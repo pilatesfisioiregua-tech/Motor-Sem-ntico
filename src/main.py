@@ -67,6 +67,19 @@ async def health():
     return {"status": "ok", "version": "0.1.0"}
 
 
+@app.post("/reactor/ejecutar")
+async def ejecutar_reactor():
+    """Ejecuta el Reactor v1 — generador de datos sintéticos."""
+    log.info("reactor_ejecutar")
+    try:
+        from src.reactor.runner import run
+        result = await run()
+        return {"status": "ok", **result}
+    except Exception as e:
+        log.error("reactor_error", error=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.post("/motor/ejecutar", response_model=MotorResponse)
 async def ejecutar(request: MotorRequest):
     """Ejecuta el pipeline completo del motor semántico."""
