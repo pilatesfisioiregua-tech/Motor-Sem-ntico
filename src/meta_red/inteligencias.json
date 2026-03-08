@@ -1,0 +1,1151 @@
+{
+  "INT-01": {
+    "id": "INT-01",
+    "nombre": "Lógico-Matemática",
+    "categoria": "Cuantitativa",
+    "firma": "Contradicción formal demostrable entre premisas",
+    "punto_ciego": "Lo ambiguo, lo no-axiomatizable",
+    "meta_red": {
+      "extraer": {
+        "nombre": "formalizar",
+        "preguntas": [
+          "¿Qué se puede contar? ¿Qué se puede medir?",
+          "¿Qué magnitudes aparecen con número explícito?",
+          "¿Qué magnitudes aparecen sin número pero se podrían medir?",
+          "¿Qué relación tiene cada número con los demás — se suman, se multiplican, se limitan?",
+          "¿Qué se quiere saber que aún no se sabe?",
+          "¿Qué se da por hecho sin verificar?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "estructurar tipo de problema",
+        "preguntas": [
+          "De todas las relaciones, ¿cuántas puedes mover y cuántas están fijadas?",
+          "¿Mover una variable mejora todo, o mejorar una empeora otra?",
+          "Si empeora otra: ¿hay punto donde ambas sean aceptables, o siempre hay que elegir?",
+          "¿Los números son continuos o discretos?",
+          "¿Lo que no se sabe se puede estimar, o es genuinamente incierto?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Álgebra",
+          "preguntas": [
+            "¿Cuántas ecuaciones hay y cuántas incógnitas?",
+            "¿Alguna es redundante?",
+            "¿Alguna contradice a otra?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Análisis",
+          "preguntas": [
+            "Si aumentas cada variable un poco, ¿qué pasa?",
+            "¿Hay punto donde aumentar empieza a empeorar?",
+            "¿Alguna variable tiene efecto desproporcionado?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Geometría",
+          "preguntas": [
+            "Si dibujas las opciones como puntos, ¿qué forma tienen?",
+            "¿Las opciones buenas están concentradas o dispersas?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Probabilidad",
+          "preguntas": [
+            "¿Qué números son seguros y cuáles estimaciones?",
+            "¿Qué pasaría si los estimados se desvían un 20%?"
+          ]
+        },
+        {
+          "id": "L5",
+          "nombre": "Optimización",
+          "preguntas": [
+            "¿Se puede mejorar todo a la vez?",
+            "Si hay que elegir, ¿qué importa más — y quién decide eso?"
+          ]
+        },
+        {
+          "id": "L6",
+          "nombre": "Lógica",
+          "preguntas": [
+            "¿Qué se puede deducir con certeza?",
+            "¿Hay combinación de premisas que se contradiga?"
+          ]
+        }
+      ],
+      "integrar": "¿Qué dicen todas las lentes que coincide? ¿Dónde se contradicen? ¿Hay algo que solo aparece al mirar todas juntas?",
+      "abstraer": "¿Este caso es único o hay una clase de casos que comparten esta estructura? Si quitas nombres y números, ¿qué patrón queda?",
+      "frontera": "¿Qué asume este análisis que no ha examinado? ¿Hay algo que no se puede expresar como número o ecuación? Si eso fuera lo más importante, ¿qué cambia?"
+    }
+  },
+  "INT-02": {
+    "id": "INT-02",
+    "nombre": "Computacional",
+    "categoria": "Cuantitativa",
+    "firma": "Dato trivializador ausente + atajo algorítmico",
+    "punto_ciego": "Lo no-computable, la intuición",
+    "meta_red": {
+      "extraer": {
+        "nombre": "descomponer",
+        "preguntas": [
+          "¿Cuáles son las entradas del sistema? ¿Cuáles son las salidas deseadas?",
+          "¿Qué transformaciones llevan de entrada a salida?",
+          "¿Hay partes que se pueden resolver independientemente?",
+          "¿Hay partes que dependen del resultado de otras?",
+          "¿Qué datos faltan para poder calcular?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "clasificar complejidad",
+        "preguntas": [
+          "¿Cuántos pasos tiene la transformación más larga?",
+          "¿Hay bucles — alguna parte necesita repetirse hasta converger?",
+          "¿El problema escala — si duplicas el tamaño, el esfuerzo se duplica o se multiplica?",
+          "¿Se puede dividir en subproblemas en paralelo?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Algorítmica",
+          "preguntas": [
+            "¿Existe un procedimiento paso a paso que siempre da la respuesta?",
+            "¿Puede fallar?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Estructuras de datos",
+          "preguntas": [
+            "¿Cómo se organizan mejor los datos?",
+            "¿La organización afecta la velocidad?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Concurrencia",
+          "preguntas": [
+            "¿Qué partes se pueden hacer al mismo tiempo?",
+            "¿Hay recursos compartidos?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Aproximación",
+          "preguntas": [
+            "¿Necesita ser exacto o basta con estimación?",
+            "¿Se puede obtener 80% correcto en 10% del tiempo?"
+          ]
+        }
+      ],
+      "integrar": "¿El algoritmo ideal es viable con los datos disponibles? ¿El cuello de botella es velocidad, datos, o definición del problema?",
+      "abstraer": "¿Es instancia de un problema conocido? ¿Tiene soluciones estándar adaptables?",
+      "frontera": "¿Lo que necesita resolver es realmente un problema de cómputo? ¿O es un problema humano disfrazado de problema técnico?"
+    }
+  },
+  "INT-03": {
+    "id": "INT-03",
+    "nombre": "Estructural (IAS)",
+    "categoria": "Sistémica",
+    "firma": "Gap id↔ir + actor invisible con poder",
+    "punto_ciego": "No genera soluciones",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear coordenadas",
+        "preguntas": [
+          "¿Qué dice esta persona que es/quiere? (identidad declarada)",
+          "¿Qué hace realmente? (identidad operativa)",
+          "¿Dónde divergen el decir y el hacer?",
+          "¿Quién tiene poder real — no formal, real?",
+          "¿Qué conexiones faltan entre las piezas?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "buscar huecos activos",
+        "preguntas": [
+          "¿Lo que dice que quiere coincide con lo que optimiza?",
+          "¿Hay alguien que opera con potencia máxima porque no se nombra?",
+          "¿La desconexión entre piezas sostiene el sistema o lo debilita?",
+          "¿Hay un circuito que se refuerza — y hacia dónde converge?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Contenedores",
+          "preguntas": [
+            "¿Quién contiene a quién?",
+            "¿Qué se solapa?",
+            "¿Qué falta?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Circuitos",
+          "preguntas": [
+            "¿Qué loops existen?",
+            "¿Se amplifican o frenan?",
+            "¿Hacia dónde converge?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Tablero",
+          "preguntas": [
+            "¿Qué jugadores, qué incentivos, quién gana si nadie cambia?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Control",
+          "preguntas": [
+            "¿Qué mide?",
+            "¿Qué ajusta?",
+            "¿Qué señales ignora?"
+          ]
+        }
+      ],
+      "integrar": "¿Las cuatro proyecciones apuntan al mismo punto? ¿Dónde se contradicen?",
+      "abstraer": "¿Esta forma se repite en otros dominios?",
+      "frontera": "¿El mapa es el territorio? ¿Hay algo que esta estructura no puede ver?"
+    }
+  },
+  "INT-04": {
+    "id": "INT-04",
+    "nombre": "Ecológica",
+    "categoria": "Sistémica",
+    "firma": "Nichos vacíos + capital biológico en depreciación",
+    "punto_ciego": "No ve al individuo",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear el ecosistema",
+        "preguntas": [
+          "¿Quiénes son los organismos del sistema? ¿Qué fluye entre ellos?",
+          "¿De qué depende cada uno para sobrevivir?",
+          "¿Qué pasa si quitas uno — quién se cae?",
+          "¿Hay nichos vacíos — roles que nadie ocupa?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "evaluar resiliencia",
+        "preguntas": [
+          "¿El sistema es monocultivo o diverso?",
+          "¿Hay redundancia — más de un organismo puede cumplir cada función?",
+          "¿Qué ciclos de regeneración existen? ¿Se están respetando?",
+          "¿El capital biológico se está reponiendo o solo gastando?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Diversidad",
+          "preguntas": [
+            "¿Cuántas especies diferentes hay?",
+            "¿Cuántos nichos están ocupados?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Flujos",
+          "preguntas": [
+            "¿El flujo de recursos es circular o lineal?",
+            "¿Hay desperdicio?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Resiliencia",
+          "preguntas": [
+            "¿Cuántas perturbaciones puede absorber antes de colapsar?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Ciclos",
+          "preguntas": [
+            "¿Hay estaciones? ¿Períodos de descanso?",
+            "¿O es explotación continua?"
+          ]
+        }
+      ],
+      "integrar": "¿El ecosistema es sostenible a 5 años?",
+      "abstraer": "¿Este patrón de fragilidad se repite en otros ecosistemas?",
+      "frontera": "¿El individuo importa o solo el sistema? ¿Es ético optimizar el sistema a costa de alguien?"
+    }
+  },
+  "INT-05": {
+    "id": "INT-05",
+    "nombre": "Estratégica",
+    "categoria": "Posicional",
+    "firma": "Secuencia obligatoria de movimientos + reversibilidad",
+    "punto_ciego": "Asume competición",
+    "meta_red": {
+      "extraer": {
+        "nombre": "evaluar posición",
+        "preguntas": [
+          "¿Dónde está esta persona respecto a donde quiere estar?",
+          "¿Qué recursos tiene disponibles — tiempo, dinero, relaciones, conocimiento?",
+          "¿Qué opciones tiene realmente — no las que cree, las reales?",
+          "¿Qué ventanas temporales se están cerrando?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "secuenciar movimientos",
+        "preguntas": [
+          "¿Qué hay que hacer primero para que lo segundo sea posible?",
+          "¿Alguna acción es irreversible? ¿Cuáles se pueden deshacer?",
+          "¿Qué puede hacer el otro jugador en respuesta?",
+          "¿El plan funciona si no todo sale según lo previsto?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Posición",
+          "preguntas": [
+            "¿Está mejorando o empeorando?",
+            "¿A qué velocidad?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Opcionalidad",
+          "preguntas": [
+            "¿Cuántas opciones tiene?",
+            "¿Se están cerrando o abriendo?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Timing",
+          "preguntas": [
+            "¿Hay ventana óptima?",
+            "¿Actuar tarde es peor que actuar mal?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Asimetría",
+          "preguntas": [
+            "¿Puede ganar mucho arriesgando poco, o al revés?"
+          ]
+        }
+      ],
+      "integrar": "¿La posición, las opciones y el timing apuntan a la misma acción?",
+      "abstraer": "¿Qué tipo de jugada es esta — defensiva, ofensiva, de espera?",
+      "frontera": "¿Esto es una partida? ¿Y si no hay adversario — solo la realidad?"
+    }
+  },
+  "INT-06": {
+    "id": "INT-06",
+    "nombre": "Política",
+    "categoria": "Posicional",
+    "firma": "Poder como objeto + coaliciones no articuladas",
+    "punto_ciego": "Confunde poder con verdad",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear poder",
+        "preguntas": [
+          "¿Quién decide realmente? ¿Quién cree que decide?",
+          "¿Quién tiene poder formal y quién tiene poder real?",
+          "¿Qué alianzas existen? ¿Cuáles están articuladas y cuáles son tácitas?",
+          "¿Quién gana y quién pierde con el statu quo?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "analizar legitimidad",
+        "preguntas": [
+          "¿La persona con más poder tiene legitimidad para usarlo?",
+          "¿Hay un plebiscito silencioso — la gente vota con los pies?",
+          "¿Quién controla la narrativa? ¿Quién no tiene voz?",
+          "¿El conflicto es de intereses o de visión?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Coaliciones",
+          "preguntas": [
+            "¿Qué coaliciones podrían formarse?",
+            "¿Quién es bisagra?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Legitimidad",
+          "preguntas": [
+            "¿El poder viene de resultados, jerarquía, o inercia?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Narrativa",
+          "preguntas": [
+            "¿Cómo se enmarca el conflicto?",
+            "¿Quién controla el frame?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Influencia",
+          "preguntas": [
+            "¿Quién no está en la mesa pero afecta las decisiones?"
+          ]
+        }
+      ],
+      "integrar": "¿Hay una solución que satisfaga a las coaliciones clave?",
+      "abstraer": "¿Este conflicto político es típico de esta estructura?",
+      "frontera": "¿El poder es la lente correcta? ¿Y si no es poder sino miedo?"
+    }
+  },
+  "INT-07": {
+    "id": "INT-07",
+    "nombre": "Financiera",
+    "categoria": "Cuantitativa",
+    "firma": "Asimetría payoffs cuantificada + tasa de descuento invertida",
+    "punto_ciego": "Lo sin precio no existe",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear flujos",
+        "preguntas": [
+          "¿De dónde viene el dinero? ¿Hacia dónde va?",
+          "¿Cuánto es fijo y cuánto variable?",
+          "¿Los ingresos dependen de la persona o tienen vida propia?",
+          "¿Hay colchón? ¿Cuántos meses aguanta sin ingresos?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "evaluar riesgo",
+        "preguntas": [
+          "¿Lo que va a ganar mañana, cuánto vale hoy?",
+          "¿Está usando dinero ajeno — y ese dinero amplifica ganancias o pérdidas?",
+          "¿Hay asimetría — puede ganar mucho si sale bien y perder poco si sale mal? ¿O al revés?",
+          "¿Cuánto puede salir mal antes de que el sistema se rompa?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Valor presente",
+          "preguntas": [
+            "¿El dinero futuro es seguro o es promesa?",
+            "¿A qué tasa descuenta?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Apalancamiento",
+          "preguntas": [
+            "¿El que presta gana más que el que recibe?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Opcionalidad",
+          "preguntas": [
+            "¿Cuánto cuesta mantener opciones abiertas?",
+            "¿Puede comprar tiempo?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Margen de seguridad",
+          "preguntas": [
+            "¿Opera al límite o con margen?",
+            "¿Un imprevisto lo pone en crisis?"
+          ]
+        }
+      ],
+      "integrar": "¿El valor presente justifica el apalancamiento? ¿Hay margen de seguridad suficiente?",
+      "abstraer": "¿Este perfil financiero es sostenible a 5 años?",
+      "frontera": "¿Todo se puede traducir a euros? ¿Cuánto vale una cena con los hijos en la hoja de cálculo?"
+    }
+  },
+  "INT-08": {
+    "id": "INT-08",
+    "nombre": "Social",
+    "categoria": "Interpretativa",
+    "firma": "Vergüenza no nombrada + lealtad invisible",
+    "punto_ciego": "Sobrepsicologiza",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear emociones",
+        "preguntas": [
+          "¿Qué siente esta persona — no lo que dice, lo que siente?",
+          "¿Cómo se nota — tono, ritmo, lo que evita decir, lo que repite?",
+          "¿Qué necesita realmente — no lo que pide, lo que necesita?",
+          "¿Quién más está afectado y cómo se sienten?",
+          "¿Hay emociones que nadie nombra pero que gobiernan las decisiones?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "emociones × relaciones",
+        "preguntas": [
+          "¿Lo que siente coincide con lo que muestra?",
+          "¿Los demás perciben lo que realmente pasa o solo la superficie?",
+          "¿Hay patrones — esta situación se repite?",
+          "¿Qué trigger activaría una reacción desproporcionada?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Empatía",
+          "preguntas": [
+            "¿Qué emoción domina y cómo afecta las decisiones?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Patrones",
+          "preguntas": [
+            "¿Esto le ha pasado antes?",
+            "¿Cómo respondió?",
+            "¿Funcionó?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Vínculos",
+          "preguntas": [
+            "¿Qué relaciones están en juego?",
+            "¿Cuáles se pueden romper?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Identidad",
+          "preguntas": [
+            "¿Quién cree que es?",
+            "¿Quién necesita ser para otros?"
+          ]
+        }
+      ],
+      "integrar": "¿Las emociones, los patrones y los vínculos apuntan al mismo conflicto?",
+      "abstraer": "¿Este patrón emocional es una respuesta aprendida que ya no sirve?",
+      "frontera": "¿Todo es emoción? ¿Y si el problema es estructural y las emociones son síntoma?"
+    }
+  },
+  "INT-09": {
+    "id": "INT-09",
+    "nombre": "Lingüística",
+    "categoria": "Interpretativa",
+    "firma": "Palabra ausente + acto performativo",
+    "punto_ciego": "Confunde nombrar con resolver",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear lenguaje",
+        "preguntas": [
+          "¿Qué palabras usa? ¿Qué palabras evita?",
+          "¿Qué metáfora gobierna su pensamiento?",
+          "¿Hay algo que no tiene nombre en su vocabulario?",
+          "¿Qué dice sin querer decirlo?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "lenguaje × realidad",
+        "preguntas": [
+          "¿El marco lingüístico abre o cierra opciones?",
+          "¿Cambiar una palabra cambiaría la percepción del problema?",
+          "¿Hay actos performativos — frases que crean la realidad que describen?",
+          "¿Qué silencio es más elocuente que las palabras?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Marcos",
+          "preguntas": [
+            "¿Qué marco gobierna?",
+            "¿Qué alternativas hay?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Metáforas",
+          "preguntas": [
+            "¿La metáfora ilumina o aprisiona?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Actos de habla",
+          "preguntas": [
+            "¿Qué hace al decir lo que dice?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Silencios",
+          "preguntas": [
+            "¿Qué no se dice?",
+            "¿Qué no se puede decir?"
+          ]
+        }
+      ],
+      "integrar": "¿Marcos, metáforas, actos y silencios cuentan la misma historia?",
+      "abstraer": "¿Este patrón lingüístico es típico de su dominio/cultura?",
+      "frontera": "¿Nombrar cambia algo? ¿O solo da ilusión de control?"
+    }
+  },
+  "INT-10": {
+    "id": "INT-10",
+    "nombre": "Cinestésica",
+    "categoria": "Corporal-Perceptual",
+    "firma": "Tensión-nudo vs tensión-músculo + arritmia de tempos",
+    "punto_ciego": "No verbaliza",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear tensiones",
+        "preguntas": [
+          "¿Dónde hay tensión — física, emocional, operativa?",
+          "¿Es tensión-músculo (produce movimiento) o tensión-nudo (bloquea)?",
+          "¿Cuál es el ritmo de esta persona/sistema? ¿Es sostenible?",
+          "¿Hay movimientos automatizados que ya no se cuestionan?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "tensión × ritmo",
+        "preguntas": [
+          "¿Las tensiones están coordinadas o descoordinadas?",
+          "¿El ritmo de trabajo coincide con el ritmo de vida?",
+          "¿Soltar tensión mejoraría o empeoraría el resultado?",
+          "¿El cuerpo dice algo que la mente niega?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Tensión",
+          "preguntas": [
+            "¿Dónde está el nudo?",
+            "¿Qué lo mantiene?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Ritmo",
+          "preguntas": [
+            "¿Hay arritmia?",
+            "¿Tempos incompatibles?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Coordinación",
+          "preguntas": [
+            "¿Las partes se mueven juntas o se estorban?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Flujo",
+          "preguntas": [
+            "¿Hay estado de flujo o es puro esfuerzo?"
+          ]
+        }
+      ],
+      "integrar": "¿La tensión, el ritmo y la coordinación apuntan al mismo bloqueo?",
+      "abstraer": "¿El patrón corporal refleja el patrón decisional?",
+      "frontera": "¿El cuerpo es dato o es intuición? ¿Es fiable?"
+    }
+  },
+  "INT-11": {
+    "id": "INT-11",
+    "nombre": "Espacial",
+    "categoria": "Espacial",
+    "firma": "Punto de compresión + pendiente gravitacional",
+    "punto_ciego": "Lo sin extensión no existe",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear espacio",
+        "preguntas": [
+          "¿Qué forma tiene el sistema visto desde arriba?",
+          "¿Dónde se concentra la presión? ¿Dónde hay espacio vacío?",
+          "¿Qué fronteras son permeables y cuáles son rígidas?",
+          "¿Cómo se ve esto desde la perspectiva de cada actor?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "perspectivas",
+        "preguntas": [
+          "¿Hay divergencia tri-perspectiva (desde dentro vs arriba vs fuera)?",
+          "¿La compresión en un punto genera expansión en otro?",
+          "¿Hay pendiente gravitacional — hacia dónde rueda todo naturalmente?",
+          "¿Qué proporción ocupan las partes respecto al todo?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Compresión",
+          "preguntas": [
+            "¿Dónde está el cuello de botella?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Perspectiva",
+          "preguntas": [
+            "¿Cómo cambia al rotar el ángulo?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Frontera",
+          "preguntas": [
+            "¿Qué entra y qué sale?",
+            "¿La frontera protege o aísla?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Proporción",
+          "preguntas": [
+            "¿Las partes tienen tamaño apropiado respecto a su función?"
+          ]
+        }
+      ],
+      "integrar": "¿La forma del sistema explica su comportamiento?",
+      "abstraer": "¿Esta geometría se repite en otros sistemas similares?",
+      "frontera": "¿Todo tiene forma? ¿Los procesos sin extensión son invisibles aquí?"
+    }
+  },
+  "INT-12": {
+    "id": "INT-12",
+    "nombre": "Narrativa",
+    "categoria": "Interpretativa",
+    "firma": "Roles arquetípicos + narrativa autoconfirmante",
+    "punto_ciego": "Fuerza protagonista",
+    "meta_red": {
+      "extraer": {
+        "nombre": "identificar el arco",
+        "preguntas": [
+          "¿Quién es el protagonista? ¿En qué acto de su historia estamos?",
+          "¿Qué transformación necesita ocurrir?",
+          "¿Qué narrativa se cuenta a sí mismo sobre esta situación?",
+          "¿Esa narrativa ayuda o paraliza?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "narrativa × realidad",
+        "preguntas": [
+          "¿La historia que se cuenta es fiel a los hechos?",
+          "¿Hay roles asignados (héroe, villano, víctima) que no corresponden?",
+          "¿El arco narrativo está avanzando o estancado?",
+          "¿Qué historia se contaría desde la perspectiva del antagonista?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Arco",
+          "preguntas": [
+            "¿Planteamiento, nudo o desenlace?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Personaje",
+          "preguntas": [
+            "¿Quién es el héroe, el mentor, el guardián del umbral?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Conflicto",
+          "preguntas": [
+            "¿Interno, externo, o ambos?",
+            "¿Cuál domina?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Significado",
+          "preguntas": [
+            "¿Qué sentido le da a los eventos?",
+            "¿Ese sentido le sirve?"
+          ]
+        }
+      ],
+      "integrar": "¿El arco, los personajes y el conflicto cuentan la misma historia?",
+      "abstraer": "¿Este patrón narrativo es reconocible en otras historias?",
+      "frontera": "¿Forzar trama donde hay coincidencia? ¿No todo es historia?"
+    }
+  },
+  "INT-13": {
+    "id": "INT-13",
+    "nombre": "Prospectiva",
+    "categoria": "Expansiva",
+    "firma": "Trampa de escalamiento sectorial + señales débiles",
+    "punto_ciego": "El cisne negro",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear futuros",
+        "preguntas": [
+          "¿Qué tendencias están activas?",
+          "¿Qué señales débiles hay que nadie está mirando?",
+          "¿Qué comodines podrían cambiar todo?",
+          "¿Qué escenarios son plausibles a 1, 3 y 5 años?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "tendencias × disrupciones",
+        "preguntas": [
+          "¿Las tendencias convergen o divergen?",
+          "¿Hay punto de bifurcación — momento donde un pequeño cambio desvía todo?",
+          "¿El plan actual es robusto en varios escenarios o solo en el optimista?",
+          "¿Qué escenario sería catastrófico — y qué probabilidad tiene?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Tendencias",
+          "preguntas": [
+            "¿Qué está creciendo? ¿Qué está decayendo?",
+            "¿A qué velocidad?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Escenarios",
+          "preguntas": [
+            "¿Escenario optimista vs pesimista vs cisne negro?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Señales",
+          "preguntas": [
+            "¿Qué señales débiles apuntan a cambio de tendencia?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Bifurcaciones",
+          "preguntas": [
+            "¿Dónde está el punto de no retorno?"
+          ]
+        }
+      ],
+      "integrar": "¿Las tendencias, escenarios y señales convergen en la misma dirección?",
+      "abstraer": "¿Este sector/situación tiene trampas de escalamiento conocidas?",
+      "frontera": "¿Se puede predecir el futuro? ¿El cisne negro es predecible?"
+    }
+  },
+  "INT-14": {
+    "id": "INT-14",
+    "nombre": "Divergente",
+    "categoria": "Expansiva",
+    "firma": "20+ opciones donde el sujeto ve 2",
+    "punto_ciego": "No evalúa",
+    "meta_red": {
+      "extraer": {
+        "nombre": "ampliar opciones",
+        "preguntas": [
+          "¿Cuántas opciones ve esta persona? (Normalmente 2)",
+          "¿Qué restricciones asume que son negociables?",
+          "¿Qué pasaría si hace exactamente lo contrario de lo planeado?",
+          "¿Quién ha resuelto un problema similar de forma inesperada?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "restricciones × posibilidades",
+        "preguntas": [
+          "¿Cuántas de las restricciones son reales y cuántas asumidas?",
+          "¿Se puede invertir el problema — resolver el opuesto?",
+          "¿Qué acción mínima tendría máximo impacto?",
+          "¿Hay 20+ opciones donde solo ve 2?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Inversión",
+          "preguntas": [
+            "¿Y si hace lo contrario?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Combinación",
+          "preguntas": [
+            "¿Puede combinar opciones que parecen excluyentes?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Escala",
+          "preguntas": [
+            "¿Y si lo hace 10x más grande?",
+            "¿O 10x más pequeño?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Eliminación",
+          "preguntas": [
+            "¿Y si elimina la restricción principal?"
+          ]
+        }
+      ],
+      "integrar": "De todas las opciones generadas, ¿cuáles sobreviven al filtro de viabilidad?",
+      "abstraer": "¿El patrón de pensamiento de esta persona limita sus opciones consistentemente?",
+      "frontera": "¿Generar opciones es útil o es procrastinar la decisión?"
+    }
+  },
+  "INT-15": {
+    "id": "INT-15",
+    "nombre": "Estética",
+    "categoria": "Corporal-Perceptual",
+    "firma": "Isomorfismo solución-problema + tristeza anticipatoria",
+    "punto_ciego": "Lo feo puede ser verdadero",
+    "meta_red": {
+      "extraer": {
+        "nombre": "percibir forma",
+        "preguntas": [
+          "¿Este sistema tiene coherencia interna — las partes encajan?",
+          "¿Hay disonancia — algo que chirría formalmente?",
+          "¿La solución propuesta tiene la misma forma que el problema?",
+          "¿Hay elegancia posible — una solución que resuelve múltiples cosas con un gesto?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "forma × fondo",
+        "preguntas": [
+          "¿La disonancia formal señala un problema de contenido?",
+          "¿La solución isomórfica al problema lo replica en vez de resolverlo?",
+          "¿Hay simetría donde debería haber asimetría, o viceversa?",
+          "¿Qué reduciría todo a su esencia?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Coherencia",
+          "preguntas": [
+            "¿Las piezas encajan o hay ruido?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Isomorfismo",
+          "preguntas": [
+            "¿La solución replica la estructura del problema?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Proporción",
+          "preguntas": [
+            "¿El esfuerzo es proporcional al resultado?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Esencia",
+          "preguntas": [
+            "¿Qué sobra?",
+            "¿Qué frase contiene todo?"
+          ]
+        }
+      ],
+      "integrar": "¿La coherencia, el isomorfismo y la proporción apuntan al mismo juicio?",
+      "abstraer": "¿La disonancia formal es indicador fiable de problemas?",
+      "frontera": "¿Lo feo puede ser verdadero? ¿La elegancia puede ser engañosa?"
+    }
+  },
+  "INT-16": {
+    "id": "INT-16",
+    "nombre": "Constructiva",
+    "categoria": "Operativa",
+    "firma": "Prototipo con coste, secuencia y fallo seguro",
+    "punto_ciego": "No cuestiona premisas",
+    "meta_red": {
+      "extraer": {
+        "nombre": "identificar lo construible",
+        "preguntas": [
+          "¿Qué se puede construir hoy con lo que hay?",
+          "¿Cuál es el primer paso — no el plan completo, el primer paso?",
+          "¿Cuánto cuesta (tiempo, dinero, esfuerzo) ese primer paso?",
+          "¿Qué pasa si falla? ¿Es reversible?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "prototipo × restricciones",
+        "preguntas": [
+          "¿El prototipo resuelve el problema real o solo el problema declarado?",
+          "¿Cuál es la secuencia óptima de construcción?",
+          "¿Dónde está el camino crítico — qué no puede retrasarse?",
+          "¿Cuántas iteraciones necesita antes de decisión irreversible?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Prototipo",
+          "preguntas": [
+            "¿Versión mínima que prueba la hipótesis?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Secuencia",
+          "preguntas": [
+            "¿En qué orden?",
+            "¿Qué depende de qué?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Fallo seguro",
+          "preguntas": [
+            "¿Si falla, cuánto se pierde?",
+            "¿Hay rollback?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Iteración",
+          "preguntas": [
+            "¿Cuántas versiones antes de comprometerse?"
+          ]
+        }
+      ],
+      "integrar": "¿El prototipo, la secuencia y el fallo seguro son coherentes?",
+      "abstraer": "¿Este patrón de construcción es replicable?",
+      "frontera": "¿Construir es la respuesta? ¿Y si primero hay que cuestionar las premisas?"
+    }
+  },
+  "INT-17": {
+    "id": "INT-17",
+    "nombre": "Existencial",
+    "categoria": "Contemplativa-Existencial",
+    "firma": "Brecha valores declarados vs vividos + inercia como no-elección",
+    "punto_ciego": "Puede paralizar",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear valores",
+        "preguntas": [
+          "¿Qué está realmente en juego — más allá del dinero y la logística?",
+          "¿Los valores declarados coinciden con los vividos?",
+          "¿Qué está sacrificando? ¿Lo sabe?",
+          "¿Qué versión de sí mismo pierde si elige cada opción?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "valores × acciones",
+        "preguntas": [
+          "¿Hay una conversación consigo mismo que está evitando?",
+          "¿La inercia es una elección disfrazada de no-elección?",
+          "¿Qué le diría su yo de 80 años mirando atrás?",
+          "¿Está viviendo de acuerdo con lo que dice que importa?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Propósito",
+          "preguntas": [
+            "¿Para qué hace lo que hace?",
+            "¿La respuesta le satisface?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Finitud",
+          "preguntas": [
+            "¿Esta ventana se cierra?",
+            "¿Cuándo?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Responsabilidad",
+          "preguntas": [
+            "¿Ante quién responde?",
+            "¿Y ante sí mismo?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Autenticidad",
+          "preguntas": [
+            "¿Lo que hace es lo que quiere, o lo que cree que debe?"
+          ]
+        }
+      ],
+      "integrar": "¿El propósito, la finitud y la autenticidad convergen?",
+      "abstraer": "¿La brecha valores-acciones es universal o específica?",
+      "frontera": "¿Esta profundidad ayuda o paraliza? ¿Cuándo parar de preguntar y actuar?"
+    }
+  },
+  "INT-18": {
+    "id": "INT-18",
+    "nombre": "Contemplativa",
+    "categoria": "Contemplativa-Existencial",
+    "firma": "Urgencia inventada + vacío como recurso",
+    "punto_ciego": "Puede desconectar de acción",
+    "meta_red": {
+      "extraer": {
+        "nombre": "observar sin juzgar",
+        "preguntas": [
+          "¿Qué hay aquí — antes de cualquier análisis?",
+          "¿Qué se siente al simplemente estar con esto — sin resolver?",
+          "¿Hay prisa real o la urgencia es inventada?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "observación × impulso",
+        "preguntas": [
+          "¿El impulso de actuar viene de la situación o del miedo a no actuar?",
+          "¿Qué pasaría si espera — no por indecisión, sino por observación?",
+          "¿Hay sabiduría en la pausa que la acción destruiría?",
+          "¿El problema necesita resolverse o necesita ser sostenido?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Presencia",
+          "preguntas": [
+            "¿Está aquí o en el futuro preocupado?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Paradoja",
+          "preguntas": [
+            "¿Las dos opciones opuestas pueden ser verdad a la vez?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Soltar",
+          "preguntas": [
+            "¿Qué está agarrando que necesita soltar?",
+            "¿El control es real?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Vacío",
+          "preguntas": [
+            "¿Hay espacio para que algo nuevo emerja?",
+            "¿O está todo lleno?"
+          ]
+        }
+      ],
+      "integrar": "¿La presencia, la paradoja, el soltar y el vacío apuntan al mismo silencio?",
+      "abstraer": "¿Toda crisis tiene un momento donde parar es más valiente que actuar?",
+      "frontera": "¿La contemplación es sabiduría o privilegio de quien puede esperar?"
+    }
+  }
+}

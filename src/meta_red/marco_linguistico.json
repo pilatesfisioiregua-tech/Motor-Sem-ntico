@@ -1,0 +1,170 @@
+{
+  "operaciones": {
+    "modificacion": {
+      "input_tipo": "adj + sust",
+      "output_tipo": "sust'",
+      "propiedad_clave": "filtra/especifica",
+      "pregunta_detectora": "¿Cómo es?",
+      "propiedades_algebraicas": {
+        "idempotente_mismo_adj": true,
+        "apilable_distintos": true
+      }
+    },
+    "predicacion": {
+      "input_tipo": "sust + verbo",
+      "output_tipo": "oracion",
+      "propiedad_clave": "genera valor de verdad",
+      "pregunta_detectora": "¿Qué hace? ¿En qué estado está?",
+      "propiedades_algebraicas": {
+        "conmutativa": false
+      }
+    },
+    "complementacion": {
+      "input_tipo": "adv + verbo",
+      "output_tipo": "verbo'",
+      "propiedad_clave": "instrumento/modo",
+      "pregunta_detectora": "¿Con qué? ¿Cómo?",
+      "propiedades_algebraicas": {}
+    },
+    "transitividad": {
+      "input_tipo": "verbo + sust",
+      "output_tipo": "predicado",
+      "propiedad_clave": "objeto de la acción",
+      "pregunta_detectora": "¿Sobre qué actúa?",
+      "propiedades_algebraicas": {
+        "verbo_sin_objeto": "hueco"
+      }
+    },
+    "subordinacion": {
+      "input_tipo": "oracion + oracion",
+      "output_tipo": "oracion'",
+      "propiedad_clave": "causa/condicion/creencia",
+      "pregunta_detectora": "¿Porque qué? ¿Si qué? ¿Qué asume?",
+      "propiedades_algebraicas": {
+        "conmutativa_porque": false
+      }
+    },
+    "cuantificacion": {
+      "input_tipo": "det + sust",
+      "output_tipo": "sust_acotado",
+      "propiedad_clave": "alcance/límites",
+      "pregunta_detectora": "¿Cuánto? ¿Todo o alguno?",
+      "propiedades_algebraicas": {}
+    },
+    "conexion": {
+      "input_tipo": "X + conj + X",
+      "output_tipo": "X'",
+      "propiedad_clave": "tipo de acople",
+      "pregunta_detectora": "¿Y/Pero/Aunque/Porque/Si/Para?",
+      "propiedades_algebraicas": {
+        "Y_conmutativa": true,
+        "PERO_no_asociativa": true
+      }
+    },
+    "transformacion": {
+      "input_tipo": "X",
+      "output_tipo": "Y",
+      "propiedad_clave": "cambio de categoría",
+      "pregunta_detectora": "¿Qué era antes? ¿En qué se convierte?",
+      "propiedades_algebraicas": {
+        "no_involutiva": true
+      }
+    }
+  },
+  "capas": {
+    "lentes": {
+      "categoria_gramatical": "Atributo de estado",
+      "pregunta": "¿En qué estado está?",
+      "verbo_existencial": "ESTAR",
+      "operacion_primaria": "predicacion"
+    },
+    "cualidades": {
+      "categoria_gramatical": "Adjetivo predicativo",
+      "pregunta": "¿Cómo es?",
+      "verbo_existencial": "SER",
+      "operacion_primaria": "modificacion"
+    },
+    "creencias": {
+      "categoria_gramatical": "Subordinada asertiva",
+      "pregunta": "¿Qué asume?",
+      "verbo_existencial": "ASUMIR",
+      "operacion_primaria": "subordinacion"
+    },
+    "reglas": {
+      "categoria_gramatical": "Modal deóntico",
+      "pregunta": "¿Qué debe hacer?",
+      "verbo_existencial": "DEBER",
+      "operacion_primaria": "subordinacion"
+    },
+    "funciones": {
+      "categoria_gramatical": "Verbo de acción",
+      "pregunta": "¿Qué hace?",
+      "verbo_existencial": "HACER",
+      "operacion_primaria": "predicacion"
+    },
+    "operadores": {
+      "categoria_gramatical": "Complemento circunstancial",
+      "pregunta": "¿Con qué observa?",
+      "verbo_existencial": "OBSERVAR",
+      "operacion_primaria": "complementacion"
+    },
+    "contexto": {
+      "categoria_gramatical": "Circunstancial lugar/tiempo",
+      "pregunta": "¿Dónde/cuándo opera?",
+      "verbo_existencial": null,
+      "operacion_primaria": "complementacion"
+    },
+    "roles": {
+      "categoria_gramatical": "Pronombre/deíctico",
+      "pregunta": "¿Quién hace qué?",
+      "verbo_existencial": null,
+      "operacion_primaria": "transitividad"
+    },
+    "acoples": {
+      "categoria_gramatical": "Conjunción",
+      "pregunta": "¿Cómo se vinculan las piezas?",
+      "verbo_existencial": null,
+      "operacion_primaria": "conexion"
+    }
+  },
+  "acoples": {
+    "Y": {"tipo": "sinergia", "diagnostico": "Ambas operan juntas — salud"},
+    "PERO": {"tipo": "tension", "diagnostico": "Una limita a la otra — fricción activa"},
+    "AUNQUE": {"tipo": "concesion", "diagnostico": "Tolera algo que no debería — grieta"},
+    "PORQUE": {"tipo": "causalidad", "diagnostico": "Dependencia dirigida — cadena causal"},
+    "SI": {"tipo": "condicionalidad", "diagnostico": "Requiere condición — fragilidad"},
+    "PARA": {"tipo": "finalidad", "diagnostico": "Orientación — dirección"}
+  },
+  "falacias": {
+    "conducta_valor": {
+      "operacion_incorrecta": "Predicación tratada como Modificación",
+      "correccion": "Pred → Sub_asertiva → Mod",
+      "ejemplo": "Decir \"es innovador\" cuando hace cosas innovadoras"
+    },
+    "optimizacion_sin_finalidad": {
+      "operacion_incorrecta": "Transformación sin Subordinación final",
+      "correccion": "Tr + Sub_final(PARA qué)",
+      "ejemplo": "Optimizar sin saber para qué"
+    },
+    "friccion_es_fallo": {
+      "operacion_incorrecta": "Conexión PERO asumida como error",
+      "correccion": "Evaluar si PERO es funcional",
+      "ejemplo": "Asumir que toda tensión es mala"
+    },
+    "creencia_como_regla": {
+      "operacion_incorrecta": "Sub_asertiva confundida con Sub_deóntica",
+      "correccion": "Distinguir \"creo que X\" de \"X debe ser\"",
+      "ejemplo": "Tratar opinión como obligación"
+    },
+    "cualidad_como_funcion": {
+      "operacion_incorrecta": "Modificación confundida con Predicación",
+      "correccion": "\"Es innovador\" ≠ \"innova\"",
+      "ejemplo": "Confundir ser con hacer"
+    },
+    "verbo_sin_objeto": {
+      "operacion_incorrecta": "Predicación sin Transitividad",
+      "correccion": "Función declarada pero no definida",
+      "ejemplo": "\"Lidera\" — ¿a quién? ¿hacia dónde?"
+    }
+  }
+}
