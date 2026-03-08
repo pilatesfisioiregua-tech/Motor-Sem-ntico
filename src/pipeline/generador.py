@@ -33,14 +33,16 @@ CASO:
 {contexto_extra}
 
 Responde de forma estructurada. Para cada paso, contesta CADA pregunta. No saltes ninguna.
-Al final, genera un JSON con:
+IMPORTANTE: Al final de tu análisis, incluye un bloque JSON entre triple backticks. Este JSON es OBLIGATORIO:
+```json
 {{
   "firma_caso": "la firma específica de este caso en 1-2 frases",
   "hallazgos": ["hallazgo 1", "hallazgo 2", ...],
   "puntos_ciegos": ["lo que esta inteligencia NO puede ver"],
   "accion_prioritaria": "la acción más importante que sugiere este análisis",
   "confianza": 0.0-1.0
-}}"""
+}}
+```"""
 
 TEMPLATE_COMPOSICION = """Eres la inteligencia {nombre_b} ({id_b}).
 
@@ -64,10 +66,19 @@ Presta especial atención a:
 - Lo que EMERGE al cruzar su análisis con tu lente
 - Contradicciones entre lo que {id_a} encontró y lo que tú ves
 
-Responde con el mismo formato JSON que el análisis previo, más:
+INSTRUCCIÓN CRÍTICA SOBRE EMERGENCIA:
+Un hallazgo emergente es algo que SOLO aparece al cruzar {id_a} con {id_b} — algo que ninguna de las dos inteligencias produciría por separado. No es un resumen ni una combinación. Es un insight de ORDEN SUPERIOR que requiere ambas lentes simultáneamente. Si no encuentras ninguno genuino, escribe "ninguno" — pero busca bien antes de rendirte.
+
+Responde EXCLUSIVAMENTE con JSON válido (sin texto antes ni después):
 {{
-  "hallazgo_emergente": "lo que SOLO aparece al cruzar {id_a} con {id_b}",
-  "contradicciones": ["contradicción encontrada con el análisis previo"]
+  "firma_caso": "firma específica de este caso en 1-2 frases",
+  "hallazgos": ["hallazgo 1", "hallazgo 2"],
+  "puntos_ciegos": ["lo que esta composición NO puede ver"],
+  "contradicciones": ["contradicción entre {id_a} y {id_b}"],
+  "hallazgo_emergente": "lo que SOLO aparece al cruzar {id_a} con {id_b} — el insight de orden superior",
+  "emergencias": ["hallazgo emergente 1 detallado", "hallazgo emergente 2 si existe"],
+  "accion_prioritaria": "acción más importante",
+  "confianza": 0.0
 }}"""
 
 TEMPLATE_FUSION = """Tienes dos análisis del MISMO caso, realizados por dos inteligencias diferentes.
@@ -84,14 +95,19 @@ Tu trabajo es FUSIONAR ambos análisis:
 3. ¿Qué emerge SOLO al juntar ambos que ninguno veía solo?
 4. ¿Cuál es la síntesis que respeta lo mejor de ambos?
 
+INSTRUCCIÓN CRÍTICA SOBRE EMERGENCIA:
+Un hallazgo emergente NO es un resumen de ambos análisis. NO es algo que ya aparece en uno de ellos. Es un insight de ORDEN SUPERIOR que SOLO existe porque las dos lentes operan simultáneamente sobre el mismo material. Piensa: ¿qué ve el cruce que ninguna lente individual puede ver? Si {nombre_a} ve X e {nombre_b} ve Y, ¿qué Z aparece que no es ni X ni Y sino algo nuevo? Busca al menos 1 hallazgo emergente genuino.
+
 CASO ORIGINAL:
 {input}
 
-Responde con:
+Responde EXCLUSIVAMENTE con JSON válido (sin texto antes ni después):
 {{
   "convergencias": ["punto donde ambos coinciden"],
   "divergencias": ["punto donde se contradicen"],
-  "emergente": "lo que SOLO aparece al fusionar",
+  "hallazgo_emergente": "el insight principal de orden superior que SOLO aparece al fusionar",
+  "emergencias": ["emergencia 1 detallada", "emergencia 2 si existe"],
+  "emergente": "síntesis de lo que emerge (1-2 frases)",
   "sintesis": "la síntesis integradora",
   "firma_combinada": "firma del par fusionado en 1-2 frases"
 }}"""
@@ -111,10 +127,11 @@ Preguntas de meta-diagnóstico:
 - ¿Hay hallazgos genuinamente nuevos que emergen al re-examinar?
 
 Responde SOLO con lo NUEVO. No repitas lo anterior.
+Responde EXCLUSIVAMENTE con JSON válido (sin texto antes ni después):
 {{
   "hallazgos_nuevos": ["genuinamente nuevo, no repetido"],
   "sesgos_detectados": ["sesgo de tu propio análisis"],
-  "correccion": "si algo del análisis previo era erróneo"
+  "correccion": "si algo del análisis previo era erróneo, null si todo correcto"
 }}"""
 
 

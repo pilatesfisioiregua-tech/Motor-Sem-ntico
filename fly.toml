@@ -1,5 +1,5 @@
 app = "motor-semantico-omni"
-primary_region = "mad"
+primary_region = "ams"
 
 [build]
   dockerfile = "Dockerfile"
@@ -20,9 +20,6 @@ primary_region = "mad"
     type = "requests"
     hard_limit = 10
     soft_limit = 5
-
-  [http_service.machine_checks]
-    grace_period = "180s"
 
 [[vm]]
   memory = "1gb"

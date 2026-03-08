@@ -21,12 +21,27 @@ def evaluar(plan: ExecutionPlan, algoritmo: Algoritmo) -> EvaluationResult:
     issues: list[str] = []
 
     # 1. Cobertura: ¿Se ejecutaron todas las operaciones planeadas?
-    planned = len(algoritmo.operaciones)
-    executed = len([r for r in plan.results.values() if r.operacion_tipo != 'loop'])
-    coverage = executed / max(planned, 1)
+    # Contar operaciones reales: individuales del algoritmo + prerequisitos generados
+    # Los prerequisitos se ejecutan pero no están en algoritmo.operaciones
+    non_loop_results = [r for r in plan.results.values() if r.operacion_tipo != 'loop']
+    # planned = individuales que necesitamos + composiciones + fusiones
+    planned_individuals = set()
+    planned_ops = 0
+    for op in algoritmo.operaciones:
+        planned_ops += 1
+        if op.tipo == 'individual':
+            planned_individuals.add(op.inteligencias[0])
+        elif op.tipo in ('composicion', 'fusion'):
+            # Los prerequisitos de composición/fusión también cuentan como planeados
+            for intel_id in op.inteligencias:
+                if intel_id not in planned_individuals:
+                    planned_individuals.add(intel_id)
+                    planned_ops += 1  # prerequisito implícito
+    executed = len(non_loop_results)
+    coverage = min(executed / max(planned_ops, 1), 1.0)  # Cap at 1.0
     scores.append(('cobertura', coverage * 10))
     if coverage < 0.8:
-        issues.append(f"Solo {executed}/{planned} operaciones ejecutadas")
+        issues.append(f"Solo {executed}/{planned_ops} operaciones ejecutadas")
 
     # 2. JSON parseables: ¿Los outputs tienen estructura?
     total_results = len(plan.results)
@@ -49,13 +64,48 @@ def evaluar(plan: ExecutionPlan, algoritmo: Algoritmo) -> EvaluationResult:
 
     # 4. Emergencia: ¿Las composiciones/fusiones produjeron hallazgos emergentes?
     emergentes = 0
-    for r in plan.results.values():
-        if r.output_json and r.operacion_tipo in ('composicion', 'fusion'):
-            if r.output_json.get('hallazgo_emergente') or r.output_json.get('emergente'):
-                emergentes += 1
-    comp_fus = len([o for o in algoritmo.operaciones if o.tipo in ('composicion', 'fusion')])
-    emergencia = emergentes / max(comp_fus, 1) if comp_fus > 0 else 1.0
+    comp_fus_results = [r for r in plan.results.values()
+                        if r.operacion_tipo in ('composicion', 'fusion')]
+    for r in comp_fus_results:
+        found_emergente = False
+        if r.output_json:
+            # Buscar en múltiples campos posibles
+            for campo in ('hallazgo_emergente', 'emergente', 'emergencias',
+                          'hallazgos_emergentes', 'emergencia_composicional'):
+                val = r.output_json.get(campo)
+                if val:
+                    # Verificar que no sea vacío/placeholder
+                    if isinstance(val, str) and len(val.strip()) > 10 and val.strip().lower() != 'ninguno':
+                        found_emergente = True
+                        break
+                    elif isinstance(val, list) and len(val) > 0 and any(
+                        isinstance(v, str) and len(v.strip()) > 10 for v in val
+                    ):
+                        found_emergente = True
+                        break
+        # Fallback: buscar señales de emergencia en texto raw
+        if not found_emergente and r.output_raw:
+            text_lower = r.output_raw.lower()
+            emergent_signals = [
+                'solo aparece al',
+                'emerge al cruzar',
+                'ninguna de las dos',
+                'orden superior',
+                'ninguna lente individual',
+                'solo al fusionar',
+                'insight emergente',
+                'hallazgo emergente',
+            ]
+            if sum(1 for sig in emergent_signals if sig in text_lower) >= 2:
+                found_emergente = True
+        if found_emergente:
+            emergentes += 1
+
+    comp_fus_count = len(comp_fus_results)
+    emergencia = emergentes / max(comp_fus_count, 1) if comp_fus_count > 0 else 1.0
     scores.append(('emergencia', emergencia * 10))
+    if emergencia < 0.5 and comp_fus_count > 0:
+        issues.append(f"Solo {emergentes}/{comp_fus_count} composiciones/fusiones con hallazgos emergentes")
 
     # 5. Loop quality: ¿Los loops encontraron algo nuevo?
     loops = [r for r in plan.results.values() if r.operacion_tipo == 'loop']
