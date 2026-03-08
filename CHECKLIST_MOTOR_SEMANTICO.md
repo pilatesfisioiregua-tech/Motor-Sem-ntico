@@ -1,6 +1,6 @@
 # CHECKLIST MOTOR SEMANTICO — 2026-03-08
 
-> **Estado:** MVP v1 completo. Pipeline end-to-end funcional. Deploy fly.io pendiente (sin CLI).
+> **Estado:** MVP v1 completo. Pipeline end-to-end funcional. Deploy fly.io operativo.
 
 ---
 
@@ -12,7 +12,7 @@
 | B01 | DATOS — Schema SQL, seed, inteligencias.json, marco_linguistico.json, db client | COMPLETADO | 2026-03-08 |
 | B02 | PIPELINE 1-3 — Detector Huecos, Router, Compositor, Generador | COMPLETADO | 2026-03-08 |
 | B03 | PIPELINE 4-6 — Ejecutor, Evaluador, Integrador, Orquestador | COMPLETADO | 2026-03-08 |
-| B04 | DEPLOY + TESTS — Lifespan hooks, fly.toml timeout, tests E2E cartografía | COMPLETADO (deploy pendiente) | 2026-03-08 |
+| B04 | DEPLOY + TESTS — Lifespan hooks, fly.toml timeout, tests E2E cartografía | COMPLETADO | 2026-03-08 |
 
 ---
 
@@ -31,7 +31,7 @@
 | 9 | Latencia < 150s en analisis, < 60s en conversacion | PASS | MAX_TIME_S=150, timeout en fly.toml 180s |
 | 10 | Telemetria guardada en DB | PASS | log_ejecucion() en orchestrator, fire-and-forget |
 | 11 | Test E2E con los 3 casos de cartografia pasan | PASS (mock) | Mock test pasa. Live tests listos, requieren servidor |
-| 12 | Deploy en fly.io funcionando | PENDIENTE | fly CLI no instalado. Codigo y config listos |
+| 12 | Deploy en fly.io funcionando | PASS | Desplegado en motor-semantico-omni.fly.dev |
 
 ---
 
@@ -113,6 +113,24 @@ motor-semantico/
   tests/
     test_pipeline_e2e.py
 ```
+
+---
+
+## FASE D — DEPLOY + VALIDACIÓN
+
+- [x] Pipeline end-to-end en fly.io
+- [x] Modo ANÁLISIS funcional
+- [x] API documentada (acepta input, devuelve output estructurado)
+
+### Resultados de test (2026-03-08)
+
+| Caso | Score | Cobertura | Estructura | Hallazgos | Emergencia | Loops | Eficiencia | Tiempo | Coste |
+|------|-------|-----------|------------|-----------|------------|-------|------------|--------|-------|
+| Clínica dental | **9.5** | 8.3 | 8.9 | 10.0 | 10.0 | 10.0 | 9.9 | 104s | $0.18 |
+| SaaS B2B | **8.5** | 7.1 | 6.2 | 10.0 | 10.0 | 6.7 | 9.8 | 133s | $0.19 |
+| Cambio carrera | **9.0** | 7.1 | 7.5 | 10.0 | 10.0 | 10.0 | 9.8 | 139s | $0.18 |
+
+**Score medio: 9.0 | Coste medio: $0.18 | Tiempo medio: 125s**
 
 ---
 
