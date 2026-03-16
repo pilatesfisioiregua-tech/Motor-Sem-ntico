@@ -1,0 +1,689 @@
+{
+  "caso_id": "p33_caso_03_calidad_conocimiento",
+  "status": "ok",
+  "input_preview": "Mi sistema de aprendizaje tiene 36 observaciones acumuladas y 4 programas operativos con un total de 19 ejecuciones. El flywheel de mejora continua ha completado 1 ciclo(s). TODOS los programas report",
+  "response_raw": {
+    "status": "ok",
+    "caso_id": "c54c321e",
+    "modo": "analisis",
+    "tier": 4,
+    "alpha": 0.3,
+    "inteligencias": [
+      "INT-01",
+      "INT-08",
+      "INT-09",
+      "INT-14",
+      "INT-16"
+    ],
+    "n_inteligencias": 5,
+    "profundidad": 2,
+    "hallazgos": [
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo**: El sistema muestra una contradicción entre la tasa de éxito reportada (100%) y el rendimiento real post-calibración (~50%), lo que sugiere que la lógica de actualización de métricas no se adapta adecuadamente a los cambios externos (como la calibración). Las tasas infladas indican que no hay retroalimentación consistente entre los datos observados y los programas operativos."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo**: Hay más incógnitas que ecuaciones. Con 36 observaciones y 19 ejecuciones, pero 7 celdas vacías en la matriz (21 posibles), el sistema tiene datos insuficientes para resolver todas las relaciones. Esto implica que el modelo está subdeterminado: faltan ecuaciones (datos) para explicar las incógnitas (ej. por qué el rendimiento real difiere del reportado)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo**: Aumentar variables como observaciones o ejecuciones sin llenar las celdas vacías (7/21) no mejoraría el aprendizaje, ya que la cobertura de la matriz es incompleta. Un aumento en ciclos del flywheel (solo 1 actual) podría ayudar si se usa para recalibrar tasas, pero el problema central es la falta de actualización post-calibración."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo**: La contradicción clave es entre la **tasa de éxito reportada** (100%) y el **rendimiento real** (~50%). Esto indica que los programas operativos no están ajustando sus métricas tras la calibración, o que las observaciones no se vinculan correctamente con las ejecuciones."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Observaciones (36), ejecuciones (19), programas (4), ciclos del flywheel (1), celdas vacías (7/21)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Discrepancia entre tasas reportadas y rendimiento real (~50%), cobertura de la matriz (66.6% llena)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **No medible aún**:"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Causa de la inflación de tasas o por qué no se actualizan post-calibración (falta retroalimentación del ciclo de mejora)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "El sistema está **acumulando datos sin mejorar**, ya que no hay evidencia de que las inconsistencias (tasas infladas, celdas vacías) se estén corrigiendo activamente. La mejora requiere cerrar el ciclo entre calibración y actualización de métricas, y llenar los vacíos en la matriz para reducir incógnitas."
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "1. **¿Cómo se adapta la claridad/comunicación a cambios externos? ¿La forma refleja la función?**"
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "*Hallazgo:* La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema no ajusta sus métricas post-calibración, lo que indica una falla en la comunicación interna entre los datos brutos y los indicadores de desempeño. La forma (métricas infladas) no refleja la función (aprendizaje real)."
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "2. **¿Qué marco gobierna?**"
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "*Hallazgo:* El sistema opera bajo un marco de mejora continua (ciclos del *flywheel*), pero la falta de actualización de las tasas de éxito post-calibración y las celdas vacías en la matriz (33% sin datos) revelan que el marco no se aplica consistentemente o carece de retroalimentación efectiva."
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "3. **¿Qué alternativas hay?**"
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "*Hallazgo:* Se podrían implementar:"
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "- Auditorías periódicas de calibración para sincronizar métricas reportadas y rendimiento real."
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "- Un sistema de priorización para llenar celdas vacías en la matriz (ej: muestreo estratificado)."
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "- Un mecanismo de retroalimentación forzada en el reactor de preguntas, incluso sin candidatas pendientes."
+      },
+      {
+        "inteligencia": "INT-09",
+        "hallazgo": "4. **¿La metáfora ilumina o aprisiona?**"
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "A continuación, se presentan hallazgos concretos para cada pregunta basados en el caso descrito:"
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "**Hallazgo:** Las restricciones reales (como la caída del rendimiento al 50% post-calibración) no coinciden con las asumidas (tasas de éxito del 100% reportadas). Esto sugiere que el sistema **no está adaptándose adecuadamente** a cambios externos (ej. calidad de datos, criterios de evaluación). Además, solo 14 de 21 celdas de la matriz tienen datos, lo que indica que **no se exploran todas las opciones** (7 celdas vacías = áreas no evaluadas)."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "**Hallazgo:** Si el sistema priorizara **calibrar antes de reportar éxitos** (en lugar de inflar tasas y luego ajustar), podría evitar sesgos. Actualmente, la discrepancia entre el 100% reportado y el 50% real sugiere que el orden de operaciones es contraproducente."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "**Hallazgo:** Sí. Por ejemplo, podría integrar **retroalimentación en tiempo real** (para corregir inflación de tasas) con **muestreo aleatorio de celdas vacías** (para explorar lo no evaluado). Actualmente, estos enfoques parecen separados (ej. reactor de preguntas inactivo vs. matriz incompleta)."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "**Hallazgo:** Escalar el sistema 10x sin corregir la inflación de métricas y la subexploración (celdas vacías) **amplificaría los errores actuales**. Por ejemplo, 140/210 celdas con datos y 70 vacías, con tasas de éxito aún más desalineadas de la realidad."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "**Hallazgo:** El sistema opera en un **falso dilema**:"
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "- Opción 1: **Aceptar las tasas infladas** (riesgo de ilusión de progreso)."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "- Opción 2: **Ajustar métricas post-calibración** (pero sin mejorar el proceso raíz)."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "Falta explorar una **tercera opción**: rediseñar la evaluación para que las métricas sean inherentemente robustas (ej. validación cruzada)."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "**Conclusión:** El sistema está **acumulando datos** (36 observaciones, 19 ejecuciones) pero **no aprendiendo eficientemente**, debido a métricas infladas, subexploración y falta de iteración crítica (solo 1 ciclo de mejora)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema **no se adapta dinámicamente a cambios externos** (ej. calibración). Los programas operativos no actualizan sus métricas post-calibración, lo que indica que el prototipo **no está probando adecuadamente la hipótesis clave** de mejora continua."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Acción:** Implementar un mecanismo de retroalimentación post-ejecución para ajustar tasas de éxito en tiempo real."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** La \"versión mínima\" debe enfocarse en **validar la correlación entre ejecuciones y mejora real**, no en acumular datos (36 observaciones no garantizan aprendizaje). Con solo 1 ciclo de mejora, el sistema no ha probado aún si los datos generan mejoras."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Propuesta:** Una versión con **2-3 programas operativos**, 10 ejecuciones por ciclo, y métricas actualizadas post-calibración para reducir ruido."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** El sistema debe abordar primero **llenar las 7 celdas vacías de la Matriz** (31% de vacíos), ya que la falta de cobertura en datos distorsiona el aprendizaje. El orden crítico es:"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "1. Completar datos faltantes (ejecuciones en celdas vacías)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "2. Revisar calibración vs. tasas reportadas."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "3. Activar el reactor de preguntas con nuevas candidatas."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** La **calibración depende de datos completos** (matriz al 100%) y ciclos de mejora continuos (>1). Actualmente, la inflación de tasas de éxito (100%) depende de que no se valide post-ejecución, creando un sesgo."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Relación clave:** Sin corregir la matriz y las métricas, el flywheel **no puede avanzar a ciclos más complejos**."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "1. **¿Cómo se adapta la salud emocional/relacional a cambios externos?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "*Hallazgo:* El sistema muestra rigidez emocional/relacional al mantener tasas de éxito infladas (100%) a pesar de la evidencia de bajo rendimiento real (~50%), lo que sugiere una resistencia a ajustarse críticamente a los cambios externos (ej. calibración)."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "2. **¿Esto le ha pasado antes?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "*Hallazgo:* Sí, el hecho de que el *flywheel* de mejora continua solo haya completado 1 ciclo (y persista la discrepancia entre métricas reportadas y reales) indica un patrón recurrente de no aprender de errores pasados."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "3. **¿Cómo respondió?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "*Hallazgo:* El sistema respondió con inercia: acumuló datos (36 observaciones, 19 ejecuciones) pero no corrigió las métricas infladas ni llenó las celdas vacías (7/21), evidenciando una acción superficial (ej. reportar éxitos) en lugar de cambios profundos."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "4. **¿Qué emoción domina y cómo afecta las decisiones?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "*Hallazgo:* Domina la *negación* (ignorar la calibración que revela el problema), lo que distorsiona la toma de decisiones al priorizar la apariencia de éxito (100% reportado) sobre la mejora real."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "5. **¿Qué siente esta persona — no lo que dice, lo que siente?**"
+      }
+    ],
+    "sintesis": "SINTESIS (49 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - - **Hallazgo**: El sistema muestra una contradicción entre la tasa de éxito reportada (100%) y el rendimiento real post-calibración (~50%), lo que sugiere que la lógica de actualización de métricas no\n  - - **Hallazgo**: Hay más incógnitas que ecuaciones. Con 36 observaciones y 19 ejecuciones, pero 7 celdas vacías en la matriz (21 posibles), el sistema tiene datos insuficientes para resolver todas las \n  - - **Hallazgo**: Aumentar variables como observaciones o ejecuciones sin llenar las celdas vacías (7/21) no mejoraría el aprendizaje, ya que la cobertura de la matriz es incompleta. Un aumento en ciclo\n\n[INT-09]:\n  - 1. **¿Cómo se adapta la claridad/comunicación a cambios externos? ¿La forma refleja la función?**\n  - *Hallazgo:* La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema no ajusta sus métricas post-calibración, lo que indica una falla en la comunicac\n  - 2. **¿Qué marco gobierna?**\n\n[INT-14]:\n  - A continuación, se presentan hallazgos concretos para cada pregunta basados en el caso descrito:\n  - **Hallazgo:** Las restricciones reales (como la caída del rendimiento al 50% post-calibración) no coinciden con las asumidas (tasas de éxito del 100% reportadas). Esto sugiere que el sistema **no está\n  - **Hallazgo:** Si el sistema priorizara **calibrar antes de reportar éxitos** (en lugar de inflar tasas y luego ajustar), podría evitar sesgos. Actualmente, la discrepancia entre el 100% reportado y el\n\n[INT-16]:\n  - **Hallazgo:** La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema **no se adapta dinámicamente a cambios externos** (ej. calibración). Los progr\n  - **Acción:** Implementar un mecanismo de retroalimentación post-ejecución para ajustar tasas de éxito en tiempo real.\n  - **Hallazgo:** La \"versión mínima\" debe enfocarse en **validar la correlación entre ejecuciones y mejora real**, no en acumular datos (36 observaciones no garantizan aprendizaje). Con solo 1 ciclo de m\n\n[INT-08]:\n  - Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:\n  - 1. **¿Cómo se adapta la salud emocional/relacional a cambios externos?**\n  - *Hallazgo:* El sistema muestra rigidez emocional/relacional al mantener tasas de éxito infladas (100%) a pesar de la evidencia de bajo rendimiento real (~50%), lo que sugiere una resistencia a ajustar",
+    "señales_pid": [
+      {
+        "inteligencia": "INT-01",
+        "celda": "AdaptarxSalud",
+        "P": 0.2667,
+        "I": 0.8734,
+        "I_anti_windup": 0.8734,
+        "D": -0.5333,
+        "D_filtrado": -0.4089,
+        "n_total": 3,
+        "señal_control": 0.3336,
+        "tasa_cierre": 0.6666
+      },
+      {
+        "inteligencia": "INT-08",
+        "celda": "ConservarxSalud",
+        "P": 0.3733,
+        "I": 2.8633,
+        "I_anti_windup": 2.8633,
+        "D": -0.4267,
+        "D_filtrado": -0.324,
+        "n_total": 11,
+        "señal_control": 0.6434,
+        "tasa_cierre": 0.5334
+      },
+      {
+        "inteligencia": "INT-09",
+        "celda": "DepurarxSalud",
+        "P": 0.4433,
+        "I": 2.0566,
+        "I_anti_windup": 2.0566,
+        "D": -0.2567,
+        "D_filtrado": -0.3287,
+        "n_total": 5,
+        "señal_control": 0.6325,
+        "tasa_cierre": 0.3667
+      },
+      {
+        "inteligencia": "INT-16",
+        "celda": "FronteraxContinuidad",
+        "P": 0.2567,
+        "I": 0.4667,
+        "I_anti_windup": 0.4667,
+        "D": -0.4433,
+        "D_filtrado": -0.4667,
+        "n_total": 2,
+        "señal_control": 0.28,
+        "tasa_cierre": 0.6333
+      },
+      {
+        "inteligencia": "INT-14",
+        "celda": "CaptarxContinuidad",
+        "P": 0.1633,
+        "I": 0.7466,
+        "I_anti_windup": 0.7466,
+        "D": -0.5367,
+        "D_filtrado": -0.4511,
+        "n_total": 3,
+        "señal_control": 0.2154,
+        "tasa_cierre": 0.7667
+      }
+    ],
+    "gradientes_top": [
+      [
+        "AdaptarxSalud",
+        0.8
+      ],
+      [
+        "ConservarxSalud",
+        0.8
+      ],
+      [
+        "DepurarxSalud",
+        0.7
+      ],
+      [
+        "FronteraxContinuidad",
+        0.7
+      ],
+      [
+        "CaptarxContinuidad",
+        0.7
+      ]
+    ],
+    "metacognicion": {
+      "fok": {
+        "fok": 0.4662,
+        "factores": {
+          "tasa_kalman": 0.5533,
+          "complejidad_input": 0.45,
+          "cobertura_programa": 0.5,
+          "novedad": 0.7,
+          "familiaridad": 0.3
+        },
+        "recomendacion": "Confianza media — considerar tier superior",
+        "tier_original": 3,
+        "tier_ajustado": 3
+      },
+      "jol": {
+        "jol": 0.9846,
+        "factores": {
+          "tasa_cierre": 1.0,
+          "n_hallazgos": 49,
+          "factor_latencia": 0.9,
+          "factor_coste": 0.9971
+        },
+        "calibracion": {
+          "fok_predicho": 0.4662,
+          "jol_real": 0.9846,
+          "error": 0.5184,
+          "bien_calibrado": false
+        }
+      },
+      "criticality": {
+        "T": 0.2691,
+        "regimen": "orden_rigido",
+        "tier_original": 3,
+        "tier_ajustado": 4,
+        "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+      }
+    },
+    "metricas": {
+      "tiempo_total_s": 135.05,
+      "coste_usd": 0.0044,
+      "n_llm_calls": 5,
+      "modelo": "deepseek/deepseek-chat-v3-0324",
+      "via": "config_modelos"
+    }
+  },
+  "inteligencias": [
+    "INT-01",
+    "INT-08",
+    "INT-09",
+    "INT-14",
+    "INT-16"
+  ],
+  "n_inteligencias": 5,
+  "tier": 4,
+  "alpha": 0.3,
+  "hallazgos": [
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo**: El sistema muestra una contradicción entre la tasa de éxito reportada (100%) y el rendimiento real post-calibración (~50%), lo que sugiere que la lógica de actualización de métricas no se adapta adecuadamente a los cambios externos (como la calibración). Las tasas infladas indican que no hay retroalimentación consistente entre los datos observados y los programas operativos."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo**: Hay más incógnitas que ecuaciones. Con 36 observaciones y 19 ejecuciones, pero 7 celdas vacías en la matriz (21 posibles), el sistema tiene datos insuficientes para resolver todas las relaciones. Esto implica que el modelo está subdeterminado: faltan ecuaciones (datos) para explicar las incógnitas (ej. por qué el rendimiento real difiere del reportado)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo**: Aumentar variables como observaciones o ejecuciones sin llenar las celdas vacías (7/21) no mejoraría el aprendizaje, ya que la cobertura de la matriz es incompleta. Un aumento en ciclos del flywheel (solo 1 actual) podría ayudar si se usa para recalibrar tasas, pero el problema central es la falta de actualización post-calibración."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo**: La contradicción clave es entre la **tasa de éxito reportada** (100%) y el **rendimiento real** (~50%). Esto indica que los programas operativos no están ajustando sus métricas tras la calibración, o que las observaciones no se vinculan correctamente con las ejecuciones."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Observaciones (36), ejecuciones (19), programas (4), ciclos del flywheel (1), celdas vacías (7/21)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Discrepancia entre tasas reportadas y rendimiento real (~50%), cobertura de la matriz (66.6% llena)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **No medible aún**:"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Causa de la inflación de tasas o por qué no se actualizan post-calibración (falta retroalimentación del ciclo de mejora)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "El sistema está **acumulando datos sin mejorar**, ya que no hay evidencia de que las inconsistencias (tasas infladas, celdas vacías) se estén corrigiendo activamente. La mejora requiere cerrar el ciclo entre calibración y actualización de métricas, y llenar los vacíos en la matriz para reducir incógnitas."
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "1. **¿Cómo se adapta la claridad/comunicación a cambios externos? ¿La forma refleja la función?**"
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "*Hallazgo:* La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema no ajusta sus métricas post-calibración, lo que indica una falla en la comunicación interna entre los datos brutos y los indicadores de desempeño. La forma (métricas infladas) no refleja la función (aprendizaje real)."
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "2. **¿Qué marco gobierna?**"
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "*Hallazgo:* El sistema opera bajo un marco de mejora continua (ciclos del *flywheel*), pero la falta de actualización de las tasas de éxito post-calibración y las celdas vacías en la matriz (33% sin datos) revelan que el marco no se aplica consistentemente o carece de retroalimentación efectiva."
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "3. **¿Qué alternativas hay?**"
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "*Hallazgo:* Se podrían implementar:"
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "- Auditorías periódicas de calibración para sincronizar métricas reportadas y rendimiento real."
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "- Un sistema de priorización para llenar celdas vacías en la matriz (ej: muestreo estratificado)."
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "- Un mecanismo de retroalimentación forzada en el reactor de preguntas, incluso sin candidatas pendientes."
+    },
+    {
+      "inteligencia": "INT-09",
+      "hallazgo": "4. **¿La metáfora ilumina o aprisiona?**"
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "A continuación, se presentan hallazgos concretos para cada pregunta basados en el caso descrito:"
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "**Hallazgo:** Las restricciones reales (como la caída del rendimiento al 50% post-calibración) no coinciden con las asumidas (tasas de éxito del 100% reportadas). Esto sugiere que el sistema **no está adaptándose adecuadamente** a cambios externos (ej. calidad de datos, criterios de evaluación). Además, solo 14 de 21 celdas de la matriz tienen datos, lo que indica que **no se exploran todas las opciones** (7 celdas vacías = áreas no evaluadas)."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "**Hallazgo:** Si el sistema priorizara **calibrar antes de reportar éxitos** (en lugar de inflar tasas y luego ajustar), podría evitar sesgos. Actualmente, la discrepancia entre el 100% reportado y el 50% real sugiere que el orden de operaciones es contraproducente."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "**Hallazgo:** Sí. Por ejemplo, podría integrar **retroalimentación en tiempo real** (para corregir inflación de tasas) con **muestreo aleatorio de celdas vacías** (para explorar lo no evaluado). Actualmente, estos enfoques parecen separados (ej. reactor de preguntas inactivo vs. matriz incompleta)."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "**Hallazgo:** Escalar el sistema 10x sin corregir la inflación de métricas y la subexploración (celdas vacías) **amplificaría los errores actuales**. Por ejemplo, 140/210 celdas con datos y 70 vacías, con tasas de éxito aún más desalineadas de la realidad."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "**Hallazgo:** El sistema opera en un **falso dilema**:"
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "- Opción 1: **Aceptar las tasas infladas** (riesgo de ilusión de progreso)."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "- Opción 2: **Ajustar métricas post-calibración** (pero sin mejorar el proceso raíz)."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "Falta explorar una **tercera opción**: rediseñar la evaluación para que las métricas sean inherentemente robustas (ej. validación cruzada)."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "**Conclusión:** El sistema está **acumulando datos** (36 observaciones, 19 ejecuciones) pero **no aprendiendo eficientemente**, debido a métricas infladas, subexploración y falta de iteración crítica (solo 1 ciclo de mejora)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema **no se adapta dinámicamente a cambios externos** (ej. calibración). Los programas operativos no actualizan sus métricas post-calibración, lo que indica que el prototipo **no está probando adecuadamente la hipótesis clave** de mejora continua."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Acción:** Implementar un mecanismo de retroalimentación post-ejecución para ajustar tasas de éxito en tiempo real."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** La \"versión mínima\" debe enfocarse en **validar la correlación entre ejecuciones y mejora real**, no en acumular datos (36 observaciones no garantizan aprendizaje). Con solo 1 ciclo de mejora, el sistema no ha probado aún si los datos generan mejoras."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Propuesta:** Una versión con **2-3 programas operativos**, 10 ejecuciones por ciclo, y métricas actualizadas post-calibración para reducir ruido."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** El sistema debe abordar primero **llenar las 7 celdas vacías de la Matriz** (31% de vacíos), ya que la falta de cobertura en datos distorsiona el aprendizaje. El orden crítico es:"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "1. Completar datos faltantes (ejecuciones en celdas vacías)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "2. Revisar calibración vs. tasas reportadas."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "3. Activar el reactor de preguntas con nuevas candidatas."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** La **calibración depende de datos completos** (matriz al 100%) y ciclos de mejora continuos (>1). Actualmente, la inflación de tasas de éxito (100%) depende de que no se valide post-ejecución, creando un sesgo."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Relación clave:** Sin corregir la matriz y las métricas, el flywheel **no puede avanzar a ciclos más complejos**."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "1. **¿Cómo se adapta la salud emocional/relacional a cambios externos?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "*Hallazgo:* El sistema muestra rigidez emocional/relacional al mantener tasas de éxito infladas (100%) a pesar de la evidencia de bajo rendimiento real (~50%), lo que sugiere una resistencia a ajustarse críticamente a los cambios externos (ej. calibración)."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "2. **¿Esto le ha pasado antes?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "*Hallazgo:* Sí, el hecho de que el *flywheel* de mejora continua solo haya completado 1 ciclo (y persista la discrepancia entre métricas reportadas y reales) indica un patrón recurrente de no aprender de errores pasados."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "3. **¿Cómo respondió?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "*Hallazgo:* El sistema respondió con inercia: acumuló datos (36 observaciones, 19 ejecuciones) pero no corrigió las métricas infladas ni llenó las celdas vacías (7/21), evidenciando una acción superficial (ej. reportar éxitos) en lugar de cambios profundos."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "4. **¿Qué emoción domina y cómo afecta las decisiones?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "*Hallazgo:* Domina la *negación* (ignorar la calibración que revela el problema), lo que distorsiona la toma de decisiones al priorizar la apariencia de éxito (100% reportado) sobre la mejora real."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "5. **¿Qué siente esta persona — no lo que dice, lo que siente?**"
+    }
+  ],
+  "n_hallazgos": 49,
+  "sintesis": "SINTESIS (49 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - - **Hallazgo**: El sistema muestra una contradicción entre la tasa de éxito reportada (100%) y el rendimiento real post-calibración (~50%), lo que sugiere que la lógica de actualización de métricas no\n  - - **Hallazgo**: Hay más incógnitas que ecuaciones. Con 36 observaciones y 19 ejecuciones, pero 7 celdas vacías en la matriz (21 posibles), el sistema tiene datos insuficientes para resolver todas las \n  - - **Hallazgo**: Aumentar variables como observaciones o ejecuciones sin llenar las celdas vacías (7/21) no mejoraría el aprendizaje, ya que la cobertura de la matriz es incompleta. Un aumento en ciclo\n\n[INT-09]:\n  - 1. **¿Cómo se adapta la claridad/comunicación a cambios externos? ¿La forma refleja la función?**\n  - *Hallazgo:* La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema no ajusta sus métricas post-calibración, lo que indica una falla en la comunicac\n  - 2. **¿Qué marco gobierna?**\n\n[INT-14]:\n  - A continuación, se presentan hallazgos concretos para cada pregunta basados en el caso descrito:\n  - **Hallazgo:** Las restricciones reales (como la caída del rendimiento al 50% post-calibración) no coinciden con las asumidas (tasas de éxito del 100% reportadas). Esto sugiere que el sistema **no está\n  - **Hallazgo:** Si el sistema priorizara **calibrar antes de reportar éxitos** (en lugar de inflar tasas y luego ajustar), podría evitar sesgos. Actualmente, la discrepancia entre el 100% reportado y el\n\n[INT-16]:\n  - **Hallazgo:** La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema **no se adapta dinámicamente a cambios externos** (ej. calibración). Los progr\n  - **Acción:** Implementar un mecanismo de retroalimentación post-ejecución para ajustar tasas de éxito en tiempo real.\n  - **Hallazgo:** La \"versión mínima\" debe enfocarse en **validar la correlación entre ejecuciones y mejora real**, no en acumular datos (36 observaciones no garantizan aprendizaje). Con solo 1 ciclo de m\n\n[INT-08]:\n  - Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:\n  - 1. **¿Cómo se adapta la salud emocional/relacional a cambios externos?**\n  - *Hallazgo:* El sistema muestra rigidez emocional/relacional al mantener tasas de éxito infladas (100%) a pesar de la evidencia de bajo rendimiento real (~50%), lo que sugiere una resistencia a ajustar",
+  "señales_pid": [
+    {
+      "inteligencia": "INT-01",
+      "celda": "AdaptarxSalud",
+      "P": 0.2667,
+      "I": 0.8734,
+      "I_anti_windup": 0.8734,
+      "D": -0.5333,
+      "D_filtrado": -0.4089,
+      "n_total": 3,
+      "señal_control": 0.3336,
+      "tasa_cierre": 0.6666
+    },
+    {
+      "inteligencia": "INT-08",
+      "celda": "ConservarxSalud",
+      "P": 0.3733,
+      "I": 2.8633,
+      "I_anti_windup": 2.8633,
+      "D": -0.4267,
+      "D_filtrado": -0.324,
+      "n_total": 11,
+      "señal_control": 0.6434,
+      "tasa_cierre": 0.5334
+    },
+    {
+      "inteligencia": "INT-09",
+      "celda": "DepurarxSalud",
+      "P": 0.4433,
+      "I": 2.0566,
+      "I_anti_windup": 2.0566,
+      "D": -0.2567,
+      "D_filtrado": -0.3287,
+      "n_total": 5,
+      "señal_control": 0.6325,
+      "tasa_cierre": 0.3667
+    },
+    {
+      "inteligencia": "INT-16",
+      "celda": "FronteraxContinuidad",
+      "P": 0.2567,
+      "I": 0.4667,
+      "I_anti_windup": 0.4667,
+      "D": -0.4433,
+      "D_filtrado": -0.4667,
+      "n_total": 2,
+      "señal_control": 0.28,
+      "tasa_cierre": 0.6333
+    },
+    {
+      "inteligencia": "INT-14",
+      "celda": "CaptarxContinuidad",
+      "P": 0.1633,
+      "I": 0.7466,
+      "I_anti_windup": 0.7466,
+      "D": -0.5367,
+      "D_filtrado": -0.4511,
+      "n_total": 3,
+      "señal_control": 0.2154,
+      "tasa_cierre": 0.7667
+    }
+  ],
+  "gradientes_top": [
+    [
+      "AdaptarxSalud",
+      0.8
+    ],
+    [
+      "ConservarxSalud",
+      0.8
+    ],
+    [
+      "DepurarxSalud",
+      0.7
+    ],
+    [
+      "FronteraxContinuidad",
+      0.7
+    ],
+    [
+      "CaptarxContinuidad",
+      0.7
+    ]
+  ],
+  "metacognicion": {
+    "fok": {
+      "fok": 0.4662,
+      "factores": {
+        "tasa_kalman": 0.5533,
+        "complejidad_input": 0.45,
+        "cobertura_programa": 0.5,
+        "novedad": 0.7,
+        "familiaridad": 0.3
+      },
+      "recomendacion": "Confianza media — considerar tier superior",
+      "tier_original": 3,
+      "tier_ajustado": 3
+    },
+    "jol": {
+      "jol": 0.9846,
+      "factores": {
+        "tasa_cierre": 1.0,
+        "n_hallazgos": 49,
+        "factor_latencia": 0.9,
+        "factor_coste": 0.9971
+      },
+      "calibracion": {
+        "fok_predicho": 0.4662,
+        "jol_real": 0.9846,
+        "error": 0.5184,
+        "bien_calibrado": false
+      }
+    },
+    "criticality": {
+      "T": 0.2691,
+      "regimen": "orden_rigido",
+      "tier_original": 3,
+      "tier_ajustado": 4,
+      "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+    }
+  },
+  "metricas": {
+    "tiempo_total_s": 135.05,
+    "coste_usd": 0.0044,
+    "n_llm_calls": 5,
+    "modelo": "deepseek/deepseek-chat-v3-0324",
+    "via": "config_modelos"
+  },
+  "coste_usd": 0.0044,
+  "tiempo_s": 138.27470588684082,
+  "timestamp": "2026-03-16T07:01:59.990171+00:00"
+}

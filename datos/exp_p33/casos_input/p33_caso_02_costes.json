@@ -1,0 +1,276 @@
+{
+  "caso_id": "p33_caso_02_costes",
+  "input": "Mi sistema de IA ha hecho 48 llamadas a 7 modelos diferentes en los últimos 30 días. Gasto total: $0.0030. Proyección mensual: $0.04. Los modelos más usados son: xiaomi/mimo-v2-flash (36 llamadas, $0.0021), moonshotai/kimi-k2.5 (2 llamadas, $0.0008), stepfun/step-3.5-flash (2 llamadas, $0.0001). Por consumidor: motor_vn (34 llamadas, $0.0019), exocortex:pilates (13 llamadas, $0.0009), sistema (1 llamadas, $0.0001). Presupuestos: exocortex:fisioterapia gasta $0.0000 de $30 (0.0%), exocortex:pilates gasta $0.0009 de $30 (0.0%), sistema gasta $0.0001 de $200 (0.0%). Pero al mirar los modelos configurados, 4 de 8 están caídos y no aparecen en costes. Las métricas del motor muestran ejecuciones con DeepSeek V3 que no se reflejan completamente en el registro de costes. ¿Estoy rastreando todos los gastos reales? ¿Dónde se me escapa dinero?",
+  "contexto": "Este es un análisis del propio sistema cognitivo OMNI-MIND. Todos los datos son reales.",
+  "config": {
+    "profundidad": "profunda",
+    "presupuesto_max": 0.05,
+    "tiempo_max_s": 120
+  },
+  "datos_brutos": {
+    "/costes/resumen": {
+      "por_modelo_mes": [
+        {
+          "modelo": "xiaomi/mimo-v2-flash",
+          "mes": "2026-03",
+          "llamadas": 36,
+          "coste": 0.0021
+        },
+        {
+          "modelo": "moonshotai/kimi-k2.5",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "coste": 0.0008
+        },
+        {
+          "modelo": "stepfun/step-3.5-flash",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "coste": 0.0001
+        },
+        {
+          "modelo": "openai/gpt-4o-mini",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "coste": 0.0
+        },
+        {
+          "modelo": "mistralai/devstral-2512",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "coste": 0.0
+        },
+        {
+          "modelo": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "coste": 0.0
+        },
+        {
+          "modelo": "deepcogito/cogito-v2.1-671b",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "coste": 0.0
+        }
+      ],
+      "por_consumidor_mes": [
+        {
+          "consumidor": "motor_vn",
+          "mes": "2026-03",
+          "llamadas": 34,
+          "coste": 0.0019
+        },
+        {
+          "consumidor": "exocortex:pilates",
+          "mes": "2026-03",
+          "llamadas": 13,
+          "coste": 0.0009
+        },
+        {
+          "consumidor": "sistema",
+          "mes": "2026-03",
+          "llamadas": 1,
+          "coste": 0.0001
+        }
+      ],
+      "por_componente_mes": [
+        {
+          "componente": "model_observatory",
+          "mes": "2026-03",
+          "llamadas": 14,
+          "coste": 0.0009
+        },
+        {
+          "componente": "evaluador",
+          "mes": "2026-03",
+          "llamadas": 30,
+          "coste": 0.0009
+        },
+        {
+          "componente": "copiloto_ceo",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "coste": 0.0007
+        },
+        {
+          "componente": "detector_gaps",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "coste": 0.0005
+        }
+      ],
+      "resumen_30d": {
+        "total_llamadas": 48,
+        "modelos_usados": 7,
+        "consumidores_activos": 3,
+        "coste_total": 0.003,
+        "coste_medio_diario": 0.0015,
+        "proyeccion_mensual": 0.04
+      },
+      "presupuestos": [
+        {
+          "consumidor": "exocortex:fisioterapia",
+          "limite": 30.0,
+          "gastado": 0.0,
+          "pct_usado": 0.0,
+          "restante": 30.0
+        },
+        {
+          "consumidor": "exocortex:pilates",
+          "limite": 30.0,
+          "gastado": 0.0009,
+          "pct_usado": 0.0,
+          "restante": 29.9991
+        },
+        {
+          "consumidor": "sistema",
+          "limite": 200.0,
+          "gastado": 0.0001,
+          "pct_usado": 0.0,
+          "restante": 199.9999
+        }
+      ]
+    },
+    "/costes/por-modelo": {
+      "costes": [
+        {
+          "modelo": "xiaomi/mimo-v2-flash",
+          "mes": "2026-03",
+          "llamadas": 36,
+          "tokens_in": 9937,
+          "tokens_out": 2668,
+          "coste_total": 0.0021,
+          "coste_medio": 5.7e-05,
+          "latencia_ms": 1632
+        },
+        {
+          "modelo": "moonshotai/kimi-k2.5",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "tokens_in": 26,
+          "tokens_out": 92,
+          "coste_total": 0.0008,
+          "coste_medio": 0.000378,
+          "latencia_ms": 5811
+        },
+        {
+          "modelo": "stepfun/step-3.5-flash",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "tokens_in": 34,
+          "tokens_out": 20,
+          "coste_total": 0.0001,
+          "coste_medio": 5.5e-05,
+          "latencia_ms": 4010
+        },
+        {
+          "modelo": "openai/gpt-4o-mini",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "tokens_in": 24,
+          "tokens_out": 2,
+          "coste_total": 0.0,
+          "coste_medio": 2e-06,
+          "latencia_ms": 565
+        },
+        {
+          "modelo": "mistralai/devstral-2512",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "tokens_in": 16,
+          "tokens_out": 4,
+          "coste_total": 0.0,
+          "coste_medio": 3e-06,
+          "latencia_ms": 399
+        },
+        {
+          "modelo": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "tokens_in": 48,
+          "tokens_out": 20,
+          "coste_total": 0.0,
+          "coste_medio": 6e-06,
+          "latencia_ms": 337
+        },
+        {
+          "modelo": "deepcogito/cogito-v2.1-671b",
+          "mes": "2026-03",
+          "llamadas": 2,
+          "tokens_in": 66,
+          "tokens_out": 4,
+          "coste_total": 0.0,
+          "coste_medio": 1.9e-05,
+          "latencia_ms": 287
+        }
+      ]
+    },
+    "/costes/por-consumidor": {
+      "costes": [
+        {
+          "consumidor": "motor_vn",
+          "mes": "2026-03",
+          "llamadas": 34,
+          "coste_total": 0.0019,
+          "coste_medio": 5.6e-05,
+          "modelos": 7
+        },
+        {
+          "consumidor": "exocortex:pilates",
+          "mes": "2026-03",
+          "llamadas": 13,
+          "coste_total": 0.0009,
+          "coste_medio": 7.3e-05,
+          "modelos": 1
+        },
+        {
+          "consumidor": "sistema",
+          "mes": "2026-03",
+          "llamadas": 1,
+          "coste_total": 0.0001,
+          "coste_medio": 0.000132,
+          "modelos": 1
+        }
+      ]
+    },
+    "/costes/presupuestos": {
+      "presupuestos": [
+        {
+          "consumidor": "exocortex:fisioterapia",
+          "limite": 30.0,
+          "gastado": 0.0,
+          "pct_usado": 0.0,
+          "restante": 30.0
+        },
+        {
+          "consumidor": "exocortex:pilates",
+          "limite": 30.0,
+          "gastado": 0.0009,
+          "pct_usado": 0.0,
+          "restante": 29.9991
+        },
+        {
+          "consumidor": "sistema",
+          "limite": 200.0,
+          "gastado": 0.0001,
+          "pct_usado": 0.0,
+          "restante": 199.9999
+        }
+      ]
+    },
+    "/costes/proyeccion": {
+      "total_llamadas": 48,
+      "coste_total_30d": 0.003,
+      "coste_medio_diario": 0.0015,
+      "proyeccion_mensual": 0.04
+    }
+  },
+  "fuentes": [
+    "/costes/resumen",
+    "/costes/por-modelo",
+    "/costes/por-consumidor",
+    "/costes/presupuestos",
+    "/costes/proyeccion"
+  ],
+  "timestamp": "2026-03-16T06:50:10.013153+00:00"
+}

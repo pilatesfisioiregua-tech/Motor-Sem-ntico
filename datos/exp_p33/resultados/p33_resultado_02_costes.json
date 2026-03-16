@@ -1,0 +1,697 @@
+{
+  "caso_id": "p33_caso_02_costes",
+  "status": "ok",
+  "input_preview": "Mi sistema de IA ha hecho 48 llamadas a 7 modelos diferentes en los últimos 30 días. Gasto total: $0.0030. Proyección mensual: $0.04. Los modelos más usados son: xiaomi/mimo-v2-flash (36 llamadas, $0.",
+  "response_raw": {
+    "status": "ok",
+    "caso_id": "44f01608",
+    "modo": "analisis",
+    "tier": 5,
+    "alpha": 0.2,
+    "inteligencias": [
+      "INT-01",
+      "INT-05",
+      "INT-07",
+      "INT-14",
+      "INT-16"
+    ],
+    "n_inteligencias": 5,
+    "profundidad": 2,
+    "hallazgos": [
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "Hay **más incógnitas que ecuaciones**."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Ecuaciones:** Los datos proporcionan relaciones entre llamadas, costos y modelos (ej: 36 llamadas a `xiaomi/mimo-v2-flash` cuestan $0.0021)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- 4 de 8 modelos no aparecen en los costos (¿se usaron sin registro?)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Ejecuciones con `DeepSeek V3` no reflejadas en los registros."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Discrepancias entre presupuestos asignados y gastos reales (ej: `exocortex:fisioterapia` gasta $0 de $30)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "**El costo total proyectado ($0.04) podría subir significativamente** si:"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Se incluyen los 4 modelos caídos (no contabilizados)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Se rastrean las ejecuciones de `DeepSeek V3` (actualmente omitidas)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Los presupuestos como `exocortex:fisioterapia` ($30) comienzan a usarse."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "**Sí, hay contradicciones en los datos:**"
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "**Hallazgos concretos sobre el caso:**"
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "1. **¿A qué tasa descuenta?**"
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "- El sistema muestra un **descuento extremo en costos reales vs. presupuestos** (ej: *exocortex:pilates* gasta $0.0009 de $30, un 0.003% del presupuesto). Esto sugiere una **subutilización crítica de recursos asignados** o una **falla en el registro de gastos reales** (como con DeepSeek V3 no contabilizado)."
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "2. **¿El que presta gana más que el que recibe?**"
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "- **Los proveedores de modelos (ej: xiaomi/mimo-v2-flash) reciben más tráfico (36 llamadas) pero costos bajos ($0.0021)**, mientras que modelos como *moonshotai/kimi-k2.5* (2 llamadas, $0.0008) tienen un **costo por llamada 4x mayor**. Hay **desbalance en costo-beneficio por modelo**, pero sin datos de márgenes de los proveedores, no se confirma quién gana más."
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "3. **¿El dinero futuro es seguro o es promesa?**"
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "- **Es una promesa con riesgo**: La proyección mensual ($0.04) ignora que **4/8 modelos están caídos** y que **DeepSeek V3 no se registra completamente**. Si esos modelos se reactivan o el tráfico aumenta, el costo real podría dispararse sin reflejarse en los presupuestos actuales (ej: *sistema* tiene $200 asignados pero gasta $0.0001)."
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "4. **¿De dónde viene el dinero? ¿Hacia dónde va?**"
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "- **Origen**: Presupuestos asignados a consumidores (ej: $30 para *exocortex:fisioterapia*, $200 para *sistema*)."
+      },
+      {
+        "inteligencia": "INT-07",
+        "hallazgo": "- **Destino**: Principalmente a modelos de bajo costo (xiaomi/mimo-v2-flash) y con **fugas no rastreadas** (DeepSeek V3). **No hay claridad en el flujo completo** debido a modelos caídos y métricas inconsistentes."
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "**- ¿A qué velocidad?**"
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "La velocidad de gasto es extremadamente baja: $0.0030 en 30 días, con una proyección mensual de solo $0.04. Sin embargo, hay indicios de que el gasto podría ser mayor debido a modelos caídos y métricas no registradas (ejecuciones con DeepSeek V3 no reflejadas)."
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "**- ¿Cuántas opciones tiene?**"
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "Tiene 7 modelos en uso activo, pero 4 de 8 configurados están caídos (no operativos), lo que sugiere opciones limitadas para gestionar costos o escalar. Además, hay discrepancias en el rastreo de gastos que podrían requerir ajustes técnicos."
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "**- ¿Está mejorando o empeorando?**"
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "La situación está *empeorando* en términos de visibilidad: los modelos caídos y las métricas no registradas indican que el rastreo de costos es incompleto, lo que podría llevar a gastos ocultos o errores en la proyección financiera."
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "**- ¿Dónde está esta persona respecto a donde quiere estar?**"
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "Está muy por debajo de sus presupuestos asignados (ej: solo usa 0.0% de $30 o $200), pero no está logrando un monitoreo preciso. Su objetivo debería ser tener control total sobre los gastos, pero actualmente hay fugas en el sistema de rastreo."
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "**- ¿Qué recursos tiene disponibles?**"
+      },
+      {
+        "inteligencia": "INT-05",
+        "hallazgo": "- *Dinero*: Presupuestos no utilizados (ej: $30 para fisioterapia, $200 para sistema)."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "1. **¿Y si hace lo contrario?**"
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "- **Hallazgo:** Si en lugar de priorizar modelos económicos como `xiaomi/mimo-v2-flash` (36 llamadas, $0.0021) se usaran modelos más costosos pero con mejor rendimiento, podrían reducirse llamadas repetidas o fallidas (4 de 8 modelos caídos). Esto podría optimizar costes a largo plazo al evitar reprocesos."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "2. **¿Puede combinar opciones que parecen excluyentes?**"
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "- **Hallazgo:** Sí, podría mezclar modelos económicos para tareas simples (`stepfun/step-3.5-flash`) con modelos avanzados como `DeepSeek V3` (no rastreado completamente) para tareas críticas, equilibrando coste y eficacia. Actualmente, la falta de integración entre métricas y registros oculta esta posibilidad."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "3. **¿Y si lo hace 10x más grande?**"
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "- **Hallazgo:** Escalar a 480 llamadas/mes revelaría inconsistencias mayores: los $0.04 proyectados no incluyen costes de modelos caídos ni ejecuciones de `DeepSeek V3`. El gasto real podría ser 10x mayor ($0.4), superando presupuestos como el de \"sistema\" ($200)."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "4. **¿Cuántas opciones ve esta persona? (Normalmente 2)**"
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "- **Hallazgo:** Solo considera dos opciones extremas:"
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "1. **Ajustar presupuestos actuales** (ej: redistribuir $30 de \"exocortex:pilates\")."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "2. **Ignorar modelos caídos** (asumiendo que no generan costes)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "1. **¿Versión mínima que prueba la hipótesis?**"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo:** Implementar un registro detallado de *todas* las ejecuciones del motor (incluyendo DeepSeek V3) y contrastarlo con los costes facturados. Si hay discrepancias, se confirma que no se están rastreando todos los gastos."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "2. **¿En qué orden?**"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo:** Primero verificar los modelos caídos (4/8 no aparecen en costes), luego auditar las ejecuciones de DeepSeek V3 y, por último, revisar si hay llamadas no registradas en otros modelos."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "3. **¿Qué depende de qué?**"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo:** La precisión del rastreo de costes depende de:"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- La disponibilidad de los modelos (si están caídos, no generan costes registrados)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- La integridad de los logs del motor (si DeepSeek V3 no aparece, hay fugas)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- La correcta asignación de consumidores (¿falta algún presupuesto activo?)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "4. **¿Qué se puede construir hoy con lo que hay?**"
+      }
+    ],
+    "sintesis": "SINTESIS (50 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - Hay **más incógnitas que ecuaciones**.\n  - - **Ecuaciones:** Los datos proporcionan relaciones entre llamadas, costos y modelos (ej: 36 llamadas a `xiaomi/mimo-v2-flash` cuestan $0.0021).\n  - - 4 de 8 modelos no aparecen en los costos (¿se usaron sin registro?).\n\n[INT-07]:\n  - **Hallazgos concretos sobre el caso:**\n  - 1. **¿A qué tasa descuenta?**\n  - - El sistema muestra un **descuento extremo en costos reales vs. presupuestos** (ej: *exocortex:pilates* gasta $0.0009 de $30, un 0.003% del presupuesto). Esto sugiere una **subutilización crítica de \n\n[INT-05]:\n  - **- ¿A qué velocidad?**\n  - La velocidad de gasto es extremadamente baja: $0.0030 en 30 días, con una proyección mensual de solo $0.04. Sin embargo, hay indicios de que el gasto podría ser mayor debido a modelos caídos y métrica\n  - **- ¿Cuántas opciones tiene?**\n\n[INT-14]:\n  - 1. **¿Y si hace lo contrario?**\n  - - **Hallazgo:** Si en lugar de priorizar modelos económicos como `xiaomi/mimo-v2-flash` (36 llamadas, $0.0021) se usaran modelos más costosos pero con mejor rendimiento, podrían reducirse llamadas rep\n  - 2. **¿Puede combinar opciones que parecen excluyentes?**\n\n[INT-16]:\n  - 1. **¿Versión mínima que prueba la hipótesis?**\n  - - **Hallazgo:** Implementar un registro detallado de *todas* las ejecuciones del motor (incluyendo DeepSeek V3) y contrastarlo con los costes facturados. Si hay discrepancias, se confirma que no se es\n  - 2. **¿En qué orden?**",
+    "señales_pid": [
+      {
+        "inteligencia": "INT-07",
+        "celda": "ConservarxSalud",
+        "P": 0.5667,
+        "I": 3.6867,
+        "I_anti_windup": 3.6867,
+        "D": -0.2833,
+        "D_filtrado": -0.3493,
+        "n_total": 13,
+        "señal_control": 0.9179,
+        "tasa_cierre": 0.3333
+      },
+      {
+        "inteligencia": "INT-05",
+        "celda": "DepurarxSalud",
+        "P": 0.5067,
+        "I": 2.8833,
+        "I_anti_windup": 2.8833,
+        "D": -0.2933,
+        "D_filtrado": -0.326,
+        "n_total": 7,
+        "señal_control": 0.7787,
+        "tasa_cierre": 0.3666
+      },
+      {
+        "inteligencia": "INT-01",
+        "celda": "ReplicarxContinuidad",
+        "P": 0.475,
+        "I": 3.805,
+        "I_anti_windup": 3.805,
+        "D": -0.275,
+        "D_filtrado": -0.4357,
+        "n_total": 10,
+        "señal_control": 0.8337,
+        "tasa_cierre": 0.3667
+      },
+      {
+        "inteligencia": "INT-16",
+        "celda": "FronteraxSalud",
+        "P": 0.4667,
+        "I": 2.6317,
+        "I_anti_windup": 2.6317,
+        "D": -0.2333,
+        "D_filtrado": -0.3093,
+        "n_total": 7,
+        "señal_control": 0.7144,
+        "tasa_cierre": 0.3333
+      },
+      {
+        "inteligencia": "INT-14",
+        "celda": "DistribuirxSentido",
+        "P": 0.39,
+        "I": 1.1833,
+        "I_anti_windup": 1.1833,
+        "D": -0.26,
+        "D_filtrado": -0.2889,
+        "n_total": 3,
+        "señal_control": 0.4939,
+        "tasa_cierre": 0.4
+      }
+    ],
+    "gradientes_top": [
+      [
+        "ConservarxSalud",
+        0.85
+      ],
+      [
+        "DepurarxSalud",
+        0.8
+      ],
+      [
+        "ReplicarxContinuidad",
+        0.75
+      ],
+      [
+        "FronteraxSalud",
+        0.7
+      ],
+      [
+        "DistribuirxSentido",
+        0.65
+      ]
+    ],
+    "metacognicion": {
+      "fok": {
+        "fok": 0.5838,
+        "factores": {
+          "tasa_kalman": 0.9602,
+          "complejidad_input": 0.615,
+          "cobertura_programa": 0.5,
+          "novedad": 0.7,
+          "familiaridad": 0.3
+        },
+        "recomendacion": "Confianza media — considerar tier superior",
+        "tier_original": 4,
+        "tier_ajustado": 4
+      },
+      "jol": {
+        "jol": 0.9845,
+        "factores": {
+          "tasa_cierre": 1.0,
+          "n_hallazgos": 50,
+          "factor_latencia": 0.9,
+          "factor_coste": 0.9966
+        },
+        "calibracion": {
+          "fok_predicho": 0.5838,
+          "jol_real": 0.9845,
+          "error": 0.4007,
+          "bien_calibrado": false
+        }
+      },
+      "criticality": {
+        "T": 0.2513,
+        "regimen": "orden_rigido",
+        "tier_original": 4,
+        "tier_ajustado": 5,
+        "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+      }
+    },
+    "metricas": {
+      "tiempo_total_s": 115.57,
+      "coste_usd": 0.0051,
+      "n_llm_calls": 5,
+      "modelo": "deepseek/deepseek-chat-v3-0324",
+      "via": "config_modelos"
+    }
+  },
+  "inteligencias": [
+    "INT-01",
+    "INT-05",
+    "INT-07",
+    "INT-14",
+    "INT-16"
+  ],
+  "n_inteligencias": 5,
+  "tier": 5,
+  "alpha": 0.2,
+  "hallazgos": [
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "Hay **más incógnitas que ecuaciones**."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Ecuaciones:** Los datos proporcionan relaciones entre llamadas, costos y modelos (ej: 36 llamadas a `xiaomi/mimo-v2-flash` cuestan $0.0021)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- 4 de 8 modelos no aparecen en los costos (¿se usaron sin registro?)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Ejecuciones con `DeepSeek V3` no reflejadas en los registros."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Discrepancias entre presupuestos asignados y gastos reales (ej: `exocortex:fisioterapia` gasta $0 de $30)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "**El costo total proyectado ($0.04) podría subir significativamente** si:"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Se incluyen los 4 modelos caídos (no contabilizados)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Se rastrean las ejecuciones de `DeepSeek V3` (actualmente omitidas)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Los presupuestos como `exocortex:fisioterapia` ($30) comienzan a usarse."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "**Sí, hay contradicciones en los datos:**"
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "**Hallazgos concretos sobre el caso:**"
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "1. **¿A qué tasa descuenta?**"
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "- El sistema muestra un **descuento extremo en costos reales vs. presupuestos** (ej: *exocortex:pilates* gasta $0.0009 de $30, un 0.003% del presupuesto). Esto sugiere una **subutilización crítica de recursos asignados** o una **falla en el registro de gastos reales** (como con DeepSeek V3 no contabilizado)."
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "2. **¿El que presta gana más que el que recibe?**"
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "- **Los proveedores de modelos (ej: xiaomi/mimo-v2-flash) reciben más tráfico (36 llamadas) pero costos bajos ($0.0021)**, mientras que modelos como *moonshotai/kimi-k2.5* (2 llamadas, $0.0008) tienen un **costo por llamada 4x mayor**. Hay **desbalance en costo-beneficio por modelo**, pero sin datos de márgenes de los proveedores, no se confirma quién gana más."
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "3. **¿El dinero futuro es seguro o es promesa?**"
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "- **Es una promesa con riesgo**: La proyección mensual ($0.04) ignora que **4/8 modelos están caídos** y que **DeepSeek V3 no se registra completamente**. Si esos modelos se reactivan o el tráfico aumenta, el costo real podría dispararse sin reflejarse en los presupuestos actuales (ej: *sistema* tiene $200 asignados pero gasta $0.0001)."
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "4. **¿De dónde viene el dinero? ¿Hacia dónde va?**"
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "- **Origen**: Presupuestos asignados a consumidores (ej: $30 para *exocortex:fisioterapia*, $200 para *sistema*)."
+    },
+    {
+      "inteligencia": "INT-07",
+      "hallazgo": "- **Destino**: Principalmente a modelos de bajo costo (xiaomi/mimo-v2-flash) y con **fugas no rastreadas** (DeepSeek V3). **No hay claridad en el flujo completo** debido a modelos caídos y métricas inconsistentes."
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "**- ¿A qué velocidad?**"
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "La velocidad de gasto es extremadamente baja: $0.0030 en 30 días, con una proyección mensual de solo $0.04. Sin embargo, hay indicios de que el gasto podría ser mayor debido a modelos caídos y métricas no registradas (ejecuciones con DeepSeek V3 no reflejadas)."
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "**- ¿Cuántas opciones tiene?**"
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "Tiene 7 modelos en uso activo, pero 4 de 8 configurados están caídos (no operativos), lo que sugiere opciones limitadas para gestionar costos o escalar. Además, hay discrepancias en el rastreo de gastos que podrían requerir ajustes técnicos."
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "**- ¿Está mejorando o empeorando?**"
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "La situación está *empeorando* en términos de visibilidad: los modelos caídos y las métricas no registradas indican que el rastreo de costos es incompleto, lo que podría llevar a gastos ocultos o errores en la proyección financiera."
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "**- ¿Dónde está esta persona respecto a donde quiere estar?**"
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "Está muy por debajo de sus presupuestos asignados (ej: solo usa 0.0% de $30 o $200), pero no está logrando un monitoreo preciso. Su objetivo debería ser tener control total sobre los gastos, pero actualmente hay fugas en el sistema de rastreo."
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "**- ¿Qué recursos tiene disponibles?**"
+    },
+    {
+      "inteligencia": "INT-05",
+      "hallazgo": "- *Dinero*: Presupuestos no utilizados (ej: $30 para fisioterapia, $200 para sistema)."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "1. **¿Y si hace lo contrario?**"
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "- **Hallazgo:** Si en lugar de priorizar modelos económicos como `xiaomi/mimo-v2-flash` (36 llamadas, $0.0021) se usaran modelos más costosos pero con mejor rendimiento, podrían reducirse llamadas repetidas o fallidas (4 de 8 modelos caídos). Esto podría optimizar costes a largo plazo al evitar reprocesos."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "2. **¿Puede combinar opciones que parecen excluyentes?**"
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "- **Hallazgo:** Sí, podría mezclar modelos económicos para tareas simples (`stepfun/step-3.5-flash`) con modelos avanzados como `DeepSeek V3` (no rastreado completamente) para tareas críticas, equilibrando coste y eficacia. Actualmente, la falta de integración entre métricas y registros oculta esta posibilidad."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "3. **¿Y si lo hace 10x más grande?**"
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "- **Hallazgo:** Escalar a 480 llamadas/mes revelaría inconsistencias mayores: los $0.04 proyectados no incluyen costes de modelos caídos ni ejecuciones de `DeepSeek V3`. El gasto real podría ser 10x mayor ($0.4), superando presupuestos como el de \"sistema\" ($200)."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "4. **¿Cuántas opciones ve esta persona? (Normalmente 2)**"
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "- **Hallazgo:** Solo considera dos opciones extremas:"
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "1. **Ajustar presupuestos actuales** (ej: redistribuir $30 de \"exocortex:pilates\")."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "2. **Ignorar modelos caídos** (asumiendo que no generan costes)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "1. **¿Versión mínima que prueba la hipótesis?**"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo:** Implementar un registro detallado de *todas* las ejecuciones del motor (incluyendo DeepSeek V3) y contrastarlo con los costes facturados. Si hay discrepancias, se confirma que no se están rastreando todos los gastos."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "2. **¿En qué orden?**"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo:** Primero verificar los modelos caídos (4/8 no aparecen en costes), luego auditar las ejecuciones de DeepSeek V3 y, por último, revisar si hay llamadas no registradas en otros modelos."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "3. **¿Qué depende de qué?**"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo:** La precisión del rastreo de costes depende de:"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- La disponibilidad de los modelos (si están caídos, no generan costes registrados)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- La integridad de los logs del motor (si DeepSeek V3 no aparece, hay fugas)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- La correcta asignación de consumidores (¿falta algún presupuesto activo?)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "4. **¿Qué se puede construir hoy con lo que hay?**"
+    }
+  ],
+  "n_hallazgos": 50,
+  "sintesis": "SINTESIS (50 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - Hay **más incógnitas que ecuaciones**.\n  - - **Ecuaciones:** Los datos proporcionan relaciones entre llamadas, costos y modelos (ej: 36 llamadas a `xiaomi/mimo-v2-flash` cuestan $0.0021).\n  - - 4 de 8 modelos no aparecen en los costos (¿se usaron sin registro?).\n\n[INT-07]:\n  - **Hallazgos concretos sobre el caso:**\n  - 1. **¿A qué tasa descuenta?**\n  - - El sistema muestra un **descuento extremo en costos reales vs. presupuestos** (ej: *exocortex:pilates* gasta $0.0009 de $30, un 0.003% del presupuesto). Esto sugiere una **subutilización crítica de \n\n[INT-05]:\n  - **- ¿A qué velocidad?**\n  - La velocidad de gasto es extremadamente baja: $0.0030 en 30 días, con una proyección mensual de solo $0.04. Sin embargo, hay indicios de que el gasto podría ser mayor debido a modelos caídos y métrica\n  - **- ¿Cuántas opciones tiene?**\n\n[INT-14]:\n  - 1. **¿Y si hace lo contrario?**\n  - - **Hallazgo:** Si en lugar de priorizar modelos económicos como `xiaomi/mimo-v2-flash` (36 llamadas, $0.0021) se usaran modelos más costosos pero con mejor rendimiento, podrían reducirse llamadas rep\n  - 2. **¿Puede combinar opciones que parecen excluyentes?**\n\n[INT-16]:\n  - 1. **¿Versión mínima que prueba la hipótesis?**\n  - - **Hallazgo:** Implementar un registro detallado de *todas* las ejecuciones del motor (incluyendo DeepSeek V3) y contrastarlo con los costes facturados. Si hay discrepancias, se confirma que no se es\n  - 2. **¿En qué orden?**",
+  "señales_pid": [
+    {
+      "inteligencia": "INT-07",
+      "celda": "ConservarxSalud",
+      "P": 0.5667,
+      "I": 3.6867,
+      "I_anti_windup": 3.6867,
+      "D": -0.2833,
+      "D_filtrado": -0.3493,
+      "n_total": 13,
+      "señal_control": 0.9179,
+      "tasa_cierre": 0.3333
+    },
+    {
+      "inteligencia": "INT-05",
+      "celda": "DepurarxSalud",
+      "P": 0.5067,
+      "I": 2.8833,
+      "I_anti_windup": 2.8833,
+      "D": -0.2933,
+      "D_filtrado": -0.326,
+      "n_total": 7,
+      "señal_control": 0.7787,
+      "tasa_cierre": 0.3666
+    },
+    {
+      "inteligencia": "INT-01",
+      "celda": "ReplicarxContinuidad",
+      "P": 0.475,
+      "I": 3.805,
+      "I_anti_windup": 3.805,
+      "D": -0.275,
+      "D_filtrado": -0.4357,
+      "n_total": 10,
+      "señal_control": 0.8337,
+      "tasa_cierre": 0.3667
+    },
+    {
+      "inteligencia": "INT-16",
+      "celda": "FronteraxSalud",
+      "P": 0.4667,
+      "I": 2.6317,
+      "I_anti_windup": 2.6317,
+      "D": -0.2333,
+      "D_filtrado": -0.3093,
+      "n_total": 7,
+      "señal_control": 0.7144,
+      "tasa_cierre": 0.3333
+    },
+    {
+      "inteligencia": "INT-14",
+      "celda": "DistribuirxSentido",
+      "P": 0.39,
+      "I": 1.1833,
+      "I_anti_windup": 1.1833,
+      "D": -0.26,
+      "D_filtrado": -0.2889,
+      "n_total": 3,
+      "señal_control": 0.4939,
+      "tasa_cierre": 0.4
+    }
+  ],
+  "gradientes_top": [
+    [
+      "ConservarxSalud",
+      0.85
+    ],
+    [
+      "DepurarxSalud",
+      0.8
+    ],
+    [
+      "ReplicarxContinuidad",
+      0.75
+    ],
+    [
+      "FronteraxSalud",
+      0.7
+    ],
+    [
+      "DistribuirxSentido",
+      0.65
+    ]
+  ],
+  "metacognicion": {
+    "fok": {
+      "fok": 0.5838,
+      "factores": {
+        "tasa_kalman": 0.9602,
+        "complejidad_input": 0.615,
+        "cobertura_programa": 0.5,
+        "novedad": 0.7,
+        "familiaridad": 0.3
+      },
+      "recomendacion": "Confianza media — considerar tier superior",
+      "tier_original": 4,
+      "tier_ajustado": 4
+    },
+    "jol": {
+      "jol": 0.9845,
+      "factores": {
+        "tasa_cierre": 1.0,
+        "n_hallazgos": 50,
+        "factor_latencia": 0.9,
+        "factor_coste": 0.9966
+      },
+      "calibracion": {
+        "fok_predicho": 0.5838,
+        "jol_real": 0.9845,
+        "error": 0.4007,
+        "bien_calibrado": false
+      }
+    },
+    "criticality": {
+      "T": 0.2513,
+      "regimen": "orden_rigido",
+      "tier_original": 4,
+      "tier_ajustado": 5,
+      "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+    }
+  },
+  "metricas": {
+    "tiempo_total_s": 115.57,
+    "coste_usd": 0.0051,
+    "n_llm_calls": 5,
+    "modelo": "deepseek/deepseek-chat-v3-0324",
+    "via": "config_modelos"
+  },
+  "coste_usd": 0.0051,
+  "tiempo_s": 116.04135704040527,
+  "timestamp": "2026-03-16T07:52:09.806253+00:00"
+}

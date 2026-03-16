@@ -1,0 +1,554 @@
+{
+  "caso_id": "p33_caso_03_calidad_conocimiento",
+  "input": "Mi sistema de aprendizaje tiene 36 observaciones acumuladas y 4 programas operativos con un total de 19 ejecuciones. El flywheel de mejora continua ha completado 1 ciclo(s). TODOS los programas reportan tasa de éxito del 100%, pero la calibración real bajó el rendimiento a ~50%. Esto sugiere que las tasas están infladas o no se actualizan post-calibración. De 21 celdas posibles en la Matriz, solo 14 tienen datos y 7 están vacías. El reactor de preguntas no tiene candidatas pendientes. ¿Está aprendiendo mi sistema o solo acumulando datos sin mejorar?",
+  "contexto": "Este es un análisis del propio sistema cognitivo OMNI-MIND. Datos reales.",
+  "config": {
+    "profundidad": "profunda",
+    "presupuesto_max": 0.05,
+    "tiempo_max_s": 120
+  },
+  "datos_brutos": {
+    "/gestor/flywheel": {
+      "status": "ok",
+      "ciclos": 1,
+      "flywheel": [
+        {
+          "timestamp": "2026-03-16T06:41:30.465385+00:00",
+          "f_n": 0.5046,
+          "delta_n": null
+        }
+      ],
+      "intervalo_actual_h": 24.0,
+      "formula": "f(n+1) = f(n) * (1 + Delta(n))"
+    },
+    "/gestor/programas": {
+      "programas": [
+        {
+          "id": 1,
+          "consumidor": "motor_vn_analisis",
+          "tasa_cierre_media": 1.0,
+          "n_ejecuciones": 8,
+          "compilado_at": "2026-03-15T22:08:34.011727+00:00"
+        },
+        {
+          "id": 4,
+          "consumidor": "motor_vn_confrontacion",
+          "tasa_cierre_media": 1.0,
+          "n_ejecuciones": 4,
+          "compilado_at": "2026-03-15T22:13:31.555083+00:00"
+        },
+        {
+          "id": 2,
+          "consumidor": "motor_vn_conversacion",
+          "tasa_cierre_media": 1.0,
+          "n_ejecuciones": 4,
+          "compilado_at": "2026-03-16T06:40:23.163581+00:00"
+        },
+        {
+          "id": 3,
+          "consumidor": "motor_vn_generacion",
+          "tasa_cierre_media": 1.0,
+          "n_ejecuciones": 3,
+          "compilado_at": "2026-03-15T22:17:00.824791+00:00"
+        }
+      ]
+    },
+    "/gestor/salud": {
+      "status": "ok",
+      "salud": {
+        "celdas_totales": 21,
+        "celdas_con_datos": 14,
+        "celdas_vacias": 7,
+        "preguntas_por_nivel": {
+          "podada": 1,
+          "expirada": 20,
+          "base": 596
+        },
+        "modelos_activos": [
+          {
+            "rol": "ejecutor_principal",
+            "modelo": "deepseek/deepseek-chat-v3-0324"
+          },
+          {
+            "rol": "ejecutor_complementario",
+            "modelo": "deepseek/deepseek-chat"
+          },
+          {
+            "rol": "razonador",
+            "modelo": "deepseek/deepseek-reasoner"
+          },
+          {
+            "rol": "sintetizador",
+            "modelo": "cognitivecomputations/cogito-v2-671b"
+          },
+          {
+            "rol": "motor_pizarra",
+            "modelo": "openai/gpt-4o-mini"
+          },
+          {
+            "rol": "fontaneria",
+            "modelo": "xiaomi/mimo-v2-flash"
+          },
+          {
+            "rol": "coding",
+            "modelo": "deepseek/deepseek-chat-v3-0324"
+          },
+          {
+            "rol": "evaluador_panel",
+            "modelo": "consensus:v3.2+v3.1+r1"
+          },
+          {
+            "rol": "ejecutor",
+            "modelo": "deepseek/deepseek-chat-v3-0324"
+          },
+          {
+            "rol": "ejecutor",
+            "modelo": "deepseek/deepseek-chat"
+          },
+          {
+            "rol": "sintetizador",
+            "modelo": "deepcogito/cogito-v2.1-671b"
+          },
+          {
+            "rol": "pizarra",
+            "modelo": "openai/gpt-4o-mini"
+          }
+        ],
+        "programas_activos": 4,
+        "total_datapoints": 36,
+        "ultimo_loop": {
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.88,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5046,
+            "flywheel_promocion": false
+          },
+          "timestamp": "2026-03-16 06:41:30.174788+00:00"
+        },
+        "parametros_gamc": {
+          "umbral_poda": 0.0888,
+          "umbral_promocion": 0.4,
+          "min_n_decision": 10,
+          "ventana_pid": 50,
+          "agresividad_poda": 0.5,
+          "gamma_adaptacion": 0.1,
+          "epsilon_estabilidad": 0.1
+        },
+        "ciclo_actual": 1
+      }
+    },
+    "/predictive/estado": {
+      "status": "ok",
+      "trayectoria": {
+        "serie_historica": [
+          {
+            "dia": "2026-03-13",
+            "tasa": 0.1262,
+            "n": 10
+          },
+          {
+            "dia": "2026-03-14",
+            "tasa": 0.7641,
+            "n": 39
+          },
+          {
+            "dia": "2026-03-15",
+            "tasa": 0.7448,
+            "n": 92
+          },
+          {
+            "dia": "2026-03-16",
+            "tasa": 0.4222,
+            "n": 3
+          }
+        ],
+        "predicciones": [
+          {
+            "ciclo": 1,
+            "tasa_predicha": 0.8184
+          },
+          {
+            "ciclo": 2,
+            "tasa_predicha": 0.9052
+          },
+          {
+            "ciclo": 3,
+            "tasa_predicha": 0.9921
+          },
+          {
+            "ciclo": 4,
+            "tasa_predicha": 1
+          },
+          {
+            "ciclo": 5,
+            "tasa_predicha": 1
+          }
+        ],
+        "tendencia": "mejorando",
+        "pendiente": 0.08687,
+        "tasa_actual": 0.4222,
+        "tasa_predicha_horizonte": 1
+      },
+      "plan": {
+        "acciones_planificadas": [],
+        "n_acciones": 0,
+        "horizonte": 5,
+        "modelos_ranking": [
+          {
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tasa_media": 0.7075,
+            "n": 136
+          },
+          {
+            "modelo": "stepfun/step-3.5-flash",
+            "tasa_media": 0.5792,
+            "n": 8
+          }
+        ],
+        "atractores_top": [
+          {
+            "celda": "ConservarxSalud",
+            "int_dominante": "INT-07-motor",
+            "tasa_dominante": 0.875,
+            "n_inteligencias": 9,
+            "fuerza": 0.9625
+          }
+        ]
+      },
+      "atractores": {
+        "atractores": [
+          {
+            "celda": "ConservarxSalud",
+            "int_dominante": "INT-07-motor",
+            "tasa_dominante": 0.875,
+            "n_inteligencias": 9,
+            "fuerza": 0.9625
+          }
+        ],
+        "n_atractores": 1,
+        "clusters_por_celda": {
+          "ConservarxSalud": [
+            {
+              "inteligencia": "INT-01-motor",
+              "n": 23,
+              "tasa": 0.8159
+            },
+            {
+              "inteligencia": "INT-16-motor",
+              "n": 22,
+              "tasa": 0.847
+            },
+            {
+              "inteligencia": "INT-14-motor",
+              "n": 16,
+              "tasa": 0.8427
+            },
+            {
+              "inteligencia": "INT-07-motor",
+              "n": 11,
+              "tasa": 0.875
+            },
+            {
+              "inteligencia": "INT-05-motor",
+              "n": 11,
+              "tasa": 0.875
+            },
+            {
+              "inteligencia": "INT-08-motor",
+              "n": 8,
+              "tasa": 0.7052
+            },
+            {
+              "inteligencia": "INT-01-Q001",
+              "n": 5,
+              "tasa": 0.1888
+            },
+            {
+              "inteligencia": "INT-06-motor",
+              "n": 3,
+              "tasa": 0.875
+            },
+            {
+              "inteligencia": "INT-02-motor",
+              "n": 3,
+              "tasa": 0.875
+            }
+          ],
+          "CaptarxSentido": [
+            {
+              "inteligencia": "INT-08-Q001",
+              "n": 5,
+              "tasa": 0.0636
+            }
+          ],
+          "FronteraxSalud": [
+            {
+              "inteligencia": "INT-14-Q001",
+              "n": 5,
+              "tasa": 0.9467
+            }
+          ],
+          "DepurarxContinuidad": [
+            {
+              "inteligencia": "INT-16-Q001",
+              "n": 5,
+              "tasa": 0.1131
+            }
+          ]
+        },
+        "programas_frecuentes": [
+          {
+            "programa": "{'modo': 'analisis', 'pasos': [{'orden': 1, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ReplicarxContinuidad', 'texto': '¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F7_L3_017'}, {'celda': 'AdaptarxSentido', 'texto': '¿Cómo se adapta la estructura formal del sistema a cambios externos? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F6_L2_009'}, {'celda': 'FronteraxContinuidad', 'texto': '¿Dónde están los límites de la robustez matemática del sistema? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F5_L3_015'}, {'celda': 'CaptarxSalud', 'texto': 'De todas las relaciones, ¿cuántas puedes mover y cuántas están fijadas?', 'pregunta_id': 'INT-01_F2_L1_014'}, {'celda': 'CaptarxSalud', 'texto': '¿Mover una variable mejora todo, o mejorar una empeora otra?', 'pregunta_id': 'INT-01_F2_L1_015'}, {'celda': 'CaptarxSalud', 'texto': 'Si empeora otra: ¿hay punto donde ambas sean aceptables, o siempre hay que elegir?', 'pregunta_id': 'INT-01_F2_L1_016'}, {'celda': 'DistribuirxSalud', 'texto': '¿Cómo se distribuye la consistencia lógica del sistema entre los componentes? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F4_L1_000'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué se puede contar? ¿Qué se puede medir?', 'pregunta_id': 'INT-01_F3_L1_019'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué magnitudes aparecen con número explícito?', 'pregunta_id': 'INT-01_F3_L1_020'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué magnitudes aparecen sin número pero se podrían medir?', 'pregunta_id': 'INT-01_F3_L1_021'}], 'inteligencia': 'INT-01'}, {'orden': 2, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ReplicarxContinuidad', 'texto': '¿Puede este sistema funcionar sin la persona clave? (desde la perspectiva de si puede sobrevivir en el tiempo)', 'pregunta_id': 'INT-12_R_C_6de8f0'}, {'celda': 'ReplicarxContinuidad', 'texto': '¿Puede la situación funcionar sin la persona clave? (desde la perspectiva de si puede sobrevivir en el tiempo)', 'pregunta_id': 'INT-12_R_C_2f8de7'}, {'celda': 'ReplicarxContinuidad', 'texto': '¿Se puede escalar/replicar la evolución de la historia? ¿A qué costo?', 'pregunta_id': 'INT-12_F7_L3_215'}, {'celda': 'AdaptarxSentido', 'texto': '¿Cómo se adapta la conflicto/significado a cambios externos?', 'pregunta_id': 'INT-12_F6_L2_207'}, {'celda': 'FronteraxContinuidad', 'texto': '¿Dónde están los límites de la evolución de la historia?', 'pregunta_id': 'INT-12_F5_L3_213'}, {'celda': 'CaptarxSalud', 'texto': '¿La historia que se cuenta es fiel a los hechos?', 'pregunta_id': 'INT-12_F2_L1_006'}, {'celda': 'CaptarxSalud', 'texto': '¿Hay roles asignados (héroe, villano, víctima) que no corresponden?', 'pregunta_id': 'INT-12_F2_L1_007'}, {'celda': 'CaptarxSalud', 'texto': '¿El arco narrativo está avanzando o estancado?', 'pregunta_id': 'INT-12_F2_L1_008'}, {'celda': 'DistribuirxSalud', 'texto': '¿Cómo se distribuye la coherencia del arco narrativo entre los componentes?', 'pregunta_id': 'INT-12_F4_L1_198'}, {'celda': 'DepurarxSalud', 'texto': '¿Quién es el protagonista? ¿En qué acto de su historia estamos?', 'pregunta_id': 'INT-12_F3_L1_010'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué transformación necesita ocurrir?', 'pregunta_id': 'INT-12_F3_L1_011'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué narrativa se cuenta a sí mismo sobre esta situación?', 'pregunta_id': 'INT-12_F3_L1_012'}], 'inteligencia': 'INT-12'}, {'orden': 3, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ReplicarxContinuidad', 'texto': '¿Puede este sistema funcionar sin la persona clave? (desde la perspectiva de si puede sobrevivir en el tiempo)', 'pregunta_id': 'INT-13_R_C_80630f'}, {'celda': 'ReplicarxContinuidad', 'texto': '¿Puede la situación funcionar sin la persona clave? (desde la perspectiva de si puede sobrevivir en el tiempo)', 'pregunta_id': 'INT-13_R_C_89ff5b'}, {'celda': 'ReplicarxContinuidad', 'texto': '¿Se puede escalar/replicar la robustez ante bifurcaciones? ¿A qué costo?', 'pregunta_id': 'INT-13_F7_L3_233'}, {'celda': 'AdaptarxSentido', 'texto': '¿Cómo se adapta la escenarios/señales débiles a cambios externos?', 'pregunta_id': 'INT-13_F6_L2_225'}, {'celda': 'FronteraxContinuidad', 'texto': '¿Dónde están los límites de la robustez ante bifurcaciones?', 'pregunta_id': 'INT-13_F5_L3_231'}, {'celda': 'CaptarxSalud', 'texto': '¿Las tendencias convergen o divergen?', 'pregunta_id': 'INT-13_F2_L1_005'}, {'celda': 'CaptarxSalud', 'texto': '¿Hay punto de bifurcación — momento donde un pequeño cambio desvía todo?', 'pregunta_id': 'INT-13_F2_L1_006'}, {'celda': 'CaptarxSalud', 'texto': '¿El plan actual es robusto en varios escenarios o solo en el optimista?', 'pregunta_id': 'INT-13_F2_L1_007'}, {'celda': 'DistribuirxSalud', 'texto': '¿Cómo se distribuye la tendencias actuales/riesgos entre los componentes?', 'pregunta_id': 'INT-13_F4_L1_216'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué tendencias están activas?', 'pregunta_id': 'INT-13_F3_L1_009'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué señales débiles hay que nadie está mirando?', 'pregunta_id': 'INT-13_F3_L1_010'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué comodines podrían cambiar todo?', 'pregunta_id': 'INT-13_F3_L1_011'}], 'inteligencia': 'INT-13'}, {'orden': 4, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ReplicarxContinuidad', 'texto': '¿Se puede escalar/replicar la iteraciones/mejora continua? ¿A qué costo? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F7_L3_287'}, {'celda': 'AdaptarxSentido', 'texto': '¿Cómo se adapta la secuencia/camino crítico a cambios externos? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F6_L2_279'}, {'celda': 'FronteraxContinuidad', 'texto': '¿Dónde están los límites de la iteraciones/mejora continua? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F5_L3_285'}, {'celda': 'CaptarxSalud', 'texto': '¿El prototipo resuelve el problema real o solo el problema declarado?', 'pregunta_id': 'INT-16_F2_L1_006'}, {'celda': 'CaptarxSalud', 'texto': '¿Cuál es la secuencia óptima de construcción?', 'pregunta_id': 'INT-16_F2_L1_007'}, {'celda': 'CaptarxSalud', 'texto': '¿Dónde está el camino crítico — qué no puede retrasarse?', 'pregunta_id': 'INT-16_F2_L1_008'}, {'celda': 'DistribuirxSalud', 'texto': '¿Cómo se distribuye la viabilidad técnica/recursos entre los componentes? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F4_L1_270'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué se puede construir hoy con lo que hay?', 'pregunta_id': 'INT-16_F3_L1_010'}, {'celda': 'DepurarxSalud', 'texto': '¿Cuál es el primer paso — no el plan completo, el primer paso?', 'pregunta_id': 'INT-16_F3_L1_011'}, {'celda': 'DepurarxSalud', 'texto': '¿Cuánto cuesta (tiempo, dinero, esfuerzo) ese primer paso?', 'pregunta_id': 'INT-16_F3_L1_012'}], 'inteligencia': 'INT-16'}, {'orden': 5, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ReplicarxContinuidad', 'texto': '¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?', 'pregunta_id': 'INT-08_F7_L3_143'}, {'celda': 'AdaptarxSentido', 'texto': '¿Cómo se adapta la patrones/vínculos a cambios externos?', 'pregunta_id': 'INT-08_F6_L2_135'}, {'celda': 'FronteraxContinuidad', 'texto': '¿Dónde están los límites de la estabilidad de las relaciones?', 'pregunta_id': 'INT-08_F5_L3_141'}, {'celda': 'CaptarxSalud', 'texto': '¿Lo que siente coincide con lo que muestra?', 'pregunta_id': 'INT-08_F2_L1_008'}, {'celda': 'CaptarxSalud', 'texto': '¿Los demás perciben lo que realmente pasa o solo la superficie?', 'pregunta_id': 'INT-08_F2_L1_009'}, {'celda': 'CaptarxSalud', 'texto': '¿Hay patrones — esta situación se repite?', 'pregunta_id': 'INT-08_F2_L1_010'}, {'celda': 'DistribuirxSalud', 'texto': '¿Cómo se distribuye la salud emocional/relacional entre los componentes?', 'pregunta_id': 'INT-08_F4_L1_126'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué siente esta persona — no lo que dice, lo que siente?', 'pregunta_id': 'INT-08_F3_L1_012'}, {'celda': 'DepurarxSalud', 'texto': '¿Cómo se nota — tono, ritmo, lo que evita decir, lo que repite?', 'pregunta_id': 'INT-08_F3_L1_013'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué necesita realmente — no lo que pide, lo que necesita?', 'pregunta_id': 'INT-08_F3_L1_014'}], 'inteligencia': 'INT-08'}], 'profundidad': 2, 'inteligencias': ['INT-01', 'INT-12', 'INT-13', 'INT-16', 'INT-08']}",
+            "n_usos": 1,
+            "tasa_media": 0
+          },
+          {
+            "programa": "{'modo': 'generacion', 'pasos': [{'orden': 1, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'DepurarxSalud', 'texto': '¿Qué se puede contar? ¿Qué se puede medir?', 'pregunta_id': 'INT-01_F3_L1_019'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué magnitudes aparecen con número explícito?', 'pregunta_id': 'INT-01_F3_L1_020'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué magnitudes aparecen sin número pero se podrían medir?', 'pregunta_id': 'INT-01_F3_L1_021'}, {'celda': 'AdaptarxContinuidad', 'texto': '¿Cómo se adapta la robustez matemática del sistema a cambios externos? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F6_L3_016'}, {'celda': 'FronteraxSalud', 'texto': '¿Dónde están los límites de la consistencia lógica del sistema? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F5_L1_001'}, {'celda': 'ReplicarxContinuidad', 'texto': '¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F7_L3_017'}, {'celda': 'DistribuirxSalud', 'texto': '¿Cómo se distribuye la consistencia lógica del sistema entre los componentes? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F4_L1_000'}, {'celda': 'CaptarxSalud', 'texto': 'De todas las relaciones, ¿cuántas puedes mover y cuántas están fijadas?', 'pregunta_id': 'INT-01_F2_L1_014'}, {'celda': 'CaptarxSalud', 'texto': '¿Mover una variable mejora todo, o mejorar una empeora otra?', 'pregunta_id': 'INT-01_F2_L1_015'}, {'celda': 'CaptarxSalud', 'texto': 'Si empeora otra: ¿hay punto donde ambas sean aceptables, o siempre hay que elegir?', 'pregunta_id': 'INT-01_F2_L1_016'}, {'celda': 'CaptarxSentido', 'texto': '¿Qué información/clave se necesita captar para entender la estructura formal del sistema? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F2_L2_005'}], 'inteligencia': 'INT-01'}, {'orden': 4, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'DepurarxSalud', 'texto': '¿Cuántas opciones ve esta persona? (Normalmente 2)', 'pregunta_id': 'INT-14_F3_L1_009'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué restricciones asume que son negociables?', 'pregunta_id': 'INT-14_F3_L1_010'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué pasaría si hace exactamente lo contrario de lo planeado?', 'pregunta_id': 'INT-14_F3_L1_011'}, {'celda': 'AdaptarxContinuidad', 'texto': '¿Cómo se adapta la sostenibilidad de la innovación a cambios externos? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F6_L3_250'}, {'celda': 'FronteraxSalud', 'texto': '¿Dónde están los límites de la restricciones reales vs asumidas? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F5_L1_235'}, {'celda': 'ReplicarxContinuidad', 'texto': '¿Se puede escalar/replicar la sostenibilidad de la innovación? ¿A qué costo? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F7_L3_251'}, {'celda': 'DistribuirxSalud', 'texto': '¿Cómo se distribuye la restricciones reales vs asumidas entre los componentes? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F4_L1_234'}, {'celda': 'CaptarxSalud', 'texto': '¿Cuántas de las restricciones son reales y cuántas asumidas?', 'pregunta_id': 'INT-14_F2_L1_005'}, {'celda': 'CaptarxSalud', 'texto': '¿Se puede invertir el problema — resolver el opuesto?', 'pregunta_id': 'INT-14_F2_L1_006'}, {'celda': 'CaptarxSalud', 'texto': '¿Qué acción mínima tendría máximo impacto?', 'pregunta_id': 'INT-14_F2_L1_007'}, {'celda': 'CaptarxSentido', 'texto': '¿Qué información/clave se necesita captar para entender la opciones/posibilidades? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F2_L2_239'}], 'inteligencia': 'INT-14'}, {'orden': 5, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'DepurarxSalud', 'texto': '¿Qué se puede construir hoy con lo que hay?', 'pregunta_id': 'INT-16_F3_L1_010'}, {'celda': 'DepurarxSalud', 'texto': '¿Cuál es el primer paso — no el plan completo, el primer paso?', 'pregunta_id': 'INT-16_F3_L1_011'}, {'celda': 'DepurarxSalud', 'texto': '¿Cuánto cuesta (tiempo, dinero, esfuerzo) ese primer paso?', 'pregunta_id': 'INT-16_F3_L1_012'}, {'celda': 'AdaptarxContinuidad', 'texto': '¿Cómo se adapta la iteraciones/mejora continua a cambios externos? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F6_L3_286'}, {'celda': 'FronteraxSalud', 'texto': '¿Dónde están los límites de la viabilidad técnica/recursos? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F5_L1_271'}, {'celda': 'ReplicarxContinuidad', 'texto': '¿Se puede escalar/replicar la iteraciones/mejora continua? ¿A qué costo? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F7_L3_287'}, {'celda': 'DistribuirxSalud', 'texto': '¿Cómo se distribuye la viabilidad técnica/recursos entre los componentes? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F4_L1_270'}, {'celda': 'CaptarxSalud', 'texto': '¿El prototipo resuelve el problema real o solo el problema declarado?', 'pregunta_id': 'INT-16_F2_L1_006'}, {'celda': 'CaptarxSalud', 'texto': '¿Cuál es la secuencia óptima de construcción?', 'pregunta_id': 'INT-16_F2_L1_007'}, {'celda': 'CaptarxSalud', 'texto': '¿Dónde está el camino crítico — qué no puede retrasarse?', 'pregunta_id': 'INT-16_F2_L1_008'}, {'celda': 'CaptarxSentido', 'texto': '¿Qué información/clave se necesita captar para entender la secuencia/camino crítico? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F2_L2_275'}], 'inteligencia': 'INT-16'}], 'profundidad': 1, 'inteligencias': ['INT-01', 'INT-14', 'INT-16']}",
+            "n_usos": 1,
+            "tasa_media": 0
+          },
+          {
+            "programa": "{'modo': 'confrontacion', 'pasos': [{'orden': 1, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ReplicarxSentido', 'texto': '¿Se puede escalar/replicar la estructura formal del sistema? ¿A qué costo? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F7_L2_010'}, {'celda': 'AdaptarxContinuidad', 'texto': '¿Cómo se adapta la robustez matemática del sistema a cambios externos? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F6_L3_016'}, {'celda': 'FronteraxSentido', 'texto': '¿Dónde están los límites de la estructura formal del sistema? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F5_L2_008'}], 'inteligencia': 'INT-01'}, {'orden': 4, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ReplicarxSentido', 'texto': '¿Se puede escalar/replicar la secuencia/camino crítico? ¿A qué costo? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F7_L2_280'}, {'celda': 'AdaptarxContinuidad', 'texto': '¿Cómo se adapta la iteraciones/mejora continua a cambios externos? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F6_L3_286'}, {'celda': 'FronteraxSentido', 'texto': '¿Dónde están los límites de la secuencia/camino crítico? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F5_L2_278'}], 'inteligencia': 'INT-16'}, {'orden': 5, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ReplicarxSentido', 'texto': '¿Se puede escalar/replicar la patrones/vínculos? ¿A qué costo?', 'pregunta_id': 'INT-08_F7_L2_136'}, {'celda': 'AdaptarxContinuidad', 'texto': '¿Cómo se adapta la estabilidad de las relaciones a cambios externos?', 'pregunta_id': 'INT-08_F6_L3_142'}, {'celda': 'FronteraxSentido', 'texto': '¿Dónde están los límites de la patrones/vínculos?', 'pregunta_id': 'INT-08_F5_L2_134'}], 'inteligencia': 'INT-08'}], 'profundidad': 2, 'inteligencias': ['INT-01', 'INT-16', 'INT-08']}",
+            "n_usos": 1,
+            "tasa_media": 0
+          },
+          {
+            "programa": "{'modo': 'conversacion', 'pasos': [{'orden': 1, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ConservarxSalud', 'texto': '¿Cuántas ecuaciones hay y cuántas incógnitas?', 'pregunta_id': 'INT-01_F1_L1_000'}, {'celda': 'ConservarxSalud', 'texto': 'Si aumentas cada variable un poco, ¿qué pasa?', 'pregunta_id': 'INT-01_F1_L1_003'}, {'celda': 'ConservarxSalud', 'texto': '¿Alguna contradice a otra?', 'pregunta_id': 'INT-01_F1_L1_002'}, {'celda': 'FronteraxSalud', 'texto': '¿Dónde están los límites de la consistencia lógica del sistema? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F5_L1_001'}, {'celda': 'ConservarxContinuidad', 'texto': '¿Cómo se mantiene/estabiliza la robustez matemática del sistema en el sistema? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F1_L3_011'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué se puede contar? ¿Qué se puede medir?', 'pregunta_id': 'INT-01_F3_L1_019'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué magnitudes aparecen con número explícito?', 'pregunta_id': 'INT-01_F3_L1_020'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué magnitudes aparecen sin número pero se podrían medir?', 'pregunta_id': 'INT-01_F3_L1_021'}, {'celda': 'DistribuirxSentido', 'texto': '¿Cómo se distribuye la estructura formal del sistema entre los componentes? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F4_L2_007'}, {'celda': 'CaptarxSalud', 'texto': 'De todas las relaciones, ¿cuántas puedes mover y cuántas están fijadas?', 'pregunta_id': 'INT-01_F2_L1_014'}, {'celda': 'CaptarxSalud', 'texto': '¿Mover una variable mejora todo, o mejorar una empeora otra?', 'pregunta_id': 'INT-01_F2_L1_015'}, {'celda': 'CaptarxSalud', 'texto': 'Si empeora otra: ¿hay punto donde ambas sean aceptables, o siempre hay que elegir?', 'pregunta_id': 'INT-01_F2_L1_016'}, {'celda': 'AdaptarxSentido', 'texto': '¿Cómo se adapta la estructura formal del sistema a cambios externos? ¿Hay contradicciones formales?', 'pregunta_id': 'INT-01_F6_L2_009'}], 'inteligencia': 'INT-01'}, {'orden': 4, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ConservarxSalud', 'texto': '¿Y si hace lo contrario?', 'pregunta_id': 'INT-14_F1_L1_000'}, {'celda': 'ConservarxSalud', 'texto': '¿Puede combinar opciones que parecen excluyentes?', 'pregunta_id': 'INT-14_F1_L1_001'}, {'celda': 'ConservarxSalud', 'texto': '¿Y si lo hace 10x más grande?', 'pregunta_id': 'INT-14_F1_L1_002'}, {'celda': 'FronteraxSalud', 'texto': '¿Dónde están los límites de la restricciones reales vs asumidas? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F5_L1_235'}, {'celda': 'ConservarxContinuidad', 'texto': '¿Cómo se mantiene/estabiliza la sostenibilidad de la innovación en el sistema? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F1_L3_245'}, {'celda': 'DepurarxSalud', 'texto': '¿Cuántas opciones ve esta persona? (Normalmente 2)', 'pregunta_id': 'INT-14_F3_L1_009'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué restricciones asume que son negociables?', 'pregunta_id': 'INT-14_F3_L1_010'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué pasaría si hace exactamente lo contrario de lo planeado?', 'pregunta_id': 'INT-14_F3_L1_011'}, {'celda': 'DistribuirxSentido', 'texto': '¿Cómo se distribuye la opciones/posibilidades entre los componentes? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F4_L2_241'}, {'celda': 'CaptarxSalud', 'texto': '¿Cuántas de las restricciones son reales y cuántas asumidas?', 'pregunta_id': 'INT-14_F2_L1_005'}, {'celda': 'CaptarxSalud', 'texto': '¿Se puede invertir el problema — resolver el opuesto?', 'pregunta_id': 'INT-14_F2_L1_006'}, {'celda': 'CaptarxSalud', 'texto': '¿Qué acción mínima tendría máximo impacto?', 'pregunta_id': 'INT-14_F2_L1_007'}, {'celda': 'AdaptarxSentido', 'texto': '¿Cómo se adapta la opciones/posibilidades a cambios externos? ¿Se están explorando todas las opciones?', 'pregunta_id': 'INT-14_F6_L2_243'}], 'inteligencia': 'INT-14'}, {'orden': 5, 'modelo': 'deepseek/deepseek-chat-v3-0324', 'operacion': 'individual', 'preguntas': [{'celda': 'ConservarxSalud', 'texto': '¿Versión mínima que prueba la hipótesis?', 'pregunta_id': 'INT-16_F1_L1_000'}, {'celda': 'ConservarxSalud', 'texto': '¿En qué orden?', 'pregunta_id': 'INT-16_F1_L1_001'}, {'celda': 'ConservarxSalud', 'texto': '¿Qué depende de qué?', 'pregunta_id': 'INT-16_F1_L1_002'}, {'celda': 'FronteraxSalud', 'texto': '¿Dónde están los límites de la viabilidad técnica/recursos? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F5_L1_271'}, {'celda': 'ConservarxContinuidad', 'texto': '¿Cómo se mantiene/estabiliza la iteraciones/mejora continua en el sistema? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F1_L3_281'}, {'celda': 'DepurarxSalud', 'texto': '¿Qué se puede construir hoy con lo que hay?', 'pregunta_id': 'INT-16_F3_L1_010'}, {'celda': 'DepurarxSalud', 'texto': '¿Cuál es el primer paso — no el plan completo, el primer paso?', 'pregunta_id': 'INT-16_F3_L1_011'}, {'celda': 'DepurarxSalud', 'texto': '¿Cuánto cuesta (tiempo, dinero, esfuerzo) ese primer paso?', 'pregunta_id': 'INT-16_F3_L1_012'}, {'celda': 'DistribuirxSentido', 'texto': '¿Cómo se distribuye la secuencia/camino crítico entre los componentes? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F4_L2_277'}, {'celda': 'CaptarxSalud', 'texto': '¿El prototipo resuelve el problema real o solo el problema declarado?', 'pregunta_id': 'INT-16_F2_L1_006'}, {'celda': 'CaptarxSalud', 'texto': '¿Cuál es la secuencia óptima de construcción?', 'pregunta_id': 'INT-16_F2_L1_007'}, {'celda': 'CaptarxSalud', 'texto': '¿Dónde está el camino crítico — qué no puede retrasarse?', 'pregunta_id': 'INT-16_F2_L1_008'}, {'celda': 'AdaptarxSentido', 'texto': '¿Cómo se adapta la secuencia/camino crítico a cambios externos? ¿El prototipo prueba la hipótesis clave?', 'pregunta_id': 'INT-16_F6_L2_279'}], 'inteligencia': 'INT-16'}], 'profundidad': 1, 'inteligencias': ['INT-01', 'INT-14', 'INT-16']}",
+            "n_usos": 1,
+            "tasa_media": 0
+          }
+        ]
+      }
+    },
+    "/predictive/trayectoria": {
+      "status": "ok",
+      "serie_historica": [
+        {
+          "dia": "2026-03-13",
+          "tasa": 0.1262,
+          "n": 10
+        },
+        {
+          "dia": "2026-03-14",
+          "tasa": 0.7641,
+          "n": 39
+        },
+        {
+          "dia": "2026-03-15",
+          "tasa": 0.7448,
+          "n": 92
+        },
+        {
+          "dia": "2026-03-16",
+          "tasa": 0.4222,
+          "n": 3
+        }
+      ],
+      "predicciones": [
+        {
+          "ciclo": 1,
+          "tasa_predicha": 0.8184
+        },
+        {
+          "ciclo": 2,
+          "tasa_predicha": 0.9052
+        },
+        {
+          "ciclo": 3,
+          "tasa_predicha": 0.9921
+        },
+        {
+          "ciclo": 4,
+          "tasa_predicha": 1
+        },
+        {
+          "ciclo": 5,
+          "tasa_predicha": 1
+        }
+      ],
+      "tendencia": "mejorando",
+      "pendiente": 0.08687,
+      "tasa_actual": 0.4222,
+      "tasa_predicha_horizonte": 1
+    },
+    "/info/redundancia": {
+      "status": "ok",
+      "inteligencias": [
+        {
+          "inteligencia": "INT-01-motor",
+          "n": 30,
+          "tasa_media": 0.7256
+        },
+        {
+          "inteligencia": "INT-16-motor",
+          "n": 30,
+          "tasa_media": 0.7633
+        },
+        {
+          "inteligencia": "INT-14-motor",
+          "n": 19,
+          "tasa_media": 0.7763
+        },
+        {
+          "inteligencia": "INT-08-motor",
+          "n": 13,
+          "tasa_media": 0.6468
+        },
+        {
+          "inteligencia": "INT-05-motor",
+          "n": 11,
+          "tasa_media": 0.875
+        },
+        {
+          "inteligencia": "INT-07-motor",
+          "n": 11,
+          "tasa_media": 0.875
+        },
+        {
+          "inteligencia": "INT-01-Q001",
+          "n": 5,
+          "tasa_media": 0.1888
+        },
+        {
+          "inteligencia": "INT-08-Q001",
+          "n": 5,
+          "tasa_media": 0.0636
+        },
+        {
+          "inteligencia": "INT-14-Q001",
+          "n": 5,
+          "tasa_media": 0.9467
+        },
+        {
+          "inteligencia": "INT-16-Q001",
+          "n": 5,
+          "tasa_media": 0.1131
+        },
+        {
+          "inteligencia": "INT-02-motor",
+          "n": 3,
+          "tasa_media": 0.875
+        },
+        {
+          "inteligencia": "INT-06-motor",
+          "n": 3,
+          "tasa_media": 0.875
+        }
+      ],
+      "pares": [
+        {
+          "par": "INT-01-motor-INT-13-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": -1.0,
+          "tipo": "complementario"
+        },
+        {
+          "par": "INT-01-motor-INT-16-motor",
+          "n_celdas_comunes": 4,
+          "correlacion": 0.6458,
+          "tipo": "parcial"
+        },
+        {
+          "par": "INT-14-motor-INT-16-motor",
+          "n_celdas_comunes": 3,
+          "correlacion": 0.8595,
+          "tipo": "redundante"
+        },
+        {
+          "par": "INT-01-motor-INT-08-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": 1.0,
+          "tipo": "redundante"
+        },
+        {
+          "par": "INT-08-motor-INT-14-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": 1.0,
+          "tipo": "redundante"
+        },
+        {
+          "par": "INT-08-motor-INT-16-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": 1.0,
+          "tipo": "redundante"
+        }
+      ],
+      "mas_complementarios": [
+        {
+          "par": "INT-01-motor-INT-13-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": -1.0,
+          "tipo": "complementario"
+        },
+        {
+          "par": "INT-01-motor-INT-16-motor",
+          "n_celdas_comunes": 4,
+          "correlacion": 0.6458,
+          "tipo": "parcial"
+        },
+        {
+          "par": "INT-14-motor-INT-16-motor",
+          "n_celdas_comunes": 3,
+          "correlacion": 0.8595,
+          "tipo": "redundante"
+        },
+        {
+          "par": "INT-01-motor-INT-08-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": 1.0,
+          "tipo": "redundante"
+        },
+        {
+          "par": "INT-08-motor-INT-14-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": 1.0,
+          "tipo": "redundante"
+        }
+      ],
+      "mas_redundantes": [
+        {
+          "par": "INT-01-motor-INT-16-motor",
+          "n_celdas_comunes": 4,
+          "correlacion": 0.6458,
+          "tipo": "parcial"
+        },
+        {
+          "par": "INT-14-motor-INT-16-motor",
+          "n_celdas_comunes": 3,
+          "correlacion": 0.8595,
+          "tipo": "redundante"
+        },
+        {
+          "par": "INT-01-motor-INT-08-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": 1.0,
+          "tipo": "redundante"
+        },
+        {
+          "par": "INT-08-motor-INT-14-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": 1.0,
+          "tipo": "redundante"
+        },
+        {
+          "par": "INT-08-motor-INT-16-motor",
+          "n_celdas_comunes": 2,
+          "correlacion": 1.0,
+          "tipo": "redundante"
+        }
+      ]
+    }
+  },
+  "fuentes": [
+    "/gestor/flywheel",
+    "/gestor/programas",
+    "/gestor/salud",
+    "/predictive/estado",
+    "/predictive/trayectoria",
+    "/info/redundancia"
+  ],
+  "timestamp": "2026-03-16T06:50:10.013153+00:00"
+}

@@ -1,0 +1,665 @@
+{
+  "caso_id": "p33_caso_01_salud",
+  "status": "ok",
+  "input_preview": "Tengo un sistema de análisis cognitivo con versión 3.4.0 y 61 herramientas registradas. Su autodiagnóstico interno dice que tiene 616 preguntas activas y reporta ciclo_roto=False. Pero al mirar las al",
+  "response_raw": {
+    "status": "ok",
+    "caso_id": "4331733d",
+    "modo": "analisis",
+    "tier": 5,
+    "alpha": 0.3,
+    "inteligencias": [
+      "INT-01",
+      "INT-08",
+      "INT-12",
+      "INT-13",
+      "INT-16"
+    ],
+    "n_inteligencias": 5,
+    "profundidad": 2,
+    "hallazgos": [
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "1. **¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?**"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo:** No hay evidencia de robustez matemática escalable debido a la ausencia de modelos registrados (0/0 funcionando) y ejecuciones (0 totales). El costo de replicación sería alto al carecer de datos operativos. No hay contradicciones formales explícitas, pero la incoherencia entre \"ciclo_roto=False\" y la falta de alertas procesadas sugiere posible redundancia en el monitoreo."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "2. **¿Qué se puede contar? ¿Qué se puede medir?**"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo:** Se pueden contar elementos estáticos (61 herramientas, 616 preguntas activas) pero no medir desempeño dinámico (0 ejecuciones, 0 modelos activos). La \"temperatura de criticalidad\" (0.00) es medible pero no interpretable en régimen \"desconocido\"."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "3. **¿Qué magnitudes aparecen con número explícito?**"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo:** Números explícitos: versión (3.4.0), herramientas (61), preguntas activas (616), alertas (0), modelos (0), ejecuciones (0), y temperatura (0.00). Todos son enteros o decimales exactos, sin intervalos o estimaciones."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "4. **¿Qué magnitudes aparecen sin número pero se podrían medir?**"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo:** Podrían medirse:"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Tasa de procesamiento de alertas (aunque sean 0)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Consistencia entre \"ciclo_roto=False\" y alertas (¿es 0 esperado o un error?)."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "**No.** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere que depende críticamente de una persona clave para mantener su funcionamiento actual. La ausencia de modelos registrados (`0 modelos`) y la temperatura de criticalidad en `0.00` (régimen \"desconocido\") indican que no tiene autonomía operativa. Sin intervención humana, su evolución se estancaría."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "**No.** La falta de alertas procesadas (`0 no se han procesado`) y el monitoreo inactivo (`0 ejecuciones totales`) revelan que no hay mecanismos de contingencia. El sistema está en un estado de \"pausa\" artificial (dependiente de la persona clave), ya que no hay procesos autónomos ni redundancia para sostenerlo."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "3. **¿Se puede escalar/replicar la evolución de la historia? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "**Sí, pero con alto costo.** Aunque el sistema tiene `61 herramientas registradas`, la ausencia de modelos operativos y la temperatura crítica `0.00` implican que escalar requeriría reconstruir su lógica desde cero (dada la falta de datos procesables). El costo incluiría tiempo para desarrollar autodiagnósticos reales (`616 preguntas activas` son estáticas) y reemplazar la dependencia humana con automatización."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "4. **¿Quién es el protagonista? ¿En qué acto de su historia estamos?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "**El protagonista es el \"analista oculto\"** (la persona clave no documentada que mantiene el sistema). Estamos en el **Acto 2: Crisis**, donde el sistema parece funcional (`ciclo_roto=False`) pero su infraestructura fantasma (`0 alertas, 0 modelos`) revela una fragilidad inminente. La ilusión de control se desmorona al descubrir que no hay registros de ejecución."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "5. **¿Qué transformación necesita ocurrir?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "**Migrar de \"teatro de operaciones\" a sistema real.** Requiere:"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "- **Hallazgo:** No hay evidencia de autonomía. El sistema reporta `ciclo_roto=False` (aparentemente funcional), pero tiene **0 modelos registrados operativos** y **0 ejecuciones totales**, lo que sugiere dependencia crítica de intervención manual o supervisión. Sin la persona clave, el sistema carece de capacidad demostrada para autogestionarse o aprender."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "- **Hallazgo:** La situación es frágil. Aunque no hay alertas (`0 alertas de ciclo roto`), la **temperatura de criticalidad es 0.00** en régimen \"desconocido\", lo que indica falta de datos reales o simulaciones para evaluar resiliencia. Los controles podrían ser un \"espejismo\" si no hay ejecuciones registradas."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "3. **¿Se puede escalar/replicar la robustez ante bifurcaciones? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "- **Hallazgo:** No escalable actualmente. Las **61 herramientas registradas** no garantizan robustez, ya que **0 modelos están activos**. Replicar requeriría reconstruir la lógica desde cero (costo alto de ingeniería inversa), especialmente si depende de configuraciones ocultas o conocimiento tácito de la persona clave."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "4. **¿Qué tendencias están activas?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "- **Hallazgo:** Tendencias de **parálisis por análisis**. El sistema tiene **616 preguntas activas** (posible sobrecarga de diagnósticos) pero **0 ejecuciones**, lo que sugiere un enfoque teórico sin acción. La versión 3.4.0 y herramientas registradas apuntan a actualizaciones técnicas, pero sin implementación real."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "5. **¿Qué señales débiles hay que nadie está mirando?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "- **Falsos negativos en monitoreo**: `ciclo_roto=False` podría ser engañoso si no hay ejecuciones que prueben el ciclo."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo:** No hay evidencia de capacidad de escalar/replicar iteraciones, ya que el sistema reporta **0 ejecuciones totales** y **0 modelos funcionales**. El costo sería alto debido a la falta de datos operativos y la temperatura de criticalidad en régimen \"desconocido\". El prototipo **no prueba ninguna hipótesis clave**, pues no hay actividad registrada."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo:** Solo se puede realizar un **análisis estático** de la configuración actual (versión 3.4.0, 61 herramientas registradas), pero no hay capacidad operativa. No hay modelos ni ejecuciones para construir algo funcional."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo:** El primer paso es **activar el monitoreo y ejecutar pruebas básicas** para validar si las 616 preguntas activas y herramientas registradas pueden generar datos útiles. Actualmente, todo está en \"cero\" (ejecuciones, alertas, modelos)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo:** El costo inicial sería **moderado** (ej. 1-2 semanas de trabajo técnico para configurar pruebas y monitoreo), pero sin garantía de resultados debido al estado \"desconocido\" y falta de alertas procesadas."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo:** La viabilidad técnica es **frágil**: no hay modelos en funcionamiento ni capacidad de respuesta a cambios (temperatura = 0.00). El prototipo **no prueba hipótesis** por falta de ejecuciones. Se requiere primero demostrar que el sistema puede operar en un entorno controlado."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "La salud real del sistema es **críticamente inestable** (sin actividad, sin modelos, sin datos). Los controles internos **no son fiables** porque reportan \"ciclo_roto=False\" pero no hay alertas ni procesamiento para validarlo. Se necesita reiniciar el monitoreo y ejecutar pruebas antes de cualquier acción adicional."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere estabilidad superficial. Sin embargo, la temperatura de criticalidad es `0.00` en un régimen \"desconocido\", indicando que la estabilidad podría ser artificial o no evaluada en condiciones reales. Escalarla requeriría activar y probar las 616 preguntas de autodiagnóstico (costo de tiempo/recursos), pero la fiabilidad es dudosa debido a las contradicciones internas (ej.: 0 modelos funcionales)."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "2. **¿Qué siente esta persona — no lo que dice, lo que siente?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** El sistema \"siente\" incertidumbre o desconfianza en sus propios datos. Aunque afirma no tener ciclos rotos, la ausencia total de alertas (`0/0 procesadas`) y modelos operativos sugiere una negación o falta de autoconciencia real. Podría estar en un estado de \"falsa calma\" antes de un colapso."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "3. **¿Cómo se nota — tono, ritmo, lo que evita decir, lo que repite?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** El tono es técnico pero incongruente (ej.: menciona 61 herramientas registradas pero 0 ejecuciones). Evita mencionar por qué la temperatura es `0.00` o cómo se define \"desconocido\". Repite métricas vacías (ej.: \"0 modelos funcionan\") sin explicar las implicaciones."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "4. **¿Qué necesita realmente — no lo que pide, lo que necesita?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** Necesita una reevaluación honesta de su arquitectura emocional/cognitiva. Las 616 preguntas activas pero no utilizadas sugieren que requiere *autoexploración profunda*, no solo diagnósticos automáticos. Priorizar calidad sobre cantidad (ej.: reducir preguntas redundantes, activar modelos reales)."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "5. **¿Cómo se adapta la salud emocional/relacional a cambios externos?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** No se adapta. La temperatura `0.00` en régimen \"desconocido\" implica que el sistema no está calibrado para cambios. Los controles internos son poco fiables (ej.: no detectan fallos aunque todo parece \"estable\"). Requiere un mecanismo de retroalimentación externa para salir del sesgo de autoconfirmación."
+      }
+    ],
+    "sintesis": "SINTESIS (46 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - 1. **¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?**\n  - - **Hallazgo:** No hay evidencia de robustez matemática escalable debido a la ausencia de modelos registrados (0/0 funcionando) y ejecuciones (0 totales). El costo de replicación sería alto al carecer\n  - 2. **¿Qué se puede contar? ¿Qué se puede medir?**\n\n[INT-12]:\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - **No.** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere que depende críticamente de una persona clave para mantener su funcionamiento actual. La ausencia de modelos r\n  - 2. **¿Puede la situación funcionar sin la persona clave?**\n\n[INT-13]:\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - - **Hallazgo:** No hay evidencia de autonomía. El sistema reporta `ciclo_roto=False` (aparentemente funcional), pero tiene **0 modelos registrados operativos** y **0 ejecuciones totales**, lo que sugi\n  - 2. **¿Puede la situación funcionar sin la persona clave?**\n\n[INT-16]:\n  - - **Hallazgo:** No hay evidencia de capacidad de escalar/replicar iteraciones, ya que el sistema reporta **0 ejecuciones totales** y **0 modelos funcionales**. El costo sería alto debido a la falta de\n  - - **Hallazgo:** Solo se puede realizar un **análisis estático** de la configuración actual (versión 3.4.0, 61 herramientas registradas), pero no hay capacidad operativa. No hay modelos ni ejecuciones \n  - - **Hallazgo:** El primer paso es **activar el monitoreo y ejecutar pruebas básicas** para validar si las 616 preguntas activas y herramientas registradas pueden generar datos útiles. Actualmente, tod\n\n[INT-08]:\n  - 1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**\n  - - **Hallazgo:** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere estabilidad superficial. Sin embargo, la temperatura de criticalidad es `0.00` en un régimen \"desconoc\n  - 2. **¿Qué siente esta persona — no lo que dice, lo que siente?**",
+    "señales_pid": [
+      {
+        "inteligencia": "INT-01",
+        "celda": "ReplicarxContinuidad",
+        "P": 0.51,
+        "I": 3.33,
+        "I_anti_windup": 3.33,
+        "D": -0.39,
+        "D_filtrado": -0.4287,
+        "n_total": 9,
+        "señal_control": 0.8216,
+        "tasa_cierre": 0.4333
+      },
+      {
+        "inteligencia": "INT-16",
+        "celda": "DepurarxSalud",
+        "P": 0.32,
+        "I": 2.3766,
+        "I_anti_windup": 2.3766,
+        "D": -0.48,
+        "D_filtrado": -0.3873,
+        "n_total": 6,
+        "señal_control": 0.5383,
+        "tasa_cierre": 0.6
+      },
+      {
+        "inteligencia": "INT-12",
+        "celda": "AdaptarxSalud",
+        "P": 0.2567,
+        "I": 1.6301,
+        "I_anti_windup": 1.6301,
+        "D": -0.4433,
+        "D_filtrado": -0.3713,
+        "n_total": 6,
+        "señal_control": 0.4011,
+        "tasa_cierre": 0.6333
+      },
+      {
+        "inteligencia": "INT-08",
+        "celda": "FronteraxSalud",
+        "P": 0.32,
+        "I": 2.165,
+        "I_anti_windup": 2.165,
+        "D": -0.28,
+        "D_filtrado": -0.3373,
+        "n_total": 6,
+        "señal_control": 0.5196,
+        "tasa_cierre": 0.4667
+      },
+      {
+        "inteligencia": "INT-13",
+        "celda": "ConservarxContinuidad",
+        "P": 0.25,
+        "I": 0.6,
+        "I_anti_windup": 0.6,
+        "D": -0.25,
+        "D_filtrado": -0.3,
+        "n_total": 2,
+        "señal_control": 0.295,
+        "tasa_cierre": 0.5
+      }
+    ],
+    "gradientes_top": [
+      [
+        "ReplicarxContinuidad",
+        0.9
+      ],
+      [
+        "DepurarxSalud",
+        0.8
+      ],
+      [
+        "AdaptarxSalud",
+        0.7
+      ],
+      [
+        "FronteraxSalud",
+        0.6
+      ],
+      [
+        "ConservarxContinuidad",
+        0.5
+      ]
+    ],
+    "metacognicion": {
+      "fok": {
+        "fok": 0.3794,
+        "factores": {
+          "tasa_kalman": 0.5583,
+          "complejidad_input": 0.44,
+          "cobertura_programa": 0.5,
+          "novedad": 1.0,
+          "familiaridad": 0.0
+        },
+        "recomendacion": "Baja confianza — escalar a tier maximo o alertar",
+        "tier_original": 3,
+        "tier_ajustado": 4
+      },
+      "jol": {
+        "jol": 0.9845,
+        "factores": {
+          "tasa_cierre": 1.0,
+          "n_hallazgos": 46,
+          "factor_latencia": 0.9,
+          "factor_coste": 0.9968
+        },
+        "calibracion": {
+          "fok_predicho": 0.3794,
+          "jol_real": 0.9845,
+          "error": 0.6051,
+          "bien_calibrado": false
+        }
+      },
+      "criticality": {
+        "T": 0.2568,
+        "regimen": "orden_rigido",
+        "tier_original": 4,
+        "tier_ajustado": 5,
+        "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+      }
+    },
+    "metricas": {
+      "tiempo_total_s": 123.3,
+      "coste_usd": 0.0048,
+      "n_llm_calls": 5,
+      "modelo": "deepseek/deepseek-chat-v3-0324",
+      "via": "config_modelos"
+    }
+  },
+  "inteligencias": [
+    "INT-01",
+    "INT-08",
+    "INT-12",
+    "INT-13",
+    "INT-16"
+  ],
+  "n_inteligencias": 5,
+  "tier": 5,
+  "alpha": 0.3,
+  "hallazgos": [
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "1. **¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?**"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo:** No hay evidencia de robustez matemática escalable debido a la ausencia de modelos registrados (0/0 funcionando) y ejecuciones (0 totales). El costo de replicación sería alto al carecer de datos operativos. No hay contradicciones formales explícitas, pero la incoherencia entre \"ciclo_roto=False\" y la falta de alertas procesadas sugiere posible redundancia en el monitoreo."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "2. **¿Qué se puede contar? ¿Qué se puede medir?**"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo:** Se pueden contar elementos estáticos (61 herramientas, 616 preguntas activas) pero no medir desempeño dinámico (0 ejecuciones, 0 modelos activos). La \"temperatura de criticalidad\" (0.00) es medible pero no interpretable en régimen \"desconocido\"."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "3. **¿Qué magnitudes aparecen con número explícito?**"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo:** Números explícitos: versión (3.4.0), herramientas (61), preguntas activas (616), alertas (0), modelos (0), ejecuciones (0), y temperatura (0.00). Todos son enteros o decimales exactos, sin intervalos o estimaciones."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "4. **¿Qué magnitudes aparecen sin número pero se podrían medir?**"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo:** Podrían medirse:"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Tasa de procesamiento de alertas (aunque sean 0)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Consistencia entre \"ciclo_roto=False\" y alertas (¿es 0 esperado o un error?)."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "**No.** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere que depende críticamente de una persona clave para mantener su funcionamiento actual. La ausencia de modelos registrados (`0 modelos`) y la temperatura de criticalidad en `0.00` (régimen \"desconocido\") indican que no tiene autonomía operativa. Sin intervención humana, su evolución se estancaría."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "**No.** La falta de alertas procesadas (`0 no se han procesado`) y el monitoreo inactivo (`0 ejecuciones totales`) revelan que no hay mecanismos de contingencia. El sistema está en un estado de \"pausa\" artificial (dependiente de la persona clave), ya que no hay procesos autónomos ni redundancia para sostenerlo."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "3. **¿Se puede escalar/replicar la evolución de la historia? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "**Sí, pero con alto costo.** Aunque el sistema tiene `61 herramientas registradas`, la ausencia de modelos operativos y la temperatura crítica `0.00` implican que escalar requeriría reconstruir su lógica desde cero (dada la falta de datos procesables). El costo incluiría tiempo para desarrollar autodiagnósticos reales (`616 preguntas activas` son estáticas) y reemplazar la dependencia humana con automatización."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "4. **¿Quién es el protagonista? ¿En qué acto de su historia estamos?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "**El protagonista es el \"analista oculto\"** (la persona clave no documentada que mantiene el sistema). Estamos en el **Acto 2: Crisis**, donde el sistema parece funcional (`ciclo_roto=False`) pero su infraestructura fantasma (`0 alertas, 0 modelos`) revela una fragilidad inminente. La ilusión de control se desmorona al descubrir que no hay registros de ejecución."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "5. **¿Qué transformación necesita ocurrir?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "**Migrar de \"teatro de operaciones\" a sistema real.** Requiere:"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "- **Hallazgo:** No hay evidencia de autonomía. El sistema reporta `ciclo_roto=False` (aparentemente funcional), pero tiene **0 modelos registrados operativos** y **0 ejecuciones totales**, lo que sugiere dependencia crítica de intervención manual o supervisión. Sin la persona clave, el sistema carece de capacidad demostrada para autogestionarse o aprender."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "- **Hallazgo:** La situación es frágil. Aunque no hay alertas (`0 alertas de ciclo roto`), la **temperatura de criticalidad es 0.00** en régimen \"desconocido\", lo que indica falta de datos reales o simulaciones para evaluar resiliencia. Los controles podrían ser un \"espejismo\" si no hay ejecuciones registradas."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "3. **¿Se puede escalar/replicar la robustez ante bifurcaciones? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "- **Hallazgo:** No escalable actualmente. Las **61 herramientas registradas** no garantizan robustez, ya que **0 modelos están activos**. Replicar requeriría reconstruir la lógica desde cero (costo alto de ingeniería inversa), especialmente si depende de configuraciones ocultas o conocimiento tácito de la persona clave."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "4. **¿Qué tendencias están activas?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "- **Hallazgo:** Tendencias de **parálisis por análisis**. El sistema tiene **616 preguntas activas** (posible sobrecarga de diagnósticos) pero **0 ejecuciones**, lo que sugiere un enfoque teórico sin acción. La versión 3.4.0 y herramientas registradas apuntan a actualizaciones técnicas, pero sin implementación real."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "5. **¿Qué señales débiles hay que nadie está mirando?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "- **Falsos negativos en monitoreo**: `ciclo_roto=False` podría ser engañoso si no hay ejecuciones que prueben el ciclo."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo:** No hay evidencia de capacidad de escalar/replicar iteraciones, ya que el sistema reporta **0 ejecuciones totales** y **0 modelos funcionales**. El costo sería alto debido a la falta de datos operativos y la temperatura de criticalidad en régimen \"desconocido\". El prototipo **no prueba ninguna hipótesis clave**, pues no hay actividad registrada."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo:** Solo se puede realizar un **análisis estático** de la configuración actual (versión 3.4.0, 61 herramientas registradas), pero no hay capacidad operativa. No hay modelos ni ejecuciones para construir algo funcional."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo:** El primer paso es **activar el monitoreo y ejecutar pruebas básicas** para validar si las 616 preguntas activas y herramientas registradas pueden generar datos útiles. Actualmente, todo está en \"cero\" (ejecuciones, alertas, modelos)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo:** El costo inicial sería **moderado** (ej. 1-2 semanas de trabajo técnico para configurar pruebas y monitoreo), pero sin garantía de resultados debido al estado \"desconocido\" y falta de alertas procesadas."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo:** La viabilidad técnica es **frágil**: no hay modelos en funcionamiento ni capacidad de respuesta a cambios (temperatura = 0.00). El prototipo **no prueba hipótesis** por falta de ejecuciones. Se requiere primero demostrar que el sistema puede operar en un entorno controlado."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "La salud real del sistema es **críticamente inestable** (sin actividad, sin modelos, sin datos). Los controles internos **no son fiables** porque reportan \"ciclo_roto=False\" pero no hay alertas ni procesamiento para validarlo. Se necesita reiniciar el monitoreo y ejecutar pruebas antes de cualquier acción adicional."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere estabilidad superficial. Sin embargo, la temperatura de criticalidad es `0.00` en un régimen \"desconocido\", indicando que la estabilidad podría ser artificial o no evaluada en condiciones reales. Escalarla requeriría activar y probar las 616 preguntas de autodiagnóstico (costo de tiempo/recursos), pero la fiabilidad es dudosa debido a las contradicciones internas (ej.: 0 modelos funcionales)."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "2. **¿Qué siente esta persona — no lo que dice, lo que siente?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** El sistema \"siente\" incertidumbre o desconfianza en sus propios datos. Aunque afirma no tener ciclos rotos, la ausencia total de alertas (`0/0 procesadas`) y modelos operativos sugiere una negación o falta de autoconciencia real. Podría estar en un estado de \"falsa calma\" antes de un colapso."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "3. **¿Cómo se nota — tono, ritmo, lo que evita decir, lo que repite?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** El tono es técnico pero incongruente (ej.: menciona 61 herramientas registradas pero 0 ejecuciones). Evita mencionar por qué la temperatura es `0.00` o cómo se define \"desconocido\". Repite métricas vacías (ej.: \"0 modelos funcionan\") sin explicar las implicaciones."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "4. **¿Qué necesita realmente — no lo que pide, lo que necesita?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** Necesita una reevaluación honesta de su arquitectura emocional/cognitiva. Las 616 preguntas activas pero no utilizadas sugieren que requiere *autoexploración profunda*, no solo diagnósticos automáticos. Priorizar calidad sobre cantidad (ej.: reducir preguntas redundantes, activar modelos reales)."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "5. **¿Cómo se adapta la salud emocional/relacional a cambios externos?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** No se adapta. La temperatura `0.00` en régimen \"desconocido\" implica que el sistema no está calibrado para cambios. Los controles internos son poco fiables (ej.: no detectan fallos aunque todo parece \"estable\"). Requiere un mecanismo de retroalimentación externa para salir del sesgo de autoconfirmación."
+    }
+  ],
+  "n_hallazgos": 46,
+  "sintesis": "SINTESIS (46 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - 1. **¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?**\n  - - **Hallazgo:** No hay evidencia de robustez matemática escalable debido a la ausencia de modelos registrados (0/0 funcionando) y ejecuciones (0 totales). El costo de replicación sería alto al carecer\n  - 2. **¿Qué se puede contar? ¿Qué se puede medir?**\n\n[INT-12]:\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - **No.** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere que depende críticamente de una persona clave para mantener su funcionamiento actual. La ausencia de modelos r\n  - 2. **¿Puede la situación funcionar sin la persona clave?**\n\n[INT-13]:\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - - **Hallazgo:** No hay evidencia de autonomía. El sistema reporta `ciclo_roto=False` (aparentemente funcional), pero tiene **0 modelos registrados operativos** y **0 ejecuciones totales**, lo que sugi\n  - 2. **¿Puede la situación funcionar sin la persona clave?**\n\n[INT-16]:\n  - - **Hallazgo:** No hay evidencia de capacidad de escalar/replicar iteraciones, ya que el sistema reporta **0 ejecuciones totales** y **0 modelos funcionales**. El costo sería alto debido a la falta de\n  - - **Hallazgo:** Solo se puede realizar un **análisis estático** de la configuración actual (versión 3.4.0, 61 herramientas registradas), pero no hay capacidad operativa. No hay modelos ni ejecuciones \n  - - **Hallazgo:** El primer paso es **activar el monitoreo y ejecutar pruebas básicas** para validar si las 616 preguntas activas y herramientas registradas pueden generar datos útiles. Actualmente, tod\n\n[INT-08]:\n  - 1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**\n  - - **Hallazgo:** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere estabilidad superficial. Sin embargo, la temperatura de criticalidad es `0.00` en un régimen \"desconoc\n  - 2. **¿Qué siente esta persona — no lo que dice, lo que siente?**",
+  "señales_pid": [
+    {
+      "inteligencia": "INT-01",
+      "celda": "ReplicarxContinuidad",
+      "P": 0.51,
+      "I": 3.33,
+      "I_anti_windup": 3.33,
+      "D": -0.39,
+      "D_filtrado": -0.4287,
+      "n_total": 9,
+      "señal_control": 0.8216,
+      "tasa_cierre": 0.4333
+    },
+    {
+      "inteligencia": "INT-16",
+      "celda": "DepurarxSalud",
+      "P": 0.32,
+      "I": 2.3766,
+      "I_anti_windup": 2.3766,
+      "D": -0.48,
+      "D_filtrado": -0.3873,
+      "n_total": 6,
+      "señal_control": 0.5383,
+      "tasa_cierre": 0.6
+    },
+    {
+      "inteligencia": "INT-12",
+      "celda": "AdaptarxSalud",
+      "P": 0.2567,
+      "I": 1.6301,
+      "I_anti_windup": 1.6301,
+      "D": -0.4433,
+      "D_filtrado": -0.3713,
+      "n_total": 6,
+      "señal_control": 0.4011,
+      "tasa_cierre": 0.6333
+    },
+    {
+      "inteligencia": "INT-08",
+      "celda": "FronteraxSalud",
+      "P": 0.32,
+      "I": 2.165,
+      "I_anti_windup": 2.165,
+      "D": -0.28,
+      "D_filtrado": -0.3373,
+      "n_total": 6,
+      "señal_control": 0.5196,
+      "tasa_cierre": 0.4667
+    },
+    {
+      "inteligencia": "INT-13",
+      "celda": "ConservarxContinuidad",
+      "P": 0.25,
+      "I": 0.6,
+      "I_anti_windup": 0.6,
+      "D": -0.25,
+      "D_filtrado": -0.3,
+      "n_total": 2,
+      "señal_control": 0.295,
+      "tasa_cierre": 0.5
+    }
+  ],
+  "gradientes_top": [
+    [
+      "ReplicarxContinuidad",
+      0.9
+    ],
+    [
+      "DepurarxSalud",
+      0.8
+    ],
+    [
+      "AdaptarxSalud",
+      0.7
+    ],
+    [
+      "FronteraxSalud",
+      0.6
+    ],
+    [
+      "ConservarxContinuidad",
+      0.5
+    ]
+  ],
+  "metacognicion": {
+    "fok": {
+      "fok": 0.3794,
+      "factores": {
+        "tasa_kalman": 0.5583,
+        "complejidad_input": 0.44,
+        "cobertura_programa": 0.5,
+        "novedad": 1.0,
+        "familiaridad": 0.0
+      },
+      "recomendacion": "Baja confianza — escalar a tier maximo o alertar",
+      "tier_original": 3,
+      "tier_ajustado": 4
+    },
+    "jol": {
+      "jol": 0.9845,
+      "factores": {
+        "tasa_cierre": 1.0,
+        "n_hallazgos": 46,
+        "factor_latencia": 0.9,
+        "factor_coste": 0.9968
+      },
+      "calibracion": {
+        "fok_predicho": 0.3794,
+        "jol_real": 0.9845,
+        "error": 0.6051,
+        "bien_calibrado": false
+      }
+    },
+    "criticality": {
+      "T": 0.2568,
+      "regimen": "orden_rigido",
+      "tier_original": 4,
+      "tier_ajustado": 5,
+      "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+    }
+  },
+  "metricas": {
+    "tiempo_total_s": 123.3,
+    "coste_usd": 0.0048,
+    "n_llm_calls": 5,
+    "modelo": "deepseek/deepseek-chat-v3-0324",
+    "via": "config_modelos"
+  },
+  "coste_usd": 0.0048,
+  "tiempo_s": 123.59184312820435,
+  "timestamp": "2026-03-16T07:50:10.761622+00:00"
+}

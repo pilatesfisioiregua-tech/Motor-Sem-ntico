@@ -1,0 +1,1177 @@
+{
+  "caso_id": "p33_caso_05_direccion",
+  "input": "Mi sistema tiene un gestor que se auto-ajusta. Sus parámetros actuales: umbral de poda=0.0888, umbral de promoción=0.4, ventana PID=50 puntos, agresividad de poda=0.5. Lleva 1 ciclo(s) de auto-ajuste. El explorador detecta 11 gaps en la matriz lente×función, 7 gaps en tipos de pensamiento, y 1 gaps en modos conceptuales. Gaps principales: ?, ?, ?, ?, ?. El reactor de preguntas tiene 0 candidatas pendientes. Las herramientas del sistema no registran uso ({'tools': [], 'period_days': 30}). Hay 14 celdas con señales PID activas. ¿Está mi sistema priorizando correctamente? ¿Trabaja en lo que más impacto tiene?",
+  "contexto": "Este es un análisis del propio sistema cognitivo OMNI-MIND. Datos reales.",
+  "config": {
+    "profundidad": "profunda",
+    "presupuesto_max": 0.05,
+    "tiempo_max_s": 120
+  },
+  "datos_brutos": {
+    "/gestor/parametros": {
+      "status": "ok",
+      "parametros": {
+        "umbral_poda": 0.0888,
+        "umbral_promocion": 0.4,
+        "min_n_decision": 10,
+        "ventana_pid": 50,
+        "agresividad_poda": 0.5,
+        "gamma_adaptacion": 0.1,
+        "epsilon_estabilidad": 0.1
+      },
+      "ciclo": 1
+    },
+    "/explorer/gaps": {
+      "lente_funcion_gaps": [
+        {
+          "lente": "salud",
+          "funcion": "conservar",
+          "count": 0
+        },
+        {
+          "lente": "salud",
+          "funcion": "captar",
+          "count": 0
+        },
+        {
+          "lente": "salud",
+          "funcion": "depurar",
+          "count": 0
+        },
+        {
+          "lente": "salud",
+          "funcion": "distribuir",
+          "count": 0
+        },
+        {
+          "lente": "salud",
+          "funcion": "frontera",
+          "count": 0
+        },
+        {
+          "lente": "salud",
+          "funcion": "replicar",
+          "count": 0
+        },
+        {
+          "lente": "sentido",
+          "funcion": "conservar",
+          "count": 0
+        },
+        {
+          "lente": "sentido",
+          "funcion": "captar",
+          "count": 0
+        },
+        {
+          "lente": "sentido",
+          "funcion": "frontera",
+          "count": 1
+        },
+        {
+          "lente": "sentido",
+          "funcion": "adaptar",
+          "count": 1
+        },
+        {
+          "lente": "sentido",
+          "funcion": "replicar",
+          "count": 0
+        }
+      ],
+      "thinking_gaps": [
+        {
+          "thinking": "percepcion",
+          "count": 1
+        },
+        {
+          "thinking": "auto_diagnostico",
+          "count": 0
+        },
+        {
+          "thinking": "convergencia",
+          "count": 1
+        },
+        {
+          "thinking": "provocacion",
+          "count": 0
+        },
+        {
+          "thinking": "reencuadre",
+          "count": 0
+        },
+        {
+          "thinking": "destruccion_creativa",
+          "count": 0
+        },
+        {
+          "thinking": "creacion",
+          "count": 0
+        }
+      ],
+      "mode_gaps": [
+        {
+          "mode": "SENTIR",
+          "count": 1
+        }
+      ],
+      "total_lf_gaps": 11,
+      "total_thinking_gaps": 7,
+      "total_mode_gaps": 1
+    },
+    "/reactor/candidatas": {
+      "status": "ok",
+      "candidatas": [],
+      "n": 0
+    },
+    "/tools/stats": {
+      "tools": [],
+      "period_days": 30
+    },
+    "/tools/gaps": {
+      "gaps": []
+    },
+    "/motor/señales": {
+      "status": "ok",
+      "celdas": 14,
+      "señales": {
+        "AdaptarxContinuidad": {
+          "P": 0.57,
+          "I": 0.87,
+          "I_anti_windup": 0.87,
+          "D": -0.33,
+          "D_filtrado": -0.315,
+          "n_total": 2,
+          "señal_control": 0.6412
+        },
+        "AdaptarxSentido": {
+          "P": 0.48,
+          "I": 0.72,
+          "I_anti_windup": 0.72,
+          "D": -0.32,
+          "D_filtrado": -0.34,
+          "n_total": 2,
+          "señal_control": 0.535
+        },
+        "CaptarxContinuidad": {
+          "P": 0.2333,
+          "I": 0.2333,
+          "I_anti_windup": 0.2333,
+          "D": -0.4667,
+          "D_filtrado": -0.4667,
+          "n_total": 1,
+          "señal_control": 0.2333
+        },
+        "CaptarxSalud": {
+          "P": 0.28,
+          "I": 0.5633,
+          "I_anti_windup": 0.5633,
+          "D": -0.32,
+          "D_filtrado": -0.2683,
+          "n_total": 2,
+          "señal_control": 0.3229
+        },
+        "ConservarxContinuidad": {
+          "P": 0.35,
+          "I": 0.35,
+          "I_anti_windup": 0.35,
+          "D": -0.35,
+          "D_filtrado": -0.35,
+          "n_total": 1,
+          "señal_control": 0.3675
+        },
+        "ConservarxSalud": {
+          "P": 0.5867,
+          "I": 2.27,
+          "I_anti_windup": 2.27,
+          "D": -0.2133,
+          "D_filtrado": -0.2793,
+          "n_total": 9,
+          "señal_control": 0.7997
+        },
+        "DepurarxContinuidad": {
+          "P": 0.2,
+          "I": 0.2,
+          "I_anti_windup": 0.2,
+          "D": -0.4,
+          "D_filtrado": -0.4,
+          "n_total": 1,
+          "señal_control": 0.2
+        },
+        "DepurarxSalud": {
+          "P": 0.4,
+          "I": 1.3133,
+          "I_anti_windup": 1.3133,
+          "D": -0.4,
+          "D_filtrado": -0.3956,
+          "n_total": 3,
+          "señal_control": 0.5116
+        },
+        "DistribuirxSalud": {
+          "P": 0.525,
+          "I": 0.805,
+          "I_anti_windup": 0.805,
+          "D": -0.225,
+          "D_filtrado": -0.2725,
+          "n_total": 2,
+          "señal_control": 0.5919
+        },
+        "FronteraxContinuidad": {
+          "P": 0.21,
+          "I": 0.21,
+          "I_anti_windup": 0.21,
+          "D": -0.49,
+          "D_filtrado": -0.49,
+          "n_total": 1,
+          "señal_control": 0.2065
+        },
+        "FronteraxSalud": {
+          "P": 0.4,
+          "I": 1.4784,
+          "I_anti_windup": 1.4784,
+          "D": -0.4,
+          "D_filtrado": -0.3239,
+          "n_total": 3,
+          "señal_control": 0.5316
+        },
+        "FronteraxSentido": {
+          "P": 0.25,
+          "I": 0.85,
+          "I_anti_windup": 0.85,
+          "D": -0.25,
+          "D_filtrado": -0.3167,
+          "n_total": 3,
+          "señal_control": 0.3192
+        },
+        "ReplicarxContinuidad": {
+          "P": 0.56,
+          "I": 2.1333,
+          "I_anti_windup": 2.1333,
+          "D": -0.24,
+          "D_filtrado": -0.4133,
+          "n_total": 5,
+          "señal_control": 0.7527
+        },
+        "ReplicarxSentido": {
+          "P": 0.3733,
+          "I": 0.3733,
+          "I_anti_windup": 0.3733,
+          "D": -0.3267,
+          "D_filtrado": -0.3267,
+          "n_total": 1,
+          "señal_control": 0.3943
+        }
+      }
+    },
+    "/gestor/log": {
+      "log": [
+        {
+          "id": 76,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.88,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5046,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-16T06:41:30.174788+00:00"
+        },
+        {
+          "id": 75,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.0888,
+                "old": 0.05,
+                "razon": "p10=0.4380"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.0888,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-16T06:41:30.121972+00:00"
+        },
+        {
+          "id": 74,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.41,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5121,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-16T06:29:52.117550+00:00"
+        },
+        {
+          "id": 73,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.65,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5121,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-16T06:21:47.495954+00:00"
+        },
+        {
+          "id": 72,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.84,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5012,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T23:19:09.108739+00:00"
+        },
+        {
+          "id": 71,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.4,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5167,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T23:13:28.179726+00:00"
+        },
+        {
+          "id": 70,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.41,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5167,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T22:44:49.050824+00:00"
+        },
+        {
+          "id": 69,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.39,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5167,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T22:35:34.485415+00:00"
+        },
+        {
+          "id": 68,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.42,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5167,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T22:34:17.875554+00:00"
+        },
+        {
+          "id": 67,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 6.64,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5167,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T22:26:53.555085+00:00"
+        },
+        {
+          "id": 66,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 3,
+            "pasos_ok": 12,
+            "tiempo_s": 9.29,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5167,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T22:18:41.878171+00:00"
+        },
+        {
+          "id": 65,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 2,
+            "pasos_ok": 12,
+            "tiempo_s": 0.4,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5167,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T22:18:19.840013+00:00"
+        },
+        {
+          "id": 64,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.42,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.5667,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T22:07:18.939940+00:00"
+        },
+        {
+          "id": 63,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 2,
+            "pasos_ok": 12,
+            "tiempo_s": 0.53,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.7656,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T21:33:08.267591+00:00"
+        },
+        {
+          "id": 62,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 2,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.2067,
+                "old": 0.1325,
+                "razon": "p10=0.8750"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.2067,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T21:33:08.216582+00:00"
+        },
+        {
+          "id": 61,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.47,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.7153,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T21:22:11.677208+00:00"
+        },
+        {
+          "id": 60,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.1325,
+                "old": 0.05,
+                "razon": "p10=0.8750"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.1325,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T21:22:11.619492+00:00"
+        },
+        {
+          "id": 59,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.73,
+            "tool_gaps": 0,
+            "pasos_error": 0,
+            "tasa_media_global": 0.7153,
+            "flywheel_promocion": false
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T21:21:25.371608+00:00"
+        },
+        {
+          "id": 58,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.1325,
+                "old": 0.05,
+                "razon": "p10=0.8750"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.1325,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T21:21:25.316478+00:00"
+        },
+        {
+          "id": 57,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 0.43,
+            "pasos_error": 0,
+            "tasa_media_global": 0.6904
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T21:04:06.202802+00:00"
+        },
+        {
+          "id": 56,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 1.74,
+            "pasos_error": 0,
+            "tasa_media_global": 0.6339
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T20:49:56.850309+00:00"
+        },
+        {
+          "id": 55,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 1.09,
+            "pasos_error": 0,
+            "tasa_media_global": 0.6339
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T20:32:11.589382+00:00"
+        },
+        {
+          "id": 54,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 5.07,
+            "pasos_error": 0,
+            "tasa_media_global": 0.2279
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T20:11:54.804750+00:00"
+        },
+        {
+          "id": 53,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T20:11:54.094086+00:00"
+        },
+        {
+          "id": 52,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 2.27,
+            "pasos_error": 0,
+            "tasa_media_global": 0.2279
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T20:01:05.196942+00:00"
+        },
+        {
+          "id": 51,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T20:01:04.735641+00:00"
+        },
+        {
+          "id": 50,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 1.65,
+            "pasos_error": 0,
+            "tasa_media_global": 0.2279
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T11:00:03.447640+00:00"
+        },
+        {
+          "id": 49,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T11:00:03.151114+00:00"
+        },
+        {
+          "id": 48,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 1.53,
+            "pasos_error": 0,
+            "tasa_media_global": 0.2279
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T10:07:02.141291+00:00"
+        },
+        {
+          "id": 47,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T10:07:01.770630+00:00"
+        },
+        {
+          "id": 46,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 1.56,
+            "pasos_error": 0,
+            "tasa_media_global": 0.2279
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T08:37:43.772657+00:00"
+        },
+        {
+          "id": 45,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T08:37:43.467916+00:00"
+        },
+        {
+          "id": 44,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 2.9,
+            "pasos_error": 0,
+            "tasa_media_global": 0.2279
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T08:33:30.990853+00:00"
+        },
+        {
+          "id": 43,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T08:33:30.385179+00:00"
+        },
+        {
+          "id": 42,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 1.72,
+            "pasos_error": 0,
+            "tasa_media_global": 0.2279
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T08:12:44.103590+00:00"
+        },
+        {
+          "id": 41,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-15T08:12:43.884493+00:00"
+        },
+        {
+          "id": 40,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 4.17,
+            "pasos_error": 0,
+            "tasa_media_global": 0.1853
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:46:01.982679+00:00"
+        },
+        {
+          "id": 39,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:46:01.807841+00:00"
+        },
+        {
+          "id": 38,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 3,
+            "pasos_ok": 12,
+            "tiempo_s": 0.67,
+            "pasos_error": 0,
+            "tasa_media_global": 0.1853
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:44:50.081712+00:00"
+        },
+        {
+          "id": 37,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 3,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.0256,
+                "old": 0.0329,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.0256,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:44:50.030242+00:00"
+        },
+        {
+          "id": 36,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 2,
+            "pasos_ok": 12,
+            "tiempo_s": 0.49,
+            "pasos_error": 0,
+            "tasa_media_global": 0.1853
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:44:44.545352+00:00"
+        },
+        {
+          "id": 35,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 2,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.0329,
+                "old": 0.041,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.0329,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:44:44.492376+00:00"
+        },
+        {
+          "id": 34,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 8.48,
+            "pasos_error": 0,
+            "tasa_media_global": 0.1853
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:44:17.153656+00:00"
+        },
+        {
+          "id": 33,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:44:16.653015+00:00"
+        },
+        {
+          "id": 32,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 2,
+            "pasos_ok": 12,
+            "tiempo_s": 1.15,
+            "pasos_error": 0,
+            "tasa_media_global": 0.1853
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:42:56.075557+00:00"
+        },
+        {
+          "id": 31,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 2,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.0329,
+                "old": 0.041,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.0329,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:42:56.024597+00:00"
+        },
+        {
+          "id": 30,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 1,
+            "pasos_ok": 12,
+            "tiempo_s": 2.81,
+            "pasos_error": 0,
+            "tasa_media_global": 0.1853
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:42:29.147899+00:00"
+        },
+        {
+          "id": 29,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 1,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.041,
+                "old": 0.05,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.041,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:42:28.847259+00:00"
+        },
+        {
+          "id": 28,
+          "accion": "loop_completo",
+          "detalle": {
+            "ciclo": 2,
+            "pasos_ok": 12,
+            "tiempo_s": 0.68,
+            "pasos_error": 0,
+            "tasa_media_global": 0.1853
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:40:47.400573+00:00"
+        },
+        {
+          "id": 27,
+          "accion": "auto_ajuste",
+          "detalle": {
+            "ciclo": 2,
+            "ajustes": {
+              "umbral_poda": {
+                "new": 0.0329,
+                "old": 0.041,
+                "razon": "p10=-0.0400"
+              }
+            },
+            "params_actuales": {
+              "umbral_poda": 0.0329,
+              "ventana_pid": 50,
+              "min_n_decision": 10,
+              "agresividad_poda": 0.5,
+              "gamma_adaptacion": 0.1,
+              "umbral_promocion": 0.4,
+              "epsilon_estabilidad": 0.1
+            }
+          },
+          "nivel": "auto",
+          "created_at": "2026-03-14T23:40:47.131754+00:00"
+        }
+      ]
+    }
+  },
+  "fuentes": [
+    "/gestor/parametros",
+    "/explorer/gaps",
+    "/reactor/candidatas",
+    "/tools/stats",
+    "/tools/gaps",
+    "/motor/señales",
+    "/gestor/log"
+  ],
+  "timestamp": "2026-03-16T06:50:10.013153+00:00"
+}

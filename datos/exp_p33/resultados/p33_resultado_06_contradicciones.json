@@ -1,0 +1,697 @@
+{
+  "caso_id": "p33_caso_06_contradicciones",
+  "status": "ok",
+  "input_preview": "Mi sistema tiene contradicciones internas que no cuadran. El autodiagnóstico dice ciclo_roto=false, pero hay 0 alertas internas diciendo 'ciclo roto' sin resolver. La criticalidad dice régimen '?' (de",
+  "response_raw": {
+    "status": "ok",
+    "caso_id": "dd545680",
+    "modo": "analisis",
+    "tier": 4,
+    "alpha": 0.3,
+    "inteligencias": [
+      "INT-01",
+      "INT-08",
+      "INT-12",
+      "INT-13",
+      "INT-16"
+    ],
+    "n_inteligencias": 5,
+    "profundidad": 2,
+    "hallazgos": [
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "1. **¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?**"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo:** La robustez matemática del sistema es cuestionable debido a **contradicciones formales** evidentes (ej. `ciclo_roto=false` vs. alertas ausentes, o \"predecible\" y \"caótico\" simultáneamente). Escalarlo requeriría resolver estas incoherencias, con un **costo alto en verificación de consistencia** entre subsistemas (propiocepción, monitoreo, métricas)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "2. **¿Qué se puede contar? ¿Qué se puede medir?**"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- 144 datapoints acumulados."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- 0 alertas internas, señales pendientes o mejoras pendientes."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Medible (pero inconsistente):**"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Ejecuciones (métricas vs. propiocepción/monitoreo)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- Criticalidad (régimen vs. avalanchas)."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "3. **¿Qué magnitudes aparecen con número explícito?**"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- `0 ejecuciones en 24h` (propiocepción)."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "*Hallazgo:* No, el sistema muestra contradicciones críticas (ejecuciones no registradas, SLOs sin datos) que sugieren dependencia de intervención humana para mantener coherencia. La ausencia de alertas activas a pesar de inconsistencias indica que la \"persona clave\" suprime fallas latentes."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "*Hallazgo:* No, la situación es insostenible: el sistema opera en un *limbo* (\"predecible y caótico\") donde la propiocepción y el monitoreo se contradicen. Sin la persona clave, las contradicciones internas llevarían a un colapso silencioso (ejecuciones fantasma, métricas no auditables)."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "3. **¿Se puede escalar/replicar la evolución de la historia? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "*Hallazgo:* Solo escalable con un *costo de caos controlado*: replicar requeriría normalizar las contradicciones (e.g., aceptar \"?\" como estado válido) y externalizar la supervisión humana a sistemas distribuidos, lo que aumentaría la entropía (avalanchas caóticas)."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "4. **¿Quién es el protagonista? ¿En qué acto de su historia estamos?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "*Hallazgo:* El protagonista es el *sistema mismo*, en un **acto de negación** (segundo acto): ignora su propia fractura (ciclo_roto=false vs. 0 alertas) mientras acumula datos inútiles (144 datapoints sin señales). La historia avanza hacia una crisis de identidad operativa."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "5. **¿Qué transformación necesita ocurrir?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "**Hallazgos concretos por pregunta:**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "*No en el estado actual*. Las contradicciones internas (ejecuciones no registradas, SLOs sin datos y diagnóstico vs. métricas) indican que el sistema depende de ajustes manuales o interpretación humana para funcionar correctamente. Sin intervención, los errores de incoherencia persistirán hasta colapsar."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "*Sí, pero de forma disfuncional*. El sistema sigue acumulando datos (144 datapoints) y no tiene señales pendientes, lo que sugiere que opera en \"piloto automático\", pero con resultados inútiles (régimen \"?\" y SLOs sin_datos). Sobrevive, pero sin dirección ni corrección de errores."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "3. **¿Se puede escalar/replicar la robustez ante bifurcaciones? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "*Sí, pero con alto costo de estandarización*. La coexistencia de predecibilidad y caos (\"?\") sugiere que el sistema tiene mecanismos parcialmente adaptativos, pero sin integración. Replicar requeriría forzar coherencia (ej: redefinir umbrales de alertas o métricas), lo que podría sacrificar flexibilidad o generar falsos positivos."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "4. **¿Qué tendencias están activas?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "*Acumulación pasiva y desacople progresivo*. Los datos se almacenan (144 datapoints) pero no se procesan (0 señales/mejoras pendientes). El sistema tiende a la parálisis por contradicciones no resueltas, priorizando métricas crudas sobre análisis accionables."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "5. **¿Qué señales débiles hay que nadie está mirando?**"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** No se puede escalar/replicar en el estado actual debido a las contradicciones internas del sistema (ejemplo: `ciclo_roto=false` vs. alertas no resueltas, métricas inconsistentes). El costo sería alto en tiempo y recursos para depurar las incoherencias antes de escalar. El prototipo **no** prueba la hipótesis clave porque los datos son contradictorios (ejecuciones registradas vs. monitoreo en `0`), lo que invalida cualquier conclusión."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** Solo se puede construir un **informe de diagnóstico detallado** que documente las incoherencias (ej.: diferencias entre autodiagnóstico, métricas y monitoreo). Priorizar la resolución de las alertas de \"ciclo roto\" y validar la fuente de verdad de los datos antes de tomar decisiones."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** El primer paso es **auditar las fuentes de datos** para identificar cuál de los sistemas (autodiagnóstico, métricas o monitoreo) está generando información errónea. Esto implica:"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- Comparar registros de ejecuciones reales con los datos del monitoreo."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- Verificar la configuración de las alertas \"ciclo roto\"."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** El costo estimado es **bajo** (1-2 días de trabajo) si se cuenta con acceso a logs y herramientas de depuración. Requiere:"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Tiempo:** 8-16 horas de análisis técnico."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Esfuerzo:** Colaboración entre equipos de desarrollo y operaciones."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Dinero:** Costo marginal si se usa infraestructura existente."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**Hallazgo:** Los límites están en la **falta de datos confiables** (ej.: SLOs `sin_datos`, contradicciones en ejecuciones). El prototipo **no** prueba la hipótesis clave porque:"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "**Hallazgos concretos:**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** La estabilidad parece no ser escalable debido a contradicciones sistémicas irreconciliables (ej.: \"predecible\" vs. \"caótico\"). El costo sería aceptar incoherencias como características inherentes, no errores, y redefinir los parámetros de \"estabilidad\"."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "2. **¿Qué siente esta persona — no lo que dice, lo que siente?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** Siente **desorientación y desconfianza hacia sus propios sistemas**, evidenciado por la pregunta *\"¿A quién creo?\"*. Hay un conflicto entre la lógica (\"datos acumulados\") y la percepción de que algo está *roto pero no detectado*."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "3. **¿Cómo se nota — tono, ritmo, lo que evita decir, lo que repite?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** Tono **urgente y fragmentado** (enumera contradicciones sin transiciones). Evita nombrar emociones directamente, pero repite \"¿?\" y \"0\" como símbolos de vacío o falla. Ritmo: acumulativo, casi catastrófico."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "4. **¿Qué necesita realmente — no lo que pide, lo que necesita?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** Necesita **coherencia interna**, no solo datos. Sus sistemas requieren reajustar expectativas (ej.: aceptar que \"predecible\" y \"caótico\" pueden coexistir en distintos módulos) y un *mecanismo de priorización* para jerarquizar alertas."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "5. **¿Dónde están los límites de la estabilidad de las relaciones?**"
+      }
+    ],
+    "sintesis": "SINTESIS (50 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - 1. **¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?**\n  - - **Hallazgo:** La robustez matemática del sistema es cuestionable debido a **contradicciones formales** evidentes (ej. `ciclo_roto=false` vs. alertas ausentes, o \"predecible\" y \"caótico\" simultáneame\n  - 2. **¿Qué se puede contar? ¿Qué se puede medir?**\n\n[INT-12]:\n  - Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - *Hallazgo:* No, el sistema muestra contradicciones críticas (ejecuciones no registradas, SLOs sin datos) que sugieren dependencia de intervención humana para mantener coherencia. La ausencia de alerta\n\n[INT-13]:\n  - **Hallazgos concretos por pregunta:**\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - *No en el estado actual*. Las contradicciones internas (ejecuciones no registradas, SLOs sin datos y diagnóstico vs. métricas) indican que el sistema depende de ajustes manuales o interpretación human\n\n[INT-16]:\n  - **Hallazgo:** No se puede escalar/replicar en el estado actual debido a las contradicciones internas del sistema (ejemplo: `ciclo_roto=false` vs. alertas no resueltas, métricas inconsistentes). El cos\n  - **Hallazgo:** Solo se puede construir un **informe de diagnóstico detallado** que documente las incoherencias (ej.: diferencias entre autodiagnóstico, métricas y monitoreo). Priorizar la resolución de\n  - **Hallazgo:** El primer paso es **auditar las fuentes de datos** para identificar cuál de los sistemas (autodiagnóstico, métricas o monitoreo) está generando información errónea. Esto implica:\n\n[INT-08]:\n  - **Hallazgos concretos:**\n  - 1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**\n  - - **Hallazgo:** La estabilidad parece no ser escalable debido a contradicciones sistémicas irreconciliables (ej.: \"predecible\" vs. \"caótico\"). El costo sería aceptar incoherencias como características",
+    "señales_pid": [
+      {
+        "inteligencia": "INT-01",
+        "celda": "ReplicarxContinuidad",
+        "P": 0.24,
+        "I": 4.2783,
+        "I_anti_windup": 4.2783,
+        "D": -0.56,
+        "D_filtrado": -0.4317,
+        "n_total": 12,
+        "señal_control": 0.6462,
+        "tasa_cierre": 0.7
+      },
+      {
+        "inteligencia": "INT-16",
+        "celda": "DepurarxSalud",
+        "P": 0.1867,
+        "I": 3.07,
+        "I_anti_windup": 3.07,
+        "D": -0.5133,
+        "D_filtrado": -0.3487,
+        "n_total": 8,
+        "señal_control": 0.4763,
+        "tasa_cierre": 0.7333
+      },
+      {
+        "inteligencia": "INT-12",
+        "celda": "FronteraxContinuidad",
+        "P": 0.21,
+        "I": 0.9017,
+        "I_anti_windup": 0.9017,
+        "D": -0.49,
+        "D_filtrado": -0.4871,
+        "n_total": 4,
+        "señal_control": 0.2758,
+        "tasa_cierre": 0.7
+      },
+      {
+        "inteligencia": "INT-08",
+        "celda": "AdaptarxSalud",
+        "P": 0.14,
+        "I": 1.7701,
+        "I_anti_windup": 1.7701,
+        "D": -0.46,
+        "D_filtrado": -0.4273,
+        "n_total": 7,
+        "señal_control": 0.2956,
+        "tasa_cierre": 0.7667
+      },
+      {
+        "inteligencia": "INT-13",
+        "celda": "DistribuirxSentido",
+        "P": 0.22,
+        "I": 1.4033,
+        "I_anti_windup": 1.4033,
+        "D": -0.38,
+        "D_filtrado": -0.3117,
+        "n_total": 4,
+        "señal_control": 0.3447,
+        "tasa_cierre": 0.6333
+      }
+    ],
+    "gradientes_top": [
+      [
+        "ReplicarxContinuidad",
+        0.8
+      ],
+      [
+        "DepurarxSalud",
+        0.7
+      ],
+      [
+        "FronteraxContinuidad",
+        0.7
+      ],
+      [
+        "AdaptarxSalud",
+        0.6
+      ],
+      [
+        "DistribuirxSentido",
+        0.6
+      ]
+    ],
+    "metacognicion": {
+      "fok": {
+        "fok": 0.6776,
+        "factores": {
+          "tasa_kalman": 0.911,
+          "complejidad_input": 0.475,
+          "cobertura_programa": 0.5,
+          "novedad": 0.4,
+          "familiaridad": 0.6
+        },
+        "recomendacion": "Confianza media — considerar tier superior",
+        "tier_original": 3,
+        "tier_ajustado": 3
+      },
+      "jol": {
+        "jol": 0.9845,
+        "factores": {
+          "tasa_cierre": 1.0,
+          "n_hallazgos": 50,
+          "factor_latencia": 0.9,
+          "factor_coste": 0.9968
+        },
+        "calibracion": {
+          "fok_predicho": 0.6776,
+          "jol_real": 0.9845,
+          "error": 0.3069,
+          "bien_calibrado": false
+        }
+      },
+      "criticality": {
+        "T": 0.2799,
+        "regimen": "orden_rigido",
+        "tier_original": 3,
+        "tier_ajustado": 4,
+        "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+      }
+    },
+    "metricas": {
+      "tiempo_total_s": 141.35,
+      "coste_usd": 0.0047,
+      "n_llm_calls": 5,
+      "modelo": "deepseek/deepseek-chat-v3-0324",
+      "via": "config_modelos"
+    }
+  },
+  "inteligencias": [
+    "INT-01",
+    "INT-08",
+    "INT-12",
+    "INT-13",
+    "INT-16"
+  ],
+  "n_inteligencias": 5,
+  "tier": 4,
+  "alpha": 0.3,
+  "hallazgos": [
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "1. **¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?**"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo:** La robustez matemática del sistema es cuestionable debido a **contradicciones formales** evidentes (ej. `ciclo_roto=false` vs. alertas ausentes, o \"predecible\" y \"caótico\" simultáneamente). Escalarlo requeriría resolver estas incoherencias, con un **costo alto en verificación de consistencia** entre subsistemas (propiocepción, monitoreo, métricas)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "2. **¿Qué se puede contar? ¿Qué se puede medir?**"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- 144 datapoints acumulados."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- 0 alertas internas, señales pendientes o mejoras pendientes."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Medible (pero inconsistente):**"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Ejecuciones (métricas vs. propiocepción/monitoreo)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- Criticalidad (régimen vs. avalanchas)."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "3. **¿Qué magnitudes aparecen con número explícito?**"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- `0 ejecuciones en 24h` (propiocepción)."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "*Hallazgo:* No, el sistema muestra contradicciones críticas (ejecuciones no registradas, SLOs sin datos) que sugieren dependencia de intervención humana para mantener coherencia. La ausencia de alertas activas a pesar de inconsistencias indica que la \"persona clave\" suprime fallas latentes."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "*Hallazgo:* No, la situación es insostenible: el sistema opera en un *limbo* (\"predecible y caótico\") donde la propiocepción y el monitoreo se contradicen. Sin la persona clave, las contradicciones internas llevarían a un colapso silencioso (ejecuciones fantasma, métricas no auditables)."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "3. **¿Se puede escalar/replicar la evolución de la historia? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "*Hallazgo:* Solo escalable con un *costo de caos controlado*: replicar requeriría normalizar las contradicciones (e.g., aceptar \"?\" como estado válido) y externalizar la supervisión humana a sistemas distribuidos, lo que aumentaría la entropía (avalanchas caóticas)."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "4. **¿Quién es el protagonista? ¿En qué acto de su historia estamos?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "*Hallazgo:* El protagonista es el *sistema mismo*, en un **acto de negación** (segundo acto): ignora su propia fractura (ciclo_roto=false vs. 0 alertas) mientras acumula datos inútiles (144 datapoints sin señales). La historia avanza hacia una crisis de identidad operativa."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "5. **¿Qué transformación necesita ocurrir?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "**Hallazgos concretos por pregunta:**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "*No en el estado actual*. Las contradicciones internas (ejecuciones no registradas, SLOs sin datos y diagnóstico vs. métricas) indican que el sistema depende de ajustes manuales o interpretación humana para funcionar correctamente. Sin intervención, los errores de incoherencia persistirán hasta colapsar."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "*Sí, pero de forma disfuncional*. El sistema sigue acumulando datos (144 datapoints) y no tiene señales pendientes, lo que sugiere que opera en \"piloto automático\", pero con resultados inútiles (régimen \"?\" y SLOs sin_datos). Sobrevive, pero sin dirección ni corrección de errores."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "3. **¿Se puede escalar/replicar la robustez ante bifurcaciones? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "*Sí, pero con alto costo de estandarización*. La coexistencia de predecibilidad y caos (\"?\") sugiere que el sistema tiene mecanismos parcialmente adaptativos, pero sin integración. Replicar requeriría forzar coherencia (ej: redefinir umbrales de alertas o métricas), lo que podría sacrificar flexibilidad o generar falsos positivos."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "4. **¿Qué tendencias están activas?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "*Acumulación pasiva y desacople progresivo*. Los datos se almacenan (144 datapoints) pero no se procesan (0 señales/mejoras pendientes). El sistema tiende a la parálisis por contradicciones no resueltas, priorizando métricas crudas sobre análisis accionables."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "5. **¿Qué señales débiles hay que nadie está mirando?**"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** No se puede escalar/replicar en el estado actual debido a las contradicciones internas del sistema (ejemplo: `ciclo_roto=false` vs. alertas no resueltas, métricas inconsistentes). El costo sería alto en tiempo y recursos para depurar las incoherencias antes de escalar. El prototipo **no** prueba la hipótesis clave porque los datos son contradictorios (ejecuciones registradas vs. monitoreo en `0`), lo que invalida cualquier conclusión."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** Solo se puede construir un **informe de diagnóstico detallado** que documente las incoherencias (ej.: diferencias entre autodiagnóstico, métricas y monitoreo). Priorizar la resolución de las alertas de \"ciclo roto\" y validar la fuente de verdad de los datos antes de tomar decisiones."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** El primer paso es **auditar las fuentes de datos** para identificar cuál de los sistemas (autodiagnóstico, métricas o monitoreo) está generando información errónea. Esto implica:"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- Comparar registros de ejecuciones reales con los datos del monitoreo."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- Verificar la configuración de las alertas \"ciclo roto\"."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** El costo estimado es **bajo** (1-2 días de trabajo) si se cuenta con acceso a logs y herramientas de depuración. Requiere:"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Tiempo:** 8-16 horas de análisis técnico."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Esfuerzo:** Colaboración entre equipos de desarrollo y operaciones."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Dinero:** Costo marginal si se usa infraestructura existente."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**Hallazgo:** Los límites están en la **falta de datos confiables** (ej.: SLOs `sin_datos`, contradicciones en ejecuciones). El prototipo **no** prueba la hipótesis clave porque:"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "**Hallazgos concretos:**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** La estabilidad parece no ser escalable debido a contradicciones sistémicas irreconciliables (ej.: \"predecible\" vs. \"caótico\"). El costo sería aceptar incoherencias como características inherentes, no errores, y redefinir los parámetros de \"estabilidad\"."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "2. **¿Qué siente esta persona — no lo que dice, lo que siente?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** Siente **desorientación y desconfianza hacia sus propios sistemas**, evidenciado por la pregunta *\"¿A quién creo?\"*. Hay un conflicto entre la lógica (\"datos acumulados\") y la percepción de que algo está *roto pero no detectado*."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "3. **¿Cómo se nota — tono, ritmo, lo que evita decir, lo que repite?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** Tono **urgente y fragmentado** (enumera contradicciones sin transiciones). Evita nombrar emociones directamente, pero repite \"¿?\" y \"0\" como símbolos de vacío o falla. Ritmo: acumulativo, casi catastrófico."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "4. **¿Qué necesita realmente — no lo que pide, lo que necesita?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** Necesita **coherencia interna**, no solo datos. Sus sistemas requieren reajustar expectativas (ej.: aceptar que \"predecible\" y \"caótico\" pueden coexistir en distintos módulos) y un *mecanismo de priorización* para jerarquizar alertas."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "5. **¿Dónde están los límites de la estabilidad de las relaciones?**"
+    }
+  ],
+  "n_hallazgos": 50,
+  "sintesis": "SINTESIS (50 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - 1. **¿Se puede escalar/replicar la robustez matemática del sistema? ¿A qué costo? ¿Hay contradicciones formales?**\n  - - **Hallazgo:** La robustez matemática del sistema es cuestionable debido a **contradicciones formales** evidentes (ej. `ciclo_roto=false` vs. alertas ausentes, o \"predecible\" y \"caótico\" simultáneame\n  - 2. **¿Qué se puede contar? ¿Qué se puede medir?**\n\n[INT-12]:\n  - Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - *Hallazgo:* No, el sistema muestra contradicciones críticas (ejecuciones no registradas, SLOs sin datos) que sugieren dependencia de intervención humana para mantener coherencia. La ausencia de alerta\n\n[INT-13]:\n  - **Hallazgos concretos por pregunta:**\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - *No en el estado actual*. Las contradicciones internas (ejecuciones no registradas, SLOs sin datos y diagnóstico vs. métricas) indican que el sistema depende de ajustes manuales o interpretación human\n\n[INT-16]:\n  - **Hallazgo:** No se puede escalar/replicar en el estado actual debido a las contradicciones internas del sistema (ejemplo: `ciclo_roto=false` vs. alertas no resueltas, métricas inconsistentes). El cos\n  - **Hallazgo:** Solo se puede construir un **informe de diagnóstico detallado** que documente las incoherencias (ej.: diferencias entre autodiagnóstico, métricas y monitoreo). Priorizar la resolución de\n  - **Hallazgo:** El primer paso es **auditar las fuentes de datos** para identificar cuál de los sistemas (autodiagnóstico, métricas o monitoreo) está generando información errónea. Esto implica:\n\n[INT-08]:\n  - **Hallazgos concretos:**\n  - 1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**\n  - - **Hallazgo:** La estabilidad parece no ser escalable debido a contradicciones sistémicas irreconciliables (ej.: \"predecible\" vs. \"caótico\"). El costo sería aceptar incoherencias como características",
+  "señales_pid": [
+    {
+      "inteligencia": "INT-01",
+      "celda": "ReplicarxContinuidad",
+      "P": 0.24,
+      "I": 4.2783,
+      "I_anti_windup": 4.2783,
+      "D": -0.56,
+      "D_filtrado": -0.4317,
+      "n_total": 12,
+      "señal_control": 0.6462,
+      "tasa_cierre": 0.7
+    },
+    {
+      "inteligencia": "INT-16",
+      "celda": "DepurarxSalud",
+      "P": 0.1867,
+      "I": 3.07,
+      "I_anti_windup": 3.07,
+      "D": -0.5133,
+      "D_filtrado": -0.3487,
+      "n_total": 8,
+      "señal_control": 0.4763,
+      "tasa_cierre": 0.7333
+    },
+    {
+      "inteligencia": "INT-12",
+      "celda": "FronteraxContinuidad",
+      "P": 0.21,
+      "I": 0.9017,
+      "I_anti_windup": 0.9017,
+      "D": -0.49,
+      "D_filtrado": -0.4871,
+      "n_total": 4,
+      "señal_control": 0.2758,
+      "tasa_cierre": 0.7
+    },
+    {
+      "inteligencia": "INT-08",
+      "celda": "AdaptarxSalud",
+      "P": 0.14,
+      "I": 1.7701,
+      "I_anti_windup": 1.7701,
+      "D": -0.46,
+      "D_filtrado": -0.4273,
+      "n_total": 7,
+      "señal_control": 0.2956,
+      "tasa_cierre": 0.7667
+    },
+    {
+      "inteligencia": "INT-13",
+      "celda": "DistribuirxSentido",
+      "P": 0.22,
+      "I": 1.4033,
+      "I_anti_windup": 1.4033,
+      "D": -0.38,
+      "D_filtrado": -0.3117,
+      "n_total": 4,
+      "señal_control": 0.3447,
+      "tasa_cierre": 0.6333
+    }
+  ],
+  "gradientes_top": [
+    [
+      "ReplicarxContinuidad",
+      0.8
+    ],
+    [
+      "DepurarxSalud",
+      0.7
+    ],
+    [
+      "FronteraxContinuidad",
+      0.7
+    ],
+    [
+      "AdaptarxSalud",
+      0.6
+    ],
+    [
+      "DistribuirxSentido",
+      0.6
+    ]
+  ],
+  "metacognicion": {
+    "fok": {
+      "fok": 0.6776,
+      "factores": {
+        "tasa_kalman": 0.911,
+        "complejidad_input": 0.475,
+        "cobertura_programa": 0.5,
+        "novedad": 0.4,
+        "familiaridad": 0.6
+      },
+      "recomendacion": "Confianza media — considerar tier superior",
+      "tier_original": 3,
+      "tier_ajustado": 3
+    },
+    "jol": {
+      "jol": 0.9845,
+      "factores": {
+        "tasa_cierre": 1.0,
+        "n_hallazgos": 50,
+        "factor_latencia": 0.9,
+        "factor_coste": 0.9968
+      },
+      "calibracion": {
+        "fok_predicho": 0.6776,
+        "jol_real": 0.9845,
+        "error": 0.3069,
+        "bien_calibrado": false
+      }
+    },
+    "criticality": {
+      "T": 0.2799,
+      "regimen": "orden_rigido",
+      "tier_original": 3,
+      "tier_ajustado": 4,
+      "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+    }
+  },
+  "metricas": {
+    "tiempo_total_s": 141.35,
+    "coste_usd": 0.0047,
+    "n_llm_calls": 5,
+    "modelo": "deepseek/deepseek-chat-v3-0324",
+    "via": "config_modelos"
+  },
+  "coste_usd": 0.0047,
+  "tiempo_s": 141.78184008598328,
+  "timestamp": "2026-03-16T07:59:27.343704+00:00"
+}

@@ -1,0 +1,367 @@
+{
+  "caso_id": "p33_caso_01_salud",
+  "input": "Tengo un sistema de análisis cognitivo con versión 3.4.0 y 61 herramientas registradas. Su autodiagnóstico interno dice que tiene 616 preguntas activas y reporta ciclo_roto=False. Pero al mirar las alertas internas, hay 0 alertas de 'ciclo roto', de las cuales 0 no se han procesado. De 0 modelos registrados, 0 funcionan y 0 están caídos. La temperatura de criticalidad es 0.00 (régimen 'desconocido'). El sistema de monitoreo reporta 0 ejecuciones totales. ¿Cuál es la salud real de este sistema? ¿Sus controles internos son fiables?",
+  "contexto": "Este es un análisis del propio sistema cognitivo OMNI-MIND. Todos los datos son reales, extraídos de sus propios endpoints.",
+  "config": {
+    "profundidad": "profunda",
+    "presupuesto_max": 0.05,
+    "tiempo_max_s": 120
+  },
+  "datos_brutos": {
+    "/health": {
+      "status": "ok",
+      "version": "3.4.0",
+      "tools": 61,
+      "supabase": false,
+      "swarm_models": 4,
+      "model_observatory": true,
+      "running_sessions": 0
+    },
+    "/gestor/autopoiesis": {
+      "status": "ok",
+      "autopoiesis": {
+        "preguntas_activas": 616,
+        "check_preguntas": true,
+        "check_gaps": null,
+        "gap_reciente": 0.34360833333333335,
+        "gap_anterior": null,
+        "check_tasa": null,
+        "tasa_reciente": 0.5046348895113603,
+        "tasa_anterior": null,
+        "dp_recientes": 36,
+        "dp_anteriores": 0,
+        "check_datapoints": null,
+        "ciclo_roto": false
+      },
+      "descripcion": {
+        "check_preguntas": "Hay preguntas activas en la Matriz?",
+        "check_gaps": "Los gaps estan decreciendo (24h vs 48h)?",
+        "check_tasa": "La tasa de cierre esta subiendo?",
+        "check_datapoints": "Los datapoints estan creciendo?"
+      }
+    },
+    "/monitoring/dashboard": {
+      "status": "ok",
+      "ejecuciones_totales": 0,
+      "por_modo": {},
+      "slos": {
+        "status": "sin_datos",
+        "slos": {}
+      },
+      "budget": {
+        "coste_acumulado_24h": 0.0,
+        "presupuesto_diario": 50.0,
+        "porcentaje_usado": 0.0,
+        "dentro_presupuesto": true
+      }
+    },
+    "/criticality/estado": {
+      "status": "ok",
+      "temperatura": {
+        "T": 0.2522,
+        "T_c": 0.5,
+        "distancia_critica": 0.2478,
+        "regimen": "orden_rigido",
+        "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible",
+        "media_tasa": 0.5046,
+        "stddev_tasa": 0.1273,
+        "n_datapoints": 36
+      },
+      "avalanchas": {
+        "n_avalanchas": 8,
+        "max_avalancha": 3,
+        "media_avalancha": 2.0,
+        "tau": -0.0,
+        "regimen": "supercritico",
+        "descripcion": "Sistema demasiado caotico — avalanchas excesivas",
+        "distribucion": {
+          "3": 4,
+          "1": 4
+        }
+      },
+      "transiciones": {
+        "transiciones": [],
+        "n_transiciones": 0,
+        "inteligencias_criticas": []
+      },
+      "ajuste_manifold": {
+        "accion": "relajar",
+        "R03_max_ints": 7,
+        "R04_orden_flexible": true,
+        "R07_profundidad": 1
+      }
+    },
+    "/estigmergia/marcas": {
+      "marcas": [
+        {
+          "id": 12,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.2461,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 32,
+              "tasa_anterior": 0.6635,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": false,
+          "created_at": "2026-03-15T20:49:57.906982+00:00"
+        },
+        {
+          "id": 11,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.2461,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 32,
+              "tasa_anterior": 0.6635,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": false,
+          "created_at": "2026-03-15T20:32:12.027814+00:00"
+        },
+        {
+          "id": 10,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.624,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 145,
+              "tasa_anterior": 0.1869,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T20:11:55.349928+00:00"
+        },
+        {
+          "id": 9,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.624,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 145,
+              "tasa_anterior": 0.1869,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T20:01:05.421527+00:00"
+        },
+        {
+          "id": 8,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.6247,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 152,
+              "tasa_anterior": 0.1853,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T11:00:03.875205+00:00"
+        },
+        {
+          "id": 7,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 22,
+              "gap_anterior": 0.6625,
+              "gap_reciente": 0.1455,
+              "dp_anteriores": 140,
+              "tasa_anterior": 0.1373,
+              "tasa_reciente": 0.8045,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T10:07:02.317604+00:00"
+        },
+        {
+          "id": 6,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 76,
+              "gap_anterior": 0.734,
+              "gap_reciente": 0.432,
+              "dp_anteriores": 86,
+              "tasa_anterior": 0.1418,
+              "tasa_reciente": 0.3253,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T08:37:43.960367+00:00"
+        },
+        {
+          "id": 5,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 76,
+              "gap_anterior": 0.734,
+              "gap_reciente": 0.432,
+              "dp_anteriores": 86,
+              "tasa_anterior": 0.1418,
+              "tasa_reciente": 0.3253,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T08:33:31.467747+00:00"
+        },
+        {
+          "id": 4,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 76,
+              "gap_anterior": 0.734,
+              "gap_reciente": 0.432,
+              "dp_anteriores": 86,
+              "tasa_anterior": 0.1418,
+              "tasa_reciente": 0.3253,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T08:12:44.320569+00:00"
+        },
+        {
+          "id": 3,
+          "tipo": "ingestion_externa",
+          "origen": "exocortex_etl",
+          "contenido": {
+            "celdas": [
+              "ConservarxSalud"
+            ],
+            "tenant_id": "test_tenant",
+            "n_observaciones": 1
+          },
+          "consumida": true,
+          "created_at": "2026-03-14T10:36:15.330904+00:00"
+        },
+        {
+          "id": 2,
+          "tipo": "hallazgo",
+          "origen": "test",
+          "contenido": {
+            "ok": true
+          },
+          "consumida": true,
+          "created_at": "2026-03-14T01:49:03.020769+00:00"
+        },
+        {
+          "id": 1,
+          "tipo": "hallazgo",
+          "origen": "verificacion_sn05",
+          "contenido": {
+            "ts": "2026-03-14",
+            "mensaje": "Verificacion completa SN-05"
+          },
+          "consumida": true,
+          "created_at": "2026-03-14T01:34:32.831969+00:00"
+        }
+      ]
+    }
+  },
+  "fuentes": [
+    "/health",
+    "/gestor/autopoiesis",
+    "/monitoring/dashboard",
+    "/criticality/estado",
+    "/estigmergia/marcas"
+  ],
+  "timestamp": "2026-03-16T06:50:10.013153+00:00"
+}

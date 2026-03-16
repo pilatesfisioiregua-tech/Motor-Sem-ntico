@@ -1,0 +1,2148 @@
+{
+  "caso_id": "p33_caso_06_contradicciones",
+  "input": "Mi sistema tiene contradicciones internas que no cuadran. El autodiagnóstico dice ciclo_roto=false, pero hay 0 alertas internas diciendo 'ciclo roto' sin resolver. La criticalidad dice régimen '?' (demasiado predecible) pero las avalanchas dicen '?' (demasiado caótico). ¿Cómo puede ser predecible Y caótico a la vez? La propiocepción dice 0 ejecuciones en 24h, pero las métricas muestran ejecuciones recientes con costes reales. El monitoreo dice 0 ejecuciones totales y SLOs 'sin_datos'. Tengo 144 datapoints acumulados, 0 señales pendientes y 0 mejoras pendientes. ¿A quién creo? ¿Cuáles de mis propios controles están mintiendo?",
+  "contexto": "Este es un análisis del propio sistema cognitivo OMNI-MIND. Todos los datos son reales y provienen de endpoints del mismo sistema. El objetivo es detectar contradicciones entre subsistemas.",
+  "config": {
+    "profundidad": "profunda",
+    "presupuesto_max": 0.05,
+    "tiempo_max_s": 120
+  },
+  "datos_brutos": {
+    "/gestor/autopoiesis": {
+      "status": "ok",
+      "autopoiesis": {
+        "preguntas_activas": 616,
+        "check_preguntas": true,
+        "check_gaps": null,
+        "gap_reciente": 0.34360833333333335,
+        "gap_anterior": null,
+        "check_tasa": null,
+        "tasa_reciente": 0.5046348895113603,
+        "tasa_anterior": null,
+        "dp_recientes": 36,
+        "dp_anteriores": 0,
+        "check_datapoints": null,
+        "ciclo_roto": false
+      },
+      "descripcion": {
+        "check_preguntas": "Hay preguntas activas en la Matriz?",
+        "check_gaps": "Los gaps estan decreciendo (24h vs 48h)?",
+        "check_tasa": "La tasa de cierre esta subiendo?",
+        "check_datapoints": "Los datapoints estan creciendo?"
+      }
+    },
+    "/estigmergia/marcas": {
+      "marcas": [
+        {
+          "id": 12,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.2461,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 32,
+              "tasa_anterior": 0.6635,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": false,
+          "created_at": "2026-03-15T20:49:57.906982+00:00"
+        },
+        {
+          "id": 11,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.2461,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 32,
+              "tasa_anterior": 0.6635,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": false,
+          "created_at": "2026-03-15T20:32:12.027814+00:00"
+        },
+        {
+          "id": 10,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.624,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 145,
+              "tasa_anterior": 0.1869,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T20:11:55.349928+00:00"
+        },
+        {
+          "id": 9,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.624,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 145,
+              "tasa_anterior": 0.1869,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T20:01:05.421527+00:00"
+        },
+        {
+          "id": 8,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 10,
+              "gap_anterior": 0.6247,
+              "gap_reciente": 0.1,
+              "dp_anteriores": 152,
+              "tasa_anterior": 0.1853,
+              "tasa_reciente": 0.875,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T11:00:03.875205+00:00"
+        },
+        {
+          "id": 7,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 22,
+              "gap_anterior": 0.6625,
+              "gap_reciente": 0.1455,
+              "dp_anteriores": 140,
+              "tasa_anterior": 0.1373,
+              "tasa_reciente": 0.8045,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T10:07:02.317604+00:00"
+        },
+        {
+          "id": 6,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 76,
+              "gap_anterior": 0.734,
+              "gap_reciente": 0.432,
+              "dp_anteriores": 86,
+              "tasa_anterior": 0.1418,
+              "tasa_reciente": 0.3253,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T08:37:43.960367+00:00"
+        },
+        {
+          "id": 5,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 76,
+              "gap_anterior": 0.734,
+              "gap_reciente": 0.432,
+              "dp_anteriores": 86,
+              "tasa_anterior": 0.1418,
+              "tasa_reciente": 0.3253,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T08:33:31.467747+00:00"
+        },
+        {
+          "id": 4,
+          "tipo": "alerta",
+          "origen": "gestor_scheduler",
+          "contenido": {
+            "tipo": "autopoiesis_roto",
+            "ciclo": 1,
+            "checks": {
+              "check_gaps": true,
+              "check_tasa": true,
+              "ciclo_roto": true,
+              "dp_recientes": 76,
+              "gap_anterior": 0.734,
+              "gap_reciente": 0.432,
+              "dp_anteriores": 86,
+              "tasa_anterior": 0.1418,
+              "tasa_reciente": 0.3253,
+              "check_preguntas": true,
+              "check_datapoints": false,
+              "preguntas_activas": 616
+            }
+          },
+          "consumida": true,
+          "created_at": "2026-03-15T08:12:44.320569+00:00"
+        },
+        {
+          "id": 3,
+          "tipo": "ingestion_externa",
+          "origen": "exocortex_etl",
+          "contenido": {
+            "celdas": [
+              "ConservarxSalud"
+            ],
+            "tenant_id": "test_tenant",
+            "n_observaciones": 1
+          },
+          "consumida": true,
+          "created_at": "2026-03-14T10:36:15.330904+00:00"
+        },
+        {
+          "id": 2,
+          "tipo": "hallazgo",
+          "origen": "test",
+          "contenido": {
+            "ok": true
+          },
+          "consumida": true,
+          "created_at": "2026-03-14T01:49:03.020769+00:00"
+        },
+        {
+          "id": 1,
+          "tipo": "hallazgo",
+          "origen": "verificacion_sn05",
+          "contenido": {
+            "ts": "2026-03-14",
+            "mensaje": "Verificacion completa SN-05"
+          },
+          "consumida": true,
+          "created_at": "2026-03-14T01:34:32.831969+00:00"
+        }
+      ]
+    },
+    "/criticality/estado": {
+      "status": "ok",
+      "temperatura": {
+        "T": 0.2522,
+        "T_c": 0.5,
+        "distancia_critica": 0.2478,
+        "regimen": "orden_rigido",
+        "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible",
+        "media_tasa": 0.5046,
+        "stddev_tasa": 0.1273,
+        "n_datapoints": 36
+      },
+      "avalanchas": {
+        "n_avalanchas": 8,
+        "max_avalancha": 3,
+        "media_avalancha": 2.0,
+        "tau": -0.0,
+        "regimen": "supercritico",
+        "descripcion": "Sistema demasiado caotico — avalanchas excesivas",
+        "distribucion": {
+          "3": 4,
+          "1": 4
+        }
+      },
+      "transiciones": {
+        "transiciones": [],
+        "n_transiciones": 0,
+        "inteligencias_criticas": []
+      },
+      "ajuste_manifold": {
+        "accion": "relajar",
+        "R03_max_ints": 7,
+        "R04_orden_flexible": true,
+        "R07_profundidad": 1
+      }
+    },
+    "/propiocepcion": {
+      "inteligencias": 18,
+      "preguntas_matriz": 617,
+      "aristas_grafo": 20,
+      "knowledge_base_entries": 27506,
+      "knowledge_connections": 42,
+      "programas_activos": 4,
+      "datapoints_efectividad": 144,
+      "modelos_activos": 12,
+      "exocortex": [
+        {
+          "id": "exocortex:pilates",
+          "nombre": "Estudio de Pilates",
+          "fase": "piloto"
+        },
+        {
+          "id": "exocortex:fisioterapia",
+          "nombre": "Clinica de Fisioterapia",
+          "fase": "piloto"
+        }
+      ],
+      "señales_pendientes": 0,
+      "mejoras_pendientes": 0,
+      "metricas_ultima_hora": {
+        "gestor": 1,
+        "motor_vn": 1,
+        "registrador": 6
+      },
+      "ejecuciones_24h": 0,
+      "cobertura_matriz": {
+        "inteligencias": 18,
+        "lentes": 3,
+        "funciones": 7,
+        "total_preguntas": 617
+      }
+    },
+    "/metricas": {
+      "metricas": [
+        {
+          "id": 361,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "conversacion",
+            "tier": 2,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "d56687c4",
+            "coste_usd": 0.0018,
+            "consumidor": "motor_vn",
+            "latencia_ms": 75200,
+            "n_hallazgos": 27,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 3
+          },
+          "created_at": "2026-03-16T06:41:29.214168+00:00"
+        },
+        {
+          "id": 359,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxContinuidad",
+            "scores": [
+              0.6,
+              0.1,
+              0.8
+            ],
+            "gap_pre": 0.7,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5,
+            "gap_post_calibrado": 0.35,
+            "tasa_cierre_calibrada": 0.5
+          },
+          "created_at": "2026-03-16T06:41:25.120311+00:00"
+        },
+        {
+          "id": 360,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0006,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-14-motor_vn",
+            "tasa_cierre": 0.5
+          },
+          "created_at": "2026-03-16T06:41:25.120311+00:00"
+        },
+        {
+          "id": 357,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "FronteraxSalud",
+            "scores": [
+              0.6,
+              0.6,
+              0.3
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5,
+            "gap_post_calibrado": 0.4,
+            "tasa_cierre_calibrada": 0.5
+          },
+          "created_at": "2026-03-16T06:41:13.473551+00:00"
+        },
+        {
+          "id": 358,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "FronteraxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0006,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.5
+          },
+          "created_at": "2026-03-16T06:41:13.473551+00:00"
+        },
+        {
+          "id": 355,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.6,
+              0.0,
+              0.2
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 7,
+            "score_medio": 0.2667,
+            "gap_post_calibrado": 0.5867,
+            "tasa_cierre_calibrada": 0.2666
+          },
+          "created_at": "2026-03-16T06:41:10.128936+00:00"
+        },
+        {
+          "id": 356,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0006,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.2666
+          },
+          "created_at": "2026-03-16T06:41:10.128936+00:00"
+        },
+        {
+          "id": 354,
+          "componente": "gestor",
+          "evento": "detector_gaps_llm",
+          "datos": {
+            "celdas": [
+              "ConservarxSalud",
+              "ConservarxContinuidad",
+              "CaptarxSalud",
+              "DepurarxSalud",
+              "FronteraxSalud",
+              "AdaptarxSentido",
+              "ReplicarxContinuidad",
+              "DistribuirxSentido"
+            ],
+            "modelo": "xiaomi/mimo-v2-flash",
+            "celdas_detectadas": 8
+          },
+          "created_at": "2026-03-16T06:40:21.946458+00:00"
+        },
+        {
+          "id": 353,
+          "componente": "copiloto",
+          "evento": "interaccion",
+          "datos": {
+            "seccion": "costes",
+            "pregunta": null,
+            "acciones_sugeridas": 0
+          },
+          "created_at": "2026-03-15T23:20:05.719091+00:00"
+        },
+        {
+          "id": 352,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "conversacion",
+            "tier": 2,
+            "modelo": "stepfun/step-3.5-flash",
+            "caso_id": "824e5015",
+            "coste_usd": 0.0018,
+            "consumidor": "exocortex:pilates",
+            "latencia_ms": 84590,
+            "n_hallazgos": 40,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 4
+          },
+          "created_at": "2026-03-15T23:19:46.293183+00:00"
+        },
+        {
+          "id": 350,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.6,
+              0.6,
+              0.6
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6,
+            "gap_post_calibrado": 0.2,
+            "tasa_cierre_calibrada": 0.6
+          },
+          "created_at": "2026-03-15T23:19:43.245749+00:00"
+        },
+        {
+          "id": 351,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "stepfun/step-3.5-flash",
+            "tokens": 0,
+            "coste_usd": 0.0004,
+            "latencia_ms": 12000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.6
+          },
+          "created_at": "2026-03-15T23:19:43.245749+00:00"
+        },
+        {
+          "id": 348,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.6,
+              0.6,
+              0.6
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6,
+            "gap_post_calibrado": 0.2,
+            "tasa_cierre_calibrada": 0.6
+          },
+          "created_at": "2026-03-15T23:19:39.884845+00:00"
+        },
+        {
+          "id": 349,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "stepfun/step-3.5-flash",
+            "tokens": 0,
+            "coste_usd": 0.0004,
+            "latencia_ms": 12000,
+            "pregunta_id": "INT-14-motor_vn",
+            "tasa_cierre": 0.6
+          },
+          "created_at": "2026-03-15T23:19:39.884845+00:00"
+        },
+        {
+          "id": 346,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.8,
+              0.6,
+              0.6
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6667,
+            "gap_post_calibrado": 0.1667,
+            "tasa_cierre_calibrada": 0.6666
+          },
+          "created_at": "2026-03-15T23:19:35.115162+00:00"
+        },
+        {
+          "id": 347,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "stepfun/step-3.5-flash",
+            "tokens": 0,
+            "coste_usd": 0.0004,
+            "latencia_ms": 12000,
+            "pregunta_id": "INT-08-motor_vn",
+            "tasa_cierre": 0.6666
+          },
+          "created_at": "2026-03-15T23:19:35.115162+00:00"
+        },
+        {
+          "id": 344,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.6,
+              0.6,
+              0.3
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5,
+            "gap_post_calibrado": 0.25,
+            "tasa_cierre_calibrada": 0.5
+          },
+          "created_at": "2026-03-15T23:19:28.735939+00:00"
+        },
+        {
+          "id": 345,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "stepfun/step-3.5-flash",
+            "tokens": 0,
+            "coste_usd": 0.0004,
+            "latencia_ms": 12000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.5
+          },
+          "created_at": "2026-03-15T23:19:28.735939+00:00"
+        },
+        {
+          "id": 343,
+          "componente": "copiloto",
+          "evento": "interaccion",
+          "datos": {
+            "seccion": "resumen",
+            "pregunta": null,
+            "acciones_sugeridas": 0
+          },
+          "created_at": "2026-03-15T23:18:14.595282+00:00"
+        },
+        {
+          "id": 342,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "conversacion",
+            "tier": 3,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "1b787fc3",
+            "coste_usd": 0.0023,
+            "consumidor": "motor_vn",
+            "latencia_ms": 48740,
+            "n_hallazgos": 30,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 3
+          },
+          "created_at": "2026-03-15T23:14:30.475701+00:00"
+        },
+        {
+          "id": 340,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "DistribuirxSalud",
+            "scores": [
+              0.3,
+              0.3,
+              0.3
+            ],
+            "gap_pre": 0.75,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.3,
+            "gap_post_calibrado": 0.525,
+            "tasa_cierre_calibrada": 0.3
+          },
+          "created_at": "2026-03-15T23:14:27.329956+00:00"
+        },
+        {
+          "id": 341,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "DistribuirxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.3
+          },
+          "created_at": "2026-03-15T23:14:27.329956+00:00"
+        },
+        {
+          "id": 338,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "scores": [
+              0.3,
+              0.3,
+              0.3
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.3,
+            "gap_post_calibrado": 0.56,
+            "tasa_cierre_calibrada": 0.3
+          },
+          "created_at": "2026-03-15T23:14:25.223376+00:00"
+        },
+        {
+          "id": 339,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-14-motor_vn",
+            "tasa_cierre": 0.3
+          },
+          "created_at": "2026-03-15T23:14:25.223376+00:00"
+        },
+        {
+          "id": 336,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "DepurarxSalud",
+            "scores": [
+              0.6,
+              0.6,
+              0.3
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5,
+            "gap_post_calibrado": 0.4,
+            "tasa_cierre_calibrada": 0.5
+          },
+          "created_at": "2026-03-15T23:14:22.228506+00:00"
+        },
+        {
+          "id": 337,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "DepurarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.5
+          },
+          "created_at": "2026-03-15T23:14:22.228506+00:00"
+        },
+        {
+          "id": 335,
+          "componente": "gestor",
+          "evento": "detector_gaps_llm",
+          "datos": {
+            "celdas": [
+              "CaptarxSalud",
+              "ConservarxSalud",
+              "DepurarxSalud",
+              "DistribuirxSalud",
+              "FronteraxSentido",
+              "AdaptarxContinuidad",
+              "ReplicarxContinuidad",
+              "CaptarxContinuidad"
+            ],
+            "modelo": "xiaomi/mimo-v2-flash",
+            "celdas_detectadas": 8
+          },
+          "created_at": "2026-03-15T23:13:45.682647+00:00"
+        },
+        {
+          "id": 334,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "generacion",
+            "tier": 4,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "401902f1",
+            "coste_usd": 0.0023,
+            "consumidor": "motor_vn",
+            "latencia_ms": 77130,
+            "n_hallazgos": 30,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 3
+          },
+          "created_at": "2026-03-15T22:18:10.642742+00:00"
+        },
+        {
+          "id": 332,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "FronteraxSalud",
+            "scores": [
+              0.6,
+              0.6,
+              0.2
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.4667,
+            "gap_post_calibrado": 0.4267,
+            "tasa_cierre_calibrada": 0.4666
+          },
+          "created_at": "2026-03-15T22:18:07.842040+00:00"
+        },
+        {
+          "id": 333,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "FronteraxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-14-motor_vn",
+            "tasa_cierre": 0.4666
+          },
+          "created_at": "2026-03-15T22:18:07.842040+00:00"
+        },
+        {
+          "id": 330,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "AdaptarxContinuidad",
+            "scores": [
+              0.8,
+              0.2,
+              0.1
+            ],
+            "gap_pre": 0.9,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.3667,
+            "gap_post_calibrado": 0.57,
+            "tasa_cierre_calibrada": 0.3667
+          },
+          "created_at": "2026-03-15T22:18:04.072192+00:00"
+        },
+        {
+          "id": 331,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "AdaptarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.3667
+          },
+          "created_at": "2026-03-15T22:18:04.072192+00:00"
+        },
+        {
+          "id": 328,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "DepurarxSalud",
+            "scores": [
+              0.6,
+              0.8,
+              0.6
+            ],
+            "gap_pre": 0.9,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6667,
+            "gap_post_calibrado": 0.3,
+            "tasa_cierre_calibrada": 0.6667
+          },
+          "created_at": "2026-03-15T22:18:00.997141+00:00"
+        },
+        {
+          "id": 329,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "DepurarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.6667
+          },
+          "created_at": "2026-03-15T22:18:00.997141+00:00"
+        },
+        {
+          "id": 327,
+          "componente": "gestor",
+          "evento": "detector_gaps_llm",
+          "datos": {
+            "celdas": [
+              "CaptarxSalud",
+              "FronteraxSalud",
+              "DepurarxSalud",
+              "CaptarxSentido",
+              "AdaptarxContinuidad",
+              "ReplicarxContinuidad",
+              "DistribuirxSalud"
+            ],
+            "modelo": "xiaomi/mimo-v2-flash",
+            "celdas_detectadas": 7
+          },
+          "created_at": "2026-03-15T22:17:00.277849+00:00"
+        },
+        {
+          "id": 326,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "conversacion",
+            "tier": 3,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "9c107905",
+            "coste_usd": 0.0023,
+            "consumidor": "motor_vn",
+            "latencia_ms": 94860,
+            "n_hallazgos": 30,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 3
+          },
+          "created_at": "2026-03-15T22:16:42.185695+00:00"
+        },
+        {
+          "id": 324,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "DepurarxSalud",
+            "scores": [
+              0.0,
+              0.7,
+              0.0
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.2333,
+            "gap_post_calibrado": 0.6133,
+            "tasa_cierre_calibrada": 0.2334
+          },
+          "created_at": "2026-03-15T22:16:39.077269+00:00"
+        },
+        {
+          "id": 325,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "DepurarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.2334
+          },
+          "created_at": "2026-03-15T22:16:39.077269+00:00"
+        },
+        {
+          "id": 322,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "FronteraxSalud",
+            "scores": [
+              0.1,
+              0.6,
+              0.0
+            ],
+            "gap_pre": 0.85,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.2333,
+            "gap_post_calibrado": 0.6517,
+            "tasa_cierre_calibrada": 0.2333
+          },
+          "created_at": "2026-03-15T22:16:35.848839+00:00"
+        },
+        {
+          "id": 323,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "FronteraxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-08-motor_vn",
+            "tasa_cierre": 0.2333
+          },
+          "created_at": "2026-03-15T22:16:35.848839+00:00"
+        },
+        {
+          "id": 320,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "scores": [
+              0.6,
+              0.8,
+              0.6
+            ],
+            "gap_pre": 0.9,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6667,
+            "gap_post_calibrado": 0.3,
+            "tasa_cierre_calibrada": 0.6667
+          },
+          "created_at": "2026-03-15T22:16:31.702178+00:00"
+        },
+        {
+          "id": 321,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.6667
+          },
+          "created_at": "2026-03-15T22:16:31.702178+00:00"
+        },
+        {
+          "id": 319,
+          "componente": "gestor",
+          "evento": "detector_gaps_llm",
+          "datos": {
+            "celdas": [
+              "DepurarxSalud",
+              "DepurarxSentido",
+              "DepurarxContinuidad",
+              "DistribuirxSalud",
+              "DistribuirxSentido",
+              "AdaptarxSalud",
+              "FronteraxSalud",
+              "ReplicarxContinuidad"
+            ],
+            "modelo": "xiaomi/mimo-v2-flash",
+            "celdas_detectadas": 8
+          },
+          "created_at": "2026-03-15T22:15:15.689685+00:00"
+        },
+        {
+          "id": 318,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "confrontacion",
+            "tier": 5,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "abb487f1",
+            "coste_usd": 0.0018,
+            "consumidor": "motor_vn",
+            "latencia_ms": 105450,
+            "n_hallazgos": 22,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 3
+          },
+          "created_at": "2026-03-15T22:14:57.291831+00:00"
+        },
+        {
+          "id": 316,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "FronteraxSentido",
+            "scores": [
+              0.8,
+              0.1,
+              0.6
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 8,
+            "score_medio": 0.5,
+            "gap_post_calibrado": 0.25,
+            "tasa_cierre_calibrada": 0.5
+          },
+          "created_at": "2026-03-15T22:14:54.103875+00:00"
+        },
+        {
+          "id": 317,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "FronteraxSentido",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0006,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.5
+          },
+          "created_at": "2026-03-15T22:14:54.103875+00:00"
+        },
+        {
+          "id": 314,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "AdaptarxContinuidad",
+            "scores": [
+              0.6,
+              0.7,
+              0.2
+            ],
+            "gap_pre": 0.6,
+            "n_evaluados": 3,
+            "n_hallazgos": 7,
+            "score_medio": 0.5,
+            "gap_post_calibrado": 0.3,
+            "tasa_cierre_calibrada": 0.5
+          },
+          "created_at": "2026-03-15T22:14:50.876049+00:00"
+        },
+        {
+          "id": 315,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "AdaptarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0006,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-08-motor_vn",
+            "tasa_cierre": 0.5
+          },
+          "created_at": "2026-03-15T22:14:50.876049+00:00"
+        },
+        {
+          "id": 312,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ReplicarxSentido",
+            "scores": [
+              0.6,
+              0.7,
+              0.1
+            ],
+            "gap_pre": 0.7,
+            "n_evaluados": 3,
+            "n_hallazgos": 7,
+            "score_medio": 0.4667,
+            "gap_post_calibrado": 0.3733,
+            "tasa_cierre_calibrada": 0.4667
+          },
+          "created_at": "2026-03-15T22:14:47.352189+00:00"
+        },
+        {
+          "id": 313,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ReplicarxSentido",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0006,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.4667
+          },
+          "created_at": "2026-03-15T22:14:47.352189+00:00"
+        },
+        {
+          "id": 311,
+          "componente": "gestor",
+          "evento": "detector_gaps_llm",
+          "datos": {
+            "celdas": [
+              "FronteraxSentido",
+              "AdaptarxContinuidad",
+              "ReplicarxSentido"
+            ],
+            "modelo": "xiaomi/mimo-v2-flash",
+            "celdas_detectadas": 3
+          },
+          "created_at": "2026-03-15T22:13:19.552183+00:00"
+        },
+        {
+          "id": 310,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "confrontacion",
+            "tier": 5,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "daec6a88",
+            "coste_usd": 0.0033,
+            "consumidor": "motor_vn",
+            "latencia_ms": 96790,
+            "n_hallazgos": 30,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 3
+          },
+          "created_at": "2026-03-15T22:13:01.667994+00:00"
+        },
+        {
+          "id": 308,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "FronteraxSentido",
+            "scores": [
+              0.8,
+              0.2,
+              0.4
+            ],
+            "gap_pre": 0.6,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.4667,
+            "gap_post_calibrado": 0.32,
+            "tasa_cierre_calibrada": 0.4667
+          },
+          "created_at": "2026-03-15T22:12:57.584805+00:00"
+        },
+        {
+          "id": 309,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "FronteraxSentido",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0011,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.4667
+          },
+          "created_at": "2026-03-15T22:12:57.584805+00:00"
+        },
+        {
+          "id": 306,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "CaptarxContinuidad",
+            "scores": [
+              0.6,
+              0.8,
+              0.6
+            ],
+            "gap_pre": 0.7,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6667,
+            "gap_post_calibrado": 0.2333,
+            "tasa_cierre_calibrada": 0.6667
+          },
+          "created_at": "2026-03-15T22:12:54.848290+00:00"
+        },
+        {
+          "id": 307,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "CaptarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0011,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-08-motor_vn",
+            "tasa_cierre": 0.6667
+          },
+          "created_at": "2026-03-15T22:12:54.848290+00:00"
+        },
+        {
+          "id": 304,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "scores": [
+              0.8,
+              0.3,
+              0.4
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5,
+            "gap_post_calibrado": 0.4,
+            "tasa_cierre_calibrada": 0.5
+          },
+          "created_at": "2026-03-15T22:12:52.391403+00:00"
+        },
+        {
+          "id": 305,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0011,
+            "latencia_ms": 9000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.5
+          },
+          "created_at": "2026-03-15T22:12:52.391403+00:00"
+        },
+        {
+          "id": 303,
+          "componente": "gestor",
+          "evento": "detector_gaps_llm",
+          "datos": {
+            "celdas": [
+              "FronteraxSentido",
+              "CaptarxContinuidad",
+              "DepurarxContinuidad",
+              "AdaptarxSentido",
+              "DistribuirxSalud",
+              "ReplicarxContinuidad",
+              "ConservarxSalud"
+            ],
+            "modelo": "xiaomi/mimo-v2-flash",
+            "celdas_detectadas": 7
+          },
+          "created_at": "2026-03-15T22:11:33.713259+00:00"
+        },
+        {
+          "id": 302,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "analisis",
+            "tier": 4,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "ee86e672",
+            "coste_usd": 0.0042,
+            "consumidor": "motor_vn",
+            "latencia_ms": 156030,
+            "n_hallazgos": 50,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 5
+          },
+          "created_at": "2026-03-15T22:11:04.945779+00:00"
+        },
+        {
+          "id": 300,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "DistribuirxSalud",
+            "scores": [
+              0.8,
+              0.2,
+              0.6
+            ],
+            "gap_pre": 0.6,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5333,
+            "gap_post_calibrado": 0.28,
+            "tasa_cierre_calibrada": 0.5333
+          },
+          "created_at": "2026-03-15T22:11:01.073011+00:00"
+        },
+        {
+          "id": 301,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "DistribuirxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.5333
+          },
+          "created_at": "2026-03-15T22:11:01.073011+00:00"
+        },
+        {
+          "id": 298,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "CaptarxSalud",
+            "scores": [
+              0.7,
+              0.3,
+              0.6
+            ],
+            "gap_pre": 0.6,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5333,
+            "gap_post_calibrado": 0.28,
+            "tasa_cierre_calibrada": 0.5333
+          },
+          "created_at": "2026-03-15T22:10:57.451896+00:00"
+        },
+        {
+          "id": 299,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "CaptarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.5333
+          },
+          "created_at": "2026-03-15T22:10:57.451896+00:00"
+        },
+        {
+          "id": 296,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "FronteraxContinuidad",
+            "scores": [
+              0.8,
+              0.6,
+              0.7
+            ],
+            "gap_pre": 0.7,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.7,
+            "gap_post_calibrado": 0.21,
+            "tasa_cierre_calibrada": 0.7
+          },
+          "created_at": "2026-03-15T22:10:54.447506+00:00"
+        },
+        {
+          "id": 297,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "FronteraxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-08-motor_vn",
+            "tasa_cierre": 0.7
+          },
+          "created_at": "2026-03-15T22:10:54.447506+00:00"
+        },
+        {
+          "id": 294,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "AdaptarxSentido",
+            "scores": [
+              0.6,
+              0.4,
+              0.2
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.4,
+            "gap_post_calibrado": 0.48,
+            "tasa_cierre_calibrada": 0.4
+          },
+          "created_at": "2026-03-15T22:10:50.466345+00:00"
+        },
+        {
+          "id": 295,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "AdaptarxSentido",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-13-motor_vn",
+            "tasa_cierre": 0.4
+          },
+          "created_at": "2026-03-15T22:10:50.466345+00:00"
+        },
+        {
+          "id": 292,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "scores": [
+              0.6,
+              0.7,
+              0.3
+            ],
+            "gap_pre": 0.9,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5333,
+            "gap_post_calibrado": 0.42,
+            "tasa_cierre_calibrada": 0.5333
+          },
+          "created_at": "2026-03-15T22:10:46.494685+00:00"
+        },
+        {
+          "id": 293,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-12-motor_vn",
+            "tasa_cierre": 0.5333
+          },
+          "created_at": "2026-03-15T22:10:46.494685+00:00"
+        },
+        {
+          "id": 291,
+          "componente": "gestor",
+          "evento": "detector_gaps_llm",
+          "datos": {
+            "celdas": [
+              "CaptarxSalud",
+              "DepurarxSalud",
+              "DistribuirxSalud",
+              "FronteraxContinuidad",
+              "AdaptarxSentido",
+              "ReplicarxContinuidad"
+            ],
+            "modelo": "xiaomi/mimo-v2-flash",
+            "celdas_detectadas": 6
+          },
+          "created_at": "2026-03-15T22:08:33.317822+00:00"
+        },
+        {
+          "id": 290,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "analisis",
+            "tier": 4,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "863d5325",
+            "coste_usd": 0.0042,
+            "consumidor": "motor_vn",
+            "latencia_ms": 99210,
+            "n_hallazgos": 46,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 5
+          },
+          "created_at": "2026-03-15T22:07:58.504963+00:00"
+        },
+        {
+          "id": 288,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "CaptarxSalud",
+            "scores": [
+              0.3,
+              0.7,
+              0.3
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.4333,
+            "gap_post_calibrado": 0.2833,
+            "tasa_cierre_calibrada": 0.4334
+          },
+          "created_at": "2026-03-15T22:07:56.092743+00:00"
+        },
+        {
+          "id": 289,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "CaptarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.4334
+          },
+          "created_at": "2026-03-15T22:07:56.092743+00:00"
+        },
+        {
+          "id": 286,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "AdaptarxSentido",
+            "scores": [
+              0.6,
+              0.6,
+              0.6
+            ],
+            "gap_pre": 0.6,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6,
+            "gap_post_calibrado": 0.24,
+            "tasa_cierre_calibrada": 0.6
+          },
+          "created_at": "2026-03-15T22:07:54.252675+00:00"
+        },
+        {
+          "id": 287,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "AdaptarxSentido",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.6
+          },
+          "created_at": "2026-03-15T22:07:54.252675+00:00"
+        },
+        {
+          "id": 284,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "DepurarxContinuidad",
+            "scores": [
+              0.6,
+              0.7,
+              0.7
+            ],
+            "gap_pre": 0.6,
+            "n_evaluados": 3,
+            "n_hallazgos": 6,
+            "score_medio": 0.6667,
+            "gap_post_calibrado": 0.2,
+            "tasa_cierre_calibrada": 0.6667
+          },
+          "created_at": "2026-03-15T22:07:51.865734+00:00"
+        },
+        {
+          "id": 285,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "DepurarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-08-motor_vn",
+            "tasa_cierre": 0.6667
+          },
+          "created_at": "2026-03-15T22:07:51.865734+00:00"
+        },
+        {
+          "id": 282,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "FronteraxSentido",
+            "scores": [
+              0.6,
+              0.6,
+              0.6
+            ],
+            "gap_pre": 0.7,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6,
+            "gap_post_calibrado": 0.28,
+            "tasa_cierre_calibrada": 0.6
+          },
+          "created_at": "2026-03-15T22:07:46.856847+00:00"
+        },
+        {
+          "id": 283,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "FronteraxSentido",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-13-motor_vn",
+            "tasa_cierre": 0.6
+          },
+          "created_at": "2026-03-15T22:07:46.856847+00:00"
+        },
+        {
+          "id": 280,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "scores": [
+              0.3,
+              0.4,
+              0.6
+            ],
+            "gap_pre": 0.8,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.4333,
+            "gap_post_calibrado": 0.4533,
+            "tasa_cierre_calibrada": 0.4334
+          },
+          "created_at": "2026-03-15T22:07:43.531109+00:00"
+        },
+        {
+          "id": 281,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ReplicarxContinuidad",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-12-motor_vn",
+            "tasa_cierre": 0.4334
+          },
+          "created_at": "2026-03-15T22:07:43.531109+00:00"
+        },
+        {
+          "id": 279,
+          "componente": "gestor",
+          "evento": "detector_gaps_llm",
+          "datos": {
+            "celdas": [
+              "CaptarxSalud",
+              "DepurarxSalud",
+              "DepurarxContinuidad",
+              "DistribuirxSalud",
+              "FronteraxSentido",
+              "AdaptarxSentido",
+              "ReplicarxContinuidad",
+              "ConservarxSalud"
+            ],
+            "modelo": "xiaomi/mimo-v2-flash",
+            "celdas_detectadas": 8
+          },
+          "created_at": "2026-03-15T22:06:32.299514+00:00"
+        },
+        {
+          "id": 278,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "analisis",
+            "tier": 3,
+            "modelo": "stepfun/step-3.5-flash",
+            "caso_id": "1a2d0f9d",
+            "coste_usd": 0.0018,
+            "consumidor": "motor_vn",
+            "latencia_ms": 71980,
+            "n_hallazgos": 33,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 4
+          },
+          "created_at": "2026-03-15T21:59:58.931737+00:00"
+        },
+        {
+          "id": 276,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.3,
+              0.6,
+              0.6
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 8,
+            "score_medio": 0.5,
+            "gap_post_calibrado": 0.25,
+            "tasa_cierre_calibrada": 0.5
+          },
+          "created_at": "2026-03-15T21:59:55.109827+00:00"
+        },
+        {
+          "id": 277,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "stepfun/step-3.5-flash",
+            "tokens": 0,
+            "coste_usd": 0.0004,
+            "latencia_ms": 12000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.5
+          },
+          "created_at": "2026-03-15T21:59:55.109827+00:00"
+        },
+        {
+          "id": 274,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.7,
+              0.6,
+              0.6
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 5,
+            "score_medio": 0.6333,
+            "gap_post_calibrado": 0.1833,
+            "tasa_cierre_calibrada": 0.6334
+          },
+          "created_at": "2026-03-15T21:59:45.408965+00:00"
+        },
+        {
+          "id": 275,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "stepfun/step-3.5-flash",
+            "tokens": 0,
+            "coste_usd": 0.0004,
+            "latencia_ms": 12000,
+            "pregunta_id": "INT-14-motor_vn",
+            "tasa_cierre": 0.6334
+          },
+          "created_at": "2026-03-15T21:59:45.408965+00:00"
+        },
+        {
+          "id": 272,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.6,
+              0.6,
+              0.6
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.6,
+            "gap_post_calibrado": 0.2,
+            "tasa_cierre_calibrada": 0.6
+          },
+          "created_at": "2026-03-15T21:59:36.929743+00:00"
+        },
+        {
+          "id": 273,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "stepfun/step-3.5-flash",
+            "tokens": 0,
+            "coste_usd": 0.0004,
+            "latencia_ms": 12000,
+            "pregunta_id": "INT-08-motor_vn",
+            "tasa_cierre": 0.6
+          },
+          "created_at": "2026-03-15T21:59:36.929743+00:00"
+        },
+        {
+          "id": 270,
+          "componente": "registrador",
+          "evento": "evaluacion_calidad",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "scores": [
+              0.6,
+              0.6,
+              0.4
+            ],
+            "gap_pre": 0.5,
+            "n_evaluados": 3,
+            "n_hallazgos": 10,
+            "score_medio": 0.5333,
+            "gap_post_calibrado": 0.2333,
+            "tasa_cierre_calibrada": 0.5334
+          },
+          "created_at": "2026-03-15T21:59:33.878409+00:00"
+        },
+        {
+          "id": 271,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "stepfun/step-3.5-flash",
+            "tokens": 0,
+            "coste_usd": 0.0004,
+            "latencia_ms": 12000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.5334
+          },
+          "created_at": "2026-03-15T21:59:33.878409+00:00"
+        },
+        {
+          "id": 269,
+          "componente": "neural_db",
+          "evento": "busqueda",
+          "datos": {
+            "query": "motor semántico",
+            "scope": null,
+            "top_score": 1.0,
+            "resultados": 5,
+            "session_id": null
+          },
+          "created_at": "2026-03-15T21:34:29.474864+00:00"
+        },
+        {
+          "id": 268,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "confrontacion",
+            "tier": 4,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "0ddec755",
+            "coste_usd": 0.0013,
+            "consumidor": "motor_vn",
+            "latencia_ms": 33660,
+            "n_hallazgos": 20,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 2
+          },
+          "created_at": "2026-03-15T21:32:58.407045+00:00"
+        },
+        {
+          "id": 267,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0007,
+            "latencia_ms": 6000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.875
+          },
+          "created_at": "2026-03-15T21:32:57.745535+00:00"
+        },
+        {
+          "id": 266,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0007,
+            "latencia_ms": 6000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.875
+          },
+          "created_at": "2026-03-15T21:32:57.299109+00:00"
+        },
+        {
+          "id": 265,
+          "componente": "motor_vn",
+          "evento": "ejecucion_completa",
+          "datos": {
+            "via": "config_modelos",
+            "modo": "analisis",
+            "tier": 3,
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "caso_id": "0b47be04",
+            "coste_usd": 0.0039,
+            "consumidor": "motor_vn",
+            "latencia_ms": 99620,
+            "n_hallazgos": 50,
+            "tasa_cierre": 1.0,
+            "n_inteligencias": 5
+          },
+          "created_at": "2026-03-15T21:32:14.415478+00:00"
+        },
+        {
+          "id": 264,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-02-motor_vn",
+            "tasa_cierre": 0.875
+          },
+          "created_at": "2026-03-15T21:32:13.751455+00:00"
+        },
+        {
+          "id": 263,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-01-motor_vn",
+            "tasa_cierre": 0.875
+          },
+          "created_at": "2026-03-15T21:32:13.525060+00:00"
+        },
+        {
+          "id": 262,
+          "componente": "registrador",
+          "evento": "ejecucion",
+          "datos": {
+            "celda": "ConservarxSalud",
+            "modelo": "deepseek/deepseek-chat-v3-0324",
+            "tokens": 0,
+            "coste_usd": 0.0008,
+            "latencia_ms": 15000,
+            "pregunta_id": "INT-16-motor_vn",
+            "tasa_cierre": 0.875
+          },
+          "created_at": "2026-03-15T21:32:13.296657+00:00"
+        }
+      ]
+    },
+    "/monitoring/dashboard": {
+      "status": "ok",
+      "ejecuciones_totales": 0,
+      "por_modo": {},
+      "slos": {
+        "status": "sin_datos",
+        "slos": {}
+      },
+      "budget": {
+        "coste_acumulado_24h": 0.0,
+        "presupuesto_diario": 50.0,
+        "porcentaje_usado": 0.0,
+        "dentro_presupuesto": true
+      }
+    }
+  },
+  "fuentes": [
+    "/gestor/autopoiesis",
+    "/estigmergia/marcas",
+    "/criticality/estado",
+    "/propiocepcion",
+    "/metricas",
+    "/monitoring/dashboard"
+  ],
+  "timestamp": "2026-03-16T06:50:10.013153+00:00"
+}

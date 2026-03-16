@@ -1,0 +1,445 @@
+{
+  "caso_id": "p33_caso_05_direccion",
+  "status": "ok",
+  "input_preview": "Mi sistema tiene un gestor que se auto-ajusta. Sus parámetros actuales: umbral de poda=0.0888, umbral de promoción=0.4, ventana PID=50 puntos, agresividad de poda=0.5. Lleva 1 ciclo(s) de auto-ajuste.",
+  "response_raw": {
+    "status": "ok",
+    "caso_id": "71926881",
+    "modo": "analisis",
+    "tier": 4,
+    "alpha": 0.3,
+    "inteligencias": [
+      "INT-01",
+      "INT-08",
+      "INT-14",
+      "INT-16"
+    ],
+    "n_inteligencias": 4,
+    "profundidad": 2,
+    "hallazgos": [
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "1. Los gaps principales no están especificados (???), lo que impide priorizar áreas de alto impacto y sugiere una falta de claridad en la identificación de problemas críticos."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "2. Las herramientas del sistema no registran uso en 30 días, a pesar de detectarse 19 gaps (11+7+1), indicando una desconexión entre la detección de problemas y la asignación de recursos para resolverlos."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "3. El reactor de preguntas tiene 0 candidatas pendientes, lo que sugiere que no se están generando o priorizando interrogantes clave para abordar los gaps, limitando la profundidad del análisis."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "4. Los parámetros de auto-ajuste (umbral de poda=0.0888, umbral de promoción=0.4) pueden no estar optimizados tras solo 1 ciclo, especialmente con un umbral de poda muy bajo que podría retener señales de bajo impacto."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "5. Hay 14 celdas con señales PID activas, pero no se correlacionan explícitamente con los gaps detectados, lo que genera riesgo de dispersión de esfuerzos en áreas de menor relevancia."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "6. La agresividad de poda (0.5) y la ventana PID (50 puntos) podrían no estar alineadas con la dinámica de los gaps, requiriendo ajuste para mejorar la sensibilidad a cambios significativos."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "7. No se evidencia un proceso de promoción de gaps a acciones concretas (ej. uso de herramientas o generación de preguntas), lo que compromete la capacidad del sistema para trabajar en lo que más impacto tiene."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "1. **Falta de claridad en gaps principales**: Los gaps principales aparecen como \"?, ?, ?, ?, ?\", lo que impide una priorización basada en evidencia. Se debe exigir su identificación específica para enfocar recursos."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "2. **Subutilización crítica de herramientas**: 0 herramientas usadas en 30 días indica desperdicio de capacidades del sistema. Se requiere auditoría de por qué no se emplean y redefinición de su propósito o eliminación."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "3. **Desconexión entre señales PID y acciones**: 14 celdas con señales PID activas pero 0 candidatas pendientes sugiere que las señales no se traducen en preguntas/acciones concretas. Revisar el flujo de conversión y ajustar umbrales."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "4. **Auto-ajuste insuficiente**: Solo 1 ciclo de auto-ajuste es anecdótico; el sistema no ha explorado suficiente espacio paramétrico. Aumentar ciclos o forzar reevaluaciones con datos de gaps."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "5. **Umbral de promoción (0.4) potencialmente alto**: Con gaps detectados, un umbral alto podría estar filtrando oportunidades de mejora. Evaluar reducción temporal para priorizar resolución de gaps."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "6. **Agresividad de poda (0.5) en rango medio**: Podría estar eliminando señales valiosas en áreas con gaps. Ajustar a la baja (ej. 0.3) hasta clarificar gaps principales."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "7. **Ventana PID (50 puntos) desalineada con detección de gaps**: Si los gaps son estructurales, una ventana corta puede no capturar patrones. Probar ampliarla a 100-200 puntos para análisis de tendencias."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "8. **Priorización por defecto a señales PID, no a gaps**: El sistema parece reaccionar a PID (14 activas) pero ignora los 19 gaps totales. Recalibrar para que los gaps actúen como primary drivers."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "9. **Riesgo de \"parálisis por análisis\"**: Detección de gaps sin resolución (candidatas=0) sugiere que el sistema se estanca en diagnóstico. Implementar un mecanismo de \"umbral de acción\" que genere candidatas automáticas tras X gaps no resueltos."
+      },
+      {
+        "inteligencia": "INT-14",
+        "hallazgo": "10. **Falta de retroalimentación de impacto**: No hay métricas que vinculen la resolución de gaps con resultados medibles (ej. mejora en rendimiento). Introducir KPIs de impacto por gap resuelto."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "1. Los gaps detectados (11 en matriz lente×función, 7 en tipos de pensamiento, 1 en modos conceptuales) indican áreas críticas no atendidas; verificar si las 14 celdas con señales PID activas corresponden a estas zonas de gap para confirmar alineación con prioridades."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "2. La agresividad de poda (0.5) combinada con un umbral de poda bajo (0.0888) podría estar eliminando elementos potencialmente relevantes para cerrar gaps, especialmente en modos conceptuales donde solo hay 1 gap identificado."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "3. Herramientas sin uso en 30 días sugiere subutilización de recursos; evaluar si estas herramientas pueden aplicarse directamente a los gaps principales (especialmente en tipos de pensamiento y matriz lente×función)."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "4. El reactor de preguntas con 0 candidatas pendientes, pese a múltiples gaps, refleja posible desconexión entre la detección de problemas y la generación de acciones; implementar un mecanismo que convierta gaps en candidatas automáticas."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "5. Umbral de promoción (0.4) relativamente alto podría estar limitando la promoción de elementos que aborden gaps; ajustar a la baja para priorizar temas con gaps identificados."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "6. Solo 1 ciclo de auto-ajuste es insuficiente para收敛 hacia una priorización óptima; aumentar a mínimo 3-5 ciclos monitoreando el impacto en reducción de gaps."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "7. Ventana PID de 50 puntos puede ser demasiado corta si los gaps son persistentes; ampliarla a 100-200 puntos para capturar tendencias estructurales en las áreas con gaps."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "8. Gaps principales no especificados (?, ?, ?, ?, ?) impiden enfoque concreto; forzar la identificación de los 3-5 gaps más críticos basados en impacto potencial y recurrencia."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "9. Desbalance en gaps: 11 en matriz lente×función vs. 1 en modos conceptuales sugiere que el sistema podría estar ignorando áreas de alto impacto conceptual; recalibrar el gestor para dar peso a modos conceptuales."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "10. Señales PID activas en 14 celdas sin relación clara con gaps indica posible dispersión de esfuerzos; reasignar recursos PID hacia celdas con gaps confirmados."
+      }
+    ],
+    "sintesis": "SINTESIS (27 hallazgos, 3 inteligencias):\n\n[INT-01]:\n  - 1. Los gaps principales no están especificados (???), lo que impide priorizar áreas de alto impacto y sugiere una falta de claridad en la identificación de problemas críticos.\n  - 2. Las herramientas del sistema no registran uso en 30 días, a pesar de detectarse 19 gaps (11+7+1), indicando una desconexión entre la detección de problemas y la asignación de recursos para resolver\n  - 3. El reactor de preguntas tiene 0 candidatas pendientes, lo que sugiere que no se están generando o priorizando interrogantes clave para abordar los gaps, limitando la profundidad del análisis.\n\n[INT-14]:\n  - 1. **Falta de claridad en gaps principales**: Los gaps principales aparecen como \"?, ?, ?, ?, ?\", lo que impide una priorización basada en evidencia. Se debe exigir su identificación específica para e\n  - 2. **Subutilización crítica de herramientas**: 0 herramientas usadas en 30 días indica desperdicio de capacidades del sistema. Se requiere auditoría de por qué no se emplean y redefinición de su propó\n  - 3. **Desconexión entre señales PID y acciones**: 14 celdas con señales PID activas pero 0 candidatas pendientes sugiere que las señales no se traducen en preguntas/acciones concretas. Revisar el flujo\n\n[INT-08]:\n  - 1. Los gaps detectados (11 en matriz lente×función, 7 en tipos de pensamiento, 1 en modos conceptuales) indican áreas críticas no atendidas; verificar si las 14 celdas con señales PID activas correspo\n  - 2. La agresividad de poda (0.5) combinada con un umbral de poda bajo (0.0888) podría estar eliminando elementos potencialmente relevantes para cerrar gaps, especialmente en modos conceptuales donde so\n  - 3. Herramientas sin uso en 30 días sugiere subutilización de recursos; evaluar si estas herramientas pueden aplicarse directamente a los gaps principales (especialmente en tipos de pensamiento y matri",
+    "señales_pid": [
+      {
+        "inteligencia": "INT-14",
+        "celda": "ConservarxSalud",
+        "P": 0.1833,
+        "I": 4.0033,
+        "I_anti_windup": 4.0033,
+        "D": -0.3167,
+        "D_filtrado": -0.3673,
+        "n_total": 15,
+        "señal_control": 0.5653,
+        "tasa_cierre": 0.6334
+      },
+      {
+        "inteligencia": "INT-08",
+        "celda": "ConservarxSalud",
+        "P": 0.1667,
+        "I": 4.17,
+        "I_anti_windup": 4.17,
+        "D": -0.3333,
+        "D_filtrado": -0.3487,
+        "n_total": 16,
+        "señal_control": 0.5663,
+        "tasa_cierre": 0.6666
+      },
+      {
+        "inteligencia": "INT-01",
+        "celda": "ConservarxSalud",
+        "P": 0.1833,
+        "I": 4.3533,
+        "I_anti_windup": 4.3533,
+        "D": -0.3167,
+        "D_filtrado": -0.3233,
+        "n_total": 17,
+        "señal_control": 0.6025,
+        "tasa_cierre": 0.6334
+      },
+      {
+        "inteligencia": "INT-16",
+        "celda": "ConservarxSalud",
+        "P": 0.5,
+        "I": 4.8533,
+        "I_anti_windup": 4.8533,
+        "D": 0.0,
+        "D_filtrado": -0.2667,
+        "n_total": 18,
+        "señal_control": 0.972,
+        "tasa_cierre": 0.0
+      }
+    ],
+    "gradientes_top": [],
+    "metacognicion": {
+      "fok": {
+        "fok": 0.7022,
+        "factores": {
+          "tasa_kalman": 0.9876,
+          "complejidad_input": 0.49,
+          "cobertura_programa": 0.5,
+          "novedad": 0.4,
+          "familiaridad": 0.6
+        },
+        "recomendacion": "Alta confianza — proceder con tier normal",
+        "tier_original": 3,
+        "tier_ajustado": 3
+      },
+      "jol": {
+        "jol": 0.8628,
+        "factores": {
+          "tasa_cierre": 0.75,
+          "n_hallazgos": 27,
+          "factor_latencia": 0.92,
+          "factor_coste": 0.9986
+        },
+        "calibracion": {
+          "fok_predicho": 0.7022,
+          "jol_real": 0.8628,
+          "error": 0.1606,
+          "bien_calibrado": true
+        }
+      },
+      "criticality": {
+        "T": 0.2605,
+        "regimen": "orden_rigido",
+        "tier_original": 3,
+        "tier_ajustado": 4,
+        "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+      }
+    },
+    "metricas": {
+      "tiempo_total_s": 116.45,
+      "coste_usd": 0.0021,
+      "n_llm_calls": 4,
+      "modelo": "stepfun/step-3.5-flash",
+      "via": "config_modelos"
+    }
+  },
+  "inteligencias": [
+    "INT-01",
+    "INT-08",
+    "INT-14",
+    "INT-16"
+  ],
+  "n_inteligencias": 4,
+  "tier": 4,
+  "alpha": 0.3,
+  "hallazgos": [
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "1. Los gaps principales no están especificados (???), lo que impide priorizar áreas de alto impacto y sugiere una falta de claridad en la identificación de problemas críticos."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "2. Las herramientas del sistema no registran uso en 30 días, a pesar de detectarse 19 gaps (11+7+1), indicando una desconexión entre la detección de problemas y la asignación de recursos para resolverlos."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "3. El reactor de preguntas tiene 0 candidatas pendientes, lo que sugiere que no se están generando o priorizando interrogantes clave para abordar los gaps, limitando la profundidad del análisis."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "4. Los parámetros de auto-ajuste (umbral de poda=0.0888, umbral de promoción=0.4) pueden no estar optimizados tras solo 1 ciclo, especialmente con un umbral de poda muy bajo que podría retener señales de bajo impacto."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "5. Hay 14 celdas con señales PID activas, pero no se correlacionan explícitamente con los gaps detectados, lo que genera riesgo de dispersión de esfuerzos en áreas de menor relevancia."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "6. La agresividad de poda (0.5) y la ventana PID (50 puntos) podrían no estar alineadas con la dinámica de los gaps, requiriendo ajuste para mejorar la sensibilidad a cambios significativos."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "7. No se evidencia un proceso de promoción de gaps a acciones concretas (ej. uso de herramientas o generación de preguntas), lo que compromete la capacidad del sistema para trabajar en lo que más impacto tiene."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "1. **Falta de claridad en gaps principales**: Los gaps principales aparecen como \"?, ?, ?, ?, ?\", lo que impide una priorización basada en evidencia. Se debe exigir su identificación específica para enfocar recursos."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "2. **Subutilización crítica de herramientas**: 0 herramientas usadas en 30 días indica desperdicio de capacidades del sistema. Se requiere auditoría de por qué no se emplean y redefinición de su propósito o eliminación."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "3. **Desconexión entre señales PID y acciones**: 14 celdas con señales PID activas pero 0 candidatas pendientes sugiere que las señales no se traducen en preguntas/acciones concretas. Revisar el flujo de conversión y ajustar umbrales."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "4. **Auto-ajuste insuficiente**: Solo 1 ciclo de auto-ajuste es anecdótico; el sistema no ha explorado suficiente espacio paramétrico. Aumentar ciclos o forzar reevaluaciones con datos de gaps."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "5. **Umbral de promoción (0.4) potencialmente alto**: Con gaps detectados, un umbral alto podría estar filtrando oportunidades de mejora. Evaluar reducción temporal para priorizar resolución de gaps."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "6. **Agresividad de poda (0.5) en rango medio**: Podría estar eliminando señales valiosas en áreas con gaps. Ajustar a la baja (ej. 0.3) hasta clarificar gaps principales."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "7. **Ventana PID (50 puntos) desalineada con detección de gaps**: Si los gaps son estructurales, una ventana corta puede no capturar patrones. Probar ampliarla a 100-200 puntos para análisis de tendencias."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "8. **Priorización por defecto a señales PID, no a gaps**: El sistema parece reaccionar a PID (14 activas) pero ignora los 19 gaps totales. Recalibrar para que los gaps actúen como primary drivers."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "9. **Riesgo de \"parálisis por análisis\"**: Detección de gaps sin resolución (candidatas=0) sugiere que el sistema se estanca en diagnóstico. Implementar un mecanismo de \"umbral de acción\" que genere candidatas automáticas tras X gaps no resueltos."
+    },
+    {
+      "inteligencia": "INT-14",
+      "hallazgo": "10. **Falta de retroalimentación de impacto**: No hay métricas que vinculen la resolución de gaps con resultados medibles (ej. mejora en rendimiento). Introducir KPIs de impacto por gap resuelto."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "1. Los gaps detectados (11 en matriz lente×función, 7 en tipos de pensamiento, 1 en modos conceptuales) indican áreas críticas no atendidas; verificar si las 14 celdas con señales PID activas corresponden a estas zonas de gap para confirmar alineación con prioridades."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "2. La agresividad de poda (0.5) combinada con un umbral de poda bajo (0.0888) podría estar eliminando elementos potencialmente relevantes para cerrar gaps, especialmente en modos conceptuales donde solo hay 1 gap identificado."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "3. Herramientas sin uso en 30 días sugiere subutilización de recursos; evaluar si estas herramientas pueden aplicarse directamente a los gaps principales (especialmente en tipos de pensamiento y matriz lente×función)."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "4. El reactor de preguntas con 0 candidatas pendientes, pese a múltiples gaps, refleja posible desconexión entre la detección de problemas y la generación de acciones; implementar un mecanismo que convierta gaps en candidatas automáticas."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "5. Umbral de promoción (0.4) relativamente alto podría estar limitando la promoción de elementos que aborden gaps; ajustar a la baja para priorizar temas con gaps identificados."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "6. Solo 1 ciclo de auto-ajuste es insuficiente para收敛 hacia una priorización óptima; aumentar a mínimo 3-5 ciclos monitoreando el impacto en reducción de gaps."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "7. Ventana PID de 50 puntos puede ser demasiado corta si los gaps son persistentes; ampliarla a 100-200 puntos para capturar tendencias estructurales en las áreas con gaps."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "8. Gaps principales no especificados (?, ?, ?, ?, ?) impiden enfoque concreto; forzar la identificación de los 3-5 gaps más críticos basados en impacto potencial y recurrencia."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "9. Desbalance en gaps: 11 en matriz lente×función vs. 1 en modos conceptuales sugiere que el sistema podría estar ignorando áreas de alto impacto conceptual; recalibrar el gestor para dar peso a modos conceptuales."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "10. Señales PID activas en 14 celdas sin relación clara con gaps indica posible dispersión de esfuerzos; reasignar recursos PID hacia celdas con gaps confirmados."
+    }
+  ],
+  "n_hallazgos": 27,
+  "sintesis": "SINTESIS (27 hallazgos, 3 inteligencias):\n\n[INT-01]:\n  - 1. Los gaps principales no están especificados (???), lo que impide priorizar áreas de alto impacto y sugiere una falta de claridad en la identificación de problemas críticos.\n  - 2. Las herramientas del sistema no registran uso en 30 días, a pesar de detectarse 19 gaps (11+7+1), indicando una desconexión entre la detección de problemas y la asignación de recursos para resolver\n  - 3. El reactor de preguntas tiene 0 candidatas pendientes, lo que sugiere que no se están generando o priorizando interrogantes clave para abordar los gaps, limitando la profundidad del análisis.\n\n[INT-14]:\n  - 1. **Falta de claridad en gaps principales**: Los gaps principales aparecen como \"?, ?, ?, ?, ?\", lo que impide una priorización basada en evidencia. Se debe exigir su identificación específica para e\n  - 2. **Subutilización crítica de herramientas**: 0 herramientas usadas en 30 días indica desperdicio de capacidades del sistema. Se requiere auditoría de por qué no se emplean y redefinición de su propó\n  - 3. **Desconexión entre señales PID y acciones**: 14 celdas con señales PID activas pero 0 candidatas pendientes sugiere que las señales no se traducen en preguntas/acciones concretas. Revisar el flujo\n\n[INT-08]:\n  - 1. Los gaps detectados (11 en matriz lente×función, 7 en tipos de pensamiento, 1 en modos conceptuales) indican áreas críticas no atendidas; verificar si las 14 celdas con señales PID activas correspo\n  - 2. La agresividad de poda (0.5) combinada con un umbral de poda bajo (0.0888) podría estar eliminando elementos potencialmente relevantes para cerrar gaps, especialmente en modos conceptuales donde so\n  - 3. Herramientas sin uso en 30 días sugiere subutilización de recursos; evaluar si estas herramientas pueden aplicarse directamente a los gaps principales (especialmente en tipos de pensamiento y matri",
+  "señales_pid": [
+    {
+      "inteligencia": "INT-14",
+      "celda": "ConservarxSalud",
+      "P": 0.1833,
+      "I": 4.0033,
+      "I_anti_windup": 4.0033,
+      "D": -0.3167,
+      "D_filtrado": -0.3673,
+      "n_total": 15,
+      "señal_control": 0.5653,
+      "tasa_cierre": 0.6334
+    },
+    {
+      "inteligencia": "INT-08",
+      "celda": "ConservarxSalud",
+      "P": 0.1667,
+      "I": 4.17,
+      "I_anti_windup": 4.17,
+      "D": -0.3333,
+      "D_filtrado": -0.3487,
+      "n_total": 16,
+      "señal_control": 0.5663,
+      "tasa_cierre": 0.6666
+    },
+    {
+      "inteligencia": "INT-01",
+      "celda": "ConservarxSalud",
+      "P": 0.1833,
+      "I": 4.3533,
+      "I_anti_windup": 4.3533,
+      "D": -0.3167,
+      "D_filtrado": -0.3233,
+      "n_total": 17,
+      "señal_control": 0.6025,
+      "tasa_cierre": 0.6334
+    },
+    {
+      "inteligencia": "INT-16",
+      "celda": "ConservarxSalud",
+      "P": 0.5,
+      "I": 4.8533,
+      "I_anti_windup": 4.8533,
+      "D": 0.0,
+      "D_filtrado": -0.2667,
+      "n_total": 18,
+      "señal_control": 0.972,
+      "tasa_cierre": 0.0
+    }
+  ],
+  "gradientes_top": [],
+  "metacognicion": {
+    "fok": {
+      "fok": 0.7022,
+      "factores": {
+        "tasa_kalman": 0.9876,
+        "complejidad_input": 0.49,
+        "cobertura_programa": 0.5,
+        "novedad": 0.4,
+        "familiaridad": 0.6
+      },
+      "recomendacion": "Alta confianza — proceder con tier normal",
+      "tier_original": 3,
+      "tier_ajustado": 3
+    },
+    "jol": {
+      "jol": 0.8628,
+      "factores": {
+        "tasa_cierre": 0.75,
+        "n_hallazgos": 27,
+        "factor_latencia": 0.92,
+        "factor_coste": 0.9986
+      },
+      "calibracion": {
+        "fok_predicho": 0.7022,
+        "jol_real": 0.8628,
+        "error": 0.1606,
+        "bien_calibrado": true
+      }
+    },
+    "criticality": {
+      "T": 0.2605,
+      "regimen": "orden_rigido",
+      "tier_original": 3,
+      "tier_ajustado": 4,
+      "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+    }
+  },
+  "metricas": {
+    "tiempo_total_s": 116.45,
+    "coste_usd": 0.0021,
+    "n_llm_calls": 4,
+    "modelo": "stepfun/step-3.5-flash",
+    "via": "config_modelos"
+  },
+  "coste_usd": 0.0021,
+  "tiempo_s": 116.57689666748047,
+  "timestamp": "2026-03-16T07:57:02.557371+00:00"
+}

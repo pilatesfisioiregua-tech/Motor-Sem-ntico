@@ -1,0 +1,697 @@
+{
+  "caso_id": "p33_caso_04_fragilidad",
+  "status": "ok",
+  "input_preview": "Mi sistema depende de modelos de IA externos. De 0 modelos activos, 0 están caídos ahora mismo. Hay 0 modelos candidatos descubiertos pero no activados. La consistencia del sistema es INCONSISTENTE: 2",
+  "response_raw": {
+    "status": "ok",
+    "caso_id": "4223027e",
+    "modo": "analisis",
+    "tier": 4,
+    "alpha": 0.3,
+    "inteligencias": [
+      "INT-01",
+      "INT-08",
+      "INT-12",
+      "INT-13",
+      "INT-16"
+    ],
+    "n_inteligencias": 5,
+    "profundidad": 2,
+    "hallazgos": [
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo:** La robustez matemática del sistema es limitada debido a su inconsistencia (INCONSISTENTE) y la presencia de 144 datapoints huérfanos, lo que sugiere falta de integridad en los datos."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Costo:** Escalar requeriría resolver las inconsistencias (p. ej., reactivar modelos inactivos, eliminar referencias a preguntas inactivas) y reconstruir conexiones neuronales (solo 42 con fuerza media baja: 0.108). El costo sería alto en tiempo y recursos para normalizar los datos y reentrenar modelos."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Contradicciones formales:** Sí, hay contradicciones como programas que referencian preguntas inactivas y configuraciones de enjambre que apuntan a modelos inactivos."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo:** La consistencia lógica está fragmentada:"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Inconsistencias críticas:** 2 programas con preguntas inactivas + 9 configuraciones de enjambre con modelos inactivos."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Datapoints huérfanos:** 144 puntos sin referencias, lo que rompe la coherencia."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Contradicciones formales:** Las referencias a componentes inactivos (preguntas/modelos) generan inconsistencias en la ejecución y el análisis."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Hallazgo:** Los límites de consistencia están en:"
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Conexiones neuronales débiles:** 42 conexiones con fuerza media baja (0.108) y 0 fuertes, lo que limita la capacidad de generalización."
+      },
+      {
+        "inteligencia": "INT-01",
+        "hallazgo": "- **Preguntas expiradas:** 20 sin reemplazo, lo que afecta la actualización del conocimiento."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "**Hallazgos concretos sobre el caso:**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "- **No.** La alta inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos) sugiere que el sistema depende de intervención manual para mantener su funcionalidad. Sin supervisión, los fallos se acumularían (ej. preguntas expiradas sin reemplazo)."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "- **No.** La falta de conexiones fuertes en la red neuronal (0 conexiones fuertes) y la fragilidad en configuraciones (9 referencias a modelos inactivos) indican que el sistema no es autosuficiente. La degradación sería rápida sin gestión activa."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "3. **¿Se puede escalar/replicar la evolución de la historia? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "- **Solo con alto costo.** La inconsistencia generalizada (144 datapoints huérfanos) y la dependencia de modelos externos inactivos implican que escalar requeriría reestructurar flujos de datos y reemplazar componentes inactivos, con riesgo de pérdida de coherencia."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "4. **¿Cómo se distribuye la coherencia del arco narrativo entre los componentes?**"
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "- **De forma desigual y frágil.** La coherencia está fracturada: 2 programas y 9 configuraciones dependen de elementos inactivos, mientras que la red neuronal tiene baja fuerza de conexiones (media 0.108), lo que limita su capacidad para sostener narrativas complejas."
+      },
+      {
+        "inteligencia": "INT-12",
+        "hallazgo": "5. **¿Dónde están los límites de la coherencia del arco narrativo?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "**Hallazgo:** No, el sistema es altamente frágil debido a su inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos). La falta de conexiones fuertes en la red neuronal (0) y la dependencia de modelos externos inactivos sugieren que requiere supervisión humana constante para mantener operatividad básica."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "**Hallazgo:** No, la situación actual es insostenible sin intervención. Hay 20 preguntas expiradas sin reemplazo y 144 datapoints huérfanos, lo que indica degradación progresiva. La ausencia de modelos candidatos activables (0) agrava el riesgo de colapso funcional."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "3. **¿Se puede escalar/replicar la robustez ante bifurcaciones? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "**Hallazgo:** No en el estado actual. La inconsistencia (9 configuraciones de enjambre inactivas) y la baja fuerza media de conexiones (0.108) implican que escalar requeriría:"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "- Reconstruir modelos activos (costo alto por dependencia externa)."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "- Revisar manualmente datapoints huérfanos y preguntas expiradas (costo de tiempo/recursos)."
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "4. **¿Cómo se distribuyen las tendencias actuales/riesgos entre los componentes?**"
+      },
+      {
+        "inteligencia": "INT-13",
+        "hallazgo": "**Hallazgo:** Los riesgos están concentrados en:"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**1. ¿Se puede escalar/replicar las iteraciones/mejora continua? ¿A qué costo? ¿El prototipo prueba la hipótesis clave?**"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo**: El sistema es **altamente frágil** debido a su inconsistencia (modelos inactivos, datapoints huérfanos y conexiones neuronales débiles). Escalar/replicar requeriría:"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- Reactivar modelos candidatos (actualmente 0 activos)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- Resolver la inconsistencia (2 programas con preguntas inactivas, 9 configuraciones de enjambre con modelos inactivos)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Costo alto**: Reconstruir 144 datapoints huérfanos y fortalecer conexiones (fuerza media actual: 0.108)."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hipótesis clave no probada**: La alta fragilidad sugiere que el prototipo no valida escalabilidad ni mejora continua."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "**2. ¿Cómo se distribuye la viabilidad técnica/recursos entre los componentes?**"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Hallazgo**: Distribución **desbalanceada y crítica**:"
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- **Puntos únicos de fallo**: Modelos externos (todos inactivos), conexiones neuronales débiles (0 fuertes), y datapoints huérfanos."
+      },
+      {
+        "inteligencia": "INT-16",
+        "hallazgo": "- Recursos mal asignados: 20 preguntas expiradas sin reemplazo indican obsolescencia en componentes clave."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** La escalabilidad está limitada por la alta inconsistencia del sistema (2 programas, 9 configuraciones y 144 datapoints huérfanos). Replicar estabilidad requeriría reactivar modelos inactivos o reemplazar referencias, con un costo alto en tiempo y recursos debido a la falta de conexiones fuertes (0) y la baja fuerza media (0.108) en la red neuronal."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "2. **¿Cómo se distribuye la salud emocional/relacional entre los componentes?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** La salud relacional es desigual: hay una total ausencia de modelos activos (0/0) y dependencia de componentes inactivos, lo que concentra el \"estrés\" en los programas y configuraciones que referencian preguntas/modelos inaccesibles. Los datapoints huérfanos (144) indican fragmentación emocional no gestionada."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "3. **¿Dónde están los límites de la salud emocional/relacional?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** Los límites están marcados por las 20 preguntas expiradas sin reemplazo y las conexiones débiles (fuerza media 0.108). El sistema colapsaría si aumenta la demanda sobre relaciones ya inconsistentes o si fallan los pocos nodos críticos que mantienen operatividad parcial."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "4. **¿Esto le ha pasado antes?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** La presencia de preguntas expiradas y datapoints huérfanos sugiere un patrón recurrente de abandono o falta de mantenimiento, indicando que el sistema ha operado previamente en estados degradados sin corrección proactiva."
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "5. **¿Cómo respondió?**"
+      },
+      {
+        "inteligencia": "INT-08",
+        "hallazgo": "- **Hallazgo:** La respuesta previa parece reactiva y no estructural: no hay modelos candidatos activados (0) ni conexiones fuertes restauradas, lo que implica parches temporales (ej. ignorar inactivos) en lugar de resolver la inconsistencia sistémica."
+      }
+    ],
+    "sintesis": "SINTESIS (50 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - - **Hallazgo:** La robustez matemática del sistema es limitada debido a su inconsistencia (INCONSISTENTE) y la presencia de 144 datapoints huérfanos, lo que sugiere falta de integridad en los datos.\n  - - **Costo:** Escalar requeriría resolver las inconsistencias (p. ej., reactivar modelos inactivos, eliminar referencias a preguntas inactivas) y reconstruir conexiones neuronales (solo 42 con fuerza m\n  - - **Contradicciones formales:** Sí, hay contradicciones como programas que referencian preguntas inactivas y configuraciones de enjambre que apuntan a modelos inactivos.\n\n[INT-12]:\n  - **Hallazgos concretos sobre el caso:**\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - - **No.** La alta inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos) sugiere que el sistema depende de intervención manual para mantener su funcionalidad. Sin supervisión, \n\n[INT-13]:\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - **Hallazgo:** No, el sistema es altamente frágil debido a su inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos). La falta de conexiones fuertes en la red neuronal (0) y la \n  - 2. **¿Puede la situación funcionar sin la persona clave?**\n\n[INT-16]:\n  - **1. ¿Se puede escalar/replicar las iteraciones/mejora continua? ¿A qué costo? ¿El prototipo prueba la hipótesis clave?**\n  - - **Hallazgo**: El sistema es **altamente frágil** debido a su inconsistencia (modelos inactivos, datapoints huérfanos y conexiones neuronales débiles). Escalar/replicar requeriría:\n  - - Reactivar modelos candidatos (actualmente 0 activos).\n\n[INT-08]:\n  - 1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**\n  - - **Hallazgo:** La escalabilidad está limitada por la alta inconsistencia del sistema (2 programas, 9 configuraciones y 144 datapoints huérfanos). Replicar estabilidad requeriría reactivar modelos ina\n  - 2. **¿Cómo se distribuye la salud emocional/relacional entre los componentes?**",
+    "señales_pid": [
+      {
+        "inteligencia": "INT-01",
+        "celda": "ReplicarxContinuidad",
+        "P": 0.2333,
+        "I": 4.0383,
+        "I_anti_windup": 4.0383,
+        "D": -0.4667,
+        "D_filtrado": -0.4263,
+        "n_total": 11,
+        "señal_control": 0.6158,
+        "tasa_cierre": 0.6667
+      },
+      {
+        "inteligencia": "INT-16",
+        "celda": "DistribuirxSalud",
+        "P": 0.24,
+        "I": 1.5383,
+        "I_anti_windup": 1.5383,
+        "D": -0.36,
+        "D_filtrado": -0.3123,
+        "n_total": 5,
+        "señal_control": 0.3782,
+        "tasa_cierre": 0.6
+      },
+      {
+        "inteligencia": "INT-12",
+        "celda": "FronteraxSalud",
+        "P": 0.25,
+        "I": 2.8817,
+        "I_anti_windup": 2.8817,
+        "D": -0.25,
+        "D_filtrado": -0.2793,
+        "n_total": 8,
+        "señal_control": 0.5242,
+        "tasa_cierre": 0.5
+      },
+      {
+        "inteligencia": "INT-08",
+        "celda": "ConservarxSalud",
+        "P": 0.1333,
+        "I": 3.82,
+        "I_anti_windup": 3.82,
+        "D": -0.3667,
+        "D_filtrado": -0.38,
+        "n_total": 14,
+        "señal_control": 0.4963,
+        "tasa_cierre": 0.7334
+      },
+      {
+        "inteligencia": "INT-13",
+        "celda": "AdaptarxSentido",
+        "P": 0.0933,
+        "I": 1.0233,
+        "I_anti_windup": 1.0233,
+        "D": -0.3067,
+        "D_filtrado": -0.3692,
+        "n_total": 4,
+        "señal_control": 0.1772,
+        "tasa_cierre": 0.7668
+      }
+    ],
+    "gradientes_top": [
+      [
+        "ReplicarxContinuidad",
+        0.7
+      ],
+      [
+        "DistribuirxSalud",
+        0.6
+      ],
+      [
+        "FronteraxSalud",
+        0.5
+      ],
+      [
+        "ConservarxSalud",
+        0.5
+      ],
+      [
+        "AdaptarxSentido",
+        0.4
+      ]
+    ],
+    "metacognicion": {
+      "fok": {
+        "fok": 0.6193,
+        "factores": {
+          "tasa_kalman": 0.9802,
+          "complejidad_input": 0.425,
+          "cobertura_programa": 0.5,
+          "novedad": 0.7,
+          "familiaridad": 0.3
+        },
+        "recomendacion": "Confianza media — considerar tier superior",
+        "tier_original": 3,
+        "tier_ajustado": 3
+      },
+      "jol": {
+        "jol": 0.9845,
+        "factores": {
+          "tasa_cierre": 1.0,
+          "n_hallazgos": 50,
+          "factor_latencia": 0.9,
+          "factor_coste": 0.9966
+        },
+        "calibracion": {
+          "fok_predicho": 0.6193,
+          "jol_real": 0.9845,
+          "error": 0.3652,
+          "bien_calibrado": false
+        }
+      },
+      "criticality": {
+        "T": 0.2626,
+        "regimen": "orden_rigido",
+        "tier_original": 3,
+        "tier_ajustado": 4,
+        "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+      }
+    },
+    "metricas": {
+      "tiempo_total_s": 170.03,
+      "coste_usd": 0.0051,
+      "n_llm_calls": 5,
+      "modelo": "deepseek/deepseek-chat-v3-0324",
+      "via": "config_modelos"
+    }
+  },
+  "inteligencias": [
+    "INT-01",
+    "INT-08",
+    "INT-12",
+    "INT-13",
+    "INT-16"
+  ],
+  "n_inteligencias": 5,
+  "tier": 4,
+  "alpha": 0.3,
+  "hallazgos": [
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo:** La robustez matemática del sistema es limitada debido a su inconsistencia (INCONSISTENTE) y la presencia de 144 datapoints huérfanos, lo que sugiere falta de integridad en los datos."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Costo:** Escalar requeriría resolver las inconsistencias (p. ej., reactivar modelos inactivos, eliminar referencias a preguntas inactivas) y reconstruir conexiones neuronales (solo 42 con fuerza media baja: 0.108). El costo sería alto en tiempo y recursos para normalizar los datos y reentrenar modelos."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Contradicciones formales:** Sí, hay contradicciones como programas que referencian preguntas inactivas y configuraciones de enjambre que apuntan a modelos inactivos."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo:** La consistencia lógica está fragmentada:"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Inconsistencias críticas:** 2 programas con preguntas inactivas + 9 configuraciones de enjambre con modelos inactivos."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Datapoints huérfanos:** 144 puntos sin referencias, lo que rompe la coherencia."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Contradicciones formales:** Las referencias a componentes inactivos (preguntas/modelos) generan inconsistencias en la ejecución y el análisis."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Hallazgo:** Los límites de consistencia están en:"
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Conexiones neuronales débiles:** 42 conexiones con fuerza media baja (0.108) y 0 fuertes, lo que limita la capacidad de generalización."
+    },
+    {
+      "inteligencia": "INT-01",
+      "hallazgo": "- **Preguntas expiradas:** 20 sin reemplazo, lo que afecta la actualización del conocimiento."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "**Hallazgos concretos sobre el caso:**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "- **No.** La alta inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos) sugiere que el sistema depende de intervención manual para mantener su funcionalidad. Sin supervisión, los fallos se acumularían (ej. preguntas expiradas sin reemplazo)."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "- **No.** La falta de conexiones fuertes en la red neuronal (0 conexiones fuertes) y la fragilidad en configuraciones (9 referencias a modelos inactivos) indican que el sistema no es autosuficiente. La degradación sería rápida sin gestión activa."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "3. **¿Se puede escalar/replicar la evolución de la historia? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "- **Solo con alto costo.** La inconsistencia generalizada (144 datapoints huérfanos) y la dependencia de modelos externos inactivos implican que escalar requeriría reestructurar flujos de datos y reemplazar componentes inactivos, con riesgo de pérdida de coherencia."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "4. **¿Cómo se distribuye la coherencia del arco narrativo entre los componentes?**"
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "- **De forma desigual y frágil.** La coherencia está fracturada: 2 programas y 9 configuraciones dependen de elementos inactivos, mientras que la red neuronal tiene baja fuerza de conexiones (media 0.108), lo que limita su capacidad para sostener narrativas complejas."
+    },
+    {
+      "inteligencia": "INT-12",
+      "hallazgo": "5. **¿Dónde están los límites de la coherencia del arco narrativo?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "1. **¿Puede este sistema funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "**Hallazgo:** No, el sistema es altamente frágil debido a su inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos). La falta de conexiones fuertes en la red neuronal (0) y la dependencia de modelos externos inactivos sugieren que requiere supervisión humana constante para mantener operatividad básica."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "2. **¿Puede la situación funcionar sin la persona clave?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "**Hallazgo:** No, la situación actual es insostenible sin intervención. Hay 20 preguntas expiradas sin reemplazo y 144 datapoints huérfanos, lo que indica degradación progresiva. La ausencia de modelos candidatos activables (0) agrava el riesgo de colapso funcional."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "3. **¿Se puede escalar/replicar la robustez ante bifurcaciones? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "**Hallazgo:** No en el estado actual. La inconsistencia (9 configuraciones de enjambre inactivas) y la baja fuerza media de conexiones (0.108) implican que escalar requeriría:"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "- Reconstruir modelos activos (costo alto por dependencia externa)."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "- Revisar manualmente datapoints huérfanos y preguntas expiradas (costo de tiempo/recursos)."
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "4. **¿Cómo se distribuyen las tendencias actuales/riesgos entre los componentes?**"
+    },
+    {
+      "inteligencia": "INT-13",
+      "hallazgo": "**Hallazgo:** Los riesgos están concentrados en:"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**1. ¿Se puede escalar/replicar las iteraciones/mejora continua? ¿A qué costo? ¿El prototipo prueba la hipótesis clave?**"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo**: El sistema es **altamente frágil** debido a su inconsistencia (modelos inactivos, datapoints huérfanos y conexiones neuronales débiles). Escalar/replicar requeriría:"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- Reactivar modelos candidatos (actualmente 0 activos)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- Resolver la inconsistencia (2 programas con preguntas inactivas, 9 configuraciones de enjambre con modelos inactivos)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Costo alto**: Reconstruir 144 datapoints huérfanos y fortalecer conexiones (fuerza media actual: 0.108)."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hipótesis clave no probada**: La alta fragilidad sugiere que el prototipo no valida escalabilidad ni mejora continua."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "**2. ¿Cómo se distribuye la viabilidad técnica/recursos entre los componentes?**"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Hallazgo**: Distribución **desbalanceada y crítica**:"
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- **Puntos únicos de fallo**: Modelos externos (todos inactivos), conexiones neuronales débiles (0 fuertes), y datapoints huérfanos."
+    },
+    {
+      "inteligencia": "INT-16",
+      "hallazgo": "- Recursos mal asignados: 20 preguntas expiradas sin reemplazo indican obsolescencia en componentes clave."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** La escalabilidad está limitada por la alta inconsistencia del sistema (2 programas, 9 configuraciones y 144 datapoints huérfanos). Replicar estabilidad requeriría reactivar modelos inactivos o reemplazar referencias, con un costo alto en tiempo y recursos debido a la falta de conexiones fuertes (0) y la baja fuerza media (0.108) en la red neuronal."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "2. **¿Cómo se distribuye la salud emocional/relacional entre los componentes?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** La salud relacional es desigual: hay una total ausencia de modelos activos (0/0) y dependencia de componentes inactivos, lo que concentra el \"estrés\" en los programas y configuraciones que referencian preguntas/modelos inaccesibles. Los datapoints huérfanos (144) indican fragmentación emocional no gestionada."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "3. **¿Dónde están los límites de la salud emocional/relacional?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** Los límites están marcados por las 20 preguntas expiradas sin reemplazo y las conexiones débiles (fuerza media 0.108). El sistema colapsaría si aumenta la demanda sobre relaciones ya inconsistentes o si fallan los pocos nodos críticos que mantienen operatividad parcial."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "4. **¿Esto le ha pasado antes?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** La presencia de preguntas expiradas y datapoints huérfanos sugiere un patrón recurrente de abandono o falta de mantenimiento, indicando que el sistema ha operado previamente en estados degradados sin corrección proactiva."
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "5. **¿Cómo respondió?**"
+    },
+    {
+      "inteligencia": "INT-08",
+      "hallazgo": "- **Hallazgo:** La respuesta previa parece reactiva y no estructural: no hay modelos candidatos activados (0) ni conexiones fuertes restauradas, lo que implica parches temporales (ej. ignorar inactivos) en lugar de resolver la inconsistencia sistémica."
+    }
+  ],
+  "n_hallazgos": 50,
+  "sintesis": "SINTESIS (50 hallazgos, 5 inteligencias):\n\n[INT-01]:\n  - - **Hallazgo:** La robustez matemática del sistema es limitada debido a su inconsistencia (INCONSISTENTE) y la presencia de 144 datapoints huérfanos, lo que sugiere falta de integridad en los datos.\n  - - **Costo:** Escalar requeriría resolver las inconsistencias (p. ej., reactivar modelos inactivos, eliminar referencias a preguntas inactivas) y reconstruir conexiones neuronales (solo 42 con fuerza m\n  - - **Contradicciones formales:** Sí, hay contradicciones como programas que referencian preguntas inactivas y configuraciones de enjambre que apuntan a modelos inactivos.\n\n[INT-12]:\n  - **Hallazgos concretos sobre el caso:**\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - - **No.** La alta inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos) sugiere que el sistema depende de intervención manual para mantener su funcionalidad. Sin supervisión, \n\n[INT-13]:\n  - 1. **¿Puede este sistema funcionar sin la persona clave?**\n  - **Hallazgo:** No, el sistema es altamente frágil debido a su inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos). La falta de conexiones fuertes en la red neuronal (0) y la \n  - 2. **¿Puede la situación funcionar sin la persona clave?**\n\n[INT-16]:\n  - **1. ¿Se puede escalar/replicar las iteraciones/mejora continua? ¿A qué costo? ¿El prototipo prueba la hipótesis clave?**\n  - - **Hallazgo**: El sistema es **altamente frágil** debido a su inconsistencia (modelos inactivos, datapoints huérfanos y conexiones neuronales débiles). Escalar/replicar requeriría:\n  - - Reactivar modelos candidatos (actualmente 0 activos).\n\n[INT-08]:\n  - 1. **¿Se puede escalar/replicar la estabilidad de las relaciones? ¿A qué costo?**\n  - - **Hallazgo:** La escalabilidad está limitada por la alta inconsistencia del sistema (2 programas, 9 configuraciones y 144 datapoints huérfanos). Replicar estabilidad requeriría reactivar modelos ina\n  - 2. **¿Cómo se distribuye la salud emocional/relacional entre los componentes?**",
+  "señales_pid": [
+    {
+      "inteligencia": "INT-01",
+      "celda": "ReplicarxContinuidad",
+      "P": 0.2333,
+      "I": 4.0383,
+      "I_anti_windup": 4.0383,
+      "D": -0.4667,
+      "D_filtrado": -0.4263,
+      "n_total": 11,
+      "señal_control": 0.6158,
+      "tasa_cierre": 0.6667
+    },
+    {
+      "inteligencia": "INT-16",
+      "celda": "DistribuirxSalud",
+      "P": 0.24,
+      "I": 1.5383,
+      "I_anti_windup": 1.5383,
+      "D": -0.36,
+      "D_filtrado": -0.3123,
+      "n_total": 5,
+      "señal_control": 0.3782,
+      "tasa_cierre": 0.6
+    },
+    {
+      "inteligencia": "INT-12",
+      "celda": "FronteraxSalud",
+      "P": 0.25,
+      "I": 2.8817,
+      "I_anti_windup": 2.8817,
+      "D": -0.25,
+      "D_filtrado": -0.2793,
+      "n_total": 8,
+      "señal_control": 0.5242,
+      "tasa_cierre": 0.5
+    },
+    {
+      "inteligencia": "INT-08",
+      "celda": "ConservarxSalud",
+      "P": 0.1333,
+      "I": 3.82,
+      "I_anti_windup": 3.82,
+      "D": -0.3667,
+      "D_filtrado": -0.38,
+      "n_total": 14,
+      "señal_control": 0.4963,
+      "tasa_cierre": 0.7334
+    },
+    {
+      "inteligencia": "INT-13",
+      "celda": "AdaptarxSentido",
+      "P": 0.0933,
+      "I": 1.0233,
+      "I_anti_windup": 1.0233,
+      "D": -0.3067,
+      "D_filtrado": -0.3692,
+      "n_total": 4,
+      "señal_control": 0.1772,
+      "tasa_cierre": 0.7668
+    }
+  ],
+  "gradientes_top": [
+    [
+      "ReplicarxContinuidad",
+      0.7
+    ],
+    [
+      "DistribuirxSalud",
+      0.6
+    ],
+    [
+      "FronteraxSalud",
+      0.5
+    ],
+    [
+      "ConservarxSalud",
+      0.5
+    ],
+    [
+      "AdaptarxSentido",
+      0.4
+    ]
+  ],
+  "metacognicion": {
+    "fok": {
+      "fok": 0.6193,
+      "factores": {
+        "tasa_kalman": 0.9802,
+        "complejidad_input": 0.425,
+        "cobertura_programa": 0.5,
+        "novedad": 0.7,
+        "familiaridad": 0.3
+      },
+      "recomendacion": "Confianza media — considerar tier superior",
+      "tier_original": 3,
+      "tier_ajustado": 3
+    },
+    "jol": {
+      "jol": 0.9845,
+      "factores": {
+        "tasa_cierre": 1.0,
+        "n_hallazgos": 50,
+        "factor_latencia": 0.9,
+        "factor_coste": 0.9966
+      },
+      "calibracion": {
+        "fok_predicho": 0.6193,
+        "jol_real": 0.9845,
+        "error": 0.3652,
+        "bien_calibrado": false
+      }
+    },
+    "criticality": {
+      "T": 0.2626,
+      "regimen": "orden_rigido",
+      "tier_original": 3,
+      "tier_ajustado": 4,
+      "recomendacion": "Relajar restricciones del Manifold — sistema demasiado predecible"
+    }
+  },
+  "metricas": {
+    "tiempo_total_s": 170.03,
+    "coste_usd": 0.0051,
+    "n_llm_calls": 5,
+    "modelo": "deepseek/deepseek-chat-v3-0324",
+    "via": "config_modelos"
+  },
+  "coste_usd": 0.0051,
+  "tiempo_s": 170.16665506362915,
+  "timestamp": "2026-03-16T07:55:02.976925+00:00"
+}
