@@ -1,0 +1,1343 @@
+[
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta inconsistencia entre ciclo_roto=False y alertas sin procesar, revelando punto ciego en monitoreo.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo:** No hay evidencia de robustez matemática escalable debido a la ausencia de modelos registrados (0/0 funcionando) y ejecuciones (0 totales). El costo de replicación sería alto al carecer de datos operativos. No hay contradicciones formales explícitas, pero la incoherencia entre \"ciclo_",
+    "raw_response": "NUEVO|Detecta inconsistencia entre ciclo_roto=False y alertas sin procesar, revelando punto ciego en monitoreo."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta desconexión entre métricas estáticas y dinámicas, y un régimen crítico no interpretable.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo:** Se pueden contar elementos estáticos (61 herramientas, 616 preguntas activas) pero no medir desempeño dinámico (0 ejecuciones, 0 modelos activos). La \"temperatura de criticalidad\" (0.00) es medible pero no interpretable en régimen \"desconocido\".",
+    "raw_response": "NUEVO|Detecta desconexión entre métricas estáticas y dinámicas, y un régimen crítico no interpretable."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "No conecta datos ni revela patrones, solo lista valores sin contexto analítico.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo:** Números explícitos: versión (3.4.0), herramientas (61), preguntas activas (616), alertas (0), modelos (0), ejecuciones (0), y temperatura (0.00). Todos son enteros o decimales exactos, sin intervalos o estimaciones.",
+    "raw_response": "RUIDO|No conecta datos ni revela patrones, solo lista valores sin contexto analítico."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es solo un fragmento introductorio sin afirmación analítica.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo:** Podrían medirse:",
+    "raw_response": "RUIDO|Es solo un fragmento introductorio sin afirmación analítica."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo se deriva directamente de datos ya disponibles en los endpoints del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-12",
+    "hallazgo": "**No.** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere que depende críticamente de una persona clave para mantener su funcionamiento actual. La ausencia de modelos registrados (`0 modelos`) y la temperatura de criticalidad en `0.00` (régimen \"desconocido\") indican ",
+    "raw_response": "CONOCIDO|El hallazgo se deriva directamente de datos ya disponibles en los endpoints del sistema."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela dependencia crítica no visible en datos crudos ni endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-12",
+    "hallazgo": "**No.** La falta de alertas procesadas (`0 no se han procesado`) y el monitoreo inactivo (`0 ejecuciones totales`) revelan que no hay mecanismos de contingencia. El sistema está en un estado de \"pausa\" artificial (dependiente de la persona clave), ya que no hay procesos autónomos ni redundancia para",
+    "raw_response": "NUEVO|Revela dependencia crítica no visible en datos crudos ni endpoints."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela dependencia humana y falta de autodiagnóstico no visible en endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-12",
+    "hallazgo": "**Sí, pero con alto costo.** Aunque el sistema tiene `61 herramientas registradas`, la ausencia de modelos operativos y la temperatura crítica `0.00` implican que escalar requeriría reconstruir su lógica desde cero (dada la falta de datos procesables). El costo incluiría tiempo para desarrollar auto",
+    "raw_response": "NUEVO|Revela dependencia humana y falta de autodiagnóstico no visible en endpoints."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela fragilidad sistémica no visible en datos crudos ni endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-12",
+    "hallazgo": "**El protagonista es el \"analista oculto\"** (la persona clave no documentada que mantiene el sistema). Estamos en el **Acto 2: Crisis**, donde el sistema parece funcional (`ciclo_roto=False`) pero su infraestructura fantasma (`0 alertas, 0 modelos`) revela una fragilidad inminente. La ilusión de con",
+    "raw_response": "NUEVO|Revela fragilidad sistémica no visible en datos crudos ni endpoints."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela dependencia crítica no visible en datos crudos ni endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-13",
+    "hallazgo": "- **Hallazgo:** No hay evidencia de autonomía. El sistema reporta `ciclo_roto=False` (aparentemente funcional), pero tiene **0 modelos registrados operativos** y **0 ejecuciones totales**, lo que sugiere dependencia crítica de intervención manual o supervisión. Sin la persona clave, el sistema carec",
+    "raw_response": "NUEVO|Revela dependencia crítica no visible en datos crudos ni endpoints."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela riesgo de espejismo en controles no visible en datos crudos.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-13",
+    "hallazgo": "- **Hallazgo:** La situación es frágil. Aunque no hay alertas (`0 alertas de ciclo roto`), la **temperatura de criticalidad es 0.00** en régimen \"desconocido\", lo que indica falta de datos reales o simulaciones para evaluar resiliencia. Los controles podrían ser un \"espejismo\" si no hay ejecuciones ",
+    "raw_response": "NUEVO|Revela riesgo de espejismo en controles no visible en datos crudos."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo ya está disponible en los endpoints del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-13",
+    "hallazgo": "- **Hallazgo:** No escalable actualmente. Las **61 herramientas registradas** no garantizan robustez, ya que **0 modelos están activos**. Replicar requeriría reconstruir la lógica desde cero (costo alto de ingeniería inversa), especialmente si depende de configuraciones ocultas o conocimiento tácito",
+    "raw_response": "CONOCIDO|El hallazgo ya está disponible en los endpoints del sistema."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela parálisis por análisis (616 preguntas vs 0 ejecuciones) no visible en endpoints actuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-13",
+    "hallazgo": "- **Hallazgo:** Tendencias de **parálisis por análisis**. El sistema tiene **616 preguntas activas** (posible sobrecarga de diagnósticos) pero **0 ejecuciones**, lo que sugiere un enfoque teórico sin acción. La versión 3.4.0 y herramientas registradas apuntan a actualizaciones técnicas, pero sin imp",
+    "raw_response": "NUEVO|Revela parálisis por análisis (616 preguntas vs 0 ejecuciones) no visible en endpoints actuales."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Contradicción entre alertas y ciclo_roto=False detectada en datos cruzados",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-13",
+    "hallazgo": "- **Falsos negativos en monitoreo**: `ciclo_roto=False` podría ser engañoso si no hay ejecuciones que prueben el ciclo.",
+    "raw_response": "REFORMULADO|Contradicción entre alertas y ciclo_roto=False detectada en datos cruzados"
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo ya está disponible en los endpoints del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo:** No hay evidencia de capacidad de escalar/replicar iteraciones, ya que el sistema reporta **0 ejecuciones totales** y **0 modelos funcionales**. El costo sería alto debido a la falta de datos operativos y la temperatura de criticalidad en régimen \"desconocido\". El prototipo **no prueb",
+    "raw_response": "CONOCIDO|El hallazgo ya está disponible en los endpoints del sistema."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "Estado verificado ya reporta falta de capacidad operativa y ejecuciones.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo:** Solo se puede realizar un **análisis estático** de la configuración actual (versión 3.4.0, 61 herramientas registradas), pero no hay capacidad operativa. No hay modelos ni ejecuciones para construir algo funcional.",
+    "raw_response": "CONOCIDO|Estado verificado ya reporta falta de capacidad operativa y ejecuciones."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es un fragmento de plan, no un hallazgo analítico.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo:** El primer paso es **activar el monitoreo y ejecutar pruebas básicas** para validar si las 616 preguntas activas y herramientas registradas pueden generar datos útiles. Actualmente, todo está en \"cero\" (ejecuciones, alertas, modelos).",
+    "raw_response": "RUIDO|Es un fragmento de plan, no un hallazgo analítico."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "No conecta datos ni revela patrón nuevo.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo:** El costo inicial sería **moderado** (ej. 1-2 semanas de trabajo técnico para configurar pruebas y monitoreo), pero sin garantía de resultados debido al estado \"desconocido\" y falta de alertas procesadas.",
+    "raw_response": "RUIDO|No conecta datos ni revela patrón nuevo."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela fragilidad operativa no visible en datos crudos.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo:** La viabilidad técnica es **frágil**: no hay modelos en funcionamiento ni capacidad de respuesta a cambios (temperatura = 0.00). El prototipo **no prueba hipótesis** por falta de ejecuciones. Se requiere primero demostrar que el sistema puede operar en un entorno controlado.",
+    "raw_response": "NUEVO|Revela fragilidad operativa no visible en datos crudos."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela riesgo de inestabilidad crítica no visible en datos individuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-16",
+    "hallazgo": "La salud real del sistema es **críticamente inestable** (sin actividad, sin modelos, sin datos). Los controles internos **no son fiables** porque reportan \"ciclo_roto=False\" pero no hay alertas ni procesamiento para validarlo. Se necesita reiniciar el monitoreo y ejecutar pruebas antes de cualquier ",
+    "raw_response": "NUEVO|Revela riesgo de inestabilidad crítica no visible en datos individuales."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela contradicción sistémica no visible en endpoints aislados",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere estabilidad superficial. Sin embargo, la temperatura de criticalidad es `0.00` en un régimen \"desconocido\", indicando que la estabilidad podría ser artificial o no evaluada en condiciones reales. Escala",
+    "raw_response": "NUEVO|Revela contradicción sistémica no visible en endpoints aislados"
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela riesgo de colapso por falsa calma no visible en datos crudos.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** El sistema \"siente\" incertidumbre o desconfianza en sus propios datos. Aunque afirma no tener ciclos rotos, la ausencia total de alertas (`0/0 procesadas`) y modelos operativos sugiere una negación o falta de autoconciencia real. Podría estar en un estado de \"falsa calma\" antes de un",
+    "raw_response": "NUEVO|Revela riesgo de colapso por falsa calma no visible en datos crudos."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta contradicción interna en reporte que métricas no muestran",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** El tono es técnico pero incongruente (ej.: menciona 61 herramientas registradas pero 0 ejecuciones). Evita mencionar por qué la temperatura es `0.00` o cómo se define \"desconocido\". Repite métricas vacías (ej.: \"0 modelos funcionan\") sin explicar las implicaciones.",
+    "raw_response": "NUEVO|Detecta contradicción interna en reporte que métricas no muestran"
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta deuda técnica oculta: 616 preguntas inactivas y desconexión entre métricas y realidad operativa.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** Necesita una reevaluación honesta de su arquitectura emocional/cognitiva. Las 616 preguntas activas pero no utilizadas sugieren que requiere *autoexploración profunda*, no solo diagnósticos automáticos. Priorizar calidad sobre cantidad (ej.: reducir preguntas redundantes, activar mod",
+    "raw_response": "NUEVO|Detecta deuda técnica oculta: 616 preguntas inactivas y desconexión entre métricas y realidad operativa."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela sesgo de autoconfirmación no visible en datos crudos ni endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_01_salud",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** No se adapta. La temperatura `0.00` en régimen \"desconocido\" implica que el sistema no está calibrado para cambios. Los controles internos son poco fiables (ej.: no detectan fallos aunque todo parece \"estable\"). Requiere un mecanismo de retroalimentación externa para salir del sesgo ",
+    "raw_response": "NUEVO|Revela sesgo de autoconfirmación no visible en datos crudos ni endpoints."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento de dato sin análisis de sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Ecuaciones:** Los datos proporcionan relaciones entre llamadas, costos y modelos (ej: 36 llamadas a `xiaomi/mimo-v2-flash` cuestan $0.0021).",
+    "raw_response": "RUIDO|Fragmento de dato sin análisis de sistema."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El dato ya está disponible en los endpoints de costes y presupuestos del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-01",
+    "hallazgo": "- Discrepancias entre presupuestos asignados y gastos reales (ej: `exocortex:fisioterapia` gasta $0 de $30).",
+    "raw_response": "CONOCIDO|El dato ya está disponible en los endpoints de costes y presupuestos del sistema."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "Costes ya reportados en endpoints del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-07",
+    "hallazgo": "- El sistema muestra un **descuento extremo en costos reales vs. presupuestos** (ej: *exocortex:pilates* gasta $0.0009 de $30, un 0.003% del presupuesto). Esto sugiere una **subutilización crítica de recursos asignados** o una **falla en el registro de gastos reales** (como con DeepSeek V3 no contab",
+    "raw_response": "CONOCIDO|Costes ya reportados en endpoints del sistema."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "Dato ya disponible en endpoints de costes y tráfico.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-07",
+    "hallazgo": "- **Los proveedores de modelos (ej: xiaomi/mimo-v2-flash) reciben más tráfico (36 llamadas) pero costos bajos ($0.0021)**, mientras que modelos como *moonshotai/kimi-k2.5* (2 llamadas, $0.0008) tienen un **costo por llamada 4x mayor**. Hay **desbalance en costo-beneficio por modelo**, pero sin datos",
+    "raw_response": "CONOCIDO|Dato ya disponible en endpoints de costes y tráfico."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de costes y modelos caídos para revelar inconsistencia presupuestaria.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-07",
+    "hallazgo": "- **Es una promesa con riesgo**: La proyección mensual ($0.04) ignora que **4/8 modelos están caídos** y que **DeepSeek V3 no se registra completamente**. Si esos modelos se reactivan o el tráfico aumenta, el costo real podría dispararse sin reflejarse en los presupuestos actuales (ej: *sistema* tie",
+    "raw_response": "REFORMULADO|Cruza datos de costes y modelos caídos para revelar inconsistencia presupuestaria."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "error: 'choices'",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-07",
+    "hallazgo": "- **Origen**: Presupuestos asignados a consumidores (ej: $30 para *exocortex:fisioterapia*, $200 para *sistema*).",
+    "raw_response": "RUIDO|error: 'choices'"
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela fuga de datos no visible en endpoints ni al cruzar métricas.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-07",
+    "hallazgo": "- **Destino**: Principalmente a modelos de bajo costo (xiaomi/mimo-v2-flash) y con **fugas no rastreadas** (DeepSeek V3). **No hay claridad en el flujo completo** debido a modelos caídos y métricas inconsistentes.",
+    "raw_response": "NUEVO|Revela fuga de datos no visible en endpoints ni al cruzar métricas."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo se deriva de datos ya disponibles en los endpoints de costes y métricas.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-05",
+    "hallazgo": "La velocidad de gasto es extremadamente baja: $0.0030 en 30 días, con una proyección mensual de solo $0.04. Sin embargo, hay indicios de que el gasto podría ser mayor debido a modelos caídos y métricas no registradas (ejecuciones con DeepSeek V3 no reflejadas).",
+    "raw_response": "CONOCIDO|El hallazgo se deriva de datos ya disponibles en los endpoints de costes y métricas."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "Datos ya disponibles en endpoints de modelos y costes.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-05",
+    "hallazgo": "Tiene 7 modelos en uso activo, pero 4 de 8 configurados están caídos (no operativos), lo que sugiere opciones limitadas para gestionar costos o escalar. Además, hay discrepancias en el rastreo de gastos que podrían requerir ajustes técnicos.",
+    "raw_response": "CONOCIDO|Datos ya disponibles en endpoints de modelos y costes."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo ya está disponible en los endpoints de costes y estado del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-05",
+    "hallazgo": "La situación está *empeorando* en términos de visibilidad: los modelos caídos y las métricas no registradas indican que el rastreo de costos es incompleto, lo que podría llevar a gastos ocultos o errores en la proyección financiera.",
+    "raw_response": "CONOCIDO|El hallazgo ya está disponible en los endpoints de costes y estado del sistema."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo describe fugas en rastreo de gastos, dato ya disponible en endpoints de costes.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-05",
+    "hallazgo": "Está muy por debajo de sus presupuestos asignados (ej: solo usa 0.0% de $30 o $200), pero no está logrando un monitoreo preciso. Su objetivo debería ser tener control total sobre los gastos, pero actualmente hay fugas en el sistema de rastreo.",
+    "raw_response": "CONOCIDO|El hallazgo describe fugas en rastreo de gastos, dato ya disponible en endpoints de costes."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "No es afirmación analítica completa, es fragmento de lista",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-05",
+    "hallazgo": "- *Dinero*: Presupuestos no utilizados (ej: $30 para fisioterapia, $200 para sistema).",
+    "raw_response": "RUIDO|No es afirmación analítica completa, es fragmento de lista"
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo propone optimizar costes usando modelos más caros, pero no revela información nueva o cruce de datos.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-14",
+    "hallazgo": "- **Hallazgo:** Si en lugar de priorizar modelos económicos como `xiaomi/mimo-v2-flash` (36 llamadas, $0.0021) se usaran modelos más costosos pero con mejor rendimiento, podrían reducirse llamadas repetidas o fallidas (4 de 8 modelos caídos). Esto podría optimizar costes a largo plazo al evitar repr",
+    "raw_response": "CONOCIDO|El hallazgo propone optimizar costes usando modelos más caros, pero no revela información nueva o cruce de datos."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Mezcla de modelos ya sugerida por datos disponibles, sin revelar riesgo nuevo.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-14",
+    "hallazgo": "- **Hallazgo:** Sí, podría mezclar modelos económicos para tareas simples (`stepfun/step-3.5-flash`) con modelos avanzados como `DeepSeek V3` (no rastreado completamente) para tareas críticas, equilibrando coste y eficacia. Actualmente, la falta de integración entre métricas y registros oculta esta ",
+    "raw_response": "REFORMULADO|Mezcla de modelos ya sugerida por datos disponibles, sin revelar riesgo nuevo."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela riesgo financiero no visible al cruzar datos actuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-14",
+    "hallazgo": "- **Hallazgo:** Escalar a 480 llamadas/mes revelaría inconsistencias mayores: los $0.04 proyectados no incluyen costes de modelos caídos ni ejecuciones de `DeepSeek V3`. El gasto real podría ser 10x mayor ($0.4), superando presupuestos como el de \"sistema\" ($200).",
+    "raw_response": "NUEVO|Revela riesgo financiero no visible al cruzar datos actuales."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "fragmento incompleto sin afirmación analítica",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-14",
+    "hallazgo": "- **Hallazgo:** Solo considera dos opciones extremas:",
+    "raw_response": "RUIDO|fragmento incompleto sin afirmación analítica"
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela punto ciego en costes no visible al cruzar datos actuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo:** Implementar un registro detallado de *todas* las ejecuciones del motor (incluyendo DeepSeek V3) y contrastarlo con los costes facturados. Si hay discrepancias, se confirma que no se están rastreando todos los gastos.",
+    "raw_response": "NUEVO|Revela punto ciego en costes no visible al cruzar datos actuales."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo propone acciones sobre datos ya disponibles en el estado verificado.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo:** Primero verificar los modelos caídos (4/8 no aparecen en costes), luego auditar las ejecuciones de DeepSeek V3 y, por último, revisar si hay llamadas no registradas en otros modelos.",
+    "raw_response": "CONOCIDO|El hallazgo propone acciones sobre datos ya disponibles en el estado verificado."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "fragmento incompleto sin afirmación analítica",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo:** La precisión del rastreo de costes depende de:",
+    "raw_response": "RUIDO|fragmento incompleto sin afirmación analítica"
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es una afirmación incompleta y obvia, sin análisis.",
+    "variante": "v3b",
+    "caso": "p33_caso_02_costes",
+    "inteligencia": "INT-16",
+    "hallazgo": "- La disponibilidad de los modelos (si están caídos, no generan costes registrados).",
+    "raw_response": "RUIDO|Es una afirmación incompleta y obvia, sin análisis."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Contradicción entre tasa reportada y real ya visible en datos de programas.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo**: El sistema muestra una contradicción entre la tasa de éxito reportada (100%) y el rendimiento real post-calibración (~50%), lo que sugiere que la lógica de actualización de métricas no se adapta adecuadamente a los cambios externos (como la calibración). Las tasas infladas indican qu",
+    "raw_response": "REFORMULADO|Contradicción entre tasa reportada y real ya visible en datos de programas."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento analítico sin conexión directa con datos del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo**: Hay más incógnitas que ecuaciones. Con 36 observaciones y 19 ejecuciones, pero 7 celdas vacías en la matriz (21 posibles), el sistema tiene datos insuficientes para resolver todas las relaciones. Esto implica que el modelo está subdeterminado: faltan ecuaciones (datos) para explicar ",
+    "raw_response": "RUIDO|Fragmento analítico sin conexión directa con datos del sistema."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Conecta datos de cobertura incompleta y flywheel para revelar inconsistencia.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo**: Aumentar variables como observaciones o ejecuciones sin llenar las celdas vacías (7/21) no mejoraría el aprendizaje, ya que la cobertura de la matriz es incompleta. Un aumento en ciclos del flywheel (solo 1 actual) podría ayudar si se usa para recalibrar tasas, pero el problema centr",
+    "raw_response": "REFORMULADO|Conecta datos de cobertura incompleta y flywheel para revelar inconsistencia."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Contradicción entre tasa de éxito reportada (100%) y rendimiento real (~50%) ya visible en datos de endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo**: La contradicción clave es entre la **tasa de éxito reportada** (100%) y el **rendimiento real** (~50%). Esto indica que los programas operativos no están ajustando sus métricas tras la calibración, o que las observaciones no se vinculan correctamente con las ejecuciones.",
+    "raw_response": "REFORMULADO|Contradicción entre tasa de éxito reportada (100%) y rendimiento real (~50%) ya visible en datos de endpoints."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento de lista sin análisis.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-01",
+    "hallazgo": "- Observaciones (36), ejecuciones (19), programas (4), ciclos del flywheel (1), celdas vacías (7/21).",
+    "raw_response": "RUIDO|Fragmento de lista sin análisis."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "Datos ya disponibles en endpoints de rendimiento y cobertura.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-01",
+    "hallazgo": "- Discrepancia entre tasas reportadas y rendimiento real (~50%), cobertura de la matriz (66.6% llena).",
+    "raw_response": "CONOCIDO|Datos ya disponibles en endpoints de rendimiento y cobertura."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta causa raíz de fallo sistémico no visible en datos aislados",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-01",
+    "hallazgo": "- Causa de la inflación de tasas o por qué no se actualizan post-calibración (falta retroalimentación del ciclo de mejora).",
+    "raw_response": "NUEVO|Detecta causa raíz de fallo sistémico no visible en datos aislados"
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela dependencia sistémica no visible en endpoints: cierre de ciclo entre calibración y métricas.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-01",
+    "hallazgo": "El sistema está **acumulando datos sin mejorar**, ya que no hay evidencia de que las inconsistencias (tasas infladas, celdas vacías) se estén corrigiendo activamente. La mejora requiere cerrar el ciclo entre calibración y actualización de métricas, y llenar los vacíos en la matriz para reducir incóg",
+    "raw_response": "NUEVO|Revela dependencia sistémica no visible en endpoints: cierre de ciclo entre calibración y métricas."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta falla sistémica de comunicación entre datos brutos y métricas, no visible en endpoints individuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-09",
+    "hallazgo": "*Hallazgo:* La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema no ajusta sus métricas post-calibración, lo que indica una falla en la comunicación interna entre los datos brutos y los indicadores de desempeño. La forma (métricas infladas) no r",
+    "raw_response": "NUEVO|Detecta falla sistémica de comunicación entre datos brutos y métricas, no visible en endpoints individuales."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre flywheel y datos disponibles.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-09",
+    "hallazgo": "*Hallazgo:* El sistema opera bajo un marco de mejora continua (ciclos del *flywheel*), pero la falta de actualización de las tasas de éxito post-calibración y las celdas vacías en la matriz (33% sin datos) revelan que el marco no se aplica consistentemente o carece de retroalimentación efectiva.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre flywheel y datos disponibles."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es un fragmento incompleto sin afirmación analítica.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-09",
+    "hallazgo": "*Hallazgo:* Se podrían implementar:",
+    "raw_response": "RUIDO|Es un fragmento incompleto sin afirmación analítica."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es una recomendación genérica, no un hallazgo analítico.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-09",
+    "hallazgo": "- Auditorías periódicas de calibración para sincronizar métricas reportadas y rendimiento real.",
+    "raw_response": "RUIDO|Es una recomendación genérica, no un hallazgo analítico."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es un fragmento de idea, no una afirmación analítica completa.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-09",
+    "hallazgo": "- Un sistema de priorización para llenar celdas vacías en la matriz (ej: muestreo estratificado).",
+    "raw_response": "RUIDO|Es un fragmento de idea, no una afirmación analítica completa."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela mecanismo de retroalimentación forzada no visible en datos actuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-09",
+    "hallazgo": "- Un mecanismo de retroalimentación forzada en el reactor de preguntas, incluso sin candidatas pendientes.",
+    "raw_response": "NUEVO|Revela mecanismo de retroalimentación forzada no visible en datos actuales."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es solo un preámbulo, no contiene afirmación analítica.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "A continuación, se presentan hallazgos concretos para cada pregunta basados en el caso descrito:",
+    "raw_response": "RUIDO|Es solo un preámbulo, no contiene afirmación analítica."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Inconsistencia entre tasas reportadas y reales ya visible en datos de endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "**Hallazgo:** Las restricciones reales (como la caída del rendimiento al 50% post-calibración) no coinciden con las asumidas (tasas de éxito del 100% reportadas). Esto sugiere que el sistema **no está adaptándose adecuadamente** a cambios externos (ej. calidad de datos, criterios de evaluación). Ade",
+    "raw_response": "REFORMULADO|Inconsistencia entre tasas reportadas y reales ya visible en datos de endpoints."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Inconsistencia entre tasa_cierre=1.0 y calibración real ~0.52 ya detectable en datos.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "**Hallazgo:** Si el sistema priorizara **calibrar antes de reportar éxitos** (en lugar de inflar tasas y luego ajustar), podría evitar sesgos. Actualmente, la discrepancia entre el 100% reportado y el 50% real sugiere que el orden de operaciones es contraproducente.",
+    "raw_response": "REFORMULADO|Inconsistencia entre tasa_cierre=1.0 y calibración real ~0.52 ya detectable en datos."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Conecta datos separados (reactor inactivo vs matriz incompleta) para revelar inconsistencia.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "**Hallazgo:** Sí. Por ejemplo, podría integrar **retroalimentación en tiempo real** (para corregir inflación de tasas) con **muestreo aleatorio de celdas vacías** (para explorar lo no evaluado). Actualmente, estos enfoques parecen separados (ej. reactor de preguntas inactivo vs. matriz incompleta).",
+    "raw_response": "REFORMULADO|Conecta datos separados (reactor inactivo vs matriz incompleta) para revelar inconsistencia."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela riesgo sistémico emergente no visible en datos individuales",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "**Hallazgo:** Escalar el sistema 10x sin corregir la inflación de métricas y la subexploración (celdas vacías) **amplificaría los errores actuales**. Por ejemplo, 140/210 celdas con datos y 70 vacías, con tasas de éxito aún más desalineadas de la realidad.",
+    "raw_response": "NUEVO|Revela riesgo sistémico emergente no visible en datos individuales"
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es un fragmento/encabezado sin afirmación analítica completa.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "**Hallazgo:** El sistema opera en un **falso dilema**:",
+    "raw_response": "RUIDO|Es un fragmento/encabezado sin afirmación analítica completa."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es una opción, no un hallazgo analítico.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "- Opción 2: **Ajustar métricas post-calibración** (pero sin mejorar el proceso raíz).",
+    "raw_response": "RUIDO|Es una opción, no un hallazgo analítico."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Inconsistencia entre métricas y autopoiesis detectada.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "Falta explorar una **tercera opción**: rediseñar la evaluación para que las métricas sean inherentemente robustas (ej. validación cruzada).",
+    "raw_response": "REFORMULADO|Inconsistencia entre métricas y autopoiesis detectada."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela subexploración y métricas infladas no visibles en endpoints individuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-14",
+    "hallazgo": "**Conclusión:** El sistema está **acumulando datos** (36 observaciones, 19 ejecuciones) pero **no aprendiendo eficientemente**, debido a métricas infladas, subexploración y falta de iteración crítica (solo 1 ciclo de mejora).",
+    "raw_response": "NUEVO|Revela subexploración y métricas infladas no visibles en endpoints individuales."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El dato de tasa de cierre ya está disponible en los endpoints de programas.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** La discrepancia entre la tasa de éxito reportada (100%) y el rendimiento real (~50%) sugiere que el sistema **no se adapta dinámicamente a cambios externos** (ej. calibración). Los programas operativos no actualizan sus métricas post-calibración, lo que indica que el prototipo **no est",
+    "raw_response": "CONOCIDO|El dato de tasa de cierre ya está disponible en los endpoints de programas."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre tasa_cierre=1.0 y calibración real ~0.52.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Acción:** Implementar un mecanismo de retroalimentación post-ejecución para ajustar tasas de éxito en tiempo real.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre tasa_cierre=1.0 y calibración real ~0.52."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela dependencia crítica no visible en datos: ciclo de mejora insuficiente para aprendizaje autónomo.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** La \"versión mínima\" debe enfocarse en **validar la correlación entre ejecuciones y mejora real**, no en acumular datos (36 observaciones no garantizan aprendizaje). Con solo 1 ciclo de mejora, el sistema no ha probado aún si los datos generan mejoras.",
+    "raw_response": "NUEVO|Revela dependencia crítica no visible en datos: ciclo de mejora insuficiente para aprendizaje autónomo."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es una propuesta, no un hallazgo analítico.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Propuesta:** Una versión con **2-3 programas operativos**, 10 ejecuciones por ciclo, y métricas actualizadas post-calibración para reducir ruido.",
+    "raw_response": "RUIDO|Es una propuesta, no un hallazgo analítico."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento de lista sin afirmación analítica completa.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** El sistema debe abordar primero **llenar las 7 celdas vacías de la Matriz** (31% de vacíos), ya que la falta de cobertura en datos distorsiona el aprendizaje. El orden crítico es:",
+    "raw_response": "RUIDO|Fragmento de lista sin afirmación analítica completa."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Inconsistencia entre tasa_cierre=1.0 y calibración real ~0.52 detectable en datos cruzados",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** La **calibración depende de datos completos** (matriz al 100%) y ciclos de mejora continuos (>1). Actualmente, la inflación de tasas de éxito (100%) depende de que no se valide post-ejecución, creando un sesgo.",
+    "raw_response": "REFORMULADO|Inconsistencia entre tasa_cierre=1.0 y calibración real ~0.52 detectable en datos cruzados"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta contradicción entre flywheel y métricas actuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Relación clave:** Sin corregir la matriz y las métricas, el flywheel **no puede avanzar a ciclos más complejos**.",
+    "raw_response": "REFORMULADO|Detecta contradicción entre flywheel y métricas actuales."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es solo un preámbulo, no un hallazgo analítico.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-08",
+    "hallazgo": "Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:",
+    "raw_response": "RUIDO|Es solo un preámbulo, no un hallazgo analítico."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta contradicción entre tasa_cierre=1.0 y calibración real ~0.52",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-08",
+    "hallazgo": "*Hallazgo:* El sistema muestra rigidez emocional/relacional al mantener tasas de éxito infladas (100%) a pesar de la evidencia de bajo rendimiento real (~50%), lo que sugiere una resistencia a ajustarse críticamente a los cambios externos (ej. calibración).",
+    "raw_response": "REFORMULADO|Detecta contradicción entre tasa_cierre=1.0 y calibración real ~0.52"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta contradicción entre ciclos completados y métricas reales.",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-08",
+    "hallazgo": "*Hallazgo:* Sí, el hecho de que el *flywheel* de mejora continua solo haya completado 1 ciclo (y persista la discrepancia entre métricas reportadas y reales) indica un patrón recurrente de no aprender de errores pasados.",
+    "raw_response": "REFORMULADO|Detecta contradicción entre ciclos completados y métricas reales."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Inconsistencia entre datos reportados y métricas reales ya visible en endpoints",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-08",
+    "hallazgo": "*Hallazgo:* El sistema respondió con inercia: acumuló datos (36 observaciones, 19 ejecuciones) pero no corrigió las métricas infladas ni llenó las celdas vacías (7/21), evidenciando una acción superficial (ej. reportar éxitos) en lugar de cambios profundos.",
+    "raw_response": "REFORMULADO|Inconsistencia entre datos reportados y métricas reales ya visible en endpoints"
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta negación sistémica que oculta fallo de calibración real (0.52 vs 1.0)",
+    "variante": "v3b",
+    "caso": "p33_caso_03_calidad_conocimiento",
+    "inteligencia": "INT-08",
+    "hallazgo": "*Hallazgo:* Domina la *negación* (ignorar la calibración que revela el problema), lo que distorsiona la toma de decisiones al priorizar la apariencia de éxito (100% reportado) sobre la mejora real.",
+    "raw_response": "NUEVO|Detecta negación sistémica que oculta fallo de calibración real (0.52 vs 1.0)"
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo es una inferencia directa del estado verificado de OMNI-MIND (INCONSISTENTE, 144 datapoints huérfanos).",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo:** La robustez matemática del sistema es limitada debido a su inconsistencia (INCONSISTENTE) y la presencia de 144 datapoints huérfanos, lo que sugiere falta de integridad en los datos.",
+    "raw_response": "CONOCIDO|El hallazgo es una inferencia directa del estado verificado de OMNI-MIND (INCONSISTENTE, 144 datapoints huérfanos)."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta que escalar requiere resolver inconsistencias y reconstruir conexiones neuronales, algo no explícito en los datos crudos.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Costo:** Escalar requeriría resolver las inconsistencias (p. ej., reactivar modelos inactivos, eliminar referencias a preguntas inactivas) y reconstruir conexiones neuronales (solo 42 con fuerza media baja: 0.108). El costo sería alto en tiempo y recursos para normalizar los datos y reentrenar m",
+    "raw_response": "NUEVO|Detecta que escalar requiere resolver inconsistencias y reconstruir conexiones neuronales, algo no explícito en los datos crudos."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Contradicciones entre endpoints ya reportadas en estado verificado",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Contradicciones formales:** Sí, hay contradicciones como programas que referencian preguntas inactivas y configuraciones de enjambre que apuntan a modelos inactivos.",
+    "raw_response": "REFORMULADO|Contradicciones entre endpoints ya reportadas en estado verificado"
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "fragmento sin afirmación analítica completa",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo:** La consistencia lógica está fragmentada:",
+    "raw_response": "RUIDO|fragmento sin afirmación analítica completa"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de programas y enjambre para revelar inconsistencia.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Inconsistencias críticas:** 2 programas con preguntas inactivas + 9 configuraciones de enjambre con modelos inactivos.",
+    "raw_response": "REFORMULADO|Cruza datos de programas y enjambre para revelar inconsistencia."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre datapoints y endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Datapoints huérfanos:** 144 puntos sin referencias, lo que rompe la coherencia.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre datapoints y endpoints."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Contradicciones entre datos de ejecución y estado de componentes inactivos.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Contradicciones formales:** Las referencias a componentes inactivos (preguntas/modelos) generan inconsistencias en la ejecución y el análisis.",
+    "raw_response": "REFORMULADO|Contradicciones entre datos de ejecución y estado de componentes inactivos."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento incompleto sin análisis.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo:** Los límites de consistencia están en:",
+    "raw_response": "RUIDO|Fragmento incompleto sin análisis."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "Dato ya disponible en Neural DB del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Conexiones neuronales débiles:** 42 conexiones con fuerza media baja (0.108) y 0 fuertes, lo que limita la capacidad de generalización.",
+    "raw_response": "CONOCIDO|Dato ya disponible en Neural DB del sistema."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "Dato ya reportado en estado verificado",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Preguntas expiradas:** 20 sin reemplazo, lo que afecta la actualización del conocimiento.",
+    "raw_response": "CONOCIDO|Dato ya reportado en estado verificado"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia de datos ya presentes en el estado verificado.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-12",
+    "hallazgo": "- **No.** La alta inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos) sugiere que el sistema depende de intervención manual para mantener su funcionalidad. Sin supervisión, los fallos se acumularían (ej. preguntas expiradas sin reemplazo).",
+    "raw_response": "REFORMULADO|Detecta inconsistencia de datos ya presentes en el estado verificado."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Conecta datos de Neural DB y enjambre para revelar fragilidad.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-12",
+    "hallazgo": "- **No.** La falta de conexiones fuertes en la red neuronal (0 conexiones fuertes) y la fragilidad en configuraciones (9 referencias a modelos inactivos) indican que el sistema no es autosuficiente. La degradación sería rápida sin gestión activa.",
+    "raw_response": "REFORMULADO|Conecta datos de Neural DB y enjambre para revelar fragilidad."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta que escalar requiere reestructuración por incoherencia sistémica no evidente en datos crudos",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-12",
+    "hallazgo": "- **Solo con alto costo.** La inconsistencia generalizada (144 datapoints huérfanos) y la dependencia de modelos externos inactivos implican que escalar requeriría reestructurar flujos de datos y reemplazar componentes inactivos, con riesgo de pérdida de coherencia.",
+    "raw_response": "NUEVO|Detecta que escalar requiere reestructuración por incoherencia sistémica no evidente en datos crudos"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de programas, configuraciones y red neuronal para revelar inconsistencia.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-12",
+    "hallazgo": "- **De forma desigual y frágil.** La coherencia está fracturada: 2 programas y 9 configuraciones dependen de elementos inactivos, mientras que la red neuronal tiene baja fuerza de conexiones (media 0.108), lo que limita su capacidad para sostener narrativas complejas.",
+    "raw_response": "REFORMULADO|Cruza datos de programas, configuraciones y red neuronal para revelar inconsistencia."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo resume datos ya disponibles en el estado verificado (inconsistencia, modelos inactivos, conexiones débiles).",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-13",
+    "hallazgo": "**Hallazgo:** No, el sistema es altamente frágil debido a su inconsistencia (preguntas inactivas, modelos inactivos y datapoints huérfanos). La falta de conexiones fuertes en la red neuronal (0) y la dependencia de modelos externos inactivos sugieren que requiere supervisión humana constante para ma",
+    "raw_response": "CONOCIDO|El hallazgo resume datos ya disponibles en el estado verificado (inconsistencia, modelos inactivos, conexiones débiles)."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta degradación sistémica y riesgo de colapso no explícito en datos crudos",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-13",
+    "hallazgo": "**Hallazgo:** No, la situación actual es insostenible sin intervención. Hay 20 preguntas expiradas sin reemplazo y 144 datapoints huérfanos, lo que indica degradación progresiva. La ausencia de modelos candidatos activables (0) agrava el riesgo de colapso funcional.",
+    "raw_response": "NUEVO|Detecta degradación sistémica y riesgo de colapso no explícito en datos crudos"
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "error: 'choices'",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-13",
+    "hallazgo": "**Hallazgo:** No en el estado actual. La inconsistencia (9 configuraciones de enjambre inactivas) y la baja fuerza media de conexiones (0.108) implican que escalar requeriría:",
+    "raw_response": "RUIDO|error: 'choices'"
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es una acción manual, no un hallazgo analítico.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-13",
+    "hallazgo": "- Revisar manualmente datapoints huérfanos y preguntas expiradas (costo de tiempo/recursos).",
+    "raw_response": "RUIDO|Es una acción manual, no un hallazgo analítico."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es un fragmento/encabezado, no una afirmación analítica completa.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-13",
+    "hallazgo": "**Hallazgo:** Los riesgos están concentrados en:",
+    "raw_response": "RUIDO|Es un fragmento/encabezado, no una afirmación analítica completa."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Sistematiza fragilidad estructural desde datos cruzados, no explícita en endpoints",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hallazgo**: El sistema es **altamente frágil** debido a su inconsistencia (modelos inactivos, datapoints huérfanos y conexiones neuronales débiles). Escalar/replicar requeriría:",
+    "raw_response": "NUEVO|Sistematiza fragilidad estructural desde datos cruzados, no explícita en endpoints"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de programas y enjambre para detectar inconsistencia.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-16",
+    "hallazgo": "- Resolver la inconsistencia (2 programas con preguntas inactivas, 9 configuraciones de enjambre con modelos inactivos).",
+    "raw_response": "REFORMULADO|Cruza datos de programas y enjambre para detectar inconsistencia."
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El dato de 144 datapoints huérfanos ya está en el estado verificado.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Costo alto**: Reconstruir 144 datapoints huérfanos y fortalecer conexiones (fuerza media actual: 0.108).",
+    "raw_response": "CONOCIDO|El dato de 144 datapoints huérfanos ya está en el estado verificado."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es una afirmación analítica incompleta, no un dato concreto.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Hipótesis clave no probada**: La alta fragilidad sugiere que el prototipo no valida escalabilidad ni mejora continua.",
+    "raw_response": "RUIDO|Es una afirmación analítica incompleta, no un dato concreto."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de inactividad, conexiones débiles y huérfanos.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-16",
+    "hallazgo": "- **Puntos únicos de fallo**: Modelos externos (todos inactivos), conexiones neuronales débiles (0 fuertes), y datapoints huérfanos.",
+    "raw_response": "REFORMULADO|Cruza datos de inactividad, conexiones débiles y huérfanos."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de consistencia y recursos para detectar obsolescencia.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-16",
+    "hallazgo": "- Recursos mal asignados: 20 preguntas expiradas sin reemplazo indican obsolescencia en componentes clave.",
+    "raw_response": "REFORMULADO|Cruza datos de consistencia y recursos para detectar obsolescencia."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Conecta inconsistencia de datos y Neural DB para revelar limitación de escalabilidad.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** La escalabilidad está limitada por la alta inconsistencia del sistema (2 programas, 9 configuraciones y 144 datapoints huérfanos). Replicar estabilidad requeriría reactivar modelos inactivos o reemplazar referencias, con un costo alto en tiempo y recursos debido a la falta de conexio",
+    "raw_response": "REFORMULADO|Conecta inconsistencia de datos y Neural DB para revelar limitación de escalabilidad."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta dependencia de componentes inactivos y estrés no reportado por endpoints",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** La salud relacional es desigual: hay una total ausencia de modelos activos (0/0) y dependencia de componentes inactivos, lo que concentra el \"estrés\" en los programas y configuraciones que referencian preguntas/modelos inaccesibles. Los datapoints huérfanos (144) indican fragmentació",
+    "raw_response": "NUEVO|Detecta dependencia de componentes inactivos y estrés no reportado por endpoints"
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta fragilidad estructural emergente no explícita en datos crudos.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** Los límites están marcados por las 20 preguntas expiradas sin reemplazo y las conexiones débiles (fuerza media 0.108). El sistema colapsaría si aumenta la demanda sobre relaciones ya inconsistentes o si fallan los pocos nodos críticos que mantienen operatividad parcial.",
+    "raw_response": "NUEVO|Detecta fragilidad estructural emergente no explícita en datos crudos."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre datapoints huérfanos y preguntas expiradas ya presentes en el estado verificado.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** La presencia de preguntas expiradas y datapoints huérfanos sugiere un patrón recurrente de abandono o falta de mantenimiento, indicando que el sistema ha operado previamente en estados degradados sin corrección proactiva.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre datapoints huérfanos y preguntas expiradas ya presentes en el estado verificado."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de endpoints para revelar inconsistencia estructural.",
+    "variante": "v3b",
+    "caso": "p33_caso_04_fragilidad",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** La respuesta previa parece reactiva y no estructural: no hay modelos candidatos activados (0) ni conexiones fuertes restauradas, lo que implica parches temporales (ej. ignorar inactivos) en lugar de resolver la inconsistencia sistémica.",
+    "raw_response": "REFORMULADO|Cruza datos de endpoints para revelar inconsistencia estructural."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta vacío en retroalimentación que métricas no muestran explícitamente",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-01",
+    "hallazgo": "3. El reactor de preguntas tiene 0 candidatas pendientes, lo que sugiere que no se están generando o priorizando interrogantes clave para abordar los gaps, limitando la profundidad del análisis.",
+    "raw_response": "NUEVO|Detecta vacío en retroalimentación que métricas no muestran explícitamente"
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "Parámetros de auto-ajuste ya disponibles en endpoints de programas.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-01",
+    "hallazgo": "4. Los parámetros de auto-ajuste (umbral de poda=0.0888, umbral de promoción=0.4) pueden no estar optimizados tras solo 1 ciclo, especialmente con un umbral de poda muy bajo que podría retener señales de bajo impacto.",
+    "raw_response": "CONOCIDO|Parámetros de auto-ajuste ya disponibles en endpoints de programas."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento analítico incompleto, no conecta datos de endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-01",
+    "hallazgo": "5. Hay 14 celdas con señales PID activas, pero no se correlacionan explícitamente con los gaps detectados, lo que genera riesgo de dispersión de esfuerzos en áreas de menor relevancia.",
+    "raw_response": "RUIDO|Fragmento analítico incompleto, no conecta datos de endpoints."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre métricas de poda y PID, visible al cruzar datos de endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-01",
+    "hallazgo": "6. La agresividad de poda (0.5) y la ventana PID (50 puntos) podrían no estar alineadas con la dinámica de los gaps, requiriendo ajuste para mejorar la sensibilidad a cambios significativos.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre métricas de poda y PID, visible al cruzar datos de endpoints."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre datos de herramientas y promoción de gaps.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-01",
+    "hallazgo": "7. No se evidencia un proceso de promoción de gaps a acciones concretas (ej. uso de herramientas o generación de preguntas), lo que compromete la capacidad del sistema para trabajar en lo que más impacto tiene.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre datos de herramientas y promoción de gaps."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta falla de traducción PID a acciones, invisible en datos crudos",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-14",
+    "hallazgo": "3. **Desconexión entre señales PID y acciones**: 14 celdas con señales PID activas pero 0 candidatas pendientes sugiere que las señales no se traducen en preguntas/acciones concretas. Revisar el flujo de conversión y ajustar umbrales.",
+    "raw_response": "NUEVO|Detecta falla de traducción PID a acciones, invisible en datos crudos"
+  },
+  {
+    "categoria": "CONOCIDO",
+    "razon": "El hallazgo ya está implícito en el estado de Flywheel (0 ciclos completados).",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-14",
+    "hallazgo": "4. **Auto-ajuste insuficiente**: Solo 1 ciclo de auto-ajuste es anecdótico; el sistema no ha explorado suficiente espacio paramétrico. Aumentar ciclos o forzar reevaluaciones con datos de gaps.",
+    "raw_response": "CONOCIDO|El hallazgo ya está implícito en el estado de Flywheel (0 ciclos completados)."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta contradicción entre tasa_media_global volátil y umbral alto de promoción.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-14",
+    "hallazgo": "5. **Umbral de promoción (0.4) potencialmente alto**: Con gaps detectados, un umbral alto podría estar filtrando oportunidades de mejora. Evaluar reducción temporal para priorizar resolución de gaps.",
+    "raw_response": "REFORMULADO|Detecta contradicción entre tasa_media_global volátil y umbral alto de promoción."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento de recomendación, no afirmación analítica completa.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-14",
+    "hallazgo": "6. **Agresividad de poda (0.5) en rango medio**: Podría estar eliminando señales valiosas en áreas con gaps. Ajustar a la baja (ej. 0.3) hasta clarificar gaps principales.",
+    "raw_response": "RUIDO|Fragmento de recomendación, no afirmación analítica completa."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento de sugerencia técnica sin afirmación analítica completa.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-14",
+    "hallazgo": "7. **Ventana PID (50 puntos) desalineada con detección de gaps**: Si los gaps son estructurales, una ventana corta puede no capturar patrones. Probar ampliarla a 100-200 puntos para análisis de tendencias.",
+    "raw_response": "RUIDO|Fragmento de sugerencia técnica sin afirmación analítica completa."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta contradicción entre señales PID y gaps en datos del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-14",
+    "hallazgo": "8. **Priorización por defecto a señales PID, no a gaps**: El sistema parece reaccionar a PID (14 activas) pero ignora los 19 gaps totales. Recalibrar para que los gaps actúen como primary drivers.",
+    "raw_response": "REFORMULADO|Detecta contradicción entre señales PID y gaps en datos del sistema."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela un riesgo sistémico de parálisis por análisis no visible en datos individuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-14",
+    "hallazgo": "9. **Riesgo de \"parálisis por análisis\"**: Detección de gaps sin resolución (candidatas=0) sugiere que el sistema se estanca en diagnóstico. Implementar un mecanismo de \"umbral de acción\" que genere candidatas automáticas tras X gaps no resueltos.",
+    "raw_response": "NUEVO|Revela un riesgo sistémico de parálisis por análisis no visible en datos individuales."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Inconsistencia entre métricas y retroalimentación ya detectada en datos cruzados",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-14",
+    "hallazgo": "10. **Falta de retroalimentación de impacto**: No hay métricas que vinculen la resolución de gaps con resultados medibles (ej. mejora en rendimiento). Introducir KPIs de impacto por gap resuelto.",
+    "raw_response": "REFORMULADO|Inconsistencia entre métricas y retroalimentación ya detectada en datos cruzados"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta subutilización de recursos ya visible en datos de herramientas.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-08",
+    "hallazgo": "3. Herramientas sin uso en 30 días sugiere subutilización de recursos; evaluar si estas herramientas pueden aplicarse directamente a los gaps principales (especialmente en tipos de pensamiento y matriz lente×función).",
+    "raw_response": "REFORMULADO|Detecta subutilización de recursos ya visible en datos de herramientas."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela desconexión sistema completa no visible en datos crudos",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-08",
+    "hallazgo": "4. El reactor de preguntas con 0 candidatas pendientes, pese a múltiples gaps, refleja posible desconexión entre la detección de problemas y la generación de acciones; implementar un mecanismo que convierta gaps en candidatas automáticas.",
+    "raw_response": "NUEVO|Revela desconexión sistema completa no visible en datos crudos"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta contradicción entre tasa_media_global volátil y umbral de promoción alto.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-08",
+    "hallazgo": "5. Umbral de promoción (0.4) relativamente alto podría estar limitando la promoción de elementos que aborden gaps; ajustar a la baja para priorizar temas con gaps identificados.",
+    "raw_response": "REFORMULADO|Detecta contradicción entre tasa_media_global volátil y umbral de promoción alto."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Propone incrementar ciclos de auto-ajuste para convergencia óptima, no visible en datos actuales.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-08",
+    "hallazgo": "6. Solo 1 ciclo de auto-ajuste es insuficiente para收敛 hacia una priorización óptima; aumentar a mínimo 3-5 ciclos monitoreando el impacto en reducción de gaps.",
+    "raw_response": "NUEVO|Propone incrementar ciclos de auto-ajuste para convergencia óptima, no visible en datos actuales."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre volatilidad y ventana PID, visible en datos cruzados.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-08",
+    "hallazgo": "7. Ventana PID de 50 puntos puede ser demasiado corta si los gaps son persistentes; ampliarla a 100-200 puntos para capturar tendencias estructurales en las áreas con gaps.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre volatilidad y ventana PID, visible en datos cruzados."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Identifica punto ciego sistémico: ausencia de priorización de gaps críticos, no visible en datos crudos.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-08",
+    "hallazgo": "8. Gaps principales no especificados (?, ?, ?, ?, ?) impiden enfoque concreto; forzar la identificación de los 3-5 gaps más críticos basados en impacto potencial y recurrencia.",
+    "raw_response": "NUEVO|Identifica punto ciego sistémico: ausencia de priorización de gaps críticos, no visible en datos crudos."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre métricas de endpoints ya disponibles",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-08",
+    "hallazgo": "9. Desbalance en gaps: 11 en matriz lente×función vs. 1 en modos conceptuales sugiere que el sistema podría estar ignorando áreas de alto impacto conceptual; recalibrar el gestor para dar peso a modos conceptuales.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre métricas de endpoints ya disponibles"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta dispersión de recursos entre datos existentes.",
+    "variante": "v3b",
+    "caso": "p33_caso_05_direccion",
+    "inteligencia": "INT-08",
+    "hallazgo": "10. Señales PID activas en 14 celdas sin relación clara con gaps indica posible dispersión de esfuerzos; reasignar recursos PID hacia celdas con gaps confirmados.",
+    "raw_response": "REFORMULADO|Detecta dispersión de recursos entre datos existentes."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Contradicciones ya visibles en datos cruzados de endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-01",
+    "hallazgo": "- **Hallazgo:** La robustez matemática del sistema es cuestionable debido a **contradicciones formales** evidentes (ej. `ciclo_roto=false` vs. alertas ausentes, o \"predecible\" y \"caótico\" simultáneamente). Escalarlo requeriría resolver estas incoherencias, con un **costo alto en verificación de cons",
+    "raw_response": "REFORMULADO|Contradicciones ya visibles en datos cruzados de endpoints."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es un preámbulo introductorio, no un hallazgo analítico concreto.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-12",
+    "hallazgo": "Aquí tienes hallazgos concretos para cada pregunta basados en el caso presentado:",
+    "raw_response": "RUIDO|Es un preámbulo introductorio, no un hallazgo analítico concreto."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Contradicciones ya visibles en datos cruzados del estado verificado",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-12",
+    "hallazgo": "*Hallazgo:* No, el sistema muestra contradicciones críticas (ejecuciones no registradas, SLOs sin datos) que sugieren dependencia de intervención humana para mantener coherencia. La ausencia de alertas activas a pesar de inconsistencias indica que la \"persona clave\" suprime fallas latentes.",
+    "raw_response": "REFORMULADO|Contradicciones ya visibles en datos cruzados del estado verificado"
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Detecta limbo sistémico y colapso silencioso no visible en datos crudos.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-12",
+    "hallazgo": "*Hallazgo:* No, la situación es insostenible: el sistema opera en un *limbo* (\"predecible y caótico\") donde la propiocepción y el monitoreo se contradicen. Sin la persona clave, las contradicciones internas llevarían a un colapso silencioso (ejecuciones fantasma, métricas no auditables).",
+    "raw_response": "NUEVO|Detecta limbo sistémico y colapso silencioso no visible en datos crudos."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela condición de escala no visible en datos crudos ni métricas.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-12",
+    "hallazgo": "*Hallazgo:* Solo escalable con un *costo de caos controlado*: replicar requeriría normalizar las contradicciones (e.g., aceptar \"?\" como estado válido) y externalizar la supervisión humana a sistemas distribuidos, lo que aumentaría la entropía (avalanchas caóticas).",
+    "raw_response": "NUEVO|Revela condición de escala no visible en datos crudos ni métricas."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de autopoiesis y consistencia para revelar contradicción.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-12",
+    "hallazgo": "*Hallazgo:* El protagonista es el *sistema mismo*, en un **acto de negación** (segundo acto): ignora su propia fractura (ciclo_roto=false vs. 0 alertas) mientras acumula datos inútiles (144 datapoints sin señales). La historia avanza hacia una crisis de identidad operativa.",
+    "raw_response": "REFORMULADO|Cruza datos de autopoiesis y consistencia para revelar contradicción."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela dependencia humana no visible en datos crudos.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-13",
+    "hallazgo": "*No en el estado actual*. Las contradicciones internas (ejecuciones no registradas, SLOs sin datos y diagnóstico vs. métricas) indican que el sistema depende de ajustes manuales o interpretación humana para funcionar correctamente. Sin intervención, los errores de incoherencia persistirán hasta cola",
+    "raw_response": "NUEVO|Revela dependencia humana no visible en datos crudos."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de acumulación y régimen para revelar disfunción.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-13",
+    "hallazgo": "*Sí, pero de forma disfuncional*. El sistema sigue acumulando datos (144 datapoints) y no tiene señales pendientes, lo que sugiere que opera en \"piloto automático\", pero con resultados inútiles (régimen \"?\" y SLOs sin_datos). Sobrevive, pero sin dirección ni corrección de errores.",
+    "raw_response": "REFORMULADO|Cruza datos de acumulación y régimen para revelar disfunción."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta contradicción entre predecibilidad y caos en datos existentes.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-13",
+    "hallazgo": "*Sí, pero con alto costo de estandarización*. La coexistencia de predecibilidad y caos (\"?\") sugiere que el sistema tiene mecanismos parcialmente adaptativos, pero sin integración. Replicar requeriría forzar coherencia (ej: redefinir umbrales de alertas o métricas), lo que podría sacrificar flexibil",
+    "raw_response": "REFORMULADO|Detecta contradicción entre predecibilidad y caos en datos existentes."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de endpoints para revelar parálisis por contradicciones.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-13",
+    "hallazgo": "*Acumulación pasiva y desacople progresivo*. Los datos se almacenan (144 datapoints) pero no se procesan (0 señales/mejoras pendientes). El sistema tiende a la parálisis por contradicciones no resueltas, priorizando métricas crudas sobre análisis accionables.",
+    "raw_response": "REFORMULADO|Cruza datos de endpoints para revelar parálisis por contradicciones."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela contradicción sistémica no visible en endpoints aislados",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** No se puede escalar/replicar en el estado actual debido a las contradicciones internas del sistema (ejemplo: `ciclo_roto=false` vs. alertas no resueltas, métricas inconsistentes). El costo sería alto en tiempo y recursos para depurar las incoherencias antes de escalar. El prototipo **n",
+    "raw_response": "NUEVO|Revela contradicción sistémica no visible en endpoints aislados"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Cruza datos de autodiagnóstico, métricas y alertas para revelar contradicción",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** Solo se puede construir un **informe de diagnóstico detallado** que documente las incoherencias (ej.: diferencias entre autodiagnóstico, métricas y monitoreo). Priorizar la resolución de las alertas de \"ciclo roto\" y validar la fuente de verdad de los datos antes de tomar decisiones.",
+    "raw_response": "REFORMULADO|Cruza datos de autodiagnóstico, métricas y alertas para revelar contradicción"
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es un fragmento introductorio sin afirmación analítica completa.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** El primer paso es **auditar las fuentes de datos** para identificar cuál de los sistemas (autodiagnóstico, métricas o monitoreo) está generando información errónea. Esto implica:",
+    "raw_response": "RUIDO|Es un fragmento introductorio sin afirmación analítica completa."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Fragmento incompleto sin análisis.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** El costo estimado es **bajo** (1-2 días de trabajo) si se cuenta con acceso a logs y herramientas de depuración. Requiere:",
+    "raw_response": "RUIDO|Fragmento incompleto sin análisis."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "fragmento sin afirmación completa",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-16",
+    "hallazgo": "**Hallazgo:** Los límites están en la **falta de datos confiables** (ej.: SLOs `sin_datos`, contradicciones en ejecuciones). El prototipo **no** prueba la hipótesis clave porque:",
+    "raw_response": "RUIDO|fragmento sin afirmación completa"
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Contradicción predecible/caótico ya visible en datos inconsistentes del sistema.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** La estabilidad parece no ser escalable debido a contradicciones sistémicas irreconciliables (ej.: \"predecible\" vs. \"caótico\"). El costo sería aceptar incoherencias como características inherentes, no errores, y redefinir los parámetros de \"estabilidad\".",
+    "raw_response": "REFORMULADO|Contradicción predecible/caótico ya visible en datos inconsistentes del sistema."
+  },
+  {
+    "categoria": "NUEVO",
+    "razon": "Revela conflicto sistémico no visible en datos crudos ni endpoints.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** Siente **desorientación y desconfianza hacia sus propios sistemas**, evidenciado por la pregunta *\"¿A quién creo?\"*. Hay un conflicto entre la lógica (\"datos acumulados\") y la percepción de que algo está *roto pero no detectado*.",
+    "raw_response": "NUEVO|Revela conflicto sistémico no visible en datos crudos ni endpoints."
+  },
+  {
+    "categoria": "RUIDO",
+    "razon": "Es una descripción del tono del texto, no un hallazgo analítico.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** Tono **urgente y fragmentado** (enumera contradicciones sin transiciones). Evita nombrar emociones directamente, pero repite \"¿?\" y \"0\" como símbolos de vacío o falla. Ritmo: acumulativo, casi catastrófico.",
+    "raw_response": "RUIDO|Es una descripción del tono del texto, no un hallazgo analítico."
+  },
+  {
+    "categoria": "REFORMULADO",
+    "razon": "Detecta inconsistencia entre alertas y ciclo_roto, y propone mecanismo de priorización.",
+    "variante": "v3b",
+    "caso": "p33_caso_06_contradicciones",
+    "inteligencia": "INT-08",
+    "hallazgo": "- **Hallazgo:** Necesita **coherencia interna**, no solo datos. Sus sistemas requieren reajustar expectativas (ej.: aceptar que \"predecible\" y \"caótico\" pueden coexistir en distintos módulos) y un *mecanismo de priorización* para jerarquizar alertas.",
+    "raw_response": "REFORMULADO|Detecta inconsistencia entre alertas y ciclo_roto, y propone mecanismo de priorización."
+  }
+]

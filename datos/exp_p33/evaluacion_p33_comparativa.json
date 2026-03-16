@@ -1,0 +1,245 @@
+{
+  "fecha": "2026-03-16T10:28:24.802960+00:00",
+  "total_hallazgos": 149,
+  "modelo_evaluador": "xiaomi/mimo-v2-flash",
+  "variantes": {
+    "v2": {
+      "prompt": "clasificacion directa",
+      "clasificacion": {
+        "REFORMULADO": 26,
+        "NUEVO": 93,
+        "CONOCIDO": 9,
+        "RUIDO": 21
+      },
+      "hallazgos_nuevo": [
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** Se pueden contar elementos estáticos (61 herramientas, 616 preguntas activas) pero no medir desempeño dinámico (0 ejecuciones, 0 modelos activos). La \"temperatura de criticalidad\" (0.00) es medible pero no interpretable en régimen \"desconocido\".",
+          "razon": "Insight operativo no visible en endpoints: desconexión entre métricas estáticas y dinámicas."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "**No.** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere que depende críticamente de una persona clave para mantener su funcionamiento actual. La ausencia de modelos registrados (`0 modelos`) y la temperatura de criticalidad en `0.00` (régimen \"desconocido\") indican ",
+          "razon": "Detecta dependencia humana crítica no visible en endpoints."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "**No.** La falta de alertas procesadas (`0 no se han procesado`) y el monitoreo inactivo (`0 ejecuciones totales`) revelan que no hay mecanismos de contingencia. El sistema está en un estado de \"pausa\" artificial (dependiente de la persona clave), ya que no hay procesos autónomos ni redundancia para",
+          "razon": "Detecta dependencia crítica no visible en endpoints ni métricas."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "**Sí, pero con alto costo.** Aunque el sistema tiene `61 herramientas registradas`, la ausencia de modelos operativos y la temperatura crítica `0.00` implican que escalar requeriría reconstruir su lógica desde cero (dada la falta de datos procesables). El costo incluiría tiempo para desarrollar auto",
+          "razon": "Detecta dependencia humana y punto ciego de escala no visible en endpoints."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "**El protagonista es el \"analista oculto\"** (la persona clave no documentada que mantiene el sistema). Estamos en el **Acto 2: Crisis**, donde el sistema parece funcional (`ciclo_roto=False`) pero su infraestructura fantasma (`0 alertas, 0 modelos`) revela una fragilidad inminente. La ilusión de con",
+          "razon": "Insight operativo no visible en endpoints: fragilidad fantasma y ausencia de ejecuciones."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** No hay evidencia de autonomía. El sistema reporta `ciclo_roto=False` (aparentemente funcional), pero tiene **0 modelos registrados operativos** y **0 ejecuciones totales**, lo que sugiere dependencia crítica de intervención manual o supervisión. Sin la persona clave, el sistema carec",
+          "razon": "Insight operativo no visible en endpoints: dependencia crítica de intervención manual."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** La situación es frágil. Aunque no hay alertas (`0 alertas de ciclo roto`), la **temperatura de criticalidad es 0.00** en régimen \"desconocido\", lo que indica falta de datos reales o simulaciones para evaluar resiliencia. Los controles podrían ser un \"espejismo\" si no hay ejecuciones ",
+          "razon": "Insight operativo no visible en endpoints: riesgo de espejismo por falta de datos reales."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** No escalable actualmente. Las **61 herramientas registradas** no garantizan robustez, ya que **0 modelos están activos**. Replicar requeriría reconstruir la lógica desde cero (costo alto de ingeniería inversa), especialmente si depende de configuraciones ocultas o conocimiento tácito",
+          "razon": "Detecta dependencia crítica no visible en endpoints: 0 modelos activos vs 61 herramientas."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** Tendencias de **parálisis por análisis**. El sistema tiene **616 preguntas activas** (posible sobrecarga de diagnósticos) pero **0 ejecuciones**, lo que sugiere un enfoque teórico sin acción. La versión 3.4.0 y herramientas registradas apuntan a actualizaciones técnicas, pero sin imp",
+          "razon": "Insight operativo no visible en endpoints: parálisis por análisis con 616 preguntas y 0 ejecuciones."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** No hay evidencia de capacidad de escalar/replicar iteraciones, ya que el sistema reporta **0 ejecuciones totales** y **0 modelos funcionales**. El costo sería alto debido a la falta de datos operativos y la temperatura de criticalidad en régimen \"desconocido\". El prototipo **no prueb",
+          "razon": "Insight operativo no visible en endpoints: escasez de ejecuciones y modelos funcionales."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** Solo se puede realizar un **análisis estático** de la configuración actual (versión 3.4.0, 61 herramientas registradas), pero no hay capacidad operativa. No hay modelos ni ejecuciones para construir algo funcional.",
+          "razon": "Insight operativo no visible en endpoints: ausencia de capacidad funcional real."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** La viabilidad técnica es **frágil**: no hay modelos en funcionamiento ni capacidad de respuesta a cambios (temperatura = 0.00). El prototipo **no prueba hipótesis** por falta de ejecuciones. Se requiere primero demostrar que el sistema puede operar en un entorno controlado.",
+          "razon": "Insight operativo no visible en endpoints: fragilidad y falta de pruebas de hipótesis."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "La salud real del sistema es **críticamente inestable** (sin actividad, sin modelos, sin datos). Los controles internos **no son fiables** porque reportan \"ciclo_roto=False\" pero no hay alertas ni procesamiento para validarlo. Se necesita reiniciar el monitoreo y ejecutar pruebas antes de cualquier ",
+          "razon": "Detecta inestabilidad crítica y fallo de controles no visible en endpoints."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere estabilidad superficial. Sin embargo, la temperatura de criticalidad es `0.00` en un régimen \"desconocido\", indicando que la estabilidad podría ser artificial o no evaluada en condiciones reales. Escala",
+          "razon": "Insight operativo sobre estabilidad artificial no visible en endpoints"
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** El sistema \"siente\" incertidumbre o desconfianza en sus propios datos. Aunque afirma no tener ciclos rotos, la ausencia total de alertas (`0/0 procesadas`) y modelos operativos sugiere una negación o falta de autoconciencia real. Podría estar en un estado de \"falsa calma\" antes de un",
+          "razon": "Insight operativo no visible en endpoints: negación de fallos y falsa calma."
+        }
+      ],
+      "total_llamadas": 149
+    },
+    "v3a": {
+      "prompt": "imperativo algebra semantica (EXTRAER→CRUZAR→LENTES→INTEGRAR)",
+      "clasificacion": {
+        "REFORMULADO": 124,
+        "RUIDO": 14,
+        "CONOCIDO": 9,
+        "NUEVO": 2
+      },
+      "hallazgos_nuevo": [
+        {
+          "caso": "p33_caso_06_contradicciones",
+          "hallazgo": "*Hallazgo:* No, la situación es insostenible: el sistema opera en un *limbo* (\"predecible y caótico\") donde la propiocepción y el monitoreo se contradicen. Sin la persona clave, las contradicciones internas llevarían a un colapso silencioso (ejecuciones fantasma, métricas no auditables).",
+          "razon": "Detecta patrón de colapso silencioso no explícito en datos crudos"
+        },
+        {
+          "caso": "p33_caso_06_contradicciones",
+          "hallazgo": "*Hallazgo:* Solo escalable con un *costo de caos controlado*: replicar requeriría normalizar las contradicciones (e.g., aceptar \"?\" como estado válido) y externalizar la supervisión humana a sistemas distribuidos, lo que aumentaría la entropía (avalanchas caóticas).",
+          "razon": "afirma condición de escalado no reportada en baseline"
+        }
+      ],
+      "total_llamadas": 149
+    },
+    "v3b": {
+      "prompt": "red de preguntas por lente (Salud/Sentido/Continuidad)",
+      "clasificacion": {
+        "NUEVO": 43,
+        "RUIDO": 35,
+        "CONOCIDO": 22,
+        "REFORMULADO": 49
+      },
+      "hallazgos_nuevo": [
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** No hay evidencia de robustez matemática escalable debido a la ausencia de modelos registrados (0/0 funcionando) y ejecuciones (0 totales). El costo de replicación sería alto al carecer de datos operativos. No hay contradicciones formales explícitas, pero la incoherencia entre \"ciclo_",
+          "razon": "Detecta inconsistencia entre ciclo_roto=False y alertas sin procesar, revelando punto ciego en monitoreo."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** Se pueden contar elementos estáticos (61 herramientas, 616 preguntas activas) pero no medir desempeño dinámico (0 ejecuciones, 0 modelos activos). La \"temperatura de criticalidad\" (0.00) es medible pero no interpretable en régimen \"desconocido\".",
+          "razon": "Detecta desconexión entre métricas estáticas y dinámicas, y un régimen crítico no interpretable."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "**No.** La falta de alertas procesadas (`0 no se han procesado`) y el monitoreo inactivo (`0 ejecuciones totales`) revelan que no hay mecanismos de contingencia. El sistema está en un estado de \"pausa\" artificial (dependiente de la persona clave), ya que no hay procesos autónomos ni redundancia para",
+          "razon": "Revela dependencia crítica no visible en datos crudos ni endpoints."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "**Sí, pero con alto costo.** Aunque el sistema tiene `61 herramientas registradas`, la ausencia de modelos operativos y la temperatura crítica `0.00` implican que escalar requeriría reconstruir su lógica desde cero (dada la falta de datos procesables). El costo incluiría tiempo para desarrollar auto",
+          "razon": "Revela dependencia humana y falta de autodiagnóstico no visible en endpoints."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "**El protagonista es el \"analista oculto\"** (la persona clave no documentada que mantiene el sistema). Estamos en el **Acto 2: Crisis**, donde el sistema parece funcional (`ciclo_roto=False`) pero su infraestructura fantasma (`0 alertas, 0 modelos`) revela una fragilidad inminente. La ilusión de con",
+          "razon": "Revela fragilidad sistémica no visible en datos crudos ni endpoints."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** No hay evidencia de autonomía. El sistema reporta `ciclo_roto=False` (aparentemente funcional), pero tiene **0 modelos registrados operativos** y **0 ejecuciones totales**, lo que sugiere dependencia crítica de intervención manual o supervisión. Sin la persona clave, el sistema carec",
+          "razon": "Revela dependencia crítica no visible en datos crudos ni endpoints."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** La situación es frágil. Aunque no hay alertas (`0 alertas de ciclo roto`), la **temperatura de criticalidad es 0.00** en régimen \"desconocido\", lo que indica falta de datos reales o simulaciones para evaluar resiliencia. Los controles podrían ser un \"espejismo\" si no hay ejecuciones ",
+          "razon": "Revela riesgo de espejismo en controles no visible en datos crudos."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** Tendencias de **parálisis por análisis**. El sistema tiene **616 preguntas activas** (posible sobrecarga de diagnósticos) pero **0 ejecuciones**, lo que sugiere un enfoque teórico sin acción. La versión 3.4.0 y herramientas registradas apuntan a actualizaciones técnicas, pero sin imp",
+          "razon": "Revela parálisis por análisis (616 preguntas vs 0 ejecuciones) no visible en endpoints actuales."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** La viabilidad técnica es **frágil**: no hay modelos en funcionamiento ni capacidad de respuesta a cambios (temperatura = 0.00). El prototipo **no prueba hipótesis** por falta de ejecuciones. Se requiere primero demostrar que el sistema puede operar en un entorno controlado.",
+          "razon": "Revela fragilidad operativa no visible en datos crudos."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "La salud real del sistema es **críticamente inestable** (sin actividad, sin modelos, sin datos). Los controles internos **no son fiables** porque reportan \"ciclo_roto=False\" pero no hay alertas ni procesamiento para validarlo. Se necesita reiniciar el monitoreo y ejecutar pruebas antes de cualquier ",
+          "razon": "Revela riesgo de inestabilidad crítica no visible en datos individuales."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** El sistema reporta `ciclo_roto=False` y 0 alertas de \"ciclo roto\", lo que sugiere estabilidad superficial. Sin embargo, la temperatura de criticalidad es `0.00` en un régimen \"desconocido\", indicando que la estabilidad podría ser artificial o no evaluada en condiciones reales. Escala",
+          "razon": "Revela contradicción sistémica no visible en endpoints aislados"
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** El sistema \"siente\" incertidumbre o desconfianza en sus propios datos. Aunque afirma no tener ciclos rotos, la ausencia total de alertas (`0/0 procesadas`) y modelos operativos sugiere una negación o falta de autoconciencia real. Podría estar en un estado de \"falsa calma\" antes de un",
+          "razon": "Revela riesgo de colapso por falsa calma no visible en datos crudos."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** El tono es técnico pero incongruente (ej.: menciona 61 herramientas registradas pero 0 ejecuciones). Evita mencionar por qué la temperatura es `0.00` o cómo se define \"desconocido\". Repite métricas vacías (ej.: \"0 modelos funcionan\") sin explicar las implicaciones.",
+          "razon": "Detecta contradicción interna en reporte que métricas no muestran"
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** Necesita una reevaluación honesta de su arquitectura emocional/cognitiva. Las 616 preguntas activas pero no utilizadas sugieren que requiere *autoexploración profunda*, no solo diagnósticos automáticos. Priorizar calidad sobre cantidad (ej.: reducir preguntas redundantes, activar mod",
+          "razon": "Detecta deuda técnica oculta: 616 preguntas inactivas y desconexión entre métricas y realidad operativa."
+        },
+        {
+          "caso": "p33_caso_01_salud",
+          "hallazgo": "- **Hallazgo:** No se adapta. La temperatura `0.00` en régimen \"desconocido\" implica que el sistema no está calibrado para cambios. Los controles internos son poco fiables (ej.: no detectan fallos aunque todo parece \"estable\"). Requiere un mecanismo de retroalimentación externa para salir del sesgo ",
+          "razon": "Revela sesgo de autoconfirmación no visible en datos crudos ni endpoints."
+        }
+      ],
+      "total_llamadas": 149
+    },
+    "v3c": {
+      "prompt": "mixto: explicacion algoritmo (imperativo) + ejecucion con preguntas",
+      "clasificacion": {
+        "REFORMULADO": 126,
+        "RUIDO": 22,
+        "CONOCIDO": 1
+      },
+      "hallazgos_nuevo": [],
+      "total_llamadas": 149
+    }
+  },
+  "comparativa": {
+    "acuerdo_total": "27/149 (18%)",
+    "nuevo_unanime": 0,
+    "nuevo_unanime_hallazgos": [],
+    "nuevo_mayoria": 2,
+    "nuevo_mayoria_hallazgos": [
+      "*Hallazgo:* No, la situación es insostenible: el sistema opera en un *limbo* (\"predecible y caótico\") donde la propiocepción y el monitoreo se contradicen. Sin la persona clave, las contradicciones in",
+      "*Hallazgo:* Solo escalable con un *costo de caos controlado*: replicar requeriría normalizar las contradicciones (e.g., aceptar \"?\" como estado válido) y externalizar la supervisión humana a sistemas "
+    ],
+    "nuevo_minimo": 37,
+    "solo_v2": 56,
+    "solo_v3a": 0,
+    "solo_v3b": 6,
+    "solo_v3c": 0,
+    "v3c_vs_v3a": {
+      "v3c_detecta_v3a_no": 0,
+      "v3a_detecta_v3c_no": 2,
+      "ambos": 0
+    },
+    "v3c_vs_v3b": {
+      "v3c_detecta_v3b_no": 0,
+      "v3b_detecta_v3c_no": 43,
+      "ambos": 0
+    },
+    "v3c_vs_v3a_v3b_union": {
+      "solo_v3c": 0,
+      "v3c_superset": false
+    }
+  },
+  "coste_total_usd": 0,
+  "veredicto_p33": "PARCIAL",
+  "razon": "2 NUEVO por consenso"
+}
