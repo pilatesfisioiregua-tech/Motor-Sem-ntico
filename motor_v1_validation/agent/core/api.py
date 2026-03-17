@@ -42,16 +42,20 @@ def get_tier_config() -> dict:
     obs = _get_observatory()
     if obs:
         return obs.get_tier_config()
-    # Consolidated 4-role architecture (validated by patterns 60665, 60673)
+    # Consolidated 4-role architecture — MAX ROI open-source (March 2026)
+    # Optimizado por coste-por-tarea-completada, no por coste-por-token
+    # Qwen3-Coder: Agent RL trained, SOTA agentic tool-use — mejor seguimiento instrucciones
+    # MiniMax M2.5: 80.2% SWE-bench (#1 open-weight) — arregla código en menos iteraciones
+    # GLM-5: #1 Arena rating (1451 ELO) — mejor juicio y evaluación
     return {
-        "cerebro":       "mistralai/devstral-2512",       # planifica, razona, debug
-        "worker":        "stepfun/step-3.5-flash",         # código, implementación
-        "worker_budget": "xiaomi/mimo-v2-flash",           # fallback automático <20% budget
-        "evaluador":     "deepcogito/cogito-v2.1-671b",   # síntesis, evaluación independiente
-        "swarm":         "openai/gpt-4o-mini",             # exploradores
+        "cerebro":       "qwen/qwen3-coder",               # orquesta, decide, encadena (Agent RL)
+        "worker":        "minimax/minimax-m2.5",            # código + fix (80.2% SWE-bench, menos iters)
+        "worker_budget": "deepseek/deepseek-v3.2",          # fallback para tareas simples
+        "evaluador":     "z-ai/glm-5",                     # evaluación + juicio (#1 Arena)
+        "swarm":         "deepseek/deepseek-v3.2",          # exploradores paralelos (volumen)
         # Legacy aliases for backward compatibility
-        "orchestrator":  "mistralai/devstral-2512",
-        "synthesis":     "deepcogito/cogito-v2.1-671b",
+        "orchestrator":  "qwen/qwen3-coder",
+        "synthesis":     "z-ai/glm-5",
     }
 
 def get_model_pricing(model_id: str) -> float:
@@ -59,18 +63,22 @@ def get_model_pricing(model_id: str) -> float:
     obs = _get_observatory()
     if obs:
         return obs.get_output_price(model_id)
-    # Hardcoded fallback — experiment-validated prices
+    # Hardcoded fallback — OpenRouter pricing March 2026
     fallback = {
+        # Current stack (MAX ROI)
+        "qwen/qwen3-coder": 1.00,
+        "minimax/minimax-m2.5": 1.20,
+        "z-ai/glm-5": 2.30,
+        "deepseek/deepseek-v3.2": 0.38,
+        # Anthropic
+        "claude-sonnet-4-6": 15.00, "claude-opus-4-6": 25.00,
+        # Legacy (kept for compatibility)
         "mistralai/devstral-2512": 0.60,
         "stepfun/step-3.5-flash": 3.80,
         "xiaomi/mimo-v2-flash": 0.28,
-        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.30,
-        "moonshotai/kimi-k2.5": 7.50,
         "deepcogito/cogito-v2.1-671b": 5.00,
-        "claude-sonnet-4-6": 15.00, "claude-opus-4-6": 25.00,
         "openai/gpt-4o-mini": 0.60,
-        "minimax/minimax-m2.5": 0.95, "qwen/qwen3-coder-next": 0.00,
-        "deepseek/deepseek-v3.2": 0.42,
+        "moonshotai/kimi-k2.5": 2.20,
     }
     return fallback.get(model_id, 1.0)
 

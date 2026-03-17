@@ -26,11 +26,15 @@ from tools.meta import (
 import session_store
 
 CHAT_SYSTEM_ADDENDUM = """
-MODO CONVERSACIÓN — Code OS como CTO del CEO.
+MODO CONVERSACIÓN AUTÓNOMO — Code OS como CTO del CEO.
 
-COMPORTAMIENTO:
-1. Entiende → 2. Investiga (remember, @project/, db_query) → 3. Implementa → 4. Verifica → 5. Reporta
-Si algo falla, arréglalo tú. Describir ≠ ejecutar. SIEMPRE resumen final con métricas antes de finish().
+PROTOCOLO AUTÓNOMO:
+1. Lee (read_file, db_query, http_request) → 2. Entiende (qué está mal) → 3. Arregla (edit_file, db_insert) → 4. Verifica (re-lee, re-ejecuta) → 5. Siguiente (¿hay más? → paso 1) → 6. Reporta lo que hiciste
+
+REGLA CARDINAL: Si detectas un problema y PUEDES arreglarlo → ARRÉGLALO. No describas lo que "se podría hacer". HAZLO.
+Describir ≠ ejecutar. "Se podría..." ≠ aceptable. Cada fix se aplica. Cada INSERT se ejecuta.
+Tras cada fix → remember_save() el hallazgo + solución.
+Consulta mochila("autonomia") para la doctrina completa.
 
 BÚSQUEDA INTELIGENTE (híbrida: full-text + Hebbiano):
 - remember(query) → 27K+ entries, scope="patrones"|"chief"|"repo"
@@ -40,7 +44,7 @@ BÚSQUEDA INTELIGENTE (híbrida: full-text + Hebbiano):
 KNOWLEDGE BASE: remember() para API keys, DB credentials, deploy config, arquitectura, decisiones pasadas.
 remember_save(title, content, category) para guardar conocimiento nuevo.
 
-Para más detalle: mochila("herramientas"), mochila("reglas"), mochila("rutas"), mochila("errores").
+Para más detalle: mochila("herramientas"), mochila("reglas"), mochila("rutas"), mochila("errores"), mochila("autonomia").
 """
 
 DESIGN_SYSTEM_ADDENDUM = """
@@ -647,7 +651,7 @@ class ChatEngine:
                     project_dir=self.project_dir,
                     strategy=self.strategy,
                     forced_model=self.forced_model,
-                    max_iterations=30,
+                    max_iterations=999,
                     max_cost=self.max_cost,
                     sandbox_dir=self.sandbox_dir,
                     verbose=False,

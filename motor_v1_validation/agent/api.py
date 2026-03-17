@@ -1,11 +1,14 @@
-"""Code OS v2 — FastAPI wrapper for Omni Mind integration.
+"""Code OS v3 — FastAPI wrapper for Omni Mind integration.
 
 Endpoints:
-  POST /code-os/execute  → Launch async execution, return session_id
+  POST /code-os/execute  → SSE stream execution (CEO interface)
+  GET  /code-os/health   → Proactive health check
+  GET  /code-os/status   → System status (version, models, tools)
   GET  /code-os/session/{id} → Get session status/result
   GET  /code-os/sessions → List recent sessions
   GET  /chat → Web chat interface
   POST /chat/send → Send message, receive SSE stream
+  GET  /ceo → CEO Dashboard with Code OS tab
   GET  /health → Health check
 """
 
@@ -89,6 +92,14 @@ class ExecuteRequest(BaseModel):
     swarm: bool = False
 
 
+class CEOExecuteRequest(BaseModel):
+    input: str
+    mode: str = "auto"  # "auto", "goal", "briefing"
+    project_dir: Optional[str] = None
+    file_content: Optional[str] = None
+    file_name: Optional[str] = None
+
+
 class SessionResponse(BaseModel):
     session_id: str
     status: str
@@ -128,21 +139,168 @@ def _run_code_os_sync(session_id: str, request: ExecuteRequest):
         }
 
 
-@app.post("/code-os/execute", response_model=SessionResponse)
-async def execute(request: ExecuteRequest, background_tasks: BackgroundTasks):
-    """Launch Code OS execution in background. Returns session_id immediately."""
-    session_id = str(uuid.uuid4())
+@app.post("/code-os/execute")
+async def execute_sse(request: CEOExecuteRequest):
+    """Execute Code OS with SSE streaming — CEO interface endpoint."""
+    import time as _time
+    import threading
 
-    _running_sessions[session_id] = {"status": "running", "result": None}
+    from core.intent import translate_intent
+    from core.reporter import Reporter
 
-    # Run in background thread (sync code)
-    background_tasks.add_task(_run_code_os_sync, session_id, request)
-
-    return SessionResponse(
-        session_id=session_id,
-        status="running",
-        message=f"Execution started. Check status at /code-os/session/{session_id}",
+    user_input = request.input
+    project_dir = request.project_dir or os.environ.get(
+        "CODE_OS_PROJECT_DIR",
+        "/repo" if os.path.isdir("/repo") else ".",
     )
+
+    # Detect briefing from attached file
+    file_is_briefing = False
+    if request.file_content and request.file_name:
+        if request.file_name.endswith('.md') and '# BRIEFING:' in request.file_content[:500]:
+            file_is_briefing = True
+
+    # Translate business language to technical goal
+    intent = translate_intent(user_input, {})
+    mode = request.mode
+    if mode == "auto":
+        if file_is_briefing:
+            mode = "briefing"
+        else:
+            mode = "goal"
+
+    # Inject file content as context for non-briefing files
+    if request.file_content and not file_is_briefing:
+        goal = intent["technical_goal"] + f"\n\n--- Archivo adjunto: {request.file_name} ---\n{request.file_content}"
+    else:
+        goal = intent["technical_goal"]
+
+    def event_stream():
+        import queue as _queue
+
+        session_id = str(uuid.uuid4())
+        start = _time.time()
+
+        # Emit intent translation
+        if intent["category"]:
+            yield f"data: {json.dumps({'type': 'text', 'content': intent['explanation_for_user']}, ensure_ascii=False)}\n\n"
+
+        if file_is_briefing:
+            yield f"data: {json.dumps({'type': 'text', 'content': '📋 Briefing detectado: ' + request.file_name}, ensure_ascii=False)}\n\n"
+
+        yield f"data: {json.dumps({'type': 'thinking', 'model': 'auto', 'step': 1}, ensure_ascii=False)}\n\n"
+
+        # Queue for real-time streaming from agent thread
+        evt_queue = _queue.Queue()
+
+        def on_progress(iteration, total, message):
+            """Callback fired each iteration — streams progress to SSE."""
+            evt_queue.put({"type": "thinking", "model": message, "step": iteration})
+
+        def run_in_thread():
+            """Run agent loop in background thread, push result to queue."""
+            try:
+                from core.agent_loop import run_agent_loop, run_briefing
+
+                if mode == "briefing":
+                    import tempfile
+                    briefing_content = request.file_content if file_is_briefing else None
+                    briefing_path = request.input
+
+                    if briefing_content:
+                        tmp = tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False, dir='/tmp')
+                        tmp.write(briefing_content)
+                        tmp.close()
+                        briefing_path = tmp.name
+
+                    result = run_briefing(
+                        briefing_path=briefing_path,
+                        project_dir=project_dir,
+                        verbose=False,
+                    )
+
+                    if briefing_content:
+                        try:
+                            os.unlink(briefing_path)
+                        except OSError:
+                            pass
+
+                    evt_queue.put({"type": "tool_result", "tool": "run_briefing",
+                                   "result": "Briefing: {}/{} pasos".format(result.get('steps_completed', 0), result.get('steps_total', 0)),
+                                   "is_error": not result.get('all_passed', False)})
+                    evt_queue.put({"__done__": True, "result": result})
+                else:
+                    result = run_agent_loop(
+                        goal=goal,
+                        mode="goal",
+                        project_dir=project_dir,
+                        strategy="tiered",
+                        max_iterations=999,
+                        max_cost=15.0,
+                        autonomous=True,
+                        verbose=False,
+                        session_id=session_id,
+                        on_progress=on_progress,
+                    )
+
+                    # Push tool calls from log
+                    for entry in result.get("log", []):
+                        if isinstance(entry, dict):
+                            tool = entry.get("tool", "")
+                            is_err = entry.get("is_error", False)
+                            evt_queue.put({"type": "tool_call", "tool": tool, "args": {}})
+                            evt_queue.put({"type": "tool_result", "tool": tool,
+                                           "result": "OK" if not is_err else "ERROR", "is_error": is_err})
+
+                    evt_queue.put({"__done__": True, "result": result})
+
+            except Exception as e:
+                evt_queue.put({"__error__": True, "message": str(e)})
+
+        # Start agent loop in background thread
+        thread = threading.Thread(target=run_in_thread, daemon=True)
+        thread.start()
+
+        # Stream events from queue with keepalive heartbeats
+        while True:
+            try:
+                evt = evt_queue.get(timeout=3)
+            except _queue.Empty:
+                # Keepalive to prevent proxy/browser timeout
+                elapsed = int(_time.time() - start)
+                yield f": keepalive {elapsed}s\n\n"
+                if elapsed > 600:
+                    yield f"data: {json.dumps({'type': 'error', 'message': 'Timeout: ejecucion excedio 10 minutos'}, ensure_ascii=False)}\n\n"
+                    break
+                continue
+
+            if evt.get("__done__"):
+                final_result = evt["result"]
+                try:
+                    reporter = Reporter()
+                    summary = reporter.summarize_session(final_result) if isinstance(final_result, dict) and "stop_reason" in final_result else str(final_result)
+                except Exception:
+                    summary = str(final_result.get("result", "Completado")) if isinstance(final_result, dict) else str(final_result)
+
+                elapsed_ms = int((_time.time() - start) * 1000)
+                cost = final_result.get("cost_usd", final_result.get("total_cost", 0)) if isinstance(final_result, dict) else 0
+
+                yield f"data: {json.dumps({'type': 'done', 'summary': summary, 'total_ms': elapsed_ms, 'total_cost_usd': cost, 'session_id': session_id}, ensure_ascii=False)}\n\n"
+
+                _running_sessions[session_id] = {
+                    "status": "completed" if (isinstance(final_result, dict) and final_result.get("stop_reason") == "DONE") else "done",
+                    "result": final_result if isinstance(final_result, dict) else {"result": str(final_result)},
+                }
+                break
+
+            elif evt.get("__error__"):
+                yield f"data: {json.dumps({'type': 'error', 'message': evt['message']}, ensure_ascii=False)}\n\n"
+                break
+
+            else:
+                yield f"data: {json.dumps(evt, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
 @app.get("/code-os/session/{session_id}")
@@ -178,6 +336,101 @@ async def list_sessions(project: str = "", limit: int = 10):
         sessions = result if isinstance(result, list) else []
 
     return {"sessions": sessions}
+
+
+@app.get("/code-os/health")
+async def code_os_health():
+    """Proactive health check for CEO dashboard."""
+    import datetime
+    try:
+        from core.proactive import health_check
+        alerts = health_check()
+    except Exception as e:
+        alerts = [{"nivel": "error", "mensaje": f"Health check failed: {e}", "accion_sugerida": "Verificar conexion DB"}]
+    return {
+        "alerts": alerts,
+        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+    }
+
+
+@app.get("/code-os/status")
+async def code_os_status():
+    """Code OS system status for CEO dashboard."""
+    from core.api import get_tier_config
+    try:
+        from core.proactive import health_check
+        health = health_check()
+    except Exception:
+        health = []
+
+    tc = get_tier_config()
+    modelos = [v for k, v in tc.items() if isinstance(v, str)]
+
+    try:
+        from tools import create_default_registry
+        import tempfile
+        reg = create_default_registry(tempfile.gettempdir())
+        tools_count = reg.tool_count()
+    except Exception:
+        tools_count = 63
+
+    # Last session
+    last_session = None
+    if _running_sessions:
+        last_key = list(_running_sessions.keys())[-1]
+        last_session = {"id": last_key, "status": _running_sessions[last_key].get("status")}
+
+    # Advanced module states (Fase 3)
+    circuit_breaker_state = {}
+    try:
+        from core.monitoring import get_circuit_breaker
+        circuit_breaker_state = get_circuit_breaker().get_estados()
+    except Exception:
+        pass
+
+    monitor_state = {}
+    try:
+        from core.monitoring import get_monitor
+        mon = get_monitor()
+        monitor_state = {
+            "slos": mon.check_slos(),
+            "budget": mon.check_budget(),
+            "dashboard": mon.get_dashboard(),
+        }
+    except Exception:
+        pass
+
+    criticality_state = {}
+    try:
+        from core.criticality_engine import get_criticality_engine
+        crit = get_criticality_engine()
+        criticality_state = {
+            "T": crit.T,
+            "T_c": crit.T_c,
+            "ajuste_manifold": crit.ajustar_manifold_temperatura(),
+        }
+    except Exception:
+        pass
+
+    flywheel_state = {}
+    try:
+        from core.flywheel import check_promotion
+        promo = check_promotion()
+        flywheel_state = {"pending_promotion": promo}
+    except Exception:
+        pass
+
+    return {
+        "version": "5.0",
+        "modelos_activos": modelos,
+        "tools_count": tools_count,
+        "last_session": last_session,
+        "health": health,
+        "circuit_breaker": circuit_breaker_state,
+        "monitor": monitor_state,
+        "criticality": criticality_state,
+        "flywheel": flywheel_state,
+    }
 
 
 @app.get("/ceo")
@@ -1807,9 +2060,21 @@ async def iniciar_scheduler_gestor():
         print(f"[SN-10] Error iniciando scheduler: {e}")
 
 
+@app.on_event("startup")
+async def iniciar_watchdog():
+    """Start system watchdog as background task."""
+    try:
+        from core.watchdog import get_watchdog
+        watchdog = get_watchdog()
+        watchdog._task = asyncio.create_task(watchdog.loop(delay_inicial_s=120))
+        print("[WATCHDOG] System watchdog iniciado (primer check en 120s)")
+    except Exception as e:
+        print(f"[WATCHDOG] Error iniciando watchdog: {e}")
+
+
 @app.on_event("shutdown")
 async def detener_scheduler_gestor():
-    """Detener scheduler al apagar la app."""
+    """Detener scheduler y watchdog al apagar la app."""
     try:
         from core.gestor_scheduler import get_scheduler
         scheduler = get_scheduler()
@@ -1817,6 +2082,38 @@ async def detener_scheduler_gestor():
         print("[SN-10] Gestor Scheduler detenido")
     except Exception:
         pass
+    try:
+        from core.watchdog import get_watchdog
+        get_watchdog().stop()
+        print("[WATCHDOG] Watchdog detenido")
+    except Exception:
+        pass
+
+
+@app.get("/watchdog/status")
+async def watchdog_status():
+    """Estado del watchdog de salud del sistema."""
+    from core.watchdog import get_watchdog
+    return get_watchdog().get_status()
+
+
+@app.post("/watchdog/check")
+async def watchdog_check_now():
+    """Ejecutar un health check manual ahora."""
+    from core.watchdog import get_watchdog
+    w = get_watchdog()
+    checks = w.run_checks()
+    errors = [c for c in checks if c.status in ("error", "warning")]
+    fixes = w.auto_remediate(checks) if errors else []
+    routed = w.route_to_codeos(checks) if errors else {"routed": 0}
+    return {
+        "status": "ok",
+        "checks": [c.to_dict() for c in checks],
+        "errors": len(errors),
+        "auto_fixed": len(fixes),
+        "fixes": fixes,
+        "routed_to_codeos": routed,
+    }
 
 
 @app.get("/gestor/estado")
@@ -1864,6 +2161,39 @@ async def gestor_autopoiesis():
                 "check_tasa": "La tasa de cierre esta subiendo?",
                 "check_datapoints": "Los datapoints estan creciendo?",
             },
+        }
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+@app.post("/gestor/autopoiesis/reset-alertas")
+async def gestor_autopoiesis_reset_alertas():
+    """Consumir alertas autopoiesis_roto stale y re-verificar ciclo."""
+    try:
+        from core.db_pool import get_conn, put_conn
+        conn = get_conn()
+        if not conn:
+            return {"status": "error", "error": "no_db"}
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE marcas_estigmergicas
+                    SET consumida = true
+                    WHERE consumida = false AND tipo = 'alerta'
+                      AND contenido->>'tipo' = 'autopoiesis_roto'
+                    RETURNING id
+                """)
+                consumed = cur.fetchall()
+            conn.commit()
+        finally:
+            put_conn(conn)
+
+        from core.gestor_scheduler import get_scheduler
+        auto = get_scheduler().check_autopoiesis()
+        return {
+            "status": "ok",
+            "alertas_consumidas": len(consumed),
+            "autopoiesis": auto,
         }
     except Exception as e:
         return {"status": "error", "error": str(e)}
@@ -2610,6 +2940,287 @@ def _parsear_respuesta_copiloto(texto: str) -> dict:
         resultado['explicacion'] = texto.strip()
 
     return resultado
+
+
+# ============================================================
+# STEP 15: Chief API endpoints
+# ============================================================
+
+@app.post("/chief/execute")
+async def chief_execute(request: Request):
+    """Execute Chief design flow — SSE stream."""
+    body = await request.json()
+    domain = body.get("domain", "")
+    focus = body.get("focus")
+    verify_tier = body.get("verify_tier", "standard")
+
+    if not domain:
+        raise HTTPException(400, "domain is required")
+
+    async def stream():
+        try:
+            from core.chief import Chief, ChiefConversation
+            chief = Chief()
+            conv = ChiefConversation(chief)
+
+            yield f"data: {json.dumps({'type': 'status', 'message': 'Analyzing domain...'})}\n\n"
+
+            # Initial analysis
+            result = conv.process_message(domain)
+            yield f"data: {json.dumps({'type': 'analysis', 'data': result})}\n\n"
+
+            # If focus provided, continue
+            if focus and conv.state != "done":
+                yield f"data: {json.dumps({'type': 'status', 'message': f'Designing with focus: {focus}...'})}\n\n"
+                result = conv.process_message(focus)
+                yield f"data: {json.dumps({'type': 'design_result', 'data': result}, default=str)}\n\n"
+
+            yield f"data: {json.dumps({'type': 'done', 'state': conv.state})}\n\n"
+        except Exception as e:
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+
+    return StreamingResponse(stream(), media_type="text/event-stream")
+
+
+@app.get("/chief/status/{consumidor}")
+async def chief_status(consumidor: str):
+    """Get domain status via Chief."""
+    try:
+        from core.chief import Chief
+        chief = Chief()
+        return chief.get_domain_status(consumidor)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/chief/suggest/{consumidor}")
+async def chief_suggest(consumidor: str):
+    """Suggest next step for an exocortex."""
+    try:
+        from core.chief import Chief
+        chief = Chief()
+        return chief.suggest_next_step(consumidor)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/chief/designs")
+async def chief_designs():
+    """List recent designs from design_registry."""
+    try:
+        from core.db_pool import get_conn, put_conn
+        conn = get_conn()
+        if not conn:
+            return {"designs": []}
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT id, consumidor, domain, focus, status,
+                           total_cost_usd, created_at
+                    FROM design_registry
+                    ORDER BY created_at DESC
+                    LIMIT 20
+                """)
+                return {
+                    "designs": [
+                        {
+                            "id": str(r[0]),
+                            "consumidor": r[1],
+                            "domain": r[2],
+                            "focus": r[3],
+                            "status": r[4],
+                            "cost": r[5],
+                            "created_at": r[6].isoformat() if r[6] else None,
+                        }
+                        for r in cur.fetchall()
+                    ]
+                }
+        finally:
+            put_conn(conn)
+    except Exception as e:
+        return {"designs": [], "error": str(e)}
+
+
+# ============================================================
+# STEP 19: Self-healing API endpoints
+# ============================================================
+
+@app.get("/self-healing/status")
+async def self_healing_status():
+    """Self-healing system status: last cycle info and summary."""
+    try:
+        from core.self_healing import get_self_healing
+        sh = get_self_healing()
+        queue = sh.get_queue()
+        return {
+            "status": "active",
+            "pending_count": len(queue),
+            "last_cycle": getattr(sh, 'last_cycle', None),
+            "fontaneria_ejecutadas": getattr(sh, 'fontaneria_count', 0),
+        }
+    except Exception as e:
+        return {"status": "unavailable", "error": str(e)}
+
+
+@app.get("/self-healing/pending")
+async def self_healing_pending():
+    """Get pending improvements (alias for /self-healing/queue with enriched data)."""
+    try:
+        from core.self_healing import get_self_healing
+        sh = get_self_healing()
+        queue = sh.get_queue()
+        return {"improvements": queue, "count": len(queue)}
+    except Exception as e:
+        return {"improvements": [], "count": 0, "error": str(e)}
+
+
+@app.post("/self-healing/run")
+async def self_healing_run():
+    """Run one self-healing cycle."""
+    try:
+        from core.self_healing import get_self_healing
+        sh = get_self_healing()
+        result = sh.run_cycle()
+        return result
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.get("/self-healing/queue")
+async def self_healing_queue():
+    """Get pending architectural improvements queue."""
+    try:
+        from core.self_healing import get_self_healing
+        sh = get_self_healing()
+        return {"queue": sh.get_queue()}
+    except Exception as e:
+        return {"queue": [], "error": str(e)}
+
+
+@app.post("/self-healing/approve/{improvement_id}")
+async def self_healing_approve(improvement_id: str):
+    """CEO approves an architectural improvement."""
+    try:
+        from core.self_healing import get_self_healing
+        sh = get_self_healing()
+        return sh.approve_improvement(improvement_id)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.post("/self-healing/reject/{improvement_id}")
+async def self_healing_reject(improvement_id: str):
+    """CEO rejects an architectural improvement."""
+    try:
+        from core.self_healing import get_self_healing
+        sh = get_self_healing()
+        return sh.reject_improvement(improvement_id)
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# ──────────────────────────────────────────────
+# B3: Matriz 3L x 7F endpoints
+# ──────────────────────────────────────────────
+
+@app.get("/matriz/estado")
+async def matriz_estado():
+    """Estado completo de la Matriz 3Lx7F: 21 celdas + resumen por lente/funcion + top gaps."""
+    from core.db_pool import get_conn, put_conn
+    conn = get_conn()
+    if not conn:
+        return {"error": "No DB"}
+    try:
+        import psycopg2.extras
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            # 21 celdas
+            cur.execute("SELECT * FROM celdas_matriz ORDER BY funcion, lente")
+            celdas = cur.fetchall()
+
+            # Por lente (3 rows)
+            cur.execute("SELECT * FROM matriz_por_lente")
+            por_lente = cur.fetchall()
+
+            # Por funcion (7 rows)
+            cur.execute("SELECT * FROM matriz_por_funcion")
+            por_funcion = cur.fetchall()
+
+            # Top 5 gaps
+            cur.execute("""
+                SELECT id, lente, funcion, gap, grado_actual, n_datapoints
+                FROM celdas_matriz
+                ORDER BY gap DESC
+                LIMIT 5
+            """)
+            top_gaps = cur.fetchall()
+
+        return {
+            "celdas": celdas,
+            "por_lente": por_lente,
+            "por_funcion": por_funcion,
+            "top_gaps": top_gaps,
+        }
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        put_conn(conn)
+
+
+@app.get("/matriz/termometro")
+async def matriz_termometro(consumidor: str = ""):
+    """Termometro de la Matriz: 21 celdas con color (rojo/naranja/amarillo/verde).
+
+    Sin consumidor: lee vista matriz_completa (sistema).
+    Con consumidor: LEFT JOIN datapoints por consumidor, recalcula gap/color per-consumer.
+    """
+    from core.db_pool import get_conn, put_conn
+    conn = get_conn()
+    if not conn:
+        return {"error": "No DB"}
+    try:
+        import psycopg2.extras
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            if not consumidor:
+                # Sistema: vista precalculada
+                cur.execute("SELECT * FROM matriz_completa")
+                celdas = cur.fetchall()
+            else:
+                # Per-consumer: recalcular gap/color
+                cur.execute("""
+                    SELECT
+                        cm.id, cm.lente, cm.funcion,
+                        cm.grado_actual AS grado_actual_sistema,
+                        cm.grado_objetivo, cm.gap AS gap_sistema,
+                        COALESCE(dp.n, 0) AS n_datapoints_consumidor,
+                        COALESCE(dp.avg_gap_post, cm.gap) AS gap,
+                        CASE
+                            WHEN COALESCE(dp.avg_gap_post, cm.gap) >= 0.6 THEN 'rojo'
+                            WHEN COALESCE(dp.avg_gap_post, cm.gap) >= 0.3 THEN 'naranja'
+                            WHEN COALESCE(dp.avg_gap_post, cm.gap) >= 0.1 THEN 'amarillo'
+                            ELSE 'verde'
+                        END AS color_termometro
+                    FROM celdas_matriz cm
+                    LEFT JOIN (
+                        SELECT celda_objetivo,
+                               COUNT(*) AS n,
+                               AVG(gap_post) AS avg_gap_post
+                        FROM datapoints_efectividad
+                        WHERE consumidor = %s
+                          AND celda_objetivo IS NOT NULL
+                        GROUP BY celda_objetivo
+                    ) dp ON dp.celda_objetivo = cm.id
+                    ORDER BY cm.funcion, cm.lente
+                """, [consumidor])
+                celdas = cur.fetchall()
+
+        return {
+            "consumidor": consumidor or "sistema",
+            "celdas": celdas,
+        }
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        put_conn(conn)
 
 
 if __name__ == "__main__":

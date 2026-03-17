@@ -9,10 +9,13 @@ from typing import Optional
 from .api import (
     TIER_CONFIG, OPENROUTER_KEY, call_with_retry, extract_response,
 )
-from .budget import Budget, StuckDetector
+from .budget import Budget, StuckDetector, ProgressTracker
+from .recovery import RecoveryEngine
 from .router import TieredRouter, SmartRouter, DualModelRouter, ReasoningCouncil, detect_mode, MODE_CONFIGS
 from .context import ContextManager
 from .sandwich import pre_validate_tool_call, post_validate_result, validate_code_output, post_session_summary
+from .drift_guard import check_drift, check_file_drift
+from .monitoring import get_circuit_breaker, get_monitor
 
 # Tool evolution telemetry (lazy)
 _tool_evo = None
@@ -51,10 +54,25 @@ Tienes 63 tools. Usa mochila("herramientas") para ver el catálogo completo.
 Esenciales: read_file, write_file, edit_file, db_query, db_insert, run_command, remember, mochila.
 Usa mochila("errores") si algo falla. Usa mochila("reglas") si dudas del protocolo.
 
-CHUNK 4 — PROTOCOLO:
-1. Entiende → 2. Investiga (@project/, remember, db_query) → 3. Implementa → 4. Verifica → 5. Reporta
-Antes de finish(): ejecuta TODAS las verificaciones. RESUMEN FINAL al CEO con métricas.
-Leer ≠ ejecutar. Describir ≠ hacer. Cada INSERT se ejecuta. Cada archivo se crea con @project/.
+CHUNK 4 — PROTOCOLO AUTONOMO:
+1. Lee (read_file, db_query, http_request) → 2. Entiende (qué está mal) → 3. Arregla (edit_file, db_insert) → 4. Verifica (re-lee, re-ejecuta) → 5. Siguiente (¿hay más? → paso 1) → 6. Reporta lo que hiciste
+REGLA CARDINAL: Si detectas un problema y PUEDES arreglarlo → ARRÉGLALO. No describas lo que "se podría hacer". HAZLO.
+Antes de finish(): verifica que TODOS los arreglos funcionan. Si queda algo roto → vuelve al paso 1.
+Leer ≠ ejecutar. Describir ≠ hacer. "Se podría..." ≠ aceptable. Cada INSERT se ejecuta. Cada fix se aplica.
+SIEMPRE lee el archivo/dato ANTES de tocarlo. Cambios quirúrgicos con edit_file, no reescrituras.
+Tras cada fix → remember_save() el hallazgo + solución para no repetir trabajo.
+
+CHUNK 5 — VERIFICACION DE ENDPOINTS/DASHBOARD:
+Cuando te pidan verificar el dashboard, endpoints o estado del sistema:
+- Usa http_request() para llamar a los endpoints DIRECTAMENTE. NO explores archivos del código.
+- Endpoints clave del CEO dashboard:
+  /health, /criticality/temperatura, /criticality/avalanchas, /gestor/autopoiesis,
+  /gestor/flywheel, /motor/señales, /metacognitive/kalman, /predictive/trayectoria,
+  /game-theory/estado, /costes/resumen, /ceo/advisor, /watchdog/status,
+  /propiocepcion, /senales
+- Base URL: http://localhost:8080 (llamadas internas)
+- Usa db_query() para verificar datos directamente en la DB.
+- Sé EFICIENTE: ve directo a los endpoints, no pierdas iteraciones explorando archivos.
 
 {context_section}
 """
@@ -78,7 +96,7 @@ def run_agent_loop(
     project_dir: str = ".",
     strategy: str = "tiered",
     forced_model: Optional[str] = None,
-    max_iterations: int = 80,
+    max_iterations: int = 999,
     max_cost: float = 15.0,
     sandbox_dir: Optional[str] = None,
     verbose: bool = False,
@@ -145,6 +163,8 @@ def run_agent_loop(
     council = ReasoningCouncil()
     budget = Budget(max_iterations=max_iterations, max_cost_usd=max_cost)
     stuck = StuckDetector()
+    progress = ProgressTracker(goal)
+    recovery = RecoveryEngine()
     ctx_mgr = ContextManager()
 
     # Get tool schemas
@@ -177,6 +197,16 @@ def run_agent_loop(
     stop_reason = None
     final_result = None
     files_changed = set()
+    _finish_nudged = False  # Finish gate: nudge once before accepting early finish
+
+    # Metacognitive FOK: estimate confidence BEFORE execution
+    fok_result = {}
+    try:
+        from .metacognitive import get_metacognitive
+        meta = get_metacognitive()
+        fok_result = meta.feeling_of_knowing(goal, 'CodeOS_execution')
+    except Exception:
+        fok_result = {'fok': 0.5, 'error': 'fok_unavailable'}
 
     # Cache Tier 0 — lookup puro, sin LLM (pattern 60661)
     try:
@@ -252,19 +282,32 @@ def run_agent_loop(
             on_progress(iteration + 1, max_iterations,
                         f"iter {iteration+1}, model={model.split('/')[-1]}")
 
-        # Run pre_tool hooks
+        # Run pre_iteration hooks (drift guard injects warnings/abort here)
+        pre_iter_ctx = {"iteration": iteration, "model": model, "history": history}
         if hooks:
-            hooks.run("pre_iteration", {"iteration": iteration, "model": model})
+            hooks.run("pre_iteration", pre_iter_ctx)
+        if pre_iter_ctx.get("_drift_abort"):
+            stop_reason = "DRIFT_ABORT"
+            break
+
+        # Circuit Breaker: check model availability before calling
+        breaker = get_circuit_breaker()
+        if not breaker.puede_llamar(model):
+            model = breaker.get_modelo_fallback(model)
 
         # Call model
         try:
             api_resp = call_with_retry(history, model, tools=tool_schemas)
+            breaker.registrar_exito(model)
         except RuntimeError as e:
+            breaker.registrar_fallo(model)
             try:
-                fallback = TIER_CONFIG.get("worker_budget", TIER_CONFIG.get("tier2b", "xiaomi/mimo-v2-flash"))
+                fallback = TIER_CONFIG.get("worker_budget", TIER_CONFIG.get("tier2b", "deepseek/deepseek-v3.2"))
                 api_resp = call_with_retry(history, fallback, tools=tool_schemas, max_retries=1)
+                breaker.registrar_exito(fallback)
                 model = fallback
             except RuntimeError:
+                breaker.registrar_fallo(fallback)
                 stop_reason = f"API_FAILURE: {e}"
                 break
 
@@ -327,20 +370,81 @@ def run_agent_loop(
             if hooks:
                 hooks.run("pre_tool", {"tool": tool_name, "args": tool_args})
 
-            # Handle finish
+            # Handle finish — with goal verification (CRITERIO check)
             if tool_name == "finish":
                 final_result = tool_args.get("result", "Task completed")
-                history.append({"role": "tool", "tool_call_id": tc_id, "content": final_result})
-                stop_reason = "DONE"
-                if verbose:
-                    print(f" -> finish: {final_result[:80]}")
-                if db:
-                    db.log_iteration(session_id, iteration, model, tool_called="finish",
-                                   tool_args=tool_args, tool_result=final_result,
-                                   tokens_in=usage.get("prompt_tokens", 0),
-                                   tokens_out=usage.get("completion_tokens", 0),
-                                   duration_ms=iter_ms)
-                break
+
+                # Goal verification: extract and run CRITERIO command
+                finish_accepted = True
+                if "CRITERIO:" in goal:
+                    import re as _re
+                    criterio_match = _re.search(r'CRITERIO:\s*(.+)', goal)
+                    if criterio_match:
+                        criterio_cmd = criterio_match.group(1).strip()
+                        cmd_prefixes = ("python3", "grep", "curl", "db_query", "cat", "ls", "test")
+                        if any(criterio_cmd.startswith(p) for p in cmd_prefixes):
+                            try:
+                                check_result, check_error = registry.execute("run_command", {"command": criterio_cmd})
+                                if check_error:
+                                    finish_accepted = False
+                                    history.append({"role": "tool", "tool_call_id": tc_id,
+                                                    "content": f"Finish rejected: criterio no cumplido. "
+                                                               f"Resultado del check: {check_result}. Reintenta."})
+                                    if verbose:
+                                        print(f" -> finish REJECTED: criterio failed")
+                            except Exception:
+                                pass  # If check fails to run, accept finish
+
+                # Finish gate: nudge once if >20% iterations remain
+                if finish_accepted and not _finish_nudged:
+                    remaining_ratio = (max_iterations - iteration) / max_iterations
+                    if remaining_ratio > 0.2:
+                        _finish_nudged = True
+                        finish_accepted = False
+                        history.append({"role": "tool", "tool_call_id": tc_id,
+                                        "content": "⚠️ VERIFICACIÓN: ¿Verificaste TODO? ¿Hay más que arreglar? "
+                                                   "Si todo está OK → finish() de nuevo. Si no → sigue arreglando."})
+                        if verbose:
+                            print(f" -> finish NUDGED: >20% iterations remain")
+
+                if finish_accepted:
+                    history.append({"role": "tool", "tool_call_id": tc_id, "content": final_result})
+                    stop_reason = "DONE"
+                    if verbose:
+                        print(f" -> finish: {final_result[:80]}")
+                    if db:
+                        db.log_iteration(session_id, iteration, model, tool_called="finish",
+                                       tool_args=tool_args, tool_result=final_result,
+                                       tokens_in=usage.get("prompt_tokens", 0),
+                                       tokens_out=usage.get("completion_tokens", 0),
+                                       duration_ms=iter_ms)
+                    break
+                else:
+                    continue
+
+            # DRIFT DETECTION — file path check for write/edit tools
+            if tool_name in ("write_file", "edit_file", "create_tool"):
+                file_arg = tool_args.get("path", "")
+                file_drift = check_file_drift(file_arg, project_dir)
+                if file_drift:
+                    history.append({
+                        "role": "tool", "tool_call_id": tc_id,
+                        "content": f"DRIFT DETECTED: {file_drift}. "
+                                   f"Stop and verify your working directory.",
+                    })
+                    stuck.record_no_tool()
+                    continue
+
+            # DRIFT DETECTION — content check
+            drift_reason = check_drift(content or "", project_dir)
+            if drift_reason:
+                history.append({
+                    "role": "user",
+                    "content": f"DRIFT DETECTED: {drift_reason}. "
+                               f"Refocus on the current step.",
+                })
+                router.on_error(drift_reason)
+                continue
 
             # SANDWICH PRE-VALIDATION (deterministic layer before LLM tool call)
             is_valid, pre_error = pre_validate_tool_call(tool_name, tool_args, registry)
@@ -385,6 +489,10 @@ def run_agent_loop(
                 print(f" -> {tool_name}({status}): {result_str[:60].replace(chr(10), ' ')}")
 
             stuck.record_action(tool_name, tool_args, result_str, is_error)
+            progress.record_action(tool_name, result_str, is_error)
+            if progress.stagnant():
+                history.append({"role": "user", "content":
+                    "WARNING: You are repeating the same actions. Try a different approach."})
 
             # Notify dual-model router of tool use (cerebro/trabajador switching)
             if hasattr(router, 'record_tool_use'):
@@ -426,24 +534,60 @@ def run_agent_loop(
                         )
                     except Exception:
                         pass
+
+                # Recovery engine: decide action based on error context
+                last_write = recovery.last_writes[-1][1] if recovery.last_writes else None
+                decision = recovery.decide(
+                    stuck.error_history, tool_name, goal, last_write=last_write,
+                )
+                action = decision["action"]
+                if action == "retry_different" and decision.get("hint"):
+                    history.append({"role": "user", "content":
+                        f"[RECOVERY] {decision['reason']} Hint: {decision['hint']}"})
+                elif action == "escalate":
+                    router.on_error(f"RECOVERY_ESCALATE: {decision['reason']}")
+                elif action == "rollback" and recovery._git_checkpoints:
+                    rolled = recovery.rollback(sandbox_dir)
+                    if rolled:
+                        history.append({"role": "user", "content":
+                            f"[RECOVERY] Rolled back to checkpoint {rolled[:8]}. "
+                            f"Reason: {decision['reason']}. Try a different approach."})
+                elif action == "decompose":
+                    if recovery.should_decompose(stuck.error_history, stuck.iteration, max_iterations):
+                        sub_goals = recovery.decompose(goal, result_str)
+                        decompose_msg = "[RECOVERY] Decomposing into sub-goals:\n"
+                        for i, sg in enumerate(sub_goals, 1):
+                            decompose_msg += f"  {i}. {sg}\n"
+                        decompose_msg += "Start with sub-goal 1."
+                        history.append({"role": "user", "content": decompose_msg})
+                elif action == "skip":
+                    history.append({"role": "user", "content":
+                        f"[RECOVERY] Skipping: {decision['reason']}. Move to next step."})
+                # abort is handled by StuckDetector
+
             else:
                 router.on_success()
                 if tool_name == "run_command" and any(kw in result_str for kw in
                         ["FAILED", "failed", "Error", "AssertionError"]):
                     router.on_test_failure()
 
-            # Track file changes
+            # Track file changes + recovery write tracking
             if tool_name in ("write_file", "edit_file") and not is_error:
                 fpath = tool_args.get("path", "")
                 files_changed.add(fpath)
+                recovery.record_write(tool_name, fpath)
                 if db:
                     action = "create" if tool_name == "write_file" else "edit"
                     db.log_file_change(session_id, fpath, action, iter_n=iteration)
 
             # Run post_tool hooks
+            post_tool_ctx = {"tool": tool_name, "args": tool_args,
+                             "result": result_str, "is_error": is_error}
             if hooks:
-                hooks.run("post_tool", {"tool": tool_name, "args": tool_args,
-                                        "result": result_str, "is_error": is_error})
+                hooks.run("post_tool", post_tool_ctx)
+            # Record checkpoint hash from git_checkpoint_hook for rollback
+            if post_tool_ctx.get("_checkpoint_hash"):
+                recovery.record_checkpoint(post_tool_ctx["_checkpoint_hash"])
 
             # Log iteration
             if db:
@@ -458,6 +602,20 @@ def run_agent_loop(
                 "iter": iteration + 1, "tool": tool_name, "model": model,
                 "is_error": is_error, "tokens": usage.get("total_tokens", 0),
             })
+
+        # Monitor: register execution metrics at end of each iteration
+        try:
+            monitor = get_monitor()
+            monitor.registrar_ejecucion({
+                'latencia_total_s': (time.time() - iter_start),
+                'coste_total_usd': budget.cost_usd,
+                'error': stop_reason if stop_reason else None,
+                'modo': exec_mode,
+                'tier': getattr(router, '_phase', 'unknown'),
+                'n_inteligencias': len(tool_calls) if tool_calls else 0,
+            })
+        except Exception:
+            pass
 
         if stop_reason:
             break
@@ -492,23 +650,55 @@ def run_agent_loop(
     except Exception:
         pass  # Telemetria nunca debe romper la ejecucion
 
-    # Flywheel feedback (pattern 60668) — close the loop
+    # Metacognitive JOL: evaluate quality AFTER execution
+    jol_result = {}
     try:
-        from .flywheel import after_session
+        from .metacognitive import get_metacognitive
+        meta = get_metacognitive()
+        jol_result = meta.judgment_of_learning({
+            'tasa_cierre': 1.0 if stop_reason == "DONE" else 0.0,
+            'hallazgos': log,
+            'latencia_ms': int(total_time * 1000),
+            'coste_usd': budget.cost_usd,
+            'celda_objetivo': 'CodeOS_execution',
+        })
+    except Exception:
+        jol_result = {'jol': 0.5, 'error': 'jol_unavailable'}
+
+    # Flywheel feedback (pattern 60668) — close the loop
+    flywheel_promotion = None
+    try:
+        from .flywheel import after_session, check_promotion
         result_for_flywheel = {
             "stop_reason": stop_reason or "MAX_ITERATIONS",
             "iterations": stuck.iteration,
             "time_s": round(total_time, 1),
             "cost_usd": round(budget.cost_usd, 4),
             "model_used": router.select(),
+            "success": stop_reason == "DONE",
             "task_type": router.task_type if hasattr(router, 'task_type') else "unknown",
             "phase_info": router.get_phase_info() if hasattr(router, 'get_phase_info') else {},
+            "error_rate": progress.get_signal().get("error_rate", 0),
+            "mode": exec_mode,
             "log": log,
         }
         summary = post_session_summary(result_for_flywheel)
         after_session(summary)
+        flywheel_promotion = check_promotion()
     except Exception:
         pass  # Flywheel nunca debe romper la ejecución
+
+    # Auto-learning: persist successful sessions with file changes
+    if stop_reason == "DONE" and files_changed:
+        try:
+            from tools.remember import tool_remember_save
+            tool_remember_save(
+                title=f"session: {goal[:80]}",
+                content=f"Archivos: {', '.join(list(files_changed)[:10])}\nResultado: {(final_result or '')[:500]}",
+                category="session_log",
+            )
+        except Exception:
+            pass  # Auto-learning nunca debe romper la ejecución
 
     # Cache save — store successful short executions for Tier 0 (pattern 60661)
     if stop_reason == "DONE" and stuck.iteration <= 5:
@@ -536,6 +726,27 @@ def run_agent_loop(
     # Phase info from dual-model router
     phase_info = router.get_phase_info() if hasattr(router, 'get_phase_info') else {}
 
+    # Session diagnostics
+    diagnostics = {
+        "error_counts": dict(recovery.error_counts),
+        "total_errors": sum(recovery.error_counts.values()),
+        "recoveries_attempted": len(recovery.last_errors),
+        "rollbacks": len([c for c in recovery._git_checkpoints]),  # remaining checkpoints
+        "files_written": len(recovery.last_writes),
+        "stuck_checks": {
+            "loop_detected": stuck.detect_loop() is not None,
+            "regression_detected": stuck.detect_regression() is not None,
+        },
+        "progress": progress.get_signal(),
+        "circuit_breaker": get_circuit_breaker().get_estados(),
+        "monitor_slos": get_monitor().check_slos(),
+        "monitor_budget": get_monitor().check_budget(),
+        "metacognitive": {
+            "fok": fok_result,
+            "jol": jol_result,
+        },
+    }
+
     return {
         "session_id": session_id,
         "result": final_result,
@@ -550,5 +761,104 @@ def run_agent_loop(
         "task_type": router.task_type if hasattr(router, 'task_type') else "unknown",
         "compressions": ctx_mgr.compression_count,
         "phase_info": phase_info,
+        "diagnostics": diagnostics,
+        "flywheel_promotion": flywheel_promotion,
         "log": log,
     }
+
+
+# =====================================================
+# RUN BRIEFING — multi-step execution with fresh context
+# =====================================================
+
+def run_briefing(briefing_path: str, project_dir: str = ".",
+                 max_cost_per_step: float = 2.0,
+                 verbose: bool = False, db=None,
+                 verify_tier: str = "fast") -> dict:
+    """Execute a multi-step briefing. Each step = fresh context.
+
+    Args:
+        verify_tier: "fast" (deterministic), "standard" (+ Cogito), "deep" (+ panel)
+    """
+    from .briefing_parser import parse_briefing
+    from .drift_guard import reset_drift_state
+
+    briefing = parse_briefing(briefing_path)
+    results = []
+
+    # Initialize verifier
+    verifier = None
+    try:
+        from .verifier import Verifier
+        verifier = Verifier(verify_tier)
+    except Exception:
+        pass
+
+    for step in briefing.steps:
+        reset_drift_state()
+
+        goal = (
+            f"PASO {step.number}: {step.description}\n"
+            f"REPO: {step.repo_dir}\n"
+            f"ARCHIVOS: {', '.join(step.files)}\n"
+            f"INSTRUCCION:\n{step.instruction}\n"
+            f"CRITERIO: {step.success_criteria}"
+        )
+
+        result = run_agent_loop(
+            goal=goal,
+            mode="goal",
+            project_dir=step.repo_dir,
+            max_iterations=999,
+            max_cost=max_cost_per_step,
+            autonomous=True,
+            verbose=verbose,
+            db=db,
+        )
+
+        step_result = {
+            "step": step.number,
+            "description": step.description,
+            "status": result.get("stop_reason", "unknown"),
+            "iterations": result.get("iterations", 0),
+            "cost": result.get("cost_usd", 0),
+        }
+
+        # Verify step if verifier available
+        if verifier:
+            try:
+                verification = verifier.verify_step(step, result)
+                step_result["verification"] = verification
+                if not verification.get("passed") and verbose:
+                    print(f"  [VERIFIER] Step {step.number} verification failed: "
+                          f"{verification.get('issues', [])}")
+            except Exception:
+                pass
+
+        results.append(step_result)
+
+        if result.get("stop_reason") != "DONE":
+            results[-1]["error"] = result.get("result") or "Step did not complete"
+            break
+
+    all_passed = all(r["status"] == "DONE" for r in results) and len(results) == len(briefing.steps)
+
+    # Post-briefing verification
+    briefing_result = {
+        "briefing": briefing.title,
+        "steps_total": len(briefing.steps),
+        "steps_completed": len(results),
+        "all_passed": all_passed,
+        "results": results,
+        "total_cost": sum(r["cost"] for r in results),
+    }
+
+    briefing_verification = None
+    if verifier:
+        try:
+            briefing_verification = verifier.verify_briefing(briefing_result, {})
+        except Exception:
+            pass
+
+    briefing_result["verification"] = briefing_verification
+    return briefing_result

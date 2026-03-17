@@ -11,32 +11,40 @@ from datetime import datetime, timezone
 
 # Hardcoded fallback (used if DB unavailable)
 FALLBACK_TIER_CONFIG = {
-    "cerebro":       "mistralai/devstral-2512",
-    "worker":        "stepfun/step-3.5-flash",
-    "worker_budget": "xiaomi/mimo-v2-flash",
-    "evaluador":     "deepcogito/cogito-v2.1-671b",
-    "swarm":         "openai/gpt-4o-mini",
-    "compress":      "xiaomi/mimo-v2-flash",
-    "fast":          "moonshotai/kimi-k2.5",
+    "cerebro":       "qwen/qwen3-coder",               # Agent RL, SOTA tool-use — decide y encadena
+    "worker":        "minimax/minimax-m2.5",            # 80.2% SWE-bench — arregla en menos iters
+    "worker_budget": "deepseek/deepseek-v3.2",          # fallback para tareas simples
+    "evaluador":     "z-ai/glm-5",                     # #1 Arena (1451 ELO) — mejor juicio
+    "swarm":         "deepseek/deepseek-v3.2",          # exploradores (volumen)
+    "compress":      "deepseek/deepseek-v3.2",          # compresión de contexto
+    "fast":          "deepseek/deepseek-v3.2",          # fast path
     # Legacy aliases
-    "orchestrator":  "mistralai/devstral-2512",
-    "synthesis":     "deepcogito/cogito-v2.1-671b",
+    "orchestrator":  "qwen/qwen3-coder",
+    "synthesis":     "z-ai/glm-5",
 }
 
 FALLBACK_PRICING = {
+    # Current stack (MAX ROI)
+    "qwen/qwen3-coder": {"input": 0.22, "output": 1.00},
+    "minimax/minimax-m2.5": {"input": 0.25, "output": 1.20},
+    "z-ai/glm-5": {"input": 0.72, "output": 2.30},
+    "deepseek/deepseek-v3.2": {"input": 0.26, "output": 0.38},
+    # Anthropic
     "claude-sonnet-4-6": {"input": 3.00, "output": 15.00},
     "claude-opus-4-6": {"input": 5.00, "output": 25.00},
-    "minimax/minimax-m2.5": {"input": 0.27, "output": 0.95},
+    # Other providers
     "google/gemini-3.1-pro": {"input": 2.00, "output": 12.00},
     "google/gemini-2.5-flash": {"input": 0.30, "output": 2.50},
     "openai/gpt-4.1-nano": {"input": 0.10, "output": 0.40},
     "openai/gpt-5.4": {"input": 2.50, "output": 15.00},
-    "qwen/qwen3-coder-next": {"input": 0.00, "output": 0.00},
-    "deepseek/deepseek-v3.2": {"input": 0.28, "output": 0.42},
-    "mistralai/devstral-small": {"input": 0.10, "output": 0.30},
-    "mistralai/devstral-2512": {"input": 0.50, "output": 2.00},
     "z-ai/glm-4.7": {"input": 0.38, "output": 1.98},
     "moonshotai/kimi-k2.5": {"input": 0.45, "output": 2.20},
+    # Legacy (kept for compatibility)
+    "mistralai/devstral-2512": {"input": 0.50, "output": 2.00},
+    "mistralai/devstral-small": {"input": 0.10, "output": 0.30},
+    "stepfun/step-3.5-flash": {"input": 1.00, "output": 3.80},
+    "xiaomi/mimo-v2-flash": {"input": 0.10, "output": 0.28},
+    "deepcogito/cogito-v2.1-671b": {"input": 0.50, "output": 5.00},
 }
 
 # Models that use Anthropic API directly (not OpenRouter)
