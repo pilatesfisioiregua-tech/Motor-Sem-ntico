@@ -190,8 +190,8 @@ class MotorVN:
                             return (row[0], 'config_modelos') if return_via else row[0]
                 finally:
                     put_conn(conn)
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:motor_vn._seleccionar_modelo.config_db] {type(_e).__name__}: {_e}")
 
         # 2. ModelObservatory (Code OS registry)
         try:
@@ -210,8 +210,8 @@ class MotorVN:
             model = obs.get_model_for_tier(obs_tier)
             if model:
                 return (model, 'observatory') if return_via else model
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:motor_vn._seleccionar_modelo.observatory] {type(_e).__name__}: {_e}")
 
         # 3. Fallback
         fallback = 'deepseek/deepseek-chat-v3-0324'
@@ -290,6 +290,8 @@ class MotorVN:
 
         # ===== PERSISTIR PROGRAMA COMPILADO =====
         programa_db_id = self._persistir_programa(programa_dict, gradientes, consumidor, modo)
+        if programa_db_id is None:
+            print(f"[WARN:motor_vn] _persistir_programa retornó None — feedback loop desconectado para {consumidor}_{modo}")
 
         # ===== FASE B — EJECUCION (estocastica, con LLM) =====
         resultado = await self._fase_ejecucion(programa, input_texto)
@@ -318,8 +320,8 @@ class MotorVN:
                     result=resultado.get('sintesis', ''),
                     success=len(resultado.get('hallazgos', [])) > 0,
                 )
-            except Exception:
-                pass
+            except Exception as _e:
+                print(f"[WARN:motor_vn.ejecutar.cache_save] {type(_e).__name__}: {_e}")
 
         elapsed = round(time.time() - t0, 2)
 
@@ -350,8 +352,8 @@ class MotorVN:
                 'caso_id': caso_id,
                 'modo': modo,
             })
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:motor_vn.ejecutar.telemetria] {type(_e).__name__}: {_e}")
 
         return {
             'caso_id': caso_id,
@@ -479,8 +481,8 @@ class MotorVN:
                     'error_rate': 0 if has_hallazgos else 1,
                     'mode': programa.modo,
                 })
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:motor_vn._flywheel_update] {type(_e).__name__}: {_e}")
 
     # =====================================================
     # FASE A — COMPILACION (determinista, $0)
@@ -602,8 +604,8 @@ class MotorVN:
             ]
             if len(outputs_for_gt) >= 2:
                 game_theory_result = gt.analizar_composicion(outputs_for_gt)
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:motor_vn.game_theory] {type(_e).__name__}: {_e}")
 
         # Step 5c: InformationLayer — detect redundancy between INTs
         info_layer_result = {}
@@ -622,8 +624,8 @@ class MotorVN:
             ]
             if len(outputs_for_ib) >= 2:
                 info_layer_result = information_bottleneck(outputs_for_ib)
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:motor_vn.info_bottleneck] {type(_e).__name__}: {_e}")
 
         # Step 6: Integrador — sintesis
         sintesis = self._integrar(hallazgos_totales, scores, input_texto)
@@ -749,8 +751,8 @@ Responde cada pregunta con un hallazgo concreto."""
                             latencia_ms=int((time.time() - t0_llm) * 1000),
                             provider='openrouter',
                         )
-                    except Exception:
-                        pass  # Cost tracking must not break execution
+                    except Exception as _e:
+                        print(f"[WARN:motor_vn._llamar_llm.coste] {type(_e).__name__}: {_e}")
                     breaker.registrar_exito(modelo_real)
                     return content
                 else:
@@ -856,7 +858,8 @@ Responde cada pregunta con un hallazgo concreto."""
                 return programa_id
             finally:
                 put_conn(conn)
-        except Exception:
+        except Exception as e:
+            print(f"[ERROR:motor_vn._persistir_programa] {type(e).__name__}: {e}")
             return None
 
     def _calcular_tasa_cierre(self, resultado: dict, programa: FrozenPrograma) -> float:
@@ -898,8 +901,8 @@ Responde cada pregunta con un hallazgo concreto."""
                 conn.commit()
             finally:
                 put_conn(conn)
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:motor_vn._actualizar_programa] {type(_e).__name__}: {_e}")
 
     # =====================================================
     # REGISTRADOR (Step 7)

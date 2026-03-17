@@ -19,7 +19,7 @@ class ContextManager:
     """Manages conversation history with LLM-powered compression."""
 
     def __init__(self, max_tokens: int = 80000, compress_threshold: int = 60000,
-                 keep_last_n: int = 6):
+                 keep_last_n: int = 12):
         self.max_tokens = max_tokens
         self.compress_threshold = compress_threshold
         self.keep_last_n = keep_last_n
@@ -74,7 +74,7 @@ class ContextManager:
                 )
                 compressed_text += f"[{role}] tools: {tools_summary}\n"
             elif content:
-                compressed_text += f"[{role}] {content[:300]}\n"
+                compressed_text += f"[{role}] {content[:500]}\n"
 
         if len(compressed_text) < 500:
             return None  # Not worth compressing
@@ -86,7 +86,7 @@ class ContextManager:
                 "current approach, and important errors."
             )},
             {"role": "user", "content": (
-                f"Summarize this conversation history:\n\n{compressed_text[:8000]}\n\n"
+                f"Summarize this conversation history:\n\n{compressed_text[:15000]}\n\n"
                 "Respond in JSON: {\"completed\": [...], \"failed\": [...], "
                 "\"pending\": [...], \"key_files\": [...], \"approach\": \"...\", "
                 "\"important_errors\": [...]}"
@@ -123,10 +123,21 @@ class ContextManager:
             return None  # Fall back to trim
 
     def _force_trim(self, history: list) -> list:
-        """Nuclear option — keep only system + last N messages."""
+        """Nuclear option — keep system + successful tool calls + last N."""
         protected = history[:2]  # system + task
         recent = history[-self.keep_last_n:]
-        return protected + recent
+
+        # Also keep successful tool results from older messages (max 5)
+        older = history[2:-self.keep_last_n] if len(history) > self.keep_last_n + 2 else []
+        important = []
+        for msg in older:
+            content = msg.get("content", "") or ""
+            if msg.get("role") == "tool" and any(kw in content for kw in ["Successfully", "created", "updated"]):
+                important.append(msg)
+                if len(important) >= 5:
+                    break
+
+        return protected + important + recent
 
     def _trim_history(self, history: list) -> list:
         """Fallback: trim history preserving system+task and error messages."""

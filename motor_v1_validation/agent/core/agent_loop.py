@@ -26,8 +26,8 @@ def _get_tool_evo():
         try:
             from .tool_evolution import get_tool_evolution
             _tool_evo = get_tool_evolution()
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:agent_loop.tool_evo_init] {type(_e).__name__}: {_e}")
     return _tool_evo
 
 # Lazy imports to avoid circular deps
@@ -229,8 +229,8 @@ def run_agent_loop(
                 "phase_info": {"mode": exec_mode},
                 "log": [],
             }
-    except Exception:
-        pass  # Cache nunca debe romper la ejecución
+    except Exception as _e:
+        print(f"[WARN:agent_loop.cache_init] {type(_e).__name__}: {_e}")
 
     for iteration in range(max_iterations):
         elapsed = time.time() - start_time
@@ -338,11 +338,12 @@ def run_agent_loop(
                 print(f" (no tool)")
             history.append({"role": "assistant", "content": content or "(empty)"})
             stuck.record_no_tool()
-            if stuck.no_tool_streak == 2:
-                history.append({"role": "user", "content": "Use a tool NOW to make progress."})
-            elif stuck.no_tool_streak >= 3:
+            if stuck.no_tool_streak == 3:
+                history.append({"role": "user", "content": "Recuerda usar herramientas para avanzar."})
+            elif stuck.no_tool_streak >= 5:
                 router.on_blowup()
-                history.append({"role": "user", "content": "CRITICAL: Call list_dir('.') NOW."})
+                history.append({"role": "user", "content": "Sin progreso. Empieza con list_dir('@project/')."})
+
             if db:
                 db.log_iteration(session_id, iteration, model, tool_called="(monologue)",
                                tokens_in=usage.get("prompt_tokens", 0),
@@ -395,17 +396,17 @@ def run_agent_loop(
                             except Exception:
                                 pass  # If check fails to run, accept finish
 
-                # Finish gate: nudge once if >20% iterations remain
+                # Finish gate: nudge once if >80% iterations remain AND <5 successful actions
                 if finish_accepted and not _finish_nudged:
                     remaining_ratio = (max_iterations - iteration) / max_iterations
-                    if remaining_ratio > 0.2:
+                    successful_actions = sum(1 for e in log if isinstance(e, dict) and not e.get("is_error"))
+                    if remaining_ratio > 0.8 and successful_actions < 5:
                         _finish_nudged = True
                         finish_accepted = False
                         history.append({"role": "tool", "tool_call_id": tc_id,
-                                        "content": "⚠️ VERIFICACIÓN: ¿Verificaste TODO? ¿Hay más que arreglar? "
-                                                   "Si todo está OK → finish() de nuevo. Si no → sigue arreglando."})
+                                        "content": "¿Terminaste? Si todo OK → finish() de nuevo."})
                         if verbose:
-                            print(f" -> finish NUDGED: >20% iterations remain")
+                            print(f" -> finish NUDGED: >80% iterations remain, <5 actions")
 
                 if finish_accepted:
                     history.append({"role": "tool", "tool_call_id": tc_id, "content": final_result})
@@ -481,8 +482,8 @@ def run_agent_loop(
                         error_message=result_str[:500] if is_error else None,
                         context={"iteration": iteration, "model": model},
                     )
-                except Exception:
-                    pass
+                except Exception as _e:
+                    print(f"[WARN:agent_loop.tool_telemetry] {type(_e).__name__}: {_e}")
 
             if verbose:
                 status = "ERR" if is_error else "OK"
@@ -519,8 +520,8 @@ def run_agent_loop(
                         history.append({"role": "user", "content": council_msg})
                     budget.track({"prompt_tokens": 0, "completion_tokens": 0},
                                  "council", override_cost=verdict.get("cost_usd", 0))
-                except Exception:
-                    pass
+                except Exception as _e:
+                    print(f"[WARN:agent_loop.council] {type(_e).__name__}: {_e}")
 
             if is_error:
                 router.on_error(result_str)
@@ -532,8 +533,8 @@ def run_agent_loop(
                             attempted_tools=[tool_name],
                             failure_reason=result_str[:200],
                         )
-                    except Exception:
-                        pass
+                    except Exception as _e:
+                        print(f"[WARN:agent_loop.tool_gap] {type(_e).__name__}: {_e}")
 
                 # Recovery engine: decide action based on error context
                 last_write = recovery.last_writes[-1][1] if recovery.last_writes else None
@@ -543,26 +544,22 @@ def run_agent_loop(
                 action = decision["action"]
                 if action == "retry_different" and decision.get("hint"):
                     history.append({"role": "user", "content":
-                        f"[RECOVERY] {decision['reason']} Hint: {decision['hint']}"})
+                        f"Hint: {decision['hint'][:100]}"})
                 elif action == "escalate":
                     router.on_error(f"RECOVERY_ESCALATE: {decision['reason']}")
                 elif action == "rollback" and recovery._git_checkpoints:
                     rolled = recovery.rollback(sandbox_dir)
                     if rolled:
                         history.append({"role": "user", "content":
-                            f"[RECOVERY] Rolled back to checkpoint {rolled[:8]}. "
-                            f"Reason: {decision['reason']}. Try a different approach."})
+                            f"Rollback a {rolled[:8]}. Prueba diferente enfoque."})
                 elif action == "decompose":
                     if recovery.should_decompose(stuck.error_history, stuck.iteration, max_iterations):
                         sub_goals = recovery.decompose(goal, result_str)
-                        decompose_msg = "[RECOVERY] Decomposing into sub-goals:\n"
-                        for i, sg in enumerate(sub_goals, 1):
-                            decompose_msg += f"  {i}. {sg}\n"
-                        decompose_msg += "Start with sub-goal 1."
-                        history.append({"role": "user", "content": decompose_msg})
+                        history.append({"role": "user", "content":
+                            f"Error repetido. Simplifica: {sub_goals[0] if sub_goals else 'siguiente paso'}"})
                 elif action == "skip":
                     history.append({"role": "user", "content":
-                        f"[RECOVERY] Skipping: {decision['reason']}. Move to next step."})
+                        f"Salta esto: {decision['reason'][:80]}. Siguiente paso."})
                 # abort is handled by StuckDetector
 
             else:
@@ -614,8 +611,8 @@ def run_agent_loop(
                 'tier': getattr(router, '_phase', 'unknown'),
                 'n_inteligencias': len(tool_calls) if tool_calls else 0,
             })
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:agent_loop.monitoring] {type(_e).__name__}: {_e}")
 
         if stop_reason:
             break
@@ -627,8 +624,8 @@ def run_agent_loop(
     if evo and hasattr(evo, 'flush'):
         try:
             evo.flush()
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:agent_loop.evo_flush] {type(_e).__name__}: {_e}")
 
     # Telemetry (SN-03)
     total_time = time.time() - start_time
@@ -647,8 +644,8 @@ def run_agent_loop(
             'compresiones': ctx_mgr.compression_count,
             'exito': stop_reason == 'DONE',
         })
-    except Exception:
-        pass  # Telemetria nunca debe romper la ejecucion
+    except Exception as _e:
+        print(f"[WARN:agent_loop.telemetria] {type(_e).__name__}: {_e}")
 
     # Metacognitive JOL: evaluate quality AFTER execution
     jol_result = {}
@@ -685,8 +682,8 @@ def run_agent_loop(
         summary = post_session_summary(result_for_flywheel)
         after_session(summary)
         flywheel_promotion = check_promotion()
-    except Exception:
-        pass  # Flywheel nunca debe romper la ejecución
+    except Exception as _e:
+        print(f"[WARN:agent_loop.flywheel] {type(_e).__name__}: {_e}")
 
     # Auto-learning: persist successful sessions with file changes
     if stop_reason == "DONE" and files_changed:
@@ -697,8 +694,8 @@ def run_agent_loop(
                 content=f"Archivos: {', '.join(list(files_changed)[:10])}\nResultado: {(final_result or '')[:500]}",
                 category="session_log",
             )
-        except Exception:
-            pass  # Auto-learning nunca debe romper la ejecución
+        except Exception as _e:
+            print(f"[WARN:agent_loop.auto_learning] {type(_e).__name__}: {_e}")
 
     # Cache save — store successful short executions for Tier 0 (pattern 60661)
     if stop_reason == "DONE" and stuck.iteration <= 5:
@@ -706,8 +703,8 @@ def run_agent_loop(
             from .cache_tier import save_to_cache
             tool_seq = [e for e in log if isinstance(e, dict) and e.get("tool")]
             save_to_cache(goal, tool_seq, final_result or "", True)
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:agent_loop.cache_save] {type(_e).__name__}: {_e}")
 
     # Finalize
 

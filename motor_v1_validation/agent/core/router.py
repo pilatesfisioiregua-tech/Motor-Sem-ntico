@@ -352,11 +352,8 @@ class DualModelRouter(TieredRouter):
             return None
         self._just_escalated = False
         return (
-            f"[ESCALACIÓN] Modelo anterior falló repetidamente. "
-            f"Último error: {self._escalation_reason}\n"
-            f"INSTRUCCIÓN: Revisa las acciones previas en el historial, "
-            f"identifica qué falló, y prueba un enfoque DIFERENTE. "
-            f"No repitas las mismas acciones."
+            f"Error previo: {(self._escalation_reason or '')[:100]}. "
+            f"Prueba diferente enfoque."
         )
 
     def on_blowup(self) -> None:

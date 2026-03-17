@@ -79,8 +79,8 @@ Responde SOLO con un número decimal entre 0.0 y 1.0. Nada más."""
                             modelo = row[0]
                 finally:
                     put_conn(c)
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:registrador._evaluar_hallazgo.get_model] {type(_e).__name__}: {_e}")
 
         from .costes import set_call_context
         set_call_context(componente='evaluador', operacion='evaluacion', celda=celda)
@@ -174,8 +174,8 @@ def registrar_ejecucion(resultado: dict, conn=None) -> dict:
                         'gap_post_calibrado': gap_post,
                         'tasa_cierre_calibrada': round(tasa_cierre, 4),
                     })])
-            except Exception:
-                pass
+            except Exception as _e:
+                print(f"[WARN:registrador.evaluacion_calidad.telemetria] {type(_e).__name__}: {_e}")
         else:
             # Sin hallazgos o sin input_texto — gap no cerrado
             gap_post = resultado.get('gap_post', gap_pre)
@@ -187,10 +187,10 @@ def registrar_ejecucion(resultado: dict, conn=None) -> dict:
             cur.execute("""
                 INSERT INTO datapoints_efectividad
                   (pregunta_id, modelo, caso_id, consumidor, celda_objetivo,
-                   gap_pre, gap_post, operacion, calibrado)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, true)
+                   gap_pre, gap_post, gap_cerrado, tasa_cierre, operacion, calibrado)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, true)
             """, [pregunta_id, modelo, caso_id, consumidor, celda,
-                  gap_pre, gap_post, operacion])
+                  gap_pre, gap_post, gap_cerrado, tasa_cierre, operacion])
 
             # 2. INSERT efectos_matriz (si hay hallazgos)
             ejecucion_id = caso_id

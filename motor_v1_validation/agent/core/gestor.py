@@ -75,8 +75,8 @@ def calcular_gradientes(input_texto: str, conn=None) -> dict:
                             gap_llm = g.get('gap', 0.0)
                             gap_db = db_gaps[celda]
                             g['gap'] = round(0.7 * gap_llm + 0.3 * gap_db, 4)
-            except Exception:
-                pass  # tabla no existe aun — no romper
+            except Exception as _e:
+                print(f"[WARN:gestor.calcular_gradientes.merge_db] {type(_e).__name__}: {_e}")
 
         # Ordenar por gap descendente
         top_gaps = sorted(
@@ -238,8 +238,8 @@ Responde SOLO en JSON. Array de objetos. Máximo 8 celdas. No incluyas celdas co
                 'modelo': modelo,
                 'celdas': list(gradientes.keys()),
             })
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:gestor.detector_gaps_llm.telemetria] {type(_e).__name__}: {_e}")
 
         return gradientes
 
@@ -249,8 +249,8 @@ Responde SOLO en JSON. Array de objetos. Máximo 8 celdas. No incluyas celdas co
         try:
             from .telemetria import registrar_metrica
             registrar_metrica('gestor', 'detector_gaps_llm_fallback', {'error': str(e)[:200]})
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:gestor.detector_gaps_llm.telemetria_fallback] {type(_e).__name__}: {_e}")
         return {}
 
 
@@ -451,7 +451,8 @@ def refrescar_vista():
         with conn.cursor() as cur:
             cur.execute("REFRESH MATERIALIZED VIEW pregunta_efectividad")
         conn.commit()
-    except Exception:
+    except Exception as _e:
+        print(f"[WARN:gestor.refrescar_vista] {type(_e).__name__}: {_e}")
         try:
             conn.rollback()
         except Exception:
@@ -584,8 +585,8 @@ class GestorGAMC:
                 if promo:
                     resultados['flywheel_promocion'] = promo
                     log_gestor('flywheel_promocion', promo, nivel='auto', conn=conn)
-            except Exception:
-                pass
+            except Exception as _e:
+                print(f"[WARN:gestor.flywheel_promotion] {type(_e).__name__}: {_e}")
 
             # --- TOOL EVOLUTION: automatic analysis (Fase 2 Conexión 4) ---
             try:
@@ -602,8 +603,8 @@ class GestorGAMC:
                 sugerencias = evo.suggest_compositions()
                 if sugerencias:
                     resultados['tool_compositions_sugeridas'] = len(sugerencias)
-            except Exception:
-                pass
+            except Exception as _e:
+                print(f"[WARN:gestor.tool_evolution] {type(_e).__name__}: {_e}")
 
             # Log del ciclo completo
             log_gestor('loop_completo', {
@@ -639,7 +640,8 @@ class GestorGAMC:
             # Refrescar vista materializada (si existe)
             try:
                 cur.execute("REFRESH MATERIALIZED VIEW pregunta_efectividad")
-            except Exception:
+            except Exception as _e:
+                print(f"[WARN:gestor.paso1.materialize_view] {type(_e).__name__}: {_e}")
                 conn.rollback()
 
             # Actualizar score_efectividad en preguntas_matriz desde datapoints
@@ -951,8 +953,8 @@ class GestorGAMC:
                                 json.dumps({'pasos': programa_pasos, 'modo': modo}),
                             ])
                             creados += 1
-                    except Exception:
-                        pass
+                    except Exception as _e:
+                        print(f"[WARN:gestor.compilar_programa.insert] {type(_e).__name__}: {_e}")
 
             else:
                 # --- RECOMPILAR existentes con > 30 ejecuciones ---
@@ -977,8 +979,8 @@ class GestorGAMC:
                                 WHERE id = %s
                             """, [json.dumps({'pasos': nuevo_programa}), prog_id])
                             recompilados += 1
-                    except Exception:
-                        pass
+                    except Exception as _e:
+                        print(f"[WARN:gestor.compilar_programa.recompile] {type(_e).__name__}: {_e}")
 
         conn.commit()
         return {'recompilados': recompilados, 'creados': creados}
@@ -1168,8 +1170,8 @@ class GestorGAMC:
                     if abs(self.params['umbral_poda'] - old) > 0.001:
                         ajustes['umbral_poda'] = {'old': old, 'new': self.params['umbral_poda'],
                                                   'razon': f'p10={p10:.4f}'}
-        except Exception:
-            pass
+        except Exception as _e:
+            print(f"[WARN:gestor._auto_ajustar.percentile] {type(_e).__name__}: {_e}")
 
         # 3. Ajustar gamma propio (meta-adaptacion)
         n_ajustes = len(ajustes)
