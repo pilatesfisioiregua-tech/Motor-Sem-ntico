@@ -1,0 +1,1452 @@
+{
+  "meta": {
+    "experiment": "Exp 4.2 - El Sintetizador - Analisis",
+    "outputs": [
+      "v31_best",
+      "70b_worst",
+      "maverick_medium",
+      "gptoss_depurar",
+      "qwen3t_medium"
+    ],
+    "celdas": [
+      "Salud×Conservar",
+      "Salud×Captar",
+      "Salud×Depurar",
+      "Salud×Distribuir",
+      "Salud×Frontera",
+      "Salud×Adaptar",
+      "Salud×Replicar",
+      "Sentido×Conservar",
+      "Sentido×Captar",
+      "Sentido×Depurar",
+      "Sentido×Distribuir",
+      "Sentido×Frontera",
+      "Sentido×Adaptar",
+      "Sentido×Replicar",
+      "Continuidad×Conservar",
+      "Continuidad×Captar",
+      "Continuidad×Depurar",
+      "Continuidad×Distribuir",
+      "Continuidad×Frontera",
+      "Continuidad×Adaptar",
+      "Continuidad×Replicar"
+    ],
+    "evaluadores": [
+      "opus",
+      "sonnet",
+      "v3.2-chat",
+      "v3.2-reasoner",
+      "deepseek-r1",
+      "deepseek-v3.1",
+      "cogito-671b",
+      "gpt-oss-120b",
+      "qwen3-235b",
+      "minimax-m2.5",
+      "kimi-k2.5",
+      "glm-4.7"
+    ]
+  },
+  "max_mecanico": {
+    "v31_best": {
+      "Salud×Conservar": 3,
+      "Salud×Captar": 3,
+      "Salud×Depurar": 3,
+      "Salud×Distribuir": 3,
+      "Salud×Frontera": 4,
+      "Salud×Adaptar": 3,
+      "Salud×Replicar": 3,
+      "Sentido×Conservar": 3,
+      "Sentido×Captar": 3,
+      "Sentido×Depurar": 4,
+      "Sentido×Distribuir": 3,
+      "Sentido×Frontera": 4,
+      "Sentido×Adaptar": 3,
+      "Sentido×Replicar": 2,
+      "Continuidad×Conservar": 3,
+      "Continuidad×Captar": 3,
+      "Continuidad×Depurar": 3,
+      "Continuidad×Distribuir": 3,
+      "Continuidad×Frontera": 4,
+      "Continuidad×Adaptar": 4,
+      "Continuidad×Replicar": 3
+    },
+    "70b_worst": {
+      "Salud×Conservar": 3,
+      "Salud×Captar": 2,
+      "Salud×Depurar": 3,
+      "Salud×Distribuir": 2,
+      "Salud×Frontera": 3,
+      "Salud×Adaptar": 3,
+      "Salud×Replicar": 3,
+      "Sentido×Conservar": 3,
+      "Sentido×Captar": 2,
+      "Sentido×Depurar": 3,
+      "Sentido×Distribuir": 2,
+      "Sentido×Frontera": 3,
+      "Sentido×Adaptar": 4,
+      "Sentido×Replicar": 3,
+      "Continuidad×Conservar": 3,
+      "Continuidad×Captar": 2,
+      "Continuidad×Depurar": 3,
+      "Continuidad×Distribuir": 2,
+      "Continuidad×Frontera": 3,
+      "Continuidad×Adaptar": 3,
+      "Continuidad×Replicar": 3
+    },
+    "maverick_medium": {
+      "Salud×Conservar": 3,
+      "Salud×Captar": 3,
+      "Salud×Depurar": 2,
+      "Salud×Distribuir": 3,
+      "Salud×Frontera": 3,
+      "Salud×Adaptar": 3,
+      "Salud×Replicar": 3,
+      "Sentido×Conservar": 2,
+      "Sentido×Captar": 3,
+      "Sentido×Depurar": 3,
+      "Sentido×Distribuir": 3,
+      "Sentido×Frontera": 3,
+      "Sentido×Adaptar": 4,
+      "Sentido×Replicar": 2,
+      "Continuidad×Conservar": 3,
+      "Continuidad×Captar": 2,
+      "Continuidad×Depurar": 2,
+      "Continuidad×Distribuir": 3,
+      "Continuidad×Frontera": 3,
+      "Continuidad×Adaptar": 4,
+      "Continuidad×Replicar": 4
+    },
+    "gptoss_depurar": {
+      "Salud×Conservar": 4,
+      "Salud×Captar": 3,
+      "Salud×Depurar": 4,
+      "Salud×Distribuir": 3,
+      "Salud×Frontera": 5,
+      "Salud×Adaptar": 4,
+      "Salud×Replicar": 3,
+      "Sentido×Conservar": 3,
+      "Sentido×Captar": 4,
+      "Sentido×Depurar": 4,
+      "Sentido×Distribuir": 3,
+      "Sentido×Frontera": 5,
+      "Sentido×Adaptar": 5,
+      "Sentido×Replicar": 4,
+      "Continuidad×Conservar": 3,
+      "Continuidad×Captar": 3,
+      "Continuidad×Depurar": 4,
+      "Continuidad×Distribuir": 3,
+      "Continuidad×Frontera": 4,
+      "Continuidad×Adaptar": 4,
+      "Continuidad×Replicar": 5
+    },
+    "qwen3t_medium": {
+      "Salud×Conservar": 4,
+      "Salud×Captar": 3,
+      "Salud×Depurar": 4,
+      "Salud×Distribuir": 3,
+      "Salud×Frontera": 4,
+      "Salud×Adaptar": 4,
+      "Salud×Replicar": 3,
+      "Sentido×Conservar": 4,
+      "Sentido×Captar": 4,
+      "Sentido×Depurar": 4,
+      "Sentido×Distribuir": 3,
+      "Sentido×Frontera": 4,
+      "Sentido×Adaptar": 4,
+      "Sentido×Replicar": 3,
+      "Continuidad×Conservar": 4,
+      "Continuidad×Captar": 3,
+      "Continuidad×Depurar": 4,
+      "Continuidad×Distribuir": 4,
+      "Continuidad×Frontera": 4,
+      "Continuidad×Adaptar": 4,
+      "Continuidad×Replicar": 3
+    }
+  },
+  "synth_results": {
+    "cogito-671b": {
+      "v31_best": {
+        "output_id": "v31_best",
+        "has_data": true,
+        "evaluadores_citados": 10,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 67,
+        "nivel_sum_max": 67,
+        "conexiones_total": 4,
+        "conexiones_cross_lente": 4,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La startup enfrenta una contradicción estructural insalvable: la estabilización requiere tiempo que el runway no permite, y el pivot requiere recursos que la estabilización demanda, agravada por una relación CEO-CTO rota que impide resolver el dilema, mientras el tiempo y efectivo se agotan en un contexto de alta rotación y sobrecarga del equipo técnico.",
+        "hallazgo_len": 356,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 3,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Replicar",
+            "que_falta": "Análisis profundo de cómo replicar el conocimiento del CTO sobrecargado y retener talento técnico"
+          },
+          {
+            "celda": "Sentido×Replicar",
+            "que_falta": "Exploración de cómo replicar la identidad y propósito de la startup más allá del dilema actual"
+          },
+          {
+            "celda": "Continuidad×Replicar",
+            "que_falta": "Estrategias concretas para replicar el éxito de los clientes grandes sin comprometer la base actual"
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "Patrón de contradicción estructural: múltiples celdas (Salud×Frontera, Sentido×Depurar, Continuidad×Adaptar) convergen en la misma paradoja irresoluble sin intervención externa",
+          "Patrón de fragilidad organizacional: se manifiesta en Salud×Replicar (rotación), Salud×Conservar (sobrecarga) y Continuidad×Conservar (pérdida de conocimiento)",
+          "Patrón de tensión temporal: el límite de 7 meses de runway (Salud×Conservar) fuerza decisiones inmediatas que compiten con necesidades de largo plazo (Sentido×Frontera)"
+        ],
+        "tiempo_s": 52.6
+      },
+      "70b_worst": {
+        "output_id": "70b_worst",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 58,
+        "nivel_sum_max": 58,
+        "conexiones_total": 3,
+        "conexiones_cross_lente": 3,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La paradoja de una lealtad invisible que, al intentar preservar tanto el éxito profesional como los lazos familiares, perpetúa un patrón transgeneracional de sacrificio personal que amenaza con destruir exactamente lo que busca conservar: la salud, el sentido de identidad y la continuidad familiar.",
+        "hallazgo_len": 299,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 3,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Captar",
+            "que_falta": "Ningún evaluador profundizó en cómo el sistema de creencias internalizado sobre el éxito y la masculinidad contribuye a mantener el patrón de agotamiento."
+          },
+          {
+            "celda": "Sentido×Distribuir",
+            "que_falta": "No se exploró cómo podría redistribuirse el sentido de logro más allá de las esferas laboral y familiar para incluir dimensiones de autocuidado y desarrollo personal."
+          },
+          {
+            "celda": "Continuidad×Adaptar",
+            "que_falta": "Falta análisis sobre cómo los sistemas económicos y laborales actuales refuerzan estos patrones de dedicación laboral excesiva, limitando las opciones de adaptación."
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "La repetición transgeneracional de patrones de sacrificio laboral como forma de validación personal y familiar",
+          "La tensión entre la imagen externa de éxito y la realidad interna de agotamiento y miedo",
+          "La paradoja de que las soluciones intentadas (mayor dedicación laboral) profundizan el problema que buscan resolver"
+        ],
+        "tiempo_s": 51.54
+      },
+      "maverick_medium": {
+        "output_id": "maverick_medium",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 61,
+        "nivel_sum_max": 61,
+        "conexiones_total": 4,
+        "conexiones_cross_lente": 4,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La propuesta transforma un cambio de carrera potencialmente disruptivo en un proceso de 'prototipado reversible' que equilibra la búsqueda de sentido profesional con la preservación de la estabilidad familiar, mediante un marco iterativo de bajo riesgo que valida hipótesis antes de compromisos irreversibles, redefiniendo la transición profesional no como un salto binario sino como una adaptación escalonada con mecanismos de seguridad integrados.",
+        "hallazgo_len": 449,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 3,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Depurar",
+            "que_falta": "Aunque se menciona el estrés laboral, no se profundiza en estrategias específicas para manejarlo durante la transición, más allá del rollback."
+          },
+          {
+            "celda": "Sentido×Replicar",
+            "que_falta": "Falta explorar cómo el patrón de 'probar antes de decidir' podría aplicarse a otros aspectos de la vida de la persona más allá del profesional."
+          },
+          {
+            "celda": "Continuidad×Captar",
+            "que_falta": "No se considera cómo las nuevas habilidades en derecho medioambiental podrían integrarse con su experiencia actual para crear oportunidades híbridas."
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "Reversibilidad como principio rector: Aparece en múltiples celdas (Salud×Adaptar, Continuidad×Adaptar, Continuidad×Replicar) como mecanismo central para gestionar la incertidumbre.",
+          "Validación iterativa: El enfoque de probar hipótesis antes de compromisos totales cruza las dimensiones de Salud, Sentido y Continuidad, creando un marco metodológico coherente.",
+          "Protección de límites críticos: La preservación de la estabilidad financiera y familiar actúa como frontera inquebrantable que da seguridad al proceso de exploración."
+        ],
+        "tiempo_s": 48.4
+      },
+      "gptoss_depurar": {
+        "output_id": "gptoss_depurar",
+        "has_data": true,
+        "evaluadores_citados": 7,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-v3.1",
+          "gpt-oss-120b",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 80,
+        "nivel_sum_max": 80,
+        "conexiones_total": 3,
+        "conexiones_cross_lente": 3,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La contradicción entre el deseo de expansión lineal y los límites humanos/financieros revela que la verdadera innovación no está en crecer, sino en redefinir el crecimiento como equilibrio entre salud y sostenibilidad económica, donde la restricción (4 sillones, vacaciones obligatorias) genera un modelo más viable que la expansión ilimitada.",
+        "hallazgo_len": 343,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Replicar",
+            "que_falta": "Ningún evaluador exploró cómo replicar el equilibrio salud-finanzas en otros contextos más allá del patrón identificado, ni cómo escalar el modelo de 4 sillones sin recaer en dinámicas de sobrecarga"
+          },
+          {
+            "celda": "Continuidad×Distribuir",
+            "que_falta": "No se analizó la distribución de liderazgo ni la transición generacional, a pesar del riesgo de salud del odontólogo principal y el antecedente familiar de infarto"
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "La restricción como generadora de innovación: límites de salud (60h/semana) y financieros (margen ≥5k) forzaron una solución más creativa (4 sillones + piloto) que la expansión inicial propuesta",
+          "La contradicción como motor de descubrimiento: la inconsistencia en los márgenes (7k vs 13k) reveló no solo costes ocultos, sino un patrón cognitivo que redefine todo el caso",
+          "La salud como variable estratégica: dejó de ser un 'costo' para convertirse en el eje que redefine la viabilidad del modelo de negocio"
+        ],
+        "tiempo_s": 42.29
+      },
+      "qwen3t_medium": {
+        "output_id": "qwen3t_medium",
+        "has_data": true,
+        "evaluadores_citados": 6,
+        "evaluadores_citados_list": [
+          "glm-4.7",
+          "kimi-k2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 77,
+        "nivel_sum_max": 77,
+        "conexiones_total": 4,
+        "conexiones_cross_lente": 4,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La startup enfrenta un colapso inminente donde la preservación de identidades individuales (CTO como 'guardián', CEO como 'salvador') ha creado un sistema que prioriza la supervivencia emocional sobre la viabilidad estructural, acelerando su propia destrucción mediante patrones de adaptación que exacerban las crisis que intentan resolver.",
+        "hallazgo_len": 340,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Distribuir",
+            "que_falta": "Ningún evaluador exploró cómo redistribuir el conocimiento técnico del CTO al equipo junior como palanca de cambio, más allá de señalar la dependencia existente."
+          },
+          {
+            "celda": "Sentido×Replicar",
+            "que_falta": "No se identificaron patrones alternativos de sentido que podrían emerger si las identidades defensivas se desmantelaran, limitando la visión a lo que existe, no a lo posible."
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "Patrón de autodestrucción sistémica: Las respuestas de adaptación (más horas, pivot) diseñadas para salvar el sistema aceleran su colapso, revelando una paradoja donde la supervivencia individual destruye la colectiva.",
+          "Fractura identidad-realidad: La brecha entre narrativas de identidad ('guardián', 'salvador') y realidad estructural (churn 63%, bugs 47) crea un vacío que consume recursos críticos en mantener ilusiones en lugar de abordar problemas.",
+          "Trampa de la urgencia: La presión temporal (runway 7 meses) fuerza decisiones que ignoran causas profundas, convirtiendo la supervivencia a corto plazo en garantía de fracaso a mediano plazo."
+        ],
+        "tiempo_s": 41.82
+      }
+    },
+    "deepseek-r1": {
+      "v31_best": {
+        "output_id": "v31_best",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 67,
+        "nivel_sum_max": 67,
+        "conexiones_total": 3,
+        "conexiones_cross_lente": 3,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La contradicción tiempo-recursos es una trampa estructural que trasciende el trade-off operativo: exige una intervención triple simultánea (reducción inmediata de burn rate, mediación externa del conflicto CEO-CTO, y enfoque quirúrgico en bugs que impactan churn) para crear el espacio temporal y relacional necesario para evitar el colapso inminente.",
+        "hallazgo_len": 351,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Sentido×Replicar",
+            "que_falta": "Ningún evaluador exploró cómo replicar el propósito organizacional más allá del modelo de negocio, ni cómo la pérdida del co-fundador técnico afectó la identidad central de la startup."
+          },
+          {
+            "celda": "Salud×Replicar",
+            "que_falta": "Ausencia total de análisis sobre mecanismos concretos para replicar competencias técnicas críticas perdidas con la salida del co-fundador y desarrolladores."
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "Patrón de fragilidad recursiva: problemas operativos (bugs/churn) → sobrecarga del CTO → rotación técnica → profundización de problemas operativos",
+          "Patrón de contradicción amplificada: recursos limitados exacerban el conflicto CEO-CTO, que a su vez bloquea la resolución de la limitación de recursos",
+          "Patrón temporal de punto de no retorno: el runway <7 meses convierte la contradicción en irreconciliable después del mes 3-4 sin intervención radical"
+        ],
+        "tiempo_s": 69.38
+      },
+      "70b_worst": {
+        "output_id": "70b_worst",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 58,
+        "nivel_sum_max": 58,
+        "conexiones_total": 3,
+        "conexiones_cross_lente": 3,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La lealtad invisible al rol de proveedor encierra un circuito transgeneracional donde el miedo a repetir el destino paterno paradójicamente reproduce las condiciones que amenazan la salud y los vínculos, requiriendo una ruptura simultánea de estructuras operativas e identitarias.",
+        "hallazgo_len": 280,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Captar",
+            "que_falta": "Ningún evaluador exploró cómo se manifiesta físicamente el agotamiento (síntomas concretos, indicadores biomédicos) más allá de la mención general al estrés"
+          },
+          {
+            "celda": "Continuidad×Distribuir",
+            "que_falta": "Ausencia total de propuestas específicas sobre redistribución concreta de tiempo/recursos entre familia y negocio"
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "Triada transgeneracional: Patrón laboral (Salud×Replicar) + Miedo médico (Salud×Conservar) + Identidad de proveedor (Sentido×Conservar) forman un circuito autoperpetuado",
+          "Doble frontera crítica: Pérdida de salud (Salud×Frontera) y ruptura familiar (Continuidad×Frontera) operan como amenazas gemelas que exigen cambio simultáneo en estructura e identidad",
+          "Paradoja de la lealtad: Esfuerzo por cumplir responsabilidades (Sentido×Conservar) destruye aquello que busca preservar (Continuidad×Conservar), requiriendo depuración del deber heredado (Sentido×Depurar)"
+        ],
+        "tiempo_s": 58.12
+      },
+      "maverick_medium": {
+        "output_id": "maverick_medium",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 61,
+        "nivel_sum_max": 61,
+        "conexiones_total": 3,
+        "conexiones_cross_lente": 3,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La propuesta transforma el cambio de carrera de un salto binario a un proceso de 'validación existencial escalonada', donde la preservación financiera (Salud) y los límites temporales (Continuidad) crean un corredor seguro para probar el sentido (Sentido) mediante prototipos reversibles.",
+        "hallazgo_len": 288,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Depurar",
+            "que_falta": "Ningún evaluador exploró estrategias concretas para manejar el estrés laboral durante la fase de transición dual (trabajo actual + exploración)"
+          },
+          {
+            "celda": "Sentido×Replicar",
+            "que_falta": "Ausencia de análisis sobre cómo transferir el patrón 'probar antes de decidir' a dominios no profesionales (ej: relaciones personales o proyectos vitales)"
+          }
+        ],
+        "meta_patrones_count": 2,
+        "meta_patrones": [
+          "Triangulación Segura: Salud financiera (conservar), Sentido (adaptar) y Continuidad temporal (frontera) forman un sistema de contrapesos que permite exploración sin colapso",
+          "Iteración Existencial: Los prototipos (curso/voluntariado) operan como experimentos de sentido con salvaguardas financieras integradas"
+        ],
+        "tiempo_s": 46.75
+      },
+      "gptoss_depurar": {
+        "output_id": "gptoss_depurar",
+        "has_data": true,
+        "evaluadores_citados": 8,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-v3.1",
+          "gpt-oss-120b",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 80,
+        "nivel_sum_max": 80,
+        "conexiones_total": 3,
+        "conexiones_cross_lente": 3,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La contradicción fundamental entre salud y expansión financiera se resuelve mediante un reequilibrio sistémico donde el límite humano (60h/semana) y el patrón cognitivo (confianza en ingresos lineales) convergen en S′=4 como síntesis viable, transformando el crecimiento en sostenibilidad replicable",
+        "hallazgo_len": 299,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Distribuir",
+            "que_falta": "Ningún evaluador analizó cómo la distribución de carga horaria afecta dinámicas de equipo o satisfacción del personal"
+          },
+          {
+            "celda": "Continuidad×Distribuir",
+            "que_falta": "No se exploró la distribución espacial de sillones adicionales ni su impacto en flujos de trabajo"
+          }
+        ],
+        "meta_patrones_count": 2,
+        "meta_patrones": [
+          "El patrón 'confianza en ingresos lineales ignorando límites humanos' atraviesa Salud×Replicar, Sentido×Frontera y Continuidad×Replicar, redefiniendo el diagnóstico del caso",
+          "La tensión entre vértices opuestos (facturación vs salud) estructura decisiones en Salud×Frontera, Sentido×Adaptar y Continuidad×Frontera, requiriendo soluciones de equilibrio"
+        ],
+        "tiempo_s": 52.68
+      },
+      "qwen3t_medium": {
+        "output_id": "qwen3t_medium",
+        "has_data": true,
+        "evaluadores_citados": 9,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 77,
+        "nivel_sum_max": 77,
+        "conexiones_total": 3,
+        "conexiones_cross_lente": 3,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La startup opera en un punto de no retorno estructural donde la conservación de identidades defensivas (CTO como 'guardián', CEO como 'salvador') acelera el colapso al bloquear la depuración de emociones no nombradas (vergüenza/miedo) y deudas técnicas/humanas críticas, haciendo que las adaptaciones propuestas (pivot) sean suicidio estructural ante fronteras objetivas insalvables (runway 7 meses, SLA imposible).",
+        "hallazgo_len": 415,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Distribuir",
+            "que_falta": "Ningún evaluador exploró estrategias concretas para redistribuir conocimiento técnico o mitigar dependencia del CTO."
+          },
+          {
+            "celda": "Continuidad×Replicar",
+            "que_falta": "Ausencia de análisis sobre cómo replicar procesos exitosos previos o construir legado institucional más allá de figuras individuales."
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "El patrón 'conservación identitaria → bloqueo depuración → adaptación destructiva' que cruza Salud, Sentido y Continuidad",
+          "Hiperconcentración como riesgo sistémico: conocimiento en CTO, ingresos en cliente único, sentido en roles esenciales",
+          "Fronteras estructurales (runway/SLA) que transforman emociones no procesadas en amenazas existenciales"
+        ],
+        "tiempo_s": 46.47
+      }
+    },
+    "glm-5": {
+      "v31_best": {
+        "output_id": "v31_best",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      },
+      "70b_worst": {
+        "output_id": "70b_worst",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      },
+      "maverick_medium": {
+        "output_id": "maverick_medium",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      },
+      "gptoss_depurar": {
+        "output_id": "gptoss_depurar",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      },
+      "qwen3t_medium": {
+        "output_id": "qwen3t_medium",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      }
+    },
+    "minimax-m2.5": {
+      "v31_best": {
+        "output_id": "v31_best",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      },
+      "70b_worst": {
+        "output_id": "70b_worst",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      },
+      "maverick_medium": {
+        "output_id": "maverick_medium",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      },
+      "gptoss_depurar": {
+        "output_id": "gptoss_depurar",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      },
+      "qwen3t_medium": {
+        "output_id": "qwen3t_medium",
+        "has_data": false,
+        "error": "synthesis parse failed"
+      }
+    },
+    "qwen3-235b": {
+      "v31_best": {
+        "output_id": "v31_best",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 67,
+        "nivel_sum_max": 67,
+        "conexiones_total": 0,
+        "conexiones_cross_lente": 0,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "",
+        "hallazgo_len": 0,
+        "hallazgo_non_generic": false,
+        "puntos_ciegos_count": 0,
+        "puntos_ciegos": [],
+        "meta_patrones_count": 0,
+        "meta_patrones": [],
+        "tiempo_s": 143.72
+      },
+      "70b_worst": {
+        "output_id": "70b_worst",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 58,
+        "nivel_sum_max": 58,
+        "conexiones_total": 4,
+        "conexiones_cross_lente": 4,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "El miedo no nombrado a repetir el destino del padre —un infarto por estrés laboral— actúa como un motor oculto que perpetúa un ciclo transgeneracional de sacrificio, donde el éxito profesional se paga con la salud y la familia, y solo puede romperse mediante una adaptación identitaria profunda que redefina el sentido del deber.",
+        "hallazgo_len": 329,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Captar",
+            "que_falta": "Ningún evaluador explora cómo el entorno clínico dental (el negocio) podría estar reforzando el patrón de estrés a través de su cultura organizacional o estructura operativa."
+          },
+          {
+            "celda": "Continuidad×Captar",
+            "que_falta": "No se analiza el impacto del rol del hijo mayor o la dinámica específica entre los hijos, lo que podría ofrecer pistas sobre cómo el desequilibrio se manifiesta en diferentes niveles familiares."
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "Un ciclo transgeneracional de identidad basada en el sacrificio laboral, donde el miedo al fracaso y al infarto paterno se convierte en un mandato inconsciente que prioriza el deber sobre la salud y la familia.",
+          "La existencia de una 'lealtad invisible' que mantiene un statu quo disfuncional, donde la vergüenza no nombrada impide la redistribución del tiempo y la redefinición del éxito personal.",
+          "La frontera crítica como patrón recurrente: en múltiples dimensiones (salud, sentido, continuidad), el sistema se encuentra al borde de una crisis que podría forzar el cambio, pero también causar daño irreversible."
+        ],
+        "tiempo_s": 105.43
+      },
+      "maverick_medium": {
+        "output_id": "maverick_medium",
+        "has_data": true,
+        "evaluadores_citados": 11,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 61,
+        "nivel_sum_max": 61,
+        "conexiones_total": 3,
+        "conexiones_cross_lente": 3,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "El output transforma un dilema existencial de alto riesgo en un proceso de validación incremental y reversible, donde la preservación del sistema familiar no limita el cambio, sino que lo posibilita mediante fronteras claras, iteraciones controladas y un patrón replicable de transición segura.",
+        "hallazgo_len": 294,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Captar",
+            "que_falta": "Ningún evaluador explora activamente nuevas fuentes de ingreso alternativas (freelance, consultoría ambiental parcial) que podrían complementar el ingreso actual más allá del curso o voluntariado."
+          },
+          {
+            "celda": "Sentido×Replicar",
+            "que_falta": "Aunque se menciona la replicabilidad, no se profundiza en cómo adaptar el modelo a contextos sin red de apoyo familiar o con menor estabilidad financiera."
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "El patrón central es la transformación de decisiones binarias (cambiar/no cambiar) en procesos iterativos de validación, donde la reversibilidad y el bajo costo de fallo permiten explorar sin colapsar.",
+          "La integración entre salud financiera y sentido personal se logra mediante fronteras claras que protegen lo esencial (ingreso, familia) mientras se explora lo deseado (impacto, propósito).",
+          "La replicabilidad no está en el contenido del cambio, sino en el método: prototipado reversible, iteración controlada y alineación familiar como condiciones para la transición segura."
+        ],
+        "tiempo_s": 73.95
+      },
+      "gptoss_depurar": {
+        "output_id": "gptoss_depurar",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 80,
+        "nivel_sum_max": 80,
+        "conexiones_total": 0,
+        "conexiones_cross_lente": 0,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "",
+        "hallazgo_len": 0,
+        "hallazgo_non_generic": false,
+        "puntos_ciegos_count": 0,
+        "puntos_ciegos": [],
+        "meta_patrones_count": 0,
+        "meta_patrones": [],
+        "tiempo_s": 191.95
+      },
+      "qwen3t_medium": {
+        "output_id": "qwen3t_medium",
+        "has_data": true,
+        "evaluadores_citados": 11,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 77,
+        "nivel_sum_max": 77,
+        "conexiones_total": 4,
+        "conexiones_cross_lente": 4,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La startup no está fallando por falta de estrategia o tecnología, sino por un conflicto sistémico entre supervivencia emocional y continuidad estructural: ambos líderes priorizan su identidad sobre la realidad, lo que bloquea cualquier acción efectiva, y convierte sus respuestas reactivas en mecanismos de aceleración del colapso.",
+        "hallazgo_len": 331,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 2,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Distribuir",
+            "que_falta": "Ningún evaluador profundizó en cómo redistribuir activamente el conocimiento técnico fuera del CTO, más allá de señalar la dependencia. Falta explorar mecanismos concretos de descentralización técnica."
+          },
+          {
+            "celda": "Sentido×Replicar",
+            "que_falta": "No se analizó cómo transformar el patrón 'miedo + acción reactiva' en un sistema de aprendizaje organizacional. Se identifica la repetición, pero no se propone un modelo alternativo de replicación funcional."
+          }
+        ],
+        "meta_patrones_count": 4,
+        "meta_patrones": [
+          "Patrón de doble negación: los líderes niegan tanto la realidad objetiva (churn 63%, SLA imposible) como su responsabilidad (culpa), proyectando el conflicto como 'diferencias de visión'.",
+          "Adaptación como simulacro: las acciones de 'adaptación' (pivotar, debuggear más) son rituales simbólicos para mantener la identidad, no intentos reales de cambio.",
+          "Concentración sistémica: conocimiento, sentido, riesgo y liderazgo están hiperconcentrados en figuras individuales, creando puntos únicos de falla en múltiples dimensiones.",
+          "Tiempo comprimido: el runway de 7 meses y el trigger crítico de cancelación de cliente crean una frontera temporal que exacerba el miedo y reduce la ventana para decisiones auténticas."
+        ],
+        "tiempo_s": 169.11
+      }
+    },
+    "v3.2-chat": {
+      "v31_best": {
+        "output_id": "v31_best",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 67,
+        "nivel_sum_max": 67,
+        "conexiones_total": 5,
+        "conexiones_cross_lente": 5,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La startup enfrenta una trampa estructural donde el tiempo necesario para estabilizar el producto excede el runway disponible, mientras que los recursos requeridos para pivotar a enterprise son los mismos que la estabilización demanda, creando un dilema irresoluble sin mediación externa o cambio fundamental de variables, agravado por una ruptura en la relación CEO-CTO que paraliza la toma de decisiones.",
+        "hallazgo_len": 406,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 3,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Replicar",
+            "que_falta": "Ningún evaluador analizó en profundidad la replicabilidad del conocimiento técnico perdido con la salida del co-fundador técnico y 2 devs, ni cómo esto afecta la capacidad de ejecutar cualquier estrategia. Falta evaluación de documentación, onboarding, y transferencia de conocimiento."
+          },
+          {
+            "celda": "Sentido×Replicar",
+            "que_falta": "Aunque algunos mencionaron replicar el patrón de clientes grandes, ningún evaluador exploró cómo replicar el sentido de propósito o identidad de la startup después de la salida del co-fundador técnico y la ruptura CEO-CTO. Falta análisis de cultura, valores, y narrativa compartida."
+          },
+          {
+            "celda": "Continuidad×Distribuir",
+            "que_falta": "Minimax-m2.5 no aportó evidencia en esta celda, y aunque otros evaluadores mencionaron el trade-off calidad-crecimiento, faltó análisis detallado de cómo distribuir recursos entre bugs críticos vs desarrollo enterprise en una línea de tiempo de 3-4 meses con métricas específicas."
+          }
+        ],
+        "meta_patrones_count": 4,
+        "meta_patrones": [
+          "Patrón de contradicción estructural: múltiples celdas (Salud×Frontera, Sentido×Depurar, Continuidad×Adaptar) convergen en la misma contradicción formal, mostrando que no es un problema aislado sino un meta-patrón que permea salud, sentido y continuidad.",
+          "Patrón de fractura relacional: la ruptura CEO-CTO aparece como factor crítico en celdas de Sentido (Conservar, Distribuir, Frontera) y Continuidad (Frontera, Replicar), indicando que el problema humano es tan limitante como las restricciones financieras y técnicas.",
+          "Patrón de segmentación oculta: la diferencia de ARPU (8×) entre clientes grandes y pequeños emerge como dato clave que conecta Salud×Captar, Sentido×Captar y Continuidad×Replicar, mostrando cómo un dato numérico simple revela oportunidades estratégicas y riesgos simultáneamente.",
+          "Patrón de fragilidad acumulativa: la salida del co-fundador técnico, 2 devs, CTO sobrecargado, bugs acumulados y churn alto aparecen interconectados en múltiples dimensiones, sugiriendo que los problemas no son independientes sino síntomas de una fragilidad sistémica."
+        ],
+        "tiempo_s": 128.16
+      },
+      "70b_worst": {
+        "output_id": "70b_worst",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 58,
+        "nivel_sum_max": 58,
+        "conexiones_total": 0,
+        "conexiones_cross_lente": 0,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "",
+        "hallazgo_len": 0,
+        "hallazgo_non_generic": false,
+        "puntos_ciegos_count": 0,
+        "puntos_ciegos": [],
+        "meta_patrones_count": 0,
+        "meta_patrones": [],
+        "tiempo_s": 99.27
+      },
+      "maverick_medium": {
+        "output_id": "maverick_medium",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 61,
+        "nivel_sum_max": 61,
+        "conexiones_total": 0,
+        "conexiones_cross_lente": 0,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "",
+        "hallazgo_len": 0,
+        "hallazgo_non_generic": false,
+        "puntos_ciegos_count": 0,
+        "puntos_ciegos": [],
+        "meta_patrones_count": 0,
+        "meta_patrones": [],
+        "tiempo_s": 114.06
+      },
+      "gptoss_depurar": {
+        "output_id": "gptoss_depurar",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 80,
+        "nivel_sum_max": 80,
+        "conexiones_total": 5,
+        "conexiones_cross_lente": 5,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "La mesa vio colectivamente que el caso no es un problema de optimización financiera, sino la manifestación concreta de un patrón sistémico donde la contradicción entre salud humana y lógica de crecimiento se materializa en discrepancias numéricas, límites físicos ignorados y una propuesta de expansión que, al ser analizada, revela ser formalmente inconsistente con la supervivencia del sistema.",
+        "hallazgo_len": 396,
+        "hallazgo_non_generic": true,
+        "puntos_ciegos_count": 3,
+        "puntos_ciegos": [
+          {
+            "celda": "Salud×Distribuir",
+            "que_falta": "Ningún evaluador exploró cómo distribuir la carga emocional y psicológica más allá de las horas de trabajo, ni consideró sistemas de apoyo entre el equipo clínico para manejar el estrés acumulado."
+          },
+          {
+            "celda": "Sentido×Distribuir",
+            "que_falta": "Falta análisis sobre cómo distribuir la responsabilidad de la toma de decisiones entre los socios/propietarios, o cómo involucrar al equipo en la redefinición del propósito del negocio."
+          },
+          {
+            "celda": "Continuidad×Distribuir",
+            "que_falta": "No se consideró la distribución geográfica de pacientes o la posibilidad de abrir una segunda ubicación más pequeña en lugar de expandir en el mismo sitio, como alternativa de distribución espacial del riesgo."
+          }
+        ],
+        "meta_patrones_count": 3,
+        "meta_patrones": [
+          "Patrón de convergencia numérica-ética: Las discrepancias en los números (7k vs 13k) siempre apuntan a tensiones éticas no resueltas (salud vs crecimiento), creando un mapa donde lo cuantitativo es síntoma de lo cualitativo.",
+          "Patrón de redefinición por restricción: Cada restricción identificada (horas, margen, salud) no solo limita las opciones, sino que redefine progresivamente qué significa 'éxito' en este contexto, transformando expansión en reequilibrio.",
+          "Patrón de validación escalonada: Las acciones recomendadas forman una secuencia donde cada paso valida empíricamente los supuestos del siguiente, creando un protocolo de decisión bajo incertidumbre que es replicable en otros contextos de alto riesgo."
+        ],
+        "tiempo_s": 129.81
+      },
+      "qwen3t_medium": {
+        "output_id": "qwen3t_medium",
+        "has_data": true,
+        "evaluadores_citados": 12,
+        "evaluadores_citados_list": [
+          "cogito-671b",
+          "deepseek-r1",
+          "deepseek-v3.1",
+          "glm-4.7",
+          "gpt-oss-120b",
+          "kimi-k2.5",
+          "minimax-m2.5",
+          "opus",
+          "qwen3-235b",
+          "sonnet",
+          "v3.2-chat",
+          "v3.2-reasoner"
+        ],
+        "genuinidad_pct": 100.0,
+        "genuine_cells": 21,
+        "total_cells": 21,
+        "celdas_up_vs_max": 0,
+        "celdas_same_vs_max": 21,
+        "celdas_down_vs_max": 0,
+        "nivel_sum_synth": 77,
+        "nivel_sum_max": 77,
+        "conexiones_total": 0,
+        "conexiones_cross_lente": 0,
+        "conexiones_intra_lente": 0,
+        "hallazgo_central": "",
+        "hallazgo_len": 0,
+        "hallazgo_non_generic": false,
+        "puntos_ciegos_count": 0,
+        "puntos_ciegos": [],
+        "meta_patrones_count": 0,
+        "meta_patrones": [],
+        "tiempo_s": 131.42
+      }
+    }
+  },
+  "summaries": [
+    {
+      "sintetizador": "cogito-671b",
+      "outputs_exitosos": 5,
+      "failed": false,
+      "avg_evaluadores_citados": 9.4,
+      "avg_genuinidad_pct": 100.0,
+      "celdas_up_total": 0,
+      "celdas_same_total": 105,
+      "celdas_down_total": 0,
+      "avg_conexiones": 3.6,
+      "avg_cross_lente": 3.6,
+      "avg_hallazgo_len": 357.4,
+      "hallazgo_non_generic_count": 5,
+      "avg_puntos_ciegos": 2.6,
+      "avg_meta_patrones": 3.0,
+      "avg_tiempo_s": 47.3
+    },
+    {
+      "sintetizador": "deepseek-r1",
+      "outputs_exitosos": 5,
+      "failed": false,
+      "avg_evaluadores_citados": 10.6,
+      "avg_genuinidad_pct": 100.0,
+      "celdas_up_total": 0,
+      "celdas_same_total": 105,
+      "celdas_down_total": 0,
+      "avg_conexiones": 3.0,
+      "avg_cross_lente": 3.0,
+      "avg_hallazgo_len": 326.6,
+      "hallazgo_non_generic_count": 5,
+      "avg_puntos_ciegos": 2.0,
+      "avg_meta_patrones": 2.6,
+      "avg_tiempo_s": 54.7
+    },
+    {
+      "sintetizador": "glm-5",
+      "outputs_exitosos": 0,
+      "failed": true
+    },
+    {
+      "sintetizador": "minimax-m2.5",
+      "outputs_exitosos": 0,
+      "failed": true
+    },
+    {
+      "sintetizador": "qwen3-235b",
+      "outputs_exitosos": 5,
+      "failed": false,
+      "avg_evaluadores_citados": 11.6,
+      "avg_genuinidad_pct": 100.0,
+      "celdas_up_total": 0,
+      "celdas_same_total": 105,
+      "celdas_down_total": 0,
+      "avg_conexiones": 2.2,
+      "avg_cross_lente": 2.2,
+      "avg_hallazgo_len": 190.8,
+      "hallazgo_non_generic_count": 3,
+      "avg_puntos_ciegos": 1.2,
+      "avg_meta_patrones": 2.0,
+      "avg_tiempo_s": 136.8
+    },
+    {
+      "sintetizador": "v3.2-chat",
+      "outputs_exitosos": 5,
+      "failed": false,
+      "avg_evaluadores_citados": 12.0,
+      "avg_genuinidad_pct": 100.0,
+      "celdas_up_total": 0,
+      "celdas_same_total": 105,
+      "celdas_down_total": 0,
+      "avg_conexiones": 2.0,
+      "avg_cross_lente": 2.0,
+      "avg_hallazgo_len": 160.4,
+      "hallazgo_non_generic_count": 2,
+      "avg_puntos_ciegos": 1.2,
+      "avg_meta_patrones": 1.4,
+      "avg_tiempo_s": 120.5
+    }
+  ],
+  "comparison_vs_max": {
+    "best_synth": "cogito-671b",
+    "ranking": [
+      [
+        "cogito-671b",
+        136.0
+      ],
+      [
+        "deepseek-r1",
+        130.0
+      ],
+      [
+        "qwen3-235b",
+        122.0
+      ],
+      [
+        "v3.2-chat",
+        120.0
+      ]
+    ],
+    "per_output": {
+      "v31_best": {
+        "same": 21,
+        "higher": 0,
+        "lower": 0,
+        "conexiones": 4,
+        "hallazgo": "La startup enfrenta una contradicción estructural insalvable: la estabilización requiere tiempo que el runway no permite, y el pivot requiere recursos que la estabilización demanda, agravada por una relación CEO-CTO rota que impide resolver el dilema, mientras el tiempo y efectivo se agotan en un contexto de alta rotación y sobrecarga del equipo técnico."
+      },
+      "70b_worst": {
+        "same": 21,
+        "higher": 0,
+        "lower": 0,
+        "conexiones": 3,
+        "hallazgo": "La paradoja de una lealtad invisible que, al intentar preservar tanto el éxito profesional como los lazos familiares, perpetúa un patrón transgeneracional de sacrificio personal que amenaza con destruir exactamente lo que busca conservar: la salud, el sentido de identidad y la continuidad familiar."
+      },
+      "maverick_medium": {
+        "same": 21,
+        "higher": 0,
+        "lower": 0,
+        "conexiones": 4,
+        "hallazgo": "La propuesta transforma un cambio de carrera potencialmente disruptivo en un proceso de 'prototipado reversible' que equilibra la búsqueda de sentido profesional con la preservación de la estabilidad familiar, mediante un marco iterativo de bajo riesgo que valida hipótesis antes de compromisos irreversibles, redefiniendo la transición profesional no como un salto binario sino como una adaptación escalonada con mecanismos de seguridad integrados."
+      },
+      "gptoss_depurar": {
+        "same": 21,
+        "higher": 0,
+        "lower": 0,
+        "conexiones": 3,
+        "hallazgo": "La contradicción entre el deseo de expansión lineal y los límites humanos/financieros revela que la verdadera innovación no está en crecer, sino en redefinir el crecimiento como equilibrio entre salud y sostenibilidad económica, donde la restricción (4 sillones, vacaciones obligatorias) genera un modelo más viable que la expansión ilimitada."
+      },
+      "qwen3t_medium": {
+        "same": 21,
+        "higher": 0,
+        "lower": 0,
+        "conexiones": 4,
+        "hallazgo": "La startup enfrenta un colapso inminente donde la preservación de identidades individuales (CTO como 'guardián', CEO como 'salvador') ha creado un sistema que prioriza la supervivencia emocional sobre la viabilidad estructural, acelerando su propia destrucción mediante patrones de adaptación que exacerban las crisis que intentan resolver."
+      }
+    },
+    "total_cells_same": 105,
+    "total_cells_higher": 0,
+    "total_cells_lower": 0,
+    "total_conexiones": 18,
+    "max_mec_conexiones": 0,
+    "max_mec_hallazgo": "(none)"
+  },
+  "top_connections": [
+    {
+      "synth": "v3.2-chat",
+      "output": "gptoss_depurar",
+      "celda_a": "Salud×Depurar",
+      "celda_b": "Continuidad×Depurar",
+      "conexion": "La depuración de costes variables ocultos (6.000€/mes) conecta directamente con la inviabilidad de la expansión a 5 sillones. Lo que en Salud se ve como 'sobrecarga financiera que impacta indirectamente en la salud', en Continuidad se traduce en 'opción no rentable que amenaza la viabilidad del negocio'. La misma evidencia numérica sirve para ambos diagnósticos.",
+      "evaluadores_origen": [
+        "opus",
+        "v3.2-chat",
+        "cogito-671b",
+        "qwen3-235b"
+      ],
+      "is_cross_lente": true
+    },
+    {
+      "synth": "v3.2-chat",
+      "output": "gptoss_depurar",
+      "celda_a": "Salud×Frontera",
+      "celda_b": "Sentido×Frontera",
+      "conexion": "Ambas celdas identifican la oposición fundamental entre 'máxima facturación' y 'máxima salud', pero desde perspectivas complementarias: Salud×Frontera enfatiza el riesgo humano y límites físicos, mientras Sentido×Frontera abstrae el patrón cognitivo que genera esta contradicción. Juntas revelan que la frontera no es solo técnica, sino ética y epistemológica.",
+      "evaluadores_origen": [
+        "opus",
+        "v3.2-chat",
+        "cogito-671b",
+        "qwen3-235b"
+      ],
+      "is_cross_lente": true
+    },
+    {
+      "synth": "v3.2-chat",
+      "output": "v31_best",
+      "celda_a": "Salud×Replicar",
+      "celda_b": "Continuidad×Replicar",
+      "conexion": "El patrón identificado de startup con product-market fit parcial pero problemas operativos (Salud×Replicar) se proyecta en la continuidad como modelo insostenible que requiere cambios estructurales para replicar el éxito de clientes grandes (Continuidad×Replicar), mostrando cómo el diagnóstico del presente informa las opciones futuras.",
+      "evaluadores_origen": [
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "cogito-671b",
+        "qwen3-235b"
+      ],
+      "is_cross_lente": true
+    },
+    {
+      "synth": "v3.2-chat",
+      "output": "v31_best",
+      "celda_a": "Salud×Frontera",
+      "celda_b": "Sentido×Depurar",
+      "conexion": "La contradicción formal (estabilización requiere tiempo que el runway no permite, pivot requiere recursos que la estabilización demanda) no es solo un límite operativo (Salud×Frontera) sino que redefine la pregunta estratégica como dilema estructural que necesita depuración de supuestos y mediación externa (Sentido×Depurar).",
+      "evaluadores_origen": [
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "cogito-671b"
+      ],
+      "is_cross_lente": true
+    },
+    {
+      "synth": "qwen3-235b",
+      "output": "qwen3t_medium",
+      "celda_a": "Sentido×Frontera",
+      "celda_b": "Continuidad×Frontera",
+      "conexion": "El miedo a la irrelevancia (Sentido×Frontera) no nombrado como límite identitario bloquea la toma de decisiones auténticas, lo que impide anticipar o prepararse para el trigger crítico de cancelación de cliente (Continuidad×Frontera). La frontera emocional paraliza la acción estructural necesaria para evitar el colapso.",
+      "evaluadores_origen": [
+        "opus",
+        "v3.2-chat",
+        "cogito-671b",
+        "qwen3-235b"
+      ],
+      "is_cross_lente": true
+    }
+  ],
+  "hallazgos": {
+    "v31_best": {
+      "cogito-671b": "La startup enfrenta una contradicción estructural insalvable: la estabilización requiere tiempo que el runway no permite, y el pivot requiere recursos que la estabilización demanda, agravada por una relación CEO-CTO rota que impide resolver el dilema, mientras el tiempo y efectivo se agotan en un contexto de alta rotación y sobrecarga del equipo técnico.",
+      "deepseek-r1": "La contradicción tiempo-recursos es una trampa estructural que trasciende el trade-off operativo: exige una intervención triple simultánea (reducción inmediata de burn rate, mediación externa del conflicto CEO-CTO, y enfoque quirúrgico en bugs que impactan churn) para crear el espacio temporal y relacional necesario para evitar el colapso inminente.",
+      "v3.2-chat": "La startup enfrenta una trampa estructural donde el tiempo necesario para estabilizar el producto excede el runway disponible, mientras que los recursos requeridos para pivotar a enterprise son los mismos que la estabilización demanda, creando un dilema irresoluble sin mediación externa o cambio fundamental de variables, agravado por una ruptura en la relación CEO-CTO que paraliza la toma de decisiones."
+    },
+    "70b_worst": {
+      "cogito-671b": "La paradoja de una lealtad invisible que, al intentar preservar tanto el éxito profesional como los lazos familiares, perpetúa un patrón transgeneracional de sacrificio personal que amenaza con destruir exactamente lo que busca conservar: la salud, el sentido de identidad y la continuidad familiar.",
+      "deepseek-r1": "La lealtad invisible al rol de proveedor encierra un circuito transgeneracional donde el miedo a repetir el destino paterno paradójicamente reproduce las condiciones que amenazan la salud y los vínculos, requiriendo una ruptura simultánea de estructuras operativas e identitarias.",
+      "qwen3-235b": "El miedo no nombrado a repetir el destino del padre —un infarto por estrés laboral— actúa como un motor oculto que perpetúa un ciclo transgeneracional de sacrificio, donde el éxito profesional se paga con la salud y la familia, y solo puede romperse mediante una adaptación identitaria profunda que redefina el sentido del deber."
+    },
+    "maverick_medium": {
+      "cogito-671b": "La propuesta transforma un cambio de carrera potencialmente disruptivo en un proceso de 'prototipado reversible' que equilibra la búsqueda de sentido profesional con la preservación de la estabilidad familiar, mediante un marco iterativo de bajo riesgo que valida hipótesis antes de compromisos irreversibles, redefiniendo la transición profesional no como un salto binario sino como una adaptación escalonada con mecanismos de seguridad integrados.",
+      "deepseek-r1": "La propuesta transforma el cambio de carrera de un salto binario a un proceso de 'validación existencial escalonada', donde la preservación financiera (Salud) y los límites temporales (Continuidad) crean un corredor seguro para probar el sentido (Sentido) mediante prototipos reversibles.",
+      "qwen3-235b": "El output transforma un dilema existencial de alto riesgo en un proceso de validación incremental y reversible, donde la preservación del sistema familiar no limita el cambio, sino que lo posibilita mediante fronteras claras, iteraciones controladas y un patrón replicable de transición segura."
+    },
+    "gptoss_depurar": {
+      "cogito-671b": "La contradicción entre el deseo de expansión lineal y los límites humanos/financieros revela que la verdadera innovación no está en crecer, sino en redefinir el crecimiento como equilibrio entre salud y sostenibilidad económica, donde la restricción (4 sillones, vacaciones obligatorias) genera un modelo más viable que la expansión ilimitada.",
+      "deepseek-r1": "La contradicción fundamental entre salud y expansión financiera se resuelve mediante un reequilibrio sistémico donde el límite humano (60h/semana) y el patrón cognitivo (confianza en ingresos lineales) convergen en S′=4 como síntesis viable, transformando el crecimiento en sostenibilidad replicable",
+      "v3.2-chat": "La mesa vio colectivamente que el caso no es un problema de optimización financiera, sino la manifestación concreta de un patrón sistémico donde la contradicción entre salud humana y lógica de crecimiento se materializa en discrepancias numéricas, límites físicos ignorados y una propuesta de expansión que, al ser analizada, revela ser formalmente inconsistente con la supervivencia del sistema."
+    },
+    "qwen3t_medium": {
+      "cogito-671b": "La startup enfrenta un colapso inminente donde la preservación de identidades individuales (CTO como 'guardián', CEO como 'salvador') ha creado un sistema que prioriza la supervivencia emocional sobre la viabilidad estructural, acelerando su propia destrucción mediante patrones de adaptación que exacerban las crisis que intentan resolver.",
+      "deepseek-r1": "La startup opera en un punto de no retorno estructural donde la conservación de identidades defensivas (CTO como 'guardián', CEO como 'salvador') acelera el colapso al bloquear la depuración de emociones no nombradas (vergüenza/miedo) y deudas técnicas/humanas críticas, haciendo que las adaptaciones propuestas (pivot) sean suicidio estructural ante fronteras objetivas insalvables (runway 7 meses, SLA imposible).",
+      "qwen3-235b": "La startup no está fallando por falta de estrategia o tecnología, sino por un conflicto sistémico entre supervivencia emocional y continuidad estructural: ambos líderes priorizan su identidad sobre la realidad, lo que bloquea cualquier acción efectiva, y convierte sus respuestas reactivas en mecanismos de aceleración del colapso."
+    }
+  },
+  "veredicto": {
+    "mejor_sintetizador": "cogito-671b",
+    "ranking": [
+      {
+        "modelo": "cogito-671b",
+        "score": 170.0
+      },
+      {
+        "modelo": "deepseek-r1",
+        "score": 160.8
+      },
+      {
+        "modelo": "qwen3-235b",
+        "score": 148.0
+      },
+      {
+        "modelo": "v3.2-chat",
+        "score": 141.2
+      }
+    ],
+    "justificacion": "cogito-671b destaca por genuinidad 100.0%, 3.6 conexiones/output, 3.0 meta-patrones/output, 0 celdas por encima del max mecanico",
+    "vale_la_pena": true,
+    "justificacion_vale_la_pena": "genera 18 conexiones entre celdas (max mecanico: 0); produce hallazgos centrales no triviales; 100.0% de celdas igualan o superan max mecanico",
+    "match_or_exceed_pct": 100.0,
+    "protocolo_recomendado": "1. Recoger evaluaciones R1+R2 de la mesa redonda (12 evaluadores). 2. Pasar todas las evaluaciones al sintetizador (cogito-671b). 3. El sintetizador produce: evaluacion integrada 21 celdas + conexiones + hallazgo central + puntos ciegos + meta-patrones. 4. Coste adicional: 1 llamada LLM (~47.3s). 5. Valor: conexiones entre lentes, hallazgo central, meta-patrones — informacion que max mecanico NO produce."
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "experiment": "exp9_product_design",
+  "date": "2026-03-11",
+  "models": {
+    "step35": "stepfun/step-3.5-flash",
+    "cogito": "deepcogito/cogito-v2.1-671b",
+    "kimi": "moonshotai/kimi-k2.5",
+    "deepseek": "deepseek/deepseek-chat-v3-0324",
+    "nemotron": "nvidia/llama-3.3-nemotron-super-49b-v1.5"
+  },
+  "r1_proposals": {
+    "step35": {
+      "chars": 16733,
+      "error": null
+    },
+    "cogito": {
+      "chars": 5235,
+      "error": null
+    },
+    "kimi": {
+      "chars": 10085,
+      "error": null
+    },
+    "deepseek": {
+      "chars": 4127,
+      "error": null
+    },
+    "nemotron": {
+      "chars": 10053,
+      "error": null
+    }
+  },
+  "r2_pizarras": {
+    "step35": {
+      "chars": 10324,
+      "error": null
+    },
+    "cogito": {
+      "chars": 3649,
+      "error": null
+    },
+    "kimi": {
+      "chars": 14807,
+      "error": null
+    },
+    "deepseek": {
+      "chars": 4845,
+      "error": null
+    },
+    "nemotron": {
+      "chars": 7552,
+      "error": null
+    }
+  },
+  "synthesis_chars": 4532
+}

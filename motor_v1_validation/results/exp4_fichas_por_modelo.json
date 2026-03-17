@@ -1,0 +1,424 @@
+{
+  "cogito-671b": {
+    "modelo": "cogito-671b",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.524,
+      "celdas_cubiertas": 83,
+      "celdas_3plus": 6
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.876,
+      "celdas_cubiertas": 105,
+      "celdas_3plus": 77,
+      "delta_nivel_medio": 1.352
+    },
+    "aportes_unicos": {
+      "total": 6,
+      "detalle": [
+        {
+          "output": "maverick_medium",
+          "celda": "Salud×Conservar",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "maverick_medium",
+          "celda": "Salud×Captar",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "maverick_medium",
+          "celda": "Salud×Distribuir",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "maverick_medium",
+          "celda": "Continuidad×Conservar",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "maverick_medium",
+          "celda": "Continuidad×Distribuir",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "maverick_medium",
+          "celda": "Continuidad×Adaptar",
+          "mi_score": 4,
+          "max_otros": 3
+        }
+      ]
+    },
+    "absorcion": {
+      "celdas_incorporadas": 16,
+      "de_quien_mas_incorporo": "qwen3-235b"
+    },
+    "angulos_propios": 10,
+    "inflacion": 6
+  },
+  "deepseek-r1": {
+    "modelo": "deepseek-r1",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.571,
+      "celdas_cubiertas": 78,
+      "celdas_3plus": 12
+    },
+    "ronda2": {
+      "has_r2": false,
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.571,
+      "celdas_cubiertas": 78,
+      "celdas_3plus": 12,
+      "delta_nivel_medio": 0.0
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 0,
+      "de_quien_mas_incorporo": ""
+    },
+    "angulos_propios": 0,
+    "inflacion": 0
+  },
+  "deepseek-v3.1": {
+    "modelo": "deepseek-v3.1",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.657,
+      "celdas_cubiertas": 90,
+      "celdas_3plus": 10
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.8,
+      "celdas_cubiertas": 105,
+      "celdas_3plus": 74,
+      "delta_nivel_medio": 1.143
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 33,
+      "de_quien_mas_incorporo": "qwen3-235b"
+    },
+    "angulos_propios": 11,
+    "inflacion": 0
+  },
+  "glm-4.7": {
+    "modelo": "glm-4.7",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.81,
+      "celdas_cubiertas": 100,
+      "celdas_3plus": 15
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.419,
+      "celdas_cubiertas": 103,
+      "celdas_3plus": 54,
+      "delta_nivel_medio": 0.609
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 29,
+      "de_quien_mas_incorporo": "qwen3-235b"
+    },
+    "angulos_propios": 8,
+    "inflacion": 0
+  },
+  "gpt-oss-120b": {
+    "modelo": "gpt-oss-120b",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.257,
+      "celdas_cubiertas": 63,
+      "celdas_3plus": 14
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.743,
+      "celdas_cubiertas": 105,
+      "celdas_3plus": 66,
+      "delta_nivel_medio": 1.486
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 82,
+      "de_quien_mas_incorporo": "qwen3-235b"
+    },
+    "angulos_propios": 18,
+    "inflacion": 0
+  },
+  "kimi-k2.5": {
+    "modelo": "kimi-k2.5",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.057,
+      "celdas_cubiertas": 95,
+      "celdas_3plus": 28
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.467,
+      "celdas_cubiertas": 104,
+      "celdas_3plus": 48,
+      "delta_nivel_medio": 0.41
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 18,
+      "de_quien_mas_incorporo": "qwen"
+    },
+    "angulos_propios": 6,
+    "inflacion": 0
+  },
+  "minimax-m2.5": {
+    "modelo": "minimax-m2.5",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.6,
+      "celdas_cubiertas": 85,
+      "celdas_3plus": 14
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.79,
+      "celdas_cubiertas": 91,
+      "celdas_3plus": 17,
+      "delta_nivel_medio": 0.19
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 0,
+      "de_quien_mas_incorporo": ""
+    },
+    "angulos_propios": 0,
+    "inflacion": 0
+  },
+  "opus": {
+    "modelo": "opus",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.505,
+      "celdas_cubiertas": 71,
+      "celdas_3plus": 19
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.771,
+      "celdas_cubiertas": 105,
+      "celdas_3plus": 67,
+      "delta_nivel_medio": 1.266
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 66,
+      "de_quien_mas_incorporo": "qwen3-235b"
+    },
+    "angulos_propios": 12,
+    "inflacion": 0
+  },
+  "qwen3-235b": {
+    "modelo": "qwen3-235b",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.543,
+      "celdas_cubiertas": 104,
+      "celdas_3plus": 58
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 3.19,
+      "celdas_cubiertas": 105,
+      "celdas_3plus": 87,
+      "delta_nivel_medio": 0.647
+    },
+    "aportes_unicos": {
+      "total": 31,
+      "detalle": [
+        {
+          "output": "maverick_medium",
+          "celda": "Salud×Depurar",
+          "mi_score": 2,
+          "max_otros": 1
+        },
+        {
+          "output": "maverick_medium",
+          "celda": "Sentido×Distribuir",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "gptoss_depurar",
+          "celda": "Salud×Conservar",
+          "mi_score": 4,
+          "max_otros": 3
+        },
+        {
+          "output": "gptoss_depurar",
+          "celda": "Salud×Captar",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "gptoss_depurar",
+          "celda": "Salud×Depurar",
+          "mi_score": 4,
+          "max_otros": 3
+        },
+        {
+          "output": "gptoss_depurar",
+          "celda": "Salud×Distribuir",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "gptoss_depurar",
+          "celda": "Salud×Frontera",
+          "mi_score": 5,
+          "max_otros": 4
+        },
+        {
+          "output": "gptoss_depurar",
+          "celda": "Salud×Adaptar",
+          "mi_score": 4,
+          "max_otros": 3
+        },
+        {
+          "output": "gptoss_depurar",
+          "celda": "Sentido×Conservar",
+          "mi_score": 3,
+          "max_otros": 2
+        },
+        {
+          "output": "gptoss_depurar",
+          "celda": "Sentido×Captar",
+          "mi_score": 4,
+          "max_otros": 3
+        }
+      ]
+    },
+    "absorcion": {
+      "celdas_incorporadas": 25,
+      "de_quien_mas_incorporo": "kimi-k2.5"
+    },
+    "angulos_propios": 7,
+    "inflacion": 17
+  },
+  "sonnet": {
+    "modelo": "sonnet",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.0,
+      "celdas_cubiertas": 94,
+      "celdas_3plus": 32
+    },
+    "ronda2": {
+      "has_r2": false,
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.0,
+      "celdas_cubiertas": 94,
+      "celdas_3plus": 32,
+      "delta_nivel_medio": 0.0
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 0,
+      "de_quien_mas_incorporo": ""
+    },
+    "angulos_propios": 0,
+    "inflacion": 0
+  },
+  "v3.2-chat": {
+    "modelo": "v3.2-chat",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.543,
+      "celdas_cubiertas": 84,
+      "celdas_3plus": 7
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 2.857,
+      "celdas_cubiertas": 105,
+      "celdas_3plus": 76,
+      "delta_nivel_medio": 1.314
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 55,
+      "de_quien_mas_incorporo": "qwen3-235b"
+    },
+    "angulos_propios": 12,
+    "inflacion": 0
+  },
+  "v3.2-reasoner": {
+    "modelo": "v3.2-reasoner",
+    "ronda1": {
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.419,
+      "celdas_cubiertas": 73,
+      "celdas_3plus": 9
+    },
+    "ronda2": {
+      "has_r2": true,
+      "outputs_evaluados": 5,
+      "nivel_medio": 1.419,
+      "celdas_cubiertas": 73,
+      "celdas_3plus": 9,
+      "delta_nivel_medio": 0.0
+    },
+    "aportes_unicos": {
+      "total": 0,
+      "detalle": []
+    },
+    "absorcion": {
+      "celdas_incorporadas": 0,
+      "de_quien_mas_incorporo": ""
+    },
+    "angulos_propios": 0,
+    "inflacion": 0
+  }
+}

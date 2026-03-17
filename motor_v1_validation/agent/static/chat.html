@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code OS v3 — El Enjambre</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+}
+
+/* ---- Sidebar ---- */
+#sidebar {
+  width: 260px;
+  background: #111128;
+  border-right: 1px solid #0f3460;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: width 0.2s;
+}
+
+#sidebar.collapsed {
+  width: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+#sidebar-header {
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #1a1a3e;
+}
+
+#sidebar-header h2 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #8888aa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#new-session-btn {
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+#new-session-btn:hover { background: #d63851; }
+
+#session-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.session-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.session-item:hover { background: #1a1a3e; }
+
+.session-item.active {
+  background: #1a1a3e;
+  border-left-color: #e94560;
+}
+
+.session-item .session-title {
+  font-size: 13px;
+  color: #c0c0d0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.session-item .session-phase {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.session-phase.design { background: #0d7377; color: #b2f5ea; }
+.session-phase.review { background: #92400e; color: #fef3c7; }
+.session-phase.execute { background: #065f46; color: #a7f3d0; }
+.session-phase.done { background: #047857; color: #d1fae5; }
+
+.session-item .session-delete {
+  color: #555;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 6px;
+  display: none;
+  flex-shrink: 0;
+}
+.session-item:hover .session-delete { display: inline; }
+.session-item .session-delete:hover { color: #e94560; }
+
+#session-list::-webkit-scrollbar { width: 4px; }
+#session-list::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+/* ---- Explorer section ---- */
+#explorer-section {
+  border-top: 1px solid #1a1a3e;
+  padding: 10px 12px;
+  flex-shrink: 0;
+}
+
+#explorer-header h2 {
+  font-size: 11px;
+  font-weight: 600;
+  color: #e94560;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+#explorer-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#explorer-controls select {
+  background: #1a1a2e;
+  color: #c0c0d0;
+  border: 1px solid #2a2a4e;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-size: 11px;
+  width: 100%;
+}
+
+#explore-btn {
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+}
+#explore-btn:hover { background: #d63851; }
+#explore-btn:disabled { background: #555; cursor: not-allowed; }
+
+#explorer-mode-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+#explorer-mode-row select { flex: 1; }
+
+#explorer-cost {
+  font-size: 10px;
+  color: #f0c040;
+  margin-top: 2px;
+  display: none;
+}
+
+#explorer-progress {
+  margin-top: 8px;
+}
+
+#explorer-status {
+  font-size: 11px;
+  color: #8888aa;
+  margin-bottom: 4px;
+}
+
+#explorer-bar-wrap {
+  background: #2a2a4e;
+  border-radius: 3px;
+  height: 4px;
+  overflow: hidden;
+}
+
+#explorer-bar {
+  background: #e94560;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+/* Swarm progress panel */
+#swarm-panel {
+  display: none;
+  margin-top: 8px;
+  background: #111128;
+  border: 1px solid #2a2a4e;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+#swarm-panel h3 {
+  font-size: 10px;
+  font-weight: 700;
+  color: #f0c040;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.swarm-models {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.swarm-model {
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #2a2a4e;
+  color: #8888aa;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.swarm-model.running { background: #2a3a1a; color: #4ecca3; }
+.swarm-model.done { background: #1a3a2a; color: #4ecca3; }
+.swarm-model.error { background: #3a1a1a; color: #e94560; }
+
+.swarm-model .dot {
+  width: 5px; height: 5px; border-radius: 50%; background: #555;
+}
+.swarm-model.running .dot { background: #4ecca3; animation: pulse 1s infinite; }
+.swarm-model.done .dot { background: #4ecca3; }
+.swarm-model.error .dot { background: #e94560; }
+
+.swarm-phase {
+  font-size: 10px;
+  color: #c0c0d0;
+  margin-bottom: 2px;
+}
+
+.swarm-phase .phase-label { color: #f0c040; font-weight: 600; }
+
+/* Pizarra mini-visualization */
+.pizarra-mini {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.pizarra-cell {
+  background: #2a2a4e;
+  border-radius: 3px;
+  padding: 3px 4px;
+  font-size: 8px;
+  text-align: center;
+}
+
+.pizarra-cell .cell-name {
+  color: #8888aa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pizarra-cell .cell-level {
+  font-weight: 700;
+  font-size: 10px;
+  margin-top: 1px;
+}
+
+.cell-level.l0 { color: #555; }
+.cell-level.l1 { color: #8888aa; }
+.cell-level.l2 { color: #f0c040; }
+.cell-level.l3 { color: #e94560; }
+.cell-level.l4 { color: #4ecca3; }
+
+#explorer-discoveries {
+  margin-top: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.discovery-card {
+  background: #1a1a3e;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 6px;
+  border-left: 3px solid #e94560;
+  font-size: 11px;
+}
+
+.discovery-card .disc-type {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #e94560;
+  margin-bottom: 3px;
+}
+
+.discovery-card .disc-text {
+  color: #c0c0d0;
+  line-height: 1.3;
+}
+
+.discovery-card .disc-context {
+  color: #4ecca3;
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+.discovery-card.promoted {
+  border-left-color: #4ecca3;
+  background: #1a2a2a;
+}
+
+.promoted-badge {
+  display: inline-block;
+  font-size: 8px;
+  font-weight: 700;
+  background: #065f46;
+  color: #a7f3d0;
+  padding: 1px 5px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+/* ---- Main content ---- */
+#main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#header {
+  background: #16213e;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #0f3460;
+  flex-shrink: 0;
+}
+
+#header h1 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #e94560;
+}
+
+#header .subtitle {
+  font-size: 12px;
+  color: #8888aa;
+  margin-left: 8px;
+}
+
+#header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+#toggle-sidebar {
+  background: transparent;
+  border: none;
+  color: #8888aa;
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+#toggle-sidebar:hover { color: #e94560; }
+
+#phase-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#phase-badge.design { background: #0d7377; color: #b2f5ea; }
+#phase-badge.review { background: #92400e; color: #fef3c7; }
+#phase-badge.execute { background: #065f46; color: #a7f3d0; animation: pulse-execute 1.5s infinite; }
+#phase-badge.done { background: #047857; color: #d1fae5; }
+
+@keyframes pulse-execute {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+#status-indicator {
+  font-size: 12px;
+  color: #4ecca3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ecca3;
+}
+
+#status-dot.thinking {
+  animation: pulse 1s infinite;
+  background: #f0c040;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+#messages {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.msg {
+  max-width: 100%;
+  padding: 6px 16px;
+  border-radius: 0;
+  line-height: 1.5;
+  font-size: 13px;
+  animation: fadeIn 0.1s ease-in;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.msg.no-anim { animation: none; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.msg.user {
+  align-self: stretch;
+  background: transparent;
+  color: #4aaeff;
+  border-left: 3px solid #4aaeff;
+  font-weight: 600;
+}
+
+.msg.assistant {
+  align-self: stretch;
+  background: transparent;
+  color: #e0e0e0;
+  padding: 6px 16px;
+}
+
+.msg.assistant pre {
+  background: #0d0d1a;
+  padding: 8px 10px;
+  border-radius: 4px;
+  border: 1px solid #2a2a4a;
+  overflow-x: auto;
+  margin: 4px 0;
+  font-size: 12px;
+}
+
+.msg.assistant code {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  background: #1a1a3e;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.msg.assistant p { margin: 3px 0; }
+.msg.assistant ul, .msg.assistant ol { margin: 3px 0 3px 18px; }
+.msg.assistant strong { color: #f0c040; }
+
+.msg.system-msg {
+  color: #8888aa;
+  font-style: italic;
+  font-size: 12px;
+  border-left: 3px solid #333;
+}
+
+/* System messages */
+.msg.system-msg {
+  align-self: center;
+  max-width: 90%;
+  background: #1a1a3e;
+  border: 1px solid #2a2a5e;
+  color: #8888cc;
+  font-size: 13px;
+  text-align: center;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+/* Review finding cards */
+.review-card {
+  align-self: flex-start;
+  max-width: 85%;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  animation: fadeIn 0.3s ease-in;
+  border-left: 4px solid;
+}
+
+.review-card.info { background: #1a2a3e; border-left-color: #3b82f6; }
+.review-card.info .review-severity { color: #60a5fa; }
+.review-card.warning { background: #2a2a1a; border-left-color: #f59e0b; }
+.review-card.warning .review-severity { color: #fbbf24; }
+.review-card.critical { background: #2a1a1a; border-left-color: #ef4444; }
+.review-card.critical .review-severity { color: #f87171; }
+
+.review-severity {
+  font-weight: 700; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; margin-bottom: 4px;
+}
+
+.review-finding { margin-bottom: 4px; }
+.review-suggestion { color: #8888aa; font-style: italic; font-size: 12px; }
+
+/* Review correction cards */
+.review-correction {
+  align-self: flex-start; max-width: 85%;
+  background: #1a2a2a; border: 1px solid #2a4a4a;
+  border-radius: 10px; padding: 12px 16px; font-size: 13px;
+  animation: fadeIn 0.3s ease-in;
+}
+.correction-field { font-weight: 600; color: #4ecca3; font-size: 12px; margin-bottom: 6px; }
+.correction-diff { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
+.correction-original { color: #ef4444; text-decoration: line-through; opacity: 0.7; }
+.correction-corrected { color: #4ecca3; }
+
+/* Execution progress bar */
+.execution-progress {
+  align-self: center; width: 80%; max-width: 500px;
+  background: #1a1a3e; border: 1px solid #2a2a5e;
+  border-radius: 10px; padding: 12px 16px; animation: fadeIn 0.3s ease-in;
+}
+.progress-bar-track { background: #2a2a4a; border-radius: 4px; height: 8px; overflow: hidden; margin: 8px 0; }
+.progress-bar-fill { background: linear-gradient(90deg, #047857, #4ecca3); height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+.progress-label { font-size: 12px; color: #8888aa; text-align: center; }
+
+/* Execution complete */
+.execution-summary {
+  align-self: flex-start; max-width: 85%;
+  background: #1a2a1a; border: 1px solid #2a5a3a;
+  border-radius: 10px; padding: 14px 18px; font-size: 13px;
+  animation: fadeIn 0.3s ease-in;
+}
+.execution-summary .summary-title { font-weight: 700; color: #4ecca3; margin-bottom: 8px; }
+.execution-summary .summary-row { display: flex; justify-content: space-between; padding: 2px 0; color: #aaa; }
+.execution-summary .summary-row span:last-child { color: #e0e0e0; font-family: 'SF Mono', monospace; }
+
+/* ---- Claude Code-style activity log ---- */
+.tool-box {
+  align-self: stretch; width: 100%; border-radius: 0;
+  font-size: 13px; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  animation: fadeIn 0.15s ease-in; overflow: hidden;
+  margin: 1px 0;
+}
+
+.tool-call-header {
+  background: transparent; padding: 6px 16px; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  border: none; border-left: 3px solid #5a5a30; border-radius: 0;
+  user-select: none; transition: background 0.1s;
+}
+.tool-call-header:hover { background: #ffffff08; }
+.tool-call-header .icon { font-size: 12px; flex-shrink: 0; }
+.tool-call-header .name { color: #f0c040; font-weight: 600; font-size: 13px; }
+.tool-call-header .args-preview { color: #777; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+.tool-call-header .chevron { color: #444; transition: transform 0.2s; flex-shrink: 0; font-size: 10px; }
+.tool-call-header.expanded .chevron { transform: rotate(90deg); }
+
+.tool-call-body {
+  display: none; padding: 6px 16px 6px 28px; background: #0d0d1a;
+  border-left: 3px solid #3a3a20; margin: 0;
+  max-height: 300px; overflow-y: auto; white-space: pre-wrap; word-break: break-all;
+  font-size: 12px; color: #888; line-height: 1.5;
+}
+.tool-call-body.visible { display: block; }
+
+.tool-result-header { border-left-color: #2a5a3a; }
+.tool-result-header.error { border-left-color: #5a2a2a; }
+.tool-result-header .name { color: #4ecca3; }
+.tool-result-header.error .name { color: #e94560; }
+.tool-result-body { border-left-color: #2a5a3a; background: #0a1a0a; }
+.tool-result-body.error { border-left-color: #5a2a2a; background: #1a0a0a; }
+
+/* ---- Thinking indicator (Claude Code style) ---- */
+.thinking-indicator {
+  align-self: stretch; width: 100%; padding: 8px 16px;
+  color: #8888aa; font-size: 13px; display: flex; align-items: center; gap: 10px;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  border-left: 3px solid #4a4aff; background: #0d0d2a;
+  animation: thinking-pulse 2s ease-in-out infinite;
+}
+.thinking-spinner {
+  width: 14px; height: 14px; border: 2px solid #333;
+  border-top-color: #4a4aff; border-radius: 50%;
+  animation: spin 0.8s linear infinite; flex-shrink: 0;
+}
+.thinking-label { color: #aaaacc; }
+.thinking-meta-info { display: flex; gap: 8px; align-items: center; margin-left: auto; }
+.thinking-timer {
+  font-variant-numeric: tabular-nums; color: #6666aa;
+  font-size: 12px; min-width: 40px; text-align: right;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes thinking-pulse {
+  0%, 100% { background: #0d0d2a; }
+  50% { background: #101035; }
+}
+
+/* ---- Badges ---- */
+.step-badge {
+  display: inline-flex; align-items: center; font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 3px; background: #2a2a4a; color: #8888cc;
+  font-variant-numeric: tabular-nums;
+}
+.model-badge {
+  display: inline-flex; align-items: center; font-size: 10px; padding: 1px 6px;
+  border-radius: 3px; background: #1a2a3a; color: #4aaeff;
+}
+.duration-badge {
+  display: inline-flex; align-items: center; font-size: 10px; padding: 1px 6px;
+  border-radius: 3px; background: #1a3a2a; color: #4ecca3;
+  font-variant-numeric: tabular-nums;
+}
+.cost-badge {
+  display: inline-flex; align-items: center; font-size: 10px; padding: 1px 6px;
+  border-radius: 3px; background: #3a2a1a; color: #f0c040;
+  font-variant-numeric: tabular-nums;
+}
+.tool-call-header .badges {
+  display: flex; align-items: center; gap: 4px; margin-left: auto; flex-shrink: 0;
+}
+.elapsed-badge {
+  font-size: 10px; color: #555; padding: 1px 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+#input-area {
+  background: #0d0d1a; padding: 8px 16px;
+  border-top: 1px solid #2a2a4a; display: flex; gap: 8px;
+  align-items: flex-end; flex-shrink: 0;
+}
+#input-area.disabled { opacity: 0.5; pointer-events: none; }
+
+#msg-input {
+  flex: 1; background: #111128; border: 1px solid #2a2a4a;
+  border-radius: 4px; padding: 8px 12px; color: #e0e0e0;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 13px;
+  resize: none; max-height: 120px; line-height: 1.4; outline: none;
+}
+#msg-input:focus { border-color: #4a4aff; }
+#msg-input::placeholder { color: #444; }
+
+#send-btn {
+  background: #e94560; color: white; border: none; border-radius: 8px;
+  padding: 10px 18px; font-size: 14px; font-weight: 600;
+  cursor: pointer; flex-shrink: 0; height: 40px;
+}
+#send-btn:hover { background: #d63851; }
+#send-btn:disabled { background: #555; cursor: not-allowed; }
+
+#stop-btn {
+  background: #b91c1c; color: white; border: none; border-radius: 8px;
+  padding: 10px 14px; font-size: 13px; font-weight: 600;
+  cursor: pointer; flex-shrink: 0; height: 40px;
+  font-family: 'SF Mono', monospace;
+}
+#stop-btn:hover { background: #991b1b; }
+
+/* File upload */
+#upload-btn {
+  background: transparent; border: 1px solid #0f3460; border-radius: 8px;
+  color: #8888aa; padding: 8px 12px; font-size: 16px; cursor: pointer;
+  flex-shrink: 0; height: 40px; display: flex; align-items: center; transition: all 0.2s;
+}
+#upload-btn:hover { border-color: #e94560; color: #e94560; }
+#file-input { display: none; }
+
+.file-indicator {
+  display: flex; align-items: center; gap: 6px;
+  background: #0f3460; padding: 4px 10px; border-radius: 6px;
+  font-size: 12px; color: #b0b0d0; margin-bottom: 6px;
+}
+.file-indicator .file-name { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-indicator .file-remove { cursor: pointer; color: #e94560; font-weight: bold; margin-left: 4px; }
+
+.file-received-card {
+  align-self: center; background: #1a2a3e; border: 1px solid #2a4a6e;
+  border-radius: 8px; padding: 8px 16px; font-size: 12px;
+  color: #6090c0; animation: fadeIn 0.2s ease-in;
+}
+
+/* Drag & drop overlay */
+#drop-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15, 52, 96, 0.85); z-index: 100;
+  align-items: center; justify-content: center; flex-direction: column; gap: 12px;
+}
+#drop-overlay.visible { display: flex; }
+#drop-overlay .drop-icon { font-size: 48px; }
+#drop-overlay .drop-text { font-size: 18px; color: #e0e0e0; }
+
+#footer {
+  background: #111128; padding: 6px 20px; font-size: 11px; color: #555;
+  display: flex; gap: 16px; flex-shrink: 0;
+}
+#footer span { display: inline-flex; align-items: center; gap: 4px; }
+
+/* Scrollbar */
+#messages::-webkit-scrollbar { width: 6px; }
+#messages::-webkit-scrollbar-track { background: transparent; }
+#messages::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+/* Mobile */
+@media (max-width: 600px) {
+  #sidebar { width: 0; overflow: hidden; border-right: none; }
+  #sidebar.open { width: 260px; position: fixed; z-index: 50; height: 100vh; }
+  .msg, .tool-box { max-width: 95%; }
+  #header h1 { font-size: 14px; }
+  .tool-call-header .args-preview { max-width: 180px; }
+  .review-card, .review-correction, .execution-summary { max-width: 95%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <div id="sidebar-header">
+    <h2>Sesiones</h2>
+    <button id="new-session-btn">+ Nueva</button>
+  </div>
+  <div id="session-list"></div>
+
+  <!-- Universidad I+D Explorer -->
+  <div id="explorer-section">
+    <div id="explorer-header">
+      <h2>Universidad I+D</h2>
+    </div>
+    <div id="explorer-controls">
+      <select id="scope-a">
+        <option value="">Scope A...</option>
+      </select>
+      <select id="scope-b">
+        <option value="">Scope B...</option>
+      </select>
+      <div id="explorer-mode-row">
+        <select id="explore-mode">
+          <option value="swarm">Enjambre (5 modelos)</option>
+          <option value="fast">Rapido (1 modelo)</option>
+        </select>
+        <select id="max-pairs">
+          <option value="3">3 pares</option>
+          <option value="5" selected>5 pares</option>
+          <option value="10">10 pares</option>
+        </select>
+      </div>
+      <div id="explorer-cost"></div>
+      <button id="explore-btn">Explorar</button>
+    </div>
+    <div id="explorer-progress" style="display:none">
+      <div id="explorer-status">Clasificando patrones...</div>
+      <div id="explorer-bar-wrap"><div id="explorer-bar"></div></div>
+    </div>
+    <div id="swarm-panel">
+      <h3>Enjambre</h3>
+      <div class="swarm-phase"><span class="phase-label" id="swarm-phase-label">Esperando...</span></div>
+      <div class="swarm-models" id="swarm-models-grid"></div>
+      <div class="pizarra-mini" id="pizarra-mini"></div>
+    </div>
+    <div id="explorer-discoveries"></div>
+  </div>
+</div>
+
+<!-- Main content -->
+<div id="main-content">
+  <div id="header">
+    <div id="header-left">
+      <button id="toggle-sidebar" title="Toggle sidebar">&#9776;</button>
+      <h1>Code OS v3</h1>
+      <span class="subtitle">El Enjambre</span>
+      <span id="phase-badge" class="design">DESIGN</span>
+    </div>
+    <div id="status-indicator">
+      <div id="status-dot"></div>
+      <span id="status-text">Conectado</span>
+    </div>
+  </div>
+
+  <div id="messages">
+    <div class="msg assistant">Code OS v3 iniciado. 61 herramientas disponibles. Escribe lo que necesites.</div>
+  </div>
+
+  <div id="file-preview"></div>
+  <div id="input-area">
+    <button id="upload-btn" title="Adjuntar documento (.md, .pdf, .docx, .txt, ...)">&#128206;</button>
+    <input type="file" id="file-input" accept=".md,.txt,.pdf,.docx,.doc,.json,.yaml,.yml,.csv,.py,.js,.ts,.html,.css,.sql,.sh,.xml,.toml,.ini,.log,.rst,.env,.cfg,.conf">
+    <textarea id="msg-input" rows="1" placeholder="Escribe aqui..." autofocus></textarea>
+    <button id="stop-btn" style="display:none" title="Parar (Esc)">Parar</button>
+    <button id="send-btn">Enviar</button>
+  </div>
+
+  <div id="footer">
+    <span id="ft-tokens">Tokens: 0</span>
+    <span id="ft-cost">Coste: $0.0000</span>
+    <span id="ft-model">Modelo: ---</span>
+  </div>
+</div>
+
+<div id="drop-overlay">
+  <div class="drop-icon">&#128206;</div>
+  <div class="drop-text">Suelta el archivo aqui</div>
+</div>
+
+<script>
+// ---- Session management via URL hash ----
+function getSessionId() {
+  let id = window.location.hash.replace('#', '');
+  if (!id || id.length < 8) {
+    id = crypto.randomUUID();
+    window.location.hash = id;
+  }
+  return id;
+}
+
+let chatId = getSessionId();
+const messagesEl = document.getElementById('messages');
+const inputEl = document.getElementById('msg-input');
+const sendBtn = document.getElementById('send-btn');
+const statusDot = document.getElementById('status-dot');
+const statusText = document.getElementById('status-text');
+const ftTokens = document.getElementById('ft-tokens');
+const ftCost = document.getElementById('ft-cost');
+const ftModel = document.getElementById('ft-model');
+const phaseBadge = document.getElementById('phase-badge');
+const inputArea = document.getElementById('input-area');
+const uploadBtn = document.getElementById('upload-btn');
+const fileInput = document.getElementById('file-input');
+const filePreview = document.getElementById('file-preview');
+const dropOverlay = document.getElementById('drop-overlay');
+const sidebar = document.getElementById('sidebar');
+const sessionList = document.getElementById('session-list');
+const newSessionBtn = document.getElementById('new-session-btn');
+const toggleSidebarBtn = document.getElementById('toggle-sidebar');
+
+let sending = false;
+let totalTokens = 0;
+let totalCost = 0;
+let currentPhase = 'design';
+let pendingFile = null;
+let _abortController = null;
+const stopBtn = document.getElementById('stop-btn');
+
+// ---- Sidebar ----
+toggleSidebarBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('collapsed');
+});
+
+newSessionBtn.addEventListener('click', () => {
+  const newId = crypto.randomUUID();
+  window.location.hash = newId;
+  window.location.reload();
+});
+
+async function loadSessionList() {
+  try {
+    const resp = await fetch('/chat/sessions');
+    if (!resp.ok) return;
+    const data = await resp.json();
+    const sessions = data.sessions || [];
+    renderSessionList(sessions);
+  } catch (e) {
+    // Sidebar degraded — no problem
+  }
+}
+
+function renderSessionList(sessions) {
+  sessionList.innerHTML = '';
+  for (const s of sessions) {
+    const id = s.id || s;
+    const title = s.title || 'Sin titulo';
+    const phase = s.phase || 'design';
+    const isActive = id === chatId;
+
+    const item = document.createElement('div');
+    item.className = 'session-item' + (isActive ? ' active' : '');
+    item.innerHTML = `
+      <span class="session-title">${escapeHtml(title)}</span>
+      <span class="session-phase ${phase}">${phase}</span>
+      <span class="session-delete" title="Eliminar" onclick="event.stopPropagation(); deleteSession('${escapeHtml(id)}')">&#10005;</span>
+    `;
+    item.addEventListener('click', () => {
+      if (id !== chatId) {
+        window.location.hash = id;
+        window.location.reload();
+      }
+    });
+    sessionList.appendChild(item);
+  }
+}
+
+async function deleteSession(id) {
+  if (!confirm('Eliminar esta sesion?')) return;
+  try {
+    await fetch(`/chat/session/${id}`, { method: 'DELETE' });
+    if (id === chatId) {
+      window.location.hash = '';
+      window.location.reload();
+    } else {
+      loadSessionList();
+    }
+  } catch (e) {}
+}
+
+// ---- Restore session on load ----
+async function restoreSession() {
+  try {
+    const resp = await fetch(`/chat/session/${chatId}/history`);
+    if (!resp.ok) return;
+    const data = await resp.json();
+    const history = data.history || [];
+    if (history.length === 0) return;
+
+    // Clear default welcome message
+    messagesEl.innerHTML = '';
+
+    for (const msg of history) {
+      if (msg.role === 'user') {
+        const div = document.createElement('div');
+        div.className = 'msg user no-anim';
+        div.textContent = msg.content;
+        messagesEl.appendChild(div);
+      } else if (msg.role === 'assistant' && msg.content) {
+        const div = document.createElement('div');
+        div.className = 'msg assistant no-anim';
+        div.innerHTML = renderMarkdown(msg.content);
+        messagesEl.appendChild(div);
+      }
+    }
+    scrollToBottom();
+  } catch (e) {
+    // Fresh session — OK
+  }
+}
+
+// ---- File upload handlers ----
+uploadBtn.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files.length > 0) setPendingFile(e.target.files[0]);
+});
+
+function setPendingFile(file) {
+  pendingFile = file;
+  const sizeKB = (file.size / 1024).toFixed(1);
+  filePreview.innerHTML = `
+    <div class="file-indicator">
+      <span>&#128206;</span>
+      <span class="file-name">${escapeHtml(file.name)}</span>
+      <span>(${sizeKB} KB)</span>
+      <span class="file-remove" onclick="clearPendingFile()">&#10005;</span>
+    </div>
+  `;
+}
+
+function clearPendingFile() {
+  pendingFile = null;
+  filePreview.innerHTML = '';
+  fileInput.value = '';
+}
+
+// ---- Drag & drop ----
+let dragCounter = 0;
+
+document.addEventListener('dragenter', (e) => {
+  e.preventDefault(); dragCounter++;
+  dropOverlay.classList.add('visible');
+});
+
+document.addEventListener('dragleave', (e) => {
+  e.preventDefault(); dragCounter--;
+  if (dragCounter <= 0) { dragCounter = 0; dropOverlay.classList.remove('visible'); }
+});
+
+document.addEventListener('dragover', (e) => e.preventDefault());
+
+document.addEventListener('drop', (e) => {
+  e.preventDefault(); dragCounter = 0; dropOverlay.classList.remove('visible');
+  if (e.dataTransfer.files.length > 0) { setPendingFile(e.dataTransfer.files[0]); inputEl.focus(); }
+});
+
+// ---- Auto-resize textarea ----
+inputEl.addEventListener('input', () => {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+});
+
+inputEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+sendBtn.addEventListener('click', sendMessage);
+stopBtn.addEventListener('click', () => {
+  if (_abortController) _abortController.abort();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && _abortController) { _abortController.abort(); }
+});
+
+// ---- UI helpers ----
+function scrollToBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+
+function addUserMsg(text) {
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  div.textContent = text;
+  messagesEl.appendChild(div);
+  scrollToBottom();
+}
+
+let _thinkingTimer = null;
+let _thinkingStart = 0;
+
+function addThinking(step, model, phase) {
+  removeThinking();
+  const div = document.createElement('div');
+  div.id = 'thinking-el';
+  div.className = 'thinking-indicator';
+  const stepHtml = step ? `<span class="step-badge">Paso ${step}</span>` : '';
+  const modelHtml = model ? `<span class="model-badge">${escapeHtml(model)}</span>` : '';
+  div.innerHTML = `
+    <div class="thinking-spinner"></div>
+    <span class="thinking-label">Pensando</span>
+    <div class="thinking-meta-info">
+      ${stepHtml}${modelHtml}
+      <span class="thinking-timer" id="think-timer">0.0s</span>
+    </div>
+  `;
+  messagesEl.appendChild(div);
+  scrollToBottom();
+  _thinkingStart = Date.now();
+  _thinkingTimer = setInterval(() => {
+    const el = document.getElementById('think-timer');
+    if (el) el.textContent = ((Date.now() - _thinkingStart) / 1000).toFixed(1) + 's';
+  }, 100);
+}
+
+function removeThinking() {
+  if (_thinkingTimer) { clearInterval(_thinkingTimer); _thinkingTimer = null; }
+  const el = document.getElementById('thinking-el');
+  if (el) el.remove();
+}
+
+function renderMarkdown(text) {
+  let html = escapeHtml(text);
+  html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => `<pre><code>${code}</code></pre>`);
+  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  html = html.replace(/\n\n/g, '</p><p>');
+  html = html.replace(/\n/g, '<br>');
+  return '<p>' + html + '</p>';
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function addAssistantMsg(text) {
+  removeThinking();
+  const div = document.createElement('div');
+  div.className = 'msg assistant';
+  div.innerHTML = renderMarkdown(text);
+  messagesEl.appendChild(div);
+  scrollToBottom();
+}
+
+function addSystemMsg(text) {
+  removeThinking();
+  const div = document.createElement('div');
+  div.className = 'msg system-msg';
+  div.innerHTML = renderMarkdown(text);
+  messagesEl.appendChild(div);
+  scrollToBottom();
+}
+
+function addToolCall(name, args, step, model) {
+  removeThinking();
+  const box = document.createElement('div');
+  box.className = 'tool-box';
+  // Show first key arg inline like Claude Code: ToolName(path="/file")
+  const entries = Object.entries(args);
+  let inlineArg = '';
+  if (entries.length > 0) {
+    const [k, v] = entries[0];
+    const val = typeof v === 'string' ? v : JSON.stringify(v);
+    const short = val.length > 60 ? val.substring(0, 57) + '...' : val;
+    inlineArg = `(${k}="${short}")`;
+  }
+  box.innerHTML = `
+    <div class="tool-call-header" onclick="toggleToolBody(this)">
+      <span class="icon">&#9654;</span>
+      <span class="name">${escapeHtml(name)}</span><span class="args-preview">${escapeHtml(inlineArg)}</span>
+      <div class="badges">
+        ${step ? `<span class="step-badge">${step}</span>` : ''}
+        <span class="chevron">&#9660;</span>
+      </div>
+    </div>
+    <div class="tool-call-body">${escapeHtml(JSON.stringify(args, null, 2))}</div>
+  `;
+  messagesEl.appendChild(box);
+  scrollToBottom();
+}
+
+function addToolResult(name, result, isError, durationMs, step, costUsd, elapsedS) {
+  const box = document.createElement('div');
+  box.className = 'tool-box';
+  // Show first line of result as preview
+  const firstLine = result.split('\n')[0] || result;
+  const preview = firstLine.length > 100 ? firstLine.substring(0, 97) + '...' : firstLine;
+  const errClass = isError ? ' error' : '';
+  const durationHtml = durationMs != null ? `<span class="duration-badge">${formatDuration(durationMs)}</span>` : '';
+  const costHtml = costUsd != null ? `<span class="cost-badge">$${costUsd.toFixed(4)}</span>` : '';
+  const elapsedHtml = elapsedS != null ? `<span class="elapsed-badge">${elapsedS}s total</span>` : '';
+  box.innerHTML = `
+    <div class="tool-call-header tool-result-header${errClass}" onclick="toggleToolBody(this)">
+      <span class="icon" style="font-size:11px">${isError ? '&#10060;' : '&#10003;'}</span>
+      <span class="args-preview">${escapeHtml(preview)}</span>
+      <div class="badges">${durationHtml}${costHtml}${elapsedHtml}<span class="chevron">&#9660;</span></div>
+    </div>
+    <div class="tool-call-body tool-result-body${errClass}">${escapeHtml(result)}</div>
+  `;
+  messagesEl.appendChild(box);
+  scrollToBottom();
+}
+
+function formatDuration(ms) {
+  if (ms < 1000) return ms + 'ms';
+  return (ms / 1000).toFixed(1) + 's';
+}
+
+function toggleToolBody(headerEl) {
+  headerEl.classList.toggle('expanded');
+  headerEl.nextElementSibling.classList.toggle('visible');
+}
+
+function setStatus(text, thinking) {
+  statusText.textContent = text;
+  statusDot.className = thinking ? 'thinking' : '';
+}
+
+function updateFooter(tokens, cost, model) {
+  totalTokens += tokens || 0;
+  totalCost += cost || 0;
+  ftTokens.textContent = `Tokens: ${totalTokens.toLocaleString()}`;
+  ftCost.textContent = `Coste: $${totalCost.toFixed(4)}`;
+  if (model) ftModel.textContent = `Modelo: ${model}`;
+}
+
+function setPhase(phase) {
+  currentPhase = phase;
+  phaseBadge.className = phase;
+  phaseBadge.textContent = phase.toUpperCase();
+  if (phase === 'execute' || phase === 'review') {
+    inputArea.classList.add('disabled');
+    inputEl.placeholder = phase === 'execute' ? 'Ejecucion en progreso...' : 'Review en progreso...';
+  } else {
+    inputArea.classList.remove('disabled');
+    inputEl.placeholder = phase === 'done' ? 'Chat libre — escribe lo que necesites...' : 'Describe lo que necesitas...';
+  }
+}
+
+function addReviewFinding(severity, finding, suggestion) {
+  removeThinking();
+  const card = document.createElement('div');
+  card.className = `review-card ${severity}`;
+  card.innerHTML = `
+    <div class="review-severity">${escapeHtml(severity)}</div>
+    <div class="review-finding">${escapeHtml(finding)}</div>
+    ${suggestion ? `<div class="review-suggestion">${escapeHtml(suggestion)}</div>` : ''}
+  `;
+  messagesEl.appendChild(card);
+  scrollToBottom();
+}
+
+function addReviewCorrection(field, original, corrected) {
+  removeThinking();
+  const card = document.createElement('div');
+  card.className = 'review-correction';
+  const origStr = typeof original === 'string' ? original : JSON.stringify(original);
+  const corrStr = typeof corrected === 'string' ? corrected : JSON.stringify(corrected);
+  card.innerHTML = `
+    <div class="correction-field">Auto-correccion: ${escapeHtml(field)}</div>
+    <div class="correction-diff">
+      <div class="correction-original">${escapeHtml(origStr)}</div>
+      <div class="correction-corrected">${escapeHtml(corrStr)}</div>
+    </div>
+  `;
+  messagesEl.appendChild(card);
+  scrollToBottom();
+}
+
+function updateExecutionProgress(iteration, max, message) {
+  removeThinking();
+  let progressEl = document.getElementById('exec-progress');
+  if (!progressEl) {
+    progressEl = document.createElement('div');
+    progressEl.id = 'exec-progress';
+    progressEl.className = 'execution-progress';
+    progressEl.innerHTML = `
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      <div class="progress-label" id="progress-label"></div>
+    `;
+    messagesEl.appendChild(progressEl);
+  }
+  const pct = Math.round((iteration / max) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `${iteration}/${max} — ${message || ''}`;
+  scrollToBottom();
+}
+
+function addExecutionComplete(data) {
+  removeThinking();
+  const progressEl = document.getElementById('exec-progress');
+  if (progressEl) progressEl.remove();
+  const card = document.createElement('div');
+  card.className = 'execution-summary';
+  const filesHtml = (data.files_changed || []).map(f => escapeHtml(f)).join(', ') || 'ninguno';
+  card.innerHTML = `
+    <div class="summary-title">Ejecucion completada</div>
+    <div class="summary-row"><span>Resultado:</span><span>${escapeHtml(data.result || data.stop_reason || '?')}</span></div>
+    <div class="summary-row"><span>Iteraciones:</span><span>${data.iterations || '?'}</span></div>
+    <div class="summary-row"><span>Tiempo:</span><span>${data.time_s || '?'}s</span></div>
+    <div class="summary-row"><span>Coste:</span><span>$${(data.cost || 0).toFixed(4)}</span></div>
+    <div class="summary-row"><span>Archivos:</span><span>${filesHtml}</span></div>
+  `;
+  messagesEl.appendChild(card);
+  scrollToBottom();
+}
+
+// ---- Send message ----
+async function sendMessage() {
+  const text = inputEl.value.trim();
+  if (!text && !pendingFile) return;
+  if (sending) return;
+
+  sending = true;
+  sendBtn.disabled = true;
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+
+  if (pendingFile && text) {
+    addUserMsg(`${text}\n[Adjunto: ${pendingFile.name}]`);
+  } else if (pendingFile) {
+    addUserMsg(`[Adjunto: ${pendingFile.name}]`);
+  } else {
+    addUserMsg(text);
+  }
+
+  setStatus('Pensando...', true);
+  addThinking();
+  stopBtn.style.display = 'block';
+  sendBtn.style.display = 'none';
+  _abortController = new AbortController();
+
+  try {
+    let response;
+    if (pendingFile) {
+      const formData = new FormData();
+      formData.append('chat_id', chatId);
+      formData.append('message', text);
+      formData.append('file', pendingFile);
+      clearPendingFile();
+      response = await fetch('/chat/upload', { method: 'POST', body: formData, signal: _abortController.signal });
+    } else {
+      response = await fetch('/chat/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, message: text }),
+        signal: _abortController.signal,
+      });
+    }
+
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const jsonStr = line.substring(6).trim();
+        if (!jsonStr) continue;
+        try { handleEvent(JSON.parse(jsonStr)); } catch (e) { console.warn('Parse error:', e); }
+      }
+    }
+
+    if (buffer.startsWith('data: ')) {
+      try { handleEvent(JSON.parse(buffer.substring(6).trim())); } catch (e) {}
+    }
+
+    // Refresh sidebar after interaction
+    loadSessionList();
+
+  } catch (err) {
+    removeThinking();
+    if (err.name === 'AbortError') {
+      addSystemMsg('Ejecucion detenida por el usuario.');
+    } else {
+      addAssistantMsg(`Error de conexion: ${err.message}`);
+    }
+  } finally {
+    sending = false;
+    _abortController = null;
+    sendBtn.disabled = false;
+    sendBtn.style.display = 'block';
+    stopBtn.style.display = 'none';
+    setStatus('Conectado', false);
+    removeThinking();
+    inputEl.focus();
+  }
+}
+
+function handleEvent(event) {
+  switch (event.type) {
+    case 'file_received': {
+      removeThinking();
+      const sizeKB = (event.size / 1024).toFixed(1);
+      const card = document.createElement('div');
+      card.className = 'file-received-card';
+      card.textContent = `Documento recibido: ${event.filename} (${sizeKB} KB, ${event.chars.toLocaleString()} chars extraidos)`;
+      messagesEl.appendChild(card);
+      scrollToBottom();
+      addThinking();
+      break;
+    }
+    case 'thinking': addThinking(event.step, event.model, event.phase); break;
+    case 'text': removeThinking(); addAssistantMsg(event.content); break;
+    case 'tool_call': addToolCall(event.name, event.args || {}, event.step, event.model); break;
+    case 'tool_result':
+      removeThinking();
+      addToolResult(event.name, event.result || '', event.is_error, event.duration_ms, event.step, event.cost_usd, event.elapsed_s);
+      break;
+    case 'status': removeThinking(); updateFooter(event.tokens, event.cost, event.model); break;
+    case 'error': removeThinking(); addAssistantMsg(`Error: ${event.content}`); break;
+    case 'phase_change':
+      setPhase(event.to);
+      addSystemMsg(`Fase: ${event.from.toUpperCase()} -> ${event.to.toUpperCase()}`);
+      break;
+    case 'review_finding': addReviewFinding(event.severity, event.finding, event.suggestion); break;
+    case 'review_correction': addReviewCorrection(event.field, event.original, event.corrected); break;
+    case 'review_complete':
+      addSystemMsg(`Review completo: ${event.findings_count} hallazgos, ${event.corrections_count} correcciones. ${event.briefing_summary || ''}`);
+      break;
+    case 'review_critical': addSystemMsg(`REVIEW FAILED: ${event.reason}`); break;
+    case 'execution_progress': updateExecutionProgress(event.iteration, event.max, event.message); break;
+    case 'execution_complete': addExecutionComplete(event); break;
+  }
+}
+
+// ---- Universidad I+D Explorer ----
+const scopeA = document.getElementById('scope-a');
+const scopeB = document.getElementById('scope-b');
+const exploreBtn = document.getElementById('explore-btn');
+const exploreMode = document.getElementById('explore-mode');
+const maxPairsEl = document.getElementById('max-pairs');
+const explorerCost = document.getElementById('explorer-cost');
+const explorerProgress = document.getElementById('explorer-progress');
+const explorerStatus = document.getElementById('explorer-status');
+const explorerBar = document.getElementById('explorer-bar');
+const explorerDiscoveries = document.getElementById('explorer-discoveries');
+const swarmPanel = document.getElementById('swarm-panel');
+const swarmPhaseLabel = document.getElementById('swarm-phase-label');
+const swarmModelsGrid = document.getElementById('swarm-models-grid');
+const pizarraMini = document.getElementById('pizarra-mini');
+
+const SWARM_MODEL_NAMES = {
+  'deepseek/deepseek-v3.2': 'V3.2',
+  'deepseek/deepseek-r1': 'R1',
+  'qwen/qwen3.5-397b-a17b': 'Qwen',
+  'z-ai/glm-4.7': 'GLM',
+  'moonshotai/kimi-k2.5': 'Kimi',
+  'deepcogito/cogito-v2-preview-deepseek-671b': 'Cogito',
+  'claude-opus-4-6': 'Opus',
+};
+
+const PIZARRA_CELLS = ['emergencias','conexiones_cruzadas','contradicciones','contextos_implementacion','isomorfismos','puntos_ciegos'];
+const PIZARRA_CELL_SHORT = {'emergencias':'Emerg','conexiones_cruzadas':'Conex','contradicciones':'Contr','contextos_implementacion':'Ctx','isomorfismos':'Iso','puntos_ciegos':'Ciegos'};
+
+async function loadScopes() {
+  try {
+    const resp = await fetch('/explorer/scopes');
+    const data = await resp.json();
+    const scopes = data.scopes || [];
+    [scopeA, scopeB].forEach(sel => {
+      sel.innerHTML = '<option value="">Scope...</option>';
+      scopes.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.scope;
+        opt.textContent = `${s.scope.split(':')[1]} (${s.count})`;
+        sel.appendChild(opt);
+      });
+    });
+    if (scopes.length >= 2) {
+      scopeA.value = scopes[0].scope;
+      scopeB.value = scopes[1].scope;
+    }
+  } catch(e) { console.error('Failed to load scopes:', e); }
+}
+
+// Cost estimation
+async function updateCostEstimate() {
+  if (!scopeA.value || !scopeB.value) { explorerCost.style.display = 'none'; return; }
+  const mode = exploreMode.value;
+  const pairs = parseInt(maxPairsEl.value);
+  try {
+    const resp = await fetch(`/explorer/estimate?scope_a=${encodeURIComponent(scopeA.value)}&scope_b=${encodeURIComponent(scopeB.value)}&max_pairs=${pairs}&mode=${mode}`);
+    if (!resp.ok) { explorerCost.style.display = 'none'; return; }
+    const data = await resp.json();
+    explorerCost.textContent = `~$${data.estimated_cost_usd.toFixed(2)} (${data.selected_pairs} pares)`;
+    explorerCost.style.display = 'block';
+  } catch(e) { explorerCost.style.display = 'none'; }
+}
+
+scopeA.addEventListener('change', updateCostEstimate);
+scopeB.addEventListener('change', updateCostEstimate);
+exploreMode.addEventListener('change', updateCostEstimate);
+maxPairsEl.addEventListener('change', updateCostEstimate);
+
+// Swarm UI helpers
+function initSwarmPanel() {
+  swarmPanel.style.display = 'block';
+  swarmPhaseLabel.textContent = 'Iniciando...';
+  swarmModelsGrid.innerHTML = '';
+  pizarraMini.innerHTML = PIZARRA_CELLS.map(c =>
+    `<div class="pizarra-cell" id="pz-${c}"><div class="cell-name">${PIZARRA_CELL_SHORT[c]}</div><div class="cell-level l0" id="pzl-${c}">0</div></div>`
+  ).join('');
+}
+
+function updateSwarmModel(modelId, status) {
+  const shortName = SWARM_MODEL_NAMES[modelId] || modelId.split('/').pop().slice(0,8);
+  let el = document.getElementById('sm-' + shortName);
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'sm-' + shortName;
+    el.className = 'swarm-model';
+    el.innerHTML = `<span class="dot"></span>${shortName}`;
+    swarmModelsGrid.appendChild(el);
+  }
+  el.className = `swarm-model ${status}`;
+}
+
+function updatePizarraCell(cellName, level) {
+  const el = document.getElementById('pzl-' + cellName);
+  if (el) {
+    el.textContent = level;
+    el.className = `cell-level l${Math.min(level, 4)}`;
+  }
+}
+
+exploreBtn.addEventListener('click', async () => {
+  if (!scopeA.value || !scopeB.value) {
+    alert('Selecciona ambos scopes');
+    return;
+  }
+  const mode = exploreMode.value;
+  const maxPairs = parseInt(maxPairsEl.value);
+
+  exploreBtn.disabled = true;
+  explorerProgress.style.display = 'block';
+  explorerDiscoveries.innerHTML = '';
+  explorerStatus.textContent = 'Iniciando exploración...';
+  explorerBar.style.width = '5%';
+
+  if (mode === 'swarm') initSwarmPanel();
+  else swarmPanel.style.display = 'none';
+
+  try {
+    const resp = await fetch('/explorer/run', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        scope_a: scopeA.value,
+        scope_b: scopeB.value,
+        max_pairs: maxPairs,
+        mode: mode,
+      }),
+    });
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let pairsDone = 0;
+    let totalPairs = maxPairs;
+
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, {stream: true});
+
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const event = JSON.parse(line.slice(6));
+          handleExplorerEvent(event);
+          if (event.type === 'analyzing_pair') {
+            pairsDone = event.pair;
+            totalPairs = event.total;
+            explorerBar.style.width = `${(pairsDone / totalPairs) * 100}%`;
+            explorerStatus.textContent = `Par ${pairsDone}/${totalPairs}: ${event.clasificacion}`;
+          }
+        } catch(e) {}
+      }
+    }
+  } catch(e) {
+    explorerStatus.textContent = 'Error: ' + e.message;
+  }
+
+  exploreBtn.disabled = false;
+  explorerBar.style.width = '100%';
+});
+
+function handleExplorerEvent(event) {
+  switch(event.type) {
+    case 'exploration_started':
+      explorerStatus.textContent = 'Exploración iniciada...';
+      break;
+    case 'phase':
+      explorerStatus.textContent = event.message;
+      break;
+    case 'classifications':
+      explorerStatus.textContent = `${event.total} pares clasificados`;
+      const types = Object.entries(event.by_type).map(([k,v]) => `${k}:${v}`).join(', ');
+      addDiscoveryCard('Clasificaciones', types, '', 'info');
+      break;
+
+    // Swarm events
+    case 'swarm_r1_start':
+      swarmPhaseLabel.textContent = 'R1: Exploración paralela';
+      break;
+    case 'swarm_model_start':
+      updateSwarmModel(event.model, 'running');
+      break;
+    case 'swarm_model_done':
+      updateSwarmModel(event.model, 'done');
+      break;
+    case 'swarm_model_error':
+      updateSwarmModel(event.model, 'error');
+      break;
+    case 'swarm_merge':
+      swarmPhaseLabel.textContent = `Merge R${event.ronda}: ${event.cambios} cambios`;
+      if (event.pizarra_levels) {
+        for (const [cell, level] of Object.entries(event.pizarra_levels)) {
+          updatePizarraCell(cell, level);
+        }
+      }
+      break;
+    case 'swarm_r2_start':
+      swarmPhaseLabel.textContent = 'R2: Estigmergia';
+      swarmModelsGrid.querySelectorAll('.swarm-model').forEach(el => el.className = 'swarm-model');
+      break;
+    case 'swarm_synthesis_start':
+      swarmPhaseLabel.textContent = `Síntesis: ${SWARM_MODEL_NAMES[event.model] || event.model}`;
+      updateSwarmModel(event.model, 'running');
+      break;
+    case 'swarm_synthesis_done':
+      updateSwarmModel(event.model, 'done');
+      break;
+    case 'swarm_complete':
+      swarmPhaseLabel.textContent = `Completado (confianza: ${(event.confianza || 0).toFixed(2)})`;
+      if (event.pizarra_levels) {
+        for (const [cell, level] of Object.entries(event.pizarra_levels)) {
+          updatePizarraCell(cell, level);
+        }
+      }
+      break;
+    case 'swarm_promoted':
+      addDiscoveryCard('Promovido a patrón', event.nombre || event.concepto || '', event.scope || '', 'promoted');
+      break;
+
+    case 'discovery':
+      const emgs = (event.emergencias || []).slice(0, 2).join(' | ');
+      const ctxs = (event.contextos || []).slice(0, 1).join('');
+      addDiscoveryCard(
+        `${event.clasificacion} → ${event.operacion}`,
+        emgs || 'Analizando...',
+        ctxs,
+        event.confianza > 0.7 ? 'high' : 'normal'
+      );
+      break;
+    case 'exploration_completed':
+      const s = event.summary;
+      explorerStatus.textContent = `Completado: ${s.discoveries} descubrimientos, ${s.total_emergencias} emergencias`;
+      if (s.cost_usd) explorerStatus.textContent += ` ($${s.cost_usd.toFixed(2)})`;
+      break;
+    case 'error':
+      explorerStatus.textContent = 'Error: ' + event.message;
+      break;
+  }
+}
+
+function addDiscoveryCard(type, text, context, level) {
+  const card = document.createElement('div');
+  card.className = 'discovery-card' + (level === 'promoted' ? ' promoted' : '');
+  if (level === 'high') card.style.borderLeftColor = '#4ecca3';
+  const badge = level === 'promoted' ? '<span class="promoted-badge">Nuevo patrón</span>' : '';
+  card.innerHTML = `
+    <div class="disc-type">${type}${badge}</div>
+    <div class="disc-text">${text}</div>
+    ${context ? `<div class="disc-context">→ ${context}</div>` : ''}
+  `;
+  explorerDiscoveries.prepend(card);
+}
+
+// ---- Init ----
+(async function init() {
+  await restoreSession();
+  loadSessionList();
+  loadScopes();
+})();
+</script>
+</body>
+</html>

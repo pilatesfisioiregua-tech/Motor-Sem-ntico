@@ -1,0 +1,17 @@
+[
+  {
+    "id": "clinica_dental",
+    "nombre": "Clínica Dental",
+    "input": "Odontólogo, 38 años, propietario de clínica dental privada.\n- 3 sillones, 2 dentistas (él + asociado).\n- Factura 45.000€/mes. Costes fijos 32.000€/mes. Margen neto ~7.000€/mes.\n- Trabaja 2.500 horas/año (~60h/semana). El asociado trabaja 1.800h/año.\n- Hipoteca de la clínica: 280.000€ pendientes, cuota 2.800€/mes.\n- Esposa dice: \"No paras nunca. Los niños preguntan por ti.\"\n- 2 hijos: 4 y 6 años.\n- El banco le ofrece crédito para ampliar a 5 sillones.\n- Él dice: \"Si abro sábados y contrato otro dentista, puedo subir a 65.000€/mes.\"\n- El tercer sillón está vacío el 40% del tiempo.\n- No tiene vacaciones desde hace 2 años.\n- Su padre tuvo infarto a los 52 trabajando 70h/semana en su propio negocio.\nPregunta implícita: ¿Debería expandir?"
+  },
+  {
+    "id": "startup_saas",
+    "nombre": "Startup SaaS",
+    "input": "CTO y co-fundador de SaaS B2B (gestión de inventario para restaurantes), 34 años.\n- 80 clientes de pago, MRR 12.000€. Churn: 8%/mes (alto).\n- Co-fundador técnico se fue hace 6 meses por \"diferencias de visión\".\n- Equipo: 3 desarrolladores junior + 1 diseñador part-time.\n- CEO insiste en pivotar a enterprise: \"Los restaurantes no pagan suficiente.\"\n- CTO cree que el producto necesita estabilización: 47 bugs abiertos, clientes se van por calidad.\n- Runway: 7 meses. Burn: 28.000€/mes.\n- Serie A: 3 fondos hablaron, ninguno avanzó. Feedback: \"métricas insuficientes.\"\n- 30% de ingresos viene de 3 clientes grandes que pidieron features custom.\n- CTO trabaja 70h/semana. 2 devs se fueron en 12 meses.\n- CTO y CEO apenas se hablan fuera de reuniones formales.\n- CTO: \"Si el producto fuera sólido, el churn bajaría solo.\"\n- CEO: \"Si no crecemos, morimos.\"\nPregunta implícita: ¿Pivotar a enterprise o estabilizar?"
+  },
+  {
+    "id": "cambio_carrera",
+    "nombre": "Cambio de Carrera",
+    "input": "Abogada corporativa, 45 años, 20 años en bufete prestigioso.\n- Salario: 180.000€/año. Hipoteca: 1.800€/mes, 15 años pendientes.\n- Marido freelance, ingresos irregulares (40-80K€/año).\n- 2 hijos: 14 y 16 años. Mayor empieza universidad en 2 años.\n- Rechazada para socia. \"Quizá el próximo ciclo.\"\n- 3 años pensando en cambiar a derecho medioambiental en ONG (salario: 55.000€/año).\n- \"He perdido la pasión por el derecho corporativo.\"\n- Padres: \"Estás loca.\"\n- Amiga hizo cambio similar, ahora gana menos pero \"por fin vive.\"\n- Insomnio 2 años. Médico: \"Es estrés laboral.\"\n- No ha hablado en profundidad con su marido sobre el cambio.\n- 120.000€ ahorrados.\n- \"Si no lo hago ahora, no lo haré nunca.\"\n- \"No puedo arriesgar la estabilidad de mis hijos.\"\nPregunta implícita: ¿Dejar el bufete o quedarse?"
+  }
+]

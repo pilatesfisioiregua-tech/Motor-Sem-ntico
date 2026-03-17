@@ -1,0 +1,793 @@
+{
+  "experiment": "exp1_bis",
+  "date": "2026-03-11",
+  "models": [
+    "kimi-k2.5",
+    "qwen3.5-397b",
+    "nemotron-super",
+    "step-3.5-flash",
+    "mimo-v2-flash",
+    "devstral"
+  ],
+  "results": {
+    "kimi-k2.5": {
+      "T1": {
+        "score": 0.811,
+        "metrics": {
+          "sections_found": 6,
+          "sections_score": 0.667,
+          "gap_mentions": 6,
+          "questions": 6,
+          "actions": 15,
+          "has_critical_gap": true,
+          "length": 4474
+        },
+        "tokens_in": 337,
+        "tokens_out": 4096,
+        "latency_s": 102.33,
+        "cost": 0.00665,
+        "raw": "Aquí está el análisis estructurado del caso de Elena:\n\n---\n\n### 1. SALUD × CONSERVAR\n**Gap principal:** El activo más crítico del negocio (Elena) está en colapso físico y mental. Trabaja 50h/semana sin descanso desde hace 3 años, lo que genera un riesgo inminente de burnout que paralizaría la clínica inmediatamente.\n\n**Pregunta diagnóstica:** *\"¿Qué tres procedimientos críticos dependen exclusivamente de tu presencia física y qué pasaría si mañana tuvieras una baja médica por estrés durante dos meses?\"*\n\n**Acción concreta:** Establecer un \"protocolo de emergencia vital\" inmediato: reducir horario a 40h/semana máximo durante las próximas 8 semanas, bloquear 2 días de descanso forzado al mes (con agenda cerrada irremisiblemente) y delegar todas las revisiones de mantenimiento a la higienista antes de perderla.\n\n---\n\n### 2. SALUD × CAPTAR\n**Gap principal:** No está captando los recursos energéticos ni económicos necesarios para sanear el modelo. Continúa compitiendo por volumen con el low-cost en vez de captar pacientes de alto valor que le permitan reducir horas manteniendo ingresos.\n\n**Pregunta diagnóstica:** *\"¿Qué porcentaje de tu facturación actual proviene de tratamientos que solo tú puedes realizar y que pagan por encima de 1.500€, vs. limpiezas y empastes que compites en precio con el low-cost?\"*\n\n**Acción concreta:** Rediseñar la cartera de servicios para captar exclusivamente casos de implantes, rehabilitación compleja y estética avanzada (alto margen), subiendo los precios un 20% y filtrando mediante consulta previa de valoración pagada, reduciendo así la carga horaria en un 30%.\n\n---\n\n### 3. SALUD × DEPURAR\n**Gap principal:** No filtra la carga de trabajo ni elimina pacientes/problemáticos. Mantiene una agenda saturada de procedimientos de bajo valor que agotan su capital físico sin retorno proporcional.\n\n**Pregunta diagnóstica:** *\"¿Cuántas horas semanales dedicas a pacientes que requieren más energía emocional de la que generan ingresos, y cuáles son los criterios objetivos para 'despedir' pacientes tóxicos?\"*\n\n**Acción concreta:** Implementar un \"filtro de rentabilidad\": crear una lista de espera prioritaria solo para tratamientos de >800€, transferir todos los casos de mantenimiento preventivo a la higienista (si se queda) o a un dentista colaborador externo por horas, y notificar a pacientes \"conflictivos\" que la clínica cierra lista temporalmente.\n\n---\n\n### 4. SENTIDO × CONSERVAR\n**Gap principal:** Ha perdido el propósito original de la clínica. Opera por inercia y presión externa (padre) en lugar de por una visión propia, lo que erosiona su motivación y calidad de vida diaria.\n\n**Pregunta diagnóstica:** *\"Si tu padre no existiera y no debieras demostrarle nada a nadie, ¿seguirías siendo dentista y qué tipo de práctica desearías tener exactamente dentro de 5 años?\"*\n\n**Acción concreta:** Realizar un ejercicio de \"re-fundación\": escribir una nueva declaración de misión personal excluyendo cualquier referencia a expectativas familiares, definiendo el éxito como \"equilibrio vida-trabajo + excelencia clínica\" en lugar de \"tamaño del negocio\", y leerla en voz alta al padre para establecer el nuevo marco.\n\n---\n\n### 5. SENTIDO × CAPTAR\n**Gap principal:** Está a punto de captar un crecimiento (segunda sede) que no tiene sentido para su etapa vital actual. Confunde el legado del padre con su propio propósito, atrayendo una carga que no desea.\n\n**Pregunta diagnóstica:** *\"¿Abrir una segunda sede te acerca a la vida que quieres vivir o te aleja de ella, y qué necesidades emocionales tuyas intenta cubrir realmente esa expansión?\"*\n\n**Acción concreta:** Rechazar formalmente el crédito del banco durante 12 meses y captar en su lugar un \"sentido de escalabilidad interna\": definir que el éxito será crear una clínica tan bien diseñada que funcione 2 días/semana sin ella, antes de pensar en replicarla físicamente.\n\n---\n\n### 6. SENTIDO × DEPURAR\n**Gap principal:** No ha depurado la injerencia familiar ni las expectativas heredadas. Mantiene una estructura mental donde el negocio pertece \"a la dinastía familiar\" más que a ella, limitando su autonomía decisional.\n\n**Pregunta diagnóstica:** *\"¿Qué partes de tu operación actual (horarios, servicios, inversión en equipamiento) existen principalmente para que tu padre se sienta orgulloso o válido en su jubilación?\"*\n\n**Acción concreta:** Tener una conversación estructurada con el padre: *\"Papá, tu legado ya está construido en mí. La segunda sede sería"
+      },
+      "T2": {
+        "score": 0.893,
+        "metrics": {
+          "extracted_scores": {
+            "1": 3,
+            "2": 3,
+            "3": 4,
+            "4": 1,
+            "5": 1,
+            "6": 4
+          },
+          "discrimination": 1.0,
+          "recognition": 0.667,
+          "correlation": 0.963,
+          "has_ranking": true,
+          "h4_score": 1,
+          "h5_score": 1
+        },
+        "tokens_in": 469,
+        "tokens_out": 4040,
+        "latency_s": 86.28,
+        "cost": 0.00676,
+        "raw": "**Hallazgo 1:** 3 - Cálculo matemático correcto y específico del caso pero constituye la traducción literal de la métrica de churn sin revelar implicaciones estratégicas no obvias.\n\n**Hallazgo 2:** 3 - Interpretación válida que identifica una tensión estructural real, aunque la dicotomía \"técnico vs comercial\" es un marco genérico aplicable a la mayoría de startups en conflicto fundacional.\n\n**Hallazgo 3:** 4 - Revela que la validación del modelo enterprise ya existe en los datos actuales, cambiando la pregunta de \"si pivotar\" a \"cómo reconocer y acelerar una transición ya en curso\".\n\n**Hallazgo 4:** 1 - Afirmación tautológica y vacía aplicable a cualquier situación de elección estratégica sin contenido analítico específico del caso.\n\n**Hallazgo 5:** 1 - Recomendación genérica y obvia que podría aplicarse a cualquier conflicto laboral sin considerar las restricciones de tiempo ni la naturaleza del dilema específico.\n\n**Hallazgo 6:** 4 - Expone la contradicción matemática entre el runway disponible y el tiempo requerido para pivotar, revelando que la opción \"pivotar\" es operativamente inviable y reconfigurando el dilema real hacia la supervivencia inmediata.\n\n---\n\n**Ranking (mejor a peor):** Hallazgo 6 > Hallazgo 3 > Hallazgo 2 > Hallazgo 1 > Hallazgo 5 > Hallazgo 4\n\n**Score medio:** 2.7"
+      },
+      "T4": {
+        "score": 0.8,
+        "metrics": {
+          "checks": {
+            "has_serve_handler": true,
+            "handles_post": true,
+            "parses_json": true,
+            "error_400": true,
+            "cors_headers": true,
+            "iterates_metrics": false,
+            "threshold_compare": true,
+            "returns_alerts": true,
+            "returns_summary": true,
+            "returns_worst": false
+          },
+          "passed": 8,
+          "total": 10,
+          "code_length": 1466
+        },
+        "tokens_in": 316,
+        "tokens_out": 3072,
+        "latency_s": 65.99,
+        "cost": 0.00508,
+        "raw": "```typescript\nDeno.serve(async (req) => {\n  const corsHeaders = {\n    \"Access-Control-Allow-Origin\": \"*\",\n    \"Access-Control-Allow-Methods\": \"POST, OPTIONS\",\n    \"Access-Control-Allow-Headers\": \"Content-Type\",\n  };\n\n  if (req.method === \"OPTIONS\") {\n    return new Response(null, { headers: corsHeaders });\n  }\n\n  if (req.method !== \"POST\") {\n    return new Response(JSON.stringify({ error: \"Method not allowed\" }), {\n      status: 405,\n      headers: { ...corsHeaders, \"Content-Type\": \"application/json\" },\n    });\n  }\n\n  try {\n    const text = await req.text();\n    if (!text) {\n      return new Response(JSON.stringify({ error: \"Empty body\" }), {\n        status: 400,\n        headers: { ...corsHeaders, \"Content-Type\": \"application/json\" },\n      });\n    }\n\n    const body = JSON.parse(text);\n    const { metrics, thresholds } = body;\n\n    if (!Array.isArray(metrics)) {\n      return new Response(JSON.stringify({ error: \"metrics must be an array\" }), {\n        status: 400,\n        headers: { ...corsHeaders, \"Content-Type\": \"application/json\" },\n      });\n    }\n\n    if (typeof thresholds !== \"object\" || thresholds === null || Array.isArray(thresholds)) {\n      return new Response(JSON.stringify({ error: \"thresholds must be an object\" }), {\n        status: 400,\n        headers: { ...corsHeaders, \"Content-Type\": \"application/json\" },\n      });\n    }\n\n    const alerts = [];\n    const summary = { total: metrics.length, critical: 0, warn: 0, ok: 0, unknown:"
+      },
+      "T3": {
+        "score": 0.8,
+        "metrics": {
+          "P1_correct": true,
+          "P2_correct": true,
+          "P3_correct": true,
+          "P4_correct": true,
+          "P5_correct": false,
+          "P5_detail": [
+            "?",
+            "?",
+            "?",
+            "?"
+          ],
+          "correct_count": 4
+        },
+        "tokens_in": 594,
+        "tokens_out": 7094,
+        "latency_s": 144.79,
+        "cost": 0.01153,
+        "raw": "Aquí están las soluciones paso a paso:\n\n---\n\n### **P1 (Aritmética de negocio)**\n\n**Datos:**\n- Facturación objetivo: 180K€/año → 15K€/mes\n- Margen neto: 25% → Beneficio objetivo: 3.75K€/mes (45K€/año)\n- Inversión: 200K€\n- Crecimiento lineal: 0 → 3.75K€/mes en 18 meses\n\n**Cálculo:**\n1. **Fase de crecimiento (meses 1-18):** El beneficio mensual crece linealmente desde 0 hasta 3.75K€.\n   - Beneficio acumulado (aproximación continua): Área del triángulo = ½ × 18 × 3.75K€ = **33.75K€**\n   - (Discreto: 35.63K€, diferencia negligible)\n\n2. **Fase estable (post-mes 18):** Beneficio constante de 3.75K€/mes\n   - Pendiente por recuperar: 200K€ - 33.75K€ = **166.25K€**\n   - Meses adicionales necesarios: 166.25K€ ÷ 3.75K€/mes = **44.33 meses**\n\n3. **Total:** 18 + 44.33 = **62.33 meses**\n\n**RESULTADO FINAL P1: 62 meses (aproximadamente 5.2 años)**\n\n---\n\n### **P2 (Probabilidad)**\n\n**Modelo:** Binomial X ~ B(n=6, p=0.15)\n\n**P(exactamente 0):**\n$$P(X=0) = (0.85)^6 = 0.3771$$\n**→ 37.71%**\n\n**P(2 o más):**\n$$P(X \\geq 2) = 1 - P(X=0) - P(X=1)$$\n$$P(X=1) = \\binom{6}{1}(0.15)^1(0.85)^5 = 6 \\times 0.15 \\times 0.4437 = 0.3993$$\n$$P(X \\geq 2) = 1 - 0.3771 - 0.3993 = 0.2236$$\n**→ 22.36%**\n\n**RESULTADO FINAL P2:** \n- **P(≥2 developers): 22.36% (o ~22.4%)**\n- **P(exactamente 0): 37.71% (o ~37.7%)**\n\n---\n\n### **P3 (Optimización)**\n\n**Cash disponible:** 7 meses × 28K€ = **196K€**\n\n**Opción Pivot (4 meses):**\n- Burn rate: 28K + 15K = 43K€/mes\n- Gasto total: 4 × 43K€ = 172K€\n- Restante: 196K€ - 172K€ = 24K€\n- Runway post-implementación: 24K€ ÷ 28K€/mes = **0.86 meses**\n- **Viabilidad:** 0.86 < 2 meses requeridos → **NO viable**\n\n**Opción Estabilización (3 meses):**\n- Burn rate: 28K + 5K = 33K€/mes\n- Gasto total: 3 × 33K€ = 99K€\n- Restante: 196K€ - 99K€ = 97K€\n- Runway post-implementación: 97K€ ÷ 28K€/mes = **3.46 meses**\n- **Viabilidad:** 3.46 > 2 meses requeridos → **Viable**\n\n**RESULTADO FINAL P3:**\n- **Pivot:** 0.86 meses de runway post-implementación (NO viable)\n- **Estabilización:** 3.46 meses de runway post-implementación (Viable)\n\n---\n\n### **P4 (Series)**\n\n**Fórmula recursiva:** $C_t = 0.92 \\times C_{t-1} + 10$\n\n**Evolución:**\n- **Mes 0:** 75\n- **Mes 1:** 0.92(75) + 10 = **79.00**\n- **Mes 3:** 0.92(86.07) + 10 = **86.07** (tras iteraciones: 79 → 82.68 → 86.07)\n- **Mes 6:** Iterando: 86.07 → 89.18 → 92.05 → **94.68**\n- **Mes 12:** Continuando la serie hasta t=12: **106.62**\n\n**Equilibrio (convergencia):**\n$$C_{eq} = 0.92C_{eq} + 10 \\Rightarrow 0.08C_{eq} = 10 \\Rightarrow C_{eq} = \\textbf{125 clientes}$$\n\n**RESULTADO FINAL P4:**\n- Mes 1: **79 clientes**\n- Mes 3: **86 clientes** (86.07)\n- Mes 6: **95 clientes** (94.68)\n- Mes 12: **107 clientes** (106.62)\n- **Sí converge** al equilibrio: **125 clientes**\n\n---\n\n### **P5 (Lógica)**\n\n**Criterios:**\n- A: Sí si coste < 50K\n- B: Sí si ROI > 20%\n- C: Sí si no requiere personal\n- Mayoría = 2+ votos Sí\n\n| Propuesta | Coste | ROI | Personal | A | B | C | Total | ¿Aprobada? |\n|-----------|-------|-----|----------|---|---|---|-------|------------|\n| **1** | 30K | 25% | 1 pers. | Sí | Sí | **No** | 2-1 | **SÍ** |\n| **2** | 60K | 35% | 0 pers. | **No** | Sí | Sí | 2-1 | **SÍ** |\n| **3** | 45K | 15% | 0 pers. | Sí | **No** | Sí | 2-1 | **SÍ** |\n| **4** | 55K | 22% | 2 pers. | **No** | Sí | **No** | 1-2 | **NO** |\n\n**RESULTADO FINAL P5:**\n- Propuesta 1: **Aprobada**\n- Propuesta 2: **Aprobada**\n- Propuesta 3: **Aprobada**\n- Propuesta 4: **Rechazada**"
+      },
+      "T5": {
+        "score": 1.0,
+        "metrics": {
+          "connections_found": 3,
+          "unique_lenses_referenced": 5,
+          "has_cross_lens": true,
+          "has_contradiction": true,
+          "has_emergent": true,
+          "inter_lens_connections": 1,
+          "length": 4707
+        },
+        "tokens_in": 705,
+        "tokens_out": 4826,
+        "latency_s": 105.41,
+        "cost": 0.0083,
+        "raw": "**CONEXIÓN 1: El coste oculto del framing binario**\n- **Lentes:** INT-05 (Estratégica) + INT-16 (Constructiva) + INT-07 (Financiera)\n- **Qué revela:** El framing binario \"saltar o quedarme\" no solo elimina opciones viables estratégicamente, sino que la expone innecesariamente al coste de oportunidad del 15% anual (Financiera). Sin embargo, la viabilidad técnica de la transición gradual —compatible con mantener ingresos parciales del track legal— demuestra que puede mitigar ese coste de oportunidad sin el shock financiero del salto total. La \"falta de opciones\" es una ilusión cognitiva que tiene precio financiero real.\n- **Implicación:** Debe reframes el problema no como \"¿me arriesgo?\", sino como \"¿cómo ejecuto la transición gradual en los próximos 6 meses antes de que el coste de oportunidad sea irreversible?\".\n\n**CONEXIÓN 2: El coraje como problema relacional, no individual**\n- **Lentes:** INT-17 (Existencial) + INT-08 (Social) + INT-05 (Estratégica)\n- **Qué revela:** El \"coraje\" que le falta para actuar (Existencial) no es ausencia de valentía personal, sino miedo a la disolución de su identidad social (\"la abogada exitosa\") ante su entorno. El silencio con su marido (Social) y el framing binario (Estratégica) funcionan juntos como defensa psicológica: las opciones intermedias (transición 60/40, mediación interna) requerirían que ella negocie constantemente con su entorno una identidad ambigua (\"estoy en ambos mundos\"), exponiendo la pregunta que evita: \"¿quién soy si no soy esto?\". El framing binario le permite postergar la confrontación social.\n- **Implicación:** La conversación con su marido no es un paso opcional de soporte emocional, sino un requisito técnico para desbloquear las opciones estratégicas intermedias; sin resolver la tensión de identidad ante los otros, seguirá bloqueada en la parálisis binaria.\n\n**CONEXIÓN 3: La degradación por inacción**\n- **Lentes:** INT-16 (Constructiva) + INT-17 (Existencial) + INT-07 (Financiera)\n- **Qué revela:** El insomnio crónico de 8 meses (Existencial) está degradando su capacidad ejecutiva precisamente cuando necesita máxima claridad cognitiva para gestionar la complejidad de una transición gradual (Constructiva) que minimizaría el coste de oportunidad (Financiera). La no-decisión es un activo depreciativo: cada mes aumenta el coste financiero del 15% y reduce simultáneamente su energía disponible para ejecutar el único plan viable que optimiza ambos riesgos.\n- **Implicación:** El \"prototipo mínimo\" de 1 mediación pro-bono este mes no es meramente validación profesional, sino una intervención existencial-física que rompe el ciclo de insomnio-no-decisión antes de que cierre la ventana financiera para la transición gradual.\n\n---\n\n**CONTRADICCIÓN: ¿Necesita más información o más acción?**\n- **Lentes:** INT-05 (Estratégica) vs. INT-17 (Existencial)\n- **Conflicto:** El lente estratégica afirma que el problema es la falta de consideración de opciones (\"no ha considerado 3 opciones\") y que el framing binario \"elimina opciones viables\", implicando que necesita más análisis estructural. El lente existencial afirma tajantemente que \"la decisión ya está tomada emocionalmente\" y que \"lo que falta no es más información — es coraje para actuar\".\n- **Implicación:** Si la decisión ya está tomada, buscar más opciones estratégicas es una forma sofisticada de postergación; pero si actúa sin el mapa estratégico, puede saltar al vacío financiero innecesariamente. La contradicción revela que su parálisis es precisamente el intento de resolver ambas cosas a la vez: busca la certeza absoluta (más información) para justificar el coraje que ya debería tener.\n\n---\n\n**HALLAZGO EMERGENTE: La parálisis como estrategia de conservación de la identidad pública**\n- **Lentes involucrados:** INT-08 (Social) + INT-05 (Estratégica) + INT-16 (Constructiva) + INT-17 (Existencial)\n- **Hallazgo:** Las opciones intermedias (transición gradual 60/40, mediación dentro del bufete) son tácticamente superiores y financieramente menos riesgosas, pero son psicológicamente inaccesibles porque requerirían que ella exponga su ambivalencia y su proceso de transformación ante su entorno (marido, colegas) *antes* de tener una nueva identidad consolidada. El framing binario \"todo o nada\" persiste no por ignorancia estratégica, sino porque funciona como escudo de autoprotección: permite mantener la coherencia de su \"yo público\" (la abogada exitosa) hasta que el cambio sea irreversible, evitando la vulnerabilidad de ser \"la que ya no sabe qué es\" durante la transición visible. Su insomnio no es solo estrés por la decisión, sino el coste fisiológico de sostener una fachada de certeza mientras internamente ya ha decidido cambiar."
+      }
+    },
+    "qwen3.5-397b": {
+      "T1": {
+        "score": 0.59,
+        "metrics": {
+          "sections_found": 9,
+          "sections_score": 1.0,
+          "gap_mentions": 3,
+          "questions": 2,
+          "actions": 6,
+          "has_critical_gap": false,
+          "length": 1762
+        },
+        "tokens_in": 301,
+        "tokens_out": 4096,
+        "latency_s": 22.79,
+        "cost": 0.00528,
+        "raw": "# Análisis del Caso Elena: Matriz Salud × Sentido × Continuidad\n\nA continuación, se presenta el análisis de la situación de Elena desglosado en las 9 combinaciones de Lentes (Salud, Sentido, Continuidad) y Funciones (Conservar, Captar, Depurar).\n\n---\n\n### 1. Salud × Conservar\n*Enfoque: Proteger la estabilidad operativa y el bienestar físico/mental de Elena y la clínica actual.*\n\n1.  **Gap Principal:** **Riesgo de Burnout Crítico.** Elena trabaja 50h/semana sin vacaciones en 3 años. La clínica depende 100% de su presencia clínica y administrativa.\n2.  **Pregunta Diagnóstica:** ¿Qué proceso o ineficiencia obliga a Elena a ser la única pieza que mantiene el flujo de caja y la atención clínica actual?\n3.  **Acción Concreta:** Implementar una \"Semana de Desconexión\" obligatoria en el próximo mes y contratar un sustituto (locum) para 1 sillón, liberando 10h semanales de su agenda clínica.\n\n### 2. Salud × Captar\n*Enfoque: Atraer recursos (personas, ingresos) que sostengan el bienestar y la operación.*\n\n1.  **Gap Principal:** **Fuga de Talento Clave.** La pérdida de la mejor higienista reduce la capacidad de producción y aumenta la carga de trabajo de Elena, acelerando el agotamiento.\n2.  **Pregunta Diagnóstica:** ¿Qué elemento de la oferta laboral (salario, clima, autonomía) ofrece la competencia que Elena no está valorando o pagando?\n3.  **Acción Concreta:** Realizar una entrevista de salida con la higienista (si aún es posible) y renegociar un plan de retención con la actual (bonos por productividad o mejora de horarios) antes de que se vaya.\n\n### 3. Salud × Depurar\n*Enfoque: Eliminar elementos que dañan la sostenibilidad y la salud financiera/personal.*\n\n1.  **Gap Principal:** **Endeudamiento por Presión Externa.** Aceptar el crédito de"
+      },
+      "T3": {
+        "score": 0.8,
+        "metrics": {
+          "P1_correct": true,
+          "P2_correct": true,
+          "P3_correct": false,
+          "P4_correct": true,
+          "P5_correct": true,
+          "P5_detail": [
+            "yes",
+            "no",
+            "yes",
+            "no"
+          ],
+          "correct_count": 4
+        },
+        "tokens_in": 531,
+        "tokens_out": 8124,
+        "latency_s": 109.99,
+        "cost": 0.01039,
+        "raw": "Aquí tienes la resolución paso a paso de los 5 problemas.\n\n---\n\n### P1 (aritmética de negocio)\n\n**Objetivo:** Calcular el periodo de recuperación (payback) de la inversión de la nueva sede.\n\n1.  **Calcular el beneficio neto mensual de una sede madura:**\n    *   Facturación anual: 180.000 €.\n    *   Margen neto: 25%.\n    *   Beneficio neto anual: $180.000 \\times 0,25 = 45.000$ €/año.\n    *   Beneficio neto mensual (pleno): $45.000 / 12 = 3.750$ €/mes.\n\n2.  **Calcular el beneficio generado durante la ramp-up (18 meses):**\n    *   El crecimiento es lineal desde 0 hasta 3.750 €/mes en 18 meses.\n    *   El beneficio total acumulado es el área de un triángulo: $\\frac{\\text{base} \\times \\text{altura}}{2}$.\n    *   Beneficio (0-18 meses): $\\frac{18 \\times 3.750}{2} = 9 \\times 3.750 = 33.750$ €.\n\n3.  **Calcular la inversión restante por recuperar:**\n    *   Inversión total: 200.000 €.\n    *   Recuperado en los primeros 18 meses: 33.750 €.\n    *   Restante: $200.000 - 33.750 = 166.250$ €.\n\n4.  **Calcular el tiempo necesario a rendimiento pleno:**\n    *   Una vez madura, la sede genera 3.750 €/mes.\n    *   Meses necesarios: $166.250 / 3.750 = 44,33$ meses.\n\n5.  **Calcular el tiempo total:**\n    *   Total = Meses de ramp-up + Meses a rendimiento pleno.\n    *   Total = $18 + 44,33 = 62,33$ meses.\n\n**RESULTADO P1:** **62,33 meses**\n\n---\n\n### P2 (probabilidad)\n\n**Objetivo:** Calcular probabilidades usando la distribución binomial $B(n=6, p=0,15)$.\n*   $n = 6$ (developers).\n*   $p = 0,15$ (probabilidad de irse).\n*   $q = 0,85$ (probabilidad de quedarse).\n*   Fórmula: $P(X=k) = \\binom{n}{k} p^k q^{n-k}$.\n\n1.  **Probabilidad de perder exactamente 0 developers ($P(X=0)$):**\n    *   $P(X=0) = \\binom{6}{0} (0,15)^0 (0,85)^6$\n    *   $P(X=0) = 1 \\times 1 \\times 0,85^6 \\approx 0,3771$\n\n2.  **Probabilidad de perder exactamente 1 developer ($P(X=1)$):**\n    *   $P(X=1) = \\binom{6}{1} (0,15)^1 (0,85)^5$\n    *   $P(X=1) = 6 \\times 0,15 \\times 0,4437 \\approx 0,3993$\n\n3.  **Probabilidad de perder 2 o más ($P(X \\ge 2)$):**\n    *   Es el complemento de perder 0 o 1.\n    *   $P(X \\ge 2) = 1 - [P(X=0) + P(X=1)]$\n    *   $P(X \\ge 2) = 1 - [0,3771 + 0,3993] = 1 - 0,7764 = 0,2236$\n\n**RESULTADO P2:** **P(≥2) = 22,36% ; P(0) = 37,71%**\n\n---\n\n### P3 (optimización)\n\n**Objetivo:** Calcular el runway restante tras implementar cada estrategia y verificar viabilidad (buffer ≥ 2 meses).\n\n1.  **Calcular el caja total disponible inicial:**\n    *   Runway actual: 7 meses.\n    *   Burn rate: 28K€/mes.\n    *   Caja Total: $7 \\times 28 = 196$ K€.\n\n2.  **Opción A (Pivot):**\n    *   Coste adicional: 15K€/mes durante 4 meses.\n    *   Coste total extra: $15 \\times 4 = 60$ K€.\n    *   Caja restante tras implementación: $196 - 60 = 136$ K€.\n    *   Runway restante (volviendo a burn rate de 28K€): $136 / 28 \\approx 4,86$ meses.\n    *   Viabilidad: $4,86 > 2$ → **Viable**.\n\n3.  **Opción B (Estabilización):**\n    *   Coste adicional: 5K€/mes durante 3 meses.\n    *   Coste total extra: $5 \\times 3 = 15$ K€.\n    *   Caja restante tras implementación: $196 - 15 = 181$ K€.\n    *   Runway restante (volviendo a burn rate de 28K€): $181 / 28 \\approx 6,46$ meses.\n    *   Viabilidad: $6,46 > 2$ → **Viable**.\n\n**RESULTADO P3:** **Pivot: 4,86 meses (Viable). Estabilización: 6,46 meses (Viable). Ambas son viables.**\n\n---\n\n### P4 (series)\n\n**Objetivo:** Proyectar la base de clientes y encontrar el equilibrio.\n*   Churn ($c$): 8% (0,08). Retención ($r$): 92% (0,92).\n*   Adquisición ($A$): 10 clientes/mes.\n*   Fórmula recursiva: $B_t = B_{t-1} \\times 0,92 + 10$.\n*   Fórmula cerrada (estado estacionario $B_{eq} = A/c = 10/0,08 = 125$):\n    $B_t = (B_0 - B_{eq}) \\times 0,92^t + B_{eq}$\n    $B_t = (75 - 125) \\times 0,92^t + 125 = -50 \\times 0,92^t + 125$\n\n1.  **Cálculos por mes:**\n    *   **Mes 1:** $-50(0,92)^1 + 125 = -46 + 125 = \\mathbf{79}$\n    *   **Mes 3:** $-50(0,92)^3 + 125 \\approx -38,93 + 125 = \\mathbf{86,07}$\n    *   **Mes 6:** $-50(0,92)^6 + 125 \\approx -30,32 + 125 = \\mathbf{94,68}$\n    *   **Mes 12:** $-50(0,92)^{12} + 125 \\approx -18,38 + 125 = \\mathbf{106,62}$\n\n2.  **Equilibrio:**\n    *   Sí, converge cuando el churn iguala a la adquisición.\n    *   $Clientes \\times 0,08 = 10 \\rightarrow Clientes = 125$.\n\n**RESULTADO P4:** **M1: 79; M3: 86,07; M6: 94,68; M12: 106,62. Equilibrio: 125 clientes.**\n\n---\n\n### P5 (lógica)\n\n**Objetivo:** Determinar aprobación (Mayoría simple = 2 de 3 votos \"Sí\").\n*   **A (Sí):** Coste < 50K.\n*   **B (Sí):** ROI > 20%.\n*   **C (Sí):** No requiere personal (0 personas).\n\n1.  **Propuesta 1:** Coste 30K, ROI 25%, 1 persona.\n    *   A: Sí (30 < 50).\n    *   B: Sí (25 > 20).\n    *   C: No (requiere 1).\n    *   Votos: 2 Sí. → **Aprobada**.\n\n2.  **Propuesta 2:** Coste 60K, ROI 35%, 0 personas.\n    *   A: No (60 > 50).\n    *   B: Sí (35 > 20).\n    *   C: Sí (0 personas).\n    *   Votos: 2 Sí. → **Aprobada**.\n\n3.  **Propuesta 3:** Coste 45K, ROI 15%, 0 personas.\n    *   A: Sí (45 < 50).\n    *   B: No (15 < 20).\n    *   C: Sí (0 personas).\n    *   Votos"
+      },
+      "T4": {
+        "score": 1.0,
+        "metrics": {
+          "checks": {
+            "has_serve_handler": true,
+            "handles_post": true,
+            "parses_json": true,
+            "error_400": true,
+            "cors_headers": true,
+            "iterates_metrics": true,
+            "threshold_compare": true,
+            "returns_alerts": true,
+            "returns_summary": true,
+            "returns_worst": true
+          },
+          "passed": 10,
+          "total": 10,
+          "code_length": 2117
+        },
+        "tokens_in": 326,
+        "tokens_out": 5764,
+        "latency_s": 80.44,
+        "cost": 0.00731,
+        "raw": "const corsHeaders = {\n  \"Access-Control-Allow-Origin\": \"*\",\n  \"Access-Control-Allow-Methods\": \"POST, OPTIONS\",\n  \"Access-Control-Allow-Headers\": \"Content-Type\",\n};\n\nconst jsonRes = (data: any, status = 200) =>\n  new Response(JSON.stringify(data), {\n    status,\n    headers: { \"Content-Type\": \"application/json\", ...corsHeaders },\n  });\n\nDeno.serve(async (req: Request) => {\n  if (req.method === \"OPTIONS\") {\n    return new Response(null, { status: 204, headers: corsHeaders });\n  }\n\n  if (req.method !== \"POST\") return jsonRes({ error: \"Method not allowed\" }, 405);\n\n  let body: any;\n  try {\n    const text = await req.text();\n    if (!text) throw new Error(\"Empty body\");\n    body = JSON.parse(text);\n  } catch {\n    return jsonRes({ error: \"Invalid JSON or empty body\" }, 400);\n  }\n\n  if (!Array.isArray(body.metrics)) {\n    return jsonRes({ error: \"metrics must be an array\" }, 400);\n  }\n\n  if (!body.thresholds || typeof body.thresholds !== \"object\" || Array.isArray(body.thresholds)) {\n    return jsonRes({ error: \"thresholds must be an object\" }, 400);\n  }\n\n  const alerts: any[] = [];\n  const summary = { total: 0, critical: 0, warn: 0, ok: 0, unknown: 0 };\n  let worst = \"\";\n  let worstScore = -1;\n  const score = { critical: 3, warn: 2, unknown: 1, ok: 0 };\n\n  for (const m of body.metrics) {\n    const { name, value } = m;\n    const th = body.thresholds[name];\n    let status = \"ok\";\n    let thVal: number | null = null;\n\n    summary.total++;\n\n    if (!th) {\n      status = \"unknown\";\n      thVal = null;\n    } else {\n      const { warn, critical } = th;\n      if (critical !== undefined && value > critical) {\n        status = \"critical\";\n        thVal = critical;\n      } else if (warn !== undefined && value > warn) {\n        status = \"warn\";\n        thVal = warn;\n      } else {\n        status = \"ok\";\n        thVal = warn !== undefined ? warn : null;\n      }\n    }\n\n    summary[status]++;\n    alerts.push({ name, value, status, threshold: thVal });\n\n    if (score[status] > worstScore) {\n      worstScore = score[status];\n      worst = name;\n    }\n  }\n\n  return jsonRes({ alerts, summary, worst });\n});"
+      },
+      "T5": {
+        "score": 1.0,
+        "metrics": {
+          "connections_found": 3,
+          "unique_lenses_referenced": 3,
+          "has_cross_lens": true,
+          "has_contradiction": true,
+          "has_emergent": true,
+          "inter_lens_connections": 10,
+          "length": 4595
+        },
+        "tokens_in": 611,
+        "tokens_out": 4834,
+        "latency_s": 77.17,
+        "cost": 0.00653,
+        "raw": "### 1. TRES CONEXIONES CRÍTICAS ENTRE LENTES\n\n**CONEXIÓN 1: La Transición Gradual como Cobertura del Coste de Oportunidad**\n*   **Lentes que conecta:** [LENTE ESTRATÉGICA] + [LENTE CONSTRUCTIVA] + [LENTE FINANCIERA]\n*   **Qué revela:** Individualmente, la lente Financiera advierte sobre la pérdida de valor de mercado (15%/año) y la Estratégica sugiere opciones intermedias. Al conectarlas con la Viabilidad Constructiva (master compatible + ingresos progresivos), se revela que la **transición gradual no es solo un compromiso, es la única herramienta de gestión de riesgo financiero**. Mantener un pie en el derecho corporativo mientras se construye la mediación neutraliza la depreciación del valor de mercado que teme la lente Financiera.\n*   **Implicación:** El plan no debe venderse como \"cambio de carrera\" (que activa la alarma financiera), sino como \"diversificación de práctica legal\" (que protege el valor de mercado).\n\n**CONEXIÓN 2: El Silencio Conyugal como Amplificador del Dolor Existencial**\n*   **Lentes que conecta:** [LENTE SOCIAL] + [LENTE EXISTENCIAL]\n*   **Qué revela:** La lente Existencial identifica el insomnio como una señal corporal de decisión tomada, mientras la Social identifica el silencio con el marido como gestión de conflicto. La conexión muestra que **el insomnio no es solo por la decisión profesional, sino por la carga cognitiva de mantener la secreto**. El cuerpo paga el precio de la disonancia entre la verdad interna (existencial) y la máscara externa (social).\n*   **Implicación:** Dormir mejor no requiere decidir la carrera hoy, requiere romper el silencio con la pareja. La salud física depende de la transparencia social antes que del éxito profesional.\n\n**CONEXIÓN 3: El Prototipo Práctico como Llave de la Identidad Social**\n*   **Lentes que conecta:** [LENTE CONSTRUCTIVA] + [LENTE SOCIAL]\n*   **Qué revela:** La lente Social dice que su identidad es externa (\"la abogada exitosa\") y la Constructiva propone un MVP (1 mediación pro-bono). La síntesis revela que **el caso pro-bono no sirve solo para validar el gusto por el trabajo, sino para generar \"prueba social\" tangible** que le permita responder a la pregunta \"¿quién soy si no soy esto?\" con hechos, no con ideas.\n*   **Implicación:** El primer paso no es el máster (título), es la mediación (acción). Necesita un dato real para renegociar su identidad con su entorno antes de invertir dinero o tiempo formal.\n\n---\n\n### 2. UNA CONTRADICCIÓN ENTRE LENTES\n\n**LA PARADOJA DEL VALOR DE LA PERMANENCIA**\n*   **Lentes en conflicto:** [LENTE FINANCIERA] vs. [LENTE EXISTENCIAL]\n*   **La Contradicción:**\n    *   La **Lente Financiera** sostiene que permanecer en el track de socia (o delaying the exit) preserva valor: \"cada año fuera... reduce su valor de mercado un ~15%\". Implica que quedarse es la opción de \"seguridad de activo\".\n    *   La **Lente Existencial** sostiene que permanecer (o la no-decisión) destruye valor: \"cada mes de no-decisión degrada... la opción de quedarse (resentimiento)\". Implica que quedarse es la opción de \"depreciación humana\".\n*   **Resolución necesaria:** Ambas tienen razón en su dominio, pero son incompatibles en la práctica. No se puede preservar el valor de mercado (Financiera) si el resentimiento (Existencial) termina por sabotear el desempeño profesional que genera ese valor. La \"seguridad\" financiera es ilusoria si la capacidad ejecutiva se erosiona por el bloqueo emocional.\n\n---\n\n### 3. UN HALLAZGO EMERGENTE\n\n**LA DEPENDENCIA FINANCIERA DE LA TRANSPARENCIA SOCIAL**\n*   **Lentes implicadas:** [LENTE FINANCIERA] + [LENTE SOCIAL] + [LENTE CONSTRUCTIVA]\n*   **El Hallazgo:** Ninguna lente individual advierte esto: **La viabilidad financiera del plan (INT-07) depende críticamente de la estabilidad de la pareja, pero esa estabilidad está siendo activamente amenazada por el secreto (INT-08).**\n    *   La Lente Financiera asume como dato estable que la pareja gana 60K€ y sostiene el hogar.\n    *   La Lente Social revela que la pareja ignora el cambio vital que afectará esos ingresos y dinámica.\n    *   **Emergencia:** El riesgo mayor no es caer de 95K€ a 40K€ (que es absorbible), sino que la ocultación genere una crisis de confianza que ponga en riesgo los 60K€ del pareja o el acceso a los 120K€ ahorrados.\n*   **Implicación Estratégica:** La acción prioritaria del plan Constructivo (INT-16) no debe ser la mediación pro-bono, sino **la conversación con el marido**. Sin blindar el \"socio financiero\" (el marido) mediante transparencia, el plan de transición carece de cimientos reales, independientemente de su viabilidad técnica."
+      },
+      "T2": {
+        "score": 0.875,
+        "metrics": {
+          "extracted_scores": {
+            "1": 2,
+            "2": 3,
+            "3": 5,
+            "4": 1,
+            "5": 1,
+            "6": 4
+          },
+          "discrimination": 1.0,
+          "recognition": 0.667,
+          "correlation": 0.877,
+          "has_ranking": true,
+          "h4_score": 1,
+          "h5_score": 1
+        },
+        "tokens_in": 419,
+        "tokens_out": 2170,
+        "latency_s": 31.97,
+        "cost": 0.00311,
+        "raw": "**Hallazgo 1:** 2/5 - Es un cálculo básico de SaaS con una imprecisión matemática leve, pero establece la urgencia de la retención.\n**Hallazgo 2:** 3/5 - Diagnostica correctamente la tensión estratégica subyacente más allá del desacuerdo personal superficial.\n**Hallazgo 3:** 5/5 - Reencuadra radicalmente el problema al demostrar que el pivot ya ocurrió orgánicamente, cambiando la decisión estratégica.\n**Hallazgo 4:** 1/5 - Es una tautología obvia que no aporta información accionable ni específica al caso.\n**Hallazgo 5:** 1/5 - Es un consejo trivial que ignora la complejidad del contexto y no ofrece una vía de resolución concreta.\n**Hallazgo 6:** 4/5 - Conecta restrictivamente los recursos financieros con el tiempo de ejecución para invalidar una opción estratégica viable.\n\n---\n\n**Ranking (de mejor a peor):**\n1. Hallazgo 3 (5)\n2. Hallazgo 6 (4)\n3. Hallazgo 2 (3)\n4. Hallazgo 1 (2)\n5. Hallazgo 4 (1)\n6. Hallazgo 5 (1)\n\n**Score medio:** 2.67"
+      }
+    },
+    "nemotron-super": {
+      "T1": {
+        "score": 1.0,
+        "metrics": {
+          "sections_found": 9,
+          "sections_score": 1.0,
+          "gap_mentions": 14,
+          "questions": 10,
+          "actions": 16,
+          "has_critical_gap": true,
+          "length": 4241
+        },
+        "tokens_in": 324,
+        "tokens_out": 2075,
+        "latency_s": 23.7,
+        "cost": 0.00096,
+        "raw": "### **Estructura de Análisis**\n\n#### **1. Salud × Conservar**  \n- **Gap principal**: Elena está sobrecargada de trabajo (50h/semana, sin vacaciones en 3 años), lo que pone en riesgo su salud física y mental, y por ende, la sostenibilidad de la clínica.  \n- **Pregunta diagnóstica**: ¿Cómo ha afectado la falta de descanso su capacidad para tomar decisiones estratégicas?  \n- **Acción concreta**: Contratar a otro odontólogo o delegar tareas administrativas a la recepcionista para reducir horas de trabajo.  \n\n---\n\n#### **2. Salud × Captar**  \n- **Gap principal**: Pérdida del 15% de pacientes por competencia low-cost, sin estrategia clara para captar nuevos pacientes.  \n- **Pregunta diagnóstica**: ¿Qué valor único ofrece su clínica frente a la competencia que no está comunicando?  \n- **Acción concreta**: Implementar campañas de marketing enfocadas en la calidad personalizada vs. el modelo low-cost.  \n\n---\n\n#### **3. Salud × Depurar**  \n- **Gap principal**: Procesos ineficientes (ej.: solo 2 sillones, sin tecnología actualizada) limitan la capacidad de crecimiento.  \n- **Pregunta diagnóstica**: ¿Qué herramientas o tecnología podrían optimizar el flujo de pacientes y reducir tiempos muertos?  \n- **Acción concreta**: Invertir en software de gestión dental y equipos que aceleren tratamientos.  \n\n---\n\n#### **4. Sentido × Conservar**  \n- **Gap principal**: Presión familiar (padre) para expandirse, sin alineación con sus propios objetivos personales.  \n- **Pregunta diagnóstica**: ¿Qué significa \"éxito\" para ella, y cómo se alinea con la apertura de una segunda sede?  \n- **Acción concreta**: Definir metas personales y profesionales con un coach antes de tomar decisiones.  \n\n---\n\n#### **5. Sentido × Captar**  \n- **Gap principal**: Riesgo de perder a la higienista clave, lo que afecta la identidad y calidad de la clínica.  \n- **Pregunta diagnóstica**: ¿Qué factores hacen que la higienista considere aceptar otra oferta?  \n- **Acción concreta**: Ofrecer beneficios no monetarios (flexibilidad, reconocimiento) o un bono de retención.  \n\n---\n\n#### **6. Sentido × Depurar**  \n- **Gap principal**: Falta de propósito claro en la gestión actual, generando estrés y estancamiento.  \n- **Pregunta diagnóstica**: ¿Qué valores o principios guían las decisiones de la clínica, y cómo se comunican?  \n- **Acción concreta**: Revisar la misión de la clínica y alinear el equipo con ella.  \n\n---\n\n#### **7. Continuidad × Conservar**  \n- **Gap principal**: Dependencia excesiva de la higienista, sin plan de contingencia si se va.  \n- **Pregunta diagnóstica**: ¿Qué riesgos opera la clínica si pierde a su talento clave?  \n- **Acción concreta**: Capacitar a la recepcionista en tareas básicas de higiene o contratar a otra profesional.  \n\n---\n\n#### **8. Continuidad × Captar**  \n- **Gap principal**: Falta de estrategia para asegurar la fidelidad de pacientes frente a la competencia.  \n- **Pregunta diagnóstica**: ¿Qué programas de retención (ej.: membresías, descuentos) podrían implementarse?  \n- **Acción concreta**: Crear un programa de lealtad con beneficios exclusivos para pacientes recurrentes.  \n\n---\n\n#### **9. Continuidad × Depurar**  \n- **Gap principal**: Estructura organizativa obsoleta (solo 3 empleados) para manejar crecimiento o crisis.  \n- **Pregunta diagnóstica**: ¿Cómo se distribuyen las responsabilidades y qué roles están subdimensionados?  \n- **Acción concreta**: Rediseñar la organización con definición clara de roles y posibles contrataciones.  \n\n---\n\n### **Gap MÁS CRÍTICO**  \n**Sentido × Captar (Pérdida de la higienista clave)**  \n**¿Por qué?**  \nLa higienista es un activo crítico para la reputación y calidad de la clínica. Su salida no solo afectaría la operación diaria, sino también la fidelidad de pacientes que la eligen específicamente. Además, en un contexto de competencia low-cost, la calidad diferenciada (ej.: mejor higienista) es el principal valor competitivo. Sin ella, Elena podría entrar en un espiral de pérdida de pacientes y dificultad para atraer nuevos, incluso con cambios en precios o marketing.  \n\nEste gap también se cruza con otros: sin la higienista, la salud de Elena (más carga de trabajo) y la continuidad de la clínica (riesgo operativo) se verían severamente comprometidas."
+      },
+      "T2": {
+        "score": 0.88,
+        "metrics": {
+          "extracted_scores": {
+            "1": 3,
+            "2": 4,
+            "3": 4,
+            "4": 1,
+            "5": 1,
+            "6": 5
+          },
+          "discrimination": 1.0,
+          "recognition": 0.667,
+          "correlation": 0.902,
+          "has_ranking": true,
+          "h4_score": 1,
+          "h5_score": 1
+        },
+        "tokens_in": 453,
+        "tokens_out": 1111,
+        "latency_s": 13.31,
+        "cost": 0.00063,
+        "raw": "**Evaluación de Hallazgos:**\n\n1. **Hallazgo 1**:  \n   **Score: 3**  \n   *Justificación*: Específico y correcto, vincula el churn al crecimiento neto con cálculos claros, pero no revela algo no obvio.  \n\n2. **Hallazgo 2**:  \n   **Score: 4**  \n   *Justificación*: Profundo, reenmarca el conflicto como una lucha de identidad empresarial, añadiendo una capa estratégica no explícita.  \n\n3. **Hallazgo 3**:  \n   **Score: 4**  \n   *Justificación*: Profundo, identifica un pivot implícito en los datos (clientes enterprise) que no fue reconocido, cambiando la perspectiva.  \n\n4. **Hallazgo 4**:  \n   **Score: 1**  \n   *Justificación*: Genérico y vacío; cualquier startup en crisis tiene \"problemas de decisión\" sin contexto específico.  \n\n5. **Hallazgo 5**:  \n   **Score: 1**  \n   *Justificación*: Genérico y obvio; sugerir \"hablar para resolver diferencias\" no aporta valor analítico.  \n\n6. **Hallazgo 6**:  \n   **Score: 5**  \n   *Justificación*: Excepcional, conecta el runway (7 meses) con el tiempo del pivot (6-12 meses), exponiendo una contradicción crítica y no evidente.  \n\n---\n\n**Ranking de Hallazgos (mejor a peor):**  \n1. Hallazgo 6 (5)  \n2. Hallazgo 2 (4)  \n3. Hallazgo 3 (4)  \n4. Hallazgo 1 (3)  \n5. Hallazgo 4 (1)  \n6. Hallazgo 5 (1)  \n\n**Score Medio:** 3.0  \n\n**Comentarios Adicionales:**  \n- Los hallazgos 4 y 5 son claramente genéricos, como se indicó.  \n- Hallazgo 6 es el más valioso por su impacto en la viabilidad del pivot.  \n- Hallazgos 2 y 3 destacan por reinterpretar datos o conflictos de manera estratégica."
+      },
+      "T5": {
+        "score": 1.0,
+        "metrics": {
+          "connections_found": 3,
+          "unique_lenses_referenced": 5,
+          "has_cross_lens": true,
+          "has_contradiction": true,
+          "has_emergent": true,
+          "inter_lens_connections": 2,
+          "length": 3267
+        },
+        "tokens_in": 647,
+        "tokens_out": 1748,
+        "latency_s": 20.38,
+        "cost": 0.00096,
+        "raw": "### **ANÁLISIS INTEGRADO**  \n\n---\n\n#### **1. CONEXIONES CLAVE**  \n\n**Conexión 1: Riesgo financiero vs. urgencia emocional**  \n- **Lentes conectados**: Financiera (INT-07) + Existencial (INT-17)  \n- **Qué revela**: La lente financiera señala que el costo de oportunidad es un riesgo crítico (pérdida del 15% anual de valor de mercado), mientras la existencial identifica que el insomnio refleja una decisión emocional ya tomada. Juntas, muestran que **el retraso en actuar aumenta tanto el daño financiero como el agotamiento emocional**.  \n- **Implicación**: No actuar no es neutro: degrada simultáneamente su estabilidad económica y bienestar psicológico.  \n\n**Conexión 2: Identidad social como barrera estructural**  \n- **Lentes conectados**: Social (INT-08) + Estratégica (INT-05)  \n- **Qué revela**: La identidad social (\"abogada exitosa\") la paraliza, evitando conversaciones clave (ej. con su marido), mientras la lente estratégica revela opciones viables no exploradas (ej. mediación dentro del bufete). **La falta de diálogo interno y externo limita su capacidad de ver alternativas**.  \n- **Implicación**: Romper el silencio y redefinir su identidad podría desbloquear opciones que mitigan riesgos.  \n\n**Conexión 3: Viabilidad de la transición gradual**  \n- **Lentes conectadas**: Constructiva (INT-16) + Estratégica (INT-05)  \n- **Qué revela**: La lente constructiva propone un prototipo mínimo (ej. mediación pro-bono) para validar interés, mientras la estratégica sugiere una transición 60/40. **Ambas demuestran que no hay necesidad de un salto binario**: se pueden combinar pasos pequeños con planificación.  \n- **Implicación**: Una transición escalonada reduce riesgos y provee datos reales para decidir.  \n\n---\n\n#### **2. CONTRADICCIÓN**  \n- **Lentes en conflicto**: Existencial (INT-17) vs. Constructiva (INT-16)  \n- **Contradicción**:  \n  - **Existencial**: El insomnio indica que \"la decisión ya está tomada emocionalmente\", urgiendo a actuar sin demora.  \n  - **Constructiva**: Propone validar la transición con pasos pequeños (ej. pro-bono), asumiendo que aún hay incertidumbre sobre si le gustará la mediación.  \n- **Resolución**: La contradicción refleja una tensión entre la **urgencia interna** y la **necesidad de validación externa**. Resolverla requiere integrar ambas: actuar con coraje (existencial) pero de manera estructurada (constructiva).  \n\n---\n\n#### **3. HALLAZGO EMERGENTE**  \n**\"La transición no es solo un cambio de carrera, sino una redefinición de identidad que requiere simultáneamente coraje emocional, redes de apoyo social y estructuras prácticas de experimentación.\"**  \n- **¿Por qué es emergente?**:  \n  - Ninguna lente individual aborda la interacción entre:  \n    - El agotamiento emocional (existencial) por demorar la decisión.  \n    - La dependencia de una identidad social externa (social).  \n    - La falta de experimentación práctica (constructiva).  \n  - Solo al integrar estas dimensiones se ve que el cambio implica **reconstruir quién es ella fuera del rol de abogada**, lo que exige un enfoque multidimensional.  \n\n--- \n\n**Formato cumplido**:  \n- 3 conexiones con lentes, revelaciones e implicaciones.  \n- 1 contradicción clara entre lentes.  \n- 1 hallazgo emergente no visible desde ninguna lente aislada."
+      },
+      "T3": {
+        "score": 1.0,
+        "metrics": {
+          "P1_correct": true,
+          "P2_correct": true,
+          "P3_correct": true,
+          "P4_correct": true,
+          "P5_correct": true,
+          "P5_detail": [
+            "yes",
+            "yes",
+            "yes",
+            "no"
+          ],
+          "correct_count": 5
+        },
+        "tokens_in": 556,
+        "tokens_out": 5978,
+        "latency_s": 68.05,
+        "cost": 0.00261,
+        "raw": "**P1:**  \nLa inversión se recupera en **31 meses**.  \n\n**P2:**  \n- Probabilidad de perder 2 o más developers: **22.35%**  \n- Probabilidad de perder exactamente 0 developers: **37.71%**  \n\n**P3:**  \n- **Pivot:** Quedan **0.86 meses** de runway. No viable.  \n- **Estabilización:** Quedan **3.46 meses** de runway. Viable.  \n\n**P4:**  \n- **Mes 1:** 79 clientes  \n- **Mes 3:** 86.07 clientes  \n- **Mes 6:** 94.68 clientes  \n- **Mes 12:** 106.65 clientes  \n- **Converge a 125 clientes**.  \n\n**P5:**  \n- **Propuesta 1:** Aprobada  \n- **Propuesta 2:** Aprobada  \n- **Propuesta 3:** Aprobada  \n- **Propuesta 4:** No aprobada"
+      },
+      "T4": {
+        "score": 0.9,
+        "metrics": {
+          "checks": {
+            "has_serve_handler": false,
+            "handles_post": true,
+            "parses_json": true,
+            "error_400": true,
+            "cors_headers": true,
+            "iterates_metrics": true,
+            "threshold_compare": true,
+            "returns_alerts": true,
+            "returns_summary": true,
+            "returns_worst": true
+          },
+          "passed": 9,
+          "total": 10,
+          "code_length": 3196
+        },
+        "tokens_in": 320,
+        "tokens_out": 4161,
+        "latency_s": 50.41,
+        "cost": 0.00179,
+        "raw": "```typescript\nimport { serve } from \"https://deno.land/std@0.168.0/http/server.ts\";\n\nconst handler = async (request: Request): Promise<Response> => {\n  const headers = new Headers({\n    \"Access-Control-Allow-Origin\": \"*\",\n    \"Access-Control-Allow-Methods\": \"POST\",\n    \"Access-Control-Allow-Headers\": \"Content-Type\",\n    \"Content-Type\": \"application/json\",\n  });\n\n  try {\n    const body = await request.json();\n    if (!body ||!body.metrics ||!body.thresholds) {\n      return new Response(JSON.stringify({ error: \"Invalid request body\" }), { status: 400, headers });\n    }\n\n    if (!Array.isArray(body.metrics)) {\n      return new Response(JSON.stringify({ error: \"metrics must be an array\" }), { status: 400, headers });\n    }\n\n    if (typeof body.thresholds!== \"object\" || Array.isArray(body.thresholds) || Object.keys(body.thresholds).length === 0) {\n      return new Response(JSON.stringify({ error: \"thresholds must be a non-empty object\" }), { status: 400, headers });\n    }\n\n    const alerts: any[] = [];\n    const summary = { total: 0, critical: 0, warn: 0, ok: 0, unknown: 0 };\n    let worstStatusPriority = -1;\n    let worstMetricName: string | null = null;\n\n    for (const metric of body.metrics) {\n      const name = metric.name;\n      const value = metric.value;\n      const threshold = body.thresholds[name];\n\n      let status: string;\n      let thresholdValue: number | null = null;\n\n      if (threshold) {\n        if (value > threshold.critical) {\n          status = \"critical\";\n          thresholdValue = threshold.critical;\n        } else if (value > threshold.warn) {\n          status = \"warn\";\n          thresholdValue = threshold.warn;\n        } else {\n          status = \"ok\";\n        }\n      } else {\n        status = \"unknown\";\n      }\n\n      alerts.push({ name, value, status, threshold: thresholdValue });\n\n      summary.total++;\n      summary[status] = (summary[status] as number) + 1;\n\n      const currentPriority = getStatusPriority(status);\n      if (currentPriority > worstStatusPriority) {\n        worstStatusPriority = currentPriority;\n        worstMetricName = name;\n      } else if (currentPriority === worstStatusPriority &&!worstMetricName) {\n        worstMetricName = name;\n      }\n    }\n\n    worstMetricName = worstMetricName || \"\";\n\n    return new Response(\n      JSON.stringify({\n        alerts,\n        summary,\n        worst: worstMetricName,\n      }),\n      { headers }\n    );\n  } catch (error) {\n    console.error(error);\n    return new Response(\n      JSON.stringify({ error: \"Internal Server Error\" }),\n      { status: 500, headers }\n    );\n  }\n};\n\nfunction getStatusPriority(status: string): number {\n  switch (status) {\n    case \"critical\":\n      return 3;\n    case \"warn\":\n      return 2;\n    case \"unknown\":\n      return 1;\n    default:\n      return 0;\n  }\n}\n\nlisten(handler, { port: 8000 });\n\nasync function listen(handler: (request: Request) => Promise<Response>, options: ListenOptions) {\n  const server = Deno.createServer({...options, handler });\n  console.log(`Server listening on http://localhost:${options.port}`);\n  while (true) {\n    const req = await server.request();\n    const res = await handler(req);\n    await server.respond(req, res);\n  }\n}\n```"
+      }
+    },
+    "step-3.5-flash": {
+      "T1": {
+        "score": 1.0,
+        "metrics": {
+          "sections_found": 9,
+          "sections_score": 1.0,
+          "gap_mentions": 13,
+          "questions": 10,
+          "actions": 18,
+          "has_critical_gap": true,
+          "length": 7476
+        },
+        "tokens_in": 317,
+        "tokens_out": 4001,
+        "latency_s": 29.85,
+        "cost": 0.00345,
+        "raw": "## Análisis del Caso Elena: 9 Combinaciones Lente × Función\n\n---\n\n### **1. Salud × Conservar**\n- **Gap principal**: Elena no está conservando su salud física y mental. Trabaja 50h/semana sin vacaciones en 3 años, lo que conduce a agotamiento extremo (burnout) y riesgos de salud a largo plazo.\n- **Pregunta diagnóstica**: ¿Qué síntomas específicos de agotamiento (fatiga crónica, problemas de sueño, irritabilidad, dolores físicos) está experimentando Elena y cómo están afectando su juicio clínico y calidad de vida?\n- **Acción concreta**: Implementar un **plan de recuperación obligatorio**: programar 2 semanas de vacaciones ininterrumpidas en el próximo mes, y reducir su jornada a 40h/semana durante 3 meses mediante la delegación de tareas administrativas en la recepcionista.\n\n---\n\n### **2. Salud × Captar**\n- **Gap principal**: Elena no está captando recursos (tiempo, apoyo profesional) para mejorar su salud. Está atrapada en la operación diaria y no invierte en bienestar (ej. terapia, entrenamiento, delegación efectiva).\n- **Pregunta diagnóstica**: ¿Qué creencias o miedos (ej. \"si no estoy yo, todo falla\") le impiden a Elena buscar ayuda externa para liberar tiempo y reducir su carga?\n- **Acción concreta**: Contratar un **asistente de gestión a tiempo parcial** (20h/semana) para absorber tareas no clínicas, y destinar 200€/mes a un programa de mindfulness/terapia online para manejar el estrés.\n\n---\n\n### **3. Salud × Depurar**\n- **Gap principal**: Elena no está depurando hábitos o responsabilidades que dañan su salud. Sigue asumiendo tareas que podrían ser eliminadas o externalizadas, sin priorizar su bienestar.\n- **Pregunta diagnóstica**: ¿Qué actividades en su rutina actual (ej. gestión de stock, llamadas de seguimiento) son de bajo valor y podrían eliminarse sin afectar la calidad clínica?\n- **Acción concreta**: **Depurar su agenda semanal**: eliminar 5h de tareas no esenciales (ej. compras de material) mediante la automatización (pedidos online recurrentes) o delegación total en la higienista/recepcionista.\n\n---\n\n### **4. Sentido × Conservar**\n- **Gap principal**: Elena no está conservando su sentido de propósito original. La presión de su padre para expandirse y la competencia low-cost han hecho que pierda conexión con su \"por qué\" (posiblemente la odontología centrada en el paciente, la artesanía clínica).\n- **Pregunta diagnóstica**: ¿Qué valores fundamentales (ej. trato personalizado, excelencia técnica) la motivaron a fundar la clínica y cómo se alinean (o no) con la idea de abrir una segunda sede?\n- **Acción concreta**: Realizar un **ejercicio de reflexión estructurada** (ej. escribir una carta a su yo del futuro) para clarificar si la expansión responde a su deseo o a expectativas externas, y compartir conclusiones con su padre.\n\n---\n\n### **5. Sentido × Captar**\n- **Gap principal**: Elena no está captando oportunidades (pacientes, proyectos) que refuercen su sentido. Está reaccionando a la competencia low-cost sin construir una propuesta de valor auténtica que le genere satisfacción.\n- **Pregunta diagnóstica**: ¿Qué tipo de pacientes o tratamientos (ej. rehabilitación compleja, odontología conservadora) le generarían más orgullo profesional y cómo podría atraerlos deliberadamente?\n- **Acción concreta**: Rediseñar su **propuesta de valor diferencial** en torno a \"calidad y experiencia humana\", y crear contenido (blog, redes) que eduque sobre los riesgos de la odontología low-cost, atrayendo pacientes que valoren eso.\n\n---\n\n### **6. Sentido × Depurar**\n- **Gap principal**: Elena no está depurando proyectos o relaciones que contradicen su sentido. Sigue considerando la segunda sede por presión paterna, aunque internamente la rechaza, generando conflicto interno.\n- **Pregunta diagnóstica**: ¿Qué decisiones o conversaciones pendientes (ej. con su padre sobre el crédito) está evitando por miedo al conflicto y cómo esto erosiona su autenticidad?\n- **Acción concreta**: **Depurar el proyecto de segunda sede**: comunicar firmemente a su padre que no procederá (basándose en su reflexión de Sentido × Conservar), y anular el crédito si es posible, o reasignar esos fondos a mejorar la clínica actual.\n\n---\n\n### **7. Continuidad × Conservar**\n- **Gap principal**: Elena no está conservando la continuidad operativa de su negocio. Está perdiendo pacientes (15% en 18 meses) y corre alto riesgo de perder a su higienista clave (la mejor de la zona), lo que amenaza la viabilidad.\n- **Pregunta diagnóstica**: ¿Cuáles son los factores específicos (ej. precios, trato, horarios) que están haciendo que pacientes y empleados se vayan al competidor low-cost?\n- **Acción concreta**: **Plan de retención urgente**: ofrecer a la higienista un paquete de retención (aumento del 15%, horario flexible, bonus por permanencia) y lanzar un programa de fidelización para pacientes (ej. limpiezas gratis anuales, descuentos en tratamientos preventivos).\n\n---\n\n### **8. Continuidad × Captar**\n- **Gap principal**: Elena no está captando nuevos pacien"
+      },
+      "T2": {
+        "score": 0.894,
+        "metrics": {
+          "extracted_scores": {
+            "1": 3,
+            "2": 4,
+            "3": 5,
+            "4": 1,
+            "5": 1,
+            "6": 4
+          },
+          "discrimination": 1.0,
+          "recognition": 0.667,
+          "correlation": 0.972,
+          "has_ranking": true,
+          "h4_score": 1,
+          "h5_score": 1
+        },
+        "tokens_in": 444,
+        "tokens_out": 2853,
+        "latency_s": 17.39,
+        "cost": 0.00264,
+        "raw": "**Evaluación de hallazgos:**\n\n**Hallazgo 1:** Puntuación 3. Es un cálculo correcto y específico del impacto del churn, pero es una implicación estándar en análisis de SaaS.  \n**Hallazgo 2:** Puntuación 4. Revela que el conflicto operativo enmascara una crisis de identidad organizacional más profunda.  \n**Hallazgo 3:** Puntuación 5. Descubre que la empresa ya tiene un modelo enterprise significativo, redefiniendo el concepto de pivot y cambiando la comprensión del caso.  \n**Hallazgo 4:** Puntuación 1. Es una observación genérica que aplica a cualquier situación de conflicto de decisión.  \n**Hallazgo 5:** Puntuación 1. Es un consejo obvio y superficial sin análisis específico del contexto.  \n**Hallazgo 6:** Puntuación 4. Señala una contradicción temporal crítica que invalida la viabilidad del pivot en el runway actual.\n\n**Ranking de mejor a peor:**  \n1. Hallazgo 3 (5)  \n2. Hallazgo 2 (4)  \n3. Hallazgo 6 (4)  \n4. Hallazgo 1 (3)  \n5. Hallazgo 4 (1)  \n6. Hallazgo 5 (1)\n\n**Score medio:** 3.0"
+      },
+      "T5": {
+        "score": 1.0,
+        "metrics": {
+          "connections_found": 3,
+          "unique_lenses_referenced": 5,
+          "has_cross_lens": true,
+          "has_contradiction": true,
+          "has_emergent": true,
+          "inter_lens_connections": 6,
+          "length": 6266
+        },
+        "tokens_in": 645,
+        "tokens_out": 3032,
+        "latency_s": 20.9,
+        "cost": 0.00294,
+        "raw": "### Análisis Integrado de los 5 Lentes\n\n---\n\n#### **1. PRIMERA CONEXIÓN: El costo del tiempo como fenómeno dual (financiero-existencial)**\n- **Lentes conectadas**: Financiera (INT-07) y Existencial (INT-17).\n- **Qué revela que ninguna sola veía**:  \n  La lente financiera cuantifica el costo de oportunidad profesional (15% anual de depreciación del valor legal), pero lo trata como un riesgo abstracto. La lente existencial describe cómo la indecisión degrada *ambas* opciones (resentimiento si se queda, agotamiento si se va). Juntas revelan que el tiempo no solo erosiona el capital profesional, sino que también corroe la capacidad de tomar cualquier decisión válida, creando un *costo existencial del tiempo*: cada mes de parálisis reduce tanto el valor de mercado como la integridad psicológica.\n- **Implicación**:  \n  La ventana de oportunidad para cambiar sin daño colateral es más estrecha de lo que sugiere el análisis financiero alone. La dilación no es neutral: acelera la obsolescencia profesional *y* la pérdida de sentido, haciendo que el \"riesgo real\" sea bifronte. Requiere actuar antes de que la degradación en ambos frentes sea irreversible.\n\n---\n\n#### **2. SEGUNDA CONEXIÓN: El framing binario como barrera social-estratégica**\n- **Lentes conectadas**: Social (INT-08) y Estratégica (INT-05).\n- **Qué revela que ninguna sola veía**:  \n  La lente social identifica que su identidad (\"la abogada exitosa\") es impuesta por su entorno y que evita la pregunta \"¿quién soy si no soy esto?\". La lente estratégica señala que el pensamiento \"saltar o quedarme\" elimina opciones viables (transición gradual, mediación interna). Juntas revelan que el *framing binario no es solo un error estratégico, sino un mecanismo de defensa psicológico*: al reducir la decisión a un dilema extremo, protege la identidad social de la ambigüedad que requeriría una transición gradual. La falta de diálogo con el marido (social) refuerza este binario, pues evita negociar identidades compartidas.\n- **Implicación**:  \n  Ampliar el abanico estratégico (transiciones mixtas) requiere primero desmontar la identidad rígida. Sin conversaciones auténticas con su entorno (especialmente su pareja) que renegocien roles y expectativas, cualquier opción \"gradual\" será vivida como una traición a su yo social, no como una evolución.\n\n---\n\n#### **3. TERCERA CONEXIÓN: La experimentación como puente entre lo emocional y lo práctico (existencial-constructiva)**\n- **Lentes conectadas**: Existencial (INT-17) y Constructiva (INT-16).\n- **Qué revela que ninguna sola veía**:  \n  La lente existencial afirma que la decisión emocional ya está tomada (insomnio como señal) y que falta coraje para actuar. La lente constructiva propone un prototipo mínimo (mediación pro-bono inmediata) para validar el gusto por el trabajo real. Juntas revelan que *el \"coraje\" no es un rasgo abstracto, sino el resultado de una experimentación concreta de bajo riesgo*. La parálisis existencial se alimenta de la abstracción (\"¿seré feliz como mediadora?\"); la experimentación transforma la emoción en datos tangibles (\"¿disfruté esta sesión?\"), rompiendo el ciclo de rumiación.\n- **Implicación**:  \n  El puente entre \"ya decidido emocionalmente\" y \"actuar\" no es un salto de fe, sino un *experimento validado*. Hacer una mediación pro-bono este mes no es un compromiso definitivo, sino un acto de coraje tangible que genera retroalimentación real, reduciendo la ansiedad por la incertidumbre y desafiando la narrativa de \"todo o nada\".\n\n---\n\n#### **4. CONTRADICCIÓN: ¿El problema es de información o de acción?**\n- **Lentes en contradicción**: Financiera (INT-07) vs. Existencial (INT-17).\n- **Qué dice cada una**:  \n  - Financiera: El riesgo principal es el costo de oportunidad (15% anual de depreciación), lo que implica que *más análisis* del impacto financiero a largo plazo es crucial.  \n  - Existencial: \"Lo que falta no es más información — es coraje para actuar\". La indecisión ya ha degradado las opciones; acumular datos solo posterga la acción.\n- **Núcleo de la contradicción**:  \n  La lente financiera asume que la decisión óptima requiere maximizar el valor de mercado (racionalidad económica). La lente existencial prioriza la preservación de la integridad psicológica sobre cualquier cálculo. La primera ve el tiempo como un recurso que se deprecia en el mercado; la segunda lo ve como un recurso que se agota en el alma.\n\n---\n\n#### **5. HALLAZGO EMERGENTE: La identidad profesional como sistema inmunológico psicológico**\n- **Lentes integradas**: Social (INT-08), Estratégica (INT-05), Existencial (INT-17), Constructiva (INT-16).\n- **Qué ninguna lente individual podría producir**:  \n  La abogada no sufre solo de indecisión, riesgo financiero o falta de opciones. Sufre de un *síndrome de identidad atrapada*: la narrativa social de \"abogada exitosa\" actúa como un **sistema inmunológico psicológico** que:  \n  1. Rechaza cualquier cambio que implique ambigüedad (por eso el framing binario, lente estratégica).  \n  "
+      },
+      "T3": {
+        "score": 1.0,
+        "metrics": {
+          "P1_correct": true,
+          "P2_correct": true,
+          "P3_correct": true,
+          "P4_correct": true,
+          "P5_correct": true,
+          "P5_detail": [
+            "yes",
+            "no",
+            "yes",
+            "no"
+          ],
+          "correct_count": 5
+        },
+        "tokens_in": 542,
+        "tokens_out": 7146,
+        "latency_s": 45.96,
+        "cost": 0.00615,
+        "raw": "**P1:**  \nInversión: 200,000 €.  \nBeneficio neto mensual nueva sede:  \n- Meses 0-18: crece linealmente hasta facturación anual 180,000 € (15,000 €/mes). Beneficio neto mensual = 0.25 × (15,000/18) × t = (625/3)t €/mes.  \n- A partir del mes 18: beneficio neto mensual = 0.25 × 15,000 = 3,750 €/mes.  \nBeneficio acumulado:  \n- Hasta mes 18: ∫₀¹⁸ (625/3)t dt = (625/6) × 18² = 33,750 €.  \n- Después del mes 18: 33,750 + 3,750 × (T - 18).  \nIgualando a 200,000:  \n3,750T - 33,750 = 200,000 → T = 233,750 / 3,750 = 187/3 ≈ 62.33 meses.  \n\n**Resultado:** 62.33 meses (187/3 meses).\n\n---\n\n**P2:**  \nX ~ Binomial(6, 0.15).  \nP(X=0) = 0.85⁶ ≈ 0.3771.  \nP(X≥2) = 1 - P(X=0) - P(X=1) = 1 - 0.3771 - [6 × 0.15 × 0.85⁵] ≈ 1 - 0.3771 - 0.3993 = 0.2235.  \n\n**Resultados:**  \n- P(perder ≥2) = 0.2235.  \n- P(perder =0) = 0.3771.\n\n---\n\n**P3:**  \nCapital inicial: 7 × 28,000 = 196,000 €.  \n- **Pivot:** Burn rate adicional 15,000 €/mes × 4 meses → burn rate = 43,000 €/mes.  \n  Gasto primeros 4 meses: 4 × 43,000 = 172,000 €.  \n  Resto: 196,000 - 172,000 = 24,000 €.  \n  Runway adicional a 28,000 €/mes: 24,000 / 28,000 = 0.857 meses.  \n  **Runway total:** 4 + 0.857 = 4.86 meses.  \n- **Estabilización:** Burn rate adicional 5,000 €/mes × 3 meses → burn rate = 33,000 €/mes.  \n  Gasto primeros 3 meses: 3 × 33,000 = 99,000 €.  \n  Resto: 196,000 - 99,000 = 97,000 €.  \n  Runway adicional: 97,000 / 28,000 = 3.464 meses.  \n  **Runway total:** 3 + 3.464 = 6.46 meses.  \n\n**Viabilidad (buffer ≥2 meses post-implementación):**  \n- Pivot: resto después de 4 meses = 24,000 € < 56,000 € (2 × 28,000) → no viable.  \n- Estabilización: resto después de 3 meses = 97,000 € > 56,000 € → viable.  \n\n**Resultados:**  \n- Pivot: 4.86 meses.  \n- Estabilización: 6.46 meses.  \n- Viable: Estabilización.\n\n---\n\n**P4:**  \nEcuación: Bₙ = 0.92 × Bₙ₋₁ + 10, con B₀ = 75.  \nSolución: Bₙ = 125 - 50 × (0.92)ⁿ.  \n- Mes 1: B₁ = 125 - 50 × 0.92 = 79.  \n- Mes 3: B₃ = 125 - 50 × (0.92)³ ≈ 125 - 50 × 0.778688 = 86.0656 ≈ 86.07.  \n- Mes 6: B₆ = 125 - 50 × (0.92)⁶ ≈ 125 - 50 × 0.606355 = 94.6823 ≈ 94.68.  \n- Mes 12: B₁₂ = 125 - 50 × (0.92)¹² ≈ 125 - 50 × 0.3678 = 106.61.  \nEquilibrio: limₙ→∞ Bₙ = 125.  \n\n**Resultados:**  \n- Mes 1: 79.  \n- Mes 3: 86.07.  \n- Mes 6: 94.68.  \n- Mes 12: 106.61.  \n- Equilibrio: 125 clientes.\n\n---\n\n**P5:**  \n- **Propuesta 1:** Coste 30K (<50K) → A Sí. ROI 25% (>20%) → B Sí. Requiere personal → C No. **2 Sí → Aprobada.**  \n- **Propuesta 2:** Coste 60K (no <50K) → A No. ROI 35% (>20%) → B Sí. No requiere personal → C Sí. **2 Sí → Aprobada.**  \n- **Propuesta 3:** Coste 45K (<50K) → A Sí. ROI 15% (no >20%) → B No. No requiere personal → C Sí. **2 Sí → Aprobada.**  \n- **Propuesta 4:** Coste 55K (no <50K) → A No. ROI 22% (>20%) → B Sí. Requiere personal → C No. **1 Sí → No aprobada.**  \n\n**Resultados:**  \n- P1: Sí.  \n- P2: Sí.  \n- P3: Sí.  \n- P4: No."
+      },
+      "T4": {
+        "score": 1.0,
+        "metrics": {
+          "checks": {
+            "has_serve_handler": true,
+            "handles_post": true,
+            "parses_json": true,
+            "error_400": true,
+            "cors_headers": true,
+            "iterates_metrics": true,
+            "threshold_compare": true,
+            "returns_alerts": true,
+            "returns_summary": true,
+            "returns_worst": true
+          },
+          "passed": 10,
+          "total": 10,
+          "code_length": 2792
+        },
+        "tokens_in": 318,
+        "tokens_out": 4194,
+        "latency_s": 26.2,
+        "cost": 0.00361,
+        "raw": "```typescript\nDeno.serve(async (request: Request) => {\n  if (request.method === \"OPTIONS\") {\n    return new Response(null, {\n      status: 200,\n      headers: {\n        \"Access-Control-Allow-Origin\": \"*\",\n        \"Access-Control-Allow-Methods\": \"POST, OPTIONS\",\n        \"Access-Control-Allow-Headers\": \"Content-Type\",\n      },\n    });\n  }\n\n  if (request.method !== \"POST\") {\n    return new Response(JSON.stringify({ error: \"Method not allowed\" }), {\n      status: 405,\n      headers: {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n      },\n    });\n  }\n\n  try {\n    const body = await request.json();\n    if (!body || typeof body !== \"object\") {\n      throw new Error(\"Invalid request body\");\n    }\n\n    const { metrics, thresholds } = body;\n    if (!Array.isArray(metrics)) {\n      throw new Error(\"metrics must be an array\");\n    }\n    if (typeof thresholds !== \"object\" || thresholds === null) {\n      throw new Error(\"thresholds must be an object\");\n    }\n\n    const alerts: Array<{ name: string; value: number; status: string; threshold: number | null }> = [];\n    let total = metrics.length;\n    let critical = 0;\n    let warn = 0;\n    let ok = 0;\n    let unknown = 0;\n    let worstMetric = \"\";\n    const statusOrder: Record<string, number> = { critical: 0, warn: 1, unknown: 2, ok: 3 };\n    let worstStatusOrder = 3;\n\n    for (const metric of metrics) {\n      const { name, value } = metric;\n      const threshold = thresholds[name];\n      let status: string;\n      let thresholdValue: number | null = null;\n\n      if (!threshold) {\n        status = \"unknown\";\n        unknown++;\n      } else {\n        if (value > threshold.critical) {\n          status = \"critical\";\n          thresholdValue = threshold.critical;\n          critical++;\n        } else if (value > threshold.warn) {\n          status = \"warn\";\n          thresholdValue = threshold.warn;\n          warn++;\n        } else {\n          status = \"ok\";\n          ok++;\n        }\n      }\n\n      alerts.push({ name, value, status, threshold: thresholdValue });\n\n      const currentOrder = statusOrder[status];\n      if (currentOrder < worstStatusOrder) {\n        worstStatusOrder = currentOrder;\n        worstMetric = name;\n      }\n    }\n\n    const summary = { total, critical, warn, ok, unknown };\n    const responseBody = { alerts, summary, worst: worstMetric };\n\n    return new Response(JSON.stringify(responseBody), {\n      status: 200,\n      headers: {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n      },\n    });\n  } catch (error) {\n    return new Response(JSON.stringify({ error: error.message }), {\n      status: 400,\n      headers: {\n        \"Content-Type\": \"application/json\",\n        \"Access-Control-Allow-Origin\": \"*\",\n      },\n    });\n  }\n});\n```"
+      }
+    },
+    "mimo-v2-flash": {
+      "T1": {
+        "score": 1.0,
+        "metrics": {
+          "sections_found": 9,
+          "sections_score": 1.0,
+          "gap_mentions": 19,
+          "questions": 11,
+          "actions": 16,
+          "has_critical_gap": true,
+          "length": 8163
+        },
+        "tokens_in": 352,
+        "tokens_out": 2251,
+        "latency_s": 18.6,
+        "cost": 0.00026,
+        "raw": "Aquí tienes el análisis estructurado del caso de Elena, desglosado en las 9 combinaciones de Lentes × Funciones.\n\n---\n\n### 1. Lente SALUD × Función CONSERVAR\n*(Capacidad de mantener activos, estabilidad y evitar pérdidas)*\n\n1.  **Gap principal:** Riesgo de pérdida de activo humano clave. La higienista (mejor de la zona) tiene una oferta externa y la carga de trabajo actual (50h/semana, sin vacaciones) crea un ambiente tóxico que facilita su salida.\n2.  **Pregunta diagnóstica:** ¿Qué condiciones laborales y emocionales está ofreciendo la competencia que aquí no existen, y cómo ha impactado la falta de descanso de Elena en la cultura de la clínica?\n3.  **Acción concreta:** Realizar una \"entrevista de retención\" inmediata con la higienista para ajustar su salario y horario, y firmar un acuerdo de permanencia con incentivos por 12 meses.\n\n### 2. Lente SALUD × Función CAPTAR\n*(Capacidad de adquirir nuevos activos, crecimiento y entrada de recursos)*\n\n1.  **Gap principal:** Adquisición de pacientes ineficiente frente a la competencia low-cost. La clínica pierde el 15% de pacientes en 18 meses porque su propuesta de valor no es visible o no es competitiva en precio/conveniencia frente al competidor cercano.\n2.  **Pregunta diagnóstica:** ¿Cuál es el perfil exacto del paciente que se está yendo al low-cost y qué barrera (precio, percepción de calidad, agilidad) impide que nuevos pacientes elijan tu clínica?\n3.  **Acción concreta:** Lanzar una campaña de \"Blitz marketing\" local (Google My Business optimizado + ofertas de bienvenida para nuevos pacientes) diferenciando el valor de la odontología conservadora de calidad frente al low-cost.\n\n### 3. Lente SALUD × Función DEPURAR\n*(Capacidad de eliminar lo tóxico, innecesario o dañino)*\n\n1.  **Gap principal:** Presencia de un \"ruido\" competitivo y una presión paterna que contamina la claridad estratégica. El padre y el banco empujan a una expansión prematura, mientras el competidor low-cost distorsiona la percepción de mercado.\n2.  **Pregunta diagnóstica:** ¿Qué procesos o relaciones (padre/banco/competidor) están generando ruido mental que impide enfocarse en optimizar la clínica actual antes de expandir?\n3.  **Acción concreta:** Rechazar temporalmente la oferta de crédito de 200K€ y establecer una reunión formal con el padre para delimitar límites profesionales, posponiendo la expansión hasta tener una tasa de ocupación de sillones >90%.\n\n---\n\n### 4. Lente SENTIDO × Función CONSERVAR\n*(Mantener la identidad, propósito y valores a largo plazo)*\n\n1.  **Gap principal:** Pérdida de la identidad como profesional. Elena ha dejado de ser una odontóloga con propósito para convertirse en una gestora quemada; el sentido de servicio y vocación se está agotando por la falta de descanso.\n2.  **Pregunta diagnóstica:** ¿Qué parte de tu vocación original como odontóloga sientes que estás sacrificando al trabajar 50h sin vacaciones durante 3 años?\n3.  **Acción concreta:** Programar y bloquear en el calendario 2 semanas de vacaciones consecutivas en los próximos 3 meses, desconectando totalmente de la clínica para \"resetear\" su identidad profesional.\n\n### 5. Lente SENTIDO × Función CAPTAR\n*(Atraer propósito, significado y conexión emocional)*\n\n1.  **Gap principal:** Falta de conexión con la comunidad local. Al centrarse solo en la producción y la defensa ante el low-cost, la clínica no está captando el valor emocional de ser un referente de confianza en el barrio.\n2.  **Pregunta diagnóstica:** ¿Qué historia o propósito está comunicando la clínica al mercado para conectar emocionalmente con los pacientes, más allá del precio del servicio?\n3.  **Acción concreta:** Crear un programa de \"Lealtad de Paciente\" basado en historias de éxito (casos clínicos reales) y testimonios, enfocado en la seguridad y confianza, para contrarrestar la frialdad del low-cost.\n\n### 6. Lente SENTIDO × Función DEPURAR\n*(Eliminar la falta de propósito, el vacío existencial o la desconexión)*\n\n1.  **Gap principal:** Desconexión entre el trabajo realizado y la satisfacción personal. La rutina de 50h semanales ha eliminado el propósito de crecimiento personal, convirtiendo la clínica en una carga en lugar de una realización.\n2.  **Pregunta diagnóstica:** ¿Qué actividad dentro de tu jornada actual te hace sentir que tu trabajo como odontóloga carece de significado o propósito?\n3.  **Acción concreta:** Delegar tareas administrativas y de gestión a la recepcionista (mediante un manual de procedimientos) para que Elena dedique al menos el 20% de su tiempo a clínica compleja o formación, recuperando la pasión por el oficio.\n\n---\n\n### 7. Lente CONTINUIDAD × Función CONSERVAR\n*(Mantener la sostenibilidad operativa y financiera en el tiempo)*\n\n1.  **Gap principal:** Fragilidad financiera por dependencia de un solo activo (Elena). Si la higienista se va o si Elena se enferma, el modelo de negocio colapsa al no haber estructura que soporte la carga de trabajo.\n2.  **Pregunta diagnóstica:** ¿Cuántos días podría operar la clínica"
+      },
+      "T2": {
+        "score": 0.894,
+        "metrics": {
+          "extracted_scores": {
+            "1": 3,
+            "2": 4,
+            "3": 5,
+            "4": 1,
+            "5": 1,
+            "6": 4
+          },
+          "discrimination": 1.0,
+          "recognition": 0.667,
+          "correlation": 0.972,
+          "has_ranking": true,
+          "h4_score": 1,
+          "h5_score": 1
+        },
+        "tokens_in": 473,
+        "tokens_out": 424,
+        "latency_s": 3.64,
+        "cost": 9e-05,
+        "raw": "Aquí está la evaluación del OUTPUT del modelo:\n\n**Evaluación por hallazgo:**\n\n1.  **Hallazgo 1:** Score 3\n    *   Justificación: Aplica una fórmula matemática básica al churn para cuantificar la necesidad de adquisición, siendo específico y correcto para el contexto.\n2.  **Hallazgo 2:** Score 4\n    *   Justificación: Va más allá del conflicto operativo para identificar la tensión estratégica subyacente sobre la identidad y el enfoque de la empresa.\n3.  **Hallazgo 3:** Score 5\n    *   Justificación: Reinterpreta los datos existentes para revelar que la empresa ya está pivotando de facto, cambiando la comprensión del problema actual.\n4.  **Hallazgo 4:** Score 1\n    *   Justificación: Es una tautología vacía que no aporta análisis ni distinción sobre la naturaleza del problema.\n5.  **Hallazgo 5:** Score 1\n    *   Justificación: Es un consejo de sentido común genérico que no ofrece análisis estratégico ni diagnóstico del caso.\n6.  **Hallazgo 6:** Score 4\n    *   Justificación: Detecta una contradicción crítica entre la ventana de tiempo del runway y la duración requerida para un pivot, lo cual es un insight profundo sobre la viabilidad.\n\n**Ranking de hallazgos (mejor a peor):**\n1.  Hallazgo 3 (Score 5)\n2.  Hallazgo 2 (Score 4)\n3.  Hallazgo 6 (Score 4)\n4.  Hallazgo 1 (Score 3)\n5.  Hallazgo 4 (Score 1)\n6.  Hallazgo 5 (Score 1)\n\n**Score medio:** 3.0"
+      },
+      "T3": {
+        "score": 0.6,
+        "metrics": {
+          "P1_correct": true,
+          "P2_correct": true,
+          "P3_correct": false,
+          "P4_correct": true,
+          "P5_correct": false,
+          "P5_detail": [
+            "yes",
+            "no",
+            "no",
+            "no"
+          ],
+          "correct_count": 3
+        },
+        "tokens_in": 592,
+        "tokens_out": 2953,
+        "latency_s": 36.02,
+        "cost": 0.00035,
+        "raw": "Aquí tienes la resolución detallada de cada problema, paso a paso.\n\n---\n\n### **P1 (Arimética de negocio)**\n\n**Datos:**\n*   Facturación anual original: 180.000 €.\n*   Margen neto: 25%.\n*   Inversión (Coste) de la nueva sede: 200.000 €.\n*   Tiempo de ramp-up (18 meses) para alcanzar la facturación original.\n*   Crecimiento lineal desde 0.\n\n**Cálculos:**\n\n1.  **Beneficio mensual de la sede original:**\n    *   Beneficio anual = 180.000 € * 0,25 = 45.000 €.\n    *   Beneficio mensual = 45.000 € / 12 = 3.750 €/mes.\n\n2.  **Beneficio mensual de la nueva sede durante el ramp-up:**\n    *   La facturación crece linealmente de 0 a 180.000 €/año (15.000 €/mes) en 18 meses.\n    *   La facturación media durante estos 18 meses es la mitad del objetivo: 15.000 € / 2 = 7.500 €/mes.\n    *   Margen mensual medio de la nueva sede = 7.500 € * 0,25 = 1.875 €/mes.\n\n3.  **Flujo de caja mensual combinado (Original + Nueva):**\n    *   Durante los primeros 18 meses: 3.750 € (original) + 1.875 € (nueva) = **5.625 €/mes**.\n\n4.  **Recuperación de la inversión:**\n    *   Inversión a recuperar: 200.000 €.\n    *   Meses necesarios solo con el flujo combinado: 200.000 € / 5.625 €/mes ≈ 35,56 meses.\n    *   Como 35,56 meses es mayor que los 18 meses del ramp-up, la recuperación continúa después de que la nueva sede alcance su máximo rendimiento.\n\n5.  **Desglose del tiempo:**\n    *   **Fase 1 (Meses 0-18):** Se acumula: 5.625 € * 18 = 101.250 €.\n    *   **Saldo por recuperar:** 200.000 € - 101.250 € = 98.750 €.\n    *   **Fase 2 (Mes 18 en adelante):** La nueva sede ya genera el margen completo (3.750 €). Flujo total = 3.750 € (origen) + 3.750 € (nueva) = 7.500 €/mes.\n    *   Meses adicionales: 98.750 € / 7.500 €/mes ≈ 13,17 meses.\n\n6.  **Total de meses:**\n    *   18 meses + 13,17 meses = 31,17 meses.\n\n**Resultado P1:**\nLa inversión se recupera a los **31,2 meses** (aproximadamente 31 meses y 5 días).\n\n---\n\n### **P2 (Probabilidad)**\n\n**Datos:**\n*   Número de desarrolladores ($n$): 6.\n*   Probabilidad de irse ($p$): 0,15 (15%).\n*   Probabilidad de quedarse ($q$): 0,85 (85%).\n*   Distribución: Binomial.\n\n**Cálculos:**\n\n1.  **Probabilidad de perder exactamente 0 ($P(X=0)$):**\n    *   Fórmula: $P(X=0) = \\binom{6}{0} \\cdot (0,15)^0 \\cdot (0,85)^6$\n    *   $P(X=0) = 1 \\cdot 1 \\cdot 0,37715$\n    *   $P(X=0) \\approx 0,3772$\n\n2.  **Probabilidad de perder 2 o más ($P(X \\geq 2)$):**\n    *   Es más fácil calcular el complemento: $1 - P(X < 2) = 1 - [P(X=0) + P(X=1)]$.\n    *   Calculamos $P(X=1)$:\n        *   $P(X=1) = \\binom{6}{1} \\cdot (0,15)^1 \\cdot (0,85)^5$\n        *   $P(X=1) = 6 \\cdot 0,15 \\cdot 0,443705$\n        *   $P(X=1) \\approx 0,3993$\n    *   Sumamos $P(X=0) + P(X=1)$:\n        *   $0,3772 + 0,3993 = 0,7765$\n    *   Restamos de 1:\n        *   $1 - 0,7765 = 0,2235$\n\n**Resultado P2:**\n*   Probabilidad de perder 2 o más: **22,35%**\n*   Probabilidad de perder exactamente 0: **37,72%**\n\n---\n\n### **P3 (Optimización)**\n\n**Datos:**\n*   Runway inicial: 7 meses.\n*   Burn rate actual: 28.000 €/mes.\n*   **Opción A (Pivot):** +15.000 €/mes (4 meses).\n*   **Opción B (Estabilización):** +5.000 €/mes (3 meses).\n*   Requisito: Al menos 2 meses de runway *después* de completar la acción.\n\n**Cálculos:**\n\n1.  **Coste Total de Oportunidad (Runway consumido):**\n    *   **Pivot:** 15.000 € * 4 meses = 60.000 €.\n        *   Meses de runway consumidos: 60.000 € / 28.000 €/mes = **2,14 meses**.\n    *   **Estabilización:** 5.000 € * 3 meses = 15.000 €.\n        *   Meses de runway consumidos: 15.000 € / 28.000 €/mes = **0,54 meses**.\n\n2.  **Runway restante después de cada opción:**\n    *   **Después del Pivot:** 7 meses - 2,14 meses = **4,86 meses**.\n    *   **Después de la Estabilización:** 7 meses - 0,54 meses = **6,46 meses**.\n\n3.  **Viabilidad (Buffer de 2 meses post-implementación):**\n    *   **Pivot:** 4,86 meses > 2 meses. **(Viable)**.\n    *   **Estabilización:** 6,46 meses > 2 meses. **(Viable)**.\n\n**Resultado P3:**\n*   Runway tras Pivot: **4,9 meses**.\n*   Runway tras Estabilización: **6,5 meses**.\n*   ¿Cuál es viable? **Ambas son viables**.\n\n---\n\n### **P4 (Series)**\n\n**Datos:**\n*   Base inicial ($C_0$): 75 clientes.\n*   Churn mensual ($r$): 8% (0,08). Factor de retención = 0,92.\n*   Nuevos clientes mensuales ($N$): 10.\n*   Fórmula recursiva: $C_{t} = C_{t-1} \\cdot 0,92 + 10$.\n\n**Cálculos:**\n\n1.  **Mes 1:**\n    *   $C_1 = 75 \\cdot 0,92 + 10 = 69 + 10 = 79$.\n\n2.  **Mes 3:**\n    *   $C_2 = 79 \\cdot 0,92 + 10 = 72,68 + 10 = 82,68$.\n    *   $C_3 = 82,68 \\cdot 0,92 + 10 = 76,0656 + 10 = 86,0656 \\approx 86,07$.\n\n3.  **Mes 6:**\n    *   $C_4 = 86,07 \\cdot 0,92 + 10 \\approx 89,18$.\n    *   $C_5 = 89,18 \\cdot 0,92 + 10 \\approx 92,05$.\n    *   $C_6 = 92,05 \\cdot 0,92 + 10 \\approx 94,69$.\n\n4.  **Mes 12:**\n    *   Continuando la iteración...\n    *   $C_{12} \\approx 99,39$.\n\n5.  **Punto de equilibrio (Convergencia):**\n    *   En el estado estacionario, $C_t = C_{t-1} = C_{eq}$.\n    *   $C_{eq} = C_{eq} \\cdot 0,92 + 10$.\n    *   $C_{eq} - 0,92 C_{eq} = 10$.\n    *   $0,08 C_{eq} "
+      },
+      "T4": {
+        "score": 1.0,
+        "metrics": {
+          "checks": {
+            "has_serve_handler": true,
+            "handles_post": true,
+            "parses_json": true,
+            "error_400": true,
+            "cors_headers": true,
+            "iterates_metrics": true,
+            "threshold_compare": true,
+            "returns_alerts": true,
+            "returns_summary": true,
+            "returns_worst": true
+          },
+          "passed": 10,
+          "total": 10,
+          "code_length": 3620
+        },
+        "tokens_in": 344,
+        "tokens_out": 904,
+        "latency_s": 7.21,
+        "cost": 0.00012,
+        "raw": "```typescript\nimport { serve } from \"https://deno.land/std@0.224.0/http/server.ts\";\n\ninterface Metric {\n  name: string;\n  value: number;\n  timestamp: string;\n}\n\ninterface Threshold {\n  warn: number;\n  critical: number;\n}\n\ninterface Thresholds {\n  [metricName: string]: Threshold;\n}\n\ninterface Alert {\n  name: string;\n  value: number;\n  status: string;\n  threshold: number | null;\n}\n\ninterface Summary {\n  total: number;\n  critical: number;\n  warn: number;\n  ok: number;\n  unknown: number;\n}\n\ninterface ResponseBody {\n  alerts: Alert[];\n  summary: Summary;\n  worst: string;\n}\n\nconst STATUS_ORDER = [\"critical\", \"warn\", \"unknown\", \"ok\"];\n\nfunction getWorstStatus(statuses: string[]): string {\n  for (const status of STATUS_ORDER) {\n    if (statuses.includes(status)) {\n      return status;\n    }\n  }\n  return \"ok\";\n}\n\nfunction handler(req: Request): Response {\n  const headers = new Headers({\n    \"Content-Type\": \"application/json\",\n    \"Access-Control-Allow-Origin\": \"*\",\n    \"Access-Control-Allow-Methods\": \"POST, OPTIONS\",\n    \"Access-Control-Allow-Headers\": \"Content-Type\",\n  });\n\n  if (req.method === \"OPTIONS\") {\n    return new Response(null, { status: 204, headers });\n  }\n\n  if (req.method !== \"POST\") {\n    return new Response(\n      JSON.stringify({ error: \"Method not allowed\" }),\n      { status: 405, headers }\n    );\n  }\n\n  let body: { metrics?: unknown; thresholds?: unknown };\n\n  try {\n    const rawBody = req.body ? JSON.parse(req.body.toString()) : null;\n    if (!rawBody) {\n      return new Response(\n        JSON.stringify({ error: \"Empty body\" }),\n        { status: 400, headers }\n      );\n    }\n    body = rawBody;\n  } catch {\n    return new Response(\n      JSON.stringify({ error: \"Invalid JSON\" }),\n      { status: 400, headers }\n    );\n  }\n\n  if (!body.metrics || !Array.isArray(body.metrics)) {\n    return new Response(\n      JSON.stringify({ error: \"metrics must be an array\" }),\n      { status: 400, headers }\n    );\n  }\n\n  if (!body.thresholds || typeof body.thresholds !== \"object\" || Array.isArray(body.thresholds)) {\n    return new Response(\n      JSON.stringify({ error: \"thresholds must be an object\" }),\n      { status: 400, headers }\n    );\n  }\n\n  const metrics = body.metrics as Metric[];\n  const thresholds = body.thresholds as Thresholds;\n\n  const alerts: Alert[] = [];\n  const statuses: string[] = [];\n\n  for (const metric of metrics) {\n    const threshold = thresholds[metric.name];\n    let status: string;\n    let thresholdValue: number | null = null;\n\n    if (!threshold) {\n      status = \"unknown\";\n    } else if (metric.value > threshold.critical) {\n      status = \"critical\";\n      thresholdValue = threshold.critical;\n    } else if (metric.value > threshold.warn) {\n      status = \"warn\";\n      thresholdValue = threshold.warn;\n    } else {\n      status = \"ok\";\n      thresholdValue = threshold.warn;\n    }\n\n    statuses.push(status);\n\n    alerts.push({\n      name: metric.name,\n      value: metric.value,\n      status,\n      threshold: thresholdValue,\n    });\n  }\n\n  const summary: Summary = {\n    total: metrics.length,\n    critical: statuses.filter((s) => s === \"critical\").length,\n    warn: statuses.filter((s) => s === \"warn\").length,\n    ok: statuses.filter((s) => s === \"ok\").length,\n    unknown: statuses.filter((s) => s === \"unknown\").length,\n  };\n\n  const worstStatus = getWorstStatus(statuses);\n  const worstMetric = alerts.find((a) => a.status === worstStatus)?.name || \"\";\n\n  const responseBody: ResponseBody = {\n    alerts,\n    summary,\n    worst: worstMetric,\n  };\n\n  return new Response(JSON.stringify(responseBody), {\n    status: 200,\n    headers,\n  });\n}\n\nserve(handler);\n```"
+      },
+      "T5": {
+        "score": 1.0,
+        "metrics": {
+          "connections_found": 3,
+          "unique_lenses_referenced": 5,
+          "has_cross_lens": true,
+          "has_contradiction": true,
+          "has_emergent": true,
+          "inter_lens_connections": 6,
+          "length": 5454
+        },
+        "tokens_in": 677,
+        "tokens_out": 1515,
+        "latency_s": 26.18,
+        "cost": 0.00022,
+        "raw": "### 3 CONEXIONES MÁS IMPORTANTES\n\n**CONEXIÓN 1: La parálisis por análisis como síntoma de un conflicto identitario no resuelto**\n- **Lentes conectados:** ESTRATÉGICA (INT-05) + SOCIAL (INT-08)\n- **Revelación:** La lente estratégica identifica que la abogada está atrapada en un \"framing binario\" que elimina opciones viables, mientras la lente social revela que este estrechamiento cognitivo no es casual: su identidad social como \"abogada exitosa\" está tan internalizada que el entorno la presiona a mantenerla. La conexión muestra que el problema no es falta de opciones reales, sino que su mente las filtra inconscientemente para proteger su identidad social. La lente estratégica ve el síntoma (pocas opciones) y la social ve la causa (presión identitaria), pero solo juntas revelan que la parálisis es un mecanismo de defensa contra la pregunta \"¿quién soy si no soy esto?\".\n- **Implicación:** Cualquier solución que solo ofrezca más opciones sin abordar la identidad será ignorada. La intervención debe empezar por desvincular temporalmente su valor personal de su título profesional.\n\n**CONEXIÓN 2: El cuerpo sabe antes que la mente, y la demora tiene costos duales**\n- **Lentes conectados:** EXISTENCIAL (INT-17) + CONSTRUCTIVA (INT-16)\n- **Revelación:** La lente existencial detecta que el insomnio de 8 meses es evidencia de que la decisión emocional ya está tomada, mientras la lente constructiva ofrece el dato de que un prototipo mínimo (1 mediación pro-bono) puede validarlo en 30 días. La conexión revela que la demora no es por falta de información, sino por miedo al acto mismo de decidir, y que cada mes de espera degrada *ambas* opciones simultáneamente (resentimiento vs. agotamiento). La lente constructiva muestra que el \"costo de demora\" es evitable con acción pequeña, pero la existencial explica por qué no se toma: el cuerpo ya está en crisis.\n- **Implicación:** La intervención debe ser física y de bajo riesgo: una acción concreta inmediata que \"despierte\" al cuerpo a una nueva realidad, no más planificación.\n\n**CONEXIÓN 3: El riesgo financiero es una cortina de humo para el costo de oportunidad real**\n- **Lentes conectados:** FINANCIERA (INT-07) + ESTRATÉGICA (INT-05)\n- **Revelación:** La lente financiera desmiente el miedo principal (\"no puedo permitírmelo\") al mostrar que el colchón de ahorros y la pareja hacen el salto financiero viable, pero identifica un riesgo más sutil: el \"costo de oportunidad\" de perder el track de socia. La lente estratégica conecta esto con la opción (2) de transición gradual 60/40, que *precisamente* mitiga ese costo de oportunidad al mantener el pie en el mundo legal. La conexión revela que el miedo financiero es un racionalizador inconsciente para evitar el riesgo real: la pérdida de status y valor de mercado futuro, que la transición gradual resuelve técnicamente.\n- **Implicación:** La conversación debe cambiar de \"¿puedo permitírmelo?\" a \"¿cómo protejo mi valor de mercado mientras pruebo?\" usando modelos híbridos.\n\n---\n\n### 1 CONTRADICCIÓN\n\n**Contradicción entre LENTE FINANCIERA (INT-07) y LENTE EXISTENCIAL (INT-17)**\n\n- **Contradicción:** La lente financiera afirma que el riesgo real *no* es financiero, sino de coste de oportunidad (pérdida de valor de mercado). La lente existencial, sin embargo, sugiere que el riesgo real es la degradación simultánea de *ambas* opciones por cada mes de demora, implicando que el tiempo es el principal enemigo, no la trayectoria profesional.\n- **Resolución:** La contradicción es aparente. La financiera habla del riesgo *cuantificable* (valor de mercado en euros), mientras la existencial habla del riesgo *cualitativo* (deterioro de la integridad personal). Ambas son ciertas: el costo de oportunidad existe, pero la demora para evitarlo también genera un costo existencial que puede ser mayor. La síntesis es que el \"costo de oportunidad\" no es lineal: cada mes de demora no solo retrasa el ingreso futuro, sino que erosiona la capacidad de disfrutarlo.\n\n---\n\n### 1 HALLAZGO EMERGENTE\n\n**El \"Síndrome de la Puerta de Vidrio\": La abogada está usando la planificación estratégica como una forma sofisticada de procrastinación existencial.**\n\n- **Lentes que lo generan:** ESTRATÉGICA (INT-05) + CONSTRUCTIVA (INT-16) + EXISTENCIAL (INT-17) + SOCIAL (INT-08)\n- **Descripción:** Individualmente, cada lente ofrece una pieza del rompecabezas: la estratégica ve que busca más opciones, la constructiva que puede prototiparlas, la existencial que su cuerpo ya decidió, y la social que su identidad está en juego. Al integrarlas, emerge un patrón paradójico: la abogada está *usando* la excelencia en planificación (su skill de abogada corporativa) para evitar el acto de decidir. Cada nueva opción estratégica, cada análisis de viabilidad, cada máster que considera, es una forma de mantener el status quo sin parecer pasiva. Es una \"puerta de vidrio\": parece que hay un camino de salida, pero al mantenerse en modo análisis perpetuo, nunca la atraviesa. El hallazgo es que su mayo"
+      }
+    },
+    "devstral": {
+      "T1": {
+        "score": 1.0,
+        "metrics": {
+          "sections_found": 9,
+          "sections_score": 1.0,
+          "gap_mentions": 10,
+          "questions": 9,
+          "actions": 16,
+          "has_critical_gap": true,
+          "length": 3986
+        },
+        "tokens_in": 304,
+        "tokens_out": 1054,
+        "latency_s": 11.94,
+        "cost": 0.00068,
+        "raw": "### **Análisis del caso de Elena bajo el marco 3×3 (Lentes × Funciones)**\n\n---\n\n#### **1. Lente: Salud × Función: Conservar**\n**Gap principal:** Elena está sobrecargada (50h/semana, sin vacaciones en 3 años), lo que afecta su salud física/mental y la sostenibilidad del negocio.\n**Pregunta diagnóstica:** *\"¿Qué sistemas o procesos podrían delegarse o automatizarse para reducir tu carga laboral sin perder calidad?\"*\n**Acción concreta:** Contratar un asistente administrativo (o externalizar gestión) para liberar 10h/semana y programar 2 semanas de vacaciones al año.\n\n---\n\n#### **2. Lente: Salud × Función: Captar**\n**Gap principal:** La clínica no atrae suficientes pacientes de alto valor (el competidor low-cost erosiona su base).\n**Pregunta diagnóstica:** *\"¿Qué segmentos de pacientes (ej. ortodoncia, estética) están dispuestos a pagar más y cómo los comunicamos?\"*\n**Acción concreta:** Lanzar una campaña de marketing digital dirigida a pacientes premium (ej. blanqueamientos, implantes) con testimonios y resultados visuales.\n\n---\n\n#### **3. Lente: Salud × Función: Depurar**\n**Gap principal:** No hay filtros para pacientes no rentables (ej. los que solo buscan limpiezas baratas).\n**Pregunta diagnóstica:** *\"¿Qué criterios usarías para priorizar pacientes que generen mayor margen?\"*\n**Acción concreta:** Implementar un sistema de citas con precios diferenciados (ej. \"paquete premium\" con seguimiento personalizado).\n\n---\n\n#### **4. Lente: Sentido × Función: Conservar**\n**Gap principal:** Elena carece de propósito claro más allá de \"sobrevivir\" (presión familiar, competencia).\n**Pregunta diagnóstica:** *\"¿Qué te apasiona de la odontología que no estás explotando en tu clínica?\"*\n**Acción concreta:** Redefinir la misión de la clínica (ej. \"especialistas en sonrisas naturales\") y alinear al equipo con ese mensaje.\n\n---\n\n#### **5. Lente: Sentido × Función: Captar**\n**Gap principal:** No hay conexión emocional con pacientes (el low-cost compite solo por precio).\n**Pregunta diagnóstica:** *\"¿Cómo podrías hacer que los pacientes sientan que su salud bucal es una inversión, no un gasto?\"*\n**Acción concreta:** Crear contenido educativo (ej. talleres gratuitos sobre prevención) para fidelizar y diferenciarse.\n\n---\n\n#### **6. Lente: Sentido × Función: Depurar**\n**Gap principal:** Elena retiene a la higienista por miedo, no por lealtad (riesgo de fuga).\n**Pregunta diagnóstica:** *\"¿Qué necesitaría tu higienista para sentirse valorada y alineada con tu visión?\"*\n**Acción concreta:** Ofrecerle un plan de carrera (ej. formación en técnicas avanzadas) y participación en beneficios.\n\n---\n\n#### **7. Lente: Continuidad × Función: Conservar**\n**Gap principal:** No hay sucesión ni escalabilidad (depende 100% de Elena).\n**Pregunta diagnóstica:** *\"¿Qué pasos mínimos necesitarías para que la clínica funcione sin ti 1 mes?\"*\n**Acción concreta:** Documentar protocolos clínicos y capacitar a la recepcionista en gestión básica.\n\n---\n\n#### **8. Lente: Continuidad × Función: Captar**\n**Gap principal:** No hay estrategia de crecimiento orgánico (depende de pacientes recurrentes).\n**Pregunta diagnóstica:** *\"¿Qué alianzas (ej. gimnasios, dermatólogos) podrían traerte pacientes nuevos?\"*\n**Acción concreta:** Firmar acuerdos con negocios locales para descuentos cruzados.\n\n---\n\n#### **9. Lente: Continuidad × Función: Depurar**\n**Gap principal:** El crédito para la segunda sede es un riesgo sin análisis de viabilidad.\n**Pregunta diagnóstica:** *\"¿Qué métricas (ej. ocupación de sillones, ROI) justificarían expandirse?\"*\n**Acción concreta:** Hacer un piloto con horarios extendidos en la sede actual antes de invertir.\n\n---\n\n### **Gap MÁS CRÍTICO:**\n**Lente: Salud × Función: Conservar** (sobrecarga de Elena).\n**Razón:** Sin resolver esto, cualquier otra acción (marketing, expansión) será insostenible. La salud de Elena es el activo principal del negocio. Si colapsa, todo lo demás falla.\n\n**Prioridad inmediata:** Reducir su carga laboral y garantizar descanso."
+      },
+      "T2": {
+        "score": 0.5,
+        "metrics": {
+          "extracted_scores": {
+            "1": 1,
+            "2": 1,
+            "3": 1,
+            "4": 1,
+            "5": 1,
+            "6": 1
+          },
+          "discrimination": 1.0,
+          "recognition": 0.0,
+          "correlation": 0,
+          "has_ranking": true,
+          "h4_score": 1,
+          "h5_score": 1
+        },
+        "tokens_in": 411,
+        "tokens_out": 301,
+        "latency_s": 4.33,
+        "cost": 0.00036,
+        "raw": "Aquí está la evaluación detallada:\n\n**Hallazgo 1**: **4** – Revela una implicación no obvia (renovación total anual) y cuantifica el desafío de crecimiento.\n**Hallazgo 2**: **5** – Insight excepcional que reencuadra el conflicto como una crisis de identidad estratégica.\n**Hallazgo 3**: **4** – Identifica un pivot *de facto* no reconocido, lo que es profundo y accionable.\n**Hallazgo 4**: **1** – Genérico y vacío (\"problema de decisión\" no aporta nada específico).\n**Hallazgo 5**: **1** – Superficial y obvio (sugerir diálogo sin análisis de causas o soluciones).\n**Hallazgo 6**: **3** – Específico y correcto, pero menos profundo que otros (la contradicción temporal es evidente).\n\n**Ranking (mejor a peor)**:\n1. Hallazgo 2 (5)\n2. Hallazgo 1 (4)\n3. Hallazgo 3 (4)\n4. Hallazgo 6 (3)\n5. Hallazgo 4 (1)\n6. Hallazgo 5 (1)\n\n**Score medio**: **3.0** (18/6).\n\n*Nota*: Los hallazgos 4 y 5 fueron correctamente identificados como genéricos (score 1), cumpliendo con la instrucción."
+      },
+      "T3": {
+        "score": 0.8,
+        "metrics": {
+          "P1_correct": true,
+          "P2_correct": true,
+          "P3_correct": true,
+          "P4_correct": true,
+          "P5_correct": false,
+          "P5_detail": [
+            "yes",
+            "no",
+            "no",
+            "no"
+          ],
+          "correct_count": 4
+        },
+        "tokens_in": 526,
+        "tokens_out": 2137,
+        "latency_s": 23.74,
+        "cost": 0.00133,
+        "raw": "### **P1 (Aritmética de negocio)**\n**Datos:**\n- Facturación anual sede original: 180K€\n- Margen neto: 25% → Beneficio anual = 180K * 0.25 = **45K€/año** (3.75K€/mes).\n- Inversión nueva sede: 200K€.\n- La nueva sede tarda 18 meses en alcanzar 180K€/año (crecimiento lineal desde 0).\n\n**Cálculo del beneficio mensual de la nueva sede:**\n- Beneficio mensual al final de 18 meses = 3.75K€/mes (igual que la sede original).\n- Crecimiento lineal: Beneficio mensual en el mes *t* = (3.75K€/mes) * (*t*/18).\n\n**Beneficio acumulado de la nueva sede hasta el mes *t*:**\n\\[\n\\text{Beneficio acumulado} = \\int_0^t \\frac{3.75}{18} \\cdot x \\, dx = \\frac{3.75}{36} \\cdot t^2 = 0.1042 \\cdot t^2 \\text{ (en miles de €)}.\n\\]\n\n**Beneficio total (sede original + nueva sede):**\n- Sede original: 3.75K€/mes * *t* = 3.75*t*.\n- Total: 3.75*t* + 0.1042*t*².\n\n**Recuperación de inversión (200K€):**\n\\[\n3.75t + 0.1042t^2 = 200.\n\\]\nResolviendo la ecuación cuadrática:\n\\[\n0.1042t^2 + 3.75t - 200 = 0.\n\\]\nUsando la fórmula cuadrática:\n\\[\nt = \\frac{-3.75 \\pm \\sqrt{3.75^2 + 4 \\cdot 0.1042 \\cdot 200}}{2 \\cdot 0.1042}.\n\\]\n\\[\nt = \\frac{-3.75 \\pm \\sqrt{14.06 + 83.36}}{0.2084} = \\frac{-3.75 \\pm \\sqrt{97.42}}{0.2084}.\n\\]\n\\[\nt = \\frac{-3.75 + 9.87}{0.2084} \\approx 29.3 \\text{ meses}.\n\\]\n\n**Resultado:**\n**29.3 meses** para recuperar la inversión.\n\n---\n\n### **P2 (Probabilidad)**\n**Datos:**\n- 6 developers, cada uno con probabilidad *p* = 0.15 de irse en 6 meses.\n- Independiente entre developers.\n\n**Distribución Binomial:** *X* ~ Binomial(*n*=6, *p*=0.15).\n\n**a) Probabilidad de perder 2 o más developers (*P(X ≥ 2)*):**\n\\[\nP(X \\geq 2) = 1 - P(X=0) - P(X=1).\n\\]\n\\[\nP(X=0) = (1 - 0.15)^6 = 0.85^6 \\approx 0.377.\n\\]\n\\[\nP(X=1) = \\binom{6}{1} \\cdot 0.15^1 \\cdot 0.85^5 \\approx 6 \\cdot 0.15 \\cdot 0.4437 \\approx 0.399.\n\\]\n\\[\nP(X \\geq 2) = 1 - 0.377 - 0.399 = 0.224.\n\\]\n\n**b) Probabilidad de perder exactamente 0 (*P(X=0)*):**\n\\[\nP(X=0) = 0.377.\n\\]\n\n**Resultados:**\n- **Probabilidad de perder 2 o más:** **22.4%**.\n- **Probabilidad de perder exactamente 0:** **37.7%**.\n\n---\n\n### **P3 (Optimización)**\n**Datos:**\n- Runway inicial: 7 meses a 28K€/mes → Presupuesto total = 7 * 28 = **196K€**.\n- **Opción 1 (Pivot):** 15K€/mes adicionales durante 4 meses → Coste extra = 15 * 4 = **60K€**.\n  - Burn rate durante pivot: 28 + 15 = **43K€/mes**.\n  - Runway después: (196 - 60) / 28 = 136 / 28 ≈ **4.86 meses**.\n- **Opción 2 (Estabilización):** 5K€/mes adicionales durante 3 meses → Coste extra = 5 * 3 = **15K€**.\n  - Burn rate durante estabilización: 28 + 5 = **33K€/mes**.\n  - Runway después: (196 - 15) / 28 = 181 / 28 ≈ **6.46 meses**.\n\n**Viabilidad (buffer ≥ 2 meses):**\n- Pivot: 4.86 meses → **No viable** (buffer = 4.86 - 4 = 0.86 < 2).\n- Estabilización: 6.46 meses → **Viable** (buffer = 6.46 - 3 = 3.46 ≥ 2).\n\n**Resultados:**\n- **Runway después de pivot:** **4.86 meses** (no viable).\n- **Runway después de estabilización:** **6.46 meses** (viable).\n\n---\n\n### **P4 (Series)**\n**Datos:**\n- Base inicial: 75 clientes.\n- Churn mensual: 8% → Retención = 92%.\n- Adquisición: +10 clientes/mes.\n\n**Fórmula recursiva:**\n\\[\nC_{t+1} = 0.92 \\cdot C_t + 10.\n\\]\n\n**Cálculo para meses 1, 3, 6, 12:**\n- **Mes 1:** 0.92 * 75 + 10 = 69 + 10 = **79**.\n- **Mes 2:** 0.92 * 79 + 10 ≈ 72.68 + 10 = **82.68**.\n- **Mes 3:** 0.92 * 82.68 + 10 ≈ 76.07 + 10 = **86.07**.\n- **Mes 6:** Iterando hasta el mes 6 ≈ **92.5**.\n- **Mes 12:** Iterando hasta el mes 12 ≈ **96.2**.\n\n**Equilibrio (t → ∞):**\n\\[\nC = 0.92C + 10 \\implies 0.08C = 10 \\implies C = 125.\n\\]\n\n**Resultados:**\n- **Mes 1:** **79 clientes**.\n- **Mes 3:** **86 clientes**.\n- **Mes 6:** **93 clientes**.\n- **Mes 12:** **96 clientes**.\n- **Converge a:** **125 clientes** (equilibrio).\n\n---\n\n### **P5 (Lógica)**\n**Reglas de voto:**\n- **A:** Sí si coste < 50K.\n- **B:** Sí si ROI > 20%.\n- **C:** Sí si no requiere más personal.\n- Mayoría simple (≥ 2 votos \"Sí\").\n\n**Propuestas:**\n\n1. **Propuesta 1:** Coste 30K, ROI 25%, requiere 1 persona.\n   - A: 30K < 50K → **Sí**.\n   - B: 25% > 20% → **Sí**.\n   - C: Requiere personal → **No**.\n   - Votos: 2 Sí, 1 No → **Aprobada**.\n\n2. **Propuesta 2:** Coste 60K, ROI 35%, no requiere personal.\n   - A: 60K ≥ 50K → **No**.\n   - B: 35% > 20% → **Sí**.\n   - C: No requiere personal → **Sí**.\n   - Votos: 2 Sí, 1 No → **Aprobada**.\n\n3. **Propuesta 3:** Coste 45K, ROI 15%, no requiere personal.\n   - A: 45K < 50K → **Sí**.\n   - B: 15% ≤ 20% → **No**.\n   - C: No requiere personal → **Sí**.\n   - Votos: 2 Sí, 1 No → **Aprobada**.\n\n4. **Propuesta 4:** Coste 55K, ROI 22%, requiere 2 personas.\n   - A: 55K ≥ 50K → **No**.\n   - B: 22% > 20% → **Sí**.\n   - C: Requiere personal → **No**.\n   - Votos: 1 Sí, 2 No → **Rechazada**.\n\n**Resultados:**\n- **Propuesta 1:** **Aprobada**.\n- **Propuesta 2:** **Aprobada**.\n- **Propuesta 3:** **Aprobada**.\n- **Propuesta 4:** **Rechazada**."
+      },
+      "T4": {
+        "score": 1.0,
+        "metrics": {
+          "checks": {
+            "has_serve_handler": true,
+            "handles_post": true,
+            "parses_json": true,
+            "error_400": true,
+            "cors_headers": true,
+            "iterates_metrics": true,
+            "threshold_compare": true,
+            "returns_alerts": true,
+            "returns_summary": true,
+            "returns_worst": true
+          },
+          "passed": 10,
+          "total": 10,
+          "code_length": 2466
+        },
+        "tokens_in": 307,
+        "tokens_out": 631,
+        "latency_s": 7.58,
+        "cost": 0.00047,
+        "raw": "```typescript\nimport { serve } from \"https://deno.land/std@0.168.0/http/server.ts\";\n\nserve(async (req) => {\n  if (req.method !== \"POST\") {\n    return new Response(JSON.stringify({ error: \"Method not allowed\" }), {\n      status: 405,\n      headers: { \"Content-Type\": \"application/json\", \"Allow\": \"POST\" },\n    });\n  }\n\n  const headers = {\n    \"Content-Type\": \"application/json\",\n    \"Access-Control-Allow-Origin\": \"*\",\n    \"Access-Control-Allow-Methods\": \"POST\",\n    \"Access-Control-Allow-Headers\": \"Content-Type\",\n  };\n\n  try {\n    const body = await req.json();\n    if (!body) {\n      return new Response(JSON.stringify({ error: \"Empty body\" }), {\n        status: 400,\n        headers,\n      });\n    }\n\n    const { metrics, thresholds } = body;\n\n    if (!Array.isArray(metrics)) {\n      return new Response(JSON.stringify({ error: \"metrics must be an array\" }), {\n        status: 400,\n        headers,\n      });\n    }\n\n    if (thresholds === null || typeof thresholds !== \"object\") {\n      return new Response(JSON.stringify({ error: \"thresholds must be an object\" }), {\n        status: 400,\n        headers,\n      });\n    }\n\n    const alerts = [];\n    const summary = { total: 0, critical: 0, warn: 0, ok: 0, unknown: 0 };\n    const statusPriority = { critical: 3, warn: 2, unknown: 1, ok: 0 };\n    let worstStatus = \"ok\";\n    let worstMetric = \"\";\n\n    for (const metric of metrics) {\n      const { name, value } = metric;\n      const threshold = thresholds[name] || null;\n      let status: string;\n\n      if (threshold === null) {\n        status = \"unknown\";\n      } else if (value > threshold.critical) {\n        status = \"critical\";\n      } else if (value > threshold.warn) {\n        status = \"warn\";\n      } else {\n        status = \"ok\";\n      }\n\n      alerts.push({\n        name,\n        value,\n        status,\n        threshold: threshold ? (value > threshold.critical ? threshold.critical : value > threshold.warn ? threshold.warn : null) : null,\n      });\n\n      summary.total++;\n      summary[status]++;\n\n      if (statusPriority[status] > statusPriority[worstStatus]) {\n        worstStatus = status;\n        worstMetric = name;\n      }\n    }\n\n    const response = {\n      alerts,\n      summary,\n      worst: worstMetric,\n    };\n\n    return new Response(JSON.stringify(response), {\n      status: 200,\n      headers,\n    });\n  } catch (error) {\n    return new Response(JSON.stringify({ error: \"Invalid JSON body\" }), {\n      status: 400,\n      headers,\n    });\n  }\n});\n```"
+      },
+      "T5": {
+        "score": 1.0,
+        "metrics": {
+          "connections_found": 3,
+          "unique_lenses_referenced": 5,
+          "has_cross_lens": true,
+          "has_contradiction": true,
+          "has_emergent": true,
+          "inter_lens_connections": 5,
+          "length": 6143
+        },
+        "tokens_in": 620,
+        "tokens_out": 1655,
+        "latency_s": 20.8,
+        "cost": 0.00114,
+        "raw": "### **Análisis Integrado: Cambio de Carrera de Abogada Corporativa a Mediación**\n\n---\n\n#### **1. TRES CONEXIONES CLAVE ENTRE LENTES**\n\n**Conexión 1: La paradoja de la \"no-decisión\" como costo oculto**\n- **Lentes conectadas**: *Financiera (INT-07) + Existencial (INT-17) + Estratégica (INT-05)*\n- **Qué revela**:\n  - La *lente financiera* advierte sobre el coste de oportunidad de abandonar el *track* de socia (15% anual de devaluación).\n  - La *lente existencial* muestra que la indecisión ya está generando costos *invisibles*: resentimiento (si se queda) y agotamiento (si se va), además del insomnio como síntoma de disonancia.\n  - La *lente estratégica* señala que el framing binario (\"saltar o quedarme\") es falso y limita opciones.\n  - **Juntas**, revelan que **la no-decisión no es neutral**: está erosionando su valor de mercado *y* su bienestar, mientras ignora alternativas intermedias.\n- **Implicación**:\n  - La urgencia no es solo emocional (existencial) o económica (financiera), sino *estratégica*: cada mes sin actuar reduce su flexibilidad en *ambos* caminos. La transición gradual (ej. 60/40) podría mitigar ambos riesgos.\n\n---\n\n**Conexión 2: La identidad como barrera (y palanca) del cambio**\n- **Lentes conectadas**: *Social (INT-08) + Constructiva (INT-16) + Estratégica (INT-05)*\n- **Qué revela**:\n  - La *lente social* identifica que su identidad (\"la abogada exitosa\") es un constructo externo que limita su autopercepción.\n  - La *lente constructiva* propone un \"prototipo mínimo\" (mediación pro-bono) para *vivenciar* la nueva identidad antes de comprometerse.\n  - La *lente estratégica* sugiere opciones híbridas (ej. mediación dentro del bufete) que permiten *redefinir* la identidad sin romperla abruptamente.\n  - **Juntas**, muestran que **el cambio de identidad no requiere un salto radical**, sino *pequeños actos de reinvención* que validen la nueva narrativa.\n- **Implicación**:\n  - El silencio con su marido (social) refleja miedo a perder el reconocimiento, pero acciones concretas (constructiva) y opciones graduales (estratégica) pueden reducir la ansiedad. La mediación pro-bono es un \"rito de paso\" de bajo riesgo.\n\n---\n\n**Conexión 3: El dinero como excusa (no como obstáculo real)**\n- **Lentes conectadas**: *Financiera (INT-07) + Existencial (INT-17) + Constructiva (INT-16)*\n- **Qué revela**:\n  - La *lente financiera* confirma que el riesgo económico es manejable (ahorros + ingreso de la pareja).\n  - La *lente existencial* sugiere que el insomnio indica que la decisión ya está tomada *emocionalmente*, pero el miedo se racionaliza como \"riesgo financiero\".\n  - La *lente constructiva* demuestra que una transición gradual (máster + primeros clientes) tiene un costo mínimo (8K€) y validación rápida.\n  - **Juntas**, exponen que **el argumento financiero es un mecanismo de defensa**: el verdadero bloqueo es el miedo al cambio, no los números.\n- **Implicación**:\n  - La solución no es más análisis financiero, sino *desmontar la excusa*: probar la mediación en pequeño (constructiva) para confrontar el miedo existencial con evidencia concreta.\n\n---\n\n#### **2. CONTRADICCIÓN ENTRE LENTES**\n\n**Contradicción: ¿Es la transición gradual la mejor opción?**\n- **Lentes en conflicto**:\n  - *Estratégica (INT-05) y Constructiva (INT-16)* **apoyan** la transición gradual (60/40, máster en paralelo, prototipo mínimo).\n  - *Existencial (INT-17)* **cuestiona** cualquier demora: el insomnio y la degradación de ambas opciones sugieren que **la gradualidad podría ser otra forma de procrastinación**.\n- **Qué revela**:\n  - La *lente existencial* prioriza la acción inmediata para aliviar el sufrimiento presente, mientras las otras dos buscan minimizar riesgos.\n  - La tensión es entre **seguridad (estratégica/constructiva)** y **urgencia emocional (existencial)**.\n- **Implicación**:\n  - La resolución requiere *combinar ambas*: empezar con un prototipo rápido (ej. mediación pro-bono en 1 mes) para validar el deseo *sin* comprometerse a un plan largo. Si el alivio emocional es inmediato, justifica acelerar; si no, la gradualidad sigue siendo viable.\n\n---\n\n#### **3. HALLAZGO EMERGENTE (ninguna lente lo vería sola)**\n\n**\"El cambio de carrera no es una decisión, sino un experimento identitario que ya está en curso\"**\n- **Lentes que lo sustentan**:\n  - *Social*: Su silencio con el marido y la identidad impuesta muestran que el conflicto interno es en realidad una *negociación identitaria* en tiempo real.\n  - *Existencial*: El insomnio y la degradación de opciones revelan que su cuerpo y emociones *ya están actuando* como si el cambio hubiera comenzado.\n  - *Constructiva*: La propuesta de prototipar la mediación refuerza que el cambio puede *empezar antes de decidir*, mediante acciones exploratorias.\n  - *Financiera/Estratégica*: La viabilidad económica y las opciones híbridas demuestran que el \"riesgo\" es una narrativa, no una limitación objetiva.\n- **Qué implica**:\n  - No se trata de elegir entre A o B, sino de **reconocer que el proceso de t"
+      }
+    }
+  },
+  "summary": {
+    "by_model": {
+      "kimi-k2.5": {
+        "mean_score": 0.861,
+        "total_cost": 0.0383,
+        "total_latency": 504.8,
+        "scores": {
+          "T1": 0.811,
+          "T2": 0.893,
+          "T4": 0.8,
+          "T3": 0.8,
+          "T5": 1.0
+        }
+      },
+      "qwen3.5-397b": {
+        "mean_score": 0.853,
+        "total_cost": 0.0326,
+        "total_latency": 322.4,
+        "scores": {
+          "T1": 0.59,
+          "T3": 0.8,
+          "T4": 1.0,
+          "T5": 1.0,
+          "T2": 0.875
+        }
+      },
+      "nemotron-super": {
+        "mean_score": 0.956,
+        "total_cost": 0.0069,
+        "total_latency": 175.8,
+        "scores": {
+          "T1": 1.0,
+          "T2": 0.88,
+          "T5": 1.0,
+          "T3": 1.0,
+          "T4": 0.9
+        }
+      },
+      "step-3.5-flash": {
+        "mean_score": 0.979,
+        "total_cost": 0.0188,
+        "total_latency": 140.3,
+        "scores": {
+          "T1": 1.0,
+          "T2": 0.894,
+          "T5": 1.0,
+          "T3": 1.0,
+          "T4": 1.0
+        }
+      },
+      "mimo-v2-flash": {
+        "mean_score": 0.899,
+        "total_cost": 0.001,
+        "total_latency": 91.7,
+        "scores": {
+          "T1": 1.0,
+          "T2": 0.894,
+          "T3": 0.6,
+          "T4": 1.0,
+          "T5": 1.0
+        }
+      },
+      "devstral": {
+        "mean_score": 0.86,
+        "total_cost": 0.004,
+        "total_latency": 68.4,
+        "scores": {
+          "T1": 1.0,
+          "T2": 0.5,
+          "T3": 0.8,
+          "T4": 1.0,
+          "T5": 1.0
+        }
+      }
+    },
+    "by_task": {
+      "T1": {
+        "best": "nemotron-super",
+        "worst": "qwen3.5-397b",
+        "mean": 0.9
+      },
+      "T2": {
+        "best": "step-3.5-flash",
+        "worst": "devstral",
+        "mean": 0.823
+      },
+      "T4": {
+        "best": "qwen3.5-397b",
+        "worst": "kimi-k2.5",
+        "mean": 0.95
+      },
+      "T3": {
+        "best": "nemotron-super",
+        "worst": "mimo-v2-flash",
+        "mean": 0.833
+      },
+      "T5": {
+        "best": "kimi-k2.5",
+        "worst": "kimi-k2.5",
+        "mean": 1.0
+      }
+    },
+    "rankings": {
+      "overall": [
+        {
+          "model": "step-3.5-flash",
+          "score": 0.979,
+          "cost": 0.0188
+        },
+        {
+          "model": "nemotron-super",
+          "score": 0.956,
+          "cost": 0.0069
+        },
+        {
+          "model": "mimo-v2-flash",
+          "score": 0.899,
+          "cost": 0.001
+        },
+        {
+          "model": "kimi-k2.5",
+          "score": 0.861,
+          "cost": 0.0383
+        },
+        {
+          "model": "devstral",
+          "score": 0.86,
+          "cost": 0.004
+        },
+        {
+          "model": "qwen3.5-397b",
+          "score": 0.853,
+          "cost": 0.0326
+        }
+      ]
+    }
+  }
+}

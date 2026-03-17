@@ -1,0 +1,63 @@
+{
+  "experiment": "exp7_chief_redesign",
+  "date": "2026-03-11",
+  "mesa_redonda": {
+    "r1_designs": 5,
+    "r2_evaluations": 5,
+    "r3_merges": 5,
+    "consensus_reached": true
+  },
+  "design": {
+    "total_tokens_approx": 44000,
+    "r1_tokens": {
+      "step35": 16384,
+      "cogito": 2020,
+      "kimi": 9464,
+      "deepseek": 3004,
+      "nemotron": 3855
+    },
+    "r2_tokens": {
+      "step35": 8319,
+      "cogito": 1862,
+      "kimi": 6281,
+      "deepseek": 1779,
+      "nemotron": 3238
+    },
+    "r3_tokens": 6613,
+    "f3_tokens": 2561,
+    "f4_tokens": 3168
+  },
+  "maestro_consistency": {
+    "checks_passed": 6,
+    "checks_failed": 4,
+    "checks_total": 10,
+    "failures": [
+      "estigmergia",
+      "8_operaciones_sintacticas",
+      "pipeline_7_pasos",
+      "enjambre_codigo"
+    ]
+  },
+  "timing": {
+    "r1_total_s": 629,
+    "r2_total_s": 607,
+    "r3_s": 46,
+    "f3_s": 35,
+    "f4_s": 157,
+    "total_s": 1474
+  },
+  "models_used": {
+    "step35": {"id": "stepfun/step-3.5-flash", "name": "Step 3.5 Flash"},
+    "cogito": {"id": "deepcogito/cogito-v2.1-671b", "name": "Cogito 671B"},
+    "kimi": {"id": "moonshotai/kimi-k2.5", "name": "Kimi K2.5"},
+    "deepseek": {"id": "deepseek/deepseek-chat-v3-0324", "name": "DeepSeek V3.2"},
+    "nemotron": {"id": "nvidia/llama-3.3-nemotron-super-49b-v1.5", "name": "Nemotron Super"}
+  },
+  "critical_issues": [
+    "Consensus includes proprietary models (claude-3-haiku, o1-mini) despite OS-only requirement",
+    "Missing estigmergia (uses Redis Pub/Sub instead of Postgres marks)",
+    "Missing 8 syntactic operations (detector de huecos)",
+    "Missing 7-step Motor pipeline alignment",
+    "No parallel coding swarm capability"
+  ]
+}

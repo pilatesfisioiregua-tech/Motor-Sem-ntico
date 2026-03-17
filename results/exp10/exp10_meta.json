@@ -1,0 +1,199 @@
+{
+  "timestamp": "2026-03-11T15:57:32.022142",
+  "experiment": "exp10_roadmap_enjambre",
+  "description": "7 modelos + Cogito diseñan roadmap OMNI-MIND con estigmergia",
+  "models": {
+    "kimi": {
+      "id": "moonshotai/kimi-k2.5",
+      "name": "Kimi K2.5",
+      "provider": "openrouter",
+      "context_level": "full"
+    },
+    "v32": {
+      "id": "deepseek/deepseek-chat-v3-0324",
+      "name": "V3.2-chat",
+      "provider": "openrouter",
+      "context_level": "full"
+    },
+    "qwen3": {
+      "id": "qwen/qwen3-235b-a22b",
+      "name": "Qwen3-235B",
+      "provider": "openrouter",
+      "context_level": "full"
+    },
+    "gptoss": {
+      "id": "openai/gpt-4.1-mini",
+      "name": "GPT-OSS",
+      "provider": "openrouter",
+      "context_level": "max"
+    },
+    "r1": {
+      "id": "deepseek/deepseek-r1",
+      "name": "R1",
+      "provider": "openrouter",
+      "context_level": "compact"
+    },
+    "step": {
+      "id": "stepfun/step-3.5-flash",
+      "name": "Step 3.5 Flash",
+      "provider": "openrouter",
+      "context_level": "compact"
+    },
+    "nemotron": {
+      "id": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+      "name": "Nemotron Super",
+      "provider": "openrouter",
+      "context_level": "compact"
+    },
+    "cogito": {
+      "id": "deepcogito/cogito-v2.1-671b",
+      "name": "Cogito 671B",
+      "provider": "openrouter",
+      "role": "synthesizer"
+    }
+  },
+  "context_sizes": {
+    "max_tokens": 224981,
+    "full_tokens": 95128,
+    "compact_tokens": 45104
+  },
+  "ronda1": {
+    "kimi": {
+      "latency_s": 126.2,
+      "tokens_in": 127628,
+      "tokens_out": 3000,
+      "cost_usd": 0.0,
+      "status": "ok",
+      "error": null
+    },
+    "v32": {
+      "latency_s": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0,
+      "status": "ok",
+      "error": null
+    },
+    "qwen3": {
+      "latency_s": 2.8,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0,
+      "status": "error",
+      "error": "Provider returned error"
+    },
+    "gptoss": {
+      "latency_s": 75.8,
+      "tokens_in": 238486,
+      "tokens_out": 2914,
+      "cost_usd": 0.0,
+      "status": "ok",
+      "error": null
+    },
+    "r1": {
+      "latency_s": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0,
+      "status": "ok",
+      "error": null
+    },
+    "step": {
+      "latency_s": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0,
+      "status": "ok",
+      "error": null
+    },
+    "nemotron": {
+      "latency_s": 0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0,
+      "status": "ok",
+      "error": null
+    }
+  },
+  "ronda2": {
+    "kimi": {
+      "latency_s": 129.9,
+      "tokens_in": 136965,
+      "tokens_out": 3000,
+      "cost_usd": 0.0,
+      "status": "ok",
+      "pizarra_compressed": false,
+      "error": null
+    },
+    "v32": {
+      "latency_s": 201.6,
+      "tokens_in": 128730,
+      "tokens_out": 1813,
+      "cost_usd": 0.0,
+      "status": "ok",
+      "pizarra_compressed": true,
+      "error": null
+    },
+    "qwen3": {
+      "latency_s": 2.0,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": 0,
+      "status": "error",
+      "pizarra_compressed": true,
+      "error": "Provider returned error"
+    },
+    "gptoss": {
+      "latency_s": 87.7,
+      "tokens_in": 244780,
+      "tokens_out": 2569,
+      "cost_usd": 0.0,
+      "status": "ok",
+      "pizarra_compressed": false,
+      "error": null
+    },
+    "r1": {
+      "latency_s": 83.2,
+      "tokens_in": 65514,
+      "tokens_out": 2261,
+      "cost_usd": 0.0,
+      "status": "ok",
+      "pizarra_compressed": true,
+      "error": null
+    },
+    "step": {
+      "latency_s": 26.6,
+      "tokens_in": 66317,
+      "tokens_out": 3000,
+      "cost_usd": 0.0,
+      "status": "ok",
+      "pizarra_compressed": true,
+      "error": null
+    },
+    "nemotron": {
+      "latency_s": 31.5,
+      "tokens_in": 67069,
+      "tokens_out": 1840,
+      "cost_usd": 0.0,
+      "status": "ok",
+      "pizarra_compressed": false,
+      "error": null
+    }
+  },
+  "synthesis": {
+    "model": "deepcogito/cogito-v2.1-671b",
+    "latency_s": 20.0,
+    "tokens_in": 21565,
+    "tokens_out": 1533,
+    "cost_usd": 0.0,
+    "status": "ok",
+    "pizarra_compressed": false,
+    "error": null
+  },
+  "total_cost_usd": 0.0,
+  "total_latency_s": 347.8,
+  "models_failed": [
+    "qwen3"
+  ],
+  "notes": ""
+}

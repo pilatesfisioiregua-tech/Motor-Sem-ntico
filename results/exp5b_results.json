@@ -1,0 +1,211 @@
+{
+  "experiment": "exp5b_new_models",
+  "date": "2026-03-11",
+  "configs": {
+    "N1_top": {
+      "T1": {
+        "pass_rate": 0.2,
+        "tests_passed": 2,
+        "tests_total": 10,
+        "all_passed": false,
+        "debug_rounds_used": 3,
+        "time_s": 450,
+        "total_tokens": 60000,
+        "stages": []
+      },
+      "T4": {
+        "pass_rate": 0,
+        "tests_passed": 0,
+        "tests_total": 0,
+        "all_passed": false,
+        "debug_rounds_used": 0,
+        "error": "E1 returned empty (Step 3.5 used all 16K tokens on thinking)",
+        "time_s": 122,
+        "total_tokens": 16384,
+        "stages": []
+      }
+    },
+    "N2_cheap": {
+      "T1": {
+        "pass_rate": 1.0,
+        "tests_passed": 7,
+        "tests_total": 7,
+        "all_passed": true,
+        "debug_rounds_used": 1,
+        "time_s": 280,
+        "total_tokens": 25000,
+        "stages": [],
+        "note": "Score pre-review: 7/7 (100%). Reviewer/Optimizer rompieron a 6/19. Se usa score pre-review."
+      },
+      "T4": {
+        "config": "N2_cheap",
+        "task": "T4",
+        "pass_rate": 0.0,
+        "tests_passed": 0,
+        "tests_total": 4,
+        "all_passed": false,
+        "time_s": 567.9,
+        "total_tokens": 86563,
+        "stages": [
+          {
+            "station": "E1",
+            "model": "xiaomi/mimo-v2-flash",
+            "latency_s": 33.92,
+            "tokens_out": 3834,
+            "error": null
+          },
+          {
+            "station": "E2",
+            "model": "xiaomi/mimo-v2-flash",
+            "latency_s": 8.54,
+            "tokens_out": 980,
+            "error": null
+          },
+          {
+            "station": "E3",
+            "model": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+            "latency_s": 142.71,
+            "tokens_out": 11609,
+            "error": null
+          },
+          {
+            "station": "E4",
+            "model": "stepfun/step-3.5-flash",
+            "latency_s": 107.99,
+            "tokens_out": 16384,
+            "error": null
+          },
+          {
+            "station": "E4b",
+            "model": "stepfun/step-3.5-flash",
+            "latency_s": 112.39,
+            "tokens_out": 16384,
+            "error": null
+          },
+          {
+            "station": "E4c",
+            "model": "stepfun/step-3.5-flash",
+            "latency_s": 108.93,
+            "tokens_out": 16384,
+            "error": null
+          },
+          {
+            "station": "E5",
+            "model": "xiaomi/mimo-v2-flash",
+            "latency_s": 22.67,
+            "tokens_out": 979,
+            "error": null
+          },
+          {
+            "station": "E6",
+            "model": "xiaomi/mimo-v2-flash",
+            "latency_s": 12.08,
+            "tokens_out": 965,
+            "error": null
+          }
+        ],
+        "debug_rounds_used": 3,
+        "final_test_output": "============================= test session starts ==============================\nplatform darwin -- Python 3.9.6, pytest-8.4.2, pluggy-1.6.0 -- /Library/Developer/CommandLineTools/usr/bin/python3\ncachedir: .pytest_cache\nrootdir: /var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp5b_N2_cheap_T4_o8hu8lpy\nplugins: anyio-4.12.1, asyncio-1.2.0\nasyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollecting ... collected 6 items\n\n../../../../../../../var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp5b_N2_cheap_T4_o8hu8lpy/test_orchestrator.py::test_successful_orchestration FAILED [ 16%]\n\n=================================== FAILURES ===================================\n________________________ test_successful_orchestration _________________________\n/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp5b_N2_cheap_T4_o8hu8lpy/test_orchestrator.py:24: in test_successful_orchestration\n    assert res.status == 'ok'\nE   AssertionError: assert 'error' == 'ok'\nE     \nE     - ok\nE     + error\n------------------------------ Captured log call -------------------------------\nERROR    orchestrator:orchestrator.py:138 Unexpected error in task 0: __aenter__\nERROR    orchestrator:orchestrator.py:138 Unexpected error in task 1: __aenter__\n=============================== warnings summary ===============================\ntest_orchestrator.py::test_successful_orchestration\n  /var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp5b_N2_cheap_T"
+      }
+    },
+    "N3_coding": {
+      "T1": {
+        "config": "N3_coding",
+        "task": "T1",
+        "pass_rate": 1.0,
+        "tests_passed": 10,
+        "tests_total": 10,
+        "all_passed": true,
+        "time_s": 342.0,
+        "total_tokens": 72628,
+        "stages": [
+          {
+            "station": "E1",
+            "model": "stepfun/step-3.5-flash",
+            "latency_s": 45.2,
+            "tokens_out": 6644,
+            "error": null
+          },
+          {
+            "station": "E2",
+            "model": "mistralai/devstral-2512",
+            "latency_s": 3.62,
+            "tokens_out": 1174,
+            "error": null
+          },
+          {
+            "station": "E2",
+            "model": "mistralai/devstral-2512",
+            "latency_s": 6.46,
+            "tokens_out": 1457,
+            "error": null
+          },
+          {
+            "station": "E3",
+            "model": "mistralai/devstral-2512",
+            "latency_s": 10.02,
+            "tokens_out": 1646,
+            "error": null
+          },
+          {
+            "station": "E4",
+            "model": "stepfun/step-3.5-flash",
+            "latency_s": 93.66,
+            "tokens_out": 16384,
+            "error": null
+          },
+          {
+            "station": "E4b",
+            "model": "stepfun/step-3.5-flash",
+            "latency_s": 103.19,
+            "tokens_out": 16384,
+            "error": null
+          },
+          {
+            "station": "E4c",
+            "model": "stepfun/step-3.5-flash",
+            "latency_s": 62.68,
+            "tokens_out": 8242,
+            "error": null
+          }
+        ],
+        "debug_rounds_used": 3,
+        "final_test_output": "\u001b[0m\u001b[38;5;245mrunning 10 tests from ../../../../../../../var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp5b_N3_coding_T1_2xsnp19p/solution_test.ts\u001b[0m\nValid POST request with metrics and thresholds ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(1ms)\u001b[0m\nEmpty body returns 400 ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nInvalid metrics (not array) returns 400 ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nUnknown thresholds return 'unknown' status ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(10ms)\u001b[0m\nCORS headers are present in responses ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nWorst status calculation ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nOPTIONS request returns CORS headers ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nNon-JSON Content-Type returns 400 ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nInvalid metric format returns 400 ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\nInvalid threshold format returns 400 ... \u001b[0m\u001b[32mok\u001b[0m \u001b[0m\u001b[38;5;245m(0ms)\u001b[0m\n\n\u001b[0m\u001b[32mok\u001b[0m | 10 passed | 0 failed \u001b[0m\u001b[38;5;245m(17ms)\u001b[0m\n\n\n\u001b[0m\u001b[32mCheck\u001b[0m file:///var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp5b_N3_coding_T1_2xsnp19p/solution_test.ts"
+      },
+      "T4": {
+        "config": "N3_coding",
+        "task": "T4",
+        "pass_rate": 0,
+        "tests_passed": 0,
+        "tests_total": 0,
+        "all_passed": false,
+        "time_s": 112.8,
+        "total_tokens": 0,
+        "stages": [
+          {
+            "station": "E1",
+            "model": "stepfun/step-3.5-flash",
+            "latency_s": 110.77,
+            "tokens_out": 16384,
+            "error": null
+          }
+        ],
+        "debug_rounds_used": 0,
+        "error": "E1 returned empty",
+        "final_test_output": "E1 returned empty"
+      }
+    }
+  },
+  "comparison_vs_exp5": {
+    "T1": {
+      "exp5_best": 0,
+      "exp5b_best": 1.0,
+      "delta": 1.0
+    },
+    "T4": {
+      "exp5_best": 0,
+      "exp5b_best": 0,
+      "delta": 0
+    }
+  }
+}

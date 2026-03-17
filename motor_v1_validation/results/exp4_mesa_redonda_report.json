@@ -1,0 +1,2175 @@
+{
+  "meta": {
+    "experiment": "Exp 4 - Mesa Redonda"
+  },
+  "ranking": [
+    {
+      "modelo": "gpt-oss-120b",
+      "valor": 118,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.257,
+        "celdas_cubiertas": 63,
+        "celdas_3plus": 14
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.743,
+        "celdas_cubiertas": 105,
+        "celdas_3plus": 66,
+        "delta_nivel_medio": 1.486
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 82,
+        "de_quien_mas_incorporo": "qwen3-235b"
+      },
+      "angulos_propios": 18,
+      "inflacion": 0
+    },
+    {
+      "modelo": "qwen3-235b",
+      "valor": 98,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.543,
+        "celdas_cubiertas": 104,
+        "celdas_3plus": 58
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 3.19,
+        "celdas_cubiertas": 105,
+        "celdas_3plus": 87,
+        "delta_nivel_medio": 0.647
+      },
+      "aportes_unicos": {
+        "total": 31,
+        "detalle": [
+          {
+            "output": "maverick_medium",
+            "celda": "Salud×Depurar",
+            "mi_score": 2,
+            "max_otros": 1
+          },
+          {
+            "output": "maverick_medium",
+            "celda": "Sentido×Distribuir",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "gptoss_depurar",
+            "celda": "Salud×Conservar",
+            "mi_score": 4,
+            "max_otros": 3
+          },
+          {
+            "output": "gptoss_depurar",
+            "celda": "Salud×Captar",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "gptoss_depurar",
+            "celda": "Salud×Depurar",
+            "mi_score": 4,
+            "max_otros": 3
+          },
+          {
+            "output": "gptoss_depurar",
+            "celda": "Salud×Distribuir",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "gptoss_depurar",
+            "celda": "Salud×Frontera",
+            "mi_score": 5,
+            "max_otros": 4
+          },
+          {
+            "output": "gptoss_depurar",
+            "celda": "Salud×Adaptar",
+            "mi_score": 4,
+            "max_otros": 3
+          },
+          {
+            "output": "gptoss_depurar",
+            "celda": "Sentido×Conservar",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "gptoss_depurar",
+            "celda": "Sentido×Captar",
+            "mi_score": 4,
+            "max_otros": 3
+          }
+        ]
+      },
+      "absorcion": {
+        "celdas_incorporadas": 25,
+        "de_quien_mas_incorporo": "kimi-k2.5"
+      },
+      "angulos_propios": 7,
+      "inflacion": 17
+    },
+    {
+      "modelo": "opus",
+      "valor": 90,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.505,
+        "celdas_cubiertas": 71,
+        "celdas_3plus": 19
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.771,
+        "celdas_cubiertas": 105,
+        "celdas_3plus": 67,
+        "delta_nivel_medio": 1.266
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 66,
+        "de_quien_mas_incorporo": "qwen3-235b"
+      },
+      "angulos_propios": 12,
+      "inflacion": 0
+    },
+    {
+      "modelo": "v3.2-chat",
+      "valor": 79,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.543,
+        "celdas_cubiertas": 84,
+        "celdas_3plus": 7
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.857,
+        "celdas_cubiertas": 105,
+        "celdas_3plus": 76,
+        "delta_nivel_medio": 1.314
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 55,
+        "de_quien_mas_incorporo": "qwen3-235b"
+      },
+      "angulos_propios": 12,
+      "inflacion": 0
+    },
+    {
+      "modelo": "deepseek-v3.1",
+      "valor": 55,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.657,
+        "celdas_cubiertas": 90,
+        "celdas_3plus": 10
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.8,
+        "celdas_cubiertas": 105,
+        "celdas_3plus": 74,
+        "delta_nivel_medio": 1.143
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 33,
+        "de_quien_mas_incorporo": "qwen3-235b"
+      },
+      "angulos_propios": 11,
+      "inflacion": 0
+    },
+    {
+      "modelo": "glm-4.7",
+      "valor": 45,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.81,
+        "celdas_cubiertas": 100,
+        "celdas_3plus": 15
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.419,
+        "celdas_cubiertas": 103,
+        "celdas_3plus": 54,
+        "delta_nivel_medio": 0.609
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 29,
+        "de_quien_mas_incorporo": "qwen3-235b"
+      },
+      "angulos_propios": 8,
+      "inflacion": 0
+    },
+    {
+      "modelo": "cogito-671b",
+      "valor": 42,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.524,
+        "celdas_cubiertas": 83,
+        "celdas_3plus": 6
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.876,
+        "celdas_cubiertas": 105,
+        "celdas_3plus": 77,
+        "delta_nivel_medio": 1.352
+      },
+      "aportes_unicos": {
+        "total": 6,
+        "detalle": [
+          {
+            "output": "maverick_medium",
+            "celda": "Salud×Conservar",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "maverick_medium",
+            "celda": "Salud×Captar",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "maverick_medium",
+            "celda": "Salud×Distribuir",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "maverick_medium",
+            "celda": "Continuidad×Conservar",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "maverick_medium",
+            "celda": "Continuidad×Distribuir",
+            "mi_score": 3,
+            "max_otros": 2
+          },
+          {
+            "output": "maverick_medium",
+            "celda": "Continuidad×Adaptar",
+            "mi_score": 4,
+            "max_otros": 3
+          }
+        ]
+      },
+      "absorcion": {
+        "celdas_incorporadas": 16,
+        "de_quien_mas_incorporo": "qwen3-235b"
+      },
+      "angulos_propios": 10,
+      "inflacion": 6
+    },
+    {
+      "modelo": "kimi-k2.5",
+      "valor": 30,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.057,
+        "celdas_cubiertas": 95,
+        "celdas_3plus": 28
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.467,
+        "celdas_cubiertas": 104,
+        "celdas_3plus": 48,
+        "delta_nivel_medio": 0.41
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 18,
+        "de_quien_mas_incorporo": "qwen"
+      },
+      "angulos_propios": 6,
+      "inflacion": 0
+    },
+    {
+      "modelo": "deepseek-r1",
+      "valor": 0,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.571,
+        "celdas_cubiertas": 78,
+        "celdas_3plus": 12
+      },
+      "ronda2": {
+        "has_r2": false,
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.571,
+        "celdas_cubiertas": 78,
+        "celdas_3plus": 12,
+        "delta_nivel_medio": 0.0
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 0,
+        "de_quien_mas_incorporo": ""
+      },
+      "angulos_propios": 0,
+      "inflacion": 0
+    },
+    {
+      "modelo": "minimax-m2.5",
+      "valor": 0,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.6,
+        "celdas_cubiertas": 85,
+        "celdas_3plus": 14
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.79,
+        "celdas_cubiertas": 91,
+        "celdas_3plus": 17,
+        "delta_nivel_medio": 0.19
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 0,
+        "de_quien_mas_incorporo": ""
+      },
+      "angulos_propios": 0,
+      "inflacion": 0
+    },
+    {
+      "modelo": "sonnet",
+      "valor": 0,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.0,
+        "celdas_cubiertas": 94,
+        "celdas_3plus": 32
+      },
+      "ronda2": {
+        "has_r2": false,
+        "outputs_evaluados": 5,
+        "nivel_medio": 2.0,
+        "celdas_cubiertas": 94,
+        "celdas_3plus": 32,
+        "delta_nivel_medio": 0.0
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 0,
+        "de_quien_mas_incorporo": ""
+      },
+      "angulos_propios": 0,
+      "inflacion": 0
+    },
+    {
+      "modelo": "v3.2-reasoner",
+      "valor": 0,
+      "ronda1": {
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.419,
+        "celdas_cubiertas": 73,
+        "celdas_3plus": 9
+      },
+      "ronda2": {
+        "has_r2": true,
+        "outputs_evaluados": 5,
+        "nivel_medio": 1.419,
+        "celdas_cubiertas": 73,
+        "celdas_3plus": 9,
+        "delta_nivel_medio": 0.0
+      },
+      "aportes_unicos": {
+        "total": 0,
+        "detalle": []
+      },
+      "absorcion": {
+        "celdas_incorporadas": 0,
+        "de_quien_mas_incorporo": ""
+      },
+      "angulos_propios": 0,
+      "inflacion": 0
+    }
+  ],
+  "collective_map": {
+    "v31_best": {
+      "Salud×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Runway = 7 meses, Burn rate = €28,000/mes, efectivo actual = €196,000, pérdida neta mensual = €16,00",
+          "[deepseek-r1] Estabilizar (arreglar bugs) requiere tiempo/recursos",
+          "[deepseek-v3.1] Runway = 7 meses, Burn rate = €28,000/mes, efectivo actual = €196,000. Estabilizar requiere 2-3 mese",
+          "[glm-4.7] CTO trabaja 70h/semana... indica falta de capacidad de liderazgo/gestión",
+          "[gpt-oss-120b] Burn rate > MRR (pérdida neta €16,000/mes) y runway de 7 meses (efectivo €196,000); CTO trabaja 70h/"
+        ]
+      },
+      "Salud×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 4,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] MRR = €12,000/mes, 80 clientes de pago, ARPU grande ≈ €1,200/cliente/mes vs. €150 promedio (8× más),",
+          "[deepseek-r1] Capacidad del equipo: se puede ajustar contratando/redistribuyendo",
+          "[deepseek-v3.1] 80 clientes de pago, MRR = €12,000/mes, 30% de ingresos de 3 clientes grandes, ARPU grande ≈ €1,200/",
+          "[glm-4.7] ARPU grande ≈ €1,200/cliente/mes vs. €150 promedio (8× más) revela segmentación oculta",
+          "[gpt-oss-120b] MRR €12,000/mes con 80 clientes; 30% de ingresos provienen de 3 clientes grandes (≈ €3,600/mes)."
+        ]
+      },
+      "Salud×Depurar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] 47 bugs abiertos, Churn = 8%/mes, carga ≈ 16 bugs/persona (3 devs), afectan calidad y churn",
+          "[deepseek-r1] 47 bugs abiertos",
+          "[deepseek-v3.1] Churn = 8%/mes (alto), 47 bugs abiertos afectan calidad y churn, equipo técnico insuficiente: carga ",
+          "[glm-4.7] 47 bugs abiertos... afectan calidad y churn",
+          "[gpt-oss-120b] 47 bugs abiertos, churn alto 8%/mes y pérdida neta mensual €16,000; impacto directo en calidad y chu"
+        ]
+      },
+      "Salud×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] 30% de ingresos de 3 clientes grandes (€3,600/mes), distribución desigual de carga: CTO sobrecargado",
+          "[deepseek-r1] Ambas opciones compiten por recursos limitados (equipo pequeño, tiempo finito)",
+          "[deepseek-v3.1] 30% de ingresos de 3 clientes grandes (€3,600/mes), distribución desigual de carga: CTO sobrecargado",
+          "[glm-4.7] ARPU grande ≈ €1,200/cliente/mes vs. €150 promedio (8× más)",
+          "[gpt-oss-120b] Equipo de 3 devs junior + 1 diseñador part‑time → carga ≈ 16 bugs/persona; 30% de ingresos de 3 clie"
+        ]
+      },
+      "Salud×Frontera": {
+        "max_score": 4,
+        "n_models_2plus": 11,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Contradicción formal: estabilización requiere tiempo que el runway no permite, y pivot requiere recu",
+          "[deepseek-r1] Runway finito (7 meses)",
+          "[deepseek-v3.1] La contradicción formal: estabilización requiere tiempo que el runway no permite, y pivot requiere r",
+          "[glm-4.7] La contradicción formal es que la estabilización requiere tiempo que el runway no permite, y el pivo",
+          "[gpt-oss-120b] Runway finito (7 meses), burn > MRR, churn alto y la contradicción formal: estabilización requiere t"
+        ]
+      },
+      "Salud×Adaptar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] CTO trabaja 70h/semana, co-fundador técnico se fue hace 6 meses, 2 devs se fueron en 12 meses, indic",
+          "[deepseek-r1] Pivot a enterprise: posible pero requiere tiempo/inversión",
+          "[deepseek-v3.1] CTO trabaja 70h/semana indica falta de capacidad de liderazgo, ambas opciones compiten por recursos ",
+          "[glm-4.7] Ambas opciones compiten por recursos limitados... Variables en conflicto: calidad (churn) vs. crecim",
+          "[gpt-oss-120b] Dos opciones mutuamente excluyentes (estabilizar vs pivot) compiten por recursos limitados; pivot re"
+        ]
+      },
+      "Salud×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 9,
+        "n_models_3plus": 5,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] ARPU estimado = €150/cliente/mes, patrón común en startups SaaS con equipos técnicos débiles",
+          "[deepseek-v3.1] Co-fundador técnico se fue hace 6 meses, patrón: Startup con product-market fit parcial pero problem",
+          "[glm-4.7] Co-fundador técnico se fue hace 6 meses",
+          "[gpt-oss-120b] Patrón identificado: startup con product‑market fit parcial, co‑fundador técnico ausente hace 6 mese",
+          "[kimi-k2.5] Patrón: Startup con product-market fit parcial, problemas operativos vs. presión por escalar, común "
+        ]
+      },
+      "Sentido×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Premisas: Si producto sólido → churn baja (CTO). Si no crecemos → morimos (CEO). Contradicción entre",
+          "[deepseek-r1] CEO y CTO deben acordar prioridades, pero relación rota",
+          "[deepseek-v3.1] Premisas: Si producto sólido → churn baja (CTO). Si no crecemos → morimos (CEO). Contradicción entre",
+          "[glm-4.7] Premisas: Si producto sólido → churn baja (CTO). Si no crecemos → morimos (CEO). Contradicción: Cree",
+          "[gpt-oss-120b] Premisas contrapuestas: \"Si producto sólido → churn baja\" (CTO) vs \"Si no crecemos → morimos\" (CEO)."
+        ]
+      },
+      "Sentido×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] CEO y CTO tienen visiones opuestas: estabilizar vs. pivotar, con supuestos no verificados sobre dema",
+          "[deepseek-r1] Pivotar a enterprise (basado en 3 clientes grandes)",
+          "[deepseek-v3.1] ARPU grande ≈ €1,200/cliente/mes vs. €150 promedio (8× más) revela segmentación oculta y oportunidad",
+          "[glm-4.7] ARPU grande ≈ €1,200/cliente/mes vs. €150 promedio (8× más) revela segmentación oculta",
+          "[gpt-oss-120b] Segmentación de ingresos: ARPU grande ≈ €1,200/mes vs promedio €150/mes (8×); 30% de ingresos provie"
+        ]
+      },
+      "Sentido×Depurar": {
+        "max_score": 4,
+        "n_models_2plus": 10,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] 2 devs se fueron en 12 meses, co-fundador técnico se fue, indicando problemas profundos de gestión y",
+          "[deepseek-r1] CEO y CTO deben reconciliarse",
+          "[deepseek-v3.1] Contradicción formal redefine la pregunta como dilema estructural irresoluble sin mediación externa ",
+          "[glm-4.7] Contradicción: estabilización requiere tiempo que el runway no permite, y pivot requiere recursos qu",
+          "[gpt-oss-120b] Contradicción formal explícita en el texto: estabilización requiere tiempo que el runway no permite,"
+        ]
+      },
+      "Sentido×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Relación CEO-CTO rota afecta la toma de decisiones, necesitan reconciliarse para decidir prioridades",
+          "[deepseek-r1] CEO y CTO deben acordar prioridades",
+          "[deepseek-v3.1] Trade-off entre calidad (churn) vs. crecimiento (ingresos), CEO y CTO asumen soluciones mutuamente e",
+          "[glm-4.7] CEO y CTO deben acordar prioridades, pero relación rota. Si la relación CEO-CTO no mejora, ninguna e",
+          "[gpt-oss-120b] Distribución desigual de carga (CTO sobrecargado, devs junior con alta carga de bugs) y necesidad de"
+        ]
+      },
+      "Sentido×Frontera": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 10,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Contradicción central: elección forzada entre calidad inmediata y crecimiento futuro, con recursos i",
+          "[deepseek-r1] Recursos insuficientes para hacer ambas cosas a la vez",
+          "[deepseek-v3.1] Contradicción central: elección forzada entre calidad inmediata y crecimiento futuro",
+          "[glm-4.7] Contradicción central: elección forzada entre calidad inmediata y crecimiento futuro",
+          "[gpt-oss-120b] Contradicción central: elección forzada entre calidad inmediata y crecimiento futuro; recursos insuf"
+        ]
+      },
+      "Sentido×Adaptar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Necesidad de reconciliar visión CEO-CTO para sobrevivir, con impacto emocional en equipo: CTO quemad",
+          "[deepseek-r1] Pivotar a enterprise ... arriesgando mayor churn",
+          "[deepseek-v3.1] Pivotar a enterprise requiere desarrollo intensivo, desviando recursos de estabilización, posiblemen",
+          "[glm-4.7] La contradicción formal es que la estabilización requiere tiempo que el runway no permite, y el pivo",
+          "[gpt-oss-120b] Pivot a enterprise requiere desarrollo intensivo, desviando recursos de estabilización; ambas opcion"
+        ]
+      },
+      "Sentido×Replicar": {
+        "max_score": 2,
+        "n_models_2plus": 8,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón común en startups SaaS con equipos técnicos débiles, con product-market fit parcial pero prob",
+          "[deepseek-v3.1] Patrón: Startup con product-market fit parcial, común en SaaS con equipos técnicos débiles",
+          "[gpt-oss-120b] Patrón de replicar éxito de los 3 clientes grandes (ARPU alto) frente al modelo de clientes pequeños",
+          "[kimi-k2.5] Replicar patrón de los 3 clientes grandes (ARPU €1,200) vs. modelo actual de clientes pequeños (ARPU",
+          "[opus] Replicar patrón de los 3 clientes grandes (ARPU €1,200) vs. modelo actual de clientes pequeños (ARPU"
+        ]
+      },
+      "Continuidad×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Runway de 7 meses limita tiempo de acción, con pérdida proyectada a 6 meses: clientes ≈ 48, MRR ≈ €7",
+          "[deepseek-r1] Runway = 7 meses",
+          "[deepseek-v3.1] Runway finito (7 meses): tiempo limitado para acción, si churn constante pérdida ≈ 6.4 clientes/mes",
+          "[glm-4.7] Co-fundador técnico se fue hace 6 meses. 2 devs se fueron en 12 meses. Indica fragilidad en continui",
+          "[gpt-oss-120b] Runway de 7 meses (efectivo €196,000) obliga a acción rápida; burn > MRR hace insostenible el modelo"
+        ]
+      },
+      "Continuidad×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 3,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] 3 clientes grandes sugieren oportunidad de pivot a enterprise, pero con éxito incierto y alto riesgo",
+          "[deepseek-r1] Pivotar a enterprise ... podría salvar financieramente",
+          "[deepseek-v3.1] Pivot a enterprise podría salvar financieramente pero requiere tiempo/inversión, éxito incierto",
+          "[glm-4.7] Pivot... podría salvar financieramente",
+          "[gpt-oss-120b] Pivot a enterprise podría generar ingresos mayores; 3 clientes grandes indican demanda potencial."
+        ]
+      },
+      "Continuidad×Depurar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Alto churn (8%) y bugs afectan sostenibilidad, con necesidad crítica de priorizar bugs que impactan ",
+          "[deepseek-r1] reducir burn rate recortando costes",
+          "[deepseek-v3.1] Si churn no se reduce, MRR caerá exponencialmente (en 6 meses: clientes ≈ 48, MRR ≈ €7,200)",
+          "[glm-4.7] Churn alto (8%): si no se reduce, MRR caerá exponencialmente",
+          "[gpt-oss-120b] Alto churn (8%) implica caída de MRR a €7,200 en 6 meses si no se reduce; bugs aumentan riesgo de ch"
+        ]
+      },
+      "Continuidad×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Recursos limitados deben asignarse entre estabilización y crecimiento, con trade-off entre calidad y",
+          "[deepseek-r1] Variables en conflicto: calidad (churn) vs. crecimiento (ingresos)",
+          "[deepseek-v3.1] Variables en conflicto: calidad (churn) vs. crecimiento (ingresos), recursos insuficientes para amba",
+          "[glm-4.7] Variables en conflicto: calidad (churn) vs. crecimiento (ingresos)",
+          "[gpt-oss-120b] Recursos limitados obligan a trade‑off entre calidad (reducción de churn) y crecimiento (adquisición"
+        ]
+      },
+      "Continuidad×Frontera": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Contradicción formal: estabilización requiere tiempo que el runway no permite, y pivot requiere recu",
+          "[deepseek-r1] Runway exige resultados en 3-4 meses",
+          "[deepseek-v3.1] Si la relación CEO-CTO no mejora, ninguna estrategia funcionará",
+          "[glm-4.7] Si la relación CEO-CTO no mejora, ninguna estrategia funcionará",
+          "[gpt-oss-120b] Restricciones duras: runway finito, burn > MRR, churn alto; necesidad de decidir entre estabilizar o"
+        ]
+      },
+      "Continuidad×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Contradicción insalvable sin mediación externa o cambio de variables, con necesidad de acción en 3-4",
+          "[deepseek-r1] Acción crítica: reducir burn rate recortando costes",
+          "[deepseek-v3.1] Reducir burn rate recortando costes (e.g., diseñador part-time) y priorizar bugs que afectan churn",
+          "[glm-4.7] La contradicción formal es que la estabilización requiere tiempo que el runway no permite, y el pivo",
+          "[gpt-oss-120b] Acción crítica: reducir burn recortando costes (p.ej. diseñador part‑time) y priorizar bugs que impa"
+        ]
+      },
+      "Continuidad×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 10,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Modelo actual insostenible sin cambios estructurales, con patrón de fragilidad en continuidad del eq",
+          "[deepseek-r1] Patrón: Startup con product-market fit parcial ... Común en SaaS con equipos técnicos débiles",
+          "[deepseek-v3.1] 2 devs se fueron en 12 meses, indicando problemas de gestión y fragilidad del equipo",
+          "[glm-4.7] Patrón: Startup con product-market fit parcial",
+          "[gpt-oss-120b] Patrón de startups SaaS con product‑market fit parcial y problemas operativos; posible replicar mode"
+        ]
+      }
+    },
+    "70b_worst": {
+      "Salud×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Miedo a seguir los pasos de su padre y sufrir un infarto debido al estrés laboral, que afecta direct",
+          "[deepseek-r1] miedo a seguir los pasos de su padre y sufrir un infarto",
+          "[deepseek-v3.1] Miedo a seguir los pasos de su padre y sufrir un infarto debido al estrés laboral",
+          "[glm-4.7] miedo a seguir los pasos de su padre y sufrir un infarto debido al estrés laboral",
+          "[gpt-oss-120b] Miedo a seguir los pasos de su padre y sufrir un infarto debido al estrés laboral (PASO 1)."
+        ]
+      },
+      "Salud×Captar": {
+        "max_score": 2,
+        "n_models_2plus": 9,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] La persona siente agotamiento, estrés y ansiedad por no poder cumplir con sus responsabilidades.",
+          "[deepseek-v3.1] La persona siente agotamiento, estrés y ansiedad por no poder cumplir con sus responsabilidades",
+          "[glm-4.7] La persona siente agotamiento, estrés y ansiedad por no poder cumplir con sus responsabilidades",
+          "[gpt-oss-120b] La persona siente agotamiento, estrés y ansiedad por no poder cumplir con sus responsabilidades fami",
+          "[kimi-k2.5] La expansión del negocio puede no ser la solución, ya que puede aumentar el estrés y la carga labora"
+        ]
+      },
+      "Salud×Depurar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] El patrón de dedicación laboral excesiva es una respuesta aprendida que ya no sirve y está afectando",
+          "[deepseek-r1] patrón de dedicación laboral excesiva es una respuesta aprendida que ya no sirve",
+          "[deepseek-v3.1] Patrón de dedicación laboral excesiva es una respuesta aprendida que ya no sirve y está afectando la",
+          "[glm-4.7] La emoción no nombrada es el miedo a seguir los pasos de su padre y sufrir un infarto",
+          "[gpt-oss-120b] El patrón de dedicación laboral excesiva es una respuesta aprendida que ya no sirve, afectando la sa"
+        ]
+      },
+      "Salud×Distribuir": {
+        "max_score": 2,
+        "n_models_2plus": 10,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Necesita encontrar un equilibrio entre vida laboral y personal, gestionando mejor su negocio y tiemp",
+          "[deepseek-r1] necesita encontrar un equilibrio entre su vida laboral y personal",
+          "[deepseek-v3.1] Necesidad de gestionar su negocio y tiempo de manera más efectiva",
+          "[glm-4.7] encontrar un equilibrio entre su vida laboral y personal",
+          "[gpt-oss-120b] Necesita encontrar una forma de gestionar su negocio y su tiempo de manera más efectiva (PASO 6)."
+        ]
+      },
+      "Salud×Frontera": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] El problema no es solo emocional, sino estructural en la gestión del negocio y tiempo, con riesgo de",
+          "[deepseek-r1] El problema no es solo emocional, sino también estructural, ya que la persona necesita gestionar su ",
+          "[deepseek-v3.1] El trigger que activaría reacción desproporcionada sería pérdida de salud o relación con hijos",
+          "[glm-4.7] El problema no es solo emocional, sino también estructural, ya que la persona necesita encontrar una",
+          "[gpt-oss-120b] El trigger que activaría una reacción desproporcionada sería la pérdida de la salud o la relación co"
+        ]
+      },
+      "Salud×Adaptar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 5,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Necesita cambiar su forma de gestionar el negocio y tiempo para preservar su salud.",
+          "[deepseek-r1] dejar de seguir un patrón de dedicación laboral excesiva",
+          "[deepseek-v3.1] Patrón emocional de dedicación laboral excesiva es respuesta aprendida que ya no sirve",
+          "[glm-4.7] El patrón emocional de dedicación laboral excesiva es una respuesta aprendida que ya no sirve",
+          "[gpt-oss-120b] El patrón emocional de dedicación laboral excesiva es una respuesta aprendida que ya no sirve; el pr"
+        ]
+      },
+      "Salud×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Sigue un patrón de trabajo excesivo similar a su padre, con miedo a repetir su destino de infarto.",
+          "[deepseek-r1] La persona ha seguido un patrón de trabajo excesivo similar a su padre",
+          "[deepseek-v3.1] Ha seguido patrón de trabajo excesivo similar a su padre",
+          "[glm-4.7] La situación se repite, ya que la persona ha estado trabajando largas horas durante años",
+          "[gpt-oss-120b] La situación se repite: la persona ha trabajado largas horas durante años, siguiendo el patrón de su"
+        ]
+      },
+      "Sentido×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Mantiene una imagen de éxito profesional mientras oculta su agotamiento real.",
+          "[deepseek-r1] La lealtad invisible hacia su negocio y familia ocultando una vergüenza no nombrada",
+          "[deepseek-v3.1] Lealtad invisible hacia negocio y familia ocultando vergüenza no nombrada",
+          "[glm-4.7] La lealtad invisible hacia su negocio y su familia puede estar ocultando una vergüenza no nombrada",
+          "[gpt-oss-120b] Se ve a sí misma como un proveedor y un profesional exitoso (Lente L4)."
+        ]
+      },
+      "Sentido×Captar": {
+        "max_score": 2,
+        "n_models_2plus": 10,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Reconoce la necesidad de ser un padre y esposo presente, no solo proveedor.",
+          "[deepseek-r1] necesita ser un padre y esposo presente",
+          "[deepseek-v3.1] Los demás perciben superficie de éxito pero no la realidad emocional",
+          "[glm-4.7] necesita ser un padre y esposo presente",
+          "[gpt-oss-120b] Necesita ser un padre y esposo presente (Lente L4, Lente L1)."
+        ]
+      },
+      "Sentido×Depurar": {
+        "max_score": 3,
+        "n_models_2plus": 8,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Debe dejar el patrón de dedicación laboral excesiva que aprendió y ya no le sirve.",
+          "[deepseek-v3.1] Vergüenza no nombrada: miedo a no ser capaz de cumplir responsabilidades",
+          "[glm-4.7] La persona muestra una imagen de éxito y dedicación, pero en realidad se siente agotada y estresada",
+          "[gpt-oss-120b] La lealtad invisible hacia su negocio y familia oculta una vergüenza no nombrada: miedo a no cumplir",
+          "[kimi-k2.5] vergüenza no nombrada: el miedo a no ser capaz de cumplir con sus responsabilidades"
+        ]
+      },
+      "Sentido×Distribuir": {
+        "max_score": 2,
+        "n_models_2plus": 10,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] La lealtad invisible hacia negocio y familia oculta una vergüenza no nombrada.",
+          "[deepseek-r1] equilibrio entre su vida laboral y personal",
+          "[deepseek-v3.1] Lealtad invisible oculta vergüenza no nombrada",
+          "[glm-4.7] equilibrio entre su vida laboral y personal",
+          "[gpt-oss-120b] Los hijos se sienten abandonados y extrañan a su padre; la expansión del negocio puede no ser la sol"
+        ]
+      },
+      "Sentido×Frontera": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Conflicto entre su identidad de proveedor exitoso y la necesidad de ser presente en familia.",
+          "[deepseek-r1] La persona muestra imagen de éxito pero se siente agotada",
+          "[deepseek-v3.1] Muestra imagen de éxito pero en realidad se siente agotada y estresada",
+          "[glm-4.7] El trigger que activaría una reacción desproporcionada sería la pérdida de la salud o la relación co",
+          "[gpt-oss-120b] El trigger de pérdida de salud o relación con los hijos; la imagen de éxito oculta agotamiento (PASO"
+        ]
+      },
+      "Sentido×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 11,
+        "n_models_3plus": 5,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Necesita redefinir su identidad más allá del trabajo, priorizando su rol familiar.",
+          "[deepseek-r1] necesita cambiar de proveedor exitoso a padre/esposo presente",
+          "[deepseek-v3.1] Necesita ser un padre y esposo presente, no solo proveedor",
+          "[glm-4.7] necesita ser un padre y esposo presente, redefiniendo su identidad más allá del proveedor",
+          "[gpt-oss-120b] Necesita redefinir su identidad más allá del rol de proveedor, ser padre y esposo presente; la vergü"
+        ]
+      },
+      "Sentido×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón transgeneracional de dedicación laboral excesiva que debe romper.",
+          "[deepseek-r1] patrón de dedicación laboral similar a su padre",
+          "[deepseek-v3.1] Miedo a seguir los pasos de su padre",
+          "[glm-4.7] La lealtad invisible hacia su negocio y su familia puede estar ocultando una vergüenza no nombrada: ",
+          "[gpt-oss-120b] Patrón transgeneracional de dedicación laboral excesiva similar al padre (Lente L2, FIRMA)."
+        ]
+      },
+      "Continuidad×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 4,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Lealtad invisible hacia negocio y familia que mantiene el statu quo.",
+          "[deepseek-r1] miedo a perder relación con sus hijos o salud",
+          "[deepseek-v3.1] Situación se repite trabajando largas horas durante años",
+          "[glm-4.7] Las relaciones en juego son la relación con la esposa y los hijos, que se pueden romper",
+          "[gpt-oss-120b] Las relaciones (esposa, hijos) pueden romperse; lealtad invisible que oculta vergüenza (Lente L3, FI"
+        ]
+      },
+      "Continuidad×Captar": {
+        "max_score": 2,
+        "n_models_2plus": 8,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Los hijos se sienten abandonados y extrañan a su padre.",
+          "[deepseek-v3.1] Hijos se sienten abandonados y extrañan a su padre",
+          "[glm-4.7] La expansión del negocio puede no ser la solución, ya que puede aumentar el estrés y la carga labora",
+          "[gpt-oss-120b] Los hijos se sienten abandonados y extrañan a su padre (PASO 1).",
+          "[minimax-m2.5] Los hijos se sienten abandonados y extrañan a su padre. La expansión del negocio puede no ser la sol"
+        ]
+      },
+      "Continuidad×Depurar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón emocional de dedicación laboral excesiva como respuesta aprendida que debe cambiar.",
+          "[deepseek-r1] dejar patrón que afecta salud y relaciones",
+          "[deepseek-v3.1] Patrón emocional de dedicación laboral excesiva es respuesta aprendida que ya no sirve",
+          "[glm-4.7] El patrón emocional de dedicación laboral excesiva es una respuesta aprendida que ya no sirve",
+          "[gpt-oss-120b] Patrón emocional de dedicación laboral excesiva es una respuesta aprendida que ya no sirve, afecta s"
+        ]
+      },
+      "Continuidad×Distribuir": {
+        "max_score": 2,
+        "n_models_2plus": 9,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] El problema requiere cambios tanto emocionales como estructurales en su vida.",
+          "[deepseek-v3.1] Hijos se sienten abandonados",
+          "[glm-4.7] Los hijos se sienten abandonados y extrañan a su padre",
+          "[gpt-oss-120b] El problema no es solo emocional, sino también estructural; necesidad de gestionar negocio y tiempo ",
+          "[kimi-k2.5] encontrar un equilibrio entre su vida laboral y personal"
+        ]
+      },
+      "Continuidad×Frontera": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Riesgo inminente de pérdida de salud o relaciones si no cambia su patrón actual.",
+          "[deepseek-r1] trigger sería pérdida de salud o relaciones",
+          "[deepseek-v3.1] Relaciones con esposa e hijos pueden romperse sin equilibrio",
+          "[glm-4.7] El problema no es solo emocional, sino también estructural en la gestión del negocio y tiempo",
+          "[gpt-oss-120b] Trigger: pérdida de salud o relación con los hijos (PASO 2)."
+        ]
+      },
+      "Continuidad×Adaptar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Necesita transformar completamente su enfoque de gestión de negocio y tiempo para sobrevivir.",
+          "[deepseek-r1] cambiar gestión de negocio/tiempo para sobrevivir",
+          "[deepseek-v3.1] Ha seguido patrón de trabajo excesivo similar a su padre",
+          "[glm-4.7] La expansión del negocio puede no ser la solución",
+          "[gpt-oss-120b] Necesita encontrar equilibrio y gestionar negocio y tiempo efectivamente (PASO 6)."
+        ]
+      },
+      "Continuidad×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 10,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Miedo a repetir el destino de su padre, lo que impulsa la necesidad de cambio.",
+          "[deepseek-r1] miedo a seguir los pasos de su padre (infarto)",
+          "[deepseek-v3.1] Lealtad invisible oculta vergüenza no nombrada: miedo a seguir pasos del padre",
+          "[glm-4.7] miedo a seguir los pasos de su padre y sufrir un infarto",
+          "[gpt-oss-120b] Patrón repetido de largas horas, similar al padre (PASO 2, RESUMEN)."
+        ]
+      }
+    },
+    "maverick_medium": {
+      "Salud×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Mantener trabajo actual durante exploración, con ahorros de 120.000€ y posibilidad de rollback explí",
+          "[deepseek-r1] Mantener trabajo actual durante exploración",
+          "[deepseek-v3.1] Mantener trabajo actual durante exploración, puede volver si no encuentra satisfacción, ahorros: 120",
+          "[glm-4.7] sin dejar el trabajo actual",
+          "[gpt-oss-120b] Hipoteca: 1.800€/mes durante 15 años y posibilidad de volver al trabajo actual si no encuentra satis"
+        ]
+      },
+      "Salud×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Tomar curso en derecho medioambiental (2.000€) o voluntariado, evaluando viabilidad financiera con i",
+          "[deepseek-r1] Tomar curso en derecho medioambiental (2.000€)",
+          "[deepseek-v3.1] Tomar curso en derecho medioambiental (2.000€), ingresos del marido: 40-80K€/año",
+          "[glm-4.7] Tomar un curso en derecho medioambiental",
+          "[gpt-oss-120b] Tomar un curso o voluntariado en derecho medioambiental como primer paso."
+        ]
+      },
+      "Salud×Depurar": {
+        "max_score": 2,
+        "n_models_2plus": 1,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[qwen3-235b] Identifica estrés laboral, miedo al cambio y opinión de los padres como ruido emocional y financiero"
+        ]
+      },
+      "Salud×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Balancear tiempo entre trabajo actual y exploración, considerando impacto en ingresos familiares y d",
+          "[deepseek-r1] Capacidad de ahorro vs gastos fijos (hipoteca, universidad)",
+          "[deepseek-v3.1] Impacto del cambio en ingresos familiares, ingresos del marido irregulares",
+          "[glm-4.7] Impacto del cambio de carrera en los ingresos familiares",
+          "[gpt-oss-120b] Impacto del cambio de carrera en los ingresos familiares; ingresos del marido 40‑80K€/año."
+        ]
+      },
+      "Salud×Frontera": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Límites financieros claros con hipoteca (1.800€/mes) y gastos familiares, manteniendo trabajo actual",
+          "[deepseek-r1] Límite claro: mantener empleo actual durante transición",
+          "[deepseek-v3.1] Restricciones duras: hipoteca, edad hijos, estabilidad financiera; límite claro de mantener empleo a",
+          "[glm-4.7] Restricciones Duras: Hipoteca, edad de los hijos, necesidad de estabilidad financiera",
+          "[gpt-oss-120b] Límite claro: no dejar el trabajo actual hasta validar satisfacción y sostenibilidad."
+        ]
+      },
+      "Salud×Adaptar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Adaptación gradual mediante curso/voluntariado, con opción de rollback si insostenible",
+          "[deepseek-r1] Voluntariado/curso como adaptación gradual",
+          "[deepseek-v3.1] Prototipo reversible (curso/voluntariado) con bajo coste, puede volver a trabajo actual",
+          "[glm-4.7] probar la hipótesis",
+          "[gpt-oss-120b] Prototipo de curso/voluntariado de bajo coste y reversible, con rollback posible."
+        ]
+      },
+      "Salud×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 9,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón de 'probar antes de decidir' como modelo replicable para transiciones profesionales",
+          "[deepseek-r1] Patrón incremental reversible: probar hipótesis antes de compromiso total",
+          "[deepseek-v3.1] Patrón incremental reversible para probar hipótesis antes de compromiso total",
+          "[glm-4.7] El patrón de construcción implica probar hipótesis",
+          "[gpt-oss-120b] Patrón de construcción que implica probar hipótesis de forma incremental."
+        ]
+      },
+      "Sentido×Conservar": {
+        "max_score": 2,
+        "n_models_2plus": 7,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Mantener valores personales al buscar trabajo más significativo, sin cuestionar premisas iniciales",
+          "[deepseek-v3.1] Mantener trabajo actual mientras explora, mantener valores personales al buscar trabajo significativ",
+          "[gpt-oss-120b] Mantener el trabajo actual mientras explora la transición, preservando estabilidad.",
+          "[kimi-k2.5] Mantener valores personales y propósito de impacto ambiental mientras se busca trabajo significativo",
+          "[opus] Mantiene el propósito de cambio hacia derecho medioambiental como eje identitario estable"
+        ]
+      },
+      "Sentido×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Explorar satisfacción en derecho medioambiental mediante hipótesis comprobables, no solo como emoció",
+          "[deepseek-r1] Explorar derecho medioambiental como nuevo propósito",
+          "[deepseek-v3.1] Captar oportunidades en derecho medioambiental mediante cursos, incorpora deseo de sentido como dato",
+          "[glm-4.7] deseo de cambiar a derecho medioambiental",
+          "[gpt-oss-120b] Deseo de sentido al trabajar en ONG, probado mediante hipótesis."
+        ]
+      },
+      "Sentido×Depurar": {
+        "max_score": 3,
+        "n_models_2plus": 7,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Reducir insatisfacción laboral actual e identificar miedos y opiniones externas como ruido emocional",
+          "[deepseek-v3.1] Eliminar riesgo financiero mediante prototipo reversible, identifica miedo al cambio y opinión padre",
+          "[gpt-oss-120b] Miedo al cambio y opinión de los padres como ruido emocional a depurar.",
+          "[kimi-k2.5] Miedo al cambio y opinión de los padres como ruido emocional a depurar mediante prueba controlada; i",
+          "[opus] Identifica miedo al cambio y opinión de padres como ruido emocional a depurar mediante prueba contro"
+        ]
+      },
+      "Sentido×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 8,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Equilibrar aspiraciones personales con responsabilidades familiares, conversando con el marido",
+          "[deepseek-v3.1] Distribuir carga conversando con marido sobre implicaciones financieras/emocionales",
+          "[glm-4.7] Hablar con su marido sobre las implicaciones financieras y emocionales del cambio",
+          "[gpt-oss-120b] Hablar con el marido para compartir carga financiera y emocional.",
+          "[kimi-k2.5] Hablar con su marido sobre implicaciones financieras y emocionales; compartir carga emocional y alin"
+        ]
+      },
+      "Sentido×Frontera": {
+        "max_score": 3,
+        "n_models_2plus": 10,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Límites claros entre carrera actual y deseada, con validación controlada del sentido",
+          "[deepseek-v3.1] Límite entre carrera actual y potencial explorada, delimita qué aspectos del sentido se ponen a prue",
+          "[glm-4.7] No se cuestionan las premisas iniciales pero se propone una forma segura de explorarlas",
+          "[gpt-oss-120b] No se cuestionan las premisas iniciales, pero se propone una exploración segura.",
+          "[kimi-k2.5] Delimitación clara: no se cuestionan premisas iniciales (insatisfacción, deseo ambiental) pero se po"
+        ]
+      },
+      "Sentido×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 10,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Reformular el cambio como proceso iterativo de validación, no decisión binaria",
+          "[deepseek-v3.1] Adaptar mediante iteraciones (curso/voluntariado), reformula cambio como proceso iterativo de valida",
+          "[glm-4.7] probar hipótesis de manera incremental y reversible",
+          "[gpt-oss-120b] Proceso iterativo de validación del sentido, no decisión binaria.",
+          "[kimi-k2.5] Reformulación del cambio de carrera no como decisión binaria irreversible, sino como proceso iterati"
+        ]
+      },
+      "Sentido×Replicar": {
+        "max_score": 2,
+        "n_models_2plus": 8,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Modelo de 'probar antes de decidir' aplicable a otros dilemas de sentido profesional",
+          "[deepseek-v3.1] Patrón de prueba incremental replicable para otros dilemas de sentido",
+          "[glm-4.7] El patrón de 'probar antes de decidir' se presenta como modelo replicable",
+          "[gpt-oss-120b] Modelo replicable de 'probar antes de decidir' para dilemas de sentido.",
+          "[kimi-k2.5] Patrón de 'probar antes de decidir' como modelo replicable para otros dilemas de sentido profesional"
+        ]
+      },
+      "Continuidad×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Mantener estabilidad financiera durante transición, con ahorros y opción de rollback explícita",
+          "[deepseek-r1] Rollback a trabajo actual si insostenible",
+          "[deepseek-v3.1] Conservar estabilidad financiera durante transición, mantener hipoteca y educación hijos como compro",
+          "[glm-4.7] Hipoteca... universidad de los hijos",
+          "[gpt-oss-120b] Mantener empleo actual y estabilidad financiera (hipoteca, educación)."
+        ]
+      },
+      "Continuidad×Captar": {
+        "max_score": 2,
+        "n_models_2plus": 8,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Adquirir nuevas habilidades considerando horizonte temporal de 2 años hasta universidad de hijo mayo",
+          "[deepseek-v3.1] Captar nuevo conocimiento para replicar en futuro, tiempo hasta universidad hijo (2 años) como venta",
+          "[glm-4.7] Ingresos del marido: 40-80K€/año",
+          "[gpt-oss-120b] Ventana de 2 años hasta la universidad del hijo mayor para preparar la transición.",
+          "[minimax-m2.5] \"Tiempo hasta que el hijo mayor empiece la universidad: 2 años\""
+        ]
+      },
+      "Continuidad×Depurar": {
+        "max_score": 2,
+        "n_models_2plus": 9,
+        "n_models_3plus": 0,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Eliminar riesgos financieros irreversibles mediante prototipo de bajo coste (2.000€)",
+          "[deepseek-r1] Eliminar riesgo financiero irreversible",
+          "[deepseek-v3.1] Eliminar posibilidad de fallo irreversible, bajo coste y riesgo",
+          "[glm-4.7] Rollback: Puede volver a su trabajo actual si no encuentra satisfacción o si la situación financiera",
+          "[gpt-oss-120b] Eliminar riesgo financiero irreversible mediante prototipo de bajo coste."
+        ]
+      },
+      "Continuidad×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 10,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Planificar recursos para educación universitaria y gastos fijos, distribuyendo riesgo entre presente",
+          "[deepseek-r1] Considerar tiempo hasta universidad hijo (2 años)",
+          "[deepseek-v3.1] Distribuir recursos entre obligaciones y exploración, planificar recursos para educación universitar",
+          "[glm-4.7] Ahorros: 120.000€",
+          "[gpt-oss-120b] Distribuir recursos entre ahorro, hipoteca y futuros gastos universitarios."
+        ]
+      },
+      "Continuidad×Frontera": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Límites temporales claros (2 años) y financieros (hipoteca 15 años) que definen el marco de acción",
+          "[deepseek-r1] Límite temporal: 1-2 iteraciones antes de decisión",
+          "[deepseek-v3.1] Frontera temporal definida (2 años hasta universidad), límites inquebrantables para garantizar conti",
+          "[glm-4.7] Restricciones Duras: Hipoteca, edad de los hijos, necesidad de estabilidad financiera",
+          "[gpt-oss-120b] Límites inquebrantables: no abandonar ingreso principal hasta validar viabilidad."
+        ]
+      },
+      "Continuidad×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 12,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Adaptación escalonada (1-2 iteraciones) que permite evolución sin ruptura del sistema familiar",
+          "[deepseek-r1] Adaptación reversible como mecanismo de supervivencia familiar",
+          "[deepseek-v3.1] Adaptar carrera mediante iteraciones controladas, adaptación escalonada sin ruptura del sistema",
+          "[glm-4.7] El prototipo (curso o voluntariado) y la secuencia propuesta son coherentes con el fallo seguro (baj",
+          "[gpt-oss-120b] Iteraciones de 1‑2 versiones (curso/voluntariado) antes de decisión irreversible."
+        ]
+      },
+      "Continuidad×Replicar": {
+        "max_score": 4,
+        "n_models_2plus": 11,
+        "n_models_3plus": 11,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón de 'prototipo reversible' como modelo generalizable para transiciones profesionales seguras",
+          "[deepseek-r1] Patrón de construcción incremental aplicable a otras transiciones",
+          "[deepseek-v3.1] Replicar patrón de transición segura, enfoque de prototipo reversible como patrón generalizable",
+          "[glm-4.7] El patrón de construcción implica probar hipótesis de manera incremental y reversible",
+          "[gpt-oss-120b] Patrón de prototipo reversible generalizable a otras transiciones de carrera."
+        ]
+      }
+    },
+    "gptoss_depurar": {
+      "Salud×Conservar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] La capacidad horaria actual (≈60 h/semana) ya supera el umbral de agotamiento, y el antecedente fami",
+          "[deepseek-r1] Implementación de vacaciones obligatorias protege salud",
+          "[deepseek-v3.1] antecedente familiar (infarto a 52 años) refuerza la necesidad de limitar la carga laboral; capacida",
+          "[glm-4.7] antecedente familiar (infarto a 52 años)",
+          "[gpt-oss-120b] Capacidad horaria actual (~60 h/semana) supera el umbral de agotamiento; antecedente familiar de inf"
+        ]
+      },
+      "Salud×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 10,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Revela que la capacidad horaria actual (≈60 h/semana) supera el umbral de agotamiento, con anteceden",
+          "[deepseek-v3.1] Horas odontólogo (H₁) 2 500 h/año, Horas asociado (H₂) 1 800 h/año; nuevo dentista",
+          "[gpt-oss-120b] Nuevo dentista parcial y horas adicionales (ΔH) por sábados; datos de horas odontólogo (H₁=2500 h/añ",
+          "[kimi-k2.5] Piloto sábado (2 meses, 1 dentista extra a tiempo parcial)",
+          "[minimax-m2.5] Horas adicionales (ΔH) por sábados y nuevo dentista; incorporación de dentista asociado (H₂=1800h/añ"
+        ]
+      },
+      "Salud×Depurar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Implementación de vacaciones obligatorias (2 semanas/año) reduce H₁ en ≈200 h/año, protege salud y e",
+          "[deepseek-r1] Reducir H_total y descartar expansión",
+          "[deepseek-v3.1] Implementación de vacaciones obligatorias (2 semanas/año) reduce H₁ en ≈200 h/año, protege salud y e",
+          "[glm-4.7] Implementación de vacaciones obligatorias",
+          "[gpt-oss-120b] Vacaciones obligatorias reducen H₁≈200 h/año, mitigando riesgo de infarto; costes variables ocultos "
+        ]
+      },
+      "Salud×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 10,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Piloto sábado (2 meses, 1 dentista extra a tiempo parcial) mide ingresos marginales y costes reales ",
+          "[deepseek-v3.1] 1 dentista extra a tiempo parcial; Piloto sábado (2 meses, 1 dentista extra a tiempo parcial) mide i",
+          "[gpt-oss-120b] Piloto sábado con dentista a tiempo parcial distribuye carga horaria; margen marginal ≈108 €/h muest",
+          "[kimi-k2.5] reorganización (en tabla de acciones para vacaciones)",
+          "[minimax-m2.5] Reestructuración de hipoteca para mejorar flujo de caja; reducción de cuota ≤200€/mes"
+        ]
+      },
+      "Salud×Frontera": {
+        "max_score": 5,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Firma: 'Solo al equilibrar salud y finanzas la expansión se vuelve lógica; sin ese equilibrio, la pr",
+          "[deepseek-r1] Límite de horas de trabajo razonable (≈60 h/semana)",
+          "[deepseek-v3.1] Solo al equilibrar salud y finanzas la expansión se vuelve lógica; sin ese equilibrio, la propuesta ",
+          "[glm-4.7] los vértices 'máxima facturación' y 'máxima salud' están opuestos",
+          "[gpt-oss-120b] Límite duro de 60 h/semana y riesgo de infarto; la expansión solo es lógica si se equilibra salud y "
+        ]
+      },
+      "Salud×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] La solución óptima cambia radicalmente si se prioriza la salud: se reduce H_total y se descarta la e",
+          "[deepseek-r1] Implementación de vacaciones obligatorias reduce H₁",
+          "[deepseek-v3.1] La solución óptima cambia radicalmente si se prioriza la salud: se reduce H_total y se descarta la e",
+          "[glm-4.7] se reduce H_total y se descarta la expansión a 5 sillones",
+          "[gpt-oss-120b] Adaptaciones: vacaciones obligatorias, piloto sábados, reducción de H_total y paso a 4 sillones en l"
+        ]
+      },
+      "Salud×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 7,
+        "n_models_3plus": 4,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón identificado: 'empresario-profesional que confía en ingresos lineales al añadir capacidad, ig",
+          "[gpt-oss-120b] Patrón identificado: empresario‑profesional que confía en ingresos lineales sin considerar límites h",
+          "[minimax-m2.5] Patrón identificado: 'empresario-profesional que confía en ingresos lineales al añadir capacidad, ig",
+          "[opus] Tiempo sin vacaciones (T_vac) 2 años como patrón replicable + Implementación de vacaciones como prác",
+          "[qwen3-235b] Implementación de vacaciones obligatorias (2 semanas/año) como práctica estructural, junto con la id"
+        ]
+      },
+      "Sentido×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 9,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Mantener margen neto mínimo de 5k€/mes como restricción dura en la toma de decisiones. La firma rede",
+          "[deepseek-v3.1] Margen neto mensual declarado (M) 7 000 €; factor limitante principal es la capacidad horaria saluda",
+          "[gpt-oss-120b] Mantener margen neto mínimo ≥5 k€/mes como restricción dura.",
+          "[kimi-k2.5] Pequeña clínica con alta carga de trabajo, margen aparente inflado",
+          "[minimax-m2.5] Objetivo declarado: mantener margen neto ≥5k€/mes; restricción de viabilidad financiera"
+        ]
+      },
+      "Sentido×Captar": {
+        "max_score": 4,
+        "n_models_2plus": 10,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Descubre inconsistencia entre margen declarado (7k€) y cálculo básico (13k€), revelando costes varia",
+          "[deepseek-v3.1] Contradicción formal: M declarado (7 k) ≠ F − C_f (13 k) → implica costes variables ocultos no espec",
+          "[glm-4.7] deseo de expansión sin análisis de costes variables",
+          "[gpt-oss-120b] Contradicción formal (M ≠ F‑C_f) revela costes variables ocultos; captura de esta inconsistencia per",
+          "[kimi-k2.5] proyección de facturación tras expansión (F′) 65.000 €"
+        ]
+      },
+      "Sentido×Depurar": {
+        "max_score": 4,
+        "n_models_2plus": 10,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Contradicción formal: M declarado (7k) ≠ F − C_f (13k) → implica costes variables ocultos no especif",
+          "[deepseek-v3.1] Auditoría de costes variables (materiales, laboratorios) clarifica la discrepancia del margen; proye",
+          "[glm-4.7] La expansión a 5 sillones resulta no rentable",
+          "[gpt-oss-120b] Proyección de 65 k€/mes ignora aumento de C_f y C_v, violando margen neto ≥5 k; requiere depuración ",
+          "[kimi-k2.5] Empresario-profesional que confía en ingresos lineales al añadir capacidad, ignorando límites humano"
+        ]
+      },
+      "Sentido×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 8,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Añadir solo un sillón (pasar a 4) y probar sábados con un dentista a tiempo parcial. Optimización de",
+          "[deepseek-v3.1] Ecuaciones (1‑4) → 4 incógnitas (ΔH, S′, salario, U₃) y 3 ecuaciones → sub‑determinado → necesita es",
+          "[gpt-oss-120b] Auditoría de costes variables y campaña “cita rápida” para subir U₃ distribuyen riesgos financieros.",
+          "[kimi-k2.5] Solo al equilibrar salud y finanzas la expansión se vuelve lógica",
+          "[opus] Optimización ocupación tercer sillón + añadir solo un sillón (pasar a 4) y probar sábados con dentis"
+        ]
+      },
+      "Sentido×Frontera": {
+        "max_score": 5,
+        "n_models_2plus": 10,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón: Pequeña clínica con alta carga de trabajo, margen aparente inflado y deseo de expansión sin ",
+          "[deepseek-v3.1] Restricciones duras: cuota hipotecaria, límite de horas de trabajo razonable, normativa laboral; vér",
+          "[glm-4.7] Contradicción formal: M declarado (7 k) ≠ F − C_f (13 k)",
+          "[gpt-oss-120b] Vértices de facturación máxima vs salud máxima opuestos; contradicción formal y patrón de caso defin",
+          "[kimi-k2.5] No cuantificado: Calidad de vida, riesgo de salud (infarto paterno)... Si se prioriza la salud, la s"
+        ]
+      },
+      "Sentido×Adaptar": {
+        "max_score": 5,
+        "n_models_2plus": 10,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] El modelo de optimización sugiere S′=4 (no 5), introduciendo un nuevo equilibrio entre capacidad y s",
+          "[deepseek-v3.1] La vacación pendiente actúa como 'caja de seguridad' que, si se libera, reduce H₁ en ≈200 h/año y me",
+          "[glm-4.7] Solo al equilibrar salud y finanzas la expansión se vuelve lógica",
+          "[gpt-oss-120b] Modelo de optimización sugiere ΔH≈300 h/año y S′=4, adaptando plan a límites reales.",
+          "[kimi-k2.5] Solo al equilibrar salud y finanzas la expansión se vuelve lógica; sin ese equilibrio, la propuesta "
+        ]
+      },
+      "Sentido×Replicar": {
+        "max_score": 4,
+        "n_models_2plus": 9,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón: 'Empresario-profesional que confía en ingresos lineales al añadir capacidad, ignorando límit",
+          "[deepseek-v3.1] Patrón: Pequeña clínica con alta carga de trabajo, margen aparente inflado y deseo de expansión sin ",
+          "[glm-4.7] Clase de casos: 'Empresario‑profesional que confía en ingresos lineales...'",
+          "[gpt-oss-120b] Caso replicable de clínica con alta carga y margen inflado.",
+          "[kimi-k2.5] Clase de casos: 'Empresario-profesional que confía en ingresos lineales al añadir capacidad, ignoran"
+        ]
+      },
+      "Continuidad×Conservar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 3,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Propone reestructuración de hipoteca para mejorar flujo de caja y mantener viabilidad financiera. Hi",
+          "[deepseek-r1] Auditoría de costes variables clarifica discrepancia",
+          "[deepseek-v3.1] Hipoteca pendiente (P) 280 000 €, Cuota hipotecaria mensual (Q) 2 800 €; mantener margen razonable",
+          "[glm-4.7] Restricciones Duras: cuota hipotecaria (2 800 €/mes)",
+          "[gpt-oss-120b] Hipoteca pendiente (P=280 000 €) y cuota Q=2 800 €/mes como restricción de continuidad."
+        ]
+      },
+      "Continuidad×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Analiza proyección de facturación tras expansión (65k€) considerando costes adicionales. Variables c",
+          "[deepseek-r1] Incremento de capacidad del 33% con expansión a 4 sillones",
+          "[deepseek-v3.1] Proyección de facturación tras expansión (F′) 65 000 €; Variables críticas (U₃, aceptación sábados) ",
+          "[glm-4.7] Piloto sábado (2 meses, 1 dentista extra a tiempo parcial)",
+          "[gpt-oss-120b] Proyección de facturación tras expansión (F′=65 000 €) captura potencial de ingresos."
+        ]
+      },
+      "Continuidad×Depurar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Recomienda expansión a 4 sillones en lugar de 5, eliminando la opción no rentable. La expansión a 5 ",
+          "[deepseek-r1] Evita riesgo de infarto y posibles sanciones laborales",
+          "[deepseek-v3.1] Negociación de reestructuración de hipoteca (amortización extra) reduce cuota mensual; Contradicción",
+          "[glm-4.7] Auditoría de costes variables",
+          "[gpt-oss-120b] Expansión a 5 sillones no rentable; auditoría de costes variables depura la viabilidad."
+        ]
+      },
+      "Continuidad×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 7,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Vacío del tercer sillón (V₃) 40% del tiempo, Utilización del tercer sillón: U₃ = 60%. Decisión de ex",
+          "[deepseek-v3.1] Decisión de expansión a 4 sillones (no 5) con equipamiento básico; Vacío del tercer sillón (V₃) 40 %",
+          "[gpt-oss-120b] Negociación de reestructuración de hipoteca redistribuye carga financiera; decisión de 4 sillones di",
+          "[opus] Negociación reestructuración hipoteca reduce cuota ≤200€ + Decisión expansión a 4 sillones con equip",
+          "[qwen3-235b] Decisión de expansión a 4 sillones con equipamiento básico (80 000 €), amortización en ≤ 3 años. Ade"
+        ]
+      },
+      "Continuidad×Frontera": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Establece límite de expansión basado en capacidad de amortización (3 años) y margen mínimo requerido",
+          "[deepseek-r1] Restricción dura de margen neto ≥5 k",
+          "[deepseek-v3.1] Expansión a 5 sillones resulta no rentable bajo los supuestos actuales; margen neto ≥5 k/mes; Si U₃ ",
+          "[glm-4.7] Si U₃ cae a 40%... la proyección de 65k pasa a ≈ 53k",
+          "[gpt-oss-120b] Variables críticas (U₃, aceptación sábados) con ±20 % de error; caída de U₃ a 40 % reduce F′ a ≈53 k"
+        ]
+      },
+      "Continuidad×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Sugiere prueba piloto de sábados y optimización de ocupación del tercer sillón antes de expansión ma",
+          "[deepseek-r1] Piloto sábado mide ingresos marginales antes de inversión",
+          "[deepseek-v3.1] Si U₃ cae a 40 % (en vez de 60 %) la proyección de 65 k pasa a ≈53 k; La vacación pendiente actúa co",
+          "[glm-4.7] Decisión de expansión a 4 sillones (no 5)",
+          "[gpt-oss-120b] Adaptaciones: expansión a 4 sillones, piloto sábados, mejora de U₃, reestructuración hipotecaria par"
+        ]
+      },
+      "Continuidad×Replicar": {
+        "max_score": 5,
+        "n_models_2plus": 9,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Clase de casos: 'Empresario-profesional que confía en ingresos lineales al añadir capacidad, ignoran",
+          "[deepseek-v3.1] Clase de casos: 'Empresario‑profesional que confía en ingresos lineales al añadir capacidad, ignoran",
+          "[gpt-oss-120b] Clase de casos: empresario‑profesional que confía en ingresos lineales ignorando límites humanos y c",
+          "[kimi-k2.5] Clase de casos: 'Empresario-profesional que confía en ingresos lineales...'",
+          "[opus] amortización en ≤ 3 años + Clase de casos redefine la categoría del problema + piloto Saturday antes"
+        ]
+      }
+    },
+    "qwen3t_medium": {
+      "Salud×Conservar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] CTO conserva bugs (47 bugs subieron desde 20) creyendo que debuggear protege el producto; trabaja 70",
+          "[deepseek-r1] CTO trabaja 70h/semana para conservar producto",
+          "[deepseek-v3.1] CTO trabaja 70h/semana para mantener producto, bugs subieron de 20 a 47; churn 8% anualiza 63% insos",
+          "[glm-4.7] bugs subieron de 20 a 47 en 6 meses mientras CTO intenta conservar producto mediante control ilusori",
+          "[gpt-oss-120b] Runway de 7 meses con burn neto de 16.000€/mes; burnout 70h/semana; \"producto sólido = churn bajo\" c"
+        ]
+      },
+      "Salud×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 1,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Equipo junior incapaz de escalar; fuga de devs (2 en 12 meses); rotación 66% en 12 meses con 3 devs",
+          "[deepseek-r1] Fuga de devs (2 en 12 meses), rotación 66% juniors",
+          "[deepseek-v3.1] Menciona fuga de devs (2 en 12 meses), rotación 66% juniors; CEO forzará pivot sin análisis; fondos ",
+          "[glm-4.7] fondos rechazaron por 'métricas insuficientes' (churn alto, MRR estancado)",
+          "[gpt-oss-120b] CEO forzará pivot sin análisis; fondos rechazados por métricas insuficientes (churn alto, MRR estanc"
+        ]
+      },
+      "Salud×Depurar": {
+        "max_score": 4,
+        "n_models_2plus": 11,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] 47 bugs no se depuran porque CTO filtra mal: prioriza cantidad sobre impacto crítico; churn 8% que a",
+          "[deepseek-r1] 47 bugs no resueltos causan churn 8%",
+          "[deepseek-v3.1] 47 bugs, churn 8%, equipo incapaz de escalar; churn 8% anualiza 63% insostenible; trabajar más acele",
+          "[glm-4.7] CTO prioriza bugs pero falla al filtrar: 47 bugs persistentes y churn 8% anualiza 63%",
+          "[gpt-oss-120b] Trabajar más (70h/semana) aceleró fuga de devs; bugs subieron de 20 a 47 en 6 meses"
+        ]
+      },
+      "Salud×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 10,
+        "n_models_3plus": 2,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] 70h/semana del CTO, equipo junior incapaz de escalar; distribución deficiente de carga y conocimient",
+          "[deepseek-v3.1] 70h/semana del CTO vs equipo junior incapaz; cliente grande concentra 30% ingresos; carga técnica di",
+          "[glm-4.7] equipo junior incapaz de escalar y depende totalmente del liderazgo técnico del CTO",
+          "[gpt-oss-120b] Equipo junior incapaz de escalar; clientes huyen por bugs no resueltos",
+          "[kimi-k2.5] CTO 70h/semana vs equipo junior incapaz de escalar; cliente grande concentra 30% ingresos; MRR estan"
+        ]
+      },
+      "Salud×Frontera": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Runway de 7 meses con burn neto de 16.000€/mes; el problema es estructural, no emocional, imponiendo",
+          "[deepseek-r1] Relación CTO-CEO rota, solo hablan en reuniones",
+          "[deepseek-v3.1] Runway 7 meses, burn neto 16.000€/mes; 3 fondos rechazaron; relación CTO-CEO rota; problema es estru",
+          "[glm-4.7] El problema es estructural, no emocional: Restricción dura de Runway de 7 meses con burn neto de 16.",
+          "[gpt-oss-120b] Runway de 7 meses, burn neto 16.000€/mes y churn 8% que anualiza 63% (restricción estructural dura)"
+        ]
+      },
+      "Salud×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] CTO respuesta rígida: más horas (70h/semana) en lugar de cambiar estrategia técnica; bugs subieron d",
+          "[deepseek-r1] CEO propone pivotar a enterprise sin métricas",
+          "[deepseek-v3.1] CEO quiere pivotar a enterprise como respuesta reactiva; pivot es 'suicidio' por SLA 99.9% imposible",
+          "[glm-4.7] CTO responde con rigidez (70h/semana) lo que aceleró la fuga de devs y subió bugs de 20 a 47",
+          "[gpt-oss-120b] CEO propone pivotar a enterprise como respuesta al pánico; CTO responde trabajando más horas"
+        ]
+      },
+      "Salud×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 10,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] CTO ya perdió un co-fundador por 'diferencias de visión'; patrón de respuesta empeora la situación",
+          "[deepseek-r1] Patrón 'miedo + acción reactiva' exacerba problemas",
+          "[deepseek-v3.1] CTO ya perdió co-fundador por mismo conflicto; patrón 'miedo + acción reactiva' exacerba problemas; ",
+          "[glm-4.7] Su respuesta fue trabajar más (70h/semana), lo que aceleró la fuga de devs",
+          "[gpt-oss-120b] Co‑fundador técnico se fue hace 6 meses por el mismo conflicto, replicando el patrón de crisis"
+        ]
+      },
+      "Sentido×Conservar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] CTO se cree 'el último guardián del producto'; CEO, 'el único capaz de salvar la empresa'; ambos pro",
+          "[deepseek-r1] CTO repite 'producto sólido = churn bajo' como mantra",
+          "[deepseek-v3.1] CTO repite 'producto sólido = churn bajo' como mantra; se cree 'último guardián del producto'; CEO '",
+          "[glm-4.7] CTO se cree 'el último guardián del producto'; CEO, 'el único capaz de salvar la empresa'",
+          "[gpt-oss-120b] CTO se cree \"el último guardián del producto\"; CEO se ve \"el único capaz de salvar la empresa\""
+        ]
+      },
+      "Sentido×Captar": {
+        "max_score": 4,
+        "n_models_2plus": 11,
+        "n_models_3plus": 10,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Ambos captan crisis pero interpretan direcciones opuestas: bugs vs pivot; necesitan validación de id",
+          "[deepseek-r1] CEO oculta rechazo fondos tras discurso de pivot",
+          "[deepseek-v3.1] CEO oculta rechazo fondos por métricas insuficientes; necesita ser percibido como visionario; ambos ",
+          "[glm-4.7] Ambos priorizan su identidad sobre datos objetivos; captan validación externa, no realidad",
+          "[gpt-oss-120b] CEO necesita ser percibido como visionario; CTO necesita validación de su identidad como salvador té"
+        ]
+      },
+      "Sentido×Depurar": {
+        "max_score": 4,
+        "n_models_2plus": 11,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Identifica 'vergüenza colectiva' y 'miedo a la irrelevancia' como emociones no nombradas que corromp",
+          "[deepseek-r1] Nadie nombra vergüenza colectiva por producto defectuoso",
+          "[deepseek-v3.1] Nadie nombra vergüenza colectiva por producto defectuoso; emociones no nombradas (miedo irrelevancia",
+          "[glm-4.7] nadie nombra la vergüenza colectiva de vender un producto defectuoso ni el miedo a la irrelevancia",
+          "[gpt-oss-120b] Vergüenza colectiva por vender producto defectuoso y miedo a la irrelevancia no nombrados"
+        ]
+      },
+      "Sentido×Distribuir": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 6,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Ambos priorizan su identidad sobre datos objetivos; relación CTO-CEO rota (solo hablan en reuniones ",
+          "[deepseek-r1] Equipo siente inseguridad, clientes huyen por bugs",
+          "[deepseek-v3.1] Equipo siente inseguridad, clientes huyen por bugs; relación CTO-CEO rota; ambos priorizan identidad",
+          "[glm-4.7] Ambos priorizan su identidad sobre datos objetivos, centralizando el sentido en sus egos",
+          "[gpt-oss-120b] Relación CTO‑CEO rota (solo hablan en reuniones formales); ambos buscan ser esenciales"
+        ]
+      },
+      "Sentido×Frontera": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 10,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Conflicto de supervivencia inmediata vs. crecimiento futuro; miedo a la irrelevancia como límite exi",
+          "[deepseek-r1] CTO se cree 'último guardián', CEO 'único salvador'",
+          "[deepseek-v3.1] Miedo a irrelevancia no nombrado como límite identitario; conflicto supervivencia vs crecimiento; di",
+          "[glm-4.7] Ambos usan 'diferencias de visión' como frontera para no admitir culpa ni miedo a la irrelevancia",
+          "[gpt-oss-120b] Uso de \"diferencias de visión\" como excusa para no admitir culpa"
+        ]
+      },
+      "Sentido×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 9,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Patrón 'miedo + acción reactiva' redefine el conflicto: no es estratégico sino supervivencia emocion",
+          "[deepseek-r1] CEO usa pivot como huida de realidad existencial",
+          "[deepseek-v3.1] Ambos usan 'diferencias de visión' para no admitir culpa; patrón 'miedo + acción reactiva' redefine ",
+          "[glm-4.7] Ambos ignoran que el churn 8% anualiza 63% (insostenible), adaptando su sentido a la negación",
+          "[gpt-oss-120b] Patrón \"miedo + acción reactiva\" (debuggear / pivotar) que exacerba el problema"
+        ]
+      },
+      "Sentido×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 11,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Co-fundador se fue por mismo conflicto: patrón se replica pero no se aprende; repiten 'producto sóli",
+          "[deepseek-r1] Conflicto idéntico hizo huir co-fundador hace 6 meses",
+          "[deepseek-v3.1] Patrón de respuesta aprendida de crisis previas; conflicto idéntico hizo huir co-fundador; patrón se",
+          "[glm-4.7] CTO ya perdió un co-fundador por 'diferencias de visión', replicando el patrón de conflicto",
+          "[gpt-oss-120b] Patrón de conflicto técnico‑estratégico se repite (co‑fundador salió)"
+        ]
+      },
+      "Continuidad×Conservar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 5,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Churn 8% mensual anualiza 63% — legado actual insostenible; si CEO despide al CTO, devs restantes hu",
+          "[deepseek-r1] Runway 7 meses con burn neto 16.000€/mes",
+          "[deepseek-v3.1] Co-fundador técnico se fue hace 6 meses por mismo conflicto; runway 7 meses con burn neto 16.000€/me",
+          "[glm-4.7] conflicto de supervivencia inmediata vs crecimiento futuro",
+          "[gpt-oss-120b] Runway de 7 meses con burn neto de 16.000€/mes"
+        ]
+      },
+      "Continuidad×Captar": {
+        "max_score": 3,
+        "n_models_2plus": 9,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] 3 fondos rechazaron por 'métricas insuficientes'; mercado no capta valor futuro; sin pivot, muere en",
+          "[deepseek-v3.1] 3 fondos rechazaron por métricas insuficientes; mercado no capta valor futuro; propuesta retención a",
+          "[glm-4.7] fondos rechazaron por 'métricas insuficientes'; mercado no capta valor futuro",
+          "[kimi-k2.5] 3 fondos rechazaron por métricas insuficientes (churn alto, MRR estancado); mercado no capta valor f",
+          "[minimax-m2.5] Captura tardía: trigger crítico (cliente grande 30% ingresos cancelando) no anticipado proactivament"
+        ]
+      },
+      "Continuidad×Depurar": {
+        "max_score": 4,
+        "n_models_2plus": 11,
+        "n_models_3plus": 7,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Vergüenza colectiva de vender producto defectuoso no se filtra ni procesa; rotación del 66% en 12 me",
+          "[deepseek-v3.1] Rotación 66% en 12 meses con 3 devs; salida co-fundador no procesada; deuda relacional acumulada",
+          "[glm-4.7] churn 8% anualiza 63% (insostenible para enterprise)",
+          "[gpt-oss-120b] Churn 8% anualiza 63%; rotación 66% en 12 meses con 3 devs",
+          "[kimi-k2.5] Salida co-fundador técnico hace 6 meses y rotación 66% no se procesan; se acumula deuda relacional q"
+        ]
+      },
+      "Continuidad×Distribuir": {
+        "max_score": 4,
+        "n_models_2plus": 10,
+        "n_models_3plus": 8,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Si CEO despide CTO, devs juniors huyen: equipo no sobrevive sin liderazgo técnico; cliente grande (3",
+          "[deepseek-v3.1] Si CEO despide CTO, devs restantes huirían; falta distribución liderazgo técnico; cliente 30% ingres",
+          "[glm-4.7] Si el CEO despidiera al CTO para pivotar, los devs restantes huirían (dependencia crítica)",
+          "[gpt-oss-120b] Riesgo máximo: si el CEO despide al CTO, los devs restantes huirían",
+          "[kimi-k2.5] Riesgo de fuga en cadena: si CEO despide a CTO, 'devs restantes huirían' por dependencia técnica; eq"
+        ]
+      },
+      "Continuidad×Frontera": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 11,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Si cliente grande (30% ingresos) cancela, trigger crítico forza decisiones destructivas; define umbr",
+          "[deepseek-r1] Trigger crítico: cliente grande (30% ingresos) cancela",
+          "[deepseek-v3.1] Si cliente grande (30% ingresos) cancela, desencadenaría crisis; trigger crítico de no-retorno estru",
+          "[glm-4.7] Trigger crítico: Si un cliente grande (30% ingresos) cancela, el CEO forzará pivot sin análisis",
+          "[gpt-oss-120b] Restricción dura: runway 7 meses, burn 16.000€/mes; trigger crítico cliente 30% ingresos cancela"
+        ]
+      },
+      "Continuidad×Adaptar": {
+        "max_score": 4,
+        "n_models_2plus": 12,
+        "n_models_3plus": 10,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Pivotar a enterprise sin SLA 99.9% es 'suicidio' estructural; la adaptación propuesta (pivot) matarí",
+          "[deepseek-r1] Pivot sin SLA 99.9% sería 'suicidio' para enterprise",
+          "[deepseek-v3.1] Revela churn 8% anualiza 63%, insostenible; pivotar sin métricas es suicidio por SLA 99.9% imposible",
+          "[glm-4.7] Pivotar a enterprise sin métricas sólidas es 'suicidio': los enterprise exigen SLA 99.9% (imposible ",
+          "[gpt-oss-120b] Patrón \"miedo + acción reactiva\" como respuesta aprendida que ahora exacerba el problema"
+        ]
+      },
+      "Continuidad×Replicar": {
+        "max_score": 3,
+        "n_models_2plus": 12,
+        "n_models_3plus": 10,
+        "n_evaluadores": 12,
+        "evidencias_top": [
+          "[cogito-671b] Respuesta aprendida (trabajar más) aceleró fuga devs; patrón de conflicto técnico-estratégico se rep",
+          "[deepseek-r1] Respuesta aprendida (trabajar más) aceleró fuga devs",
+          "[deepseek-v3.1] Riesgo: despedir CTO haría huir devs restantes; respuesta aprendida aceleró fuga devs; modelo actual",
+          "[glm-4.7] CTO ya perdió un co-fundador por 'diferencias de visión'. Su respuesta fue trabajar más... No funcio",
+          "[gpt-oss-120b] Co‑fundador técnico se fue; patrón de crisis se repite sin aprendizaje"
+        ]
+      }
+    }
+  },
+  "performance_curve": [
+    {
+      "n_models": 1,
+      "models": [
+        "gpt-oss-120b"
+      ],
+      "celdas_3plus": 66,
+      "pct_of_full": 71.0
+    },
+    {
+      "n_models": 2,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b"
+      ],
+      "celdas_3plus": 88,
+      "pct_of_full": 94.6
+    },
+    {
+      "n_models": 3,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus"
+      ],
+      "celdas_3plus": 88,
+      "pct_of_full": 94.6
+    },
+    {
+      "n_models": 4,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat"
+      ],
+      "celdas_3plus": 88,
+      "pct_of_full": 94.6
+    },
+    {
+      "n_models": 5,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1"
+      ],
+      "celdas_3plus": 88,
+      "pct_of_full": 94.6
+    },
+    {
+      "n_models": 6,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "glm-4.7"
+      ],
+      "celdas_3plus": 88,
+      "pct_of_full": 94.6
+    },
+    {
+      "n_models": 7,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "glm-4.7",
+        "cogito-671b"
+      ],
+      "celdas_3plus": 93,
+      "pct_of_full": 100.0
+    },
+    {
+      "n_models": 8,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "glm-4.7",
+        "cogito-671b",
+        "kimi-k2.5"
+      ],
+      "celdas_3plus": 93,
+      "pct_of_full": 100.0
+    },
+    {
+      "n_models": 9,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "glm-4.7",
+        "cogito-671b",
+        "kimi-k2.5",
+        "deepseek-r1"
+      ],
+      "celdas_3plus": 93,
+      "pct_of_full": 100.0
+    },
+    {
+      "n_models": 10,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "glm-4.7",
+        "cogito-671b",
+        "kimi-k2.5",
+        "deepseek-r1",
+        "minimax-m2.5"
+      ],
+      "celdas_3plus": 93,
+      "pct_of_full": 100.0
+    },
+    {
+      "n_models": 11,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "glm-4.7",
+        "cogito-671b",
+        "kimi-k2.5",
+        "deepseek-r1",
+        "minimax-m2.5",
+        "sonnet"
+      ],
+      "celdas_3plus": 93,
+      "pct_of_full": 100.0
+    },
+    {
+      "n_models": 12,
+      "models": [
+        "gpt-oss-120b",
+        "qwen3-235b",
+        "opus",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "glm-4.7",
+        "cogito-671b",
+        "kimi-k2.5",
+        "deepseek-r1",
+        "minimax-m2.5",
+        "sonnet",
+        "v3.2-reasoner"
+      ],
+      "celdas_3plus": 93,
+      "pct_of_full": 100.0
+    }
+  ],
+  "roles": {
+    "cogito-671b": {
+      "role": "valioso",
+      "loss_3plus": 5,
+      "loss_pct": 5.4,
+      "aportes_unicos": 6,
+      "inflacion": 6
+    },
+    "deepseek-r1": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "deepseek-v3.1": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "glm-4.7": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "gpt-oss-120b": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "kimi-k2.5": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "minimax-m2.5": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "opus": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "qwen3-235b": {
+      "role": "valioso",
+      "loss_3plus": 8,
+      "loss_pct": 8.6,
+      "aportes_unicos": 31,
+      "inflacion": 17
+    },
+    "sonnet": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "v3.2-chat": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    },
+    "v3.2-reasoner": {
+      "role": "prescindible",
+      "loss_3plus": 0,
+      "loss_pct": 0.0,
+      "aportes_unicos": 0,
+      "inflacion": 0
+    }
+  },
+  "comparison_r1_r2": {
+    "r1_celdas_3plus": 77,
+    "r2_celdas_3plus": 93,
+    "delta_3plus": 16,
+    "emergent_count": 16,
+    "emergent": [
+      {
+        "output": "v31_best",
+        "celda": "Salud×Captar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "v31_best",
+        "celda": "Continuidad×Captar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "maverick_medium",
+        "celda": "Salud×Conservar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "maverick_medium",
+        "celda": "Salud×Captar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "maverick_medium",
+        "celda": "Salud×Distribuir",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "maverick_medium",
+        "celda": "Sentido×Distribuir",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "maverick_medium",
+        "celda": "Continuidad×Conservar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "maverick_medium",
+        "celda": "Continuidad×Distribuir",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "gptoss_depurar",
+        "celda": "Salud×Captar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "gptoss_depurar",
+        "celda": "Salud×Distribuir",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "gptoss_depurar",
+        "celda": "Sentido×Conservar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "gptoss_depurar",
+        "celda": "Sentido×Distribuir",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "gptoss_depurar",
+        "celda": "Continuidad×Captar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "gptoss_depurar",
+        "celda": "Continuidad×Distribuir",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "qwen3t_medium",
+        "celda": "Salud×Captar",
+        "r1_max": 2,
+        "r2_max": 3
+      },
+      {
+        "output": "qwen3t_medium",
+        "celda": "Salud×Distribuir",
+        "r1_max": 2,
+        "r2_max": 3
+      }
+    ]
+  },
+  "mesa_minima": {
+    "n": 2,
+    "models": [
+      "gpt-oss-120b",
+      "qwen3-235b"
+    ]
+  }
+}

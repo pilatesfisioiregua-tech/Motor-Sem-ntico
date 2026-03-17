@@ -226,6 +226,34 @@ def registrar_ejecucion(resultado: dict, conn=None) -> dict:
 
         conn.commit()
 
+        # 4b. B3: UPDATE incremental celdas_matriz
+        try:
+            if celda:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        UPDATE celdas_matriz SET
+                            n_datapoints = COALESCE((
+                                SELECT COUNT(*) FROM datapoints_efectividad
+                                WHERE celda_objetivo = %s
+                            ), 0),
+                            tasa_media = COALESCE((
+                                SELECT AVG(tasa_cierre) FROM datapoints_efectividad
+                                WHERE celda_objetivo = %s
+                            ), 0.0),
+                            grado_actual = LEAST(1.0, 1.0 - COALESCE((
+                                SELECT AVG(gap_post) FROM datapoints_efectividad
+                                WHERE celda_objetivo = %s
+                            ), 0.0)),
+                            updated_at = NOW()
+                        WHERE id = %s
+                    """, [celda, celda, celda, celda])
+                conn.commit()
+        except Exception:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+
         # 4. Computar señales PID para la celda
         señales = computar_señales_pid(celda, conn=conn)
         señales['tasa_cierre'] = round(tasa_cierre, 4)

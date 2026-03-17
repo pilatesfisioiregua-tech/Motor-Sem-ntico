@@ -1,0 +1,501 @@
+{
+  "summary": {},
+  "per_config": {
+    "A": {
+      "name": "Linea Industrial",
+      "avg_pass_rate": 0.555,
+      "total_cost": 0.32667,
+      "avg_time": 526.4,
+      "tasks": {
+        "T3": {
+          "tests_total": 21,
+          "tests_passed": 21,
+          "pass_rate": 1.0
+        },
+        "T1": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T2": {
+          "tests_total": 18,
+          "tests_passed": 17,
+          "pass_rate": 0.944
+        },
+        "T4": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T5": {
+          "tests_total": 6,
+          "tests_passed": 5,
+          "pass_rate": 0.833
+        }
+      }
+    },
+    "B": {
+      "name": "Coder Puro",
+      "avg_pass_rate": 0.368,
+      "total_cost": 0.13645,
+      "avg_time": 354.2,
+      "tasks": {
+        "T1": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T2": {
+          "tests_total": 15,
+          "tests_passed": 14,
+          "pass_rate": 0.933
+        },
+        "T3": {
+          "tests_total": 11,
+          "tests_passed": 10,
+          "pass_rate": 0.909
+        },
+        "T4": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T5": {
+          "tests_total": 0,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "C": {
+      "name": "Maxima Diversidad",
+      "avg_pass_rate": 0.167,
+      "total_cost": 0.24883,
+      "avg_time": 493.5,
+      "tasks": {
+        "T1": {
+          "tests_total": 30,
+          "tests_passed": 25,
+          "pass_rate": 0.833
+        },
+        "T2": {
+          "tests_total": 0,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T3": {
+          "tests_total": 0,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T4": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T5": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "D": {
+      "name": "Ultra-Barato",
+      "avg_pass_rate": 0.511,
+      "total_cost": 0.04698,
+      "avg_time": 188.9,
+      "tasks": {
+        "T1": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T2": {
+          "tests_total": 5,
+          "tests_passed": 4,
+          "pass_rate": 0.8
+        },
+        "T3": {
+          "tests_total": 10,
+          "tests_passed": 9,
+          "pass_rate": 0.9
+        },
+        "T4": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T5": {
+          "tests_total": 7,
+          "tests_passed": 6,
+          "pass_rate": 0.857
+        }
+      }
+    },
+    "E": {
+      "name": "Premium",
+      "avg_pass_rate": 0.15,
+      "total_cost": 0.3425,
+      "avg_time": 546.4,
+      "tasks": {
+        "T1": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T2": {
+          "tests_total": 4,
+          "tests_passed": 3,
+          "pass_rate": 0.75
+        },
+        "T3": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T4": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T5": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "F": {
+      "name": "Cadena Minima",
+      "avg_pass_rate": 0.178,
+      "total_cost": 0.11923,
+      "avg_time": 188.6,
+      "tasks": {
+        "T1": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T2": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T3": {
+          "tests_total": 9,
+          "tests_passed": 8,
+          "pass_rate": 0.889
+        },
+        "T4": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T5": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "G": {
+      "name": "Razonadores",
+      "avg_pass_rate": 0.33,
+      "total_cost": 0.19084,
+      "avg_time": 452.9,
+      "tasks": {
+        "T1": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T2": {
+          "tests_total": 0,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T3": {
+          "tests_total": 10,
+          "tests_passed": 9,
+          "pass_rate": 0.9
+        },
+        "T4": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T5": {
+          "tests_total": 4,
+          "tests_passed": 3,
+          "pass_rate": 0.75
+        }
+      }
+    },
+    "0": {
+      "name": "Baseline",
+      "avg_pass_rate": 0.317,
+      "total_cost": 0.03308,
+      "avg_time": 52.3,
+      "tasks": {
+        "T3": {
+          "tests_total": 6,
+          "tests_passed": 5,
+          "pass_rate": 0.833
+        },
+        "T1": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T2": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T4": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "T5": {
+          "tests_total": 4,
+          "tests_passed": 3,
+          "pass_rate": 0.75
+        }
+      }
+    }
+  },
+  "per_task": {
+    "T1": {
+      "name": "Edge Function TS",
+      "avg_pass_rate": 0.104,
+      "configs": {
+        "0": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "A": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "B": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "C": {
+          "tests_total": 30,
+          "tests_passed": 25,
+          "pass_rate": 0.833
+        },
+        "D": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "E": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "F": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "G": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "T2": {
+      "name": "Migration SQL",
+      "avg_pass_rate": 0.428,
+      "configs": {
+        "0": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "A": {
+          "tests_total": 18,
+          "tests_passed": 17,
+          "pass_rate": 0.944
+        },
+        "B": {
+          "tests_total": 15,
+          "tests_passed": 14,
+          "pass_rate": 0.933
+        },
+        "C": {
+          "tests_total": 0,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "D": {
+          "tests_total": 5,
+          "tests_passed": 4,
+          "pass_rate": 0.8
+        },
+        "E": {
+          "tests_total": 4,
+          "tests_passed": 3,
+          "pass_rate": 0.75
+        },
+        "F": {
+          "tests_total": 1,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "G": {
+          "tests_total": 0,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "T3": {
+      "name": "Analysis Script",
+      "avg_pass_rate": 0.679,
+      "configs": {
+        "0": {
+          "tests_total": 6,
+          "tests_passed": 5,
+          "pass_rate": 0.833
+        },
+        "A": {
+          "tests_total": 21,
+          "tests_passed": 21,
+          "pass_rate": 1.0
+        },
+        "B": {
+          "tests_total": 11,
+          "tests_passed": 10,
+          "pass_rate": 0.909
+        },
+        "C": {
+          "tests_total": 0,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "D": {
+          "tests_total": 10,
+          "tests_passed": 9,
+          "pass_rate": 0.9
+        },
+        "E": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "F": {
+          "tests_total": 9,
+          "tests_passed": 8,
+          "pass_rate": 0.889
+        },
+        "G": {
+          "tests_total": 10,
+          "tests_passed": 9,
+          "pass_rate": 0.9
+        }
+      }
+    },
+    "T4": {
+      "name": "Orchestrator",
+      "avg_pass_rate": 0.0,
+      "configs": {
+        "0": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "A": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "B": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "C": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "D": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "E": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "F": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "G": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "T5": {
+      "name": "Assembly Line",
+      "avg_pass_rate": 0.399,
+      "configs": {
+        "0": {
+          "tests_total": 4,
+          "tests_passed": 3,
+          "pass_rate": 0.75
+        },
+        "A": {
+          "tests_total": 6,
+          "tests_passed": 5,
+          "pass_rate": 0.833
+        },
+        "B": {
+          "tests_total": 0,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "C": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "D": {
+          "tests_total": 7,
+          "tests_passed": 6,
+          "pass_rate": 0.857
+        },
+        "E": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "F": {
+          "tests_total": 2,
+          "tests_passed": 0,
+          "pass_rate": 0.0
+        },
+        "G": {
+          "tests_total": 4,
+          "tests_passed": 3,
+          "pass_rate": 0.75
+        }
+      }
+    }
+  }
+}

@@ -60,6 +60,24 @@ def calcular_gradientes(input_texto: str, conn=None) -> dict:
         if not gradientes:
             gradientes = _detectar_gaps_heuristico(input_texto)
 
+        # B3: Blend con datos materializados de celdas_matriz
+        if conn:
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT id, grado_actual, grado_objetivo, gap
+                        FROM celdas_matriz
+                    """)
+                    db_gaps = {row[0]: row[3] for row in cur.fetchall()}
+                if db_gaps:
+                    for celda, g in gradientes.items():
+                        if celda in db_gaps and db_gaps[celda] is not None:
+                            gap_llm = g.get('gap', 0.0)
+                            gap_db = db_gaps[celda]
+                            g['gap'] = round(0.7 * gap_llm + 0.3 * gap_db, 4)
+            except Exception:
+                pass  # tabla no existe aun — no romper
+
         # Ordenar por gap descendente
         top_gaps = sorted(
             [(celda, g['gap']) for celda, g in gradientes.items()],
@@ -509,6 +527,21 @@ class GestorGAMC:
                     except Exception:
                         pass
                     resultados[nombre] = {'error': str(e)}
+
+            # --- PREDICTIVE CONTROLLER: inform loop with trajectory + planned actions ---
+            try:
+                from .predictive_controller import get_predictive_controller
+                pc = get_predictive_controller()
+                trayectoria = pc.predecir_trayectoria(conn)
+                plan_acciones = pc.planificar_acciones(conn)
+                resultados['predictive'] = {
+                    'tendencia': trayectoria.get('tendencia', 'unknown'),
+                    'tasa_predicha': trayectoria.get('tasa_predicha_horizonte', 0),
+                    'acciones_planificadas': len(plan_acciones.get('acciones_planificadas', [])),
+                    'top_accion': plan_acciones.get('acciones_planificadas', [{}])[0] if plan_acciones.get('acciones_planificadas') else None,
+                }
+            except Exception:
+                resultados['predictive'] = {'error': 'unavailable'}
 
             # --- SEGUNDO ORDEN: auto-ajustar parametros ---
             ajuste = self._auto_ajustar_parametros(resultados, conn)

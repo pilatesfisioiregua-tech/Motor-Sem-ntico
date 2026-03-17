@@ -1,0 +1,2258 @@
+[
+  {
+    "config": "0",
+    "config_name": "Baseline",
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "stations": [
+      {
+        "station": "baseline",
+        "model": "qwen3-coder-480b",
+        "time_s": 63.08,
+        "tokens_out": 2873,
+        "error": null,
+        "syntax_ok": true,
+        "has_tests": true,
+        "tests": "5/6"
+      }
+    ],
+    "final": {
+      "tests_total": 6,
+      "tests_passed": 5,
+      "pass_rate": 0.833
+    },
+    "total_cost_usd": 0.00575,
+    "total_time_s": 63.1,
+    "timestamp": "2026-03-10T23:27:52.984541"
+  },
+  {
+    "config": "A",
+    "config_name": "Linea Industrial",
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 43.65,
+        "tokens_out": 2490,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 94.34,
+        "tokens_out": 5285,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 55.44,
+        "tokens_out": 6023,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "21/21"
+      },
+      {
+        "station": "reviewer",
+        "model": "glm-5",
+        "time_s": 150.02,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 57.52,
+        "tokens_out": 4580,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 21,
+      "tests_passed": 21,
+      "pass_rate": 1.0
+    },
+    "total_cost_usd": 0.02328,
+    "total_time_s": 401.0,
+    "timestamp": "2026-03-10T23:34:42.742595"
+  },
+  {
+    "config": "0",
+    "config_name": "Baseline",
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "stations": [
+      {
+        "station": "baseline",
+        "model": "qwen3-coder-480b",
+        "time_s": 53.75,
+        "tokens_out": 3575,
+        "error": null,
+        "syntax_ok": true,
+        "has_tests": true,
+        "tests": "0/1"
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.00715,
+    "total_time_s": 53.8,
+    "timestamp": "2026-03-10T23:35:56.834034"
+  },
+  {
+    "config": "0",
+    "config_name": "Baseline",
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "stations": [
+      {
+        "station": "baseline",
+        "model": "qwen3-coder-480b",
+        "time_s": 17.97,
+        "tokens_out": 1389,
+        "error": null,
+        "syntax_ok": true,
+        "has_tests": true,
+        "tests": "0/1"
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.00278,
+    "total_time_s": 18.0,
+    "timestamp": "2026-03-10T23:36:15.190411"
+  },
+  {
+    "config": "0",
+    "config_name": "Baseline",
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "stations": [
+      {
+        "station": "baseline",
+        "model": "qwen3-coder-480b",
+        "time_s": 57.03,
+        "tokens_out": 4200,
+        "error": null,
+        "syntax_ok": true,
+        "has_tests": true,
+        "tests": "0/2"
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.0084,
+    "total_time_s": 57.0,
+    "timestamp": "2026-03-10T23:37:12.715791"
+  },
+  {
+    "config": "0",
+    "config_name": "Baseline",
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "stations": [
+      {
+        "station": "baseline",
+        "model": "qwen3-coder-480b",
+        "time_s": 69.69,
+        "tokens_out": 4499,
+        "error": null,
+        "syntax_ok": true,
+        "has_tests": true,
+        "tests": "3/4"
+      }
+    ],
+    "final": {
+      "tests_total": 4,
+      "tests_passed": 3,
+      "pass_rate": 0.75
+    },
+    "total_cost_usd": 0.009,
+    "total_time_s": 69.7,
+    "timestamp": "2026-03-10T23:38:23.449235"
+  },
+  {
+    "config": "A",
+    "config_name": "Linea Industrial",
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 51.69,
+        "tokens_out": 2916,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 57.83,
+        "tokens_out": 3916,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 46.15,
+        "tokens_out": 4392,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 120.05,
+        "tokens_out": 7113,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 4.67,
+        "tokens_out": 325,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "reviewer",
+        "model": "glm-5",
+        "time_s": 153.15,
+        "tokens_out": 12598,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 66.07,
+        "tokens_out": 4002,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.07501,
+    "total_time_s": 499.6,
+    "timestamp": "2026-03-10T23:46:49.238350"
+  },
+  {
+    "config": "A",
+    "config_name": "Linea Industrial",
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 46.94,
+        "tokens_out": 2738,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 18.01,
+        "tokens_out": 963,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 51.92,
+        "tokens_out": 4955,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "17/18"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 125.45,
+        "tokens_out": 7459,
+        "error": null,
+        "tests_after": "17/18"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 14.18,
+        "tokens_out": 1245,
+        "error": null,
+        "tests_after": "17/18"
+      },
+      {
+        "station": "reviewer",
+        "model": "glm-5",
+        "time_s": 190.32,
+        "tokens_out": 16000,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 29.18,
+        "tokens_out": 1079,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 18,
+      "tests_passed": 17,
+      "pass_rate": 0.944
+    },
+    "total_cost_usd": 0.08062,
+    "total_time_s": 476.0,
+    "timestamp": "2026-03-10T23:54:47.140131"
+  },
+  {
+    "config": "A",
+    "config_name": "Linea Industrial",
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 41.61,
+        "tokens_out": 2466,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 91.29,
+        "tokens_out": 5547,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 105.47,
+        "tokens_out": 9552,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 120.46,
+        "tokens_out": 7063,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 10.1,
+        "tokens_out": 845,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "reviewer",
+        "model": "glm-5",
+        "time_s": 108.42,
+        "tokens_out": 5924,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 50.28,
+        "tokens_out": 2147,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.06204,
+    "total_time_s": 527.6,
+    "timestamp": "2026-03-11T00:03:36.837637"
+  },
+  {
+    "config": "A",
+    "config_name": "Linea Industrial",
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 41.79,
+        "tokens_out": 2450,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 94.05,
+        "tokens_out": 6462,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 117.78,
+        "tokens_out": 9556,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "14/15"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 144.23,
+        "tokens_out": 8192,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 83.52,
+        "tokens_out": 7343,
+        "error": null,
+        "tests_after": "13/14"
+      },
+      {
+        "station": "reviewer",
+        "model": "glm-5",
+        "time_s": 126.21,
+        "tokens_out": 9847,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 120.03,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      }
+    ],
+    "final": {
+      "tests_total": 6,
+      "tests_passed": 5,
+      "pass_rate": 0.833
+    },
+    "total_cost_usd": 0.08572,
+    "total_time_s": 727.6,
+    "timestamp": "2026-03-11T00:15:46.700771"
+  },
+  {
+    "config": "B",
+    "config_name": "Coder Puro",
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 48.78,
+        "tokens_out": 2634,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 58.36,
+        "tokens_out": 3524,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 52.7,
+        "tokens_out": 5063,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 26.55,
+        "tokens_out": 3737,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 62.5,
+        "tokens_out": 4229,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-next-80b",
+        "time_s": 22.83,
+        "tokens_out": 3541,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.03301,
+    "total_time_s": 271.7,
+    "timestamp": "2026-03-11T00:21:18.449523"
+  },
+  {
+    "config": "B",
+    "config_name": "Coder Puro",
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 47.74,
+        "tokens_out": 2540,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 16.49,
+        "tokens_out": 931,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 116.43,
+        "tokens_out": 7500,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "17/18"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 13.4,
+        "tokens_out": 1183,
+        "error": null,
+        "tests_after": "17/18"
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 42.94,
+        "tokens_out": 1518,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-next-80b",
+        "time_s": 5.5,
+        "tokens_out": 930,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 15,
+      "tests_passed": 14,
+      "pass_rate": 0.933
+    },
+    "total_cost_usd": 0.01905,
+    "total_time_s": 242.5,
+    "timestamp": "2026-03-11T00:25:22.288612"
+  },
+  {
+    "config": "B",
+    "config_name": "Coder Puro",
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 37.58,
+        "tokens_out": 1887,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 71.84,
+        "tokens_out": 4161,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 112.57,
+        "tokens_out": 9683,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "9/10"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 105.69,
+        "tokens_out": 4756,
+        "error": null,
+        "tests_after": "10/11"
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 120.03,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-next-80b",
+        "time_s": 26.54,
+        "tokens_out": 4235,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 11,
+      "tests_passed": 10,
+      "pass_rate": 0.909
+    },
+    "total_cost_usd": 0.03408,
+    "total_time_s": 474.3,
+    "timestamp": "2026-03-11T00:33:22.583930"
+  },
+  {
+    "config": "B",
+    "config_name": "Coder Puro",
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 39.9,
+        "tokens_out": 2295,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 106.07,
+        "tokens_out": 6748,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 95.16,
+        "tokens_out": 9632,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 120.02,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 120.03,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      },
+      {
+        "station": "optimizer",
+        "model": "qwen3-next-80b",
+        "time_s": 32.51,
+        "tokens_out": 5212,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.0354,
+    "total_time_s": 513.7,
+    "timestamp": "2026-03-11T00:41:57.423899"
+  },
+  {
+    "config": "B",
+    "config_name": "Coder Puro",
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "deepseek-v3.2",
+        "time_s": 47.93,
+        "tokens_out": 2738,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 100.95,
+        "tokens_out": 5951,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 120.01,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      }
+    ],
+    "final": {
+      "tests_total": 0,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.01491,
+    "total_time_s": 268.9,
+    "timestamp": "2026-03-11T00:46:26.321547"
+  },
+  {
+    "config": "C",
+    "config_name": "Maxima Diversidad",
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 123.77,
+        "tokens_out": 4117,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 74.83,
+        "tokens_out": 6388,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 67.84,
+        "tokens_out": 5887,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 145.81,
+        "tokens_out": 8192,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 63.79,
+        "tokens_out": 5431,
+        "error": null,
+        "tests_after": "21/30"
+      },
+      {
+        "station": "reviewer",
+        "model": "llama4-maverick",
+        "time_s": 21.35,
+        "tokens_out": 1384,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "gpt-oss-120b",
+        "time_s": 36.13,
+        "tokens_out": 3929,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 30,
+      "tests_passed": 25,
+      "pass_rate": 0.833
+    },
+    "total_cost_usd": 0.06128,
+    "total_time_s": 533.5,
+    "timestamp": "2026-03-11T00:55:21.513174"
+  },
+  {
+    "config": "C",
+    "config_name": "Maxima Diversidad",
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 240.01,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      }
+    ],
+    "final": {
+      "tests_total": 0,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.0,
+    "total_time_s": 240.0,
+    "timestamp": "2026-03-11T00:59:21.528835"
+  },
+  {
+    "config": "C",
+    "config_name": "Maxima Diversidad",
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 58.9,
+        "tokens_out": 2953,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 73.83,
+        "tokens_out": 5685,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 120.03,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      }
+    ],
+    "final": {
+      "tests_total": 0,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.02082,
+    "total_time_s": 252.8,
+    "timestamp": "2026-03-11T01:03:34.305058"
+  },
+  {
+    "config": "C",
+    "config_name": "Maxima Diversidad",
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 191.97,
+        "tokens_out": 7250,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 133.29,
+        "tokens_out": 9573,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 105.95,
+        "tokens_out": 9104,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 136.8,
+        "tokens_out": 8192,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 114.86,
+        "tokens_out": 9723,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "reviewer",
+        "model": "llama4-maverick",
+        "time_s": 89.82,
+        "tokens_out": 6698,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "gpt-oss-120b",
+        "time_s": 83.5,
+        "tokens_out": 5437,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.09232,
+    "total_time_s": 856.2,
+    "timestamp": "2026-03-11T01:17:52.222802"
+  },
+  {
+    "config": "C",
+    "config_name": "Maxima Diversidad",
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 200.28,
+        "tokens_out": 7511,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 126.08,
+        "tokens_out": 10900,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "minimax-m2.5",
+        "time_s": 84.16,
+        "tokens_out": 7217,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 140.67,
+        "tokens_out": 8192,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 5.59,
+        "tokens_out": 431,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "reviewer",
+        "model": "llama4-maverick",
+        "time_s": 14.78,
+        "tokens_out": 1095,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "gpt-oss-120b",
+        "time_s": 13.64,
+        "tokens_out": 839,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.07441,
+    "total_time_s": 585.2,
+    "timestamp": "2026-03-11T01:27:38.493874"
+  },
+  {
+    "config": "D",
+    "config_name": "Ultra-Barato",
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "gpt-oss-20b",
+        "time_s": 27.62,
+        "tokens_out": 2856,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 44.25,
+        "tokens_out": 2756,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "gpt-oss-120b",
+        "time_s": 49.31,
+        "tokens_out": 4092,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 69.32,
+        "tokens_out": 2998,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "review_optimize",
+        "model": "llama4-maverick",
+        "time_s": 27.05,
+        "tokens_out": 1650,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.00968,
+    "total_time_s": 217.6,
+    "timestamp": "2026-03-11T01:31:18.796107"
+  },
+  {
+    "config": "D",
+    "config_name": "Ultra-Barato",
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "gpt-oss-20b",
+        "time_s": 27.84,
+        "tokens_out": 2935,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 9.06,
+        "tokens_out": 591,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "gpt-oss-120b",
+        "time_s": 57.02,
+        "tokens_out": 5033,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "4/5"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 17.89,
+        "tokens_out": 890,
+        "error": null,
+        "tests_after": "4/5"
+      },
+      {
+        "station": "review_optimize",
+        "model": "llama4-maverick",
+        "time_s": 46.28,
+        "tokens_out": 4359,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 5,
+      "tests_passed": 4,
+      "pass_rate": 0.8
+    },
+    "total_cost_usd": 0.00873,
+    "total_time_s": 158.1,
+    "timestamp": "2026-03-11T01:33:57.531166"
+  },
+  {
+    "config": "D",
+    "config_name": "Ultra-Barato",
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "gpt-oss-20b",
+        "time_s": 11.2,
+        "tokens_out": 1184,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 65.83,
+        "tokens_out": 2461,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "gpt-oss-120b",
+        "time_s": 23.34,
+        "tokens_out": 3784,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "11/12"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 35.2,
+        "tokens_out": 2906,
+        "error": null,
+        "tests_after": "10/11"
+      },
+      {
+        "station": "review_optimize",
+        "model": "llama4-maverick",
+        "time_s": 26.71,
+        "tokens_out": 1958,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 10,
+      "tests_passed": 9,
+      "pass_rate": 0.9
+    },
+    "total_cost_usd": 0.00914,
+    "total_time_s": 162.3,
+    "timestamp": "2026-03-11T01:36:43.517675"
+  },
+  {
+    "config": "D",
+    "config_name": "Ultra-Barato",
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "gpt-oss-20b",
+        "time_s": 12.72,
+        "tokens_out": 1559,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 91.98,
+        "tokens_out": 2869,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "gpt-oss-120b",
+        "time_s": 41.75,
+        "tokens_out": 3408,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 50.05,
+        "tokens_out": 3062,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "review_optimize",
+        "model": "llama4-maverick",
+        "time_s": 20.4,
+        "tokens_out": 1570,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.00909,
+    "total_time_s": 216.9,
+    "timestamp": "2026-03-11T01:40:21.304148"
+  },
+  {
+    "config": "D",
+    "config_name": "Ultra-Barato",
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "gpt-oss-20b",
+        "time_s": 13.25,
+        "tokens_out": 1652,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-235b-instruct",
+        "time_s": 71.75,
+        "tokens_out": 2775,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "gpt-oss-120b",
+        "time_s": 44.47,
+        "tokens_out": 4952,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "7/8"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-coder-next",
+        "time_s": 34.95,
+        "tokens_out": 2952,
+        "error": null,
+        "tests_after": "7/8"
+      },
+      {
+        "station": "review_optimize",
+        "model": "llama4-maverick",
+        "time_s": 25.08,
+        "tokens_out": 2154,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 7,
+      "tests_passed": 6,
+      "pass_rate": 0.857
+    },
+    "total_cost_usd": 0.01034,
+    "total_time_s": 189.5,
+    "timestamp": "2026-03-11T01:43:31.475918"
+  },
+  {
+    "config": "E",
+    "config_name": "Premium",
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 137.43,
+        "tokens_out": 5985,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 81.64,
+        "tokens_out": 7090,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "qwen3-235b-thinking",
+        "time_s": 170.88,
+        "tokens_out": 5552,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 155.56,
+        "tokens_out": 8192,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 87.58,
+        "tokens_out": 7446,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 120.02,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      },
+      {
+        "station": "optimizer",
+        "model": "deepseek-v3.2",
+        "time_s": 91.23,
+        "tokens_out": 4852,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.08257,
+    "total_time_s": 844.3,
+    "timestamp": "2026-03-11T01:57:37.447260"
+  },
+  {
+    "config": "E",
+    "config_name": "Premium",
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 72.15,
+        "tokens_out": 2403,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 11.69,
+        "tokens_out": 880,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "qwen3-235b-thinking",
+        "time_s": 121.97,
+        "tokens_out": 6735,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "3/4"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 37.63,
+        "tokens_out": 1824,
+        "error": null,
+        "tests_after": "7/8"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 13.43,
+        "tokens_out": 1148,
+        "error": null,
+        "tests_after": "7/8"
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 19.62,
+        "tokens_out": 1438,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "deepseek-v3.2",
+        "time_s": 27.75,
+        "tokens_out": 1362,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 4,
+      "tests_passed": 3,
+      "pass_rate": 0.75
+    },
+    "total_cost_usd": 0.03903,
+    "total_time_s": 304.2,
+    "timestamp": "2026-03-11T02:02:42.552773"
+  },
+  {
+    "config": "E",
+    "config_name": "Premium",
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 79.08,
+        "tokens_out": 3639,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 85.63,
+        "tokens_out": 7025,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "qwen3-235b-thinking",
+        "time_s": 74.72,
+        "tokens_out": 5193,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "17/18"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 143.07,
+        "tokens_out": 8192,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 54.26,
+        "tokens_out": 4751,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 61.05,
+        "tokens_out": 5078,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "deepseek-v3.2",
+        "time_s": 82.71,
+        "tokens_out": 4736,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.079,
+    "total_time_s": 580.5,
+    "timestamp": "2026-03-11T02:12:25.278231"
+  },
+  {
+    "config": "E",
+    "config_name": "Premium",
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 49.49,
+        "tokens_out": 2827,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 47.59,
+        "tokens_out": 4147,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "qwen3-235b-thinking",
+        "time_s": 105.89,
+        "tokens_out": 7378,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 83.93,
+        "tokens_out": 4515,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 53.1,
+        "tokens_out": 4681,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 55.13,
+        "tokens_out": 4325,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "deepseek-v3.2",
+        "time_s": 66.96,
+        "tokens_out": 3372,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.06628,
+    "total_time_s": 462.1,
+    "timestamp": "2026-03-11T02:20:08.496091"
+  },
+  {
+    "config": "E",
+    "config_name": "Premium",
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "glm-5",
+        "time_s": 93.61,
+        "tokens_out": 4077,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 41.97,
+        "tokens_out": 3466,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "qwen3-235b-thinking",
+        "time_s": 120.22,
+        "tokens_out": 8443,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-reasoner",
+        "time_s": 122.05,
+        "tokens_out": 6237,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger2",
+        "model": "cogito-671b",
+        "time_s": 44.87,
+        "tokens_out": 3881,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "reviewer",
+        "model": "deepseek-v3.1",
+        "time_s": 50.5,
+        "tokens_out": 4667,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "deepseek-v3.2",
+        "time_s": 67.5,
+        "tokens_out": 3513,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.07562,
+    "total_time_s": 540.7,
+    "timestamp": "2026-03-11T02:29:10.303714"
+  },
+  {
+    "config": "F",
+    "config_name": "Cadena Minima",
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "stations": [
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 40.76,
+        "tokens_out": 3477,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "deepseek-reasoner",
+        "time_s": 106.17,
+        "tokens_out": 5121,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "15/18"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-next-80b",
+        "time_s": 28.38,
+        "tokens_out": 4603,
+        "error": null,
+        "tests_after": "15/18"
+      },
+      {
+        "station": "review_optimize",
+        "model": "cogito-671b",
+        "time_s": 26.67,
+        "tokens_out": 2313,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.02796,
+    "total_time_s": 202.0,
+    "timestamp": "2026-03-11T02:32:33.563142"
+  },
+  {
+    "config": "F",
+    "config_name": "Cadena Minima",
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "stations": [
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 9.1,
+        "tokens_out": 772,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "deepseek-reasoner",
+        "time_s": 85.43,
+        "tokens_out": 4263,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "2/3"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-next-80b",
+        "time_s": 5.97,
+        "tokens_out": 927,
+        "error": null,
+        "tests_after": "2/3"
+      },
+      {
+        "station": "review_optimize",
+        "model": "cogito-671b",
+        "time_s": 12.82,
+        "tokens_out": 1097,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.01364,
+    "total_time_s": 113.3,
+    "timestamp": "2026-03-11T02:34:27.515538"
+  },
+  {
+    "config": "F",
+    "config_name": "Cadena Minima",
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "stations": [
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 17.12,
+        "tokens_out": 1332,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "deepseek-reasoner",
+        "time_s": 123.27,
+        "tokens_out": 6177,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "8/9"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-next-80b",
+        "time_s": 11.86,
+        "tokens_out": 1659,
+        "error": null,
+        "tests_after": "8/9"
+      },
+      {
+        "station": "review_optimize",
+        "model": "cogito-671b",
+        "time_s": 21.04,
+        "tokens_out": 1830,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 9,
+      "tests_passed": 8,
+      "pass_rate": 0.889
+    },
+    "total_cost_usd": 0.02097,
+    "total_time_s": 173.3,
+    "timestamp": "2026-03-11T02:37:22.935492"
+  },
+  {
+    "config": "F",
+    "config_name": "Cadena Minima",
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "stations": [
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 23.29,
+        "tokens_out": 1999,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "deepseek-reasoner",
+        "time_s": 162.12,
+        "tokens_out": 8192,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-next-80b",
+        "time_s": 13.5,
+        "tokens_out": 2195,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "review_optimize",
+        "model": "cogito-671b",
+        "time_s": 26.66,
+        "tokens_out": 2340,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.02816,
+    "total_time_s": 225.6,
+    "timestamp": "2026-03-11T02:41:09.271652"
+  },
+  {
+    "config": "F",
+    "config_name": "Cadena Minima",
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "stations": [
+      {
+        "station": "implementer",
+        "model": "qwen3-coder-480b",
+        "time_s": 32.23,
+        "tokens_out": 2772,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "deepseek-reasoner",
+        "time_s": 137.18,
+        "tokens_out": 6532,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "3/4"
+      },
+      {
+        "station": "debugger1",
+        "model": "qwen3-next-80b",
+        "time_s": 20.34,
+        "tokens_out": 2972,
+        "error": null,
+        "tests_after": "6/7"
+      },
+      {
+        "station": "review_optimize",
+        "model": "cogito-671b",
+        "time_s": 38.87,
+        "tokens_out": 3358,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.0285,
+    "total_time_s": 228.6,
+    "timestamp": "2026-03-11T02:44:58.500849"
+  },
+  {
+    "config": "G",
+    "config_name": "Razonadores",
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "qwen3-235b-thinking",
+        "time_s": 70.84,
+        "tokens_out": 4259,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "deepseek-reasoner",
+        "time_s": 68.57,
+        "tokens_out": 3408,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "cogito-671b",
+        "time_s": 25.16,
+        "tokens_out": 2211,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-v3.2",
+        "time_s": 62.53,
+        "tokens_out": 3163,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "debugger2",
+        "model": "qwen3-coder-480b",
+        "time_s": 37.53,
+        "tokens_out": 2928,
+        "error": null,
+        "tests_after": "0/1"
+      },
+      {
+        "station": "reviewer",
+        "model": "qwen3-235b-thinking",
+        "time_s": 180.02,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      },
+      {
+        "station": "optimizer",
+        "model": "gpt-oss-120b",
+        "time_s": 35.31,
+        "tokens_out": 3201,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 1,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.03426,
+    "total_time_s": 480.0,
+    "timestamp": "2026-03-11T02:53:02.949295"
+  },
+  {
+    "config": "G",
+    "config_name": "Razonadores",
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "qwen3-235b-thinking",
+        "time_s": 180.02,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      }
+    ],
+    "final": {
+      "tests_total": 0,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.0,
+    "total_time_s": 180.0,
+    "timestamp": "2026-03-11T02:56:02.972091"
+  },
+  {
+    "config": "G",
+    "config_name": "Razonadores",
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "qwen3-235b-thinking",
+        "time_s": 87.59,
+        "tokens_out": 4094,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "deepseek-reasoner",
+        "time_s": 62.61,
+        "tokens_out": 3244,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "cogito-671b",
+        "time_s": 40.08,
+        "tokens_out": 3569,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "5/6"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-v3.2",
+        "time_s": 55.84,
+        "tokens_out": 2893,
+        "error": null,
+        "tests_after": "5/6"
+      },
+      {
+        "station": "debugger2",
+        "model": "qwen3-coder-480b",
+        "time_s": 34.36,
+        "tokens_out": 2634,
+        "error": null,
+        "tests_after": "5/6"
+      },
+      {
+        "station": "reviewer",
+        "model": "qwen3-235b-thinking",
+        "time_s": 180.02,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      },
+      {
+        "station": "optimizer",
+        "model": "gpt-oss-120b",
+        "time_s": 34.69,
+        "tokens_out": 3211,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 10,
+      "tests_passed": 9,
+      "pass_rate": 0.9
+    },
+    "total_cost_usd": 0.03422,
+    "total_time_s": 495.2,
+    "timestamp": "2026-03-11T03:04:19.203671"
+  },
+  {
+    "config": "G",
+    "config_name": "Razonadores",
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "qwen3-235b-thinking",
+        "time_s": 64.95,
+        "tokens_out": 4343,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "deepseek-reasoner",
+        "time_s": 103.49,
+        "tokens_out": 4921,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "cogito-671b",
+        "time_s": 39.02,
+        "tokens_out": 3431,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-v3.2",
+        "time_s": 65.98,
+        "tokens_out": 3269,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "debugger2",
+        "model": "qwen3-coder-480b",
+        "time_s": 61.42,
+        "tokens_out": 2874,
+        "error": null,
+        "tests_after": "0/2"
+      },
+      {
+        "station": "reviewer",
+        "model": "qwen3-235b-thinking",
+        "time_s": 180.02,
+        "tokens_out": 0,
+        "error": "curl rc=28: "
+      },
+      {
+        "station": "optimizer",
+        "model": "gpt-oss-120b",
+        "time_s": 35.4,
+        "tokens_out": 2976,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 2,
+      "tests_passed": 0,
+      "pass_rate": 0.0
+    },
+    "total_cost_usd": 0.03922,
+    "total_time_s": 550.3,
+    "timestamp": "2026-03-11T03:13:30.621550"
+  },
+  {
+    "config": "G",
+    "config_name": "Razonadores",
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "stations": [
+      {
+        "station": "architect",
+        "model": "qwen3-235b-thinking",
+        "time_s": 52.76,
+        "tokens_out": 5264,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "implementer",
+        "model": "deepseek-reasoner",
+        "time_s": 148.2,
+        "tokens_out": 7291,
+        "error": null,
+        "syntax_ok": true
+      },
+      {
+        "station": "tester",
+        "model": "cogito-671b",
+        "time_s": 35.2,
+        "tokens_out": 3087,
+        "error": null,
+        "has_tests": true,
+        "tests_after": "1/2"
+      },
+      {
+        "station": "debugger1",
+        "model": "deepseek-v3.2",
+        "time_s": 75.34,
+        "tokens_out": 3723,
+        "error": null,
+        "tests_after": "3/4"
+      },
+      {
+        "station": "debugger2",
+        "model": "qwen3-coder-480b",
+        "time_s": 45.97,
+        "tokens_out": 3590,
+        "error": null,
+        "tests_after": "3/4"
+      },
+      {
+        "station": "reviewer",
+        "model": "qwen3-235b-thinking",
+        "time_s": 138.03,
+        "tokens_out": 11000,
+        "error": null
+      },
+      {
+        "station": "optimizer",
+        "model": "gpt-oss-120b",
+        "time_s": 63.71,
+        "tokens_out": 5406,
+        "error": null
+      }
+    ],
+    "final": {
+      "tests_total": 4,
+      "tests_passed": 3,
+      "pass_rate": 0.75
+    },
+    "total_cost_usd": 0.08314,
+    "total_time_s": 559.2,
+    "timestamp": "2026-03-11T03:22:50.969467"
+  }
+]

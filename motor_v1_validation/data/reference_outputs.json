@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "source": "Cartografía Meta-Red de Inteligencias v1 — CR0",
+    "model": "Claude (Opus/Sonnet)",
+    "date": "2026-03-07/08",
+    "total_chats": 34
+  },
+  "outputs": {
+    "INT-01": {
+      "clinica_dental": {
+        "resumen": "La inteligencia lógico-matemática revela que el caso contiene una contradicción central: proponer expansión (3→5 sillones) cuando existe un 40% de capacidad infrautilizada en el sillón actual. Los números muestran un sistema subdeterminado con más incógnitas que ecuaciones, donde la estimación clave (65K€/mes post-expansión) no está validada. El análisis de sensibilidad muestra que una desviación del 20% en esa estimación convierte la expansión en pérdida neta. La variable de mayor apalancamiento — ocupación del sillón 3 y optimización de precios — no está siendo considerada. Todas las lentes convergen en que expandir antes de optimizar es ineficiente, pero divergen en si el problema real es matemático o de valores. La lente de optimización demuestra que más ingresos y más tiempo familiar son objetivos en conflicto directo, y la elección entre ellos es una preferencia, no un cálculo. El patrón abstracto — escalar antes de optimizar — es universal en PyMEs. La frontera del análisis es clara: los números demuestran que no debe expandir, pero no pueden resolver lo que la expansión pretendía tapar: la identidad del propietario atada al crecimiento y el miedo a repetir la historia cardiovascular de su padre.",
+        "firma": "Los números revelan que la expansión es una respuesta a la pregunta equivocada: hay una contradicción lógica entre capacidad ociosa y propuesta de crecimiento que ninguna otra inteligencia formalizaría con esta claridad.",
+        "hallazgos_clave": [
+          "Contradicción: 40% capacidad ociosa + propuesta de expansión",
+          "Sistema subdeterminado: más incógnitas que ecuaciones",
+          "Estimación 65K€/mes no validada — 20% desviación = pérdida neta",
+          "Variable de máximo apalancamiento: ocupación sillón 3 + precios",
+          "Más ingresos vs más tiempo familiar = trade-off irreducible",
+          "Patrón universal PyMEs: escalar antes de optimizar",
+          "Frontera: números no resuelven identidad ni miedo transgeneracional"
+        ]
+      },
+      "startup_saas": {
+        "resumen": "La inteligencia lógico-matemática revela que la startup enfrenta una muerte exponencial: con churn del 8%/mes, la base de clientes se reduce a la mitad en 8 meses sin adquisición. El burn de 28K contra MRR de 12K genera un déficit de 16K/mes que consume el runway de 7 meses. El análisis algebraico muestra una contradicción temporal: pivotar a enterprise requiere ciclos de venta de 6-12 meses con un runway de 7. Es temporalmente imposible. Estabilizar sin corregir unit economics (ARPU de 150€) solo retrasa la muerte. El churn es la variable de efecto desproporcionado — bajar de 8% a 4% es la diferencia entre 29 y 48 clientes a 12 meses.",
+        "firma": "Los números demuestran que la pregunta presentada es falsa: ninguna de las dos opciones cabe en las restricciones temporales y de capacidad. Solo la formalización matemática del churn exponencial + runway finito hace visible que ambas opciones están muertas.",
+        "hallazgos_clave": [
+          "Muerte exponencial: churn 8%/mes = base se reduce a la mitad en 8 meses",
+          "Déficit 16K€/mes consume runway de 7 meses",
+          "Contradicción temporal: pivot enterprise (6-12 meses) vs runway (7 meses)",
+          "ARPU 150€ insuficiente para sostenibilidad",
+          "Churn como variable desproporcionada: 8%→4% cambia pronóstico radicalmente",
+          "Tercera vía: arreglar bugs letales + subir precios + reducir burn",
+          "3 juniors no pueden ejecutar pivot enterprise"
+        ]
+      },
+      "cambio_carrera": {
+        "resumen": "La inteligencia lógico-matemática revela que el caso presenta una falsa dicotomía: la decisión no es 'bufete o ONG' sino 'cuándo y cómo transicionar' dentro de un espectro de opciones intermedias. Los números muestran que el cambio es financieramente viable pero ajustado: ingreso familiar caería de 220-260K a 95-135K, con hipoteca de 21.6K/año y universidad en 2 años como restricciones duras. Los ahorros de 120K cubren ~1 año de diferencia de ingresos. La variable más inestable es el ingreso del marido (rango 40-80K), y no han hablado del tema.",
+        "firma": "Los números revelan que existe un timing óptimo calculable que nadie ha calculado, y que la contradicción 'proteger estabilidad mientras me deterioro' convierte el statu quo en un riesgo activo, no en seguridad.",
+        "hallazgos_clave": [
+          "Falsa dicotomía: espectro continuo de opciones intermedias",
+          "Ingreso familiar caería de 220-260K a 95-135K",
+          "Ahorros 120K€ cubren ~1 año del diferencial",
+          "Variable más inestable: ingreso del marido (40-80K, no discutido)",
+          "Timing óptimo calculable pero no calculado",
+          "Statu quo = riesgo activo (insomnio 2 años)",
+          "Esperar 2 años tiene efecto no lineal (universidad + colchón)"
+        ]
+      }
+    },
+    "INT-08": {
+      "clinica_dental": {
+        "resumen": "El odontólogo está replicando el patrón transgeneracional de su padre: sacrificio total por el negocio hasta el colapso físico. A los 38 años trabaja 60h/semana, planea aumentar carga, y no ha tenido vacaciones en 2 años. Su identidad está fusionada con el rol de proveedor-sacrificado, y la expansión propuesta no es estrategia empresarial sino mecanismo de evitación emocional: mientras planifica sillones, no siente el deterioro de su matrimonio, la ausencia en la crianza ni el miedo a repetir el infarto paterno. La esposa comunica su soledad a través de los hijos ('los niños preguntan por ti'). Los hijos internalizan la ausencia como normalidad. Él regula toda tensión mediante racionalización operativa — traduce emociones a cifras.",
+        "firma": "Las cuatro lentes convergen: el problema no es la decisión de expandir, sino la incapacidad de existir fuera del trabajo. La pregunta real no es '¿más sillones?' sino '¿estoy dispuesto a ser alguien diferente a mi padre?'",
+        "hallazgos_clave": [
+          "Patrón transgeneracional: padre infarto 52 → hijo replica a 38",
+          "Identidad fusionada con rol proveedor-sacrificado",
+          "Expansión = mecanismo de evitación emocional, no estrategia",
+          "'Los niños preguntan por ti' = queja cifrada de la esposa",
+          "Duelo anticipado no nombrado: hace duelo por versión de sí mismo que aún no ha perdido",
+          "Racionalización compulsiva: traduce toda emoción a cifra",
+          "Lealtad invisible al padre: parar = traicionar modelo paterno"
+        ]
+      },
+      "startup_saas": {
+        "resumen": "El CTO siente traición, soledad profesional y agotamiento moral tras la partida del co-fundador técnico. 'Diferencias de visión' enmascara un abandono relacional. La vergüenza compartida (CTO + CEO) gobierna las decisiones: 3 fondos dijeron 'métricas insuficientes' = 'no sois lo bastante buenos'. El CTO canaliza la vergüenza hacia el producto ('si fuera sólido...'), el CEO hacia el mercado ('los restaurantes no pagan'). Misma emoción, distinta defensa. La pelea pivotar/estabilizar no es técnica — es existencial. El vínculo CTO-CEO es el más importante y el más abandonado.",
+        "firma": "La decisión pivotar/estabilizar es secundaria. La decisión primaria es: ¿CTO y CEO pueden reconstruir confianza suficiente para ejecutar cualquier estrategia juntos? Si no, da igual qué estrategia elijan — fracasará por falta de cohesión.",
+        "hallazgos_clave": [
+          "Duelo no procesado: CTO hace duelo por startup que iba a ser",
+          "Vergüenza compartida: feedback fondos vivido como 'no somos suficientes'",
+          "CTO canaliza vergüenza al producto, CEO al mercado — misma emoción",
+          "Vínculo CTO-CEO = el más importante y más abandonado",
+          "Co-fundador que se fue: dolor invisible, tratado como causa cuando fue síntoma",
+          "Las 70h/semana del CTO = trabajo + huida del conflicto relacional",
+          "Identidad: si pivot borra el producto, el CTO pierde relevancia"
+        ]
+      },
+      "cambio_carrera": {
+        "resumen": "La abogada vive atrapada entre dos identidades irreconciliables: la profesional exitosa que sus padres y el bufete reconocen, y la persona que lleva 2 años sin dormir. El insomnio no es síntoma — es el cuerpo votando lo que la mente no puede decidir. No ha hablado con su marido porque la conversación haría real el cambio. Los padres diciendo 'estás loca' activan una lealtad generacional que equipara seguridad financiera con amor. La amiga que cambió funciona como espejo y como amenaza: demuestra que es posible, lo cual elimina la excusa de la imposibilidad.",
+        "firma": "El conflicto no es bufete-vs-ONG sino identidad-para-otros vs identidad-para-sí. La conversación con el marido no es un paso previo al cambio — es el cambio mismo, porque declarar el deseo lo hace irreversible.",
+        "hallazgos_clave": [
+          "Insomnio 2 años = el cuerpo decide lo que la mente no puede",
+          "No hablar con marido = evitar que el cambio se haga real",
+          "Padres 'estás loca' = lealtad generacional: seguridad = amor",
+          "Amiga como espejo y amenaza: elimina excusa de imposibilidad",
+          "Rechazada para socia: el bufete no la recompensará por quedarse",
+          "'Si no lo hago ahora, no lo haré nunca' = presión real con componente de terror",
+          "Identidad para otros vs identidad para sí = conflicto central"
+        ]
+      }
+    },
+    "INT-16": {
+      "clinica_dental": {
+        "resumen": "La clínica tiene un sillón vacío al 40% y un propietario al 100% de capacidad. El banco ofrece crédito para ampliar, pero ampliar sin optimizar es escalar ineficiencia. El prototipo correcto es llenar el sillón 3 al 80% con un higienista a tiempo parcial (~6K€ de inversión en 3 meses), no añadir 2 sillones con crédito. La secuencia constructiva es: medir utilización real → optimizar agenda y mix de servicios → contratar higienista → evaluar a 3 meses → decidir con datos. El modo de fallo más probable en la expansión es el colapso del propietario. El prototipo tiene fallo seguro (6K€ perdidos si no funciona); la expansión no lo tiene.",
+        "firma": "Principio de ingeniería: antes de escalar capacidad, maximizar utilización de la capacidad existente. Añadir sillones con un sillón vacío al 40% es como comprar otro servidor con el actual al 60% de carga.",
+        "hallazgos_clave": [
+          "Prototipo: llenar sillón 3 al 80% con higienista (6K€, 3 meses)",
+          "Secuencia: medir → optimizar → delegar → evaluar → decidir",
+          "Fallo seguro: prototipo 6K€ vs expansión con crédito irreversible",
+          "3 versiones iterativas: optimizar → delegar → expansión si necesaria",
+          "Camino crítico: diagnóstico utilización → optimización agenda",
+          "Restricción real = throughput por sillón, no infraestructura",
+          "Modo de fallo: colapso del propietario (60h→70h+ con expansión)"
+        ]
+      },
+      "startup_saas": {
+        "resumen": "El startup tiene un balde con agujero: 8% de churn mensual se come la base de clientes más rápido de lo que cualquier pivot puede construir. El prototipo correcto es un sprint quirúrgico de 4 semanas: identificar los 10 bugs correlacionados con las últimas 20 bajas, arreglar los 5 más impactantes, y simultáneamente proponer a los 3 clientes grandes un plan premium a 3-4x con SLA y features priorizadas. Coste adicional: 0€. La secuencia es: análisis de churn → fixes top → propuesta premium → medición a 8 semanas → decisión con datos.",
+        "firma": "Principio: arregla el leak antes de añadir agua. Con 8% de churn mensual, cualquier crecimiento se pierde por el fondo del balde.",
+        "hallazgos_clave": [
+          "Sprint quirúrgico 4 semanas: top 5-10 bugs vinculados a churn",
+          "Propuesta premium 3-4x a 3 clientes grandes = enterprise sin pivot",
+          "Coste adicional: 0€ (equipo actual)",
+          "3 versiones iterativas en 7 meses de runway",
+          "Punto de fallo más frágil: equipo (3 juniors, 2 ya se fueron)",
+          "Contratista senior 3 meses (5-8K/mes) protege punto frágil",
+          "Pivot enterprise con juniors en 7 meses = ingeniería suicida"
+        ]
+      },
+      "cambio_carrera": {
+        "resumen": "La transición profesional requiere un puente, no un salto. El prototipo correcto no es 'dejar el bufete mañana' sino construir un puente financiero y profesional que soporte la transición. Paso 1: la conversación con el marido (coste: 0€, tiempo: 1 semana). Sin ese dato, cualquier plan es ficción. Paso 2: explorar posiciones intermedias (derecho medioambiental corporativo/ESG a 100-120K€). Paso 3: negociar jornada reducida en el bufete mientras construye portfolio. Los 120K€ de ahorros son el colchón, no la fuente.",
+        "firma": "El prototipo más importante no es profesional sino relacional: la conversación con el marido. Sin ella, la restricción financiera más importante (ingreso conjunto) es una incógnita. No se puede construir sobre datos que no existen.",
+        "hallazgos_clave": [
+          "Puente, no salto: transición gradual en 3 versiones",
+          "Paso 1: conversación con marido (0€, 1 semana) — prerequisito",
+          "Opciones intermedias: ESG/compliance corporativo a 100-120K€",
+          "Jornada reducida como paso intermedio viable",
+          "20 años experiencia legal = transferible a medioambiental corporativo",
+          "Red de contactos: clientes corporativos con divisiones ESG",
+          "Timing: 2 años para acumular colchón y coincidir con universidad"
+        ]
+      }
+    }
+  }
+}

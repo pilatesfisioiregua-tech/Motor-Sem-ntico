@@ -1,0 +1,140 @@
+[
+  {
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "strategy": "tiered",
+    "model": "tiered",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 18,
+      "tokens_used": 127575,
+      "cost_usd": 0.0365,
+      "time_s": 32.4,
+      "model_used": "mistralai/devstral-small",
+      "session_id": "37d460de-d556-4702-aa59-1dc08d018db2"
+    },
+    "tests": {
+      "passed": 1,
+      "total": 1,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp7_T2_tiered_lwcci6d7",
+    "timestamp": "2026-03-11T23:17:29.258792"
+  },
+  {
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "strategy": "tiered",
+    "model": "tiered",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 26,
+      "tokens_used": 284344,
+      "cost_usd": 0.0796,
+      "time_s": 70.4,
+      "model_used": "mistralai/devstral-small",
+      "session_id": "8a334a46-cdce-4b39-b644-14c64502053f"
+    },
+    "tests": {
+      "passed": 7,
+      "total": 7,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp7_T3_tiered_k6ijqvcj",
+    "timestamp": "2026-03-11T23:18:44.998014"
+  },
+  {
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "strategy": "tiered",
+    "model": "tiered",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 23,
+      "tokens_used": 513426,
+      "cost_usd": 0.1434,
+      "time_s": 112.1,
+      "model_used": "mistralai/devstral-small",
+      "session_id": "6ca761d9-a053-4ea7-9c59-019bd015eb1b"
+    },
+    "tests": {
+      "passed": 6,
+      "total": 6,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp7_T4_tiered_hn0fslko",
+    "timestamp": "2026-03-11T23:20:45.865771"
+  },
+  {
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "strategy": "tiered",
+    "model": "tiered",
+    "agent_result": {
+      "stop_reason": "TIMEOUT (600s)",
+      "iterations": 19,
+      "tokens_used": 200927,
+      "cost_usd": 0.0558,
+      "time_s": 729.5,
+      "model_used": "deepseek/deepseek-v3.2",
+      "session_id": "65879d71-15c8-4406-8329-b1255eaf8c3b"
+    },
+    "tests": {
+      "passed": 5,
+      "total": 5,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp7_T1_tiered_63edtuya",
+    "timestamp": "2026-03-11T23:43:13.490496"
+  },
+  {
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "strategy": "solo",
+    "model": "mistralai/devstral-small",
+    "agent_result": {
+      "stop_reason": "MAX_ITERATIONS",
+      "iterations": 30,
+      "tokens_used": 811189,
+      "cost_usd": 0.2233,
+      "time_s": 154.3,
+      "model_used": "mistralai/devstral-small",
+      "session_id": "8fea2c25-95d9-40df-b0bf-9c8ad7fd413c"
+    },
+    "tests": {
+      "passed": 0,
+      "total": 0,
+      "pass_rate": 0.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp7_T1_solo_gs5lcm_5",
+    "timestamp": "2026-03-11T23:45:55.264398"
+  },
+  {
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "strategy": "solo",
+    "model": "deepseek/deepseek-v3.2",
+    "agent_result": {
+      "stop_reason": "TIMEOUT (600s)",
+      "iterations": 7,
+      "tokens_used": 55442,
+      "cost_usd": 0.0193,
+      "time_s": 643.4,
+      "model_used": "deepseek/deepseek-v3.2",
+      "session_id": "b0c72980-cd7c-4f2b-8947-152e1718f9b6"
+    },
+    "tests": {
+      "passed": 0,
+      "total": 0,
+      "pass_rate": 0.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp7_T1_solo_0f8owzcl",
+    "timestamp": "2026-03-11T23:56:38.707188"
+  }
+]

@@ -1,0 +1,408 @@
+[
+  {
+    "case_id": "clinica_dental",
+    "int_id": "INT-01",
+    "evaluacion": {
+      "cobertura": {
+        "score": 2,
+        "justificacion": "Llama no identifica la contradicción central (40% capacidad ociosa + expansión), no menciona el sistema subdeterminado, no valida la estimación 65K€, no identifica la variable de máximo apalancamiento (ocupación sillón 3), y no reconoce el trade-off irreducible ingresos vs tiempo familiar."
+      },
+      "profundidad": {
+        "score": 3,
+        "justificacion": "El análisis es mayormente genérico y superficial. No profundiza en los números específicos del caso (solo los enumera), no realiza cálculos de sensibilidad, no identifica patrones matemáticos específicos, y las conclusiones son vagas sin cuantificación rigurosa."
+      },
+      "hallazgos_exclusivos": {
+        "score": 1,
+        "justificacion": "Llama no aporta insights matemáticos originales significativos. Sus observaciones sobre equilibrio trabajo-familia y complejidad de decisiones son genéricas y no emergen del análisis lógico-matemático específico."
+      },
+      "errores_factuales": {
+        "score": 7,
+        "justificacion": "Los números básicos están correctos, pero hay errores conceptuales importantes: no reconoce que hay 3 sillones con uno infrautilizado, asume que la estimación 65K€ es válida sin cuestionarla, y no identifica la contradicción lógica fundamental del caso."
+      },
+      "cierre_gap": {
+        "score": 2,
+        "justificacion": "Llama no cierra prácticamente ningún gap analítico de la referencia. Falla en aplicar verdaderamente la inteligencia lógico-matemática, no realiza análisis cuantitativo riguroso, y no identifica los patrones matemáticos clave que revela la referencia."
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Clasificación de números como discretos vs continuos",
+        "Mención explícita de la hipoteca como variable fija"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Contradicción 40% capacidad ociosa + expansión",
+        "Sistema subdeterminado",
+        "Análisis sensibilidad 20% desviación",
+        "Variable máximo apalancamiento ocupación sillón 3",
+        "Trade-off irreducible ingresos vs tiempo",
+        "Patrón universal PyMEs: escalar antes optimizar",
+        "Frontera: identidad y miedo transgeneracional"
+      ],
+      "veredicto": "Llama produce un análisis genérico que falla en aplicar rigurosamente la inteligencia lógico-matemática, perdiendo las contradicciones y patrones cuantitativos clave."
+    },
+    "tiempo_eval_s": 13.08,
+    "tokens_eval": {
+      "input": 3952,
+      "output": 686
+    }
+  },
+  {
+    "case_id": "clinica_dental",
+    "int_id": "INT-08",
+    "evaluacion": {
+      "cobertura": {
+        "score": 4,
+        "justificacion": "Llama identifica el patrón transgeneracional y la fusión trabajo-identidad, pero pierde elementos clave como la expansión como mecanismo de evitación emocional, la comunicación cifrada de la esposa, y el duelo anticipado por una versión de sí mismo no perdida"
+      },
+      "profundidad": {
+        "score": 3,
+        "justificacion": "El análisis es mayormente genérico y superficial. Identifica emociones básicas (miedo, culpa, estrés) pero no profundiza en la mecánica específica de cómo traduce emociones a cifras o cómo la planificación operativa funciona como regulador emocional"
+      },
+      "hallazgos_exclusivos": {
+        "score": 2,
+        "justificacion": "Menciona aspectos estructurales (hipoteca, carga financiera) como componentes del problema, lo cual añade una perspectiva complementaria, pero no desarrolla insights realmente originales o profundos"
+      },
+      "errores_factuales": {
+        "score": 8,
+        "justificacion": "No hay errores graves en el uso de datos del caso. Las conclusiones son coherentes aunque superficiales. Mantiene consistencia interna en el análisis"
+      },
+      "cierre_gap": {
+        "score": 3,
+        "justificacion": "Llama cierra aproximadamente un 30% del gap analítico. Identifica algunos elementos centrales pero pierde la sofisticación interpretativa, los matices relacionales y los mecanismos psicológicos específicos que caracterizan el análisis de referencia"
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Enfoque en componentes estructurales del problema (hipoteca, presión financiera)",
+        "Perspectiva de que abordar aspectos estructurales podría reducir emociones negativas"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Expansión como mecanismo de evitación emocional",
+        "'Los niños preguntan por ti' como comunicación cifrada",
+        "Duelo anticipado por versión de sí mismo no perdida",
+        "Racionalización compulsiva como traductor emocional",
+        "Regulación de tensión mediante operativización"
+      ],
+      "veredicto": "Análisis competente pero superficial que identifica patrones básicos sin alcanzar la sofisticación interpretativa requerida para INT-08 Social"
+    },
+    "tiempo_eval_s": 11.63,
+    "tokens_eval": {
+      "input": 2715,
+      "output": 609
+    }
+  },
+  {
+    "case_id": "clinica_dental",
+    "int_id": "INT-16",
+    "evaluacion": {
+      "cobertura": {
+        "score": 2,
+        "justificacion": "Llama solo captura vagamente la idea de prototipo y secuencia, pero omite completamente los hallazgos centrales: el sillón 3 vacío al 40%, la propuesta específica del higienista por 6K€, y la optimización antes de expansión."
+      },
+      "profundidad": {
+        "score": 3,
+        "justificacion": "El análisis es genérico y superficial. No menciona datos específicos del caso (sillón 3 vacío, propietario al 100% capacidad), ni calcula números concretos. Se queda en abstracciones sin profundizar en el diagnóstico real."
+      },
+      "hallazgos_exclusivos": {
+        "score": 4,
+        "justificacion": "Llama sugiere abrir sábados y contratar dentista temporal como versión mínima, y menciona 100 horas de evaluación previa. Son ideas válidas pero no revolucionarias comparadas con la propuesta del higienista de la referencia."
+      },
+      "errores_factuales": {
+        "score": 6,
+        "justificacion": "No hay errores graves de datos, pero hay imprecisión conceptual: habla de 'contratar otro dentista' cuando el problema real es optimizar utilización existente. Los 65.000€/mes mencionados no se contextualizan adecuadamente."
+      },
+      "cierre_gap": {
+        "score": 3,
+        "justificacion": "Llama cierra menos del 30% del gap analítico. Sigue la estructura metodológica pero pierde completamente el insight central: optimizar antes que expandir. No identifica la restricción real ni el modo de fallo del propietario."
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Abrir sábados como prototipo",
+        "Contratar dentista temporal",
+        "100 horas de evaluación previa",
+        "Costos de consultoría 5.000€"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Sillón 3 vacío al 40%",
+        "Higienista por 6K€ en 3 meses",
+        "Maximizar utilización antes de escalar",
+        "Colapso del propietario como modo de fallo",
+        "Throughput por sillón como restricción real",
+        "Analogía con servidor al 60% de carga"
+      ],
+      "veredicto": "Llama aplica la metodología correctamente pero falla en el diagnóstico esencial del caso, proponiendo expansión cuando debería optimizar utilización existente."
+    },
+    "tiempo_eval_s": 14.3,
+    "tokens_eval": {
+      "input": 2661,
+      "output": 645
+    }
+  },
+  {
+    "case_id": "startup_saas",
+    "int_id": "INT-01",
+    "evaluacion": {
+      "cobertura": {
+        "score": 2,
+        "justificacion": "Llama identifica algunos elementos básicos (churn 8%, MRR 12K, burn 28K) pero no calcula las métricas críticas: vida media de la base de clientes, runway exacto, contradicción temporal pivot vs runway, ni el análisis exponencial del churn."
+      },
+      "profundidad": {
+        "score": 1,
+        "justificacion": "El análisis es extremadamente superficial y genérico. No hace cálculos específicos, no cuantifica el impacto del churn exponencial, no identifica la contradicción temporal fundamental, y sus conclusiones son vagas sin fundamento matemático riguroso."
+      },
+      "hallazgos_exclusivos": {
+        "score": 3,
+        "justificacion": "Menciona aspectos como motivación del equipo, cultura empresarial y bienestar que la referencia no cubre explícitamente, pero estos son tangenciales al análisis lógico-matemático requerido para este caso."
+      },
+      "errores_factuales": {
+        "score": 7,
+        "justificacion": "No hay errores factuales graves en los datos básicos mencionados, pero la ausencia de cálculos concretos impide evaluar la precisión matemática. Las conclusiones son imprecisas pero no incorrectas."
+      },
+      "cierre_gap": {
+        "score": 1,
+        "justificacion": "Llama no cierra prácticamente ningún gap analítico. No realiza los cálculos fundamentales, no identifica las restricciones temporales críticas, ni proporciona el análisis cuantitativo que define la inteligencia lógico-matemática aplicada a este caso."
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Impacto en motivación y bienestar del equipo",
+        "Cultura empresarial como factor",
+        "Estrategia equilibrada como enfoque híbrido"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Muerte exponencial - base se reduce a mitad en 8 meses",
+        "Contradicción temporal: pivot 6-12 meses vs runway 7 meses",
+        "Déficit 16K€/mes consume runway",
+        "ARPU 150€ insuficiente",
+        "Churn 8%→4% cambia pronóstico de 29 a 48 clientes",
+        "Formalización matemática que demuestra falsedad de ambas opciones"
+      ],
+      "veredicto": "Llama falla completamente en aplicar inteligencia lógico-matemática, ofreciendo análisis genérico sin los cálculos y formalizaciones críticas que definen este tipo de inteligencia."
+    },
+    "tiempo_eval_s": 13.6,
+    "tokens_eval": {
+      "input": 3360,
+      "output": 669
+    }
+  },
+  {
+    "case_id": "startup_saas",
+    "int_id": "INT-08",
+    "evaluacion": {
+      "cobertura": {
+        "score": 3,
+        "justificacion": "Llama identifica la tensión CTO-CEO y problemas del producto, pero omite completamente elementos clave: la partida del co-fundador, el impacto del rechazo de fondos, la vergüenza compartida, y el duelo no procesado. Solo cubre superficialmente 2-3 de los 7 hallazgos clave."
+      },
+      "profundidad": {
+        "score": 4,
+        "justificacion": "El análisis es genérico y descriptivo. Identifica frustración y tensión pero no profundiza en las dinámicas emocionales subyacentes como la vergüenza o el duelo. Las insights son obvias ('frustración por alto churn') vs. las sutilezas de la referencia ('vergüenza canalizada hacia producto vs mercado')."
+      },
+      "hallazgos_exclusivos": {
+        "score": 2,
+        "justificacion": "Menciona brevemente 'lealtad y responsabilidad no nombradas' y el riesgo de perder clientes del 30%, pero son insights menores. No aporta perspectivas significativamente nuevas o valiosas que enriquezcan el análisis de la referencia."
+      },
+      "errores_factuales": {
+        "score": 7,
+        "justificacion": "No hay errores factuales graves en el uso de datos del caso. Las conclusiones son coherentes con la información presentada, aunque superficiales. Mantiene consistencia interna sin contradicciones importantes."
+      },
+      "cierre_gap": {
+        "score": 3,
+        "justificacion": "Llama cierra menos de un tercio del gap analítico. Identifica la superficie del problema (tensión, frustración, calidad del producto) pero se pierde completamente las capas emocionales profundas que son el núcleo del análisis de inteligencia social."
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Riesgo específico de perder clientes del 30% como trigger",
+        "Mención explícita de lealtad y responsabilidad como emociones no nombradas"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Duelo no procesado por la startup que iba a ser",
+        "Impacto emocional de la partida del co-fundador",
+        "Vergüenza compartida por rechazo de fondos",
+        "Canalización diferencial de vergüenza (CTO→producto, CEO→mercado)",
+        "70h/semana como huida del conflicto relacional",
+        "Identidad del CTO amenazada por pivot",
+        "Co-fundador como síntoma no causa"
+      ],
+      "veredicto": "Llama produce un análisis descriptivo competente pero se queda en la superficie, perdiendo las dinámicas emocionales profundas que son el núcleo de la inteligencia social."
+    },
+    "tiempo_eval_s": 14.05,
+    "tokens_eval": {
+      "input": 3087,
+      "output": 708
+    }
+  },
+  {
+    "case_id": "startup_saas",
+    "int_id": "INT-16",
+    "evaluacion": {
+      "cobertura": {
+        "score": 2,
+        "justificacion": "Llama solo identifica parcialmente el problema de churn y necesidad de fixes, pero pierde completamente la estrategia premium enterprise, los números específicos (8% churn, 5-8K contratista), el análisis de capacidades del equipo junior, y la secuencia táctica concreta."
+      },
+      "profundidad": {
+        "score": 3,
+        "justificacion": "El análisis es muy genérico y procedimental. Mientras la referencia da números específicos (8% churn, top 5 bugs de 47, 3-4x premium, 7 meses runway), Llama habla en términos vagos como '2-3 semanas' y 'bugs críticos' sin cuantificación ni priorización específica."
+      },
+      "hallazgos_exclusivos": {
+        "score": 1,
+        "justificacion": "Llama no aporta insights originales valiosos. Su enfoque de 'identificar-solucionar-evaluar-ajustar' es estándar. No detecta oportunidades como la propuesta premium simultánea o el riesgo crítico del equipo junior que ya perdió 2 miembros."
+      },
+      "errores_factuales": {
+        "score": 7,
+        "justificacion": "No hay errores factuales graves, pero sí imprecisiones: subestima la complejidad del problema (habla de 'rollback' cuando el churn es irreversible) y no reconoce que con 3 juniors un pivot enterprise en 7 meses es inviable técnicamente."
+      },
+      "cierre_gap": {
+        "score": 2,
+        "justificacion": "Llama identifica correctamente que hay que arreglar bugs antes que pivotar, pero pierde la estrategia dual (fixes + premium), la urgencia temporal (7 meses), el análisis de capacidades reales del equipo, y la propuesta táctica específica de coste 0€."
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Enfoque iterativo con múltiples versiones antes de decisión irreversible",
+        "Consideración explícita de rollback de mejoras"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Sprint quirúrgico 4 semanas con top 5 bugs específicos",
+        "Propuesta premium 3-4x simultánea a 3 clientes grandes",
+        "Análisis crítico equipo junior (2 ya se fueron)",
+        "Coste 0€ para la estrategia",
+        "Contratista senior 5-8K/mes como protección",
+        "Secuencia táctica específica con medición a 8 semanas"
+      ],
+      "veredicto": "Llama produce análisis genérico que pierde la precisión táctica y urgencia temporal del caso específico."
+    },
+    "tiempo_eval_s": 15.6,
+    "tokens_eval": {
+      "input": 3127,
+      "output": 706
+    }
+  },
+  {
+    "case_id": "cambio_carrera",
+    "int_id": "INT-01",
+    "evaluacion": {
+      "cobertura": {
+        "score": 3,
+        "justificacion": "Llama identifica algunos números básicos (180K salario, 55K ONG, 120K ahorros) pero pierde completamente los hallazgos clave: la falsa dicotomía, el cálculo de rangos de ingreso familiar (220-260K vs 95-135K), el timing óptimo calculable, y la identificación del statu quo como riesgo activo."
+      },
+      "profundidad": {
+        "score": 2,
+        "justificacion": "El análisis es extremadamente superficial y genérico. No calcula rangos de ingresos familiares, no analiza la cobertura temporal de los ahorros, no identifica variables críticas como la universidad en 2 años, y trata el problema como una simple dicotomía satisfacción vs estabilidad sin explorar opciones intermedias."
+      },
+      "hallazgos_exclusivos": {
+        "score": 4,
+        "justificacion": "Llama aporta la estructura de análisis multi-lente (álgebra, geometría, probabilidad, etc.) y la clasificación de números seguros vs estimaciones, pero estos son metodológicos, no insights específicos del caso. No hay hallazgos sustantivos nuevos sobre la situación de la abogada."
+      },
+      "errores_factuales": {
+        "score": 8,
+        "justificacion": "Los datos básicos están correctos (salarios, ahorros, hipoteca). El error principal es conceptual: trata la decisión como binaria cuando los números muestran un espectro de opciones. No hay contradicciones internas graves, pero la conclusión es imprecisa."
+      },
+      "cierre_gap": {
+        "score": 2,
+        "justificacion": "Llama no cierra prácticamente ningún gap analítico de la referencia. No hace los cálculos financieros críticos, no identifica el timing como variable clave, no reconoce que el problema real es 'cuándo y cómo transicionar', y produce un análisis genérico aplicable a cualquier cambio de carrera."
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Estructura metodológica de 6 lentes específicas",
+        "Clasificación explícita de números seguros vs estimaciones",
+        "Análisis del espacio de decisión bidimensional"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Falsa dicotomía: espectro continuo de opciones",
+        "Cálculo ingreso familiar 220-260K vs 95-135K",
+        "Ahorros cubren ~1 año del diferencial",
+        "Variable más inestable: ingreso marido no discutido",
+        "Timing óptimo calculable pero no calculado",
+        "Statu quo = riesgo activo por insomnio",
+        "Efecto no lineal de esperar 2 años"
+      ],
+      "veredicto": "Llama produce un análisis metodológicamente estructurado pero vacío de insights específicos, perdiendo todos los hallazgos cuantitativos críticos que revelan la verdadera naturaleza del problema."
+    },
+    "tiempo_eval_s": 14.86,
+    "tokens_eval": {
+      "input": 3643,
+      "output": 784
+    }
+  },
+  {
+    "case_id": "cambio_carrera",
+    "int_id": "INT-08",
+    "evaluacion": {
+      "cobertura": {
+        "score": 4,
+        "justificacion": "Llama captura parcialmente algunos elementos (insomnio 2 años, evitar hablar con marido, padres presionando), pero pierde la interpretación profunda del insomnio como 'voto del cuerpo', la amiga como espejo/amenaza, el rechazo para socia, y la presión temporal real."
+      },
+      "profundidad": {
+        "score": 3,
+        "justificacion": "El análisis es mayormente genérico con frases como 'miedo al cambio' y 'buscar estabilidad'. No penetra en las dinámicas específicas como 'identidad-para-otros vs identidad-para-sí' o cómo declarar el deseo hace el cambio irreversible."
+      },
+      "hallazgos_exclusivos": {
+        "score": 6,
+        "justificacion": "Llama aporta algunos insights valiosos no mencionados en la referencia: la situación del hijo mayor empezando universidad como factor de presión adicional, el análisis de patrones aprendidos que ya no sirven, y la consideración de componentes estructurales vs emocionales."
+      },
+      "errores_factuales": {
+        "score": 8,
+        "justificacion": "No hay errores factuales graves sobre los datos del caso. La interpretación es correcta aunque superficial. Mantiene coherencia interna en el análisis."
+      },
+      "cierre_gap": {
+        "score": 4,
+        "justificacion": "Llama cubre la superficie del conflicto pero pierde la riqueza interpretativa de la referencia. Su análisis es funcional pero no llega a la profundidad psicológica ni a los insights contraintuitivos que caracterizan el gold standard."
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Impacto específico en hijo mayor empezando universidad",
+        "Análisis de patrones aprendidos que ya no sirven",
+        "Distinción entre componentes estructurales vs emocionales",
+        "Vergüenza y miedo al fracaso como emociones no nombradas"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Insomnio como 'voto del cuerpo'",
+        "Conversación con marido = el cambio mismo",
+        "Amiga como espejo y amenaza que elimina excusa",
+        "Rechazo para socia como factor liberador",
+        "'Si no ahora, nunca' con componente de terror",
+        "Identidad-para-otros vs identidad-para-sí"
+      ],
+      "veredicto": "Análisis competente pero genérico que captura la superficie del conflicto sin penetrar en las dinámicas psicológicas profundas del caso."
+    },
+    "tiempo_eval_s": 12.09,
+    "tokens_eval": {
+      "input": 3012,
+      "output": 673
+    }
+  },
+  {
+    "case_id": "cambio_carrera",
+    "int_id": "INT-16",
+    "evaluacion": {
+      "cobertura": {
+        "score": 2,
+        "justificacion": "Llama no identifica prácticamente ninguno de los hallazgos clave de la referencia: no menciona la conversación con el marido como prerequisito, no considera opciones ESG/corporativas intermedias, no propone jornada reducida, no evalúa los 120K€ de ahorros ni el timing de 2 años hasta que el hijo vaya a universidad."
+      },
+      "profundidad": {
+        "score": 3,
+        "justificacion": "El análisis es genérico y superficial. Mientras la referencia ofrece cifras específicas (100-120K€ salarios intermedios), tiempos concretos (1 semana para conversación) y estrategias detalladas, Llama se queda en generalidades como 'investigar ONG' sin usar los datos específicos del caso."
+      },
+      "hallazgos_exclusivos": {
+        "score": 4,
+        "justificacion": "Llama aporta la idea de tomar cursos/talleres como versión mínima de prototipo y considera la posibilidad de encontrar satisfacción en el trabajo actual cambiando roles dentro del bufete, pero estos insights son menores comparados con los de la referencia."
+      },
+      "errores_factuales": {
+        "score": 7,
+        "justificacion": "No hay errores factuales graves, pero hay omisiones críticas de datos del caso (ingresos del marido desconocidos, restricciones temporales por el hijo) que hacen el análisis incompleto. La lógica interna es coherente aunque superficial."
+      },
+      "cierre_gap": {
+        "score": 2,
+        "justificacion": "Llama cierra muy poco del gap analítico. Pierde completamente el insight central de la referencia (la conversación con el marido como prerequisito), no identifica opciones intermedias específicas, y no desarrolla una estrategia de transición realista basada en las restricciones del caso."
+      },
+      "hallazgos_llama_no_en_ref": [
+        "Considerar cursos/talleres como prototipo mínimo",
+        "Posibilidad de cambio de rol dentro del bufete actual",
+        "Marco genérico de exploración gradual"
+      ],
+      "hallazgos_ref_no_en_llama": [
+        "Conversación con marido como prerequisito crítico",
+        "Opciones ESG/corporativas intermedias 100-120K€",
+        "Jornada reducida como transición",
+        "Uso de red de contactos corporativos",
+        "Timing específico de 2 años",
+        "120K€ como colchón no fuente",
+        "Puente vs salto como estrategia"
+      ],
+      "veredicto": "Llama ofrece un marco genérico pero pierde los insights críticos y la estrategia específica que hace brillar el análisis constructivo de la referencia."
+    },
+    "tiempo_eval_s": 13.72,
+    "tokens_eval": {
+      "input": 2751,
+      "output": 708
+    }
+  }
+]

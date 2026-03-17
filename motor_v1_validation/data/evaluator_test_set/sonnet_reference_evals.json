@@ -1,0 +1,542 @@
+{
+  "v31_best": {
+    "source": "deepseek-v3.1",
+    "case_id": "startup_saas",
+    "int_id": "INT-01",
+    "result": {
+      "celdas": {
+        "Salud×Conservar": {
+          "nivel": 2,
+          "evidencia": "MRR = €12,000/mes con 80 clientes de pago"
+        },
+        "Salud×Captar": {
+          "nivel": 2,
+          "evidencia": "ARPU estimado = €150/cliente/mes"
+        },
+        "Salud×Depurar": {
+          "nivel": 3,
+          "evidencia": "47 bugs abiertos afectan calidad y churn"
+        },
+        "Salud×Distribuir": {
+          "nivel": 2,
+          "evidencia": "Churn = 8%/mes (alto) reduce clientes"
+        },
+        "Salud×Frontera": {
+          "nivel": 1,
+          "evidencia": "Equipo técnico insuficiente para 47 bugs"
+        },
+        "Salud×Adaptar": {
+          "nivel": 2,
+          "evidencia": "CTO trabaja 70h/semana indica sobrecarga"
+        },
+        "Salud×Replicar": {
+          "nivel": 3,
+          "evidencia": "Co-fundador técnico se fue hace 6 meses"
+        },
+        "Sentido×Conservar": {
+          "nivel": 1,
+          "evidencia": "Se quiere saber: ¿Pivotar a enterprise o estabilizar?"
+        },
+        "Sentido×Captar": {
+          "nivel": 2,
+          "evidencia": "30% de ingresos de 3 clientes grandes"
+        },
+        "Sentido×Depurar": {
+          "nivel": 3,
+          "evidencia": "CEO y CTO asumen soluciones mutuamente excluyentes"
+        },
+        "Sentido×Distribuir": {
+          "nivel": 2,
+          "evidencia": "ARPU grande ≈ €1,200 vs €150 promedio (8× más)"
+        },
+        "Sentido×Frontera": {
+          "nivel": 4,
+          "evidencia": "Contradicción central: elección forzada entre calidad inmediata y crecimiento futuro"
+        },
+        "Sentido×Adaptar": {
+          "nivel": 3,
+          "evidencia": "Pivotar a enterprise requiere desarrollo intensivo, desviando recursos de estabilización"
+        },
+        "Sentido×Replicar": {
+          "nivel": 2,
+          "evidencia": "Pivot podría salvar financieramente pero arriesga mayor churn"
+        },
+        "Continuidad×Conservar": {
+          "nivel": 3,
+          "evidencia": "Runway = 7 meses obliga a acción rápida"
+        },
+        "Continuidad×Captar": {
+          "nivel": 2,
+          "evidencia": "Burn rate > MRR: pérdida neta mensual = €16,000"
+        },
+        "Continuidad×Depurar": {
+          "nivel": 3,
+          "evidencia": "2 devs se fueron en 12 meses"
+        },
+        "Continuidad×Distribuir": {
+          "nivel": 3,
+          "evidencia": "Si churn constante, en 6 meses: MRR ≈ €7,200"
+        },
+        "Continuidad×Frontera": {
+          "nivel": 4,
+          "evidencia": "La contradicción formal es que la estabilización requiere tiempo que el runway no permite"
+        },
+        "Continuidad×Adaptar": {
+          "nivel": 2,
+          "evidencia": "Runway exige resultados en 3-4 meses"
+        },
+        "Continuidad×Replicar": {
+          "nivel": 3,
+          "evidencia": "Si la relación CEO-CTO no mejora, ninguna estrategia funcionará"
+        }
+      },
+      "total_cubiertas": 21,
+      "nivel_medio": 2.5,
+      "celdas_nivel_3_plus": [
+        "Salud×Depurar",
+        "Salud×Replicar",
+        "Sentido×Depurar",
+        "Sentido×Frontera",
+        "Sentido×Adaptar",
+        "Continuidad×Conservar",
+        "Continuidad×Depurar",
+        "Continuidad×Distribuir",
+        "Continuidad×Frontera",
+        "Continuidad×Replicar"
+      ],
+      "celdas_vacias": []
+    },
+    "tiempo_s": 11.38
+  },
+  "70b_worst": {
+    "source": "70b",
+    "case_id": "clinica_dental",
+    "int_id": "INT-08",
+    "result": {
+      "celdas": {
+        "Salud×Conservar": {
+          "nivel": 2,
+          "evidencia": "miedo a seguir los pasos de su padre y sufrir un infarto debido al estrés laboral"
+        },
+        "Salud×Captar": {
+          "nivel": 2,
+          "evidencia": "La persona siente agotamiento, estrés y ansiedad"
+        },
+        "Salud×Depurar": {
+          "nivel": 1,
+          "evidencia": "patrón de trabajo excesivo"
+        },
+        "Salud×Distribuir": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Salud×Frontera": {
+          "nivel": 2,
+          "evidencia": "necesidad de encontrar un equilibrio entre la vida laboral y personal"
+        },
+        "Salud×Adaptar": {
+          "nivel": 2,
+          "evidencia": "patrón emocional de dedicación laboral excesiva es una respuesta aprendida que ya no sirve"
+        },
+        "Salud×Replicar": {
+          "nivel": 3,
+          "evidencia": "seguir los pasos de su padre - patrón generacional de estrés laboral"
+        },
+        "Sentido×Conservar": {
+          "nivel": 2,
+          "evidencia": "se ve a sí misma como un proveedor y un profesional exitoso"
+        },
+        "Sentido×Captar": {
+          "nivel": 1,
+          "evidencia": "necesita encontrar un equilibrio"
+        },
+        "Sentido×Depurar": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Sentido×Distribuir": {
+          "nivel": 1,
+          "evidencia": "falta de tiempo que dedica a la familia"
+        },
+        "Sentido×Frontera": {
+          "nivel": 2,
+          "evidencia": "necesita ser un padre y esposo presente"
+        },
+        "Sentido×Adaptar": {
+          "nivel": 1,
+          "evidencia": "necesita encontrar una forma de gestionar su negocio y su tiempo"
+        },
+        "Sentido×Replicar": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Continuidad×Conservar": {
+          "nivel": 2,
+          "evidencia": "lealtad invisible hacia su negocio y su familia"
+        },
+        "Continuidad×Captar": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Continuidad×Depurar": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Continuidad×Distribuir": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Continuidad×Frontera": {
+          "nivel": 2,
+          "evidencia": "Las relaciones en juego se pueden romper si no se encuentra un equilibrio"
+        },
+        "Continuidad×Adaptar": {
+          "nivel": 2,
+          "evidencia": "La expansión del negocio puede no ser la solución"
+        },
+        "Continuidad×Replicar": {
+          "nivel": 3,
+          "evidencia": "La situación se repite, ya que la persona ha estado trabajando largas horas durante años"
+        }
+      },
+      "total_cubiertas": 15,
+      "nivel_medio": 1.3,
+      "celdas_nivel_3_plus": [
+        "Salud×Replicar",
+        "Continuidad×Replicar"
+      ],
+      "celdas_vacias": [
+        "Salud×Distribuir",
+        "Sentido×Depurar",
+        "Sentido×Replicar",
+        "Continuidad×Captar",
+        "Continuidad×Depurar",
+        "Continuidad×Distribuir"
+      ]
+    },
+    "tiempo_s": 9.47
+  },
+  "maverick_medium": {
+    "source": "maverick",
+    "case_id": "cambio_carrera",
+    "int_id": "INT-16",
+    "result": {
+      "celdas": {
+        "Salud×Conservar": {
+          "nivel": 2,
+          "evidencia": "Ahorros: 120.000€ - capacidad de ahorro vs. gastos fijos"
+        },
+        "Salud×Captar": {
+          "nivel": 2,
+          "evidencia": "Ingresos del marido: 40-80K€/año (irregulares)"
+        },
+        "Salud×Depurar": {
+          "nivel": 1,
+          "evidencia": "estrés laboral"
+        },
+        "Salud×Distribuir": {
+          "nivel": 2,
+          "evidencia": "Impacto del cambio de carrera en los ingresos familiares"
+        },
+        "Salud×Frontera": {
+          "nivel": 2,
+          "evidencia": "Hipoteca, edad de los hijos, necesidad de estabilidad financiera"
+        },
+        "Salud×Adaptar": {
+          "nivel": 3,
+          "evidencia": "Puede volver a su trabajo actual si la situación financiera se vuelve insostenible"
+        },
+        "Salud×Replicar": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Sentido×Conservar": {
+          "nivel": 1,
+          "evidencia": "insatisfacción con el trabajo actual"
+        },
+        "Sentido×Captar": {
+          "nivel": 2,
+          "evidencia": "deseo de cambiar a derecho medioambiental"
+        },
+        "Sentido×Depurar": {
+          "nivel": 1,
+          "evidencia": "Miedo al cambio, opinión de los padres"
+        },
+        "Sentido×Distribuir": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Sentido×Frontera": {
+          "nivel": 3,
+          "evidencia": "No se cuestionan las premisas iniciales pero se propone una forma segura de explorarlas"
+        },
+        "Sentido×Adaptar": {
+          "nivel": 2,
+          "evidencia": "Tomar un curso en derecho medioambiental o voluntariarse para probar la hipótesis"
+        },
+        "Sentido×Replicar": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Continuidad×Conservar": {
+          "nivel": 2,
+          "evidencia": "explorar oportunidades en derecho medioambiental sin dejar el trabajo actual"
+        },
+        "Continuidad×Captar": {
+          "nivel": 1,
+          "evidencia": "Tiempo hasta que el hijo mayor empiece la universidad: 2 años"
+        },
+        "Continuidad×Depurar": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Continuidad×Distribuir": {
+          "nivel": 0,
+          "evidencia": ""
+        },
+        "Continuidad×Frontera": {
+          "nivel": 2,
+          "evidencia": "con opción de rollback si no satisface"
+        },
+        "Continuidad×Adaptar": {
+          "nivel": 3,
+          "evidencia": "probar hipótesis de manera incremental y reversible"
+        },
+        "Continuidad×Replicar": {
+          "nivel": 1,
+          "evidencia": "1-2 iteraciones antes de tomar una decisión irreversible"
+        }
+      },
+      "total_cubiertas": 16,
+      "nivel_medio": 1.4,
+      "celdas_nivel_3_plus": [
+        "Salud×Adaptar",
+        "Sentido×Frontera",
+        "Continuidad×Adaptar"
+      ],
+      "celdas_vacias": [
+        "Salud×Replicar",
+        "Sentido×Distribuir",
+        "Sentido×Replicar",
+        "Continuidad×Depurar",
+        "Continuidad×Distribuir"
+      ]
+    },
+    "tiempo_s": 9.38
+  },
+  "gptoss_depurar": {
+    "source": "gpt-oss-120b",
+    "case_id": "clinica_dental",
+    "int_id": "INT-01",
+    "result": {
+      "celdas": {
+        "Salud×Conservar": {
+          "nivel": 3,
+          "evidencia": "antecedente familiar (infarto a 52 años) refuerza la necesidad de limitar la carga laboral"
+        },
+        "Salud×Captar": {
+          "nivel": 2,
+          "evidencia": "Horas odontólogo (H₁) 2 500 h/año, Horas asociado (H₂) 1 800 h/año"
+        },
+        "Salud×Depurar": {
+          "nivel": 3,
+          "evidencia": "> 30 h/semana extra supera el umbral de agotamiento (riesgo salud)"
+        },
+        "Salud×Distribuir": {
+          "nivel": 2,
+          "evidencia": "La capacidad horaria actual (≈ 60 h/semana) ya supera el umbral de agotamiento"
+        },
+        "Salud×Frontera": {
+          "nivel": 4,
+          "evidencia": "Solo al equilibrar salud y finanzas la expansión se vuelve lógica"
+        },
+        "Salud×Adaptar": {
+          "nivel": 2,
+          "evidencia": "Implementación de vacaciones obligatorias (2 semanas/año) reduce H₁ en ≈ 200 h/año"
+        },
+        "Salud×Replicar": {
+          "nivel": 1,
+          "evidencia": "Tiempo sin vacaciones (T_vac) 2 años"
+        },
+        "Sentido×Conservar": {
+          "nivel": 2,
+          "evidencia": "mantener un margen razonable, margen neto ≥ 5 k/mes"
+        },
+        "Sentido×Captar": {
+          "nivel": 2,
+          "evidencia": "proyección de 65 k €/mes al añadir dos sillones y abrir sábados"
+        },
+        "Sentido×Depurar": {
+          "nivel": 3,
+          "evidencia": "proyección de 65 k €/mes ignora el aumento de costes fijos y variables"
+        },
+        "Sentido×Distribuir": {
+          "nivel": 2,
+          "evidencia": "añadir solo un sillón (pasar a 4) y probar sábados con un dentista a tiempo parcial"
+        },
+        "Sentido×Frontera": {
+          "nivel": 2,
+          "evidencia": "La expansión a 5 sillones resulta no rentable bajo los supuestos actuales"
+        },
+        "Sentido×Adaptar": {
+          "nivel": 2,
+          "evidencia": "Un modelo de optimización muestra que añadir solo un sillón"
+        },
+        "Sentido×Replicar": {
+          "nivel": 1,
+          "evidencia": "Clase de casos: Empresario‑profesional que confía en ingresos lineales"
+        },
+        "Continuidad×Conservar": {
+          "nivel": 2,
+          "evidencia": "Hipoteca pendiente (P) 280 000 €, Cuota hipotecaria mensual (Q) 2 800 €"
+        },
+        "Continuidad×Captar": {
+          "nivel": 1,
+          "evidencia": "Variables críticas (U₃, aceptación sábados) estimadas con ±20 % de error"
+        },
+        "Continuidad×Depurar": {
+          "nivel": 3,
+          "evidencia": "margen neto declarado (7 k €/mes) no coincide con la diferencia entre facturación y costes fijos (13 k €/mes)"
+        },
+        "Continuidad×Distribuir": {
+          "nivel": 2,
+          "evidencia": "Vacío del tercer sillón (V₃) 40 % del tiempo, Utilización del tercer sillón: U₃ = 60 %"
+        },
+        "Continuidad×Frontera": {
+          "nivel": 2,
+          "evidencia": "amortización en ≤ 3 años, manteniendo margen ≥ 5 k/mes"
+        },
+        "Continuidad×Adaptar": {
+          "nivel": 2,
+          "evidencia": "mejorar la ocupación del tercer sillón (↑ U₃) aumentará la facturación sin requerir inversión mayor"
+        },
+        "Continuidad×Replicar": {
+          "nivel": 2,
+          "evidencia": "Patrón: Pequeña clínica con alta carga de trabajo, margen aparente inflado"
+        }
+      },
+      "total_cubiertas": 21,
+      "nivel_medio": 2.1,
+      "celdas_nivel_3_plus": [
+        "Salud×Conservar",
+        "Salud×Depurar",
+        "Salud×Frontera",
+        "Sentido×Depurar",
+        "Continuidad×Depurar"
+      ],
+      "celdas_vacias": []
+    },
+    "tiempo_s": 12.09
+  },
+  "qwen3t_medium": {
+    "source": "qwen3-thinking",
+    "case_id": "startup_saas",
+    "int_id": "INT-08",
+    "result": {
+      "celdas": {
+        "Salud×Conservar": {
+          "nivel": 3,
+          "evidencia": "CTO conserva bugs (47 bugs subieron desde 20) creyendo que debuggear protege el producto"
+        },
+        "Salud×Captar": {
+          "nivel": 2,
+          "evidencia": "Churn 8% mensual revela que no captan las razones reales de fuga de clientes"
+        },
+        "Salud×Depurar": {
+          "nivel": 3,
+          "evidencia": "47 bugs no se depuran porque CTO filtra mal: prioriza cantidad sobre impacto crítico"
+        },
+        "Salud×Distribuir": {
+          "nivel": 2,
+          "evidencia": "MRR estancado en 12.000€ indica distribución deficiente del producto"
+        },
+        "Salud×Frontera": {
+          "nivel": 3,
+          "evidencia": "Runway 7 meses es frontera dura que ninguno nombra explícitamente"
+        },
+        "Salud×Adaptar": {
+          "nivel": 3,
+          "evidencia": "CTO respuesta rígida: más horas (70h/semana) en lugar de cambiar estrategia técnica"
+        },
+        "Salud×Replicar": {
+          "nivel": 2,
+          "evidencia": "Rotación 66% en 12 meses indica que el modelo de equipo no es replicable"
+        },
+        "Sentido×Conservar": {
+          "nivel": 2,
+          "evidencia": "CTO conserva identidad como 'guardián del producto', CEO como 'salvador de empresa'"
+        },
+        "Sentido×Captar": {
+          "nivel": 3,
+          "evidencia": "Ambos captan crisis pero interpretan direcciones opuestas: bugs vs pivot"
+        },
+        "Sentido×Depurar": {
+          "nivel": 3,
+          "evidencia": "'Diferencias de visión' filtra mal: evita nombrar miedo a la irrelevancia"
+        },
+        "Sentido×Distribuir": {
+          "nivel": 2,
+          "evidencia": "Pivot a enterprise sin métricas claras muestra distribución confusa de propósito"
+        },
+        "Sentido×Frontera": {
+          "nivel": 3,
+          "evidencia": "Solo hablan en reuniones formales: límite relacional roto CTO-CEO"
+        },
+        "Sentido×Adaptar": {
+          "nivel": 4,
+          "evidencia": "Patrón 'miedo + acción reactiva' redefine el conflicto: no es estratégico sino supervivencia emocional"
+        },
+        "Sentido×Replicar": {
+          "nivel": 2,
+          "evidencia": "Co-fundador se fue por mismo conflicto: patrón se replica pero no se aprende"
+        },
+        "Continuidad×Conservar": {
+          "nivel": 2,
+          "evidencia": "Ambos priorizan conservar su rol sobre continuidad de la empresa"
+        },
+        "Continuidad×Captar": {
+          "nivel": 3,
+          "evidencia": "3 fondos rechazaron por métricas insuficientes: mercado no capta valor futuro"
+        },
+        "Continuidad×Depurar": {
+          "nivel": 2,
+          "evidencia": "Vergüenza colectiva de vender producto defectuoso no se filtra ni procesa"
+        },
+        "Continuidad×Distribuir": {
+          "nivel": 3,
+          "evidencia": "Enterprise exige SLA 99.9% imposible con 47 bugs: distribución futura bloqueada"
+        },
+        "Continuidad×Frontera": {
+          "nivel": 3,
+          "evidencia": "Si cliente grande (30% ingresos) cancela, trigger crítico forza decisiones destructivas"
+        },
+        "Continuidad×Adaptar": {
+          "nivel": 2,
+          "evidencia": "Churn 8% anualiza 63%: modelo actual insostenible para supervivencia"
+        },
+        "Continuidad×Replicar": {
+          "nivel": 3,
+          "evidencia": "Si CEO despide CTO, devs juniors huyen: equipo no sobrevive sin liderazgo técnico"
+        }
+      },
+      "total_cubiertas": 21,
+      "nivel_medio": 2.6,
+      "celdas_nivel_3_plus": [
+        "Salud×Conservar",
+        "Salud×Depurar",
+        "Salud×Frontera",
+        "Salud×Adaptar",
+        "Sentido×Captar",
+        "Sentido×Depurar",
+        "Sentido×Frontera",
+        "Sentido×Adaptar",
+        "Continuidad×Captar",
+        "Continuidad×Distribuir",
+        "Continuidad×Frontera",
+        "Continuidad×Replicar"
+      ],
+      "celdas_vacias": []
+    },
+    "tiempo_s": 18.42
+  }
+}

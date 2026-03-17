@@ -1,0 +1,211 @@
+{
+  "INT-01": {
+    "id": "INT-01",
+    "nombre": "Lógico-Matemática",
+    "firma": "Contradicción formal demostrable entre premisas",
+    "punto_ciego": "Lo ambiguo, lo no-axiomatizable",
+    "meta_red": {
+      "extraer": {
+        "nombre": "formalizar",
+        "preguntas": [
+          "¿Qué se puede contar? ¿Qué se puede medir?",
+          "¿Qué magnitudes aparecen con número explícito?",
+          "¿Qué magnitudes aparecen sin número pero se podrían medir?",
+          "¿Qué relación tiene cada número con los demás — se suman, se multiplican, se limitan?",
+          "¿Qué se quiere saber que aún no se sabe?",
+          "¿Qué se da por hecho sin verificar?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "estructurar tipo de problema",
+        "preguntas": [
+          "De todas las relaciones, ¿cuántas puedes mover y cuántas están fijadas?",
+          "¿Mover una variable mejora todo, o mejorar una empeora otra?",
+          "Si empeora otra: ¿hay punto donde ambas sean aceptables, o siempre hay que elegir?",
+          "¿Los números son continuos o discretos?",
+          "¿Lo que no se sabe se puede estimar, o es genuinamente incierto?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Álgebra",
+          "preguntas": [
+            "¿Cuántas ecuaciones hay y cuántas incógnitas?",
+            "¿Alguna es redundante?",
+            "¿Alguna contradice a otra?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Análisis",
+          "preguntas": [
+            "Si aumentas cada variable un poco, ¿qué pasa?",
+            "¿Hay punto donde aumentar empieza a empeorar?",
+            "¿Alguna variable tiene efecto desproporcionado?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Geometría",
+          "preguntas": [
+            "Si dibujas las opciones como puntos, ¿qué forma tienen?",
+            "¿Las opciones buenas están concentradas o dispersas?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Probabilidad",
+          "preguntas": [
+            "¿Qué números son seguros y cuáles estimaciones?",
+            "¿Qué pasaría si los estimados se desvían un 20%?"
+          ]
+        },
+        {
+          "id": "L5",
+          "nombre": "Optimización",
+          "preguntas": [
+            "¿Se puede mejorar todo a la vez?",
+            "Si hay que elegir, ¿qué importa más — y quién decide eso?"
+          ]
+        },
+        {
+          "id": "L6",
+          "nombre": "Lógica",
+          "preguntas": [
+            "¿Qué se puede deducir con certeza?",
+            "¿Hay combinación de premisas que se contradiga?"
+          ]
+        }
+      ],
+      "integrar": "¿Qué dicen todas las lentes que coincide? ¿Dónde se contradicen? ¿Hay algo que solo aparece al mirar todas juntas?",
+      "abstraer": "¿Este caso es único o hay una clase de casos que comparten esta estructura? Si quitas nombres y números, ¿qué patrón queda?",
+      "frontera": "¿Qué asume este análisis que no ha examinado? ¿Hay algo que no se puede expresar como número o ecuación? Si eso fuera lo más importante, ¿qué cambia?"
+    }
+  },
+  "INT-08": {
+    "id": "INT-08",
+    "nombre": "Social",
+    "firma": "Vergüenza no nombrada + lealtad invisible",
+    "punto_ciego": "Sobrepsicologiza",
+    "meta_red": {
+      "extraer": {
+        "nombre": "mapear emociones",
+        "preguntas": [
+          "¿Qué siente esta persona — no lo que dice, lo que siente?",
+          "¿Cómo se nota — tono, ritmo, lo que evita decir, lo que repite?",
+          "¿Qué necesita realmente — no lo que pide, lo que necesita?",
+          "¿Quién más está afectado y cómo se sienten?",
+          "¿Hay emociones que nadie nombra pero que gobiernan las decisiones?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "emociones × relaciones",
+        "preguntas": [
+          "¿Lo que siente coincide con lo que muestra?",
+          "¿Los demás perciben lo que realmente pasa o solo la superficie?",
+          "¿Hay patrones — esta situación se repite?",
+          "¿Qué trigger activaría una reacción desproporcionada?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Empatía",
+          "preguntas": [
+            "¿Qué emoción domina y cómo afecta las decisiones?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Patrones",
+          "preguntas": [
+            "¿Esto le ha pasado antes?",
+            "¿Cómo respondió?",
+            "¿Funcionó?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Vínculos",
+          "preguntas": [
+            "¿Qué relaciones están en juego?",
+            "¿Cuáles se pueden romper?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Identidad",
+          "preguntas": [
+            "¿Quién cree que es?",
+            "¿Quién necesita ser para otros?"
+          ]
+        }
+      ],
+      "integrar": "¿Las emociones, los patrones y los vínculos apuntan al mismo conflicto?",
+      "abstraer": "¿Este patrón emocional es una respuesta aprendida que ya no sirve?",
+      "frontera": "¿Todo es emoción? ¿Y si el problema es estructural y las emociones son síntoma?"
+    }
+  },
+  "INT-16": {
+    "id": "INT-16",
+    "nombre": "Constructiva",
+    "firma": "Prototipo con coste, secuencia y fallo seguro",
+    "punto_ciego": "No cuestiona premisas",
+    "meta_red": {
+      "extraer": {
+        "nombre": "identificar lo construible",
+        "preguntas": [
+          "¿Qué se puede construir hoy con lo que hay?",
+          "¿Cuál es el primer paso — no el plan completo, el primer paso?",
+          "¿Cuánto cuesta (tiempo, dinero, esfuerzo) ese primer paso?",
+          "¿Qué pasa si falla? ¿Es reversible?"
+        ]
+      },
+      "cruzar": {
+        "nombre": "prototipo × restricciones",
+        "preguntas": [
+          "¿El prototipo resuelve el problema real o solo el problema declarado?",
+          "¿Cuál es la secuencia óptima de construcción?",
+          "¿Dónde está el camino crítico — qué no puede retrasarse?",
+          "¿Cuántas iteraciones necesita antes de decisión irreversible?"
+        ]
+      },
+      "lentes": [
+        {
+          "id": "L1",
+          "nombre": "Prototipo",
+          "preguntas": [
+            "¿Versión mínima que prueba la hipótesis?"
+          ]
+        },
+        {
+          "id": "L2",
+          "nombre": "Secuencia",
+          "preguntas": [
+            "¿En qué orden?",
+            "¿Qué depende de qué?"
+          ]
+        },
+        {
+          "id": "L3",
+          "nombre": "Fallo seguro",
+          "preguntas": [
+            "¿Si falla, cuánto se pierde?",
+            "¿Hay rollback?"
+          ]
+        },
+        {
+          "id": "L4",
+          "nombre": "Iteración",
+          "preguntas": [
+            "¿Cuántas versiones antes de comprometerse?"
+          ]
+        }
+      ],
+      "integrar": "¿El prototipo, la secuencia y el fallo seguro son coherentes?",
+      "abstraer": "¿Este patrón de construcción es replicable?",
+      "frontera": "¿Construir es la respuesta? ¿Y si primero hay que cuestionar las premisas?"
+    }
+  }
+}

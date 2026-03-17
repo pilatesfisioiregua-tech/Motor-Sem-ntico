@@ -1,0 +1,233 @@
+[
+  {
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "mode": "multi",
+    "model": "multi-model",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 13,
+      "tokens_used": 176944,
+      "cost_usd": 0.3539,
+      "time_s": 94.1
+    },
+    "tests": {
+      "passed": 8,
+      "total": 8,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T1_multi_bchndaxy",
+    "timestamp": "2026-03-11T10:45:13.128328"
+  },
+  {
+    "task": "T2",
+    "task_name": "Migration SQL",
+    "language": "sql",
+    "mode": "multi",
+    "model": "multi-model",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 3,
+      "tokens_used": 11758,
+      "cost_usd": 0.0235,
+      "time_s": 24.0
+    },
+    "tests": {
+      "passed": 1,
+      "total": 1,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T2_multi_2w_3jnhd",
+    "timestamp": "2026-03-11T10:45:37.523520"
+  },
+  {
+    "task": "T3",
+    "task_name": "Analysis Script",
+    "language": "python",
+    "mode": "multi",
+    "model": "multi-model",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 9,
+      "tokens_used": 58431,
+      "cost_usd": 0.1169,
+      "time_s": 62.6
+    },
+    "tests": {
+      "passed": 3,
+      "total": 3,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T3_multi_fxfpk5wz",
+    "timestamp": "2026-03-11T10:46:41.155339"
+  },
+  {
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "mode": "multi",
+    "model": "multi-model",
+    "agent_result": {
+      "stop_reason": "MAX_ITERATIONS",
+      "iterations": 25,
+      "tokens_used": 514873,
+      "cost_usd": 1.0297,
+      "time_s": 207.3
+    },
+    "tests": {
+      "passed": 13,
+      "total": 14,
+      "pass_rate": 0.929
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T4_multi_q9n2fgps",
+    "timestamp": "2026-03-11T10:50:16.779155"
+  },
+  {
+    "task": "T5",
+    "task_name": "Assembly Line",
+    "language": "python",
+    "mode": "multi",
+    "model": "multi-model",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 4,
+      "tokens_used": 23823,
+      "cost_usd": 0.0476,
+      "time_s": 55.3
+    },
+    "tests": {
+      "passed": 8,
+      "total": 8,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T5_multi_j317wdzo",
+    "timestamp": "2026-03-11T10:51:12.454968"
+  },
+  {
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "mode": "single",
+    "model": "step-3.5",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 13,
+      "tokens_used": 184243,
+      "cost_usd": 0.3685,
+      "time_s": 271.1
+    },
+    "tests": {
+      "passed": 11,
+      "total": 11,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T1_single_wmvzr8y1",
+    "timestamp": "2026-03-11T10:55:58.925532"
+  },
+  {
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "mode": "single",
+    "model": "mimo-v2-flash",
+    "agent_result": {
+      "stop_reason": "STUCK: Same action 4x: run_command:9dcadf74",
+      "iterations": 19,
+      "tokens_used": 399618,
+      "cost_usd": 0.7992,
+      "time_s": 385.5
+    },
+    "tests": {
+      "passed": 15,
+      "total": 19,
+      "pass_rate": 0.789
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T1_single_r237fifo",
+    "timestamp": "2026-03-11T11:02:25.060402"
+  },
+  {
+    "task": "T1",
+    "task_name": "Edge Function TS",
+    "language": "typescript",
+    "mode": "single",
+    "model": "devstral",
+    "agent_result": {
+      "stop_reason": "MAX_ITERATIONS",
+      "iterations": 25,
+      "tokens_used": 476914,
+      "cost_usd": 0.9538,
+      "time_s": 158.4
+    },
+    "tests": {
+      "passed": 5,
+      "total": 6,
+      "pass_rate": 0.833
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T1_single_3n63yfmf",
+    "timestamp": "2026-03-11T11:05:03.975320"
+  },
+  {
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "mode": "single",
+    "model": "step-3.5",
+    "agent_result": {
+      "stop_reason": "MAX_ITERATIONS",
+      "iterations": 25,
+      "tokens_used": 684936,
+      "cost_usd": 1.3699,
+      "time_s": 330.4
+    },
+    "tests": {
+      "passed": 0,
+      "total": 1,
+      "pass_rate": 0.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T4_single_o_r34142",
+    "timestamp": "2026-03-11T11:11:34.368378"
+  },
+  {
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "mode": "single",
+    "model": "mimo-v2-flash",
+    "agent_result": {
+      "stop_reason": "STUCK: Same action 4x: run_command:ee905053",
+      "iterations": 21,
+      "tokens_used": 461381,
+      "cost_usd": 0.9228,
+      "time_s": 278.7
+    },
+    "tests": {
+      "passed": 21,
+      "total": 22,
+      "pass_rate": 0.955
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T4_single_jhg8gcz7",
+    "timestamp": "2026-03-11T11:16:13.432035"
+  },
+  {
+    "task": "T4",
+    "task_name": "Orchestrator",
+    "language": "python",
+    "mode": "single",
+    "model": "devstral",
+    "agent_result": {
+      "stop_reason": "DONE",
+      "iterations": 17,
+      "tokens_used": 331681,
+      "cost_usd": 0.6634,
+      "time_s": 137.5
+    },
+    "tests": {
+      "passed": 9,
+      "total": 9,
+      "pass_rate": 1.0
+    },
+    "sandbox": "/var/folders/w9/6n02b40j6tn8s8kf32xspvz80000gn/T/exp6_T4_single_zbatzzks",
+    "timestamp": "2026-03-11T11:18:31.380836"
+  }
+]

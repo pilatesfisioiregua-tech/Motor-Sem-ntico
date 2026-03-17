@@ -19,7 +19,7 @@ if ENV_PATH.exists():
             os.environ.setdefault(k.strip(), v.strip())
 
 OPENROUTER_KEY = os.environ.get("OPENROUTER_API_KEY", "")
-MODEL = "xiaomi/mimo-v2-flash"
+MODEL = "deepseek/deepseek-chat-v3-0324"
 BASE_DIR = Path(__file__).parent.parent / "datos" / "exp_p33"
 RESULTS_DIR = BASE_DIR / "resultados"
 

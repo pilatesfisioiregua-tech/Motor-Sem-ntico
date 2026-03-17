@@ -1,0 +1,705 @@
+{
+  "meta": {
+    "experiment": "Exp 4.3 - Mente Distribuida - Analisis"
+  },
+  "convergencia": {
+    "v31_best": {
+      "estado": "convergido",
+      "rondas_total": 4,
+      "convergencia": true,
+      "cambios_por_ronda": [
+        12,
+        7,
+        10,
+        0
+      ],
+      "decay_ratios": [
+        0.583,
+        1.429,
+        0.0
+      ],
+      "mean_decay_ratio": 0.671,
+      "is_exponential_decay": false
+    },
+    "70b_worst": {
+      "estado": "max_rondas",
+      "rondas_total": 5,
+      "convergencia": false,
+      "cambios_por_ronda": [
+        11,
+        13,
+        6,
+        7,
+        10
+      ],
+      "decay_ratios": [
+        1.182,
+        0.462,
+        1.167,
+        1.429
+      ],
+      "mean_decay_ratio": 1.06,
+      "is_exponential_decay": false
+    },
+    "maverick_medium": {
+      "estado": "max_rondas",
+      "rondas_total": 5,
+      "convergencia": false,
+      "cambios_por_ronda": [
+        16,
+        12,
+        10,
+        5,
+        3
+      ],
+      "decay_ratios": [
+        0.75,
+        0.833,
+        0.5,
+        0.6
+      ],
+      "mean_decay_ratio": 0.671,
+      "is_exponential_decay": true
+    },
+    "gptoss_depurar": {
+      "estado": "convergido",
+      "rondas_total": 5,
+      "convergencia": true,
+      "cambios_por_ronda": [
+        16,
+        9,
+        5,
+        5,
+        2
+      ],
+      "decay_ratios": [
+        0.562,
+        0.556,
+        1.0,
+        0.4
+      ],
+      "mean_decay_ratio": 0.63,
+      "is_exponential_decay": false
+    },
+    "qwen3t_medium": {
+      "estado": "convergido",
+      "rondas_total": 4,
+      "convergencia": true,
+      "cambios_por_ronda": [
+        11,
+        9,
+        9,
+        0
+      ],
+      "decay_ratios": [
+        0.818,
+        1.0,
+        0.0
+      ],
+      "mean_decay_ratio": 0.606,
+      "is_exponential_decay": false
+    }
+  },
+  "perfiles_por_modelo": {
+    "opus": {
+      "contribuciones_aceptadas": 33,
+      "conexiones": 34,
+      "puntos_ciegos": 8,
+      "rondas_activas": 15,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        13,
+        6,
+        6,
+        5,
+        3
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector"
+      ]
+    },
+    "v3.2-chat": {
+      "contribuciones_aceptadas": 56,
+      "conexiones": 52,
+      "puntos_ciegos": 28,
+      "rondas_activas": 23,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        18,
+        13,
+        11,
+        9,
+        5
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector",
+        "Detector de huecos"
+      ]
+    },
+    "v3.2-reasoner": {
+      "contribuciones_aceptadas": 42,
+      "conexiones": 28,
+      "puntos_ciegos": 14,
+      "rondas_activas": 18,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        18,
+        12,
+        7,
+        4,
+        1
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector",
+        "Detector de huecos"
+      ]
+    },
+    "gpt-oss-120b": {
+      "contribuciones_aceptadas": 119,
+      "conexiones": 77,
+      "puntos_ciegos": 46,
+      "rondas_activas": 22,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        32,
+        29,
+        29,
+        15,
+        14
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector",
+        "Detector de huecos"
+      ]
+    },
+    "qwen3-235b": {
+      "contribuciones_aceptadas": 63,
+      "conexiones": 48,
+      "puntos_ciegos": 25,
+      "rondas_activas": 22,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        22,
+        16,
+        10,
+        9,
+        6
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector",
+        "Detector de huecos"
+      ]
+    },
+    "deepseek-v3.1": {
+      "contribuciones_aceptadas": 52,
+      "conexiones": 45,
+      "puntos_ciegos": 22,
+      "rondas_activas": 18,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        25,
+        7,
+        15,
+        2,
+        3
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector",
+        "Detector de huecos"
+      ]
+    },
+    "deepseek-r1": {
+      "contribuciones_aceptadas": 44,
+      "conexiones": 30,
+      "puntos_ciegos": 12,
+      "rondas_activas": 16,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        20,
+        8,
+        8,
+        5,
+        3
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector"
+      ]
+    },
+    "glm-4.7": {
+      "contribuciones_aceptadas": 20,
+      "conexiones": 8,
+      "puntos_ciegos": 2,
+      "rondas_activas": 5,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        17,
+        3
+      ],
+      "perfiles": [
+        "Sembrador"
+      ]
+    },
+    "minimax-m2.5": {
+      "contribuciones_aceptadas": 75,
+      "conexiones": 55,
+      "puntos_ciegos": 45,
+      "rondas_activas": 22,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        20,
+        14,
+        13,
+        15,
+        13
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector",
+        "Detector de huecos"
+      ]
+    },
+    "kimi-k2.5": {
+      "contribuciones_aceptadas": 25,
+      "conexiones": 19,
+      "puntos_ciegos": 15,
+      "rondas_activas": 11,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        11,
+        10,
+        3,
+        1
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector",
+        "Detector de huecos"
+      ]
+    },
+    "cogito-671b": {
+      "contribuciones_aceptadas": 31,
+      "conexiones": 29,
+      "puntos_ciegos": 22,
+      "rondas_activas": 20,
+      "outputs_participados": 5,
+      "contribuciones_por_ronda_agregadas": [
+        13,
+        7,
+        6,
+        3,
+        2
+      ],
+      "perfiles": [
+        "Sembrador",
+        "Conector",
+        "Detector de huecos"
+      ]
+    }
+  },
+  "comparacion_por_output": {
+    "v31_best": {
+      "max_mecanico": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 18,
+        "nivel_medio": 3.095,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mesa_redonda": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 20,
+        "nivel_medio": 3.19,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mente_distribuida": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 21,
+        "nivel_medio": 4.0,
+        "conexiones": 77,
+        "puntos_ciegos": 40
+      }
+    },
+    "70b_worst": {
+      "max_mecanico": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 15,
+        "nivel_medio": 2.762,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mesa_redonda": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 15,
+        "nivel_medio": 2.762,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mente_distribuida": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 21,
+        "nivel_medio": 4.0,
+        "conexiones": 99,
+        "puntos_ciegos": 59
+      }
+    },
+    "maverick_medium": {
+      "max_mecanico": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 10,
+        "nivel_medio": 2.524,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mesa_redonda": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 16,
+        "nivel_medio": 2.905,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mente_distribuida": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 21,
+        "nivel_medio": 4.0,
+        "conexiones": 85,
+        "puntos_ciegos": 62
+      }
+    },
+    "gptoss_depurar": {
+      "max_mecanico": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 15,
+        "nivel_medio": 2.905,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mesa_redonda": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 21,
+        "nivel_medio": 3.81,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mente_distribuida": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 21,
+        "nivel_medio": 3.952,
+        "conexiones": 86,
+        "puntos_ciegos": 44
+      }
+    },
+    "qwen3t_medium": {
+      "max_mecanico": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 19,
+        "nivel_medio": 3.143,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mesa_redonda": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 21,
+        "nivel_medio": 3.667,
+        "conexiones": 0,
+        "puntos_ciegos": 0
+      },
+      "mente_distribuida": {
+        "celdas_cubiertas": 21,
+        "celdas_3plus": 21,
+        "nivel_medio": 4.0,
+        "conexiones": 78,
+        "puntos_ciegos": 34
+      }
+    }
+  },
+  "comparacion_agregada": {
+    "max_mecanico": {
+      "celdas_cubiertas_total": 105,
+      "celdas_3plus_total": 77,
+      "nivel_medio_promedio": 2.886,
+      "conexiones_total": 0,
+      "puntos_ciegos_total": 0
+    },
+    "mesa_redonda": {
+      "celdas_cubiertas_total": 105,
+      "celdas_3plus_total": 93,
+      "nivel_medio_promedio": 3.267,
+      "conexiones_total": 0,
+      "puntos_ciegos_total": 0
+    },
+    "mente_distribuida": {
+      "celdas_cubiertas_total": 105,
+      "celdas_3plus_total": 105,
+      "nivel_medio_promedio": 3.99,
+      "conexiones_total": 425,
+      "puntos_ciegos_total": 239
+    }
+  },
+  "trazabilidad_celda_mas_interesante": {
+    "output": "70b_worst",
+    "celda": "Salud×Depurar",
+    "nivel_final": 4,
+    "nivel_historial": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "n_cambios": 4,
+    "seeder": "sonnet",
+    "ultima_modificacion": {
+      "modelo": "gpt-oss-120b",
+      "ronda": 4
+    },
+    "transitions": [
+      {
+        "de": 0,
+        "a": 1,
+        "transicion_index": 1,
+        "modelo": "sonnet",
+        "ronda": -1,
+        "evidencia": "patrón de trabajo excesivo"
+      },
+      {
+        "de": 1,
+        "a": 2,
+        "transicion_index": 2,
+        "modelo": "v3.2-chat",
+        "ronda": 0,
+        "evidencia": "El patrón de trabajo excesivo es identificado como 'una respuesta aprendida que ya no sirve' - esto es una depuración específica de un patrón disfunci"
+      },
+      {
+        "de": 2,
+        "a": 3,
+        "transicion_index": 3,
+        "modelo": "gpt-oss-120b",
+        "ronda": 0,
+        "evidencia": "El patrón de trabajo excesivo está impulsado por el miedo heredado a un infarto y la presión de ser el principal proveedor."
+      },
+      {
+        "de": 3,
+        "a": 4,
+        "transicion_index": 4,
+        "modelo": "qwen3-235b",
+        "ronda": 0,
+        "evidencia": "el agotamiento y estrés son síntomas que deben depurarse al reconocer que el modelo de trabajo actual es insostenible"
+      }
+    ],
+    "all_evidencias": [
+      {
+        "modelo": "sonnet",
+        "ronda": -1,
+        "evidencia": "patrón de trabajo excesivo"
+      },
+      {
+        "modelo": "v3.2-chat",
+        "ronda": 0,
+        "evidencia": "El patrón de trabajo excesivo es identificado como 'una respuesta aprendida que ya no sirve' - esto es una depuración específica de un patrón disfuncional"
+      },
+      {
+        "modelo": "gpt-oss-120b",
+        "ronda": 0,
+        "evidencia": "El patrón de trabajo excesivo está impulsado por el miedo heredado a un infarto y la presión de ser el principal proveedor."
+      },
+      {
+        "modelo": "qwen3-235b",
+        "ronda": 0,
+        "evidencia": "el agotamiento y estrés son síntomas que deben depurarse al reconocer que el modelo de trabajo actual es insostenible"
+      },
+      {
+        "modelo": "deepseek-v3.1",
+        "ronda": 0,
+        "evidencia": "El patrón emocional de dedicación laboral excesiva es una respuesta aprendida que ya no sirve"
+      },
+      {
+        "modelo": "deepseek-r1",
+        "ronda": 0,
+        "evidencia": "patrón de trabajo excesivo es respuesta aprendida y obsoleta que daña salud"
+      },
+      {
+        "modelo": "gpt-oss-120b",
+        "ronda": 4,
+        "evidencia": "Se identifican marcadores fisiológicos tempranos (variabilidad de la frecuencia cardíaca reducida, cortisol diurno elevado, alteraciones del sueño) que confirman que el modelo de trabajo actual genera"
+      }
+    ]
+  },
+  "mente_minima": {
+    "ranking_modelos": [
+      "gpt-oss-120b",
+      "minimax-m2.5",
+      "qwen3-235b",
+      "v3.2-chat",
+      "deepseek-v3.1",
+      "deepseek-r1",
+      "v3.2-reasoner",
+      "opus",
+      "cogito-671b",
+      "kimi-k2.5",
+      "glm-4.7"
+    ],
+    "simulaciones": {
+      "3": {
+        "top_n_models": [
+          "gpt-oss-120b",
+          "minimax-m2.5",
+          "qwen3-235b"
+        ],
+        "celdas_con_nivel": 105,
+        "celdas_cubiertas_por_top_n": 42,
+        "pct_cubierto": 40.0
+      },
+      "5": {
+        "top_n_models": [
+          "gpt-oss-120b",
+          "minimax-m2.5",
+          "qwen3-235b",
+          "v3.2-chat",
+          "deepseek-v3.1"
+        ],
+        "celdas_con_nivel": 105,
+        "celdas_cubiertas_por_top_n": 70,
+        "pct_cubierto": 66.7
+      },
+      "7": {
+        "top_n_models": [
+          "gpt-oss-120b",
+          "minimax-m2.5",
+          "qwen3-235b",
+          "v3.2-chat",
+          "deepseek-v3.1",
+          "deepseek-r1",
+          "v3.2-reasoner"
+        ],
+        "celdas_con_nivel": 105,
+        "celdas_cubiertas_por_top_n": 80,
+        "pct_cubierto": 76.2
+      }
+    },
+    "recomendacion": {
+      "n_minimo": 7,
+      "modelos": [
+        "gpt-oss-120b",
+        "minimax-m2.5",
+        "qwen3-235b",
+        "v3.2-chat",
+        "deepseek-v3.1",
+        "deepseek-r1",
+        "v3.2-reasoner"
+      ],
+      "pct_cubierto": 76.2
+    }
+  },
+  "top_5_contribuciones": [
+    {
+      "output": "v31_best",
+      "celda": "Sentido×Frontera",
+      "de": 0,
+      "a": 4,
+      "salto": 4,
+      "modelo": "sonnet",
+      "ronda": -1,
+      "evidencia": "Contradicción central: elección forzada entre calidad inmediata y crecimiento futuro"
+    },
+    {
+      "output": "v31_best",
+      "celda": "Continuidad×Frontera",
+      "de": 0,
+      "a": 4,
+      "salto": 4,
+      "modelo": "sonnet",
+      "ronda": -1,
+      "evidencia": "La contradicción formal es que la estabilización requiere tiempo que el runway no permite"
+    },
+    {
+      "output": "gptoss_depurar",
+      "celda": "Salud×Frontera",
+      "de": 0,
+      "a": 4,
+      "salto": 4,
+      "modelo": "sonnet",
+      "ronda": -1,
+      "evidencia": "Solo al equilibrar salud y finanzas la expansión se vuelve lógica"
+    },
+    {
+      "output": "qwen3t_medium",
+      "celda": "Sentido×Adaptar",
+      "de": 0,
+      "a": 4,
+      "salto": 4,
+      "modelo": "sonnet",
+      "ronda": -1,
+      "evidencia": "Patrón 'miedo + acción reactiva' redefine el conflicto: no es estratégico sino supervivencia emocional"
+    },
+    {
+      "output": "v31_best",
+      "celda": "Salud×Depurar",
+      "de": 0,
+      "a": 3,
+      "salto": 3,
+      "modelo": "sonnet",
+      "ronda": -1,
+      "evidencia": "47 bugs abiertos afectan calidad y churn"
+    }
+  ],
+  "top_5_conexiones": [
+    {
+      "output": "v31_best",
+      "celda_a": "Salud×Depurar",
+      "celda_b": "Continuidad×Distribuir",
+      "lente_a": "Salud",
+      "lente_b": "Continuidad",
+      "conexion": "Los 47 bugs no solo afectan churn actual (8%) sino que aceleran la caída proyectada del MRR a €7,200 - cada bug sin resolver aumenta la velocidad de deterioro",
+      "modelo": "opus",
+      "ronda": 0
+    },
+    {
+      "output": "v31_best",
+      "celda_a": "Sentido×Frontera",
+      "celda_b": "Continuidad×Frontera",
+      "lente_a": "Sentido",
+      "lente_b": "Continuidad",
+      "conexion": "La contradicción entre calidad/crecimiento se amplifica por la restricción temporal - no es solo elegir, sino que el tiempo hace ambas opciones progresivamente menos viables",
+      "modelo": "opus",
+      "ronda": 0
+    },
+    {
+      "output": "v31_best",
+      "celda_a": "Salud×Replicar",
+      "celda_b": "Continuidad×Depurar",
+      "lente_a": "Salud",
+      "lente_b": "Continuidad",
+      "conexion": "La salida del co-fundador técnico hace 6 meses precedió la fuga de 2 devs - patrón de deterioro en cascada del equipo técnico",
+      "modelo": "opus",
+      "ronda": 0
+    },
+    {
+      "output": "v31_best",
+      "celda_a": "Continuidad×Conservar",
+      "celda_b": "Sentido×Frontera",
+      "lente_a": "Continuidad",
+      "lente_b": "Sentido",
+      "conexion": "El runway de 7 meses (Conservar) es la restricción dura que fuerza la contradicción central (Frontera): no hay tiempo suficiente para hacer ambas cosas (estabilizar y pivotar) antes de que se acabe el dinero.",
+      "modelo": "v3.2-chat",
+      "ronda": 0
+    },
+    {
+      "output": "v31_best",
+      "celda_a": "Salud×Conservar",
+      "celda_b": "Continuidad×Captar",
+      "lente_a": "Salud",
+      "lente_b": "Continuidad",
+      "conexion": "El MRR de €12k (Conservar) es insuficiente para cubrir el burn rate de €28k (Captar), creando la pérdida neta que drena el efectivo y define el runway.",
+      "modelo": "v3.2-chat",
+      "ronda": 0
+    }
+  ]
+}

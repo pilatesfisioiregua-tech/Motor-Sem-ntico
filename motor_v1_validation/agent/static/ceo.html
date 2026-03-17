@@ -159,6 +159,7 @@ select.mode-select { padding:6px 8px; }
 .check-icon { font-size:14px; }
 .check-icon.pass { color:var(--green); }
 .check-icon.fail { color:var(--red); }
+.check-icon.neutral { color:var(--text-dim); }
 .check-label { flex:1; font-size:11px; }
 .check-value { font-size:10px; color:var(--text-dim); }
 
@@ -223,8 +224,9 @@ select.mode-select { padding:6px 8px; }
 
 <!-- SIDEBAR -->
 <nav id="sidebar">
-  <div class="nav-item active" data-section="advisor" onclick="switchSection('advisor')">
+  <div class="nav-item active" data-section="advisor" onclick="switchSection('advisor')" style="position:relative">
     <span class="nav-icon">◉</span><span class="nav-label">Advisor</span>
+    <span id="sh-badge" style="display:none;position:absolute;top:4px;right:6px;background:var(--amber);color:var(--bg);font-size:9px;padding:1px 4px;border-radius:8px;min-width:14px;text-align:center;font-weight:700">0</span>
   </div>
   <div class="nav-item" data-section="execution" onclick="switchSection('execution')">
     <span class="nav-icon">▸</span><span class="nav-label">Execution</span>
@@ -247,6 +249,10 @@ select.mode-select { padding:6px 8px; }
   <div class="nav-sep"></div>
   <div class="nav-item" data-section="exocortex" onclick="switchSection('exocortex')">
     <span class="nav-icon">✧</span><span class="nav-label">Exocortex</span>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-item" data-section="codeos" onclick="switchSection('codeos')">
+    <span class="nav-icon">⌨</span><span class="nav-label">Code OS</span>
   </div>
 </nav>
 
@@ -287,6 +293,29 @@ select.mode-select { padding:6px 8px; }
   <div class="widget w-full">
     <div class="wh"><h3>Action Log</h3></div>
     <div class="wb" id="w-action-log"><span style="color:var(--text-dim)">No actions executed yet</span></div>
+  </div>
+
+  <!-- Self-Healing -->
+  <div class="widget w-full">
+    <div class="wh">
+      <h3>Self-Healing</h3>
+      <div class="wh-actions">
+        <button class="btn-sm btn-secondary" onclick="loadSelfHealing()">↻</button>
+        <button class="btn-sm btn-secondary" onclick="runSelfHealingCycle()">Run Cycle</button>
+      </div>
+    </div>
+    <div class="wb">
+      <!-- Status -->
+      <div id="sh-status" style="margin-bottom:10px;display:flex;gap:12px;flex-wrap:wrap">
+        <div class="metric"><div class="metric-value" id="sh-pending">—</div><div class="metric-label">Pending</div></div>
+        <div class="metric"><div class="metric-value" id="sh-fontaneria">—</div><div class="metric-label">Fontanería</div></div>
+        <div class="metric"><div class="metric-value" id="sh-last-cycle" style="font-size:11px">—</div><div class="metric-label">Last Cycle</div></div>
+      </div>
+      <!-- Pending improvements -->
+      <div id="sh-queue" style="margin-top:8px"></div>
+      <!-- History -->
+      <div id="sh-history" style="margin-top:8px"></div>
+    </div>
   </div>
 
 </div>
@@ -472,9 +501,18 @@ select.mode-select { padding:6px 8px; }
 <!-- ═══ SECTION: GESTOR ═══ -->
 <div class="section" id="sec-gestor">
 
-  <div class="widget w-half">
-    <div class="wh"><h3>Matrix Health</h3><div class="wh-actions"><button class="btn-sm btn-secondary" onclick="loadMatrixHealth()">↻</button></div></div>
-    <div class="wb" id="w-matrix-health"><span class="loading"><span class="spinner"></span></span></div>
+  <!-- Termómetro Matriz 3×7 -->
+  <div class="widget w-full">
+    <div class="wh">
+      <h3>Termómetro Matriz 3L × 7F</h3>
+      <div class="wh-actions" style="display:flex;gap:6px;align-items:center">
+        <select id="termo-consumidor" onchange="loadTermometro()" style="font-size:10px;padding:2px 6px">
+          <option value="">Sistema completo</option>
+        </select>
+        <button class="btn-sm btn-secondary" onclick="loadTermometro()">↻</button>
+      </div>
+    </div>
+    <div class="wb" id="w-termometro"><span class="loading"><span class="spinner"></span></span></div>
   </div>
 
   <div class="widget w-half">
@@ -530,6 +568,34 @@ select.mode-select { padding:6px 8px; }
 <!-- ═══ SECTION: EXOCORTEX ═══ -->
 <div class="section" id="sec-exocortex">
 
+  <!-- Chief Design Flow -->
+  <div class="widget w-full">
+    <div class="wh"><h3>Diseñar Exocortex</h3><div class="wh-actions"><span id="chief-status" style="font-size:10px;color:var(--text-dim)"></span></div></div>
+    <div class="wb">
+      <div class="form-row" style="margin-bottom:8px;gap:8px;flex-wrap:wrap">
+        <div style="flex:2;min-width:200px">
+          <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px">DESCRIBE TU NEGOCIO</label>
+          <textarea id="chief-domain" rows="2" style="width:100%;resize:vertical" placeholder="Ej: estudio de pilates con 3 sedes, 15 profesores y 500 alumnos activos"></textarea>
+        </div>
+        <div style="flex:1;min-width:120px">
+          <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px">FOCO (OPCIONAL)</label>
+          <input id="chief-focus" placeholder="Ej: retención de alumnos" style="width:100%">
+        </div>
+        <div style="min-width:80px">
+          <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px">VERIFY</label>
+          <select id="chief-tier" style="width:100%"><option value="fast">Fast</option><option value="standard">Standard</option><option value="deep">Deep</option></select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-primary" id="btn-chief-analyze" onclick="chiefAnalyze()">Analizar</button>
+        <button class="btn btn-secondary" id="btn-chief-execute" onclick="chiefExecute()" style="display:none">Diseñar e Implementar</button>
+        <span id="chief-spinner" style="display:none" class="loading"><span class="spinner"></span><span id="chief-spinner-text">Analizando...</span></span>
+      </div>
+      <div id="chief-result" style="margin-top:10px"></div>
+      <div id="chief-stream" style="margin-top:10px"></div>
+    </div>
+  </div>
+
   <div class="widget w-half">
     <div class="wh"><h3>Tenants</h3><div class="wh-actions"><button class="btn-sm btn-secondary" onclick="loadTenants()">↻</button></div></div>
     <div class="wb" id="w-tenants"><span class="loading"><span class="spinner"></span></span></div>
@@ -575,6 +641,39 @@ select.mode-select { padding:6px 8px; }
   </div>
 </div>
 
+<!-- ═══ SECTION: CODE OS ═══ -->
+<div class="section" id="sec-codeos">
+
+  <!-- Health alerts bar -->
+  <div class="w-full" id="codeos-alerts" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"></div>
+
+  <!-- Chat area -->
+  <div class="widget w-full" style="display:flex;flex-direction:column;height:calc(100vh - 120px)">
+    <div class="wh" style="flex-shrink:0">
+      <h3>Code OS v3 — Terminal CEO</h3>
+      <div class="wh-actions">
+        <span id="codeos-status" style="color:var(--text-dim);font-size:10px"></span>
+        <button class="btn btn-secondary" onclick="codeosNewSession()" style="font-size:10px;padding:2px 8px">Nueva sesion</button>
+      </div>
+    </div>
+    <div class="wb" id="codeos-chat" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:12px"></div>
+    <!-- File preview bar -->
+    <div id="codeos-file-preview" style="display:none;padding:4px 12px;border-top:1px solid var(--border);background:var(--surface-2);font-size:11px;color:var(--text-dim);align-items:center;gap:8px;flex-shrink:0">
+      <span id="codeos-file-icon" style="font-size:14px"></span>
+      <span id="codeos-file-info" style="flex:1"></span>
+      <span id="codeos-file-briefing-badge" style="display:none;background:var(--blue);color:#fff;padding:1px 6px;border-radius:8px;font-size:9px;font-weight:600">BRIEFING</span>
+      <button onclick="codeosRemoveFile()" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:0 4px" title="Quitar archivo">&times;</button>
+    </div>
+    <input type="file" id="codeos-file-input" accept=".md,.py,.json,.txt,.sql,.csv" style="display:none" onchange="codeosFileSelected(this)">
+    <div style="padding:8px 12px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;align-items:flex-end">
+      <button onclick="document.getElementById('codeos-file-input').click()" style="background:none;border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:18px;padding:4px 8px;color:var(--text-dim);align-self:flex-end" title="Adjuntar archivo (.md, .py, .json, .txt, .sql, .csv)">&#x1F4CE;</button>
+      <textarea id="codeos-input" rows="2" style="flex:1;resize:none;font-size:13px;font-family:var(--font-sans)" placeholder="Escribe lo que necesitas... (ej: cuanto he gastado este mes, el copiloto va lento, estado del sistema)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();codeosExecute()}"></textarea>
+      <button class="btn btn-primary" id="codeos-btn" onclick="codeosExecute()" style="align-self:flex-end;padding:8px 20px">Ejecutar</button>
+    </div>
+  </div>
+
+</div>
+
 </main>
 
 <!-- COPILOTO PANEL -->
@@ -590,7 +689,7 @@ select.mode-select { padding:6px 8px; }
     <button class="btn-sm btn-secondary" onclick="preguntarCopiloto('costes')">Costes</button>
   </div>
   <div id="copiloto-contenido" style="flex:1;overflow-y:auto;padding:16px;font-size:12px;line-height:1.6;color:var(--text)">
-    <p style="color:var(--text-dim);font-style:italic">Pulsa "Resumen" para empezar, o pregunta lo que quieras.</p>
+    <p style="color:var(--text-dim);font-style:italic">Pulsa "Resumen" para empezar, o pregunta lo que quieras. Las preguntas de texto libre usan el ingeniero Code OS.</p>
   </div>
   <div id="copiloto-acciones" style="padding:10px 16px;border-top:1px solid var(--border);display:none"></div>
   <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:6px">
@@ -669,6 +768,7 @@ async function loadSection(name) {
     gestor: loadGestor,
     exocortex: loadExocortex,
     costes: loadCostes,
+    codeos: loadCodeOS,
   };
   if (loaders[name]) await loaders[name]();
 }
@@ -706,7 +806,7 @@ async function loadModelSection() {
 }
 
 async function loadGestor() {
-  loadMatrixHealth();
+  loadTermometro();
   loadGAMCParams();
   loadReactorCandidates();
   loadConsistency();
@@ -717,6 +817,14 @@ async function loadGestor() {
 async function loadExocortex() {
   loadTenants();
   loadStigmergy();
+  // Chief design flow — load existing designs if any
+  try {
+    const d = await api('/chief/designs');
+    const designs = d.designs || [];
+    if (designs.length > 0) {
+      document.getElementById('chief-status').textContent = `${designs.length} diseños previos`;
+    }
+  } catch {}
 }
 
 // ═══════════════════════════════════════
@@ -778,6 +886,7 @@ async function refreshVitals() {
 async function loadAdvisor() {
   loadAdvisorActions();
   loadCapabilities();
+  loadSelfHealing();
 }
 
 async function loadAdvisorActions() {
@@ -887,10 +996,10 @@ async function executeAutopilotCycle() {
   if (!S.autopilot) return;
   const d = await api('/ceo/advisor');
   if (d.error || !d.acciones) return;
-  const safe = d.acciones.filter(a => a.auto_ejecutable && a.status === 'pendiente');
+  const safe = d.acciones.filter(a => a.auto_ejecutable);
   for (const a of safe) {
-    const r = await api('/ceo/advisor/execute', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({accion: a.accion}) });
-    if (r.status === 'ok') {
+    const r = await api('/ceo/advisor/execute', { method: 'POST', body: {accion: a.accion} });
+    if (r.status === 'ejecutado') {
       console.log('[AutoPilot] Executed:', a.accion);
     }
   }
@@ -1101,9 +1210,11 @@ async function loadAutopoiesis() {
     ['Tasa subiendo', a.check_tasa],
     ['Datapoints creciendo', a.check_datapoints],
   ];
-  el.innerHTML = checks.map(([label, val]) =>
-    `<div class="check-row"><span class="check-icon ${val ? 'pass' : 'fail'}">${val ? '✓' : '✗'}</span><span class="check-label">${label}</span></div>`
-  ).join('') + `<div style="margin-top:6px;"><span class="tag ${a.ciclo_sano ? 'tag-green' : 'tag-red'}">${a.ciclo_sano ? 'Cycle Healthy' : 'Cycle Broken'}</span></div>`;
+  el.innerHTML = checks.map(([label, val]) => {
+    const icon = val === true ? '✓' : val === false ? '✗' : '—';
+    const cls = val === true ? 'pass' : val === false ? 'fail' : 'neutral';
+    return `<div class="check-row"><span class="check-icon ${cls}">${icon}</span><span class="check-label">${label}</span></div>`;
+  }).join('') + `<div style="margin-top:6px;"><span class="tag ${!a.ciclo_roto ? 'tag-green' : 'tag-red'}">${!a.ciclo_roto ? 'Cycle Healthy' : 'Cycle Broken'}</span></div>`;
 }
 
 async function loadPID() {
@@ -1382,7 +1493,7 @@ async function runGestorLoop() {
   const el = document.getElementById('w-gamc-result');
   if (d.error) { el.innerHTML = errMsg(d.error); return; }
   el.innerHTML = `<div class="tag tag-green">Loop completed</div><pre style="font-size:9px; margin-top:4px; max-height:150px; overflow:auto;">${esc(JSON.stringify(d, null, 2))}</pre>`;
-  loadMatrixHealth();
+  loadTermometro();
   loadGAMCParams();
 }
 
@@ -1650,17 +1761,634 @@ function preguntarCopilotoLibre() {
   const pregunta = input.value.trim();
   if (!pregunta) return;
   input.value = '';
-  let seccion = 'resumen';
-  const l = pregunta.toLowerCase();
-  if (l.includes('decision') || l.includes('decidir') || l.includes('que hago')) seccion = 'decisiones';
-  else if (l.includes('guia') || l.includes('explica') || l.includes('como funciona')) seccion = 'guia';
-  else if (l.includes('coste') || l.includes('gast') || l.includes('presupuesto')) seccion = 'costes';
-  preguntarCopiloto(seccion, pregunta);
+
+  // Route through Code OS /code-os/execute for intent translation + reporter
+  const contenido = document.getElementById('copiloto-contenido');
+  contenido.innerHTML = '<p style="color:var(--text-dim);font-style:italic"><span class="spinner"></span> Procesando con Code OS...</p>';
+
+  copilotoViaCodeOS(pregunta);
+}
+
+async function copilotoViaCodeOS(pregunta) {
+  const contenido = document.getElementById('copiloto-contenido');
+  let parts = [];
+
+  try {
+    const resp = await fetch('/code-os/execute', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({input: pregunta, mode: 'auto'}),
+    });
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, {stream: true});
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const evt = JSON.parse(line.slice(6));
+          if (evt.type === 'thinking') {
+            parts = ['<p style="color:var(--text-dim);font-size:10px">⏳ ' + (evt.model || 'Pensando...') + '</p>'];
+          } else if (evt.type === 'tool_call') {
+            parts.push(`<div style="color:var(--cyan);font-size:10px">▸ ${evt.tool}</div>`);
+          } else if (evt.type === 'text') {
+            parts.push(`<div style="font-size:12px;line-height:1.5;margin:4px 0">${(evt.content||'').replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>`);
+          } else if (evt.type === 'done') {
+            parts.push(`<div style="margin-top:6px;padding:6px;background:var(--green-dim);border:1px solid var(--green);border-radius:4px;font-size:11px;color:var(--green)">${(evt.summary||'Completado').replace(/</g,'&lt;')}<br><span style="font-size:9px;color:var(--text-dim)">${evt.total_cost_usd ? '$'+evt.total_cost_usd.toFixed(4) : ''}</span></div>`);
+          } else if (evt.type === 'error') {
+            parts.push(`<div style="color:var(--red);font-size:11px">${(evt.message||'Error').replace(/</g,'&lt;')}</div>`);
+          }
+          contenido.innerHTML = parts.join('');
+          contenido.scrollTop = contenido.scrollHeight;
+        } catch {}
+      }
+    }
+
+    if (parts.length === 0) contenido.innerHTML = '<span style="color:var(--text-dim)">Sin respuesta</span>';
+    copilotoHistorial.push({seccion:'codeos', pregunta, respuesta: contenido.textContent.substring(0, 200)});
+  } catch (e) {
+    contenido.innerHTML = `<p style="color:var(--red)">Error: ${e.message}</p>`;
+  }
 }
 
 async function feedbackCopiloto(tipo, seccion, btn) {
   btn.style.opacity='0.5'; btn.disabled=true;
   try { await fetch('/ceo/copiloto/feedback', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo,seccion})}); } catch {}
+}
+
+// ═══════════════════════════════════════
+// CODE OS
+// ═══════════════════════════════════════
+let codeosSessionId = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36);
+let codeosRunning = false;
+
+async function loadCodeOS() {
+  // Load health alerts
+  try {
+    const r = await fetch('/code-os/health');
+    const d = await r.json();
+    const el = document.getElementById('codeos-alerts');
+    if (d.alerts && d.alerts.length > 0) {
+      el.innerHTML = d.alerts.map(a => {
+        const c = a.nivel === 'alert' ? 'var(--red)' : a.nivel === 'warning' ? 'var(--amber)' : 'var(--blue)';
+        return `<div style="padding:4px 10px;background:${c}22;border:1px solid ${c}44;border-radius:4px;font-size:11px;color:${c}">${a.mensaje}</div>`;
+      }).join('');
+    } else {
+      el.innerHTML = '<div style="padding:4px 10px;background:var(--green-dim);border:1px solid var(--green);border-radius:4px;font-size:11px;color:var(--green)">Sistema OK — sin alertas</div>';
+    }
+  } catch { document.getElementById('codeos-alerts').innerHTML = ''; }
+
+  // Load status
+  try {
+    const r = await fetch('/code-os/status');
+    const d = await r.json();
+    document.getElementById('codeos-status').textContent = `v${d.version} | ${d.tools_count} tools | ${d.modelos_activos?.length || 0} modelos`;
+  } catch {}
+}
+
+function codeosNewSession() {
+  codeosSessionId = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36);
+  document.getElementById('codeos-chat').innerHTML = '';
+  document.getElementById('codeos-input').value = '';
+}
+
+function codeosAddMsg(role, html) {
+  const chat = document.getElementById('codeos-chat');
+  const div = document.createElement('div');
+  div.style.cssText = role === 'user'
+    ? 'align-self:flex-end;background:var(--blue-dim);border:1px solid var(--blue);border-radius:8px;padding:8px 12px;max-width:80%;font-family:var(--font-sans);font-size:13px'
+    : 'align-self:flex-start;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;max-width:90%;font-size:12px;line-height:1.5';
+  div.innerHTML = html;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div;
+}
+
+// File attachment state
+let codeosAttachedFile = null; // {name, content, isBriefing}
+
+function codeosFileSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const allowed = ['.md','.py','.json','.txt','.sql','.csv'];
+  const ext = '.' + file.name.split('.').pop().toLowerCase();
+  if (!allowed.includes(ext)) {
+    alert('Tipo no soportado. Acepta: ' + allowed.join(', '));
+    input.value = '';
+    return;
+  }
+  if (file.size > 500 * 1024) {
+    alert('Archivo demasiado grande. Max: 500KB');
+    input.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const content = e.target.result;
+    const isBriefing = ext === '.md' && content.substring(0, 500).includes('# BRIEFING:');
+    codeosAttachedFile = {name: file.name, content, isBriefing, size: file.size};
+    // Show preview
+    const preview = document.getElementById('codeos-file-preview');
+    const icons = {'.md':'📄','.py':'🐍','.json':'{}','.txt':'📝','.sql':'🗃','.csv':'📊'};
+    document.getElementById('codeos-file-icon').textContent = icons[ext] || '📎';
+    const sizeStr = file.size < 1024 ? file.size + 'B' : (file.size/1024).toFixed(1) + 'KB';
+    document.getElementById('codeos-file-info').textContent = file.name + ' (' + sizeStr + ')';
+    document.getElementById('codeos-file-briefing-badge').style.display = isBriefing ? 'inline' : 'none';
+    preview.style.display = 'flex';
+    if (isBriefing) {
+      const inp = document.getElementById('codeos-input');
+      if (!inp.value.trim()) inp.value = 'Ejecutar briefing adjunto';
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function codeosRemoveFile() {
+  codeosAttachedFile = null;
+  document.getElementById('codeos-file-preview').style.display = 'none';
+  document.getElementById('codeos-file-input').value = '';
+}
+
+async function codeosExecute() {
+  if (codeosRunning) return;
+  const input = document.getElementById('codeos-input');
+  const text = input.value.trim();
+  if (!text && !codeosAttachedFile) return;
+  input.value = '';
+
+  // Show user message
+  let userHtml = (text || '').replace(/</g,'&lt;');
+  if (codeosAttachedFile) {
+    userHtml += '<div style="margin-top:4px;font-size:10px;color:var(--text-dim)">📎 ' + codeosAttachedFile.name;
+    if (codeosAttachedFile.isBriefing) userHtml += ' <span style="background:var(--blue);color:#fff;padding:0 4px;border-radius:4px;font-size:9px">BRIEFING</span>';
+    userHtml += '</div>';
+  }
+  codeosAddMsg('user', userHtml);
+
+  // Build request body
+  const body = {input: text || 'Procesar archivo adjunto', mode: 'auto'};
+  if (codeosAttachedFile) {
+    body.file_content = codeosAttachedFile.content;
+    body.file_name = codeosAttachedFile.name;
+  }
+  const attachedFile = codeosAttachedFile;
+  codeosRemoveFile();
+
+  // Create response container
+  const respDiv = codeosAddMsg('agent', '<span style="color:var(--text-dim)">Pensando...</span>');
+  let parts = [];
+
+  const btn = document.getElementById('codeos-btn');
+  btn.disabled = true;
+  btn.textContent = '...';
+  codeosRunning = true;
+
+  try {
+    const resp = await fetch('/code-os/execute', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body),
+    });
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, {stream: true});
+
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const evt = JSON.parse(line.slice(6));
+          const t = evt.type;
+
+          if (t === 'thinking') {
+            // Replace last thinking line instead of appending
+            const thinkIdx = parts.findIndex(p => p.includes('codeos-thinking-line'));
+            const modelInfo = (evt.model || 'auto').replace(/</g,'&lt;');
+            const stepInfo = evt.step ? `paso ${evt.step}` : '';
+            const thinkHtml = `<div class="codeos-thinking-line" style="color:var(--text-dim);font-size:10px">⏳ ${stepInfo} ${modelInfo}</div>`;
+            if (thinkIdx >= 0) { parts[thinkIdx] = thinkHtml; } else { parts.push(thinkHtml); }
+          } else if (t === 'tool_call') {
+            parts.push(`<div style="color:var(--cyan);font-size:11px">▸ ${evt.tool}(${Object.entries(evt.args||{}).map(([k,v])=>k+'="'+String(v).slice(0,40)+'"').join(', ')})</div>`);
+          } else if (t === 'tool_result') {
+            const c = evt.is_error ? 'var(--red)' : 'var(--green)';
+            const s = evt.is_error ? 'ERR' : 'OK';
+            parts.push(`<div style="color:${c};font-size:11px;margin-left:12px">${s}: ${(evt.result||'').slice(0,120).replace(/</g,'&lt;')}</div>`);
+          } else if (t === 'text') {
+            parts.push(`<div style="font-family:var(--font-sans);font-size:13px;margin:4px 0">${(evt.content||'').replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>`);
+          } else if (t === 'done') {
+            parts.push(`<div style="margin-top:8px;padding:8px;background:var(--green-dim);border:1px solid var(--green);border-radius:4px;font-size:12px;color:var(--green)">${(evt.summary||'Completado').replace(/</g,'&lt;')}<br><span style="font-size:10px;color:var(--text-dim)">${evt.total_ms ? (evt.total_ms/1000).toFixed(1)+'s' : ''} ${evt.total_cost_usd ? '| $'+evt.total_cost_usd.toFixed(4) : ''}</span></div>`);
+          } else if (t === 'error') {
+            parts.push(`<div style="padding:8px;background:var(--red-dim);border:1px solid var(--red);border-radius:4px;font-size:12px;color:var(--red)">${(evt.message||'Error').replace(/</g,'&lt;')}</div>`);
+          }
+
+          respDiv.innerHTML = parts.join('');
+          respDiv.parentElement.scrollTop = respDiv.parentElement.scrollHeight;
+        } catch {}
+      }
+    }
+
+    if (parts.length === 0) {
+      respDiv.innerHTML = '<span style="color:var(--text-dim)">Sin respuesta</span>';
+    }
+  } catch (e) {
+    respDiv.innerHTML = `<div style="color:var(--red)">Error de conexion: ${e.message}</div>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Ejecutar';
+  codeosRunning = false;
+}
+
+// ═══════════════════════════════════════
+// CHIEF DESIGN FLOW
+// ═══════════════════════════════════════
+let chiefAnalysisResult = null;
+
+async function chiefAnalyze() {
+  const domain = document.getElementById('chief-domain').value.trim();
+  if (!domain) return;
+  const focus = document.getElementById('chief-focus').value.trim();
+  const tier = document.getElementById('chief-tier').value;
+
+  const btn = document.getElementById('btn-chief-analyze');
+  const spinner = document.getElementById('chief-spinner');
+  btn.disabled = true;
+  spinner.style.display = 'flex';
+  document.getElementById('chief-spinner-text').textContent = 'Analizando...';
+  document.getElementById('chief-result').innerHTML = '';
+  document.getElementById('chief-stream').innerHTML = '';
+  document.getElementById('btn-chief-execute').style.display = 'none';
+
+  try {
+    const resp = await fetch('/chief/execute', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({domain, focus, action: 'analyze', verify_tier: tier}),
+    });
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '', lastData = null;
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, {stream: true});
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try { lastData = JSON.parse(line.slice(6)); } catch {}
+      }
+    }
+
+    if (lastData && !lastData.error) {
+      chiefAnalysisResult = lastData;
+      renderChiefAnalysis(lastData);
+      document.getElementById('btn-chief-execute').style.display = 'inline-block';
+    } else {
+      document.getElementById('chief-result').innerHTML = `<div style="color:var(--red)">${(lastData?.error || 'No se pudo analizar')}</div>`;
+    }
+  } catch (e) {
+    document.getElementById('chief-result').innerHTML = `<div style="color:var(--red)">Error: ${e.message}</div>`;
+  }
+  btn.disabled = false;
+  spinner.style.display = 'none';
+}
+
+function renderChiefAnalysis(data) {
+  const el = document.getElementById('chief-result');
+  const cells = data.top_gaps || data.celdas || [];
+  const ints = data.inteligencias || [];
+  const preguntas = data.preguntas_top || data.preguntas || [];
+  const programa = data.programa || data.programa_recomendado || '';
+
+  let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+  // Top gaps
+  html += '<div>';
+  html += '<div style="font-size:10px;color:var(--text-dim);margin-bottom:4px">TOP CELDAS CON GAP</div>';
+  if (cells.length > 0) {
+    cells.slice(0, 8).forEach(c => {
+      const gap = c.gap || c.gap_actual || 0;
+      const color = gap >= 0.6 ? 'var(--red)' : gap >= 0.3 ? 'var(--amber)' : gap >= 0.1 ? '#eab308' : 'var(--green)';
+      const pct = Math.min(100, gap * 100);
+      html += `<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+        <span style="font-size:10px;min-width:120px;color:var(--text-dim)">${esc(c.lente||'')}.${esc(c.funcion||'')}</span>
+        <div style="flex:1;height:6px;background:var(--surface-3);border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${color};border-radius:3px"></div></div>
+        <span style="font-size:10px;color:${color};min-width:32px;text-align:right">${gap.toFixed(2)}</span>
+      </div>`;
+    });
+  } else {
+    html += '<span style="color:var(--text-dim);font-size:11px">Sin datos de celdas</span>';
+  }
+  html += '</div>';
+
+  // Inteligencias + preguntas
+  html += '<div>';
+  if (ints.length > 0) {
+    html += '<div style="font-size:10px;color:var(--text-dim);margin-bottom:4px">INTELIGENCIAS RELEVANTES</div>';
+    html += ints.slice(0, 6).map(i => `<span class="tag tag-purple" style="margin:2px">${esc(typeof i === 'string' ? i : i.nombre || i.id || '')}</span>`).join('');
+    html += '<div style="margin-top:6px"></div>';
+  }
+  if (preguntas.length > 0) {
+    html += '<div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;margin-top:6px">PREGUNTAS TOP</div>';
+    preguntas.slice(0, 5).forEach(p => {
+      html += `<div style="font-size:11px;color:var(--text);margin-bottom:2px;padding-left:8px;border-left:2px solid var(--amber)">• ${esc(typeof p === 'string' ? p : p.texto || '')}</div>`;
+    });
+  }
+  html += '</div></div>';
+
+  if (programa) {
+    html += `<div style="margin-top:8px;padding:8px;background:var(--surface-2);border-radius:4px;font-size:11px"><span style="color:var(--amber);font-weight:600">Programa:</span> ${esc(typeof programa === 'string' ? programa : JSON.stringify(programa).slice(0, 200))}</div>`;
+  }
+  el.innerHTML = html;
+}
+
+let chiefRejectCount = 0;
+
+async function chiefExecute() {
+  const domain = document.getElementById('chief-domain').value.trim();
+  const focus = document.getElementById('chief-focus').value.trim();
+  const tier = document.getElementById('chief-tier').value;
+
+  const btn = document.getElementById('btn-chief-execute');
+  const spinner = document.getElementById('chief-spinner');
+  btn.disabled = true;
+  spinner.style.display = 'flex';
+  document.getElementById('chief-spinner-text').textContent = 'Diseñando...';
+
+  const streamEl = document.getElementById('chief-stream');
+  streamEl.innerHTML = '';
+  let parts = [];
+
+  try {
+    const resp = await fetch('/chief/execute', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({domain, focus, action: 'execute', verify_tier: tier}),
+    });
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, {stream: true});
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const evt = JSON.parse(line.slice(6));
+          const t = evt.type || evt.event || '';
+          if (t === 'designing' || t === 'step_start') {
+            parts.push(`<div style="color:var(--cyan);font-size:11px">⚙️ ${esc(evt.message || evt.step || 'Paso...')}</div>`);
+          } else if (t === 'verifying' || t === 'opus_review') {
+            parts.push(`<div style="color:var(--purple);font-size:11px">🔍 ${esc(evt.message || 'Opus revisando...')}</div>`);
+          } else if (t === 'step_done' || t === 'progress') {
+            parts.push(`<div style="color:var(--green);font-size:11px">✅ ${esc(evt.message || 'Step done')}</div>`);
+            if (evt.progress) {
+              parts.push(`<div style="margin:4px 0"><div style="height:4px;background:var(--surface-3);border-radius:2px;overflow:hidden"><div style="width:${Math.min(100, evt.progress)}%;height:100%;background:var(--amber);border-radius:2px"></div></div><div style="font-size:9px;color:var(--text-dim);margin-top:2px">${evt.step_label || ''}</div></div>`);
+            }
+          } else if (t === 'rejected') {
+            chiefRejectCount++;
+            parts.push(`<div style="padding:6px;background:var(--red-dim);border:1px solid var(--red);border-radius:4px;font-size:11px;color:var(--red)">Opus rechazó: ${esc(evt.reason || '')}</div>`);
+            if (chiefRejectCount >= 2 && evt.intent_issues) {
+              parts.push(`<div style="padding:6px;background:var(--red-dim);border:1px solid var(--red);border-radius:4px;margin-top:4px;font-size:11px"><b>Issues:</b> ${esc(JSON.stringify(evt.intent_issues))}<br><input id="chief-reorient" placeholder="Reorientar foco..." style="margin-top:4px;width:80%"><button class="btn-sm btn-primary" onclick="document.getElementById('chief-focus').value=document.getElementById('chief-reorient').value;chiefAnalyze()" style="margin-left:4px">Reanalizar</button></div>`);
+            }
+          } else if (t === 'done' || t === 'complete') {
+            const score = evt.score || evt.score_global || '';
+            const cost = evt.cost || evt.coste || '';
+            parts.push(`<div style="margin-top:8px;padding:8px;background:var(--green-dim);border:1px solid var(--green);border-radius:4px;font-size:12px;color:var(--green)">✅ Diseño completado${score ? ' — Score: ' + score : ''}${cost ? ' — Coste: $' + (typeof cost === 'number' ? cost.toFixed(4) : cost) : ''}</div>`);
+          } else if (t === 'error') {
+            parts.push(`<div style="padding:6px;background:var(--red-dim);border:1px solid var(--red);border-radius:4px;font-size:11px;color:var(--red)">${esc(evt.message || 'Error')}</div>`);
+          }
+          streamEl.innerHTML = parts.join('');
+          streamEl.scrollIntoView({block: 'nearest'});
+        } catch {}
+      }
+    }
+  } catch (e) {
+    streamEl.innerHTML += `<div style="color:var(--red)">Error: ${e.message}</div>`;
+  }
+  btn.disabled = false;
+  spinner.style.display = 'none';
+  chiefRejectCount = 0;
+}
+
+// ═══════════════════════════════════════
+// SELF-HEALING
+// ═══════════════════════════════════════
+async function loadSelfHealing() {
+  // Status
+  try {
+    const d = await api('/self-healing/status');
+    document.getElementById('sh-pending').textContent = d.pending_count ?? '—';
+    document.getElementById('sh-fontaneria').textContent = d.fontaneria_ejecutadas ?? '—';
+    document.getElementById('sh-last-cycle').textContent = d.last_cycle ? timeAgo(d.last_cycle) : 'never';
+
+    // Badge
+    const badge = document.getElementById('sh-badge');
+    if (d.pending_count > 0) {
+      badge.textContent = d.pending_count;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  } catch {}
+
+  // Queue
+  try {
+    const d = await api('/self-healing/pending');
+    const el = document.getElementById('sh-queue');
+    const items = d.improvements || [];
+    if (items.length === 0) {
+      el.innerHTML = '<span style="color:var(--text-dim);font-size:11px">Sin mejoras pendientes</span>';
+    } else {
+      el.innerHTML = items.map(item => {
+        const riskColors = {low: 'var(--green)', medium: 'var(--amber)', high: 'var(--red)'};
+        const riskColor = riskColors[item.riesgo || item.risk || 'medium'] || 'var(--text-dim)';
+        return `<div style="display:flex;gap:8px;padding:8px;margin-bottom:6px;background:var(--surface-2);border-radius:4px;align-items:center">
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:11px">${esc(item.descripcion || item.description || item.trigger || '—')}</div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:2px">
+              ${item.trigger ? 'Trigger: ' + esc(item.trigger) + ' | ' : ''}
+              <span style="color:${riskColor}">Riesgo: ${esc(item.riesgo || item.risk || '—')}</span>
+              ${item.coste_estimado ? ' | Coste: $' + item.coste_estimado : ''}
+            </div>
+          </div>
+          <button class="btn btn-sm" style="background:var(--green-dim);color:var(--green)" onclick="approveSH('${esc(item.id || item.improvement_id || '')}', this)">Aprobar</button>
+          <button class="btn btn-sm" style="background:var(--surface-3);color:var(--text-dim)" onclick="rejectSH('${esc(item.id || item.improvement_id || '')}', this)">Rechazar</button>
+        </div>`;
+      }).join('');
+    }
+  } catch (e) {
+    document.getElementById('sh-queue').innerHTML = `<span style="color:var(--text-dim);font-size:11px">Error cargando mejoras: ${e.message}</span>`;
+  }
+}
+
+async function approveSH(id, btn) {
+  btn.disabled = true;
+  btn.textContent = '...';
+  const parent = btn.parentElement;
+  try {
+    const d = await api(`/self-healing/approve/${id}`, {method: 'POST'});
+    if (d.error) {
+      btn.textContent = 'Error';
+      btn.style.color = 'var(--red)';
+    } else {
+      parent.innerHTML = '<span class="tag tag-green" style="font-size:11px">Ejecutando...</span>';
+      // Refresh after execution
+      setTimeout(loadSelfHealing, 3000);
+    }
+  } catch { btn.textContent = 'Error'; }
+}
+
+async function rejectSH(id, btn) {
+  btn.disabled = true;
+  btn.textContent = '...';
+  try {
+    await api(`/self-healing/reject/${id}`, {method: 'POST'});
+    btn.closest('[style*="surface-2"]').style.opacity = '0.3';
+    setTimeout(loadSelfHealing, 500);
+  } catch { btn.textContent = 'Error'; }
+}
+
+async function runSelfHealingCycle() {
+  try {
+    await api('/self-healing/run', {method: 'POST'});
+    setTimeout(loadSelfHealing, 2000);
+  } catch {}
+}
+
+// ═══════════════════════════════════════
+// TERMÓMETRO MATRIZ 3×7
+// ═══════════════════════════════════════
+const LENTES = ['Salud', 'Sentido', 'Continuidad'];
+const FUNCIONES = ['Conservar', 'Captar', 'Depurar', 'Distribuir', 'Frontera', 'Adaptar', 'Replicar'];
+
+async function loadTermometro() {
+  const el = document.getElementById('w-termometro');
+  const consumidor = document.getElementById('termo-consumidor').value;
+  el.innerHTML = '<span class="loading"><span class="spinner"></span></span>';
+
+  try {
+    const d = await api(`/matriz/termometro${consumidor ? '?consumidor=' + encodeURIComponent(consumidor) : ''}`);
+    if (d.error) {
+      if (d.error.includes('relation') || d.error.includes('does not exist')) {
+        el.innerHTML = '<div style="text-align:center;padding:20px"><div style="font-size:24px;margin-bottom:8px">▦</div><div style="color:var(--text-dim)">Ejecutar B3 para activar termómetro</div><div style="font-size:10px;color:var(--text-muted);margin-top:4px">La migración celdas_matriz aún no se ha ejecutado</div></div>';
+      } else {
+        el.innerHTML = `<div style="color:var(--red)">${esc(d.error)}</div>`;
+      }
+      return;
+    }
+
+    const celdas = d.celdas || [];
+    if (celdas.length === 0) {
+      el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-dim)">Sin datos de celdas. Ejecutar B3 para poblar la Matriz.</div>';
+      return;
+    }
+
+    // Build lookup: lente.funcion → celda
+    const lookup = {};
+    let gapTotal = 0, nCeldas = 0;
+    celdas.forEach(c => {
+      const key = (c.lente || '').toLowerCase() + '.' + (c.funcion || '').toLowerCase();
+      lookup[key] = c;
+      if (c.gap !== null && c.gap !== undefined) { gapTotal += c.gap; nCeldas++; }
+    });
+    const gapPct = nCeldas > 0 ? ((gapTotal / nCeldas) * 100).toFixed(0) : '—';
+    const gapColor = gapPct === '—' ? 'var(--text-dim)' : gapPct >= 60 ? 'var(--red)' : gapPct >= 30 ? 'var(--amber)' : gapPct >= 10 ? '#eab308' : 'var(--green)';
+
+    let html = '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:10px">';
+    // Header row
+    html += '<tr><td style="padding:6px;text-align:center;font-weight:700;font-size:16px;color:' + gapColor + '">' + gapPct + '%</td>';
+    FUNCIONES.forEach(f => {
+      // Compute avg gap for function
+      let fGap = 0, fN = 0;
+      LENTES.forEach(l => {
+        const c = lookup[l.toLowerCase() + '.' + f.toLowerCase()];
+        if (c && c.gap != null) { fGap += c.gap; fN++; }
+      });
+      const avgF = fN > 0 ? (fGap / fN) : null;
+      const fc = avgF === null ? 'var(--text-muted)' : avgF >= 0.6 ? 'var(--red)' : avgF >= 0.3 ? 'var(--amber)' : avgF >= 0.1 ? '#eab308' : 'var(--green)';
+      html += `<td style="padding:4px 2px;text-align:center;font-size:9px;color:var(--text-dim);border-bottom:3px solid ${fc}">${f}</td>`;
+    });
+    html += '</tr>';
+
+    // Data rows
+    LENTES.forEach(l => {
+      let lGap = 0, lN = 0;
+      FUNCIONES.forEach(f => {
+        const c = lookup[l.toLowerCase() + '.' + f.toLowerCase()];
+        if (c && c.gap != null) { lGap += c.gap; lN++; }
+      });
+      const avgL = lN > 0 ? (lGap / lN) : null;
+      const lc = avgL === null ? 'var(--text-muted)' : avgL >= 0.6 ? 'var(--red)' : avgL >= 0.3 ? 'var(--amber)' : avgL >= 0.1 ? '#eab308' : 'var(--green)';
+
+      html += `<tr><td style="padding:6px;font-weight:600;font-size:10px;color:var(--text-dim);border-right:3px solid ${lc};white-space:nowrap">${l}</td>`;
+      FUNCIONES.forEach(f => {
+        const c = lookup[l.toLowerCase() + '.' + f.toLowerCase()];
+        const gap = c ? c.gap : null;
+        const tasa = c ? (c.tasa_cierre_media || c.grado_actual || null) : null;
+        const dp = c ? (c.n_datapoints || c.n_datapoints_consumidor || 0) : 0;
+        let bg, tc;
+        if (gap === null || gap === undefined) {
+          bg = 'var(--surface-3)'; tc = 'var(--text-muted)';
+        } else if (gap >= 0.6) {
+          bg = 'var(--red-dim)'; tc = 'var(--red)';
+        } else if (gap >= 0.3) {
+          bg = 'var(--amber-dim)'; tc = 'var(--amber)';
+        } else if (gap >= 0.1) {
+          bg = '#78350f33'; tc = '#eab308';
+        } else {
+          bg = 'var(--green-dim)'; tc = 'var(--green)';
+        }
+        html += `<td style="padding:4px;text-align:center;background:${bg};border:1px solid var(--surface-3);cursor:pointer" title="${l}.${f}: gap=${gap?.toFixed(3) ?? '?'}, tasa=${tasa?.toFixed(2) ?? '?'}, dp=${dp}">
+          <div style="font-size:13px;font-weight:700;color:${tc}">${gap !== null && gap !== undefined ? gap.toFixed(2) : '—'}</div>
+          <div style="font-size:8px;color:var(--text-muted)">${tasa !== null ? tasa.toFixed(2) : ''}</div>
+          <div style="font-size:8px;color:var(--text-muted)">${dp > 0 ? dp + ' dp' : ''}</div>
+        </td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</table></div>';
+
+    // Load consumidores dropdown
+    try {
+      const sel = document.getElementById('termo-consumidor');
+      if (sel.options.length <= 1) {
+        const t = await api('/exocortex/tenants');
+        const tenants = t.tenants || [];
+        tenants.forEach(tn => {
+          const opt = document.createElement('option');
+          opt.value = tn.consumidor || tn.id || tn.nombre || '';
+          opt.textContent = tn.nombre || tn.consumidor || tn.id || '';
+          sel.appendChild(opt);
+        });
+      }
+    } catch {}
+
+    el.innerHTML = html;
+  } catch (e) {
+    el.innerHTML = `<div style="color:var(--red)">Error: ${e.message}</div>`;
+  }
 }
 
 // ═══════════════════════════════════════
@@ -1672,6 +2400,20 @@ function startPolling() {
 
   // Refresh current section every 60s
   setInterval(() => { if (S.section) loadSection(S.section); }, 60000);
+
+  // Self-healing badge update every 30s
+  setInterval(async () => {
+    try {
+      const d = await api('/self-healing/status');
+      const badge = document.getElementById('sh-badge');
+      if (d.pending_count > 0) {
+        badge.textContent = d.pending_count;
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+    } catch {}
+  }, 30000);
 }
 
 // ═══════════════════════════════════════

@@ -590,6 +590,41 @@ class MotorVN:
         # Step 5: Evaluador — scoring heuristico
         scores = self._evaluar(hallazgos_totales, input_texto)
 
+        # Step 5b: GameTheory — evaluate composition quality
+        game_theory_result = {}
+        try:
+            from .game_theory import get_game_theory
+            gt = get_game_theory()
+            outputs_for_gt = [
+                {'inteligencia': h.get('inteligencia', ''), 'texto': h.get('hallazgo', ''),
+                 'hallazgos': [h]}
+                for h in hallazgos_totales
+            ]
+            if len(outputs_for_gt) >= 2:
+                game_theory_result = gt.analizar_composicion(outputs_for_gt)
+        except Exception:
+            pass
+
+        # Step 5c: InformationLayer — detect redundancy between INTs
+        info_layer_result = {}
+        try:
+            from .information_layer import information_bottleneck
+            # Group hallazgos by INT for MI analysis
+            by_int = {}
+            for h in hallazgos_totales:
+                int_id = h.get('inteligencia', '')
+                if int_id not in by_int:
+                    by_int[int_id] = []
+                by_int[int_id].append(h.get('hallazgo', ''))
+            outputs_for_ib = [
+                {'inteligencia': int_id, 'texto': ' '.join(texts)}
+                for int_id, texts in by_int.items()
+            ]
+            if len(outputs_for_ib) >= 2:
+                info_layer_result = information_bottleneck(outputs_for_ib)
+        except Exception:
+            pass
+
         # Step 6: Integrador — sintesis
         sintesis = self._integrar(hallazgos_totales, scores, input_texto)
 
@@ -599,6 +634,8 @@ class MotorVN:
             'sintesis': sintesis,
             'n_llm_calls': n_llm_calls,
             'modelos_usados': modelos_usados,
+            'game_theory': game_theory_result,
+            'information_layer': info_layer_result,
         }
 
     # =====================================================
@@ -673,6 +710,7 @@ Responde cada pregunta con un hallazgo concreto."""
         if not self.openrouter_key:
             return f"[SIN API KEY] Simulacion para modelo {modelo_real}"
 
+        t0_llm = time.time()
         try:
             async with httpx.AsyncClient(timeout=60) as client:
                 r = await client.post(
@@ -702,6 +740,17 @@ Responde cada pregunta con un hallazgo concreto."""
                     except Exception:
                         coste = (tokens_in * 0.27 + tokens_out * 1.10) / 1_000_000
                     self.coste_acumulado += coste
+                    try:
+                        from .costes import registrar_coste
+                        registrar_coste(
+                            modelo=modelo_real,
+                            tokens_input=tokens_in,
+                            tokens_output=tokens_out,
+                            latencia_ms=int((time.time() - t0_llm) * 1000),
+                            provider='openrouter',
+                        )
+                    except Exception:
+                        pass  # Cost tracking must not break execution
                     breaker.registrar_exito(modelo_real)
                     return content
                 else:

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chief OS // OMNI-MIND v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0b; --surface: #141416; --surface2: #1c1c20;
+    --text: #e4e4e7; --text-dim: #71717a; --text-muted: #52525b;
+    --amber: #f59e0b; --purple: #a855f7; --blue: #3b82f6;
+    --red: #ef4444; --green: #22c55e; --border: #27272a;
+  }
+  html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  .app { display: flex; flex-direction: column; height: 100vh; }
+
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px; border-bottom: 1px solid var(--border);
+    background: var(--surface); flex-shrink: 0;
+  }
+  .header-title { font-size: 14px; font-weight: 700; letter-spacing: 1px; color: var(--amber); }
+  .header-right { display: flex; align-items: center; gap: 16px; font-size: 12px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); display: inline-block; }
+  .status-dot.ok { background: var(--green); }
+  .status-dot.err { background: var(--red); }
+  .stat { color: var(--text-dim); }
+  .stat b { color: var(--text); }
+
+  .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+  .messages::-webkit-scrollbar { width: 6px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .msg-user { align-self: flex-end; max-width: 70%; }
+  .msg-user .bubble {
+    background: var(--amber); color: #000; padding: 10px 16px;
+    border-radius: 16px 16px 4px 16px; font-size: 14px; line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .msg-bot { align-self: flex-start; max-width: 85%; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .card-header {
+    display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
+  }
+  .badge-superficial { background: var(--amber); color: #000; }
+  .badge-profundo { background: var(--purple); color: #fff; }
+  .badge-system { background: var(--text-muted); color: #fff; }
+  .card-meta { font-size: 11px; color: var(--text-dim); }
+  .card-body { padding: 14px 16px; font-size: 14px; line-height: 1.7; }
+  .card-body p { margin-bottom: 8px; }
+  .card-body p:last-child { margin-bottom: 0; }
+  .card-body strong, .card-body b { color: #fff; }
+  .card-body code { background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .card-body pre { background: var(--surface2); padding: 12px; border-radius: 8px; overflow-x: auto; margin: 8px 0; }
+  .card-body pre code { background: none; padding: 0; }
+  .card-body h1, .card-body h2, .card-body h3, .card-body h4 { color: var(--amber); margin: 12px 0 6px; }
+  .card-body h1 { font-size: 18px; } .card-body h2 { font-size: 16px; } .card-body h3 { font-size: 14px; }
+  .card-body ul, .card-body ol { padding-left: 20px; margin: 6px 0; }
+  .card-body li { margin-bottom: 4px; }
+
+  /* Pizarra toggle */
+  .pizarra-toggle {
+    display: block; width: 100%; padding: 10px 16px; background: var(--surface2);
+    border: none; border-top: 1px solid var(--border); color: var(--text-dim);
+    font-size: 12px; cursor: pointer; text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .pizarra-toggle:hover { color: var(--text); background: #1f1f24; }
+  .pizarra-section { display: none; border-top: 1px solid var(--border); }
+  .pizarra-section.open { display: block; }
+
+  .round-header {
+    padding: 8px 16px; background: #111113; font-size: 11px; font-weight: 700;
+    color: var(--text-dim); letter-spacing: 0.5px; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .round-header.r1 { border-left: 3px solid var(--amber); }
+  .round-header.r2 { border-left: 3px solid var(--purple); }
+
+  .indiv-card { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .indiv-card:last-child { border-bottom: none; }
+  .indiv-name { color: var(--blue); font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .indiv-stats { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; }
+  .indiv-content { font-size: 13px; line-height: 1.6; }
+  .thinking-block {
+    background: #1a1025; border-left: 3px solid var(--purple);
+    padding: 10px 12px; margin: 8px 0; border-radius: 0 6px 6px 0;
+    max-height: 200px; overflow-y: auto; font-size: 12px;
+    color: var(--text-dim); line-height: 1.5;
+  }
+  .thinking-label { font-size: 11px; color: var(--purple); font-weight: 700; margin-bottom: 4px; }
+
+  /* Synthesizer meta */
+  .synth-meta {
+    padding: 6px 16px; font-size: 11px; color: var(--text-muted);
+    border-top: 1px solid var(--border); font-family: 'JetBrains Mono', monospace;
+  }
+
+  .input-area {
+    padding: 16px 20px; border-top: 1px solid var(--border);
+    background: var(--surface); flex-shrink: 0;
+  }
+  .input-row { display: flex; gap: 10px; align-items: flex-end; }
+  .input-row textarea {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 16px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    resize: none; min-height: 44px; max-height: 150px; line-height: 1.5;
+    outline: none; transition: border-color 0.2s;
+  }
+  .input-row textarea:focus { border-color: var(--amber); }
+  .input-row textarea::placeholder { color: var(--text-muted); }
+  .send-btn {
+    background: var(--amber); color: #000; border: none; border-radius: 10px;
+    width: 44px; height: 44px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 18px; font-weight: 700; transition: opacity 0.2s;
+  }
+  .send-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .send-btn:hover:not(:disabled) { opacity: 0.85; }
+
+  .loading { color: var(--text-dim); font-size: 13px; padding: 8px 0; }
+  .dots::after { content: ''; animation: dots 1.5s steps(4) infinite; }
+  @keyframes dots {
+    0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <span class="header-title">CHIEF OS // OMNI-MIND v4</span>
+    <div class="header-right">
+      <span class="status-dot" id="statusDot"></span>
+      <span class="stat mono">Coste: <b id="sessionCost">$0.0000</b></span>
+      <span class="stat mono">Turnos: <b id="turnCount">0</b></span>
+    </div>
+  </div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="input" placeholder="Escribe tu mensaje... (/help para comandos)" rows="1"></textarea>
+      <button class="send-btn" id="sendBtn" title="Enviar">&#x2191;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const messagesEl = document.getElementById('messages');
+const inputEl = document.getElementById('input');
+const sendBtn = document.getElementById('sendBtn');
+const statusDot = document.getElementById('statusDot');
+const sessionCostEl = document.getElementById('sessionCost');
+const turnCountEl = document.getElementById('turnCount');
+
+let history = [];
+let sessionCost = 0;
+let turnCount = 0;
+let isLoading = false;
+
+fetch('/health').then(r => r.json()).then(d => {
+  statusDot.classList.add(d.status === 'ok' && d.api_key_set ? 'ok' : 'err');
+}).catch(() => statusDot.classList.add('err'));
+
+inputEl.addEventListener('input', () => {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 150) + 'px';
+});
+
+inputEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+});
+
+sendBtn.addEventListener('click', send);
+
+function send() {
+  const msg = inputEl.value.trim();
+  if (!msg || isLoading) return;
+  addUserMessage(msg);
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+  isLoading = true;
+  sendBtn.disabled = true;
+  const loadingEl = addLoading();
+
+  fetch('/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: msg, history }),
+  })
+  .then(r => r.json())
+  .then(data => {
+    loadingEl.remove();
+    addBotMessage(data);
+    if (data.mode !== 'system') {
+      history.push({ role: 'user', content: msg });
+      history.push({ role: 'assistant', content: data.synthesis });
+      sessionCost += data.total_cost_usd || 0;
+      turnCount++;
+      sessionCostEl.textContent = '$' + sessionCost.toFixed(4);
+      turnCountEl.textContent = turnCount;
+    }
+  })
+  .catch(err => {
+    loadingEl.remove();
+    addBotMessage({ mode: 'system', synthesis: 'Error de conexión: ' + err.message });
+  })
+  .finally(() => { isLoading = false; sendBtn.disabled = false; inputEl.focus(); });
+}
+
+function addUserMessage(text) {
+  const div = document.createElement('div');
+  div.className = 'msg-user';
+  div.innerHTML = `<div class="bubble">${esc(text)}</div>`;
+  messagesEl.appendChild(div);
+  scrollBottom();
+}
+
+function addLoading() {
+  const div = document.createElement('div');
+  div.className = 'msg-bot loading';
+  div.innerHTML = '<span>Consultando enjambre<span class="dots"></span></span>';
+  messagesEl.appendChild(div);
+  scrollBottom();
+  return div;
+}
+
+function addBotMessage(data) {
+  const div = document.createElement('div');
+  div.className = 'msg-bot';
+
+  const badgeClass = data.mode === 'profundo' ? 'badge-profundo' : data.mode === 'system' ? 'badge-system' : 'badge-superficial';
+
+  let meta = '';
+  if (data.mode === 'profundo') {
+    meta = `<span class="card-meta mono">${data.total_latency_s||0}s · $${(data.total_cost_usd||0).toFixed(4)} · ${(data.models_used||[]).length} modelos · ${data.rounds||0} rondas</span>`;
+  } else if (data.mode === 'superficial') {
+    meta = `<span class="card-meta mono">${data.total_latency_s||0}s · $${(data.total_cost_usd||0).toFixed(4)} · 1 modelo</span>`;
+  }
+
+  let pizarraHTML = '';
+  if (data.mode === 'profundo' && data.pizarra) {
+    const id = 'piz-' + Date.now();
+    const r1 = data.pizarra.ronda_1 || [];
+    const r2 = data.pizarra.ronda_2 || [];
+    const total = r1.length + r2.length;
+
+    pizarraHTML = `
+      <button class="pizarra-toggle" onclick="togglePizarra(this, '${id}', ${total})">▸ Ver pizarra del enjambre (${data.rounds} rondas, ${total} bloques)</button>
+      <div class="pizarra-section" id="${id}">
+        <div class="round-header r1">Ronda 1 — Exploración inicial</div>
+        ${r1.map(r => renderIndiv(r)).join('')}
+        <div class="round-header r2">Ronda 2 — Enriquecimiento estigmértico</div>
+        ${r2.map(r => renderIndiv(r)).join('')}
+      </div>`;
+  }
+
+  let synthMeta = '';
+  if (data.mode === 'profundo' && data.synthesizer_meta) {
+    const sm = data.synthesizer_meta;
+    synthMeta = `<div class="synth-meta">Síntesis: ${esc(sm.model)} · ${sm.latency_s}s · ${sm.tokens_out} tok · $${(sm.cost_usd||0).toFixed(5)}</div>`;
+  }
+
+  div.innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <span class="badge ${badgeClass}">${data.mode}</span>
+        ${meta}
+      </div>
+      <div class="card-body">${renderMd(data.synthesis)}</div>
+      ${synthMeta}
+      ${pizarraHTML}
+    </div>`;
+  messagesEl.appendChild(div);
+  scrollBottom();
+}
+
+function togglePizarra(btn, id, total) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  const rounds = btn.dataset.rounds || 2;
+  btn.textContent = el.classList.contains('open')
+    ? `▾ Ocultar pizarra del enjambre`
+    : `▸ Ver pizarra del enjambre (${rounds} rondas, ${total} bloques)`;
+}
+
+function renderIndiv(r) {
+  const thinkHTML = r.thinking
+    ? `<div class="thinking-label">THINKING</div><div class="thinking-block">${esc(r.thinking)}</div>`
+    : '';
+  return `<div class="indiv-card">
+    <div class="indiv-name">${esc(r.model)}${r.error ? ' <span style="color:var(--red)">[ERROR]</span>' : ''}</div>
+    <div class="indiv-stats">${r.latency_s}s · ${r.tokens_out} tok · $${(r.cost_usd||0).toFixed(5)}</div>
+    ${thinkHTML}
+    <div class="indiv-content">${renderMd(r.content)}</div>
+  </div>`;
+}
+
+function scrollBottom() {
+  requestAnimationFrame(() => { messagesEl.scrollTop = messagesEl.scrollHeight; });
+}
+
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function renderMd(text) {
+  if (!text) return '';
+  let h = esc(text);
+  h = h.replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+  h = h.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+  h = h.replace(/`([^`]+)`/g, '<code>$1</code>');
+  h = h.replace(/^####\s+(.+)$/gm, '<h4>$1</h4>');
+  h = h.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+  h = h.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');
+  h = h.replace(/^#\s+(.+)$/gm, '<h1>$1</h1>');
+  h = h.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  h = h.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  h = h.replace(/^\- (.+)$/gm, '<li>$1</li>');
+  h = h.replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>');
+  h = h.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
+  h = h.replace(/\n\n/g, '</p><p>');
+  h = '<p>' + h + '</p>';
+  h = h.replace(/<p><\/p>/g, '');
+  h = h.replace(/<p>(<h[1-4]>)/g, '$1');
+  h = h.replace(/(<\/h[1-4]>)<\/p>/g, '$1');
+  h = h.replace(/<p>(<pre>)/g, '$1');
+  h = h.replace(/(<\/pre>)<\/p>/g, '$1');
+  h = h.replace(/<p>(<ul>)/g, '$1');
+  h = h.replace(/(<\/ul>)<\/p>/g, '$1');
+  return h;
+}
+</script>
+</body>
+</html>

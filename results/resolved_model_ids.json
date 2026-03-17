@@ -1,0 +1,8 @@
+{
+  "kimi-k2.5": "moonshotai/kimi-k2.5",
+  "qwen3.5-397b": "qwen/qwen3.5-397b-a17b",
+  "nemotron-super": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+  "step-3.5-flash": "stepfun/step-3.5-flash",
+  "mimo-v2-flash": "xiaomi/mimo-v2-flash",
+  "devstral": "mistralai/devstral-2512"
+}
