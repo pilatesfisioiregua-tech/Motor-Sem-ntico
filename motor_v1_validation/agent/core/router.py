@@ -3,11 +3,11 @@
 Consolidated from 8 roles to 4 based on patterns 60665 (sweet spot 4-5), 60673 (Diferencial A-B).
 3 modes (Quick/Standard/Deep) per pattern 60666 (Modos API Diferenciados).
 
-Architecture — SOTA open-source stack (March 2026):
-- CEREBRO (Qwen3-Coder 480B): Agent RL trained, SOTA agentic tool-use, $1.00/M
-- WORKER (DeepSeek V3.2): 73% SWE-bench, MIT, $0.38/M — best cost-efficiency
-- EVALUADOR (MiniMax M2.5): 80.2% SWE-bench (#1 open-weight), $1.20/M
-- Key insight: loop > model power + SOTA models follow autonomous instructions
+Architecture — Devstral 2 unified stack (March 2026):
+- CEREBRO (Devstral 2, 123B dense): agentic coding, $0.40/$2.00 — validado 100%
+- WORKER (Devstral 2, unified): mismo modelo — evita split cerebro/worker que falló con Qwen3+MiniMax
+- EVALUADOR (GLM-5): #1 Arena rating (1451 ELO), $2.30/M — sin cambio
+- Key insight: unified model > split cuando el worker no completa tareas
 """
 
 from dataclasses import dataclass, field
@@ -192,9 +192,9 @@ TASK_KEYWORDS = {
 class DualModelRouter(TieredRouter):
     """Cerebro/Trabajador router — uses different models for thinking vs coding.
 
-    Validated by experiments:
-    - CEREBRO (Qwen3-Coder): Agent RL trained, SOTA agentic tool-use — decide y encadena
-    - WORKER (MiniMax M2.5): 80.2% SWE-bench (#1 open-weight) — arregla en menos iteraciones
+    B07: Unified Devstral 2 stack (Qwen3-Coder falló 0/4, MiniMax worker no completaba):
+    - CEREBRO (Devstral 2, 123B dense): agentic coding, $0.40/$2.00 — validado 100%
+    - WORKER (Devstral 2, unified): mismo modelo — evita split que falló
     - EVALUADOR (GLM-5): #1 Arena rating (1451 ELO) — mejor juicio y evaluación
     """
     task_type: str = "code_gen"

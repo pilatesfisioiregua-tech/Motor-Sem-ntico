@@ -42,19 +42,18 @@ def get_tier_config() -> dict:
     obs = _get_observatory()
     if obs:
         return obs.get_tier_config()
-    # Consolidated 4-role architecture — MAX ROI open-source (March 2026)
-    # Optimizado por coste-por-tarea-completada, no por coste-por-token
-    # Qwen3-Coder: Agent RL trained, SOTA agentic tool-use — mejor seguimiento instrucciones
-    # MiniMax M2.5: 80.2% SWE-bench (#1 open-weight) — arregla código en menos iteraciones
-    # GLM-5: #1 Arena rating (1451 ELO) — mejor juicio y evaluación
+    # Consolidated 4-role architecture — Devstral 2 unified (March 2026)
+    # Qwen3-Coder falló 0/4 en test validación (B06) — no maneja 61 tools + system prompt complejo
+    # MiniMax M2.5 como worker tampoco completa en execute mode
+    # Devstral 2: 123B dense, agentic coding, validado 100% previamente
     return {
-        "cerebro":       "qwen/qwen3-coder",               # orquesta, decide, encadena (Agent RL)
-        "worker":        "minimax/minimax-m2.5",            # código + fix (80.2% SWE-bench, menos iters)
-        "worker_budget": "deepseek/deepseek-v3.2",          # fallback para tareas simples
-        "evaluador":     "z-ai/glm-5",                     # evaluación + juicio (#1 Arena)
-        "swarm":         "deepseek/deepseek-v3.2",          # exploradores paralelos (volumen)
+        "cerebro":       "mistralai/devstral-2512",          # 123B dense, agentic coding, validado 100%
+        "worker":        "mistralai/devstral-2512",          # mismo modelo (unified) — evita split que falló
+        "worker_budget": "deepseek/deepseek-v3.2",           # fallback barato
+        "evaluador":     "z-ai/glm-5",                      # evaluación (#1 Arena) — sin cambio
+        "swarm":         "deepseek/deepseek-v3.2",           # volumen — sin cambio
         # Legacy aliases for backward compatibility
-        "orchestrator":  "qwen/qwen3-coder",
+        "orchestrator":  "mistralai/devstral-2512",
         "synthesis":     "z-ai/glm-5",
     }
 
@@ -73,7 +72,7 @@ def get_model_pricing(model_id: str) -> float:
         # Anthropic
         "claude-sonnet-4-6": 15.00, "claude-opus-4-6": 25.00,
         # Legacy (kept for compatibility)
-        "mistralai/devstral-2512": 0.60,
+        "mistralai/devstral-2512": 2.00,  # $0.40 input / $2.00 output
         "stepfun/step-3.5-flash": 3.80,
         "xiaomi/mimo-v2-flash": 0.28,
         "deepcogito/cogito-v2.1-671b": 5.00,
