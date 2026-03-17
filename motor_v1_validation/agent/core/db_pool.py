@@ -26,7 +26,7 @@ def get_pool():
             from psycopg2.pool import ThreadedConnectionPool
             _pool = ThreadedConnectionPool(
                 minconn=2,
-                maxconn=20,
+                maxconn=25,
                 dsn=url,
             )
             return _pool

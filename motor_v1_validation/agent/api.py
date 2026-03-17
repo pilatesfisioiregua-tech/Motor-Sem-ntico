@@ -33,6 +33,7 @@ except ImportError:
     sys.exit(1)
 
 from core.api import _load_env
+from core import VERSION
 from persistence import SupabaseClient
 from chat import ChatEngine
 
@@ -41,7 +42,7 @@ _load_env()
 app = FastAPI(
     title="Code OS v2 API",
     description="El Enjambre — An open source Claude Code with 55+ tools",
-    version="3.4.0",
+    version=VERSION,
 )
 
 # Mount static files for chat UI
@@ -421,7 +422,7 @@ async def code_os_status():
         pass
 
     return {
-        "version": "5.0",
+        "version": VERSION,
         "modelos_activos": modelos,
         "tools_count": tools_count,
         "last_session": last_session,
@@ -1447,7 +1448,7 @@ async def health():
     db = SupabaseClient()
     return {
         "status": "ok",
-        "version": "3.4.0",
+        "version": VERSION,
         "tools": 61,
         "supabase": db.enabled,
         "swarm_models": 4,  # 3 explorers + 1 synthesizer
@@ -1951,7 +1952,7 @@ async def dashboard():
         db = SupabaseClient()
         resultado['health'] = {
             'status': 'ok',
-            'version': '3.4.0',
+            'version': VERSION,
             'supabase': db.enabled,
         }
     except Exception:
@@ -2005,7 +2006,7 @@ async def dashboard():
 async def version():
     """Version del sistema y briefings implementados."""
     return {
-        "version": "3.4.0",
+        "version": VERSION,
         "briefings_implementados": [
             "SN-00: Schema verification",
             "SN-01: Seed matriz",

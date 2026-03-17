@@ -29,11 +29,15 @@ class NeuralDB:
         self._max_sessions = 100     # evict oldest when exceeded
 
     def semantic_search(self, query: str, limit: int = 10,
-                        scope: str = None, session_id: str = None) -> list:
+                        scope: str = None, session_id: str = None,
+                        include_repo: bool = False) -> list:
         """Search knowledge_base using hybrid_search() SQL function.
 
         Combines: full-text search (tsvector) + scope filtering + Hebbian graph boost.
         Returns list of dicts with id, scope, tipo, texto, fts_rank, hebbian_boost, combined_score.
+
+        Args:
+            include_repo: If False (default), excludes repo-indexed chunks (scope starting with 'repo').
         """
         conn = _get_conn()
         if not conn:
@@ -41,12 +45,17 @@ class NeuralDB:
 
         try:
             import psycopg2.extras
+            fetch_limit = limit if include_repo or scope else limit * 3
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
                 cur.execute(
                     "SELECT * FROM hybrid_search(%s, %s, %s, %s)",
-                    [query, scope, session_id, limit]
+                    [query, scope, session_id, fetch_limit]
                 )
                 results = [dict(r) for r in cur.fetchall()]
+
+            if not include_repo and not scope:
+                results = [r for r in results if not r.get("scope", "").startswith("repo")]
+                results = results[:limit]
 
             # Log accesses for Hebbian learning
             if session_id and results:
@@ -73,13 +82,14 @@ class NeuralDB:
             logger.warning(f"hybrid_search failed: {e}, falling back to ILIKE")
             # Fallback to basic ILIKE if hybrid_search function doesn't exist yet
             try:
-                return self._ilike_fallback(conn, query, limit, scope)
+                return self._ilike_fallback(conn, query, limit, scope, include_repo=include_repo)
             except Exception:
                 return []
         finally:
             _put_conn(conn)
 
-    def _ilike_fallback(self, conn, query: str, limit: int, scope: str = None) -> list:
+    def _ilike_fallback(self, conn, query: str, limit: int, scope: str = None,
+                        include_repo: bool = False) -> list:
         """Emergency fallback if hybrid_search() SQL function not available."""
         import psycopg2.extras
         conditions = ["(texto ILIKE %s OR tipo ILIKE %s OR scope ILIKE %s)"]
@@ -87,6 +97,8 @@ class NeuralDB:
         if scope:
             conditions.append("(scope = %s OR scope LIKE %s)")
             params.extend([scope, f"{scope}:%"])
+        if not include_repo and not scope:
+            conditions.append("scope NOT LIKE 'repo%%'")
         params.append(limit)
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(f"""
