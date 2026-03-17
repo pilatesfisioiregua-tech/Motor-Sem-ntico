@@ -1,8 +1,17 @@
 # INDICE VIVO — motor-semantico/
 
 > Auto-mantenido por Opus Chat y Claude Code
-> Ultima actualizacion: 2026-03-17
+> Ultima actualizacion: 2026-03-17 (BRIEFING_05 añadido)
 > Protocolo: Cada vez que se cree, mueva o elimine un archivo → actualizar este indice
+
+---
+
+## 0. DOCUMENTACIÓN FUERA DE motor-semantico/
+
+Los documentos de L0, producto, sistema, código OS y biblioteca viven en la raíz del repo:
+- `/Users/jesusfernandezdominguez/omni-mind-cerebro/docs/`
+- Ver `INDICE_VIVO.md` en raíz del repo para mapa completo
+- Este índice cubre SOLO el contenido dentro de `motor-semantico/`
 
 ---
 
@@ -142,6 +151,8 @@
 | `briefings/BRIEFING_02_PIPELINE_1_3.md` | Detector, Router, Compositor, Generador |
 | `briefings/BRIEFING_03_PIPELINE_4_6.md` | Ejecutor, Evaluador, Integrador |
 | `briefings/BRIEFING_04_DEPLOY_TESTS.md` | Deploy fly.io, tests E2E |
+| `briefings/BRIEFING_05_ARREGLOS_DB_CICLOS.md` | SUPERSEDED por BRIEFING_06 |
+| `briefings/BRIEFING_06_FIX_CODE_OS_COMPLETO.md` | P0-P3: Fix completo Code OS — DB, try/except, context, agent loop, limpieza, test validación modelos |
 
 ---
 

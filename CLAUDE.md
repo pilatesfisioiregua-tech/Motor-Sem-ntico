@@ -162,6 +162,7 @@ ORDEN:
 3. briefings/BRIEFING_02_PIPELINE_1_3.md → Detector Huecos, Router, Compositor, Generador
 4. briefings/BRIEFING_03_PIPELINE_4_6.md → Ejecutor, Evaluador, Integrador, Orquestador
 5. briefings/BRIEFING_04_DEPLOY_TESTS.md → fly.io deploy, tests E2E
+6. briefings/BRIEFING_06_FIX_CODE_OS_COMPLETO.md → Fix completo Code OS: DB, try/except, context, agent loop
 ```
 
 REGLAS:
@@ -170,3 +171,27 @@ REGLAS:
 - Las 18 redes de preguntas completas para inteligencias.json están en el documento PROMPT_MVP.md (raíz del repo)
 - No inventar datos. Copiar literal del briefing y del PROMPT_MVP.md
 - Si un briefing falla verificación, arréglalo antes de avanzar
+
+## PROTOCOLO DE EJECUCIÓN AUTÓNOMA DE BRIEFINGS
+
+Cuando el usuario te pida ejecutar un briefing, EJECUTA TODO SIN PEDIR CONFIRMACIÓN:
+
+1. Lee el briefing completo
+2. Ejecuta CADA tarea en orden: SQL con db queries, ediciones con edit_file, comandos con bash
+3. Verifica CADA tarea tras ejecutarla
+4. Si algo falla, arréglalo y continúa
+5. Al terminar TODO: resumen de qué se hizo, qué pasó, qué queda pendiente
+6. git add + commit + push
+7. Deploy si aplica
+
+NUNCA:
+- No pidas permiso para ejecutar SQL
+- No pidas permiso para editar archivos
+- No pidas confirmación entre tareas
+- No describas lo que VAS a hacer — HAZLO
+- No muestres el SQL sin ejecutarlo
+
+SIEMPRE:
+- Lee archivos antes de editarlos
+- Verifica tras cada cambio
+- Si algo falla, intenta arreglarlo antes de reportar
