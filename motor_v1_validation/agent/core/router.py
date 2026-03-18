@@ -59,8 +59,9 @@ ANALYZE_KEYWORDS = [
     "diagnose", "analyze", "review", "compare", "evaluate", "check",
 ]
 EXECUTE_KEYWORDS = [
-    "crear", "modificar", "implementar", "fix", "deploy", "añadir",
-    "create", "modify", "implement", "build", "write",
+    "crear", "crea", "modificar", "modifica", "implementar", "implementa",
+    "fix", "deploy", "añadir", "añade", "agrega",
+    "create", "modify", "implement", "build", "write", "add",
 ]
 
 
@@ -79,10 +80,11 @@ def detect_mode(goal: str) -> str:
         return "quick"
     if any(kw in goal_lower for kw in DEEP_KEYWORDS):
         return "deep"
-    if any(kw in goal_lower for kw in ANALYZE_KEYWORDS):
-        return "analyze"
+    # Execute tiene prioridad sobre analyze — la acción principal importa más que la verificación
     if any(kw in goal_lower for kw in EXECUTE_KEYWORDS):
         return "execute"
+    if any(kw in goal_lower for kw in ANALYZE_KEYWORDS):
+        return "analyze"
 
     return "standard"
 

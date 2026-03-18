@@ -159,6 +159,8 @@ def run_agent_loop(
     }
     MODE_TOOLS = {
         "quick": CORE_TOOLS,
+        "execute": CORE_TOOLS | {"http_request", "run_command"},
+        "analyze": CORE_TOOLS | {"http_request", "db_query", "search_files"},
         "standard": CORE_TOOLS | {"http_request", "db_query", "search_files"},
         "deep": CORE_TOOLS | {"http_request", "db_query", "search_files",
                                "remember_search", "plan"},
