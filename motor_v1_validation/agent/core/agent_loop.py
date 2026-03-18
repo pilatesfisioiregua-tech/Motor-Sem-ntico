@@ -34,24 +34,6 @@ def _get_tool_evo():
 _registry = None
 _persistence = None
 
-# Tools by mode — reduce 61 to ~10-15 per task
-CORE_TOOLS = {
-    "read_file", "write_file", "edit_file", "list_dir",
-    "grep_content", "glob_files",
-    "run_command",
-    "finish", "mochila",
-}
-
-TOOLS_BY_MODE = {
-    "quick": CORE_TOOLS,
-    "analyze": CORE_TOOLS | {"db_query", "http_request", "remember", "analyze_codebase"},
-    "execute": CORE_TOOLS | {"db_query", "db_insert", "git_status", "git_add", "git_commit", "run_tests"},
-    "standard": CORE_TOOLS | {"db_query", "db_insert", "http_request", "remember",
-                               "git_status", "git_add", "git_commit", "run_tests",
-                               "web_search", "web_fetch"},
-    "deep": None,  # None = all tools (61)
-}
-
 TOTAL_TIMEOUT = 600
 
 CODE_OS_SYSTEM = """Eres Code OS — agente técnico de OMNI-MIND. SIEMPRE en ESPAÑOL.
@@ -146,7 +128,7 @@ def run_agent_loop(
 
     # Initialize components
     if registry is None:
-        registry = create_default_registry(sandbox_dir)
+        registry = create_default_registry(sandbox_dir, project_dir)
 
     router = SmartRouter(strategy=strategy, forced_model=forced_model)
     router.classify_task(goal)
@@ -167,12 +149,8 @@ def run_agent_loop(
     recovery = RecoveryEngine()
     ctx_mgr = ContextManager()
 
-    # Filter tools by mode — 61 tools overwhelms the model
-    allowed_tools = TOOLS_BY_MODE.get(exec_mode)
-    if allowed_tools is not None:
-        tool_schemas = registry.get_schemas(names=allowed_tools)
-    else:
-        tool_schemas = registry.get_schemas()
+    # Get tool schemas
+    tool_schemas = registry.get_schemas()
 
     # Build system prompt
     system = CODE_OS_SYSTEM.format(
