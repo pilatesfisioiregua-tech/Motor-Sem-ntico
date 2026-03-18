@@ -442,10 +442,14 @@ class ChatEngine:
             submitted = False
             for tc in tool_calls:
                 tool_name = tc["function"]["name"]
-                try:
-                    tool_args = json.loads(tc["function"]["arguments"])
-                except (json.JSONDecodeError, TypeError):
-                    tool_args = {}
+                raw_args = tc["function"]["arguments"]
+                if isinstance(raw_args, dict):
+                    tool_args = raw_args
+                else:
+                    try:
+                        tool_args = json.loads(raw_args)
+                    except (json.JSONDecodeError, TypeError):
+                        tool_args = {}
 
                 tc_id = tc.get("id", f"call_{loop_i}")
 
@@ -507,6 +511,13 @@ class ChatEngine:
 
             history = ctx_mgr.maybe_compress(history)
             session["history"] = history
+
+        # Flush tool evolution telemetry buffer
+        try:
+            from core.tool_evolution import get_tool_evolution
+            get_tool_evolution().flush()
+        except Exception:
+            pass
 
         # Final status
         summary = budget.summary()
@@ -706,6 +717,13 @@ class ChatEngine:
         # Update system prompt for post-execution chat
         session["history"][0]["content"] = self._build_system_prompt("done")
 
+        # Flush tool evolution telemetry buffer
+        try:
+            from core.tool_evolution import get_tool_evolution
+            get_tool_evolution().flush()
+        except Exception:
+            pass
+
         summary = session["budget"].summary()
         yield {
             "type": "status",
@@ -837,10 +855,14 @@ class ChatEngine:
             finished = False
             for tc in tool_calls:
                 tool_name = tc["function"]["name"]
-                try:
-                    tool_args = json.loads(tc["function"]["arguments"])
-                except (json.JSONDecodeError, TypeError):
-                    tool_args = {}
+                raw_args = tc["function"]["arguments"]
+                if isinstance(raw_args, dict):
+                    tool_args = raw_args
+                else:
+                    try:
+                        tool_args = json.loads(raw_args)
+                    except (json.JSONDecodeError, TypeError):
+                        tool_args = {}
 
                 tc_id = tc.get("id", f"call_{loop_i}")
 
@@ -944,6 +966,13 @@ class ChatEngine:
                 "log": [],
             }
             after_session(post_session_summary(flywheel_data))
+        except Exception:
+            pass
+
+        # Flush tool evolution telemetry buffer
+        try:
+            from core.tool_evolution import get_tool_evolution
+            get_tool_evolution().flush()
         except Exception:
             pass
 

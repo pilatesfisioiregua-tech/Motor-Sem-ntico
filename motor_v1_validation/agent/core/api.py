@@ -187,7 +187,7 @@ def call_with_retry(messages: list, model: str, tools: list = None,
                     max_retries: int = 3, **kwargs) -> dict:
     for attempt in range(max_retries):
         try:
-            return call_openrouter(messages, model, tools, **kwargs)
+            return call_model(messages, model, tools, **kwargs)
         except (json.JSONDecodeError, RuntimeError, TimeoutError) as e:
             if attempt == max_retries - 1:
                 raise RuntimeError(f"API failed after {max_retries} tries: {e}")
