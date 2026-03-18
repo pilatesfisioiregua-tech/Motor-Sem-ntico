@@ -244,6 +244,11 @@ async def execute_sse(request: CEOExecuteRequest):
                         on_progress=on_progress,
                     )
 
+                    # Include model's final text as text event
+                    final_text = result.get("result") or ""
+                    if final_text and len(final_text) > 20:
+                        evt_queue.put({"type": "text", "content": final_text[:2000]})
+
                     # Push tool calls from log
                     for entry in result.get("log", []):
                         if isinstance(entry, dict):
@@ -280,6 +285,11 @@ async def execute_sse(request: CEOExecuteRequest):
                 try:
                     reporter = Reporter()
                     summary = reporter.summarize_session(final_result) if isinstance(final_result, dict) and "stop_reason" in final_result else str(final_result)
+                    # Append model's actual result for richer done event
+                    if isinstance(final_result, dict):
+                        model_result = final_result.get("result") or ""
+                        if model_result and len(model_result) > 20:
+                            summary += " | " + model_result[:500]
                 except Exception:
                     summary = str(final_result.get("result", "Completado")) if isinstance(final_result, dict) else str(final_result)
 

@@ -38,21 +38,25 @@ TOTAL_TIMEOUT = 600
 
 CODE_OS_SYSTEM = """Eres Code OS — agente técnico de OMNI-MIND. SIEMPRE en ESPAÑOL.
 
-HERRAMIENTAS CLAVE (usa directamente, sin consultar nada antes):
+HERRAMIENTAS:
 - read_file(path) — lee archivos. SIEMPRE @project/ para proyecto
 - edit_file(path, old_string, new_string) — edita archivos existentes
 - write_file(path, content) — crea archivos NUEVOS
 - list_dir(path) — lista directorio
 - run_command(command) — ejecuta shell
 - db_query(sql) — consulta DB (solo SELECT)
-- db_insert(sql) — modifica DB (INSERT/UPDATE/DELETE)
 - http_request(method, url) — llamadas HTTP
-- finish(result) — TERMINAR con resultado
+- finish(result) — TERMINAR con resultado. PON TU RESPUESTA AQUÍ.
 
-RUTAS: @project/ = proyecto real. Sin prefijo = sandbox temporal (se pierde).
+RUTAS: @project/ = proyecto real. Sin prefijo = sandbox temporal.
 
-PROTOCOLO: Lee → Entiende → Arregla → Verifica → Siguiente → finish()
-NO describas lo que "se podría hacer". HAZLO.
+CÓMO TRABAJAR:
+1. ¿Qué necesito saber? → read_file, http_request, db_query
+2. ¿Necesito cambiar algo? → edit_file, write_file, run_command
+3. ¿Ya tengo la respuesta? → finish(result='mi respuesta completa')
+
+REGLA: Tu análisis va DENTRO de finish(result='...'), no como texto suelto.
+Si solo te piden leer/analizar: lee → finish(result='lo que encontré').
 
 {context_section}
 """
@@ -62,11 +66,10 @@ BRIEFING_EXECUTOR_PROMPT = """EJECUTA este briefing. Cada paso se EJECUTA, no se
 BRIEFING:
 {briefing_content}
 
-PROTOCOLO: mochila("briefing") tiene el protocolo completo. Resumen:
-- SQL → db_insert(). Archivos → write_file(path='@project/...'). Comandos → run_command().
-- SIEMPRE @project/ para archivos del proyecto. Sin él → sandbox temporal, SE PIERDE.
-- Tras cada paso → VERIFICAR. Si falla → ARREGLAR.
-- Al terminar → RESUMEN FINAL + métricas + finish().
+PROTOCOLO:
+- SQL → db_insert(). Archivos → write_file(@project/...) o edit_file(@project/...).
+- Tras cada paso → VERIFICAR (db_query, run_command).
+- Al terminar → finish(result='resumen de lo ejecutado').
 """
 
 
@@ -320,11 +323,30 @@ def run_agent_loop(
                 print(f" (no tool)")
             history.append({"role": "assistant", "content": content or "(empty)"})
             stuck.record_no_tool()
-            if stuck.no_tool_streak == 3:
-                history.append({"role": "user", "content": "Recuerda usar herramientas para avanzar."})
-            elif stuck.no_tool_streak >= 5:
-                router.on_blowup()
-                history.append({"role": "user", "content": "Sin progreso. Empieza con list_dir('@project/')."})
+            if stuck.no_tool_streak == 2:
+                # EXTRAER: pregunta que fuerza síntesis de lo encontrado
+                history.append({"role": "user", "content": (
+                    "¿Qué has encontrado hasta ahora? "
+                    "¿Es suficiente para responder la tarea original? "
+                    "Si sí → llama finish(result='tu conclusión'). "
+                    "Si no → ¿qué dato te falta?"
+                )})
+            elif stuck.no_tool_streak == 3:
+                # INTEGRAR: pregunta que empuja a formular conclusión
+                history.append({"role": "user", "content": (
+                    "Formula tu conclusión en UNA frase. "
+                    "Luego llama finish(result='esa frase')."
+                )})
+            elif stuck.no_tool_streak >= 4:
+                # FRONTERA: safety net mecánico — auto-finish con el texto del modelo
+                last_text = content or ""
+                if len(last_text) > 50:
+                    stop_reason = "AUTO_FINISH"
+                    final_result = last_text[:2000]
+                    break
+                else:
+                    router.on_blowup()
+                    history.append({"role": "user", "content": "Llama finish(result='...') ahora."})
 
             if db:
                 db.log_iteration(session_id, iteration, model, tool_called="(monologue)",
