@@ -172,6 +172,14 @@ def run_agent_loop(
     if len(tool_schemas) < 3:
         tool_schemas = registry.get_schemas()
 
+    # === DIAGNOSTIC LOGGING (B18) — eliminar cuando T3 pase ===
+    _filtered_names = [s["function"]["name"] for s in tool_schemas]
+    print(f"[DIAG:B18] exec_mode={exec_mode} | goal_start='{goal[:60]}' | "
+          f"tools_count={len(tool_schemas)} | "
+          f"tools={_filtered_names[:15]} | "
+          f"safety_net={'YES' if len(tool_schemas) > len(active_tools) + 5 else 'NO'}")
+    # === END DIAGNOSTIC ===
+
     # Build system prompt
     system = CODE_OS_SYSTEM.format(
         context_section=f"PROJECT CONTEXT:\n{context_prompt}" if context_prompt else ""
