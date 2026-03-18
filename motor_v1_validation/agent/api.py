@@ -254,7 +254,7 @@ async def execute_sse(request: CEOExecuteRequest):
                         if isinstance(entry, dict):
                             tool = entry.get("tool", "")
                             is_err = entry.get("is_error", False)
-                            evt_queue.put({"type": "tool_call", "tool": tool, "args": {}})
+                            evt_queue.put({"type": "tool_call", "tool": tool, "args": entry.get("args", {})})
                             evt_queue.put({"type": "tool_result", "tool": tool,
                                            "result": "OK" if not is_err else "ERROR", "is_error": is_err})
 
@@ -1671,6 +1671,46 @@ async def reactor_aprobar(pregunta_id: str):
         reactor = get_reactor()
         resultado = reactor.aprobar_candidata(pregunta_id)
         return {"status": "ok", **resultado}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+# ==========================================
+# Reactor v4: Telemetry to Observations
+# ==========================================
+
+@app.post("/reactor/v4/observar")
+async def reactor_v4_observar():
+    """Reactor v4: detectar patrones en telemetría y generar observaciones."""
+    try:
+        from core.reactor_v4 import get_reactor_v4
+        rv4 = get_reactor_v4()
+        resultado = rv4.observar()
+        return {"status": "ok", **resultado}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+@app.post("/reactor/v4/generar")
+async def reactor_v4_generar():
+    """Reactor v4: generar preguntas candidatas desde observaciones."""
+    try:
+        from core.reactor_v4 import get_reactor_v4
+        rv4 = get_reactor_v4()
+        resultado = rv4.generar_preguntas()
+        return {"status": "ok", **resultado}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+@app.get("/reactor/v4/estado")
+async def reactor_v4_estado():
+    """Reactor v4: breakdown de observaciones por tipo."""
+    try:
+        from core.reactor_v4 import get_reactor_v4
+        rv4 = get_reactor_v4()
+        estado = rv4.estado()
+        return {"status": "ok", **estado}
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
@@ -3232,6 +3272,73 @@ async def matriz_termometro(consumidor: str = ""):
         return {"error": str(e)}
     finally:
         put_conn(conn)
+
+
+@app.post("/hooks/maintenance")
+async def run_maintenance_hook():
+    """Post-deploy hook: refresh embeddings, prune orphans, health check."""
+    try:
+        from core.embed_maintenance import run_maintenance
+        results = run_maintenance()
+        return {"status": "ok", "results": results}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+@app.get("/hooks/vector-health")
+async def vector_health():
+    """Health check for the vector search system."""
+    try:
+        from core.embed_maintenance import get_health_report
+        return get_health_report()
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+@app.get("/hooks/search-quality")
+async def search_quality():
+    """Compare vector vs FTS search quality."""
+    try:
+        from core.search_telemetry import get_quality_report
+        return get_quality_report()
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+# ==========================================
+# Capa A — Perplexity Search (F5/F6)
+# ==========================================
+
+@app.post("/capa-a/buscar")
+async def capa_a_buscar(request: Request):
+    """Búsqueda manual via Perplexity Search API.
+
+    Body: {"query": "...", "consumidor": "exocortex:pilates"}
+    """
+    try:
+        body = await request.json()
+        query = body.get('query', '')
+        consumidor = body.get('consumidor', 'manual')
+
+        if not query:
+            return JSONResponse(status_code=400, content={"status": "error", "error": "query requerido"})
+
+        from core.capa_a import CapaA
+        capa_a = CapaA()
+        resultado = await capa_a.buscar_manual(query, consumidor)
+        return {"status": "ok", **resultado}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+@app.get("/capa-a/estado")
+async def capa_a_estado():
+    """Estado de Capa A: API key configurada, últimas búsquedas, coste acumulado."""
+    try:
+        from core.capa_a import get_estado
+        return {"status": "ok", **get_estado()}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
 
 
 if __name__ == "__main__":

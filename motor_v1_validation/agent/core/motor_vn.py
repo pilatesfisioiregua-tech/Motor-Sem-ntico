@@ -276,8 +276,28 @@ class MotorVN:
         sinema = get_sinema()
         ambiguedad = sinema.detectar_ambiguedad(input_texto)
 
+        # ===== CAPA A — Enriquecimiento de contexto (pre-Motor) =====
+        try:
+            from .capa_a import CapaA
+            capa_a = CapaA()
+            contexto_entorno = await capa_a.enriquecer(input_texto, consumidor)
+
+            # Inyectar en input si hay datos
+            if contexto_entorno.get('contexto_f5') or contexto_entorno.get('contexto_f6'):
+                input_enriquecido = (
+                    f"{input_texto}\n\n[CONTEXTO ENTORNO]\n"
+                    f"F5: {contexto_entorno.get('contexto_f5', '')}\n"
+                    f"F6: {contexto_entorno.get('contexto_f6', '')}"
+                )
+            else:
+                input_enriquecido = input_texto
+        except Exception as e:
+            print(f"[WARN:motor_vn] Capa A falló, Motor continúa sin enriquecimiento: {e}")
+            input_enriquecido = input_texto
+            contexto_entorno = {}
+
         # ===== FASE A — COMPILACION (determinista, $0) =====
-        programa_dict, gradientes = self._fase_compilacion(input_texto, modo, tier)
+        programa_dict, gradientes = self._fase_compilacion(input_enriquecido, modo, tier)
 
         # Aplicar Sinema si ambiguedad alta
         if ambiguedad > 0.5:
@@ -294,7 +314,69 @@ class MotorVN:
             print(f"[WARN:motor_vn] _persistir_programa retornó None — feedback loop desconectado para {consumidor}_{modo}")
 
         # ===== FASE B — EJECUCION (estocastica, con LLM) =====
-        resultado = await self._fase_ejecucion(programa, input_texto)
+        resultado = await self._fase_ejecucion(programa, input_enriquecido)
+
+        # ===== REGISTRAR EN TABLA EJECUCIONES =====
+        try:
+            from .db_pool import get_conn, put_conn
+            conn_ej = get_conn()
+            if conn_ej:
+                try:
+                    with conn_ej.cursor() as cur:
+                        cur.execute("""
+                            INSERT INTO ejecuciones
+                                (input, contexto, modo, huecos_detectados,
+                                 algoritmo_usado, resultado, coste_usd, tiempo_s, score_calidad)
+                            VALUES (%s, %s, %s, %s::jsonb, %s::jsonb, %s::jsonb, %s, %s, %s)
+                        """, [
+                            input_texto[:2000],
+                            consumidor,
+                            modo,
+                            json.dumps(gradientes.get('top_gaps', [])[:10], default=str),
+                            json.dumps({
+                                'inteligencias': sorted(programa.inteligencias),
+                                'tier': programa.tier,
+                                'alpha': programa.alpha,
+                                'profundidad': programa.profundidad,
+                            }, default=str),
+                            json.dumps({
+                                'n_hallazgos': len(resultado.get('hallazgos', [])),
+                                'sintesis': resultado.get('sintesis', '')[:1000],
+                                'n_llm_calls': resultado.get('n_llm_calls', 0),
+                            }, default=str),
+                            round(self.coste_acumulado, 6),
+                            round(time.time() - t0, 2),
+                            resultado.get('scores', {}).get('score_calidad', 0),
+                        ])
+                    conn_ej.commit()
+                finally:
+                    put_conn(conn_ej)
+        except Exception as _e:
+            print(f"[WARN:motor_vn.ejecutar.ejecuciones] {type(_e).__name__}: {_e}")
+
+        # ===== ACTUALIZAR PERFIL DE GRADIENTES POR CONSUMIDOR =====
+        try:
+            from .db_pool import get_conn, put_conn
+            conn_pg = get_conn()
+            if conn_pg:
+                try:
+                    with conn_pg.cursor() as cur:
+                        cur.execute("""
+                            INSERT INTO perfil_gradientes (consumidor, gradientes, version)
+                            VALUES (%s, %s::jsonb, 1)
+                            ON CONFLICT (consumidor, COALESCE(usuario_id, '')) DO UPDATE SET
+                                gradientes = EXCLUDED.gradientes,
+                                version = perfil_gradientes.version + 1,
+                                updated_at = NOW()
+                        """, [
+                            consumidor,
+                            json.dumps(gradientes.get('gradientes', {}), default=str),
+                        ])
+                    conn_pg.commit()
+                finally:
+                    put_conn(conn_pg)
+        except Exception as _e:
+            print(f"[WARN:motor_vn.ejecutar.perfil_gradientes] {type(_e).__name__}: {_e}")
 
         # ===== ACTUALIZAR PROGRAMA POST-EJECUCION =====
         tasa_cierre = self._calcular_tasa_cierre(resultado, programa)
@@ -508,7 +590,7 @@ class MotorVN:
         # Step 2: Generar programa via Manifold (decide INTs por modo)
         manifold = get_manifold()
         config = MODOS.get(modo, MODOS['analisis'])
-        programa_manifold = manifold.generar(gradientes, modo=modo)
+        programa_manifold = manifold.generar(gradientes, modo=modo, input_texto=input_texto)
         ints_objetivo = programa_manifold['inteligencias']
 
         # Step 3: Compilar con preguntas desde Matriz
@@ -672,32 +754,176 @@ class MotorVN:
         return hallazgos[:10]  # max 10 hallazgos por INT
 
     def _generar_prompt_int(self, inteligencia: str, input_texto: str) -> str:
-        """Generar prompt generico para una inteligencia."""
-        return f"""Analiza el siguiente caso desde la perspectiva de {inteligencia}.
+        """Generar prompt en formato D_hibrido (P35) para una inteligencia.
 
-Caso: {input_texto}
+        Formato canonico: pipeline como codigo Python + preguntas en lenguaje natural.
+        Validado: 91% cobertura, 100% adherencia, -35% tokens vs prosa pura.
+        Ref: docs/L0/FORMATO_CANONICO_PROMPT.md
+        """
+        firma, punto_ciego, lentes_naturales = self._cargar_metadata_int(inteligencia)
 
-Instrucciones:
-1. Identifica los aspectos relevantes para esta dimension de analisis
-2. Detecta gaps, riesgos u oportunidades
-3. Proporciona hallazgos concretos y accionables
+        preguntas_por_paso = self._cargar_preguntas_int(inteligencia)
 
-Responde con una lista de hallazgos, uno por linea."""
+        usa_provocaciones = inteligencia in ('INT-17', 'INT-18')
+
+        lentes = lentes_naturales if lentes_naturales else ['Salud', 'Sentido', 'Continuidad']
+        lentes_str = ', '.join(f'"{l}"' for l in lentes)
+
+        bloque_codigo = f'''```python
+pipeline = [
+    {{"op": "EXTRAER", "target": caso, "output": "datos_formalizados"}},
+    {{"op": "CRUZAR", "input": "datos_formalizados", "output": "estructura_problema"}},
+    {{"op": "LENTES", "input": "estructura_problema", "lenses": [{lentes_str}], "output": "perspectivas"}},
+    {{"op": "INTEGRAR", "input": "perspectivas", "output": "sintesis"}},
+    {{"op": "ABSTRAER", "input": "sintesis", "output": "patron"}},
+    {{"op": "FRONTERA", "input": "patron", "output": "limites"}},
+]
+
+agent = {{"id": "{inteligencia}", "signature": "{firma}", "blind_spot": "{punto_ciego}"}}
+```'''
+
+        pasos = ['EXTRAER', 'CRUZAR', 'LENTES', 'INTEGRAR', 'ABSTRAER', 'FRONTERA']
+        bloque_preguntas = "Ejecuta este pipeline sobre el caso. Preguntas por paso:\n\n"
+
+        for paso in pasos:
+            qs = preguntas_por_paso.get(paso, [])
+            if qs:
+                preguntas_texto = ' '.join(qs[:3])
+            else:
+                preguntas_texto = self._pregunta_default(paso, inteligencia)
+
+            bloque_preguntas += f"**{paso}**: {preguntas_texto}\n"
+
+            if usa_provocaciones and paso in ('FRONTERA', 'INTEGRAR', 'EXTRAER'):
+                provoc = self._generar_provocacion(paso, inteligencia, punto_ciego)
+                if provoc:
+                    bloque_preguntas += f"-> Provoca: {provoc}\n"
+
+            bloque_preguntas += "\n"
+
+        output_schema = "Output: hallazgos (uno por linea, concreto y accionable), firma_combinada, puntos_ciegos."
+
+        return f"""{bloque_codigo}
+
+{bloque_preguntas}
+{output_schema}
+
+CASO:
+{input_texto}"""
+
+    def _cargar_metadata_int(self, inteligencia: str) -> tuple:
+        """Cargar firma, punto_ciego y modos de una inteligencia desde DB."""
+        try:
+            from .db_pool import get_conn, put_conn
+            conn = get_conn()
+            if not conn:
+                return ('', '', [])
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT firma, punto_ciego, modos_naturales
+                        FROM inteligencias WHERE id = %s
+                    """, [inteligencia])
+                    row = cur.fetchone()
+                    if row:
+                        return (row[0] or '', row[1] or '', row[2] or [])
+                return ('', '', [])
+            finally:
+                put_conn(conn)
+        except Exception:
+            return ('', '', [])
+
+    def _cargar_preguntas_int(self, inteligencia: str) -> dict:
+        """Cargar preguntas de la Matriz agrupadas por paso del pipeline."""
+        try:
+            from .db_pool import get_conn, put_conn
+            conn = get_conn()
+            if not conn:
+                return {}
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT lente, funcion, texto FROM preguntas_matriz
+                        WHERE inteligencia = %s AND nivel = 'base'
+                        ORDER BY lente, funcion
+                        LIMIT 30
+                    """, [inteligencia])
+                    rows = cur.fetchall()
+
+                paso_mapping = {
+                    'Conservar': 'EXTRAER',
+                    'Captar': 'EXTRAER',
+                    'Depurar': 'CRUZAR',
+                    'Distribuir': 'CRUZAR',
+                    'Frontera': 'FRONTERA',
+                    'Adaptar': 'ABSTRAER',
+                    'Replicar': 'INTEGRAR',
+                }
+
+                preguntas = {}
+                for lente, funcion, texto in rows:
+                    paso = paso_mapping.get(funcion, 'CRUZAR')
+                    preguntas.setdefault(paso, []).append(texto)
+                    preguntas.setdefault('LENTES', []).append(f"{lente}: {texto}")
+
+                return preguntas
+            finally:
+                put_conn(conn)
+        except Exception:
+            return {}
+
+    def _pregunta_default(self, paso: str, inteligencia: str) -> str:
+        """Pregunta default cuando no hay preguntas en la Matriz para un paso."""
+        defaults = {
+            'EXTRAER': f'Que datos clave se pueden identificar desde la perspectiva de {inteligencia}?',
+            'CRUZAR': 'Que relaciones o tensiones emergen entre los datos extraidos?',
+            'LENTES': 'Como se ve el caso desde cada lente (Salud, Sentido, Continuidad)?',
+            'INTEGRAR': 'Que patron emerge al cruzar todas las perspectivas?',
+            'ABSTRAER': 'Este patron es transferible a otros contextos? Que lo hace universal?',
+            'FRONTERA': 'Que asume este analisis que no ha examinado? Donde estan los limites?',
+        }
+        return defaults.get(paso, f'Que revela {paso} desde {inteligencia}?')
+
+    def _generar_provocacion(self, paso: str, inteligencia: str, punto_ciego: str) -> str:
+        """Generar provocacion para inteligencias de frontera (D+G format)."""
+        provocaciones = {
+            'EXTRAER': {
+                'INT-17': 'Si esta persona se mirara al espejo dentro de 10 anos habiendo elegido NO actuar — que veria?',
+                'INT-18': 'Que es lo que este caso intenta decir que nadie ha escuchado todavia?',
+            },
+            'INTEGRAR': {
+                'INT-17': 'Si las tres lentes fueran tres versiones de esta persona — pasada, presente, futura — estarian de acuerdo?',
+                'INT-18': 'Que sucede si dejamos de intentar resolver y simplemente observamos?',
+            },
+            'FRONTERA': {
+                'INT-17': f'{inteligencia} puede {punto_ciego.lower()}. Este analisis esta ayudando a decidir, o a posponer?',
+                'INT-18': 'Que ha quedado sin decir que este analisis no puede capturar?',
+            },
+        }
+        return provocaciones.get(paso, {}).get(inteligencia, '')
 
     def _generar_prompt_preguntas(self, preguntas: list, input_texto: str) -> str:
-        """Generar prompt desde preguntas especificas de la Matriz."""
+        """Generar prompt D_hibrido desde preguntas especificas compiladas."""
         preguntas_texto = "\n".join(
             f"- {p.get('texto', p) if isinstance(p, dict) else p}"
-            for p in preguntas[:5]
+            for p in preguntas[:8]
         )
-        return f"""Responde las siguientes preguntas sobre el caso:
 
-Caso: {input_texto}
+        return f'''```python
+pipeline = [
+    {{"op": "ANALIZAR", "target": caso, "questions": "ver_abajo", "output": "hallazgos"}},
+]
+```
+
+Responde cada pregunta con un hallazgo concreto y accionable.
 
 Preguntas:
 {preguntas_texto}
 
-Responde cada pregunta con un hallazgo concreto."""
+Output: hallazgos (uno por linea), puntos_ciegos.
+
+CASO:
+{input_texto}'''
 
     async def _llamar_llm(self, modelo: str, prompt: str) -> str:
         """Llamar a un modelo via OpenRouter con Circuit Breaker (SN-16)."""

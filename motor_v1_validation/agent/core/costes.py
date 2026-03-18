@@ -26,6 +26,7 @@ PRECIOS = {
     'nvidia/llama-3.3-nemotron-super-49b-v1.5': {'input': 0.12, 'output': 0.30},
     'claude-sonnet-4-6': {'input': 3.00, 'output': 15.00},
     'claude-opus-4-6': {'input': 15.00, 'output': 75.00},
+    'perplexity/sonar': {'input': 1.00, 'output': 1.00},
 }
 
 PRECIO_DEFAULT = {'input': 1.00, 'output': 3.00}
