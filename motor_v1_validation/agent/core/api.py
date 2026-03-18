@@ -209,6 +209,79 @@ def extract_response(api_resp: dict) -> Tuple[str, Optional[list], bool]:
     return content, tool_calls, False
 
 
+def _convert_messages_to_anthropic(messages: list) -> tuple:
+    """Convert OpenRouter-format message history to Anthropic-native format.
+
+    Handles:
+    - role:"tool" → role:"user" with tool_result content blocks
+    - assistant tool_calls array → assistant content blocks with tool_use
+    - system message extraction (messages[0] with role:"system")
+
+    Returns:
+        (converted_messages, system_prompt or None)
+    """
+    system_prompt = None
+    converted = []
+
+    for msg in messages:
+        role = msg.get("role", "")
+
+        # Extract system prompt if embedded in messages
+        if role == "system":
+            system_prompt = msg.get("content", "")
+            continue
+
+        # Convert tool result: role:"tool" → role:"user" with tool_result block
+        if role == "tool":
+            tool_result_block = {
+                "type": "tool_result",
+                "tool_use_id": msg.get("tool_call_id", ""),
+                "content": msg.get("content", ""),
+            }
+            # Merge with previous user message if it's also a tool_result
+            if converted and converted[-1]["role"] == "user" and \
+               isinstance(converted[-1].get("content"), list) and \
+               converted[-1]["content"] and \
+               converted[-1]["content"][0].get("type") == "tool_result":
+                converted[-1]["content"].append(tool_result_block)
+            else:
+                converted.append({
+                    "role": "user",
+                    "content": [tool_result_block],
+                })
+            continue
+
+        # Convert assistant with tool_calls → content blocks
+        if role == "assistant" and msg.get("tool_calls"):
+            content_blocks = []
+            text = msg.get("content")
+            if text:
+                content_blocks.append({"type": "text", "text": text})
+            for tc in msg["tool_calls"]:
+                fn = tc.get("function", {})
+                raw_args = fn.get("arguments", "{}")
+                if isinstance(raw_args, str):
+                    try:
+                        input_obj = json.loads(raw_args)
+                    except (json.JSONDecodeError, TypeError):
+                        input_obj = {}
+                else:
+                    input_obj = raw_args
+                content_blocks.append({
+                    "type": "tool_use",
+                    "id": tc.get("id", ""),
+                    "name": fn.get("name", ""),
+                    "input": input_obj,
+                })
+            converted.append({"role": "assistant", "content": content_blocks})
+            continue
+
+        # Pass through normal messages (user text, assistant text)
+        converted.append({"role": role, "content": msg.get("content", "")})
+
+    return converted, system_prompt
+
+
 def call_anthropic(messages: list, model: str = "claude-sonnet-4-6",
                    tools: list = None, temperature: float = 0.0,
                    max_tokens: int = 16384, system: str = None) -> dict:
@@ -220,14 +293,19 @@ def call_anthropic(messages: list, model: str = "claude-sonnet-4-6",
 
     client = anthropic.Anthropic()
 
+    # Convert OpenRouter-format history to Anthropic-native format
+    converted_messages, extracted_system = _convert_messages_to_anthropic(messages)
+
     kwargs = {
         "model": model,
         "max_tokens": max_tokens,
-        "messages": messages,
+        "messages": converted_messages,
         "temperature": temperature,
     }
-    if system:
-        kwargs["system"] = system
+    # system param takes precedence, then extracted from messages
+    effective_system = system or extracted_system
+    if effective_system:
+        kwargs["system"] = effective_system
     if tools:
         # Convert OpenRouter tool format to Anthropic format
         anthropic_tools = []
