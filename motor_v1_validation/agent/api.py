@@ -40,8 +40,8 @@ from chat import ChatEngine
 _load_env()
 
 app = FastAPI(
-    title="Code OS v2 API",
-    description="El Enjambre — An open source Claude Code with 55+ tools",
+    title="Code OS v3 API",
+    description="OMNI-MIND Code OS — Sistema cognitivo con 18 inteligencias",
     version=VERSION,
 )
 
@@ -446,10 +446,13 @@ async def code_os_status():
 
 @app.get("/ceo")
 async def ceo_dashboard():
-    """CEO Dashboard — full system control interface."""
-    html_path = os.path.join(os.path.dirname(__file__), "static", "ceo.html")
+    """CEO Dashboard — Sistema Cognitivo OMNI-MIND."""
+    html_path = os.path.join(os.path.dirname(__file__), "static", "ceo_cognitivo.html")
     if not os.path.exists(html_path):
-        raise HTTPException(status_code=404, detail="ceo.html not found")
+        # Fallback al viejo
+        html_path = os.path.join(os.path.dirname(__file__), "static", "ceo.html")
+    if not os.path.exists(html_path):
+        raise HTTPException(status_code=404, detail="ceo dashboard not found")
     return FileResponse(html_path, media_type="text/html")
 
 
@@ -1636,6 +1639,59 @@ async def motor_ejecutar_vn(request: Request):
 
 
 # ==========================================
+# Swarm Tiers 4-5
+# ==========================================
+
+@app.post("/motor/pizarra")
+async def motor_pizarra(request: Request):
+    """Ejecuta Motor vN forzando Tier 4 (Pizarra): N modelos en paralelo, votación.
+
+    Body: {"input": "texto", "consumidor": "motor_vn"}
+    """
+    try:
+        body = await request.json()
+        input_texto = body.get('input', '')
+        if not input_texto:
+            return {"status": "error", "error": "input requerido"}
+
+        from core.motor_vn import get_motor, _freeze_programa
+        from core.swarm import SwarmExecutor
+        motor = get_motor()
+        swarm = SwarmExecutor(motor=motor)
+        # Compilar programa con Fase A y forzar tier 4
+        programa_dict, gradientes = motor._fase_compilacion(input_texto, 'analisis', 4)
+        programa = _freeze_programa(programa_dict, 4, 0.15)
+        resultado = await swarm.ejecutar_pizarra(programa, input_texto)
+        return {"status": "ok", **resultado}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+@app.post("/motor/cartografia")
+async def motor_cartografia(request: Request):
+    """Ejecuta Motor vN forzando Tier 5 (Cartografía): 18 INTs × 3 modelos × 2 pasadas.
+
+    Body: {"input": "texto", "consumidor": "motor_vn"}
+    """
+    try:
+        body = await request.json()
+        input_texto = body.get('input', '')
+        if not input_texto:
+            return {"status": "error", "error": "input requerido"}
+
+        consumidor = body.get('consumidor', 'motor_vn')
+
+        from core.motor_vn import get_motor
+        from core.swarm import SwarmExecutor
+        motor = get_motor()
+        swarm = SwarmExecutor(motor=motor)
+        resultado = await swarm.ejecutar_cartografia(input_texto, consumidor)
+        return {"status": "ok", **resultado}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
+
+# ==========================================
 # SN-11: Reactor vN
 # ==========================================
 
@@ -1730,11 +1786,11 @@ async def gestor_obsoletas():
         try:
             with conn.cursor() as cur:
                 cur.execute("""
-                    SELECT id, inteligencia, lente, funcion, texto, created_at
+                    SELECT id, inteligencia, lente, funcion, texto
                     FROM preguntas_matriz WHERE nivel = 'obsoleta'
-                    ORDER BY created_at DESC LIMIT 100
+                    ORDER BY id DESC LIMIT 100
                 """)
-                cols = ['id', 'inteligencia', 'lente', 'funcion', 'texto', 'created_at']
+                cols = ['id', 'inteligencia', 'lente', 'funcion', 'texto']
                 return {"obsoletas": [dict(zip(cols, r)) for r in cur.fetchall()]}
         finally:
             put_conn(conn)
@@ -1779,11 +1835,11 @@ async def gestor_expiradas():
         try:
             with conn.cursor() as cur:
                 cur.execute("""
-                    SELECT id, inteligencia, lente, funcion, texto, created_at
+                    SELECT id, inteligencia, lente, funcion, texto
                     FROM preguntas_matriz WHERE nivel = 'expirada'
-                    ORDER BY created_at DESC LIMIT 100
+                    ORDER BY id DESC LIMIT 100
                 """)
-                cols = ['id', 'inteligencia', 'lente', 'funcion', 'texto', 'created_at']
+                cols = ['id', 'inteligencia', 'lente', 'funcion', 'texto']
                 return {"expiradas": [dict(zip(cols, r)) for r in cur.fetchall()]}
         finally:
             put_conn(conn)
@@ -2050,6 +2106,172 @@ async def dashboard():
         resultado['consistencia'] = {'error': str(e)}
 
     return {"status": "ok", **resultado}
+
+
+# ==========================================
+# CEO Dashboard — Sistema Cognitivo
+# ==========================================
+
+@app.get("/ceo/estado-completo")
+async def ceo_estado_completo():
+    """Estado completo del sistema cognitivo para el CEO Dashboard."""
+    import time as _t
+    resultado = {"timestamp": _t.time(), "version": VERSION}
+
+    # 1. SALUD — autopoiesis + flywheel
+    try:
+        from core.gestor_scheduler import get_scheduler
+        scheduler = get_scheduler()
+        resultado['autopoiesis'] = scheduler.check_autopoiesis()
+        estado_sched = scheduler.get_estado()
+        resultado['flywheel'] = {
+            'running': estado_sched.get('running'),
+            'ciclos': estado_sched.get('ciclos_completados', 0),
+            'intervalo_h': estado_sched.get('intervalo_actual_h'),
+            'history': estado_sched.get('flywheel', [])[-10:],
+        }
+    except Exception as e:
+        resultado['autopoiesis'] = {'error': str(e), 'ciclo_roto': True}
+        resultado['flywheel'] = {'error': str(e)}
+
+    # 2. SEÑALES PID — por celda
+    try:
+        from core.registrador import obtener_señales_todas_celdas
+        resultado['señales_pid'] = obtener_señales_todas_celdas()
+    except Exception as e:
+        resultado['señales_pid'] = {'error': str(e)}
+
+    # 3. EJECUCIONES — últimas 10
+    try:
+        from core.db_pool import get_conn, put_conn
+        conn = get_conn()
+        if conn:
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT id, modo, coste_usd, tiempo_s, score_calidad, created_at
+                        FROM ejecuciones ORDER BY created_at DESC LIMIT 10
+                    """)
+                    cols = ['id', 'modo', 'coste_usd', 'tiempo_s', 'score_calidad', 'created_at']
+                    resultado['ejecuciones'] = [dict(zip(cols, r)) for r in cur.fetchall()]
+            finally:
+                put_conn(conn)
+        else:
+            resultado['ejecuciones'] = []
+    except Exception as e:
+        resultado['ejecuciones'] = {'error': str(e)}
+
+    # 4. EXOCORTEX — tenants activos
+    try:
+        from core.db_pool import get_conn, put_conn
+        conn = get_conn()
+        if conn:
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT id, nombre, dominio, activo,
+                               config->>'fase' as fase,
+                               updated_at
+                        FROM exocortex_estado WHERE activo = true
+                    """)
+                    cols = ['id', 'nombre', 'dominio', 'activo', 'fase', 'updated_at']
+                    resultado['exocortex'] = [dict(zip(cols, r)) for r in cur.fetchall()]
+            finally:
+                put_conn(conn)
+        else:
+            resultado['exocortex'] = []
+    except Exception as e:
+        resultado['exocortex'] = {'error': str(e)}
+
+    # 5. MODELOS — stack actual
+    try:
+        from core.model_observatory import get_observatory
+        obs = get_observatory()
+        config = obs.get_tier_config()
+        resultado['modelos'] = {
+            'stack': config,
+            'active_count': len(set(config.values())),
+        }
+    except Exception as e:
+        resultado['modelos'] = {'error': str(e)}
+
+    # 6. PRESUPUESTO
+    try:
+        from core.monitoring import get_monitor
+        monitor = get_monitor()
+        resultado['presupuesto'] = monitor.check_budget()
+    except Exception as e:
+        resultado['presupuesto'] = {'error': str(e)}
+
+    # 7. ESTIGMERGIA — marcas pendientes
+    try:
+        from core.db_pool import get_conn, put_conn
+        conn = get_conn()
+        if conn:
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT tipo, COUNT(*) FROM marcas_estigmergicas
+                        WHERE consumida = false GROUP BY tipo
+                    """)
+                    resultado['estigmergia'] = {r[0]: r[1] for r in cur.fetchall()}
+            finally:
+                put_conn(conn)
+        else:
+            resultado['estigmergia'] = {}
+    except Exception as e:
+        resultado['estigmergia'] = {'error': str(e)}
+
+    # 8. ADVISOR — acciones recomendadas
+    try:
+        from core.system_advisor import get_advisor
+        advisor = get_advisor()
+        acciones = advisor.get_actions()
+        resultado['advisor'] = {
+            'acciones': acciones.get('acciones', [])[:5],
+            'n_total': acciones.get('n_total', 0),
+        }
+    except Exception as e:
+        resultado['advisor'] = {'error': str(e)}
+
+    # 9. COBERTURA MATRIZ
+    try:
+        from core.telemetria import propiocepcion
+        resultado['propiocepcion'] = propiocepcion()
+    except Exception as e:
+        resultado['propiocepcion'] = {'error': str(e)}
+
+    # 10. REACTOR v4
+    try:
+        from core.reactor_v4 import get_reactor_v4
+        rv4 = get_reactor_v4()
+        resultado['reactor_v4'] = rv4.estado()
+    except Exception as e:
+        resultado['reactor_v4'] = {'error': str(e)}
+
+    # 11. COLA DE MEJORAS
+    try:
+        from core.db_pool import get_conn, put_conn
+        conn = get_conn()
+        if conn:
+            try:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT tipo, estado, COUNT(*) FROM cola_mejoras
+                        GROUP BY tipo, estado
+                    """)
+                    resultado['cola_mejoras'] = [
+                        {'tipo': r[0], 'estado': r[1], 'count': r[2]}
+                        for r in cur.fetchall()
+                    ]
+            finally:
+                put_conn(conn)
+        else:
+            resultado['cola_mejoras'] = []
+    except Exception as e:
+        resultado['cola_mejoras'] = {'error': str(e)}
+
+    return resultado
 
 
 @app.get("/version")

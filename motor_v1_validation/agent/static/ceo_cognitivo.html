@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMNI-MIND // Sistema Cognitivo</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0b;--bg2:#111113;--bg3:#1a1a1d;--border:#2a2a2d;--text:#e4e4e7;--text2:#a1a1aa;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--cyan:#06b6d4}
+body{font-family:'SF Mono','JetBrains Mono','Fira Code',monospace;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
+a{color:var(--cyan);text-decoration:none}
+.container{max-width:1400px;margin:0 auto;padding:12px}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:16px}
+header h1{font-size:16px;font-weight:600;letter-spacing:1px}
+header h1 span{color:var(--cyan)}
+.meta{display:flex;gap:16px;align-items:center;font-size:11px;color:var(--text2)}
+.meta .version{background:var(--bg3);padding:2px 8px;border-radius:4px}
+.pill{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.pill-ok{background:#22c55e22;color:var(--green);border:1px solid #22c55e44}
+.pill-err{background:#ef444422;color:var(--red);border:1px solid #ef444444}
+.pill-warn{background:#f59e0b22;color:var(--yellow);border:1px solid #f59e0b44}
+.pill-info{background:#3b82f622;color:var(--blue);border:1px solid #3b82f644}
+.grid{display:grid;gap:12px}
+.grid-top{grid-template-columns:1fr}
+.grid-mid{grid-template-columns:1fr;gap:12px}
+@media(min-width:768px){.grid-mid{grid-template-columns:3fr 2fr}}
+.grid-bot{grid-template-columns:1fr}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px}
+.panel-title{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.panel-title .badge{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--bg3)}
+
+/* Autopoiesis pills row */
+.auto-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.auto-check{display:flex;align-items:center;gap:4px;font-size:11px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.dot-ok{background:var(--green)}
+.dot-err{background:var(--red)}
+.dot-warn{background:var(--yellow)}
+
+/* Flywheel */
+.fly-row{display:flex;gap:24px;flex-wrap:wrap;font-size:12px;color:var(--text2)}
+.fly-row .val{color:var(--text);font-weight:600}
+.sparkline{display:inline-flex;align-items:end;gap:1px;height:20px;vertical-align:middle}
+.sparkline .bar{width:4px;background:var(--cyan);border-radius:1px;min-height:2px}
+
+/* Heatmap */
+.heatmap{display:grid;grid-template-columns:100px repeat(7,1fr);gap:2px;font-size:11px}
+.hm-header{font-size:10px;color:var(--text2);text-align:center;padding:4px 2px;font-weight:600}
+.hm-label{display:flex;align-items:center;padding:4px;font-size:10px;color:var(--text2);font-weight:600}
+.hm-cell{padding:8px 4px;text-align:center;border-radius:4px;cursor:pointer;transition:transform .1s;position:relative;font-size:10px;font-weight:600}
+.hm-cell:hover{transform:scale(1.1);z-index:2}
+.hm-cell.no-data{background:var(--bg3);color:var(--text2)}
+.hm-cell.ok{background:#22c55e33;color:var(--green)}
+.hm-cell.warn{background:#f59e0b33;color:var(--yellow)}
+.hm-cell.bad{background:#ef444433;color:var(--red)}
+
+/* Tooltip */
+.tooltip{display:none;position:absolute;bottom:110%;left:50%;transform:translateX(-50%);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px;font-size:10px;white-space:nowrap;z-index:10;color:var(--text)}
+.hm-cell:hover .tooltip{display:block}
+
+/* Mini table */
+.mini-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.mini-table th{text-align:left;color:var(--text2);padding:4px 8px;border-bottom:1px solid var(--border);font-weight:500}
+.mini-table td{padding:4px 8px;border-bottom:1px solid #1a1a1d}
+
+/* Cards */
+.card{background:var(--bg3);border-radius:6px;padding:10px;margin-bottom:8px}
+.card-title{font-size:11px;font-weight:600;margin-bottom:4px}
+.card-meta{font-size:10px;color:var(--text2)}
+
+/* Budget bar */
+.budget-bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin:4px 0}
+.budget-fill{height:100%;border-radius:4px;transition:width .3s}
+
+/* Model stack */
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px}
+.model-role{color:var(--text2)}
+.model-name{color:var(--cyan);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Advisor */
+.action-item{display:flex;gap:8px;padding:8px;background:var(--bg3);border-radius:6px;margin-bottom:6px;align-items:flex-start}
+.action-pri{font-size:10px;font-weight:700;min-width:20px}
+.action-pri.high{color:var(--red)}
+.action-pri.medium{color:var(--yellow)}
+.action-pri.low{color:var(--green)}
+.action-text{font-size:11px;flex:1}
+.action-cat{font-size:10px;color:var(--text2)}
+
+/* Estigmergia badges */
+.badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.badge{padding:2px 8px;border-radius:10px;font-size:10px;background:var(--bg3);color:var(--text2)}
+
+/* Buttons */
+.btn{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:6px 14px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:11px;transition:background .15s}
+.btn:hover{background:var(--border)}
+.btn-primary{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+.btn-primary:hover{opacity:.85}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+
+/* Detail overlay */
+#detail-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#0008;z-index:100;justify-content:center;align-items:center}
+#detail-overlay.show{display:flex}
+#detail-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px;max-width:400px;width:90%}
+#detail-box h3{margin-bottom:12px;font-size:14px}
+#detail-box pre{font-size:11px;color:var(--text2);white-space:pre-wrap}
+#detail-close{float:right;cursor:pointer;color:var(--text2)}
+
+/* Refresh indicator */
+.refresh-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.refresh-off .refresh-dot{background:var(--text2);animation:none}
+
+/* Loading */
+.loading{color:var(--text2);font-style:italic}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1><span>OMNI-MIND</span> // Sistema Cognitivo</h1>
+    <div class="meta">
+      <span class="version" id="ver">...</span>
+      <span id="ts" style="font-size:10px;color:var(--text2)"></span>
+      <button class="btn" id="toggle-refresh" title="Toggle auto-refresh">
+        <span class="refresh-dot" id="refresh-dot"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Panel 1: Salud -->
+  <div class="grid grid-top" style="margin-bottom:12px">
+    <div class="panel">
+      <div class="panel-title">Salud del Sistema <span class="badge" id="sched-badge">...</span></div>
+      <div class="auto-row" id="auto-pills"></div>
+      <div class="fly-row" id="flywheel-row"></div>
+      <div class="btn-row">
+        <button class="btn" onclick="ejecutarGestor()">Ejecutar ciclo Gestor</button>
+        <button class="btn" onclick="promptMotor()">Ejecutar Motor vN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel 2+3: Matriz + Exocortex -->
+  <div class="grid grid-mid" style="margin-bottom:12px">
+    <div class="panel">
+      <div class="panel-title">Matriz Cognitiva 3L x 7F <span class="badge" id="matrix-stats">...</span></div>
+      <div id="heatmap" class="heatmap"></div>
+      <div class="panel-title" style="margin-top:16px">Ultimas Ejecuciones</div>
+      <table class="mini-table" id="exec-table">
+        <thead><tr><th>modo</th><th>score</th><th>coste</th><th>tiempo</th></tr></thead>
+        <tbody id="exec-body"></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Exocortex <span class="badge" id="exo-count">0</span></div>
+      <div id="exo-list"></div>
+
+      <div class="panel-title" style="margin-top:16px">Stack de Modelos</div>
+      <div class="model-grid" id="model-stack"></div>
+
+      <div class="panel-title" style="margin-top:16px">Presupuesto</div>
+      <div id="budget-section"></div>
+
+      <div class="panel-title" style="margin-top:16px">Reactor v4</div>
+      <div id="reactor-section" class="card-meta"></div>
+    </div>
+  </div>
+
+  <!-- Panel 4: Acciones -->
+  <div class="grid grid-bot">
+    <div class="panel">
+      <div class="panel-title">Acciones Recomendadas <span class="badge" id="advisor-count">0</span></div>
+      <div id="advisor-list"></div>
+      <div style="display:flex;gap:24px;margin-top:12px;flex-wrap:wrap">
+        <div>
+          <div class="panel-title">Estigmergia</div>
+          <div class="badge-row" id="estig-badges"></div>
+        </div>
+        <div>
+          <div class="panel-title">Cola Mejoras</div>
+          <div class="badge-row" id="cola-badges"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail overlay -->
+<div id="detail-overlay" onclick="this.classList.remove('show')">
+  <div id="detail-box" onclick="event.stopPropagation()">
+    <span id="detail-close" onclick="document.getElementById('detail-overlay').classList.remove('show')">[x]</span>
+    <h3 id="detail-title"></h3>
+    <pre id="detail-content"></pre>
+  </div>
+</div>
+
+<script>
+const FUNCIONES = ['Conservar','Captar','Depurar','Distribuir','Frontera','Adaptar','Replicar'];
+const LENTES = ['Salud','Sentido','Continuidad'];
+let autoRefresh = true;
+let refreshTimer = null;
+let lastData = null;
+
+async function fetchEstado() {
+  try {
+    const r = await fetch('/ceo/estado-completo');
+    if (!r.ok) throw new Error(r.status);
+    return await r.json();
+  } catch(e) {
+    console.error('Fetch failed:', e);
+    return null;
+  }
+}
+
+function renderAutopoiesis(data) {
+  const el = document.getElementById('auto-pills');
+  const ap = data.autopoiesis || {};
+  if (ap.error) {
+    el.innerHTML = '<span class="pill pill-err">CICLO ROTO: ' + ap.error + '</span>';
+    return;
+  }
+  const checks = ap.checks || ap;
+  const items = [
+    ['preguntas', checks.preguntas_suficientes ?? checks.preguntas ?? null],
+    ['gaps', checks.gaps_detectados ?? checks.gaps ?? null],
+    ['tasa', checks.tasa_ok ?? checks.tasa ?? null],
+    ['datapoints', checks.datapoints_ok ?? checks.datapoints ?? null],
+    ['alertas', checks.alertas_limpias ?? checks.alertas ?? null],
+  ];
+  el.innerHTML = items.map(([name, ok]) => {
+    const cls = ok === null ? 'dot-warn' : ok ? 'dot-ok' : 'dot-err';
+    return '<div class="auto-check"><span class="dot ' + cls + '"></span>' + name + '</div>';
+  }).join('');
+}
+
+function renderFlywheel(data) {
+  const el = document.getElementById('flywheel-row');
+  const fw = data.flywheel || {};
+  const badge = document.getElementById('sched-badge');
+  if (fw.error) {
+    el.innerHTML = '<span style="color:var(--red)">' + fw.error + '</span>';
+    badge.textContent = 'error';
+    return;
+  }
+  badge.textContent = fw.running ? 'running' : 'stopped';
+  badge.style.color = fw.running ? 'var(--green)' : 'var(--red)';
+
+  const hist = fw.history || [];
+  const sparkHtml = hist.length > 0 ? '<span class="sparkline">' +
+    hist.map(h => {
+      const val = typeof h === 'number' ? h : (h.score || h.f_n || 0);
+      const height = Math.max(2, Math.min(20, val * 20));
+      return '<span class="bar" style="height:' + height + 'px"></span>';
+    }).join('') + '</span>' : '';
+
+  el.innerHTML =
+    '<span>Ciclos: <span class="val">' + (fw.ciclos||0) + '</span></span>' +
+    '<span>Intervalo: <span class="val">' + (fw.intervalo_h||'?') + 'h</span></span>' +
+    '<span>' + sparkHtml + '</span>';
+}
+
+function renderHeatmap(señales) {
+  const el = document.getElementById('heatmap');
+  const stats = document.getElementById('matrix-stats');
+  let totalCells = 0, activeCells = 0;
+
+  // Header row
+  let html = '<div class="hm-header"></div>';
+  FUNCIONES.forEach(f => { html += '<div class="hm-header">' + f.substring(0,4) + '</div>'; });
+
+  LENTES.forEach(lente => {
+    html += '<div class="hm-label">' + lente + '</div>';
+    FUNCIONES.forEach(func => {
+      totalCells++;
+      const key = func + 'x' + lente;
+      const s = (señales && !señales.error) ? (señales[key] || señales.celdas?.[key]) : null;
+
+      let cls = 'no-data', label = '-', tip = 'Sin datos';
+      if (s) {
+        activeCells++;
+        const p = s.P ?? s.p ?? s.proporcional ?? 0;
+        const i = s.I ?? s.i ?? s.integral ?? 0;
+        const d = s.D ?? s.d ?? s.derivativo ?? 0;
+        const n = s.n_total ?? s.n ?? 0;
+        const tasa = s.tasa_cierre ?? s.tasa ?? 0;
+        label = n;
+
+        if (Math.abs(p) < 0.3) cls = 'ok';
+        else if (Math.abs(p) < 0.6) cls = 'warn';
+        else cls = 'bad';
+
+        tip = 'P=' + p.toFixed(2) + ' I=' + i.toFixed(2) + ' D=' + d.toFixed(2) +
+              '\\nn=' + n + ' tasa=' + (tasa*100).toFixed(0) + '%';
+      }
+      html += '<div class="hm-cell ' + cls + '" onclick="showDetail(\'' + key + '\')">' +
+              label +
+              '<div class="tooltip">' + key + '\\n' + tip + '</div></div>';
+    });
+  });
+  el.innerHTML = html;
+  stats.textContent = activeCells + '/' + totalCells + ' activas';
+}
+
+function renderEjecuciones(data) {
+  const tbody = document.getElementById('exec-body');
+  const ejs = data.ejecuciones || [];
+  if (ejs.error || !Array.isArray(ejs)) {
+    tbody.innerHTML = '<tr><td colspan="4" class="loading">No disponible</td></tr>';
+    return;
+  }
+  tbody.innerHTML = ejs.slice(0,8).map(e => {
+    const ts = e.created_at ? new Date(e.created_at).toLocaleString('es',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'}) : '';
+    return '<tr><td>' + (e.modo||'-') + '</td><td>' + (e.score_calidad?.toFixed(1)||'-') +
+           '</td><td>$' + (e.coste_usd?.toFixed(4)||'0') + '</td><td>' + ts + '</td></tr>';
+  }).join('');
+}
+
+function renderExocortex(data) {
+  const el = document.getElementById('exo-list');
+  const count = document.getElementById('exo-count');
+  const tenants = data.exocortex || [];
+  if (tenants.error || !Array.isArray(tenants)) {
+    el.innerHTML = '<div class="loading">No disponible</div>';
+    count.textContent = '?';
+    return;
+  }
+  count.textContent = tenants.length;
+  if (tenants.length === 0) {
+    el.innerHTML = '<div class="card-meta">Ninguno activo</div>';
+    return;
+  }
+  el.innerHTML = tenants.map(t =>
+    '<div class="card"><div class="card-title">' + (t.nombre||t.id) + '</div>' +
+    '<div class="card-meta">' + (t.dominio||'') + ' / fase: ' + (t.fase||'?') + '</div></div>'
+  ).join('');
+}
+
+function renderModelos(data) {
+  const el = document.getElementById('model-stack');
+  const m = data.modelos || {};
+  if (m.error) { el.innerHTML = '<span class="loading">No disponible</span>'; return; }
+  const stack = m.stack || {};
+  el.innerHTML = Object.entries(stack).map(([role, model]) =>
+    '<div class="model-role">' + role + '</div><div class="model-name">' + model.split('/').pop() + '</div>'
+  ).join('');
+}
+
+function renderPresupuesto(data) {
+  const el = document.getElementById('budget-section');
+  const p = data.presupuesto || {};
+  if (p.error) { el.innerHTML = '<span class="loading">' + p.error + '</span>'; return; }
+  const gastado = p.gastado_usd ?? p.gastado ?? p.total_cost_usd ?? 0;
+  const limite = p.limite_usd ?? p.limite ?? p.budget_limit_usd ?? 50;
+  const pct = limite > 0 ? Math.min(100, (gastado / limite) * 100) : 0;
+  const color = pct >= 90 ? 'var(--red)' : pct >= 70 ? 'var(--yellow)' : 'var(--green)';
+  el.innerHTML =
+    '<div style="font-size:12px">$' + gastado.toFixed(2) + ' / $' + limite.toFixed(2) +
+    ' <span style="color:' + color + '">' + pct.toFixed(0) + '%</span></div>' +
+    '<div class="budget-bar"><div class="budget-fill" style="width:' + pct + '%;background:' + color + '"></div></div>';
+}
+
+function renderReactor(data) {
+  const el = document.getElementById('reactor-section');
+  const r = data.reactor_v4 || {};
+  if (r.error) { el.innerHTML = r.error; return; }
+  const obs = r.observaciones_total ?? r.total ?? 0;
+  const pend = r.pendientes ?? 0;
+  el.innerHTML = 'Observaciones: <b>' + obs + '</b> | Pendientes: <b>' + pend + '</b>';
+}
+
+function renderAdvisor(data) {
+  const el = document.getElementById('advisor-list');
+  const cnt = document.getElementById('advisor-count');
+  const a = data.advisor || {};
+  if (a.error) { el.innerHTML = '<div class="loading">' + a.error + '</div>'; cnt.textContent = '?'; return; }
+  const acciones = a.acciones || [];
+  cnt.textContent = a.n_total || acciones.length;
+  if (acciones.length === 0) {
+    el.innerHTML = '<div class="card-meta">Sin acciones pendientes</div>';
+    return;
+  }
+  el.innerHTML = acciones.map(ac => {
+    const pri = ac.prioridad || ac.priority || 'low';
+    return '<div class="action-item">' +
+      '<span class="action-pri ' + pri + '">' + pri[0].toUpperCase() + '</span>' +
+      '<div class="action-text">' + (ac.accion || ac.descripcion || ac.action || JSON.stringify(ac)) +
+      '<div class="action-cat">' + (ac.categoria || ac.category || '') + '</div></div></div>';
+  }).join('');
+}
+
+function renderEstigmergia(data) {
+  const el = document.getElementById('estig-badges');
+  const e = data.estigmergia || {};
+  if (e.error) { el.innerHTML = '<span class="badge">' + e.error + '</span>'; return; }
+  const entries = Object.entries(e);
+  if (entries.length === 0) { el.innerHTML = '<span class="badge">0 pendientes</span>'; return; }
+  el.innerHTML = entries.map(([tipo, count]) =>
+    '<span class="badge">' + tipo + ': ' + count + '</span>'
+  ).join('');
+}
+
+function renderCola(data) {
+  const el = document.getElementById('cola-badges');
+  const c = data.cola_mejoras || [];
+  if (c.error || !Array.isArray(c)) { el.innerHTML = '<span class="badge">No disponible</span>'; return; }
+  if (c.length === 0) { el.innerHTML = '<span class="badge">0 items</span>'; return; }
+  el.innerHTML = c.map(i =>
+    '<span class="badge">' + (i.tipo||'?') + '/' + (i.estado||'?') + ': ' + (i.count||0) + '</span>'
+  ).join('');
+}
+
+function showDetail(celda) {
+  const overlay = document.getElementById('detail-overlay');
+  const title = document.getElementById('detail-title');
+  const content = document.getElementById('detail-content');
+  title.textContent = celda;
+  const s = lastData?.señales_pid;
+  const d = s ? (s[celda] || s.celdas?.[celda] || null) : null;
+  content.textContent = d ? JSON.stringify(d, null, 2) : 'Sin datos para esta celda';
+  overlay.classList.add('show');
+}
+
+async function ejecutarGestor() {
+  if (!confirm('Ejecutar ciclo del Gestor GAMC?')) return;
+  try {
+    const r = await fetch('/gestor/loop', {method:'POST'});
+    const d = await r.json();
+    alert(d.status === 'ok' ? 'Ciclo ejecutado' : 'Error: ' + (d.error||'unknown'));
+    refresh();
+  } catch(e) { alert('Error: ' + e); }
+}
+
+function promptMotor() {
+  const input = prompt('Input para Motor vN:');
+  if (!input) return;
+  fetch('/motor/ejecutar', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({input: input, modo: 'analisis'})
+  }).then(r => r.json()).then(d => {
+    alert('Motor ejecutado. Score: ' + (d.metricas?.score_calidad || 'N/A'));
+    refresh();
+  }).catch(e => alert('Error: ' + e));
+}
+
+async function refresh() {
+  const data = await fetchEstado();
+  if (!data) return;
+  lastData = data;
+
+  document.getElementById('ver').textContent = 'v' + (data.version || '?');
+  document.getElementById('ts').textContent = new Date(data.timestamp * 1000).toLocaleTimeString('es');
+
+  renderAutopoiesis(data);
+  renderFlywheel(data);
+  renderHeatmap(data.señales_pid);
+  renderEjecuciones(data);
+  renderExocortex(data);
+  renderModelos(data);
+  renderPresupuesto(data);
+  renderReactor(data);
+  renderAdvisor(data);
+  renderEstigmergia(data);
+  renderCola(data);
+}
+
+document.getElementById('toggle-refresh').addEventListener('click', function() {
+  autoRefresh = !autoRefresh;
+  document.getElementById('refresh-dot').style.background = autoRefresh ? 'var(--green)' : 'var(--text2)';
+  document.getElementById('refresh-dot').style.animation = autoRefresh ? 'pulse 2s infinite' : 'none';
+  if (autoRefresh) startRefresh(); else stopRefresh();
+});
+
+function startRefresh() { refreshTimer = setInterval(refresh, 30000); }
+function stopRefresh() { if(refreshTimer) clearInterval(refreshTimer); refreshTimer = null; }
+
+// Init
+refresh();
+startRefresh();
+</script>
+</body>
+</html>
