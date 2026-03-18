@@ -212,12 +212,12 @@ def run_agent_loop(
     # Mode-specific hints — guían al modelo sobre QUÉ herramientas usar
     MODE_HINTS = {
         "execute": (
-            "\n\nPROTOCOLO EXECUTE: Esta tarea requiere MODIFICAR CÓDIGO. "
-            "Flujo obligatorio: "
-            "1) read_file(@project/archivo) para ver el código con números de línea, "
-            "2) insert_at(@project/archivo, línea, código_nuevo) para AÑADIR código en una línea específica, "
-            "o edit_file(@project/archivo, old_string, new_string) para CAMBIAR código existente, "
-            "3) run_command() o finish() para verificar/completar."
+            "\n\nPROTOCOLO EXECUTE — sigue EXACTAMENTE estos pasos:\n"
+            "1. read_file(@project/archivo) → verás números de línea\n"
+            "2. Identifica la línea DESPUÉS de la cual insertar\n"
+            "3. insert_at(@project/archivo, NUMERO_LINEA, código_nuevo)\n"
+            "4. finish(result='descripción del cambio')\n"
+            "IMPORTANTE: Usa insert_at, NO edit_file. insert_at es más fiable."
         ),
         "analyze": "",  # V3.2 ya maneja analyze bien (B14: 5/6 keywords)
         "quick": "",
@@ -548,6 +548,16 @@ def run_agent_loop(
                 # SANDWICH POST-VALIDATION (normalize output, detect hidden errors)
                 result_str, is_error = post_validate_result(tool_name, result_str, is_error)
             history.append({"role": "tool", "tool_call_id": tc_id, "content": result_str})
+
+            # EDIT_FILE REDIRECT — when edit_file fails, force insert_at (B23)
+            if tool_name == "edit_file" and is_error and "old_string not found" in result_str:
+                _path_arg = tool_args.get("path", "")
+                history.append({"role": "user", "content": (
+                    f"edit_file falló. USA insert_at en su lugar:\n"
+                    f"1) read_file('{_path_arg}') para ver números de línea\n"
+                    f"2) insert_at('{_path_arg}', LINEA, CODIGO_NUEVO)\n"
+                    f"NO intentes edit_file de nuevo."
+                )})
 
             # Log to tool evolution telemetry
             evo = _get_tool_evo()

@@ -216,7 +216,7 @@ def test_3_execute():
     n_errors = sum(1 for e in result if e.get("type") == "tool_result" and e.get("is_error"))
 
     # Check if edit_file or write_file was used on api.py
-    edit_calls = [e for e in tool_calls if e.get("tool") in ("edit_file", "write_file") 
+    edit_calls = [e for e in tool_calls if e.get("tool") in ("edit_file", "write_file", "insert_at")
                   and "api.py" in str(e.get("args", {}))]
 
     passed = done_evt is not None and len(edit_calls) > 0 and len(tool_calls) <= 20
