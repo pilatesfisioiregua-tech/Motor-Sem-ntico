@@ -39,6 +39,7 @@ TOTAL_TIMEOUT = 600
 TOOL_DESCRIPTIONS = {
     "read_file": "read_file(path) — lee archivos. SIEMPRE @project/ para proyecto",
     "edit_file": "edit_file(path, old_string, new_string) — edita archivos existentes",
+    "insert_at": "insert_at(path, line, content) — inserta código en línea N (usa read_file para ver números)",
     "write_file": "write_file(path, content) — crea archivos NUEVOS",
     "list_dir": "list_dir(path) — lista directorio",
     "run_command": "run_command(command) — ejecuta shell",
@@ -57,9 +58,10 @@ HERRAMIENTAS DISPONIBLES (usa SOLO estas, ninguna más):
 RUTAS: @project/ = proyecto real. Sin prefijo = sandbox temporal.
 
 CÓMO TRABAJAR:
-1. ¿Qué necesito saber? → usa las herramientas de lectura disponibles
-2. ¿Necesito cambiar algo? → edit_file, write_file, run_command
-3. ¿Ya tengo la respuesta? → finish(result='mi respuesta completa')
+1. ¿Qué necesito saber? → read_file (muestra números de línea)
+2. ¿Necesito añadir código? → insert_at(path, línea, código_nuevo)
+3. ¿Necesito cambiar código existente? → edit_file(path, texto_viejo, texto_nuevo)
+4. ¿Ya tengo la respuesta? → finish(result='mi respuesta completa')
 
 REGLA: Tu análisis va DENTRO de finish(result='...'), no como texto suelto.
 Si solo te piden leer/analizar: lee → finish(result='lo que encontré').
@@ -160,7 +162,7 @@ def run_agent_loop(
 
     # Get tool schemas — filtered by execution mode
     CORE_TOOLS = {
-        "read_file", "edit_file", "write_file", "list_dir",
+        "read_file", "edit_file", "insert_at", "write_file", "list_dir",
         "run_command", "finish", "mochila",
     }
     MODE_TOOLS = {
@@ -189,7 +191,7 @@ def run_agent_loop(
     # Build dynamic tools section — ONLY list tools that are in the filtered schema
     _schema_names = {s["function"]["name"] for s in tool_schemas}
     _tools_lines = []
-    for tname in ["read_file", "edit_file", "write_file", "list_dir", "run_command",
+    for tname in ["read_file", "edit_file", "insert_at", "write_file", "list_dir", "run_command",
                    "db_query", "http_request", "search_files", "finish", "mochila"]:
         if tname in _schema_names and tname in TOOL_DESCRIPTIONS:
             _tools_lines.append(f"- {TOOL_DESCRIPTIONS[tname]}")
@@ -212,8 +214,9 @@ def run_agent_loop(
         "execute": (
             "\n\nPROTOCOLO EXECUTE: Esta tarea requiere MODIFICAR CÓDIGO. "
             "Flujo obligatorio: "
-            "1) read_file(@project/archivo) para ver el código actual, "
-            "2) edit_file(@project/archivo, old_string, new_string) para hacer cambios, "
+            "1) read_file(@project/archivo) para ver el código con números de línea, "
+            "2) insert_at(@project/archivo, línea, código_nuevo) para AÑADIR código en una línea específica, "
+            "o edit_file(@project/archivo, old_string, new_string) para CAMBIAR código existente, "
             "3) run_command() o finish() para verificar/completar."
         ),
         "analyze": "",  # V3.2 ya maneja analyze bien (B14: 5/6 keywords)
@@ -486,7 +489,7 @@ def run_agent_loop(
                     continue
 
             # DRIFT DETECTION — file path check for write/edit tools
-            if tool_name in ("write_file", "edit_file", "create_tool"):
+            if tool_name in ("write_file", "edit_file", "insert_at", "create_tool"):
                 file_arg = tool_args.get("path", "")
                 file_drift = check_file_drift(file_arg, project_dir)
                 if file_drift:
@@ -516,7 +519,7 @@ def run_agent_loop(
                 tool_latency = 0
             else:
                 # Code validation for write/edit (pattern 60675)
-                if tool_name in ("write_file", "edit_file"):
+                if tool_name in ("write_file", "edit_file", "insert_at"):
                     code_ok, code_err = validate_code_output(tool_name, tool_args)
                     if not code_ok:
                         result_str, is_error = code_err, True
@@ -631,7 +634,7 @@ def run_agent_loop(
                     router.on_test_failure()
 
             # Track file changes + recovery write tracking
-            if tool_name in ("write_file", "edit_file") and not is_error:
+            if tool_name in ("write_file", "edit_file", "insert_at") and not is_error:
                 fpath = tool_args.get("path", "")
                 files_changed.add(fpath)
                 recovery.record_write(tool_name, fpath)

@@ -103,7 +103,7 @@ CEREBRO_TOOLS = {
 
 # Tools that signal the agent is in "coding" mode (trabajador)
 WORKER_TOOLS = {
-    "write_file", "edit_file",
+    "write_file", "edit_file", "insert_at",
     "run_command", "run_tests", "run_linter",
     "git_add", "git_commit",
     "docker_build", "docker_run",

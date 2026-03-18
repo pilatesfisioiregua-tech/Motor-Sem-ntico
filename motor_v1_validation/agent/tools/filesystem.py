@@ -41,7 +41,7 @@ def _resolve_path(rel_path: str, allow_project: bool = True) -> str:
 
 
 def tool_read_file(path: str, offset: int = 0, limit: int = 0) -> str:
-    """Read file with optional line offset/limit for large files."""
+    """Read file with line numbers. Use offset/limit for large files."""
     abs_path = _resolve_path(path)
     if not os.path.isfile(abs_path):
         return f"ERROR: File not found: {path}"
@@ -49,16 +49,20 @@ def tool_read_file(path: str, offset: int = 0, limit: int = 0) -> str:
     if size > MAX_FILE_SIZE:
         return f"ERROR: File too large ({size} bytes, max {MAX_FILE_SIZE})"
     with open(abs_path, 'r', errors='replace') as f:
-        if offset > 0 or limit > 0:
-            lines = f.readlines()
-            total_lines = len(lines)
-            start = max(0, offset)
-            end = start + limit if limit > 0 else total_lines
-            selected = lines[start:end]
-            header = f"[Lines {start+1}-{min(end, total_lines)} of {total_lines}]\n"
-            content = header + "".join(selected)
-        else:
-            content = f.read()
+        all_lines = f.readlines()
+    total_lines = len(all_lines)
+    if offset > 0 or limit > 0:
+        start = max(0, offset)
+        end = start + limit if limit > 0 else total_lines
+        selected = all_lines[start:end]
+        header = f"[Lines {start+1}-{min(end, total_lines)} of {total_lines}]\n"
+    else:
+        selected = all_lines
+        header = f"[{total_lines} lines]\n"
+        start = 0
+    # Always show line numbers (like cat -n) so models can reference them for insert_at
+    numbered = [f"{start + i + 1:4d}| {line}" for i, line in enumerate(selected)]
+    content = header + "".join(numbered)
     if len(content) > MAX_OUTPUT_LEN:
         total_len = len(content)
         content = content[:MAX_OUTPUT_LEN] + f"\n... [TRUNCATED at {MAX_OUTPUT_LEN} of {total_len} chars. Use offset/limit params to read sections: read_file(path, offset=LINE, limit=LINES)]"
@@ -95,6 +99,27 @@ def tool_edit_file(path: str, old_string: str, new_string: str) -> str:
     with open(abs_path, 'w') as f:
         f.write(new_content)
     return f"OK: Replaced in {path} ({len(old_string)} chars -> {len(new_string)} chars)"
+
+
+def tool_insert_at(path: str, line: int, content: str) -> str:
+    """Insert content at a specific line number. Existing lines shift down."""
+    abs_path = _resolve_path(path)
+    if not os.path.isfile(abs_path):
+        return f"ERROR: File not found: {path}"
+    with open(abs_path, 'r', errors='replace') as f:
+        lines = f.readlines()
+    total = len(lines)
+    if line < 1 or line > total + 1:
+        return f"ERROR: Line {line} out of range (file has {total} lines, valid: 1-{total+1})"
+    # Ensure content ends with newline
+    if content and not content.endswith('\n'):
+        content += '\n'
+    new_lines = content.splitlines(keepends=True)
+    # Insert at position (1-based: line=1 inserts before first line, line=total+1 appends)
+    lines[line-1:line-1] = new_lines
+    with open(abs_path, 'w') as f:
+        f.writelines(lines)
+    return f"OK: Inserted {len(new_lines)} lines at line {line} in {path} (file now {len(lines)} lines)"
 
 
 def tool_list_dir(path: str = ".") -> str:
@@ -147,6 +172,16 @@ def register_tools(registry: 'ToolRegistry', sandbox_dir: str = "",
             "new_string": {"type": "string", "description": "Replacement string"}
         }, "required": ["path", "old_string", "new_string"]}
     }, lambda a: tool_edit_file(a["path"], a["old_string"], a["new_string"]), category="filesystem")
+
+    registry.register("insert_at", {
+        "name": "insert_at",
+        "description": "Insert new lines at a specific line number. Use read_file first to see line numbers. Line 1 = before first line, line N+1 = append at end. Existing lines shift down.",
+        "parameters": {"type": "object", "properties": {
+            "path": {"type": "string", "description": "Path. Use @project/... for project files."},
+            "line": {"type": "integer", "description": "Line number where content will be inserted (1-based). Use line numbers from read_file output."},
+            "content": {"type": "string", "description": "Code/text to insert. Can be multiple lines."}
+        }, "required": ["path", "line", "content"]}
+    }, lambda a: tool_insert_at(a["path"], a["line"], a["content"]), category="filesystem")
 
     registry.register("list_dir", {
         "name": "list_dir",
