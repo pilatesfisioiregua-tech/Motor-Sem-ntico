@@ -451,6 +451,14 @@ def run_agent_loop(
                     print(f" -> {tool_name} BLOCKED (not in {exec_mode} tools)")
                 continue
 
+            # PATH AUTO-CORRECTION — execute mode: prepend @project/ if missing (B25)
+            if exec_mode == "execute" and tool_name in ("insert_at", "edit_file", "write_file", "read_file"):
+                _path = tool_args.get("path", "")
+                if _path and not _path.startswith("@project/") and not _path.startswith("/"):
+                    tool_args["path"] = f"@project/{_path}"
+                    if verbose:
+                        print(f" [PATH FIX] '{_path}' -> '{tool_args['path']}'")
+
             # Run pre_tool hooks
             if hooks:
                 hooks.run("pre_tool", {"tool": tool_name, "args": tool_args})
@@ -692,6 +700,7 @@ def run_agent_loop(
             log.append({
                 "iter": iteration + 1, "tool": tool_name, "model": model,
                 "is_error": is_error, "tokens": usage.get("total_tokens", 0),
+                "args": {k: v[:200] if isinstance(v, str) else v for k, v in tool_args.items()},
             })
 
         # Monitor: register execution metrics at end of each iteration
