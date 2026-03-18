@@ -11,15 +11,15 @@ from datetime import datetime, timezone
 
 # Hardcoded fallback (used if DB unavailable)
 FALLBACK_TIER_CONFIG = {
-    "cerebro":       "qwen/qwen3-coder",               # Agent RL, SOTA tool-use — decide y encadena
-    "worker":        "minimax/minimax-m2.5",            # 80.2% SWE-bench — arregla en menos iters
-    "worker_budget": "deepseek/deepseek-v3.2",          # fallback para tareas simples
-    "evaluador":     "z-ai/glm-5",                     # #1 Arena (1451 ELO) — mejor juicio
-    "swarm":         "deepseek/deepseek-v3.2",          # exploradores (volumen)
-    "compress":      "deepseek/deepseek-v3.2",          # compresión de contexto
-    "fast":          "deepseek/deepseek-v3.2",          # fast path
+    "cerebro":       "mistralai/devstral-2512",          # 123B dense, agentic coding, validado 100%
+    "worker":        "mistralai/devstral-2512",          # unified — evita split que falló
+    "worker_budget": "deepseek/deepseek-v3.2",           # fallback barato
+    "evaluador":     "z-ai/glm-5",                      # #1 Arena (1451 ELO) — mejor juicio
+    "swarm":         "deepseek/deepseek-v3.2",           # exploradores (volumen)
+    "compress":      "deepseek/deepseek-v3.2",           # compresión de contexto
+    "fast":          "deepseek/deepseek-v3.2",           # fast path
     # Legacy aliases
-    "orchestrator":  "qwen/qwen3-coder",
+    "orchestrator":  "mistralai/devstral-2512",
     "synthesis":     "z-ai/glm-5",
 }
 

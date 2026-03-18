@@ -7,7 +7,7 @@ primary_region = "cdg"
 [env]
   PORT = "8080"
   PYTHONUNBUFFERED = "1"
-  CODE_OS_PROJECT_DIR = "/repo"
+  CODE_OS_PROJECT_DIR = "/app"
 
 [http_service]
   internal_port = 8080
