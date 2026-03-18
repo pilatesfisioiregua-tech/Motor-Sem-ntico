@@ -210,14 +210,19 @@ def run_agent_loop(
         goal = BRIEFING_EXECUTOR_PROMPT.format(briefing_content=briefing_content[:30000])
 
     # Mode-specific hints — guían al modelo sobre QUÉ herramientas usar
+    # Extract @project/ path from goal for targeted hints (B24)
+    import re as _re_hint
+    _target_match = _re_hint.search(r'@project/[\w./\-]+', goal)
+    _target_path = _target_match.group(0) if _target_match else "@project/archivo"
+
     MODE_HINTS = {
         "execute": (
-            "\n\nPROTOCOLO EXECUTE — sigue EXACTAMENTE estos pasos:\n"
-            "1. read_file(@project/archivo) → verás números de línea\n"
-            "2. Identifica la línea DESPUÉS de la cual insertar\n"
-            "3. insert_at(@project/archivo, NUMERO_LINEA, código_nuevo)\n"
-            "4. finish(result='descripción del cambio')\n"
-            "IMPORTANTE: Usa insert_at, NO edit_file. insert_at es más fiable."
+            f"\n\nPROTOCOLO EXECUTE — sigue EXACTAMENTE estos pasos:\n"
+            f"1. read_file('{_target_path}') → verás números de línea\n"
+            f"2. Identifica la línea DESPUÉS de la cual insertar\n"
+            f"3. insert_at('{_target_path}', NUMERO_LINEA, código_nuevo)\n"
+            f"4. finish(result='descripción del cambio')\n"
+            f"IMPORTANTE: Usa insert_at sobre {_target_path}. NO edit_file. NO otros archivos."
         ),
         "analyze": "",  # V3.2 ya maneja analyze bien (B14: 5/6 keywords)
         "quick": "",
