@@ -181,13 +181,30 @@ def run_agent_loop(
         briefing_content = Path(briefing_path).read_text(errors='replace')
         goal = BRIEFING_EXECUTOR_PROMPT.format(briefing_content=briefing_content[:30000])
 
+    # Mode-specific hints — guían al modelo sobre QUÉ herramientas usar
+    MODE_HINTS = {
+        "execute": (
+            "\n\nPROTOCOLO EXECUTE: Esta tarea requiere MODIFICAR CÓDIGO. "
+            "Flujo obligatorio: "
+            "1) read_file(@project/archivo) para ver el código actual, "
+            "2) edit_file(@project/archivo, old_string, new_string) para hacer cambios, "
+            "3) run_command() o finish() para verificar/completar."
+        ),
+        "analyze": "",  # V3.2 ya maneja analyze bien (B14: 5/6 keywords)
+        "quick": "",
+        "standard": "",
+        "deep": "",
+    }
+    mode_hint = MODE_HINTS.get(exec_mode, "")
+
     history = [
         {"role": "system", "content": system},
         {"role": "user", "content": (
             f"TASK:\n{goal}\n\n"
             f"Workspace: {sandbox_dir}\n"
             f"Runtimes: python3, pytest, deno, node.\n"
-            f"Tools available: {registry.tool_count()}\n"
+            f"Tools available: {len(tool_schemas)}"
+            f"{mode_hint}\n"
             f"Start by understanding the task, then plan and implement."
         )},
     ]
