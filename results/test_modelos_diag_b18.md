@@ -1,6 +1,6 @@
 # Test Validación Modelos — Post BRIEFING_06
 
-Fecha: 2026-03-18T13:08:02
+Fecha: 2026-03-18T15:01:51
 Base URL: https://chief-os-omni.fly.dev
 
 Version: 3.4.0
@@ -34,7 +34,7 @@ Tools: 61
 
 | Test | Resultado | Iteraciones | Tiempo | Errores | Notas |
 |------|-----------|-------------|--------|---------|-------|
-| T3 Execute (crear endpoint) | ❌ FAIL | 6 | 33.2s | 0 | Edit calls: 0 / Total tools: 6 / Tools: ['mochila', 'http_request', 'http_reques |
+| T3 Execute (crear endpoint) | ❌ FAIL | 6 | 368.5s | 0 | Edit calls: 0 / Total tools: 6 / Tools: ['mochila', 'http_request', 'http_reques |
 
 **Total: 0/1 passed**
 
@@ -47,7 +47,7 @@ Tools: 61
 ### T3 Execute (crear endpoint)
 - Resultado: FAIL
 - Iteraciones: 6
-- Tiempo: 33.2s
+- Tiempo: 368.5s
 - Errores: 0
 - Notas: Edit calls: 0 | Total tools: 6 | Tools: ['mochila', 'http_request', 'http_request', 'http_request', 'db_query', 'db_query']
 
