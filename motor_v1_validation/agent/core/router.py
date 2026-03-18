@@ -65,6 +65,19 @@ EXECUTE_KEYWORDS = [
 ]
 
 
+def _has_keyword(goal_lower: str, keywords: list) -> bool:
+    """Check if any keyword appears as a whole word in goal text.
+
+    Uses word-boundary matching to avoid false positives like
+    'created_at' matching 'create' or 'address' matching 'add'.
+    """
+    import re
+    for kw in keywords:
+        if re.search(r'\b' + re.escape(kw) + r'\b', goal_lower):
+            return True
+    return False
+
+
 def detect_mode(goal: str) -> str:
     """Detect execution mode from goal text.
 
@@ -76,14 +89,14 @@ def detect_mode(goal: str) -> str:
     if goal_lower.startswith("paso ") or "instruccion:" in goal_lower or "instrucción:" in goal_lower:
         return "execute"
 
-    if any(kw in goal_lower for kw in QUICK_KEYWORDS) and len(goal) < 200:
+    if _has_keyword(goal_lower, QUICK_KEYWORDS) and len(goal) < 200:
         return "quick"
-    if any(kw in goal_lower for kw in DEEP_KEYWORDS):
+    if _has_keyword(goal_lower, DEEP_KEYWORDS):
         return "deep"
     # Execute tiene prioridad sobre analyze — la acción principal importa más que la verificación
-    if any(kw in goal_lower for kw in EXECUTE_KEYWORDS):
+    if _has_keyword(goal_lower, EXECUTE_KEYWORDS):
         return "execute"
-    if any(kw in goal_lower for kw in ANALYZE_KEYWORDS):
+    if _has_keyword(goal_lower, ANALYZE_KEYWORDS):
         return "analyze"
 
     return "standard"

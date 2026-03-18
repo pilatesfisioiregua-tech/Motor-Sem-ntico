@@ -136,6 +136,17 @@ def translate_intent(user_input: str, system_context: dict = None) -> dict:
 
     input_lower = user_input.lower()
 
+    # Pass through direct technical instructions — don't replace with templates (B21)
+    # Markers: @project/ paths, or explicit tool names like edit_file/insert_at/read_file
+    TECHNICAL_MARKERS = ["@project/", "edit_file", "insert_at", "read_file", "write_file"]
+    if any(marker in user_input for marker in TECHNICAL_MARKERS):
+        return {
+            "category": None,
+            "technical_goal": user_input,
+            "explanation_for_user": None,
+            "original_input": user_input,
+        }
+
     # Score each category by keyword matches
     scores = {}
     for category, keywords in BUSINESS_KEYWORDS.items():

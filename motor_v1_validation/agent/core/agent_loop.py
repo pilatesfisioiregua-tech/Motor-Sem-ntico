@@ -167,7 +167,7 @@ def run_agent_loop(
     }
     MODE_TOOLS = {
         "quick": CORE_TOOLS,
-        "execute": CORE_TOOLS | {"http_request", "run_command"},
+        "execute": CORE_TOOLS | {"run_command"},
         "analyze": CORE_TOOLS | {"http_request", "db_query", "search_files"},
         "standard": CORE_TOOLS | {"http_request", "db_query", "search_files"},
         "deep": CORE_TOOLS | {"http_request", "db_query", "search_files",
@@ -431,6 +431,20 @@ def run_agent_loop(
                 tool_args = {}
 
             tc_id = tc.get("id", f"call_{iteration}")
+
+            # TOOL ENFORCEMENT — reject tools not in active set (B21)
+            active_tool_names = {s["function"]["name"] for s in tool_schemas}
+            if tool_name not in active_tool_names and tool_name != "finish":
+                result_str = (
+                    f"ERROR: '{tool_name}' no está disponible en modo {exec_mode}. "
+                    f"Tools disponibles: {', '.join(sorted(active_tool_names))}. "
+                    f"Usa SOLO estas herramientas."
+                )
+                history.append({"role": "tool", "tool_call_id": tc_id, "content": result_str})
+                stuck.record_action(tool_name, tool_args, result_str, True)
+                if verbose:
+                    print(f" -> {tool_name} BLOCKED (not in {exec_mode} tools)")
+                continue
 
             # Run pre_tool hooks
             if hooks:
