@@ -40,6 +40,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Motor Semántico OMNI-MIND", version="0.1.0", lifespan=lifespan)
 
+# Mount Code OS sub-app (agent endpoints at /code-os/*)
+try:
+    from motor_v1_validation.agent.api import app as code_os_app
+    app.mount("", code_os_app)
+    log.info("code_os_mounted")
+except Exception as e:
+    log.warning("code_os_mount_failed", error=str(e))
+
 
 class MotorConfig(BaseModel):
     presupuesto_max: float = 1.50
