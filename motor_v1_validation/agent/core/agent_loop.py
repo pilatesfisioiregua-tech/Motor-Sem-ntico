@@ -152,8 +152,23 @@ def run_agent_loop(
     recovery = RecoveryEngine()
     ctx_mgr = ContextManager()
 
-    # Get tool schemas
-    tool_schemas = registry.get_schemas()
+    # Get tool schemas — filtered by execution mode
+    CORE_TOOLS = {
+        "read_file", "edit_file", "write_file", "list_dir",
+        "run_command", "finish", "mochila",
+    }
+    MODE_TOOLS = {
+        "quick": CORE_TOOLS,
+        "standard": CORE_TOOLS | {"http_request", "db_query", "search_files"},
+        "deep": CORE_TOOLS | {"http_request", "db_query", "search_files",
+                               "remember_search", "plan"},
+    }
+    active_tools = MODE_TOOLS.get(exec_mode, CORE_TOOLS | {"http_request", "db_query"})
+    tool_schemas = registry.get_schemas(names=active_tools)
+
+    # Fallback: si el filtro dejó <3 tools, usar todo (safety net)
+    if len(tool_schemas) < 3:
+        tool_schemas = registry.get_schemas()
 
     # Build system prompt
     system = CODE_OS_SYSTEM.format(
