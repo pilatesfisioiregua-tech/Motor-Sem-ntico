@@ -50,6 +50,8 @@ def get_tier_config() -> dict:
         "cerebro":       "mistralai/devstral-2512",          # 123B dense, agentic coding, validado 100%
         "worker":        "mistralai/devstral-2512",          # mismo modelo (unified) — evita split que falló
         "worker_budget": "deepseek/deepseek-v3.2",           # fallback barato
+        "cerebro_execute": "deepseek/deepseek-v3.2",         # B14: para tareas de escritura (T3)
+        "cerebro_analyze": "deepseek/deepseek-v3.2",         # B14: para síntesis profunda (T4)
         "evaluador":     "z-ai/glm-5",                      # evaluación (#1 Arena) — sin cambio
         "swarm":         "deepseek/deepseek-v3.2",           # volumen — sin cambio
         # Legacy aliases for backward compatibility

@@ -221,7 +221,8 @@ def test_3_execute():
 
     passed = done_evt is not None and len(edit_calls) > 0 and len(tool_calls) <= 20
 
-    notes = f"Edit calls: {len(edit_calls)} | Total tools: {len(tool_calls)}"
+    all_tools = [e.get("tool") for e in tool_calls]
+    notes = f"Edit calls: {len(edit_calls)} | Total tools: {len(tool_calls)} | Tools: {all_tools[:10]}"
     if error_evt:
         notes += f" | Error: {error_evt.get('message', '')[:100]}"
 
@@ -270,7 +271,8 @@ def test_4_deep():
     passed = (done_evt is not None and len(http_calls) >= 1 
               and found_keywords >= 2 and len(tool_calls) <= 30)
 
-    notes = f"HTTP calls: {len(http_calls)} | Keywords diagnóstico: {found_keywords}/6"
+    all_tools = [e.get("tool") for e in tool_calls]
+    notes = f"HTTP calls: {len(http_calls)} | Keywords diagnóstico: {found_keywords}/6 | Tools: {all_tools[:15]}"
     if error_evt:
         notes += f" | Error: {error_evt.get('message', '')[:100]}"
 

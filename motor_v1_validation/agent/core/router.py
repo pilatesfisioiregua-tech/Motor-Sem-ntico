@@ -222,6 +222,8 @@ class DualModelRouter(TieredRouter):
         self._worker_model = tc.get("worker", "minimax/minimax-m2.5")
         self._worker_budget = tc.get("worker_budget", "deepseek/deepseek-v3.2")
         self._evaluador_model = tc.get("evaluador", tc.get("synthesis", "z-ai/glm-5"))
+        self._cerebro_execute = tc.get("cerebro_execute", self._cerebro_model)   # B14
+        self._cerebro_analyze = tc.get("cerebro_analyze", self._cerebro_model)   # B14
 
     def classify_task(self, goal: str) -> str:
         """Classify task type from goal text."""
@@ -267,17 +269,17 @@ class DualModelRouter(TieredRouter):
             self._worker_iters += 1
             return self._worker_budget
 
-        # Execute mode: prefer worker (coding)
+        # Execute mode: modelo capaz de escribir código via tools
         if self._mode == "execute":
-            model = self._worker_model
+            model = self._cerebro_execute
             if model in self._blowup_models:
                 model = self._worker_budget
             self._worker_iters += 1
             return model
 
-        # Analyze mode: prefer cerebro (reasoning)
+        # Analyze mode: modelo capaz de sintetizar diagnósticos
         if self._mode == "analyze":
-            model = self._cerebro_model
+            model = self._cerebro_analyze
             if model in self._blowup_models:
                 model = self._worker_budget
             self._cerebro_iters += 1
