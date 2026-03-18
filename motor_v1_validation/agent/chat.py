@@ -137,8 +137,10 @@ class ChatEngine:
         self._access_order: list = []  # LRU tracking
 
     def _build_system_prompt(self, phase: str = "design", protocol: ProtocolEngine = None) -> str:
-        from core.agent_loop import CODE_OS_SYSTEM
+        from core.agent_loop import CODE_OS_SYSTEM, TOOL_DESCRIPTIONS
+        tools_section = "\n".join(f"- {desc}" for desc in TOOL_DESCRIPTIONS.values())
         base = CODE_OS_SYSTEM.format(
+            tools_section=tools_section,
             context_section=(
                 f"PROJECT DIR: {self.project_dir}\n"
                 f"WORKSPACE: {self.sandbox_dir}"
