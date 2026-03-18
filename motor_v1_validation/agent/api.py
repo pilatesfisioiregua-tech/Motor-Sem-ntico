@@ -2226,10 +2226,11 @@ async def ceo_estado_completo():
     try:
         from core.system_advisor import get_advisor
         advisor = get_advisor()
-        acciones = advisor.get_actions()
+        scan = advisor.scan_system()
+        acciones_list = scan.get('acciones', [])
         resultado['advisor'] = {
-            'acciones': acciones.get('acciones', [])[:5],
-            'n_total': acciones.get('n_total', 0),
+            'acciones': acciones_list[:5],
+            'n_total': len(acciones_list),
         }
     except Exception as e:
         resultado['advisor'] = {'error': str(e)}
