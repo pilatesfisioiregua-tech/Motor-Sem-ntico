@@ -50,7 +50,7 @@ def get_tier_config() -> dict:
         "cerebro":       "mistralai/devstral-2512",          # 123B dense, agentic coding, validado 100%
         "worker":        "mistralai/devstral-2512",          # mismo modelo (unified) — evita split que falló
         "worker_budget": "deepseek/deepseek-v3.2",           # fallback barato
-        "cerebro_execute": "mistralai/devstral-2512",         # B16: Devstral 2 para execute (V3.2 no usa filesystem)
+        "cerebro_execute": "mistralai/devstral-2512",         # B19D: Cogito falló (0 edit, 0 read) — Devstral 2 restaurado
         "cerebro_analyze": "deepseek/deepseek-v3.2",         # B14: para síntesis profunda (T4)
         "evaluador":     "z-ai/glm-5",                      # evaluación (#1 Arena) — sin cambio
         "swarm":         "deepseek/deepseek-v3.2",           # volumen — sin cambio
