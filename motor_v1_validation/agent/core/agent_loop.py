@@ -36,22 +36,28 @@ _persistence = None
 
 TOTAL_TIMEOUT = 600
 
+TOOL_DESCRIPTIONS = {
+    "read_file": "read_file(path) — lee archivos. SIEMPRE @project/ para proyecto",
+    "edit_file": "edit_file(path, old_string, new_string) — edita archivos existentes",
+    "write_file": "write_file(path, content) — crea archivos NUEVOS",
+    "list_dir": "list_dir(path) — lista directorio",
+    "run_command": "run_command(command) — ejecuta shell",
+    "db_query": "db_query(sql) — consulta DB (solo SELECT)",
+    "http_request": "http_request(method, url) — llamadas HTTP",
+    "search_files": "search_files(pattern) — busca archivos por patrón",
+    "finish": "finish(result) — TERMINAR con resultado. PON TU RESPUESTA AQUÍ.",
+    "mochila": "mochila() — contexto del proyecto (máx 3 llamadas)",
+}
+
 CODE_OS_SYSTEM = """Eres Code OS — agente técnico de OMNI-MIND. SIEMPRE en ESPAÑOL.
 
-HERRAMIENTAS:
-- read_file(path) — lee archivos. SIEMPRE @project/ para proyecto
-- edit_file(path, old_string, new_string) — edita archivos existentes
-- write_file(path, content) — crea archivos NUEVOS
-- list_dir(path) — lista directorio
-- run_command(command) — ejecuta shell
-- db_query(sql) — consulta DB (solo SELECT)
-- http_request(method, url) — llamadas HTTP
-- finish(result) — TERMINAR con resultado. PON TU RESPUESTA AQUÍ.
+HERRAMIENTAS DISPONIBLES (usa SOLO estas, ninguna más):
+{tools_section}
 
 RUTAS: @project/ = proyecto real. Sin prefijo = sandbox temporal.
 
 CÓMO TRABAJAR:
-1. ¿Qué necesito saber? → read_file, http_request, db_query
+1. ¿Qué necesito saber? → usa las herramientas de lectura disponibles
 2. ¿Necesito cambiar algo? → edit_file, write_file, run_command
 3. ¿Ya tengo la respuesta? → finish(result='mi respuesta completa')
 
@@ -180,8 +186,18 @@ def run_agent_loop(
           f"safety_net={'YES' if len(tool_schemas) > len(active_tools) + 5 else 'NO'}")
     # === END DIAGNOSTIC ===
 
+    # Build dynamic tools section — ONLY list tools that are in the filtered schema
+    _schema_names = {s["function"]["name"] for s in tool_schemas}
+    _tools_lines = []
+    for tname in ["read_file", "edit_file", "write_file", "list_dir", "run_command",
+                   "db_query", "http_request", "search_files", "finish", "mochila"]:
+        if tname in _schema_names and tname in TOOL_DESCRIPTIONS:
+            _tools_lines.append(f"- {TOOL_DESCRIPTIONS[tname]}")
+    _tools_section = "\n".join(_tools_lines) if _tools_lines else "- finish(result)"
+
     # Build system prompt
     system = CODE_OS_SYSTEM.format(
+        tools_section=_tools_section,
         context_section=f"PROJECT CONTEXT:\n{context_prompt}" if context_prompt else ""
     )
 
