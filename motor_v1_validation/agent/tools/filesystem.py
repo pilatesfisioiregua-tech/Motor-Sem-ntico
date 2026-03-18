@@ -91,7 +91,7 @@ def tool_edit_file(path: str, old_string: str, new_string: str) -> str:
     with open(abs_path, 'r', errors='replace') as f:
         content = f.read()
     if old_string not in content:
-        return f"ERROR: old_string not found in {path}. Read the file first to get exact content."
+        return f"ERROR: old_string not found in {path}. TIP: usa insert_at(path, línea, contenido) para insertar código en una línea específica — más fiable que edit_file. Usa los números de línea de read_file."
     count = content.count(old_string)
     if count > 1:
         return f"ERROR: old_string appears {count} times in {path}. Provide more context to be unique."
