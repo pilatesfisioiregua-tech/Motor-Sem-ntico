@@ -65,7 +65,7 @@ META: plan(action, content), finish(result), ask_user(question)
 9. SIEMPRE @project/ para archivos del proyecto. Sin prefijo = sandbox temporal.
 10. Al terminar: RESUMEN FINAL al CEO con métricas antes de finish().
 11. SIEMPRE responde en ESPAÑOL.
-12. Si detectas un problema que PUEDES arreglar → ARRÉGLALO antes de reportar. Consulta mochila("autonomia").
+12. Si detectas un problema que PUEDES arreglar → ARRÉGLALO antes de reportar.
 """,
 
     "rutas": """RUTAS DE ARCHIVOS — OBLIGATORIO
@@ -141,8 +141,7 @@ NUNCA: Leer un briefing ≠ ejecutarlo. Describir ≠ hacer.
     "errores": """ESTRATEGIAS DE RECUPERACIÓN DE ERRORES
 
 TOOL NO ENCONTRADO:
-  → Verificar nombre exacto con mochila("herramientas")
-  → Los nombres son snake_case: read_file, db_query, etc.
+  → Nombres son snake_case: read_file, write_file, edit_file, list_dir, db_query, http_request, finish
 
 ARCHIVO NO ENCONTRADO:
   → ¿Usaste @project/? Sin él busca en sandbox
@@ -298,29 +297,30 @@ Cuando diagnostiques, SIEMPRE distingue entre:
 }
 
 
+# Rate limiter — max 3 calls per session
+_call_count = 0
+_MAX_MOCHILA_CALLS = 3
+
+def reset_mochila():
+    """Reset call counter (call at session start)."""
+    global _call_count
+    _call_count = 0
+
 def consultar(seccion: str) -> str:
-    """Consulta una sección de la mochila.
+    global _call_count
+    _call_count += 1
+    if _call_count > _MAX_MOCHILA_CALLS:
+        return ("LIMITE: Ya consultaste la mochila 3 veces. "
+                "Tienes toda la info que necesitas. "
+                "USA LAS HERRAMIENTAS DIRECTAMENTE: read_file, edit_file, list_dir, finish. "
+                "NO llames mochila de nuevo.")
 
-    Args:
-        seccion: Nombre de sección o búsqueda parcial.
-                 Secciones: herramientas, reglas, rutas, proyecto, briefing, errores, modos, autonomia, sistema
-
-    Returns:
-        Contenido de la sección o lista de secciones disponibles.
-    """
     seccion = seccion.strip().lower()
-
-    # Exact match
     if seccion in SECTIONS:
         return SECTIONS[seccion]
-
-    # Partial match
     matches = [k for k in SECTIONS if seccion in k]
     if len(matches) == 1:
         return SECTIONS[matches[0]]
     if matches:
-        return f"Secciones que coinciden: {', '.join(matches)}\nUsa mochila(seccion) con el nombre exacto."
-
-    # List all sections
-    available = "\n".join(f"  - {k}: {v.split(chr(10))[0]}" for k, v in SECTIONS.items())
-    return f"Sección '{seccion}' no encontrada.\n\nSecciones disponibles:\n{available}"
+        return f"Secciones: {', '.join(matches)}"
+    return f"Seccion '{seccion}' no existe. Disponibles: {', '.join(SECTIONS.keys())}"
