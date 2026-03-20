@@ -179,6 +179,11 @@ if frontend_dist.exists():
     async def estudio():
         return FileResponse(frontend_dist / "index.html")
 
+    @app.get("/onboarding/{token}")
+    async def onboarding_page(token: str):
+        """Sirve el HTML del formulario de onboarding."""
+        return FileResponse(frontend_dist / "index.html")
+
     app.mount("/assets", StaticFiles(directory=frontend_dist / "assets"), name="assets")
     log.info("frontend_mounted", path=str(frontend_dist))
 

@@ -97,6 +97,17 @@ class MarcarAsistenciaGrupo(BaseModel):
     notas: Optional[dict[str, str]] = None  # {cliente_id: nota}
 
 
+class FacturaCreate(BaseModel):
+    """Crear factura desde cargos cobrados de un cliente."""
+    cliente_id: UUID
+    cargo_ids: list[UUID]  # cargos a incluir en la factura
+    fecha_operacion: Optional[date] = None
+
+
+class FacturaAnular(BaseModel):
+    motivo: str
+
+
 class PagoCreate(BaseModel):
     cliente_id: UUID
     metodo: str = Field(pattern="^(tpv|bizum|efectivo|transferencia|paygold)$")
@@ -1099,6 +1110,39 @@ class BizumEntrante(BaseModel):
     monto: float
     referencia: Optional[str] = None
 
+
+class OnboardingLinkCreate(BaseModel):
+    """Jesús crea un enlace para un lead."""
+    nombre_provisional: str
+    telefono: str
+
+
+class OnboardingComplete(BaseModel):
+    """El cliente completa el formulario de onboarding."""
+    nombre: str
+    apellidos: str
+    telefono: str
+    email: Optional[str] = None
+    fecha_nacimiento: Optional[date] = None
+    nif: Optional[str] = None
+    direccion: Optional[str] = None
+    lesiones: Optional[str] = None
+    patologias: Optional[str] = None
+    medicacion: Optional[str] = None
+    restricciones: Optional[str] = None
+    medico_derivante: Optional[str] = None
+    tipo_contrato: str = Field(pattern="^(grupo|individual)$")
+    grupo_id: Optional[UUID] = None
+    frecuencia_semanal: Optional[int] = None
+    precio_sesion: Optional[float] = None
+    ciclo_cobro: Optional[str] = None
+    consentimiento_datos: bool = True
+    consentimiento_marketing: bool = False
+    consentimiento_compartir_tenants: bool = False
+    acepta_normas: bool = True
+    metodo_pago: Optional[str] = None
+
+
 @router.post("/bizum-entrante")
 async def bizum_entrante(data: BizumEntrante):
     """Registra Bizum entrante: busca cliente por teléfono + concilia FIFO."""
@@ -1107,3 +1151,606 @@ async def bizum_entrante(data: BizumEntrante):
     if result.get("status") == "error":
         raise HTTPException(404, result["detail"])
     return result
+
+
+# ============================================================
+# ONBOARDING SELF-SERVICE
+# ============================================================
+
+@router.post("/onboarding/crear-enlace", status_code=201)
+async def crear_enlace_onboarding(data: OnboardingLinkCreate):
+    """Jesús crea enlace de onboarding para un lead."""
+    import secrets
+    pool = await _get_pool()
+    token = secrets.token_urlsafe(32)
+
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            INSERT INTO om_onboarding_links (tenant_id, token, nombre_provisional, telefono,
+                fecha_expiracion)
+            VALUES ($1, $2, $3, $4, now() + interval '7 days')
+            RETURNING id, token
+        """, TENANT, token, data.nombre_provisional, data.telefono)
+
+    base_url = "https://motor-semantico-omni.fly.dev"
+    enlace = f"{base_url}/onboarding/{token}"
+
+    log.info("onboarding_enlace_creado", token=token[:8],
+             nombre=data.nombre_provisional)
+    return {
+        "id": str(row["id"]),
+        "token": token,
+        "enlace": enlace,
+        "wa_mensaje": f"Hola {data.nombre_provisional}! Para inscribirte en Authentic Pilates, "
+                      f"rellena esta ficha: {enlace}",
+        "expira_en": "7 días",
+    }
+
+
+@router.get("/onboarding/enlaces")
+async def listar_enlaces_onboarding(estado: Optional[str] = None):
+    """Lista enlaces de onboarding creados (para Jesús)."""
+    pool = await _get_pool()
+    estado = estado or None
+    async with pool.acquire() as conn:
+        if estado:
+            rows = await conn.fetch("""
+                SELECT l.*, c.nombre, c.apellidos
+                FROM om_onboarding_links l
+                LEFT JOIN om_clientes c ON c.id = l.cliente_id
+                WHERE l.tenant_id = $1 AND l.estado = $2
+                ORDER BY l.created_at DESC
+            """, TENANT, estado)
+        else:
+            rows = await conn.fetch("""
+                SELECT l.*, c.nombre, c.apellidos
+                FROM om_onboarding_links l
+                LEFT JOIN om_clientes c ON c.id = l.cliente_id
+                WHERE l.tenant_id = $1
+                ORDER BY l.created_at DESC
+            """, TENANT)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.get("/onboarding/{token}")
+async def obtener_onboarding(token: str):
+    """Endpoint público: devuelve datos del enlace + grupos disponibles."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        link = await conn.fetchrow("""
+            SELECT * FROM om_onboarding_links WHERE token = $1 AND tenant_id = $2
+        """, token, TENANT)
+
+        if not link:
+            raise HTTPException(404, "Enlace no encontrado")
+        if link["estado"] == "completado":
+            raise HTTPException(410, "Este enlace ya fue utilizado")
+        if link["estado"] == "expirado" or (link["fecha_expiracion"] and
+            link["fecha_expiracion"] < datetime.now(link["fecha_expiracion"].tzinfo)):
+            raise HTTPException(410, "Este enlace ha expirado")
+
+        grupos = await conn.fetch("""
+            SELECT g.id, g.nombre, g.tipo, g.capacidad_max, g.dias_semana,
+                   g.precio_mensual, g.frecuencia_semanal,
+                   (SELECT count(*) FROM om_contratos c
+                    WHERE c.grupo_id = g.id AND c.estado = 'activo') as ocupadas
+            FROM om_grupos g
+            WHERE g.tenant_id = $1 AND g.estado = 'activo'
+            ORDER BY g.nombre
+        """, TENANT)
+
+        grupos_disponibles = []
+        for g in grupos:
+            if g["ocupadas"] < g["capacidad_max"]:
+                grupos_disponibles.append({
+                    "id": str(g["id"]),
+                    "nombre": g["nombre"],
+                    "tipo": g["tipo"],
+                    "precio_mensual": float(g["precio_mensual"]),
+                    "frecuencia_semanal": g["frecuencia_semanal"],
+                    "plazas_libres": g["capacidad_max"] - g["ocupadas"],
+                    "dias_semana": g["dias_semana"],
+                })
+
+    return {
+        "nombre_provisional": link["nombre_provisional"],
+        "telefono": link["telefono"],
+        "grupos_disponibles": grupos_disponibles,
+        "precios": {
+            "individual_1x": 35.00,
+            "individual_2x": 30.00,
+            "grupo_estandar": 105.00,
+            "grupo_mat": 55.00,
+            "grupo_1x": 60.00,
+        },
+    }
+
+
+@router.post("/onboarding/{token}/completar")
+async def completar_onboarding(token: str, data: OnboardingComplete):
+    """Endpoint público: el cliente completa el formulario.
+    Crea: om_clientes + om_cliente_tenant + om_datos_clinicos + om_contratos."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        link = await conn.fetchrow("""
+            SELECT * FROM om_onboarding_links WHERE token = $1 AND tenant_id = $2
+        """, token, TENANT)
+
+        if not link:
+            raise HTTPException(404, "Enlace no encontrado")
+        if link["estado"] != "pendiente":
+            raise HTTPException(410, "Este enlace ya no es válido")
+
+        async with conn.transaction():
+            # 1. Crear cliente
+            cliente_row = await conn.fetchrow("""
+                INSERT INTO om_clientes (nombre, apellidos, telefono, email,
+                    fecha_nacimiento, nif, direccion,
+                    metodo_pago_habitual,
+                    consentimiento_datos, consentimiento_marketing,
+                    consentimiento_compartir_tenants, fecha_consentimiento)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, now())
+                RETURNING id
+            """, data.nombre, data.apellidos, data.telefono, data.email,
+                data.fecha_nacimiento, data.nif, data.direccion,
+                data.metodo_pago,
+                data.consentimiento_datos, data.consentimiento_marketing,
+                data.consentimiento_compartir_tenants)
+
+            cliente_id = cliente_row["id"]
+
+            # 2. Crear relación tenant
+            await conn.execute("""
+                INSERT INTO om_cliente_tenant (cliente_id, tenant_id, estado, fuente_captacion)
+                VALUES ($1, $2, 'activo', 'onboarding_selfservice')
+            """, cliente_id, TENANT)
+
+            # 3. Datos clínicos (si hay)
+            datos_clinicos = []
+            if data.lesiones:
+                datos_clinicos.append(("restriccion", "Lesiones", data.lesiones))
+            if data.patologias:
+                datos_clinicos.append(("diagnostico", "Patologías", data.patologias))
+            if data.medicacion:
+                datos_clinicos.append(("medicacion", "Medicación", data.medicacion))
+            if data.restricciones:
+                datos_clinicos.append(("restriccion", "Restricciones", data.restricciones))
+            if data.medico_derivante:
+                datos_clinicos.append(("derivacion_medica", "Derivado por", data.medico_derivante))
+
+            for tipo, titulo, contenido in datos_clinicos:
+                await conn.execute("""
+                    INSERT INTO om_datos_clinicos (cliente_id, tenant_id, tipo, titulo,
+                        contenido, autor, visible_para, consentimiento_registrado, base_legal)
+                    VALUES ($1, $2, $3, $4, $5, 'cliente_autoregistro', $6, true, 'consentimiento')
+                """, cliente_id, TENANT, tipo, titulo, contenido,
+                    [TENANT])
+
+            # 4. Crear contrato
+            contrato_id = None
+            if data.tipo_contrato == "grupo" and data.grupo_id:
+                grupo = await conn.fetchrow("""
+                    SELECT capacidad_max FROM om_grupos WHERE id = $1 AND tenant_id = $2
+                """, data.grupo_id, TENANT)
+                if not grupo:
+                    raise HTTPException(404, "Grupo no encontrado")
+
+                ocupados = await conn.fetchval("""
+                    SELECT count(*) FROM om_contratos
+                    WHERE grupo_id = $1 AND tenant_id = $2 AND estado = 'activo'
+                """, data.grupo_id, TENANT)
+                if ocupados >= grupo["capacidad_max"]:
+                    raise HTTPException(409, "Grupo lleno, selecciona otro")
+
+                precio = await conn.fetchval(
+                    "SELECT precio_mensual FROM om_grupos WHERE id = $1", data.grupo_id)
+
+                contrato_row = await conn.fetchrow("""
+                    INSERT INTO om_contratos (tenant_id, cliente_id, tipo, grupo_id,
+                        precio_mensual, fecha_inicio)
+                    VALUES ($1, $2, 'grupo', $3, $4, CURRENT_DATE)
+                    RETURNING id
+                """, TENANT, cliente_id, data.grupo_id, precio)
+                contrato_id = contrato_row["id"]
+
+            elif data.tipo_contrato == "individual":
+                precio = data.precio_sesion or 35.00
+                contrato_row = await conn.fetchrow("""
+                    INSERT INTO om_contratos (tenant_id, cliente_id, tipo,
+                        frecuencia_semanal, precio_sesion, ciclo_cobro, fecha_inicio)
+                    VALUES ($1, $2, 'individual', $3, $4, $5, CURRENT_DATE)
+                    RETURNING id
+                """, TENANT, cliente_id,
+                    data.frecuencia_semanal or 1, precio,
+                    data.ciclo_cobro or 'sesion')
+                contrato_id = contrato_row["id"]
+
+            # 5. Marcar enlace como completado
+            await conn.execute("""
+                UPDATE om_onboarding_links
+                SET estado = 'completado', cliente_id = $1,
+                    fecha_completado = now()
+                WHERE token = $2
+            """, cliente_id, token)
+
+    log.info("onboarding_completado", cliente_id=str(cliente_id),
+             nombre=f"{data.nombre} {data.apellidos}",
+             tipo=data.tipo_contrato)
+
+    return {
+        "status": "ok",
+        "cliente_id": str(cliente_id),
+        "contrato_id": str(contrato_id) if contrato_id else None,
+        "mensaje": f"Bienvenido/a {data.nombre}! Tu inscripción está completa.",
+    }
+
+
+# ============================================================
+# FACTURACIÓN
+# ============================================================
+
+@router.post("/facturas", status_code=201)
+async def crear_factura(data: FacturaCreate):
+    """Crea factura desde cargos cobrados. Numera secuencialmente. VeriFactu ready."""
+    import hashlib
+    pool = await _get_pool()
+
+    async with pool.acquire() as conn:
+        async with conn.transaction():
+            # Verificar cliente
+            cliente = await conn.fetchrow(
+                "SELECT * FROM om_clientes WHERE id = $1", data.cliente_id)
+            if not cliente:
+                raise HTTPException(404, "Cliente no encontrado")
+
+            # Obtener cargos
+            cargos = await conn.fetch("""
+                SELECT * FROM om_cargos
+                WHERE id = ANY($1::uuid[]) AND cliente_id = $2 AND tenant_id = $3
+            """, data.cargo_ids, data.cliente_id, TENANT)
+            if len(cargos) != len(data.cargo_ids):
+                raise HTTPException(400, "Algunos cargos no encontrados o no pertenecen al cliente")
+
+            # Calcular totales
+            base_total = sum(float(c["base_imponible"]) for c in cargos)
+            iva_pct = 21.00  # Pilates = 21% IVA
+            iva_total = round(base_total * iva_pct / 100, 2)
+            total = round(base_total + iva_total, 2)
+
+            # Siguiente número de factura
+            year = date.today().year
+            serie = "AP"
+            ultimo_num = await conn.fetchval("""
+                SELECT MAX(CAST(SPLIT_PART(numero_factura, '-', 3) AS INT))
+                FROM om_facturas
+                WHERE tenant_id = $1 AND serie = $2
+                    AND EXTRACT(YEAR FROM fecha_emision) = $3
+            """, TENANT, serie, year)
+            siguiente = (ultimo_num or 0) + 1
+            numero = f"{serie}-{year}-{siguiente:04d}"
+
+            # Hash VeriFactu (encadenado con factura anterior)
+            hash_anterior = await conn.fetchval("""
+                SELECT verifactu_hash FROM om_facturas
+                WHERE tenant_id = $1 AND serie = $2
+                ORDER BY created_at DESC LIMIT 1
+            """, TENANT, serie)
+
+            datos_hash = f"{numero}|{date.today()}|{total}|{hash_anterior or 'GENESIS'}"
+            verifactu_hash = hashlib.sha256(datos_hash.encode()).hexdigest()
+
+            # Crear factura con snapshot fiscal
+            factura_row = await conn.fetchrow("""
+                INSERT INTO om_facturas (
+                    tenant_id, cliente_id, numero_factura, serie,
+                    fecha_emision, fecha_operacion,
+                    base_imponible, iva_porcentaje, iva_monto, total,
+                    verifactu_hash, verifactu_hash_anterior,
+                    cliente_nif, cliente_nombre_fiscal, cliente_direccion
+                ) VALUES ($1,$2,$3,$4, CURRENT_DATE,$5, $6,$7,$8,$9, $10,$11, $12,$13,$14)
+                RETURNING id
+            """, TENANT, data.cliente_id, numero, serie,
+                data.fecha_operacion,
+                base_total, iva_pct, iva_total, total,
+                verifactu_hash, hash_anterior,
+                cliente["nif"],
+                f"{cliente['nombre']} {cliente['apellidos']}",
+                cliente["direccion"])
+
+            factura_id = factura_row["id"]
+
+            # Crear líneas de factura
+            for cargo in cargos:
+                bi = float(cargo["base_imponible"])
+                iva_m = round(bi * iva_pct / 100, 2)
+                await conn.execute("""
+                    INSERT INTO om_factura_lineas (
+                        factura_id, cargo_id, concepto, cantidad,
+                        precio_unitario, base_imponible,
+                        iva_porcentaje, iva_monto, total
+                    ) VALUES ($1,$2,$3,1,$4,$5,$6,$7,$8)
+                """, factura_id, cargo["id"],
+                    cargo["descripcion"] or cargo["tipo"],
+                    bi, bi, iva_pct, iva_m, round(bi + iva_m, 2))
+
+    log.info("factura_creada", numero=numero, total=total, lineas=len(cargos))
+    return {"id": str(factura_id), "numero": numero, "total": total, "status": "created"}
+
+
+@router.get("/facturas")
+async def listar_facturas(
+    estado: Optional[str] = None,
+    cliente_id: Optional[UUID] = None,
+    year: Optional[int] = None,
+    limit: int = 50
+):
+    """Lista facturas con filtros."""
+    estado = estado or None
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        conditions = ["f.tenant_id = $1"]
+        params: list = [TENANT]
+        idx = 2
+
+        if estado:
+            conditions.append(f"f.estado = ${idx}"); params.append(estado); idx += 1
+        if cliente_id:
+            conditions.append(f"f.cliente_id = ${idx}"); params.append(cliente_id); idx += 1
+        if year:
+            conditions.append(f"EXTRACT(YEAR FROM f.fecha_emision) = ${idx}"); params.append(year); idx += 1
+
+        where = " AND ".join(conditions)
+        rows = await conn.fetch(f"""
+            SELECT f.*, cl.nombre, cl.apellidos
+            FROM om_facturas f
+            JOIN om_clientes cl ON cl.id = f.cliente_id
+            WHERE {where}
+            ORDER BY f.fecha_emision DESC, f.numero_factura DESC
+            LIMIT ${idx}
+        """, *params, limit)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.get("/facturas/paquete-gestor")
+async def paquete_gestor(trimestre: Optional[int] = None, year: Optional[int] = None):
+    """Resumen trimestral para la gestoría."""
+    import calendar
+    year = year or date.today().year
+    if trimestre is None:
+        trimestre = (date.today().month - 1) // 3 + 1
+
+    mes_inicio = (trimestre - 1) * 3 + 1
+    mes_fin = trimestre * 3
+    fecha_inicio = date(year, mes_inicio, 1)
+    fecha_fin = date(year, mes_fin, calendar.monthrange(year, mes_fin)[1])
+
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        # Facturas emitidas
+        facturas = await conn.fetch("""
+            SELECT * FROM om_facturas
+            WHERE tenant_id = $1 AND fecha_emision >= $2 AND fecha_emision <= $3
+                AND estado = 'emitida'
+            ORDER BY numero_factura
+        """, TENANT, fecha_inicio, fecha_fin)
+
+        iva_repercutido = sum(float(f["iva_monto"]) for f in facturas)
+        base_ingresos = sum(float(f["base_imponible"]) for f in facturas)
+        total_ingresos = sum(float(f["total"]) for f in facturas)
+
+        # Gastos del trimestre
+        gastos = await conn.fetch("""
+            SELECT * FROM om_gastos
+            WHERE tenant_id = $1 AND fecha_gasto >= $2 AND fecha_gasto <= $3
+            ORDER BY fecha_gasto
+        """, TENANT, fecha_inicio, fecha_fin)
+
+        iva_soportado = sum(float(g["iva_soportado"] or 0) for g in gastos)
+        base_gastos = sum(float(g["base_imponible"]) for g in gastos)
+        total_gastos = sum(float(g["total"]) for g in gastos)
+
+        # Gastos por categoría
+        gastos_por_cat: dict = {}
+        for g in gastos:
+            cat = g["categoria"]
+            gastos_por_cat[cat] = gastos_por_cat.get(cat, 0) + float(g["total"])
+
+    return {
+        "trimestre": f"Q{trimestre} {year}",
+        "periodo": f"{fecha_inicio} a {fecha_fin}",
+        "ingresos": {
+            "facturas_emitidas": len(facturas),
+            "base_imponible": round(base_ingresos, 2),
+            "iva_repercutido": round(iva_repercutido, 2),
+            "total": round(total_ingresos, 2),
+        },
+        "gastos": {
+            "total_gastos": len(gastos),
+            "base_imponible": round(base_gastos, 2),
+            "iva_soportado": round(iva_soportado, 2),
+            "total": round(total_gastos, 2),
+            "por_categoria": gastos_por_cat,
+        },
+        "iva_liquidar": round(iva_repercutido - iva_soportado, 2),
+        "resultado_neto": round(base_ingresos - base_gastos, 2),
+    }
+
+
+@router.get("/facturas/{factura_id}")
+async def obtener_factura(factura_id: UUID):
+    """Detalle de factura con líneas."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        factura = await conn.fetchrow(
+            "SELECT * FROM om_facturas WHERE id = $1 AND tenant_id = $2",
+            factura_id, TENANT)
+        if not factura:
+            raise HTTPException(404, "Factura no encontrada")
+
+        lineas = await conn.fetch("""
+            SELECT * FROM om_factura_lineas WHERE factura_id = $1 ORDER BY created_at
+        """, factura_id)
+
+        cliente = await conn.fetchrow(
+            "SELECT * FROM om_clientes WHERE id = $1", factura["cliente_id"])
+
+    return {
+        **_row_to_dict(factura),
+        "lineas": [_row_to_dict(l) for l in lineas],
+        "cliente": _row_to_dict(cliente) if cliente else None,
+    }
+
+
+@router.post("/facturas/{factura_id}/anular")
+async def anular_factura(factura_id: UUID, data: FacturaAnular):
+    """Anula factura. No se borra — se marca como anulada (VeriFactu)."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        result = await conn.execute("""
+            UPDATE om_facturas SET estado = 'anulada'
+            WHERE id = $1 AND tenant_id = $2 AND estado = 'emitida'
+        """, factura_id, TENANT)
+        if result == "UPDATE 0":
+            raise HTTPException(404, "Factura no encontrada o ya anulada")
+
+    log.info("factura_anulada", id=str(factura_id), motivo=data.motivo)
+    return {"status": "anulada"}
+
+
+@router.post("/facturas/{factura_id}/pdf")
+async def generar_pdf_factura(factura_id: UUID):
+    """Genera PDF/HTML de la factura."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        factura = await conn.fetchrow(
+            "SELECT * FROM om_facturas WHERE id = $1 AND tenant_id = $2",
+            factura_id, TENANT)
+        if not factura:
+            raise HTTPException(404, "Factura no encontrada")
+
+        lineas = await conn.fetch(
+            "SELECT * FROM om_factura_lineas WHERE factura_id = $1", factura_id)
+
+    # Generar HTML de la factura
+    html = _generar_html_factura(factura, lineas)
+
+    # Intentar generar PDF con weasyprint
+    try:
+        from weasyprint import HTML as WeasyHTML
+        pdf_filename = f"factura_{factura['numero_factura'].replace('-','_')}.pdf"
+        pdf_path = f"/tmp/{pdf_filename}"
+        WeasyHTML(string=html).write_pdf(pdf_path)
+
+        # Guardar path en DB
+        async with pool.acquire() as conn2:
+            await conn2.execute(
+                "UPDATE om_facturas SET pdf_path = $1 WHERE id = $2",
+                pdf_path, factura_id)
+
+        return {"status": "ok", "pdf_path": pdf_path, "filename": pdf_filename}
+    except ImportError:
+        # Sin weasyprint: devolver HTML para window.print() del navegador
+        return {"status": "html_only", "html": html,
+                "nota": "Instalar weasyprint para PDF nativo"}
+
+
+@router.post("/facturas/auto-facturar")
+async def auto_facturar():
+    """Lista candidatos para facturación automática."""
+    pool = await _get_pool()
+
+    async with pool.acquire() as conn:
+        clientes_con_cargos = await conn.fetch("""
+            SELECT DISTINCT c.cliente_id, cl.nombre, cl.apellidos
+            FROM om_cargos c
+            JOIN om_clientes cl ON cl.id = c.cliente_id
+            LEFT JOIN om_factura_lineas fl ON fl.cargo_id = c.id
+            WHERE c.tenant_id = $1 AND c.estado = 'cobrado' AND fl.id IS NULL
+            GROUP BY c.cliente_id, cl.nombre, cl.apellidos
+        """, TENANT)
+
+    return {
+        "status": "ok",
+        "clientes_con_cargos_sin_factura": len(clientes_con_cargos),
+        "clientes": [{"id": str(c["cliente_id"]),
+                       "nombre": f"{c['nombre']} {c['apellidos']}"}
+                      for c in clientes_con_cargos],
+        "nota": "Auto-facturación pendiente de campo preferencia_facturacion en om_clientes"
+    }
+
+
+# ============================================================
+# HELPERS
+# ============================================================
+
+def _generar_html_factura(factura, lineas) -> str:
+    """Genera HTML de factura para PDF o visualización."""
+    lineas_html = ""
+    for l in lineas:
+        lineas_html += f"""
+        <tr>
+            <td>{l['concepto']}</td>
+            <td style="text-align:right">{l['cantidad']}</td>
+            <td style="text-align:right">{float(l['precio_unitario']):.2f}</td>
+            <td style="text-align:right">{float(l['base_imponible']):.2f}</td>
+            <td style="text-align:right">{float(l['iva_porcentaje']):.0f}%</td>
+            <td style="text-align:right">{float(l['total']):.2f}</td>
+        </tr>"""
+
+    return f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+  body {{ font-family: 'Helvetica', sans-serif; font-size: 12px; color: #333; margin: 40px; }}
+  .header {{ display: flex; justify-content: space-between; margin-bottom: 30px; }}
+  .emisor {{ font-size: 11px; color: #666; }}
+  .titulo {{ font-size: 22px; font-weight: bold; color: #111; }}
+  .numero {{ font-size: 14px; color: #6366f1; margin-top: 4px; }}
+  .receptor {{ background: #f9fafb; padding: 16px; border-radius: 8px; margin: 20px 0; }}
+  table {{ width: 100%; border-collapse: collapse; margin: 20px 0; }}
+  th {{ text-align: left; padding: 8px; border-bottom: 2px solid #e5e7eb; font-size: 11px;
+       text-transform: uppercase; color: #6b7280; }}
+  td {{ padding: 8px; border-bottom: 1px solid #f3f4f6; }}
+  .totales {{ text-align: right; margin-top: 20px; }}
+  .totales .total {{ font-size: 18px; font-weight: bold; }}
+  .verifactu {{ font-size: 9px; color: #9ca3af; margin-top: 40px; border-top: 1px solid #e5e7eb;
+               padding-top: 8px; }}
+</style></head><body>
+  <div class="header">
+    <div>
+      <div class="titulo">FACTURA</div>
+      <div class="numero">{factura['numero_factura']}</div>
+      <div style="margin-top:8px">Fecha: {factura['fecha_emision']}</div>
+    </div>
+    <div class="emisor">
+      <strong>Authentic Pilates</strong><br>
+      Jesus Fernandez Dominguez<br>
+      Logrono, La Rioja<br>
+    </div>
+  </div>
+
+  <div class="receptor">
+    <strong>Cliente:</strong> {factura['cliente_nombre_fiscal'] or 'Sin datos fiscales'}<br>
+    {f"NIF: {factura['cliente_nif']}<br>" if factura['cliente_nif'] else ''}
+    {f"Direccion: {factura['cliente_direccion']}" if factura['cliente_direccion'] else ''}
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Concepto</th><th style="text-align:right">Cant.</th>
+          <th style="text-align:right">Precio</th><th style="text-align:right">Base</th>
+          <th style="text-align:right">IVA</th><th style="text-align:right">Total</th></tr>
+    </thead>
+    <tbody>{lineas_html}</tbody>
+  </table>
+
+  <div class="totales">
+    <div>Base imponible: {float(factura['base_imponible']):.2f} EUR</div>
+    <div>IVA ({float(factura['iva_porcentaje']):.0f}%): {float(factura['iva_monto']):.2f} EUR</div>
+    <div class="total">TOTAL: {float(factura['total']):.2f} EUR</div>
+  </div>
+
+  <div class="verifactu">
+    VeriFactu hash: {factura['verifactu_hash'][:16]}...<br>
+    Este documento es una factura simplificada. Preparado para VeriFactu (La Rioja ~2027).
+  </div>
+</body></html>"""

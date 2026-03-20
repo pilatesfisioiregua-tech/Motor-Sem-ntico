@@ -55,3 +55,20 @@ export const getAlertas = () => request('/alertas');
 export const bizumEntrante = (data) => request('/bizum-entrante', { method: 'POST', body: JSON.stringify(data) });
 export const cronInicioSemana = () => request('/cron/inicio_semana', { method: 'POST' });
 export const cronInicioMes = () => request('/cron/inicio_mes', { method: 'POST' });
+
+// ONBOARDING
+export const crearEnlaceOnboarding = (data) =>
+  request('/onboarding/crear-enlace', { method: 'POST', body: JSON.stringify(data) });
+
+// FACTURACIÓN
+export const crearFactura = (data) => request('/facturas', { method: 'POST', body: JSON.stringify(data) });
+export const getFacturas = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/facturas${qs ? `?${qs}` : ''}`);
+};
+export const getFactura = (id) => request(`/facturas/${id}`);
+export const generarPdfFactura = (id) => request(`/facturas/${id}/pdf`, { method: 'POST' });
+export const getPaqueteGestor = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/facturas/paquete-gestor${qs ? `?${qs}` : ''}`);
+};

@@ -1,9 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import * as api from './api';
+import Onboarding from './Onboarding';
 import './App.css';
 
 function App() {
+  // Routing simple: si la URL es /onboarding/{token}, mostrar formulario público
+  const path = window.location.pathname;
+  const onboardingMatch = path.match(/^\/onboarding\/(.+)$/);
+  if (onboardingMatch) {
+    return <Onboarding token={onboardingMatch[1]} />;
+  }
+
   // Estado principal
   const [sesiones, setSesiones] = useState([]);
   const [sesionSeleccionada, setSesionSeleccionada] = useState(null);
@@ -25,6 +33,12 @@ function App() {
   // Búsqueda
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+
+  // Nuevo cliente (onboarding)
+  const [showNuevoCliente, setShowNuevoCliente] = useState(false);
+  const [nuevoNombre, setNuevoNombre] = useState('');
+  const [nuevoTel, setNuevoTel] = useState('');
+  const [enlaceGenerado, setEnlaceGenerado] = useState(null);
 
   // ---- CARGA INICIAL ----
   useEffect(() => {
@@ -133,6 +147,18 @@ function App() {
     }
   }
 
+  // ---- CREAR ENLACE ONBOARDING ----
+  async function crearEnlaceOnboarding() {
+    if (!nuevoNombre || !nuevoTel) return;
+    try {
+      const result = await api.crearEnlaceOnboarding({
+        nombre_provisional: nuevoNombre, telefono: nuevoTel,
+      });
+      setEnlaceGenerado(result);
+      toast.success('Enlace creado');
+    } catch (e) { toast.error(e.message); }
+  }
+
   // ---- BÚSQUEDA ----
   useEffect(() => {
     if (searchQuery.length < 2) { setSearchResults([]); return; }
@@ -159,8 +185,10 @@ function App() {
         case ' ':
           // Space: toggle ausencia del asistente focused
           break;
+        case 'F7': e.preventDefault(); setShowNuevoCliente(prev => !prev); break;
         case 'Escape':
-          setShowCobro(false); setShowBizum(false); setSearchQuery(''); setSearchResults([]);
+          setShowCobro(false); setShowBizum(false); setShowNuevoCliente(false);
+          setSearchQuery(''); setSearchResults([]);
           break;
       }
     }
@@ -307,6 +335,35 @@ function App() {
           </button>
         )}
 
+        {/* Nuevo cliente */}
+        <h3>Nuevo cliente <span className="kb-hint">F7</span></h3>
+        {showNuevoCliente ? (
+          <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+            <input className="input" placeholder="Nombre" value={nuevoNombre}
+              onChange={e => setNuevoNombre(e.target.value)} autoFocus />
+            <input className="input" placeholder="Teléfono" value={nuevoTel}
+              onChange={e => setNuevoTel(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && crearEnlaceOnboarding()} />
+            <button className="btn btn-primary" onClick={crearEnlaceOnboarding}>
+              Generar enlace
+            </button>
+            {enlaceGenerado && (
+              <div style={{fontSize:12, background:'var(--bg)', padding:8, borderRadius:6, wordBreak:'break-all'}}>
+                <div style={{marginBottom:4}}>{enlaceGenerado.enlace}</div>
+                <button className="btn btn-sm btn-secondary" onClick={() => {
+                  navigator.clipboard.writeText(enlaceGenerado.wa_mensaje);
+                  toast.success('Mensaje copiado');
+                }}>Copiar mensaje WA</button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button className="btn btn-secondary" style={{width:'100%'}}
+            onClick={() => setShowNuevoCliente(true)}>
+            Crear enlace inscripción
+          </button>
+        )}
+
         {/* Alertas */}
         {alertas.length > 0 && (
           <>
@@ -325,6 +382,7 @@ function App() {
         <div style={{fontSize: 11, color: 'var(--text-dim)', lineHeight: 1.8}}>
           <span className="kb-hint">F1</span> Cobrar &nbsp;
           <span className="kb-hint">F3</span> Buscar &nbsp;
+          <span className="kb-hint">F7</span> Nuevo cliente &nbsp;
           <span className="kb-hint">B</span> Bizum &nbsp;
           <span className="kb-hint">Space</span> Toggle ausencia &nbsp;
           <span className="kb-hint">Esc</span> Cerrar
