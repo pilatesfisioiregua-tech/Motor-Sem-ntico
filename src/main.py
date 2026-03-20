@@ -44,6 +44,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Motor Semántico OMNI-MIND", version="0.1.0", lifespan=lifespan)
 
+# Mount Pilates router
+try:
+    from src.pilates.router import router as pilates_router
+    app.include_router(pilates_router)
+    log.info("pilates_router_mounted")
+except Exception as e:
+    log.warning("pilates_router_mount_failed", error=str(e))
+
 # Mount Code OS sub-app (agent endpoints at /code-os/*)
 try:
     from motor_v1_validation.agent.api import app as code_os_app
@@ -158,6 +166,21 @@ async def analizar_gestor():
     except Exception as e:
         log.error("gestor_error", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# Serve frontend static files (Modo Estudio)
+from pathlib import Path
+frontend_dist = Path(__file__).parent.parent / "frontend" / "dist"
+if frontend_dist.exists():
+    from fastapi.staticfiles import StaticFiles
+    from starlette.responses import FileResponse
+
+    @app.get("/estudio")
+    async def estudio():
+        return FileResponse(frontend_dist / "index.html")
+
+    app.mount("/assets", StaticFiles(directory=frontend_dist / "assets"), name="assets")
+    log.info("frontend_mounted", path=str(frontend_dist))
 
 
 @app.post("/reactor/telemetria")
