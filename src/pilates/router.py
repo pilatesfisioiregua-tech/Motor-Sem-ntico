@@ -125,6 +125,78 @@ class CargoManual(BaseModel):
     iva_porcentaje: float = 21.00
 
 
+class ConsejoRequest(BaseModel):
+    pregunta: str
+    profundidad: str = Field(default="normal", pattern="^(rapida|normal|profunda)$")
+    ints_forzadas: Optional[list[str]] = None
+
+
+class DecisionTernaria(BaseModel):
+    sesion_id: UUID
+    decision: str = Field(pattern="^(cierre|inerte|toxico)$")
+    confianza: float = Field(ge=0, le=1)
+    razon: Optional[str] = None
+
+
+# ============================================================
+# SCHEMAS — ADN + PROCESOS + CONOCIMIENTO + TENSIONES + DEPURACIÓN
+# ============================================================
+
+class ADNCreate(BaseModel):
+    categoria: str = Field(pattern="^(principio_innegociable|principio_flexible|metodo|filosofia|antipatron|criterio_depuracion)$")
+    titulo: str
+    descripcion: str
+    ejemplos: Optional[list[str]] = None
+    contra_ejemplos: Optional[list[str]] = None
+    funcion_l07: Optional[str] = None
+    lente: Optional[str] = None
+
+
+class ADNUpdate(BaseModel):
+    titulo: Optional[str] = None
+    descripcion: Optional[str] = None
+    ejemplos: Optional[list[str]] = None
+    contra_ejemplos: Optional[list[str]] = None
+    activo: Optional[bool] = None
+
+
+class ProcesoCreate(BaseModel):
+    area: str = Field(pattern="^(operativa_diaria|sesion|cliente|emergencia|administrativa|instructor)$")
+    titulo: str
+    descripcion: str
+    pasos: list[dict]  # [{"orden": 1, "accion": "...", "detalle": "..."}]
+    notas: Optional[str] = None
+    funcion_l07: Optional[str] = None
+    vinculado_a_adn: Optional[UUID] = None
+
+
+class ConocimientoCreate(BaseModel):
+    tipo: str = Field(pattern="^(tecnica|cliente|negocio|mercado|metodo)$")
+    titulo: str
+    descripcion: str
+    evidencia: Optional[list[str]] = None
+    confianza: str = Field(default="hipotesis", pattern="^(hipotesis|validado|consolidado)$")
+    origen: Optional[str] = None
+
+
+class TensionCreate(BaseModel):
+    tipo: str = Field(pattern="^(competencia_nueva|perdida_recurso|crisis_demanda|crecimiento|regulatorio|personal|estacional|mercado)$")
+    descripcion: str
+    funciones_afectadas: list[str]
+    severidad: str = Field(pattern="^(baja|media|alta|critica)$")
+    duracion_estimada_dias: Optional[int] = None
+
+
+class DepuracionCreate(BaseModel):
+    tipo: str = Field(pattern="^(servicio_eliminar|cliente_toxico|gasto_innecesario|proceso_redundante|canal_inefectivo|habito_operativo|creencia_limitante)$")
+    descripcion: str
+    impacto_estimado: Optional[str] = None
+    funcion_l07: Optional[str] = None
+    lente: Optional[str] = None
+    origen: str = Field(default="manual", pattern="^(diagnostico_acd|sesion_consejo|manual|automatizacion)$")
+    diagnostico_id: Optional[UUID] = None
+
+
 # ============================================================
 # HELPERS
 # ============================================================
@@ -1933,7 +2005,510 @@ async def dashboard_profundo():
     ]
     briefing["depuraciones"] = [_row_to_dict(d) for d in depuraciones]
 
+    # Readiness de replicación
+    try:
+        briefing["readiness"] = await _calcular_readiness()
+    except Exception:
+        briefing["readiness"] = None
+
     return briefing
+
+
+# ============================================================
+# SÉQUITO DE ASESORES
+# ============================================================
+
+@router.post("/consejo")
+async def convocar_consejo_endpoint(data: ConsejoRequest):
+    """Convoca el Consejo de Asesores. Coste: ~$0.05-0.50 según profundidad."""
+    from src.pilates.sequito import convocar_consejo
+    sesion = await convocar_consejo(
+        pregunta=data.pregunta,
+        profundidad=data.profundidad,
+        ints_forzadas=data.ints_forzadas,
+    )
+    return {
+        "status": "ok",
+        "estado_acd": sesion.estado_acd_pre,
+        "asesores_convocados": len(sesion.asesores),
+        "respuestas": [{
+            "int_id": r.int_id, "nombre": r.nombre,
+            "P": r.pensamiento, "R": r.razonamiento,
+            "respuesta": r.respuesta,
+        } for r in sesion.asesores],
+        "sintesis": sesion.sintesis,
+        "puntos_ciegos": sesion.puntos_ciegos,
+        "prescripcion_acd": sesion.prescripcion,
+        "coste_usd": sesion.coste_total,
+        "tiempo_s": sesion.tiempo_total,
+    }
+
+
+@router.get("/consejo/historial")
+async def historial_consejo(limit: int = 10):
+    """Historial de sesiones del Consejo."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch("""
+            SELECT id, pregunta, profundidad, estado_acd_pre,
+                   inteligencias_convocadas, sintesis,
+                   puntos_ciegos_cruzados, decision_ternaria,
+                   coste_api, tiempo_ejecucion_s, created_at
+            FROM om_sesiones_consejo
+            WHERE tenant_id = $1
+            ORDER BY created_at DESC LIMIT $2
+        """, TENANT, limit)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.get("/consejo/{sesion_id}")
+async def detalle_consejo(sesion_id: UUID):
+    """Detalle completo de una sesión del Consejo."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            SELECT * FROM om_sesiones_consejo WHERE id = $1 AND tenant_id = $2
+        """, sesion_id, TENANT)
+        if not row:
+            raise HTTPException(404, "Sesión no encontrada")
+    return _row_to_dict(row)
+
+
+@router.post("/consejo/{sesion_id}/decision")
+async def registrar_decision(sesion_id: UUID, data: DecisionTernaria):
+    """Registra decisión ternaria post-consejo: cierre/inerte/tóxico."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        result = await conn.execute("""
+            UPDATE om_sesiones_consejo
+            SET decision_ternaria = $1, decision_confianza = $2,
+                decision_razon = $3, decision_fecha = CURRENT_DATE
+            WHERE id = $4 AND tenant_id = $5
+        """, data.decision, data.confianza, data.razon, sesion_id, TENANT)
+        if result == "UPDATE 0":
+            raise HTTPException(404, "Sesión no encontrada")
+    return {"status": "ok"}
+
+
+@router.get("/asesores")
+async def listar_asesores():
+    """Lista los 24 asesores disponibles."""
+    from src.pilates.sequito import ASESORES
+    return [{"id": k, **v} for k, v in ASESORES.items()]
+
+
+# ============================================================
+# ADN DEL NEGOCIO (F5 Identidad)
+# ============================================================
+
+@router.get("/adn")
+async def listar_adn(categoria: Optional[str] = None, activo: bool = True):
+    """Lista principios ADN. Filtro por categoría y estado activo."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        conditions = ["tenant_id = $1"]
+        params = [TENANT]
+        idx = 2
+        if activo:
+            conditions.append("activo = true")
+        if categoria:
+            conditions.append(f"categoria = ${idx}"); params.append(categoria); idx += 1
+        where = " AND ".join(conditions)
+        rows = await conn.fetch(f"""
+            SELECT * FROM om_adn WHERE {where} ORDER BY categoria, titulo
+        """, *params)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.get("/adn/{adn_id}")
+async def obtener_adn(adn_id: UUID):
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "SELECT * FROM om_adn WHERE id = $1 AND tenant_id = $2", adn_id, TENANT)
+        if not row:
+            raise HTTPException(404, "Principio ADN no encontrado")
+    return _row_to_dict(row)
+
+
+@router.post("/adn", status_code=201)
+async def crear_adn(data: ADNCreate):
+    """Crea un principio ADN del negocio."""
+    import json
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            INSERT INTO om_adn (tenant_id, categoria, titulo, descripcion,
+                ejemplos, contra_ejemplos, funcion_l07, lente)
+            VALUES ($1,$2,$3,$4,$5::jsonb,$6::jsonb,$7,$8) RETURNING id
+        """, TENANT, data.categoria, data.titulo, data.descripcion,
+            json.dumps(data.ejemplos) if data.ejemplos else None,
+            json.dumps(data.contra_ejemplos) if data.contra_ejemplos else None,
+            data.funcion_l07, data.lente)
+    log.info("adn_creado", titulo=data.titulo, categoria=data.categoria)
+    return {"id": str(row["id"]), "status": "created"}
+
+
+@router.patch("/adn/{adn_id}")
+async def actualizar_adn(adn_id: UUID, data: ADNUpdate):
+    import json
+    updates = {k: v for k, v in data.model_dump().items() if v is not None}
+    if not updates:
+        raise HTTPException(400, "Nada que actualizar")
+    pool = await _get_pool()
+    for k in ("ejemplos", "contra_ejemplos"):
+        if k in updates and isinstance(updates[k], list):
+            updates[k] = json.dumps(updates[k])
+    set_clauses = ", ".join(f"{k} = ${i+2}" for i, k in enumerate(updates.keys()))
+    values = [adn_id] + list(updates.values())
+    async with pool.acquire() as conn:
+        await conn.execute(
+            f"UPDATE om_adn SET {set_clauses}, version = version + 1, fecha_modificacion = CURRENT_DATE WHERE id = $1 AND tenant_id = '{TENANT}'",
+            *values)
+    return {"status": "updated"}
+
+
+@router.delete("/adn/{adn_id}")
+async def desactivar_adn(adn_id: UUID):
+    """No borra — marca como inactivo (historial)."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute(
+            "UPDATE om_adn SET activo = false WHERE id = $1 AND tenant_id = $2",
+            adn_id, TENANT)
+    return {"status": "desactivado"}
+
+
+# ============================================================
+# PROCESOS DOCUMENTADOS (F7 Replicación)
+# ============================================================
+
+@router.get("/procesos")
+async def listar_procesos(area: Optional[str] = None):
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        if area:
+            rows = await conn.fetch("""
+                SELECT * FROM om_procesos WHERE tenant_id = $1 AND area = $2 ORDER BY area, titulo
+            """, TENANT, area)
+        else:
+            rows = await conn.fetch("""
+                SELECT * FROM om_procesos WHERE tenant_id = $1 ORDER BY area, titulo
+            """, TENANT)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.get("/procesos/{proceso_id}")
+async def obtener_proceso(proceso_id: UUID):
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "SELECT * FROM om_procesos WHERE id = $1 AND tenant_id = $2", proceso_id, TENANT)
+        if not row:
+            raise HTTPException(404, "Proceso no encontrado")
+        await conn.execute("""
+            UPDATE om_procesos SET veces_consultado = veces_consultado + 1, ultima_consulta = now()
+            WHERE id = $1
+        """, proceso_id)
+    return _row_to_dict(row)
+
+
+@router.post("/procesos", status_code=201)
+async def crear_proceso(data: ProcesoCreate):
+    import json
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            INSERT INTO om_procesos (tenant_id, area, titulo, descripcion, pasos,
+                notas, funcion_l07, vinculado_a_adn, documentado_por)
+            VALUES ($1,$2,$3,$4,$5::jsonb,$6,$7,$8,'Jesus') RETURNING id
+        """, TENANT, data.area, data.titulo, data.descripcion,
+            json.dumps(data.pasos), data.notas, data.funcion_l07, data.vinculado_a_adn)
+    log.info("proceso_creado", titulo=data.titulo, area=data.area)
+    return {"id": str(row["id"]), "status": "created"}
+
+
+@router.patch("/procesos/{proceso_id}")
+async def actualizar_proceso(proceso_id: UUID, data: dict):
+    """Actualiza proceso. Incrementa versión."""
+    import json
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        actual = await conn.fetchrow(
+            "SELECT * FROM om_procesos WHERE id = $1 AND tenant_id = $2", proceso_id, TENANT)
+        if not actual:
+            raise HTTPException(404, "Proceso no encontrado")
+        titulo = data.get("titulo", actual["titulo"])
+        descripcion = data.get("descripcion", actual["descripcion"])
+        pasos = json.dumps(data["pasos"]) if "pasos" in data else actual["pasos"]
+        notas = data.get("notas", actual["notas"])
+        await conn.execute("""
+            UPDATE om_procesos SET titulo=$1, descripcion=$2, pasos=$3::jsonb, notas=$4,
+                version = version + 1, ultima_revision = CURRENT_DATE
+            WHERE id = $5
+        """, titulo, descripcion, pasos if isinstance(pasos, str) else json.dumps(pasos),
+            notas, proceso_id)
+    return {"status": "updated"}
+
+
+# ============================================================
+# CONOCIMIENTO EMERGENTE (F2 Sentido)
+# ============================================================
+
+@router.get("/conocimiento")
+async def listar_conocimiento(tipo: Optional[str] = None, confianza: Optional[str] = None):
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        conditions = ["tenant_id = $1"]
+        params = [TENANT]
+        idx = 2
+        if tipo:
+            conditions.append(f"tipo = ${idx}"); params.append(tipo); idx += 1
+        if confianza:
+            conditions.append(f"confianza = ${idx}"); params.append(confianza); idx += 1
+        where = " AND ".join(conditions)
+        rows = await conn.fetch(f"""
+            SELECT * FROM om_conocimiento WHERE {where} ORDER BY fecha_descubrimiento DESC
+        """, *params)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.post("/conocimiento", status_code=201)
+async def crear_conocimiento(data: ConocimientoCreate):
+    import json
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            INSERT INTO om_conocimiento (tenant_id, tipo, titulo, descripcion,
+                evidencia, confianza, origen)
+            VALUES ($1,$2,$3,$4,$5::jsonb,$6,$7) RETURNING id
+        """, TENANT, data.tipo, data.titulo, data.descripcion,
+            json.dumps(data.evidencia) if data.evidencia else None,
+            data.confianza, data.origen)
+    log.info("conocimiento_creado", titulo=data.titulo, tipo=data.tipo)
+    return {"id": str(row["id"]), "status": "created"}
+
+
+@router.post("/conocimiento/{conocimiento_id}/promover-adn")
+async def promover_a_adn(conocimiento_id: UUID, data: ADNCreate):
+    """Promueve conocimiento consolidado a principio ADN.
+
+    F2→F5: lo que se aprende (conocimiento) sube a lo que se es (ADN).
+    """
+    pool = await _get_pool()
+    import json
+    async with pool.acquire() as conn:
+        conoc = await conn.fetchrow(
+            "SELECT * FROM om_conocimiento WHERE id = $1 AND tenant_id = $2",
+            conocimiento_id, TENANT)
+        if not conoc:
+            raise HTTPException(404, "Conocimiento no encontrado")
+
+        adn_row = await conn.fetchrow("""
+            INSERT INTO om_adn (tenant_id, categoria, titulo, descripcion,
+                ejemplos, contra_ejemplos, funcion_l07, lente)
+            VALUES ($1,$2,$3,$4,$5::jsonb,$6::jsonb,$7,$8) RETURNING id
+        """, TENANT, data.categoria, data.titulo, data.descripcion,
+            json.dumps(data.ejemplos) if data.ejemplos else None,
+            json.dumps(data.contra_ejemplos) if data.contra_ejemplos else None,
+            data.funcion_l07, data.lente)
+
+        await conn.execute("""
+            UPDATE om_conocimiento SET promovido_a_adn = $1, confianza = 'consolidado'
+            WHERE id = $2
+        """, adn_row["id"], conocimiento_id)
+
+    log.info("conocimiento_promovido", conocimiento=str(conocimiento_id), adn=str(adn_row["id"]))
+    return {"status": "promovido", "adn_id": str(adn_row["id"])}
+
+
+# ============================================================
+# TENSIONES (F6 Adaptación)
+# ============================================================
+
+@router.get("/tensiones")
+async def listar_tensiones(estado: Optional[str] = "activa"):
+    pool = await _get_pool()
+    estado = estado or None
+    async with pool.acquire() as conn:
+        if estado:
+            rows = await conn.fetch("""
+                SELECT * FROM om_tensiones WHERE tenant_id = $1 AND estado = $2
+                ORDER BY severidad DESC, fecha_inicio DESC
+            """, TENANT, estado)
+        else:
+            rows = await conn.fetch("""
+                SELECT * FROM om_tensiones WHERE tenant_id = $1 ORDER BY fecha_inicio DESC
+            """, TENANT)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.post("/tensiones", status_code=201)
+async def crear_tension(data: TensionCreate):
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            INSERT INTO om_tensiones (tenant_id, tipo, descripcion, funciones_afectadas,
+                severidad, duracion_estimada_dias, detectada_por)
+            VALUES ($1,$2,$3,$4,$5,$6,'manual') RETURNING id
+        """, TENANT, data.tipo, data.descripcion, data.funciones_afectadas,
+            data.severidad, data.duracion_estimada_dias)
+    log.info("tension_creada", tipo=data.tipo, severidad=data.severidad)
+    return {"id": str(row["id"]), "status": "created"}
+
+
+@router.patch("/tensiones/{tension_id}")
+async def actualizar_tension(tension_id: UUID, data: dict):
+    """Actualiza tensión: resolver, marcar crónica, etc."""
+    pool = await _get_pool()
+    estado = data.get("estado")
+    async with pool.acquire() as conn:
+        if estado:
+            if estado == "resuelta":
+                await conn.execute("""
+                    UPDATE om_tensiones SET estado = $1, fecha_fin = CURRENT_DATE
+                    WHERE id = $2 AND tenant_id = $3
+                """, estado, tension_id, TENANT)
+            else:
+                await conn.execute("""
+                    UPDATE om_tensiones SET estado = $1 WHERE id = $2 AND tenant_id = $3
+                """, estado, tension_id, TENANT)
+    return {"status": "updated"}
+
+
+# ============================================================
+# DEPURACIÓN (F3 — "deja de hacer esto")
+# ============================================================
+
+@router.get("/depuracion")
+async def listar_depuracion(estado: Optional[str] = None):
+    pool = await _get_pool()
+    estado = estado or None
+    async with pool.acquire() as conn:
+        if estado:
+            rows = await conn.fetch("""
+                SELECT d.*, dt.estado as diagnostico_estado
+                FROM om_depuracion d
+                LEFT JOIN om_diagnosticos_tenant dt ON dt.id = d.diagnostico_id
+                WHERE d.tenant_id = $1 AND d.estado = $2
+                ORDER BY d.created_at DESC
+            """, TENANT, estado)
+        else:
+            rows = await conn.fetch("""
+                SELECT d.*, dt.estado as diagnostico_estado
+                FROM om_depuracion d
+                LEFT JOIN om_diagnosticos_tenant dt ON dt.id = d.diagnostico_id
+                WHERE d.tenant_id = $1
+                ORDER BY d.created_at DESC
+            """, TENANT)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.post("/depuracion", status_code=201)
+async def crear_depuracion(data: DepuracionCreate):
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            INSERT INTO om_depuracion (tenant_id, tipo, descripcion, impacto_estimado,
+                funcion_l07, lente, origen, diagnostico_id)
+            VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id
+        """, TENANT, data.tipo, data.descripcion, data.impacto_estimado,
+            data.funcion_l07, data.lente, data.origen, data.diagnostico_id)
+    log.info("depuracion_creada", tipo=data.tipo, descripcion=data.descripcion[:50])
+    return {"id": str(row["id"]), "status": "created"}
+
+
+@router.patch("/depuracion/{depuracion_id}")
+async def actualizar_depuracion(depuracion_id: UUID, data: dict):
+    """Cambiar estado: propuesta → aprobada → ejecutada / descartada."""
+    pool = await _get_pool()
+    estado = data.get("estado")
+    resultado = data.get("resultado")
+    async with pool.acquire() as conn:
+        updates = []
+        params = [depuracion_id]
+        idx = 2
+        if estado:
+            updates.append(f"estado = ${idx}"); params.append(estado); idx += 1
+            if estado == "aprobada":
+                updates.append("fecha_decision = CURRENT_DATE")
+            elif estado == "ejecutada":
+                updates.append("fecha_ejecucion = CURRENT_DATE")
+        if resultado:
+            updates.append(f"resultado = ${idx}"); params.append(resultado); idx += 1
+        if not updates:
+            raise HTTPException(400, "Nada que actualizar")
+        set_clause = ", ".join(updates)
+        await conn.execute(
+            f"UPDATE om_depuracion SET {set_clause} WHERE id = $1 AND tenant_id = '{TENANT}'",
+            *params)
+    return {"status": "updated"}
+
+
+# ============================================================
+# READINESS DE REPLICACIÓN
+# ============================================================
+
+async def _calcular_readiness():
+    """Calcula readiness de replicación del negocio (función reutilizable)."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        procesos = await conn.fetchval(
+            "SELECT count(*) FROM om_procesos WHERE tenant_id = $1", TENANT)
+        areas_total = 6
+        areas_cubiertas = await conn.fetchval("""
+            SELECT count(DISTINCT area) FROM om_procesos WHERE tenant_id = $1
+        """, TENANT)
+        pct_procesos = round(min(areas_cubiertas / areas_total, 1) * 100, 0)
+
+        adn_total = await conn.fetchval(
+            "SELECT count(*) FROM om_adn WHERE tenant_id = $1 AND activo = true", TENANT)
+        cats_cubiertas = await conn.fetchval("""
+            SELECT count(DISTINCT categoria) FROM om_adn WHERE tenant_id = $1 AND activo = true
+        """, TENANT)
+        cats_total = 6
+        pct_adn = round(min(cats_cubiertas / cats_total, 1) * 100, 0)
+
+        onboarding = await conn.fetchrow("""
+            SELECT grado_absorcion FROM om_onboarding_instructor
+            WHERE tenant_id = $1 ORDER BY created_at DESC LIMIT 1
+        """, TENANT)
+        grado_absorcion = float(onboarding["grado_absorcion"]) / 10 if onboarding and onboarding["grado_absorcion"] else 0
+
+        total_conoc = await conn.fetchval(
+            "SELECT count(*) FROM om_conocimiento WHERE tenant_id = $1", TENANT)
+        consolidado = await conn.fetchval(
+            "SELECT count(*) FROM om_conocimiento WHERE tenant_id = $1 AND confianza = 'consolidado'", TENANT)
+        pct_conocimiento = round(consolidado / max(total_conoc, 1) * 100, 0)
+
+        depuraciones_ejecutadas = await conn.fetchval(
+            "SELECT count(*) FROM om_depuracion WHERE tenant_id = $1 AND estado = 'ejecutada'", TENANT)
+        depuraciones_propuestas = await conn.fetchval(
+            "SELECT count(*) FROM om_depuracion WHERE tenant_id = $1", TENANT)
+
+    readiness = round(
+        (pct_procesos / 100) * (pct_adn / 100) * max(grado_absorcion, 0.1) * max(pct_conocimiento / 100, 0.1) * 100, 1
+    )
+
+    return {
+        "readiness_pct": readiness,
+        "componentes": {
+            "procesos": {"pct": pct_procesos, "total": procesos, "areas_cubiertas": areas_cubiertas, "areas_total": areas_total},
+            "adn": {"pct": pct_adn, "total": adn_total, "categorias_cubiertas": cats_cubiertas, "categorias_total": cats_total},
+            "absorcion_instructor": {"valor": round(grado_absorcion * 100, 0), "tiene_onboarding": onboarding is not None},
+            "conocimiento": {"pct": pct_conocimiento, "total": total_conoc, "consolidado": consolidado},
+            "depuracion": {"ejecutadas": depuraciones_ejecutadas, "propuestas": depuraciones_propuestas},
+        },
+        "prescripcion_c": "Documentar procesos y codificar ADN para subir Continuidad (C)" if readiness < 50
+            else "Readiness aceptable — foco en absorción instructor" if readiness < 80
+            else "Readiness alto — listo para replicar",
+    }
+
+
+@router.get("/readiness")
+async def readiness_replicacion():
+    """Calcula readiness de replicación del negocio."""
+    return await _calcular_readiness()
 
 
 # ============================================================

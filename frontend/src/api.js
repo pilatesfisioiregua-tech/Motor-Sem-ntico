@@ -84,3 +84,53 @@ export const confirmarManana = () => request('/whatsapp/confirmar-manana', { met
 export const responderLead = (data) => request('/whatsapp/responder-lead', { method: 'POST', body: JSON.stringify(data) });
 export const getRespuestaSugerida = (data) =>
   request('/whatsapp/respuesta-sugerida', { method: 'POST', body: JSON.stringify(data) });
+
+// ADN
+export const getADN = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/adn${qs ? `?${qs}` : ''}`);
+};
+export const crearADN = (data) => request('/adn', { method: 'POST', body: JSON.stringify(data) });
+export const actualizarADN = (id, data) => request(`/adn/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
+
+// Procesos
+export const getProcesos = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/procesos${qs ? `?${qs}` : ''}`);
+};
+export const crearProceso = (data) => request('/procesos', { method: 'POST', body: JSON.stringify(data) });
+
+// Conocimiento
+export const getConocimiento = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/conocimiento${qs ? `?${qs}` : ''}`);
+};
+export const crearConocimiento = (data) => request('/conocimiento', { method: 'POST', body: JSON.stringify(data) });
+export const promoverADN = (id, data) => request(`/conocimiento/${id}/promover-adn`, { method: 'POST', body: JSON.stringify(data) });
+
+// Tensiones
+export const getTensiones = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/tensiones${qs ? `?${qs}` : ''}`);
+};
+export const crearTension = (data) => request('/tensiones', { method: 'POST', body: JSON.stringify(data) });
+
+// Depuración
+export const getDepuracion = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/depuracion${qs ? `?${qs}` : ''}`);
+};
+export const crearDepuracion = (data) => request('/depuracion', { method: 'POST', body: JSON.stringify(data) });
+export const actualizarDepuracion = (id, data) => request(`/depuracion/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
+
+// Readiness
+export const getReadiness = () => request('/readiness');
+
+// SÉQUITO
+export const convocarConsejo = (data) =>
+  request('/consejo', { method: 'POST', body: JSON.stringify(data) });
+export const getHistorialConsejo = () => request('/consejo/historial');
+export const getDetalleConsejo = (id) => request(`/consejo/${id}`);
+export const registrarDecision = (id, data) =>
+  request(`/consejo/${id}/decision`, { method: 'POST', body: JSON.stringify(data) });
+export const getAsesores = () => request('/asesores');
