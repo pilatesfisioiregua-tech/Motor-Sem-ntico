@@ -2,15 +2,26 @@ import { useState, useEffect, useCallback } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import * as api from './api';
 import Onboarding from './Onboarding';
+import Portal from './Portal';
 import PanelWA from './PanelWA';
+import Profundo from './Profundo';
 import './App.css';
 
 function App() {
   // Routing simple: si la URL es /onboarding/{token}, mostrar formulario público
   const path = window.location.pathname;
+  const portalMatch = path.match(/^\/portal\/(.+)$/);
+  if (portalMatch) {
+    return <Portal token={portalMatch[1]} />;
+  }
+
   const onboardingMatch = path.match(/^\/onboarding\/(.+)$/);
   if (onboardingMatch) {
     return <Onboarding token={onboardingMatch[1]} />;
+  }
+
+  if (path === '/profundo') {
+    return <Profundo />;
   }
 
   // Estado principal

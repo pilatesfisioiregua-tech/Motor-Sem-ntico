@@ -388,6 +388,9 @@ async def ejecutar_cron(tipo: str) -> dict:
     if tipo == "inicio_semana":
         resultados["sesiones"] = await generar_sesiones_semana()
         resultados["alertas"] = await detectar_alertas_retencion()
+        # Generar y almacenar briefing
+        from src.pilates.briefing import generar_briefing
+        resultados["briefing"] = await generar_briefing()
 
     elif tipo == "inicio_mes":
         pool = await _get_pool()

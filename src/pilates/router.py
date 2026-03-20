@@ -1373,6 +1373,10 @@ async def completar_onboarding(token: str, data: OnboardingComplete):
                 WHERE token = $2
             """, cliente_id, token)
 
+            # 6. Activar portal del cliente
+            from src.pilates.portal import activar_portal
+            portal_token = await activar_portal(cliente_id)
+
     log.info("onboarding_completado", cliente_id=str(cliente_id),
              nombre=f"{data.nombre} {data.apellidos}",
              tipo=data.tipo_contrato)
@@ -1382,6 +1386,7 @@ async def completar_onboarding(token: str, data: OnboardingComplete):
         "cliente_id": str(cliente_id),
         "contrato_id": str(contrato_id) if contrato_id else None,
         "mensaje": f"Bienvenido/a {data.nombre}! Tu inscripción está completa.",
+        "portal_url": f"https://motor-semantico-omni.fly.dev/portal/{portal_token}",
     }
 
 
@@ -1680,6 +1685,31 @@ async def auto_facturar():
 
 
 # ============================================================
+# PORTAL CLIENTE
+# ============================================================
+
+@router.post("/portal/generar-todos")
+async def generar_portales():
+    """Genera portales para todos los clientes activos que no tienen uno."""
+    from src.pilates.portal import activar_portal
+    pool = await _get_pool()
+    generados = 0
+
+    async with pool.acquire() as conn:
+        clientes = await conn.fetch("""
+            SELECT ct.cliente_id FROM om_cliente_tenant ct
+            LEFT JOIN om_onboarding_links l ON l.cliente_id = ct.cliente_id AND l.es_portal = true
+            WHERE ct.tenant_id = $1 AND ct.estado = 'activo' AND l.id IS NULL
+        """, TENANT)
+
+    for c in clientes:
+        await activar_portal(c["cliente_id"])
+        generados += 1
+
+    return {"status": "ok", "portales_generados": generados}
+
+
+# ============================================================
 # WHATSAPP
 # ============================================================
 
@@ -1814,6 +1844,96 @@ async def procesar_boton_wa(data: dict):
         if tel:
             await enviar_texto(tel, result["mensaje"], cliente_id)
     return result
+
+
+# ============================================================
+# MODO PROFUNDO — BRIEFING + DASHBOARD + ACD
+# ============================================================
+
+@router.get("/briefing")
+async def obtener_briefing(semana: Optional[date] = None):
+    """Genera briefing semanal bajo demanda."""
+    from src.pilates.briefing import generar_briefing
+    return await generar_briefing(semana)
+
+
+@router.post("/briefing/enviar-wa")
+async def enviar_briefing_wa():
+    """Genera briefing y lo envía por WhatsApp a Jesús."""
+    from src.pilates.briefing import generar_briefing
+    briefing = await generar_briefing()
+
+    import os
+    tel_jesus = os.getenv("JESUS_TELEFONO", "")
+    if tel_jesus:
+        from src.pilates.whatsapp import enviar_texto
+        await enviar_texto(tel_jesus, briefing["texto_wa"])
+        return {"status": "enviado", "texto": briefing["texto_wa"]}
+    return {"status": "generado_sin_envio", "texto": briefing["texto_wa"],
+            "nota": "Configurar JESUS_TELEFONO en fly.io secrets"}
+
+
+@router.post("/acd/diagnosticar")
+async def diagnosticar_negocio():
+    """Ejecuta diagnóstico ACD del negocio con datos reales (~$0.01)."""
+    from src.pilates.briefing import generar_diagnostico_acd_tenant
+    return await generar_diagnostico_acd_tenant()
+
+
+@router.get("/acd/historial")
+async def historial_acd(limit: int = 10):
+    """Historial de diagnósticos ACD del negocio."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch("""
+            SELECT id, trigger, estado, estado_tipo, lentes, gap,
+                   prescripcion, resultado, coste_usd, created_at
+            FROM om_diagnosticos_tenant
+            WHERE tenant_id = $1
+            ORDER BY created_at DESC
+            LIMIT $2
+        """, TENANT, limit)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.get("/dashboard")
+async def dashboard_profundo():
+    """Dashboard completo Modo Profundo: briefing + ACD + tendencias."""
+    from src.pilates.briefing import generar_briefing
+    briefing = await generar_briefing()
+
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        grupos = await conn.fetch("""
+            SELECT g.nombre, g.tipo, g.capacidad_max, g.precio_mensual,
+                (SELECT count(*) FROM om_contratos c
+                 WHERE c.grupo_id = g.id AND c.estado = 'activo') as ocupadas
+            FROM om_grupos g
+            WHERE g.tenant_id = $1 AND g.estado = 'activo'
+            ORDER BY g.nombre
+        """, TENANT)
+
+        ingresos_mensuales = await conn.fetch("""
+            SELECT date_trunc('month', fecha_pago)::date as mes,
+                   SUM(monto) as total
+            FROM om_pagos
+            WHERE tenant_id = $1 AND fecha_pago >= CURRENT_DATE - interval '6 months'
+            GROUP BY mes ORDER BY mes
+        """, TENANT)
+
+        depuraciones = await conn.fetch("""
+            SELECT * FROM om_depuracion
+            WHERE tenant_id = $1 AND estado IN ('propuesta', 'aprobada')
+            ORDER BY created_at DESC LIMIT 5
+        """, TENANT)
+
+    briefing["grupos_detalle"] = [_row_to_dict(g) for g in grupos]
+    briefing["ingresos_mensuales"] = [
+        {"mes": str(r["mes"]), "total": float(r["total"])} for r in ingresos_mensuales
+    ]
+    briefing["depuraciones"] = [_row_to_dict(d) for d in depuraciones]
+
+    return briefing
 
 
 # ============================================================

@@ -52,6 +52,14 @@ try:
 except Exception as e:
     log.warning("pilates_router_mount_failed", error=str(e))
 
+# Mount Portal router (público, sin auth)
+try:
+    from src.pilates.portal import router as portal_router
+    app.include_router(portal_router)
+    log.info("portal_router_mounted")
+except Exception as e:
+    log.warning("portal_router_mount_failed", error=str(e))
+
 # Mount Code OS sub-app (agent endpoints at /code-os/*)
 try:
     from motor_v1_validation.agent.api import app as code_os_app
@@ -182,6 +190,14 @@ if frontend_dist.exists():
     @app.get("/onboarding/{token}")
     async def onboarding_page(token: str):
         """Sirve el HTML del formulario de onboarding."""
+        return FileResponse(frontend_dist / "index.html")
+
+    @app.get("/portal/{token}")
+    async def portal_page(token: str):
+        return FileResponse(frontend_dist / "index.html")
+
+    @app.get("/profundo")
+    async def profundo_page():
         return FileResponse(frontend_dist / "index.html")
 
     app.mount("/assets", StaticFiles(directory=frontend_dist / "assets"), name="assets")
