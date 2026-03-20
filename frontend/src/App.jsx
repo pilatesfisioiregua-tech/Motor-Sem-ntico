@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import * as api from './api';
 import Onboarding from './Onboarding';
+import PanelWA from './PanelWA';
 import './App.css';
 
 function App() {
@@ -334,6 +335,9 @@ function App() {
             Registrar Bizum entrante
           </button>
         )}
+
+        {/* WhatsApp */}
+        <PanelWA />
 
         {/* Nuevo cliente */}
         <h3>Nuevo cliente <span className="kb-hint">F7</span></h3>

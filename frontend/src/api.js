@@ -72,3 +72,15 @@ export const getPaqueteGestor = (params = {}) => {
   const qs = new URLSearchParams(params).toString();
   return request(`/facturas/paquete-gestor${qs ? `?${qs}` : ''}`);
 };
+
+// WHATSAPP
+export const getMensajesWA = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/whatsapp/mensajes${qs ? `?${qs}` : ''}`);
+};
+export const enviarMensajeWA = (data) => request('/whatsapp/enviar', { method: 'POST', body: JSON.stringify(data) });
+export const marcarLeidoWA = (id) => request(`/whatsapp/marcar-leido/${id}`, { method: 'POST' });
+export const confirmarManana = () => request('/whatsapp/confirmar-manana', { method: 'POST' });
+export const responderLead = (data) => request('/whatsapp/responder-lead', { method: 'POST', body: JSON.stringify(data) });
+export const getRespuestaSugerida = (data) =>
+  request('/whatsapp/respuesta-sugerida', { method: 'POST', body: JSON.stringify(data) });
