@@ -1,7 +1,8 @@
 """Motor Semántico OMNI-MIND — API endpoint."""
 import structlog
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -42,7 +43,16 @@ async def lifespan(app: FastAPI):
     log.info("shutdown_complete")
 
 
-app = FastAPI(title="Motor Semántico OMNI-MIND", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="Motor Semántico OMNI-MIND", version="0.2.0", lifespan=lifespan)
+
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Mount Pilates router
 try:
@@ -92,7 +102,49 @@ class MotorResponse(BaseModel):
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "version": "0.1.0"}
+    """Health check ampliado con estado de componentes."""
+    status = {"status": "ok", "version": "0.2.0"}
+    try:
+        from src.db.client import get_pool
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            status["db"] = "ok"
+            count = await conn.fetchval(
+                "SELECT count(*) FROM pg_tables WHERE tablename LIKE 'om_%'")
+            status["om_tables"] = count
+            clientes = await conn.fetchval(
+                "SELECT count(*) FROM om_cliente_tenant WHERE estado = 'activo'")
+            status["clientes_activos"] = clientes
+    except Exception as e:
+        status["db"] = f"error: {str(e)[:50]}"
+    endpoints = [r.path for r in app.routes if hasattr(r, 'methods')]
+    status["endpoints"] = len(endpoints)
+    return status
+
+
+@app.get("/endpoints")
+async def listar_endpoints():
+    """Lista todos los endpoints disponibles."""
+    endpoints = []
+    for route in app.routes:
+        if hasattr(route, 'methods') and hasattr(route, 'path'):
+            for method in route.methods:
+                if method not in ('HEAD', 'OPTIONS'):
+                    endpoints.append({
+                        "method": method,
+                        "path": route.path,
+                        "name": route.name,
+                    })
+    return sorted(endpoints, key=lambda e: (e["path"], e["method"]))
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    log.error("unhandled_error", path=request.url.path, error=str(exc))
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Error interno del servidor", "path": request.url.path},
+    )
 
 
 @app.post("/reactor/ejecutar")
