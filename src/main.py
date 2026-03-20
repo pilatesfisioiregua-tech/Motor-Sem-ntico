@@ -20,10 +20,14 @@ async def lifespan(app: FastAPI):
     """Startup: pool DB + cargar inteligencias en memoria."""
     log.info("startup_begin")
     try:
-        from src.db.client import get_pool, execute_schema
+        from src.db.client import get_pool, execute_schema, execute_migrations, execute_seeds
         await get_pool()
         await execute_schema()
         log.info("startup_db_ready")
+        await execute_migrations()
+        log.info("startup_migrations_done")
+        await execute_seeds()
+        log.info("startup_seeds_done")
     except Exception as e:
         log.warning("startup_db_unavailable", error=str(e))
     from src.meta_red import load_inteligencias
@@ -43,7 +47,7 @@ app = FastAPI(title="Motor Semántico OMNI-MIND", version="0.1.0", lifespan=life
 # Mount Code OS sub-app (agent endpoints at /code-os/*)
 try:
     from motor_v1_validation.agent.api import app as code_os_app
-    app.mount("", code_os_app)
+    app.mount("/code-os", code_os_app)
     log.info("code_os_mounted")
 except Exception as e:
     log.warning("code_os_mount_failed", error=str(e))
@@ -140,4 +144,43 @@ async def evaluar_modelos():
         return {"status": "ok", **result}
     except Exception as e:
         log.error("models_evaluar_error", error=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/gestor/analizar")
+async def analizar_gestor():
+    """Ejecuta el loop lento del Gestor — análisis de patrones."""
+    log.info("gestor_analizar")
+    try:
+        from src.gestor.analizador import analizar
+        informe = await analizar()
+        return {"status": "ok", **informe.to_dict()}
+    except Exception as e:
+        log.error("gestor_error", error=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/reactor/telemetria")
+async def reactor_telemetria():
+    """Reactor v4 — Detecta patrones en datos reales."""
+    log.info("reactor_telemetria")
+    try:
+        from src.reactor.v4_telemetria import detectar_patrones
+        informe = await detectar_patrones()
+        return {"status": "ok", **informe.to_dict()}
+    except Exception as e:
+        log.error("reactor_telemetria_error", error=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/reactor/v5")
+async def reactor_v5():
+    """Reactor v5 — Genera datos empíricos ACD con casos semilla."""
+    log.info("reactor_v5_ejecutar")
+    try:
+        from src.reactor.v5_empirico import run
+        result = await run()
+        return {"status": "ok", **result}
+    except Exception as e:
+        log.error("reactor_v5_error", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))

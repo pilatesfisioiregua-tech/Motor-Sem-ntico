@@ -116,3 +116,99 @@ CREATE INDEX IF NOT EXISTS idx_aristas_destino ON aristas_grafo(destino);
 CREATE INDEX IF NOT EXISTS idx_aristas_tipo ON aristas_grafo(tipo);
 CREATE INDEX IF NOT EXISTS idx_ejecuciones_modo ON ejecuciones(modo);
 CREATE INDEX IF NOT EXISTS idx_ejecuciones_created ON ejecuciones(created_at DESC);
+
+-- =================================================================
+-- ACD — tablas para Álgebra Cognitiva Diagnóstica
+-- 4 tablas nuevas: tipos_pensamiento, tipos_razonamiento,
+--                  estados_diagnosticos, diagnosticos
+-- =================================================================
+
+-- ── TABLA 1: Tipos de Pensamiento (15 entradas) ─────────────────
+
+CREATE TABLE IF NOT EXISTS tipos_pensamiento (
+    id TEXT PRIMARY KEY,                -- P01-P15
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    lente_preferente TEXT NOT NULL,      -- "salud", "sentido", "continuidad", "salud+sentido", etc.
+    funciones_naturales TEXT[],          -- {"F3", "F5"}
+    razonamientos_asociados TEXT[],      -- {"R03", "R09"}
+    nivel_logico INTEGER,               -- 1-5
+    ints_compatibles TEXT[],
+    ints_incompatibles TEXT[],
+    pregunta_activadora TEXT,
+    cuando_usar TEXT,
+    datos JSONB                          -- campos adicionales sin esquema fijo
+);
+
+-- ── TABLA 2: Tipos de Razonamiento (12 entradas) ────────────────
+
+CREATE TABLE IF NOT EXISTS tipos_razonamiento (
+    id TEXT PRIMARY KEY,                -- R01-R12
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    lente_preferente TEXT NOT NULL,
+    funciones_naturales TEXT[],
+    ints_compatibles TEXT[],
+    genera TEXT,                         -- "Certeza operativa", "Transferencia cross-dominio", etc.
+    limite TEXT,
+    pregunta_activadora TEXT,
+    datos JSONB
+);
+
+-- ── TABLA 3: Estados Diagnósticos (10 entradas) ─────────────────
+
+CREATE TABLE IF NOT EXISTS estados_diagnosticos (
+    id TEXT PRIMARY KEY,                -- E1, E2, E3, E4, operador_ciego, etc.
+    nombre TEXT NOT NULL,
+    tipo TEXT NOT NULL CHECK (tipo IN ('equilibrado', 'desequilibrado')),
+    descripcion TEXT,
+    perfil_lentes TEXT,                 -- "S↑ Se↓ C↓" para desequilibrados, NULL para equilibrados
+    condiciones JSONB NOT NULL,         -- umbrales numéricos
+    flags TEXT[],                       -- {"peligro_oculto", "invisible_metricas_convencionales"}
+    ints_tipicas_activas TEXT[],
+    ints_tipicas_ausentes TEXT[],
+    prescripcion_ps TEXT[],             -- P que hay que activar
+    prescripcion_rs TEXT[],             -- R que hay que activar
+    objetivo_prescripcion TEXT,         -- "CUESTIONAR", "EJECUTAR", "TRANSFERIR", etc.
+    transiciones JSONB                  -- [{destino, via, nota}]
+);
+
+-- ── TABLA 4: Diagnósticos (historial por caso) ──────────────────
+
+CREATE TABLE IF NOT EXISTS diagnosticos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_at TIMESTAMPTZ DEFAULT now(),
+    caso_input TEXT,                    -- texto del caso original
+    ejecucion_id UUID,                  -- referencia a ejecuciones(id) si existe
+    -- Pre-intervención
+    vector_pre JSONB,                   -- {F1: 0.50, F2: 0.30, ...}
+    lentes_pre JSONB,                   -- {salud: 0.40, sentido: 0.60, continuidad: 0.20}
+    estado_pre TEXT,                    -- "genio_mortal", "E3", etc.
+    flags_pre TEXT[],                   -- {"automata_oculto", "zona_toxica"}
+    repertorio_inferido JSONB,          -- {ints_activas, ints_atrofiadas, ps_activos, rs_activos}
+    -- Prescripción
+    prescripcion JSONB,                 -- {ints, ps, rs, secuencia_funciones, frenar, modo, nivel_logico}
+    -- Post-intervención
+    vector_post JSONB,
+    lentes_post JSONB,
+    estado_post TEXT,
+    flags_post TEXT[],
+    -- Resultado
+    resultado TEXT CHECK (resultado IN ('cierre', 'inerte', 'toxico', 'pendiente')),
+    metricas JSONB                      -- {delta_se, delta_gap, repertorio_expansion, funciones_se_activas}
+);
+
+-- ── ÍNDICES ACD ─────────────────────────────────────────────────
+
+CREATE INDEX IF NOT EXISTS idx_diagnosticos_estado_pre ON diagnosticos(estado_pre);
+CREATE INDEX IF NOT EXISTS idx_diagnosticos_resultado ON diagnosticos(resultado);
+CREATE INDEX IF NOT EXISTS idx_diagnosticos_created ON diagnosticos(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_estados_tipo ON estados_diagnosticos(tipo);
+
+-- =================================================================
+-- V4: Extensiones para Maestro V4 (3L×7F×18INT×15P×12R)
+-- =================================================================
+
+-- V4 §2.3: Afinidad de lente por inteligencia
+ALTER TABLE inteligencias ADD COLUMN IF NOT EXISTS lente_primaria TEXT;
+ALTER TABLE inteligencias ADD COLUMN IF NOT EXISTS lentes_secundarias TEXT[];

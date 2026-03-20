@@ -1,4 +1,6 @@
 """Pool de conexiones asyncpg para Postgres."""
+from __future__ import annotations
+
 import asyncpg
 import structlog
 from src.config.settings import DATABASE_URL
@@ -50,6 +52,53 @@ async def execute_seed():
     async with pool.acquire() as conn:
         await conn.execute(seed)
     log.info("seed_executed")
+
+
+async def execute_migrations():
+    """Ejecuta migrations SQL idempotentes (V4+)."""
+    from pathlib import Path
+    pool = await get_pool()
+    migrations_dir = Path(__file__).parent.parent.parent / "migrations"
+    if not migrations_dir.exists():
+        return
+
+    sql_files = sorted(migrations_dir.glob("*.sql"))
+    async with pool.acquire() as conn:
+        for sql_file in sql_files:
+            try:
+                sql = sql_file.read_text()
+                await conn.execute(sql)
+                log.info("migration_ok", file=sql_file.name)
+            except Exception as e:
+                log.warning("migration_skip", file=sql_file.name, error=str(e))
+
+
+async def execute_seeds():
+    """Ejecuta seeds Python idempotentes (V4+)."""
+    import importlib.util
+    import sys
+    from pathlib import Path
+
+    migrations_dir = Path(__file__).parent.parent.parent / "migrations"
+    if not migrations_dir.exists():
+        return
+
+    # Añadir raíz del proyecto al path para imports
+    project_root = Path(__file__).parent.parent.parent
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+
+    py_files = sorted(migrations_dir.glob("v4_seed_*.py"))
+    for py_file in py_files:
+        try:
+            spec = importlib.util.spec_from_file_location(py_file.stem, py_file)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            if hasattr(mod, 'seed'):
+                await mod.seed()
+                log.info("seed_ok", file=py_file.name)
+        except Exception as e:
+            log.warning("seed_skip", file=py_file.name, error=str(e))
 
 
 async def fetch_all_inteligencias() -> list[dict]:
@@ -111,3 +160,40 @@ async def fetch_tipos_acople() -> list[dict]:
     async with pool.acquire() as conn:
         rows = await conn.fetch("SELECT * FROM tipos_acople ORDER BY id")
         return [dict(r) for r in rows]
+
+
+async def log_diagnostico(data: dict) -> str:
+    """Guarda un diagnóstico ACD y devuelve su UUID.
+
+    Args:
+        data: dict con campos de la tabla diagnosticos.
+              Campos obligatorios: caso_input, vector_pre, lentes_pre, estado_pre.
+              Campos opcionales: ejecucion_id, flags_pre, repertorio_inferido,
+                                 prescripcion, resultado, metricas.
+
+    Returns:
+        UUID del diagnóstico creado.
+    """
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            INSERT INTO diagnosticos (
+                caso_input, ejecucion_id,
+                vector_pre, lentes_pre, estado_pre, flags_pre,
+                repertorio_inferido, prescripcion, resultado, metricas
+            )
+            VALUES ($1, $2, $3::jsonb, $4::jsonb, $5, $6, $7::jsonb, $8::jsonb, $9, $10::jsonb)
+            RETURNING id
+        """,
+            data.get('caso_input'),
+            data.get('ejecucion_id'),
+            data.get('vector_pre'),
+            data.get('lentes_pre'),
+            data.get('estado_pre'),
+            data.get('flags_pre'),
+            data.get('repertorio_inferido'),
+            data.get('prescripcion'),
+            data.get('resultado', 'pendiente'),
+            data.get('metricas'),
+        )
+        return str(row['id'])
