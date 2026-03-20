@@ -599,6 +599,13 @@ async def completar_sesion(sesion_id: UUID):
                         precio, sesion_id, a["asistencia_id"], sesion["fecha"])
                     cargos_creados += 1
 
+            # Side-effect: actualizar días esperados
+            try:
+                from src.pilates.automatismos import actualizar_dias_esperados_asistencia
+                await actualizar_dias_esperados_asistencia(sesion_id)
+            except Exception as e:
+                log.warning("dias_esperados_update_failed", error=str(e))
+
     log.info("sesion_completada", id=str(sesion_id), cargos=cargos_creados)
     return {"status": "completada", "cargos_creados": cargos_creados}
 
@@ -724,6 +731,13 @@ async def marcar_grupo(sesion_id: UUID, data: MarcarAsistenciaGrupo):
                     count(*) as total
                 FROM om_asistencias WHERE sesion_id = $1
             """, sesion_id)
+
+    # Side-effect: actualizar días esperados
+    try:
+        from src.pilates.automatismos import actualizar_dias_esperados_asistencia
+        await actualizar_dias_esperados_asistencia(sesion_id)
+    except Exception as e:
+        log.warning("dias_esperados_update_failed", error=str(e))
 
     log.info("grupo_marcado", sesion=str(sesion_id),
              asistieron=conteo["asistieron"], ausentes=conteo["no_vinieron"])
@@ -1050,3 +1064,46 @@ async def resumen_mes(mes: Optional[str] = None):
         },
         "clientes_activos": clientes_activos,
     }
+
+
+# ============================================================
+# AUTOMATISMOS / CRON
+# ============================================================
+
+@router.post("/cron/generar-sesiones")
+async def generar_sesiones_endpoint(fecha_inicio: Optional[date] = None):
+    """Genera sesiones de la semana para todos los grupos."""
+    from src.pilates.automatismos import generar_sesiones_semana
+    return await generar_sesiones_semana(fecha_inicio)
+
+
+@router.post("/cron/{tipo}")
+async def ejecutar_cron_endpoint(tipo: str):
+    """Ejecuta batch automático. Tipos: inicio_semana, inicio_mes, diario."""
+    from src.pilates.automatismos import ejecutar_cron
+    result = await ejecutar_cron(tipo)
+    if result.get("status") == "error":
+        raise HTTPException(400, result["detail"])
+    return result
+
+
+@router.get("/alertas")
+async def alertas_retencion():
+    """Devuelve alertas de retención actuales."""
+    from src.pilates.automatismos import detectar_alertas_retencion
+    return await detectar_alertas_retencion()
+
+
+class BizumEntrante(BaseModel):
+    telefono: str
+    monto: float
+    referencia: Optional[str] = None
+
+@router.post("/bizum-entrante")
+async def bizum_entrante(data: BizumEntrante):
+    """Registra Bizum entrante: busca cliente por teléfono + concilia FIFO."""
+    from src.pilates.automatismos import conciliar_bizum_entrante
+    result = await conciliar_bizum_entrante(data.telefono, data.monto, data.referencia)
+    if result.get("status") == "error":
+        raise HTTPException(404, result["detail"])
+    return result
