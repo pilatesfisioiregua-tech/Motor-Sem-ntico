@@ -1,293 +1,37 @@
-"""Cockpit del Estudio — Motor de interfaz generativa.
+# B-PIL-19: Cockpit Operativo — Centro de Mando Conversacional
 
-Analiza el contexto del día y sugiere qué módulos mostrar.
-Aprende de las preferencias de Jesús.
-Incluye chat conversacional para controlar la interfaz.
-Soporta jerarquía visual: principal / secundario / compacto.
+**Fecha:** 2026-03-21
+**Ejecutor:** Claude Code
+**Dependencia:** B-PIL-18 Fase J (cockpit base)
+**Coste:** ~$0.002/interacción (deepseek-chat, más tokens por tools operativas)
 
-Fuente: Exocortex v2.1 B-PIL-18 Fase J + J5.
-"""
-from __future__ import annotations
-import json, os, time, httpx, structlog
-from datetime import date, datetime, timedelta
+---
 
-log = structlog.get_logger()
-TENANT = "authentic_pilates"
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-CHAT_MODEL = os.getenv("PORTAL_CHAT_MODEL", "deepseek/deepseek-chat")
+## CONTEXTO
 
-MODULOS = {
-    "agenda":           {"nombre": "Agenda de hoy",       "icono": "📅", "endpoint": "/sesiones/hoy"},
-    "calendario":       {"nombre": "Calendario semanal",  "icono": "📅", "endpoint": "/sesiones/semana"},
-    "feed":             {"nombre": "Noticias",             "icono": "🔔", "endpoint": "/feed"},
-    "pagos_pendientes": {"nombre": "Pagos pendientes",    "icono": "💰", "endpoint": "/cargos?estado=pendiente"},
-    "resumen_mes":      {"nombre": "Resumen del mes",     "icono": "📊", "endpoint": "/resumen"},
-    "briefing":         {"nombre": "Briefing semanal",    "icono": "📋", "endpoint": "/briefing"},
-    "solicitudes":      {"nombre": "Solicitudes",          "icono": "📋", "endpoint": "/procesos"},
-    "alertas":          {"nombre": "Alertas retención",   "icono": "⚠️", "endpoint": "/alertas"},
-    "buscar":           {"nombre": "Buscar cliente",       "icono": "🔍", "endpoint": "/buscar"},
-    "grupos":           {"nombre": "Ocupación grupos",    "icono": "👥", "endpoint": "/grupos"},
-    "sequito":          {"nombre": "Consejo asesores",     "icono": "🧠", "endpoint": "/consejo"},
-    "voz":              {"nombre": "Propuestas Voz",       "icono": "💬", "endpoint": "/voz/propuestas"},
-    "depuracion":       {"nombre": "Depuración",          "icono": "🗑️", "endpoint": "/depuracion"},
-    "adn":              {"nombre": "ADN del negocio",      "icono": "🧬", "endpoint": "/adn"},
-    "readiness":        {"nombre": "Readiness",            "icono": "📈", "endpoint": "/readiness"},
-    "facturas":         {"nombre": "Facturación",         "icono": "📄", "endpoint": "/facturas"},
-    "engagement":       {"nombre": "Engagement clientes",  "icono": "❤️", "endpoint": "/engagement"},
-    "wa":               {"nombre": "Panel WhatsApp",       "icono": "💬", "endpoint": "/whatsapp/mensajes"},
-}
+El cockpit actual (Fase J) controla QUÉ MÓDULOS se ven en pantalla. Pero Jesús quiere que además EJECUTE ACCIONES OPERATIVAS directamente:
 
-# Módulos que visualmente necesitan más espacio
-MODULOS_GRANDES = {"calendario", "sequito", "wa", "briefing"}
+- "Agéndame a María los martes a las 12h y viernes a las 13h hasta junio"
+- "Añade a Pedro al grupo de las 17h L-X"  
+- "Prepárame las facturas de 2025 de Ana, Luis y Carmen y mándaselas por WhatsApp"
+- "Registra un Bizum de 105€ de Sofía"
+- "Cancela todas las clases de Pedro la semana que viene"
 
+Esto convierte el cockpit en un **centro de mando por voz/texto** que elimina toda la fricción operativa.
 
-async def _get_pool():
-    from src.db.client import get_pool
-    return await get_pool()
+---
 
+## FASE A: Tools operativas para cockpit
 
-async def contexto_del_dia() -> dict:
-    """Genera el contexto del día para el saludo + sugerencias de módulos."""
-    hoy = date.today()
-    dia_nombre = ["lunes","martes","miércoles","jueves","viernes","sábado","domingo"][hoy.weekday()]
-    pool = await _get_pool()
+### A1. Actualizar cockpit.py — System prompt + Tools + Dispatch
 
-    async with pool.acquire() as conn:
-        sesiones_hoy = await conn.fetchval("""
-            SELECT count(*) FROM om_sesiones
-            WHERE tenant_id=$1 AND fecha=$2
-        """, TENANT, hoy)
+**Archivo:** `src/pilates/cockpit.py` — REESCRIBIR la sección J4+J5.
 
-        cancelaciones = await conn.fetchval("""
-            SELECT count(*) FROM om_asistencias a
-            JOIN om_sesiones s ON s.id=a.sesion_id
-            WHERE a.tenant_id=$1 AND s.fecha=$2 AND a.estado='cancelada'
-        """, TENANT, hoy)
+#### System prompt actualizado:
 
-        deuda_total = await conn.fetchval("""
-            SELECT COALESCE(SUM(total),0) FROM om_cargos
-            WHERE tenant_id=$1 AND estado='pendiente'
-        """, TENANT)
-        clientes_deudores = await conn.fetchval("""
-            SELECT count(DISTINCT cliente_id) FROM om_cargos
-            WHERE tenant_id=$1 AND estado='pendiente'
-        """, TENANT)
+Añadir después del bloque actual de REGLAS GENERALES:
 
-        feed_no_leido = await conn.fetchval("""
-            SELECT count(*) FROM om_feed_estudio
-            WHERE tenant_id=$1 AND leido=false
-        """, TENANT)
-
-        alertas = 0
-        try:
-            alertas = await conn.fetchval("""
-                SELECT count(*) FROM om_tensiones
-                WHERE tenant_id=$1 AND estado='activa' AND severidad IN ('alta','critica')
-            """, TENANT) or 0
-        except Exception:
-            pass
-
-        solicitudes = 0
-        try:
-            solicitudes = await conn.fetchval("""
-                SELECT count(*) FROM om_procesos
-                WHERE tenant_id=$1 AND titulo LIKE 'Solicitud%'
-            """, TENANT) or 0
-        except Exception:
-            pass
-
-        voz_pendientes = 0
-        try:
-            voz_pendientes = await conn.fetchval("""
-                SELECT count(*) FROM om_voz_propuestas
-                WHERE tenant_id=$1 AND estado='pendiente'
-            """, TENANT) or 0
-        except Exception:
-            pass
-
-        wa_sin_leer = 0
-        try:
-            wa_sin_leer = await conn.fetchval("""
-                SELECT count(*) FROM om_mensajes_wa
-                WHERE tenant_id=$1 AND direccion='entrante' AND leido=false
-            """, TENANT) or 0
-        except Exception:
-            pass
-
-        churn_alto = 0
-        try:
-            churn_alto = await conn.fetchval("""
-                SELECT count(*) FROM om_cliente_perfil
-                WHERE tenant_id=$1 AND riesgo_churn IN ('alto','critico')
-            """, TENANT) or 0
-        except Exception:
-            pass
-
-    # Saludo
-    partes = [f"Hoy es {dia_nombre} {hoy.day} de {_nombre_mes(hoy.month)}."]
-    if sesiones_hoy > 0:
-        partes.append(f"{sesiones_hoy} sesiones programadas.")
-    else:
-        partes.append("No hay sesiones hoy.")
-
-    extras = []
-    if cancelaciones > 0:
-        extras.append(f"{cancelaciones} cancelación{'es' if cancelaciones > 1 else ''}")
-    if feed_no_leido > 0:
-        extras.append(f"{feed_no_leido} noticia{'s' if feed_no_leido > 1 else ''}")
-    if solicitudes > 0:
-        extras.append(f"{solicitudes} solicitud{'es' if solicitudes > 1 else ''}")
-    if extras:
-        partes.append(" · ".join(extras) + ".")
-
-    saludo = " ".join(partes)
-
-    # Sugerir módulos con jerarquía
-    sugeridos = []
-
-    # La agenda siempre es principal si hay sesiones
-    if sesiones_hoy > 0:
-        sugeridos.append({"id": "agenda", "rol": "principal"})
-    else:
-        sugeridos.append({"id": "agenda", "rol": "secundario"})
-
-    if feed_no_leido > 0:
-        sugeridos.append({"id": "feed", "rol": "secundario"})
-    if clientes_deudores > 0:
-        sugeridos.append({"id": "pagos_pendientes", "rol": "secundario"})
-    if hoy.weekday() == 0:
-        sugeridos.append({"id": "briefing", "rol": "principal" if sesiones_hoy == 0 else "secundario"})
-    if solicitudes > 0:
-        sugeridos.append({"id": "solicitudes", "rol": "compacto"})
-    if alertas > 0:
-        sugeridos.append({"id": "alertas", "rol": "secundario"})
-    if wa_sin_leer > 0:
-        sugeridos.append({"id": "wa", "rol": "secundario"})
-    if voz_pendientes > 0:
-        sugeridos.append({"id": "voz", "rol": "compacto"})
-    if churn_alto > 0:
-        sugeridos.append({"id": "engagement", "rol": "compacto"})
-
-    sugeridos = sugeridos[:6]
-
-    # Preferencias aprendidas
-    try:
-        async with pool.acquire() as conn2:
-            pref = await conn2.fetchval("""
-                SELECT metadata->>'modulos_frecuentes' FROM om_cliente_eventos
-                WHERE tenant_id=$1 AND tipo='cockpit_config'
-                ORDER BY created_at DESC LIMIT 1
-            """, TENANT)
-            if pref:
-                frecuentes = json.loads(pref)
-                ids_ya = {s["id"] for s in sugeridos}
-                for m in frecuentes:
-                    if m not in ids_ya and m in MODULOS:
-                        sugeridos.append({"id": m, "rol": "secundario"})
-                sugeridos = sugeridos[:6]
-    except Exception:
-        pass
-
-    datos = {
-        "sesiones_hoy": sesiones_hoy,
-        "cancelaciones_hoy": cancelaciones,
-        "deuda_total": float(deuda_total),
-        "clientes_deudores": clientes_deudores,
-        "feed_no_leido": feed_no_leido,
-        "alertas_activas": alertas,
-        "solicitudes_pendientes": solicitudes,
-        "voz_pendientes": voz_pendientes,
-        "wa_sin_leer": wa_sin_leer,
-        "churn_alto": churn_alto,
-    }
-
-    return {
-        "saludo": saludo,
-        "datos": datos,
-        "modulos_sugeridos": [
-            {"rol": s["rol"], **MODULOS[s["id"]], "id": s["id"]}
-            for s in sugeridos if s["id"] in MODULOS
-        ],
-        "modulos_disponibles": [
-            {"id": k, **v} for k, v in MODULOS.items()
-        ],
-    }
-
-
-async def guardar_configuracion(modulos_activos: list):
-    """Guarda qué módulos ha elegido Jesús para aprender preferencias.
-    
-    modulos_activos puede ser:
-    - lista de strings: ["agenda", "feed"] (legacy)
-    - lista de dicts: [{"id": "agenda", "rol": "principal"}, ...] (nuevo)
-    """
-    pool = await _get_pool()
-
-    # Normalizar a lista de IDs
-    ids = []
-    for m in modulos_activos:
-        if isinstance(m, str):
-            ids.append(m)
-        elif isinstance(m, dict):
-            ids.append(m.get("id", ""))
-    ids = [i for i in ids if i]
-
-    async with pool.acquire() as conn:
-        freq_raw = await conn.fetchval("""
-            SELECT metadata FROM om_cliente_eventos
-            WHERE tenant_id=$1 AND tipo='cockpit_frecuencia'
-            ORDER BY created_at DESC LIMIT 1
-        """, TENANT)
-
-        frecuencia = {}
-        if freq_raw:
-            try:
-                meta = freq_raw if isinstance(freq_raw, dict) else json.loads(freq_raw)
-                frecuencia = meta if isinstance(meta, dict) else {}
-            except Exception:
-                pass
-
-        for m in ids:
-            frecuencia[m] = frecuencia.get(m, 0) + 1
-
-        top = sorted(frecuencia.items(), key=lambda x: -x[1])[:6]
-        modulos_frecuentes = [m[0] for m in top]
-
-        await conn.execute("""
-            INSERT INTO om_cliente_eventos (tenant_id, cliente_id, tipo, metadata)
-            VALUES ($1, '00000000-0000-0000-0000-000000000000', 'cockpit_config', $2::jsonb)
-        """, TENANT, json.dumps({
-            "modulos_activos": modulos_activos,
-            "modulos_frecuentes": modulos_frecuentes,
-            "frecuencia": frecuencia,
-        }))
-
-
-def _nombre_mes(n):
-    return ["enero","febrero","marzo","abril","mayo","junio",
-            "julio","agosto","septiembre","octubre","noviembre","diciembre"][n-1]
-
-
-# ============================================================
-# COCKPIT OPERATIVO — Centro de mando conversacional (B-PIL-19)
-# ============================================================
-
-SYSTEM_COCKPIT = f"""Eres el asistente de interfaz de Authentic Pilates.
-Jesús (el dueño) te habla para controlar qué ve en su pantalla Y para ejecutar operaciones del estudio.
-
-MÓDULOS DISPONIBLES (usa estos IDs exactos):
-{json.dumps({k: v["nombre"] for k, v in MODULOS.items()}, ensure_ascii=False, indent=2)}
-
-JERARQUÍA VISUAL — cada módulo lleva un "rol":
-- "principal": GRANDE, centro de pantalla. Solo 1 a la vez.
-- "secundario": NORMAL, tamaño estándar.
-- "compacto": PEQUEÑO, info de apoyo.
-
-REGLAS DE LAYOUT:
-1. Si pide ver algo como foco → "principal". Varios → primero "principal", resto "secundario".
-2. Módulos rápidos (alertas, engagement) → "compacto".
-3. Nunca más de 1 "principal".
-
+```python
 OPERACIONES:
 Además de controlar la interfaz, puedes ejecutar operaciones del estudio:
 - Buscar clientes por nombre o teléfono
@@ -307,15 +51,13 @@ REGLAS OPERATIVAS:
 5. Para facturas: primero busca cargos cobrados sin facturar, luego genera la factura.
 6. Puedes combinar operaciones de interfaz con operativas en la misma respuesta.
 7. Tras una operación, muestra el módulo relevante (ej: tras agendar → montar "calendario").
+```
 
-REGLAS GENERALES:
-1. Si pide ver algo → configurar_interfaz.
-2. Si pide quitar algo → desmontar. "Quita todo" → desmontar_todos=true.
-3. Tono de pueblo. Nada de formalidades.
-"""
+#### Tools spec — AÑADIR estas tools al array TOOLS_COCKPIT:
 
-TOOLS_COCKPIT = [
-    # --- INTERFAZ ---
+```python
+TOOLS_COCKPIT_OPS = [
+    # --- INTERFAZ (ya existe) ---
     {
         "type": "function",
         "function": {
@@ -346,11 +88,11 @@ TOOLS_COCKPIT = [
         "type": "function",
         "function": {
             "name": "buscar_cliente",
-            "description": "Buscar cliente por nombre, apellidos o teléfono. SIEMPRE usar antes de cualquier operación con un cliente.",
+            "description": "Buscar cliente por nombre, apellidos o teléfono. SIEMPRE usar antes de cualquier operación con un cliente. Devuelve ID, nombre, grupo, contrato, saldo.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "query": {"type": "string", "description": "Nombre, apellidos o teléfono"}
+                    "query": {"type": "string", "description": "Nombre, apellidos o teléfono del cliente"}
                 },
                 "required": ["query"]
             }
@@ -376,25 +118,26 @@ TOOLS_COCKPIT = [
         "type": "function",
         "function": {
             "name": "agendar_sesiones_recurrentes",
-            "description": "Crear sesiones individuales recurrentes. Ej: martes 12:00 y viernes 13:00 cada semana hasta una fecha.",
+            "description": "Crear sesiones individuales recurrentes para un cliente. Ej: martes 12:00 y viernes 13:00 cada semana hasta una fecha. Calcula todas las fechas y crea las sesiones de golpe.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "cliente_id": {"type": "string"},
+                    "cliente_id": {"type": "string", "description": "UUID del cliente"},
                     "slots": {
                         "type": "array",
                         "items": {
                             "type": "object",
                             "properties": {
                                 "dia_semana": {"type": "integer", "description": "0=lunes, 1=martes, 2=miércoles, 3=jueves, 4=viernes"},
-                                "hora_inicio": {"type": "string", "description": "HH:MM"},
-                                "hora_fin": {"type": "string", "description": "HH:MM (default: +1h)"}
+                                "hora_inicio": {"type": "string", "description": "Formato HH:MM (ej: 12:00)"},
+                                "hora_fin": {"type": "string", "description": "Formato HH:MM (ej: 13:00). Si no se da, se asume 1h después."}
                             },
                             "required": ["dia_semana", "hora_inicio"]
-                        }
+                        },
+                        "description": "Lista de slots semanales"
                     },
-                    "hasta_fecha": {"type": "string", "description": "YYYY-MM-DD"},
-                    "desde_fecha": {"type": "string", "description": "YYYY-MM-DD (default: hoy)"}
+                    "hasta_fecha": {"type": "string", "description": "Fecha límite YYYY-MM-DD (ej: 2026-06-30)"},
+                    "desde_fecha": {"type": "string", "description": "Fecha inicio YYYY-MM-DD. Default: próxima ocurrencia."}
                 },
                 "required": ["cliente_id", "slots", "hasta_fecha"]
             }
@@ -405,13 +148,13 @@ TOOLS_COCKPIT = [
         "type": "function",
         "function": {
             "name": "inscribir_en_grupo",
-            "description": "Inscribir cliente en un grupo. Busca por nombre o por horario ('el grupo de las 17h').",
+            "description": "Inscribir un cliente en un grupo existente. Crea contrato tipo grupo. Busca el grupo por nombre o por horario si Jesús dice 'el grupo de las 17h'.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "cliente_id": {"type": "string"},
+                    "cliente_id": {"type": "string", "description": "UUID del cliente"},
                     "grupo_id": {"type": "string", "description": "UUID del grupo (si se conoce)"},
-                    "buscar_grupo": {"type": "string", "description": "Texto para buscar grupo: hora, nombre, días"}
+                    "buscar_grupo": {"type": "string", "description": "Texto para buscar grupo: hora, nombre, días. Ej: '17h L-X', 'Reformer mañanas'"}
                 },
                 "required": ["cliente_id"]
             }
@@ -422,11 +165,11 @@ TOOLS_COCKPIT = [
         "type": "function",
         "function": {
             "name": "ver_grupos",
-            "description": "Listar grupos con plazas, horarios y ocupación.",
+            "description": "Listar grupos con plazas disponibles, horarios y ocupación.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "solo_con_plaza": {"type": "boolean", "default": True}
+                    "solo_con_plaza": {"type": "boolean", "default": true}
                 }
             }
         }
@@ -436,14 +179,14 @@ TOOLS_COCKPIT = [
         "type": "function",
         "function": {
             "name": "cancelar_sesiones_cliente",
-            "description": "Cancelar sesiones de un cliente. Una específica, rango de fechas, o próxima semana.",
+            "description": "Cancelar sesiones de un cliente. Puede ser: una sesión específica, todas las de un rango de fechas, o todas las de la próxima semana.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "cliente_id": {"type": "string"},
-                    "sesion_id": {"type": "string", "description": "UUID de sesión específica"},
-                    "fecha_inicio": {"type": "string", "description": "YYYY-MM-DD"},
-                    "fecha_fin": {"type": "string", "description": "YYYY-MM-DD"}
+                    "cliente_id": {"type": "string", "description": "UUID del cliente"},
+                    "sesion_id": {"type": "string", "description": "UUID de sesión específica (si se conoce)"},
+                    "fecha_inicio": {"type": "string", "description": "YYYY-MM-DD inicio del rango"},
+                    "fecha_fin": {"type": "string", "description": "YYYY-MM-DD fin del rango"}
                 },
                 "required": ["cliente_id"]
             }
@@ -454,13 +197,13 @@ TOOLS_COCKPIT = [
         "type": "function",
         "function": {
             "name": "registrar_pago",
-            "description": "Registrar pago (Bizum, efectivo, transferencia). Concilia FIFO con cargos pendientes.",
+            "description": "Registrar un pago recibido (Bizum, efectivo, transferencia). Concilia automáticamente con cargos pendientes FIFO.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "cliente_id": {"type": "string"},
-                    "monto": {"type": "number", "description": "Euros"},
-                    "metodo": {"type": "string", "enum": ["bizum", "efectivo", "transferencia", "tpv"]}
+                    "cliente_id": {"type": "string", "description": "UUID del cliente"},
+                    "monto": {"type": "number", "description": "Importe en euros"},
+                    "metodo": {"type": "string", "enum": ["bizum", "efectivo", "transferencia", "tpv"], "description": "Método de pago"}
                 },
                 "required": ["cliente_id", "monto", "metodo"]
             }
@@ -471,35 +214,35 @@ TOOLS_COCKPIT = [
         "type": "function",
         "function": {
             "name": "generar_facturas",
-            "description": "Generar facturas desde cargos cobrados sin facturar.",
+            "description": "Generar facturas para un cliente desde sus cargos cobrados sin facturar. Si se pide 'facturas del año pasado', busca cargos cobrados de ese período.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "cliente_id": {"type": "string"},
-                    "periodo": {"type": "string", "description": "'ultimo_mes', '2025', 'YYYY-MM'. Default: sin facturar."}
+                    "cliente_id": {"type": "string", "description": "UUID del cliente"},
+                    "periodo": {"type": "string", "description": "Periodo: 'ultimo_mes', 'ultimo_trimestre', '2025', 'YYYY-MM'. Default: sin facturar."}
                 },
                 "required": ["cliente_id"]
             }
         }
     },
-    # --- ENVIAR WHATSAPP ---
+    # --- ENVIAR POR WHATSAPP ---
     {
         "type": "function",
         "function": {
             "name": "enviar_whatsapp",
-            "description": "Enviar mensaje o factura por WhatsApp a un cliente.",
+            "description": "Enviar un mensaje o factura por WhatsApp a un cliente.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "cliente_id": {"type": "string"},
-                    "mensaje": {"type": "string", "description": "Texto libre"},
-                    "factura_id": {"type": "string", "description": "UUID de factura"}
+                    "cliente_id": {"type": "string", "description": "UUID del cliente"},
+                    "mensaje": {"type": "string", "description": "Texto del mensaje (si es texto libre)"},
+                    "factura_id": {"type": "string", "description": "UUID de factura (si es envío de factura)"}
                 },
                 "required": ["cliente_id"]
             }
         }
     },
-    # --- VER PAGOS/SALDO ---
+    # --- VER PAGOS/SALDO CLIENTE ---
     {
         "type": "function",
         "function": {
@@ -508,26 +251,31 @@ TOOLS_COCKPIT = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "cliente_id": {"type": "string"}
+                    "cliente_id": {"type": "string", "description": "UUID del cliente"}
                 },
                 "required": ["cliente_id"]
             }
         }
     },
 ]
+```
 
+### A2. Implementación de cada tool operativa
 
+Añadir estas funciones a `cockpit.py`:
+
+```python
 # ============================================================
 # TOOLS OPERATIVAS — Ejecución directa contra DB
 # ============================================================
 
 async def _op_buscar_cliente(args: dict) -> dict:
-    """Buscar cliente por nombre, apellidos o teléfono."""
     q = args["query"]
     pool = await _get_pool()
     async with pool.acquire() as conn:
         rows = await conn.fetch("""
             SELECT c.id, c.nombre, c.apellidos, c.telefono,
+                   ct.estado as estado_tenant,
                    co.tipo as contrato_tipo, co.estado as contrato_estado,
                    g.nombre as grupo_nombre, g.id as grupo_id,
                    COALESCE((SELECT SUM(total) FROM om_cargos
@@ -537,7 +285,6 @@ async def _op_buscar_cliente(args: dict) -> dict:
             LEFT JOIN om_contratos co ON co.cliente_id=c.id AND co.tenant_id=$1 AND co.estado='activo'
             LEFT JOIN om_grupos g ON g.id=co.grupo_id
             WHERE c.nombre ILIKE $2 OR c.apellidos ILIKE $2 OR c.telefono ILIKE $2
-                OR (c.nombre || ' ' || c.apellidos) ILIKE $2
             ORDER BY c.apellidos LIMIT 5
         """, TENANT, f"%{q}%")
     if not rows:
@@ -553,7 +300,6 @@ async def _op_buscar_cliente(args: dict) -> dict:
 
 
 async def _op_ver_cliente(args: dict) -> dict:
-    """Ver detalle completo de un cliente."""
     from uuid import UUID
     cliente_id = UUID(args["cliente_id"])
     pool = await _get_pool()
@@ -580,7 +326,7 @@ async def _op_ver_cliente(args: dict) -> dict:
         """, cliente_id, TENANT)
     return {
         "nombre": c["nombre"], "apellidos": c["apellidos"],
-        "telefono": c["telefono"], "email": c.get("email"),
+        "telefono": c["telefono"], "email": c["email"],
         "contrato": {"tipo": co["tipo"], "grupo": co["grupo"]} if co else None,
         "saldo_pendiente": float(saldo),
         "proximas_clases": [
@@ -597,12 +343,13 @@ async def _op_agendar_recurrentes(args: dict) -> dict:
     cliente_id = UUID(args["cliente_id"])
     slots = args["slots"]
     hasta = date.fromisoformat(args["hasta_fecha"])
-    desde = date.fromisoformat(args.get("desde_fecha") or str(date.today()))
+    desde = date.fromisoformat(args.get("desde_fecha", str(date.today())))
 
+    # Buscar contrato individual del cliente
     pool = await _get_pool()
     async with pool.acquire() as conn:
         contrato = await conn.fetchrow("""
-            SELECT id FROM om_contratos
+            SELECT id, precio_sesion FROM om_contratos
             WHERE cliente_id=$1 AND tenant_id=$2 AND tipo='individual' AND estado='activo'
         """, cliente_id, TENANT)
         contrato_id = contrato["id"] if contrato else None
@@ -611,14 +358,19 @@ async def _op_agendar_recurrentes(args: dict) -> dict:
         detalles = []
 
         for slot in slots:
-            dia = slot["dia_semana"]
+            dia = slot["dia_semana"]  # 0=lunes
             hi = dtime.fromisoformat(slot["hora_inicio"])
             hf_str = slot.get("hora_fin")
-            hf = dtime.fromisoformat(hf_str) if hf_str else dtime(hi.hour + 1, hi.minute)
+            if hf_str:
+                hf = dtime.fromisoformat(hf_str)
+            else:
+                hf = dtime(hi.hour + 1, hi.minute)
 
+            # Iterar fechas
             fecha = desde
             while fecha <= hasta:
                 if fecha.weekday() == dia:
+                    # Verificar que no exista ya
                     exists = await conn.fetchval("""
                         SELECT 1 FROM om_sesiones s
                         JOIN om_asistencias a ON a.sesion_id=s.id
@@ -649,7 +401,6 @@ async def _op_agendar_recurrentes(args: dict) -> dict:
 
 
 async def _op_inscribir_grupo(args: dict) -> dict:
-    """Inscribir cliente en un grupo."""
     from uuid import UUID
     cliente_id = UUID(args["cliente_id"])
     pool = await _get_pool()
@@ -660,31 +411,29 @@ async def _op_inscribir_grupo(args: dict) -> dict:
         if args.get("grupo_id"):
             grupo_id = UUID(args["grupo_id"])
         elif args.get("buscar_grupo"):
+            # Buscar grupo por texto libre (hora, nombre, días)
             busq = args["buscar_grupo"].lower()
             grupos = await conn.fetch("""
-                SELECT g.id, g.nombre, g.dias_semana, g.capacidad_max,
+                SELECT g.id, g.nombre, g.hora_inicio, g.dias_semana, g.capacidad_max,
                     (SELECT count(*) FROM om_contratos c WHERE c.grupo_id=g.id AND c.estado='activo') as ocu
                 FROM om_grupos g
                 WHERE g.tenant_id=$1 AND g.estado='activo'
             """, TENANT)
             for g in grupos:
                 nombre_lower = (g["nombre"] or "").lower()
-                # Extraer hora del primer slot en dias_semana JSON
-                dias = g["dias_semana"] or []
-                if isinstance(dias, str):
-                    dias = json.loads(dias)
-                hora_str = dias[0]["hi"] if dias else ""
+                hora_str = str(g["hora_inicio"])[:5] if g["hora_inicio"] else ""
                 if (busq in nombre_lower or busq in hora_str or
                     hora_str.replace(":","h") in busq or hora_str[:2]+"h" in busq):
                     if g["ocu"] < g["capacidad_max"]:
                         grupo_id = g["id"]
                         break
             if not grupo_id:
-                return {"error": f"No encuentro grupo con '{args['buscar_grupo']}' con plaza libre"}
+                return {"error": f"No encuentro grupo que encaje con '{args['buscar_grupo']}' con plaza libre"}
 
         if not grupo_id:
             return {"error": "Necesito grupo_id o buscar_grupo"}
 
+        # Verificar plaza
         grupo = await conn.fetchrow("""
             SELECT g.*, (SELECT count(*) FROM om_contratos c WHERE c.grupo_id=g.id AND c.estado='activo') as ocu
             FROM om_grupos g WHERE g.id=$1
@@ -692,52 +441,49 @@ async def _op_inscribir_grupo(args: dict) -> dict:
         if not grupo:
             return {"error": "Grupo no encontrado"}
         if grupo["ocu"] >= grupo["capacidad_max"]:
-            return {"error": f"Grupo {grupo['nombre']} lleno ({grupo['ocu']}/{grupo['capacidad_max']})"}
+            return {"error": f"Grupo {grupo['nombre']} está lleno ({grupo['ocu']}/{grupo['capacidad_max']})"}
 
+        # Verificar que no tenga ya contrato en este grupo
         ya = await conn.fetchval("""
             SELECT 1 FROM om_contratos WHERE cliente_id=$1 AND grupo_id=$2 AND estado='activo'
         """, cliente_id, grupo_id)
         if ya:
             return {"error": "Ya está inscrito en este grupo"}
 
+        # Crear contrato
         await conn.execute("""
             INSERT INTO om_contratos (tenant_id, cliente_id, tipo, grupo_id, precio_mensual, fecha_inicio)
             VALUES ($1, $2, 'grupo', $3, $4, CURRENT_DATE)
-        """, TENANT, cliente_id, grupo_id, grupo.get("precio_mensual"))
+        """, TENANT, cliente_id, grupo_id, grupo["precio_mensual"])
 
     return {
         "inscrito": True,
         "grupo": grupo["nombre"],
-        "precio": float(grupo["precio_mensual"]) if grupo.get("precio_mensual") else None,
+        "precio": float(grupo["precio_mensual"]) if grupo["precio_mensual"] else None,
         "plazas_restantes": grupo["capacidad_max"] - grupo["ocu"] - 1,
     }
 
 
 async def _op_ver_grupos(args: dict) -> dict:
-    """Listar grupos con plazas y ocupación."""
     solo_con_plaza = args.get("solo_con_plaza", True)
     pool = await _get_pool()
     async with pool.acquire() as conn:
         rows = await conn.fetch("""
-            SELECT g.id, g.nombre, g.tipo, g.dias_semana,
+            SELECT g.id, g.nombre, g.tipo, g.hora_inicio, g.dias_semana,
                    g.capacidad_max, g.precio_mensual,
                    (SELECT count(*) FROM om_contratos c WHERE c.grupo_id=g.id AND c.estado='activo') as ocu
             FROM om_grupos g WHERE g.tenant_id=$1 AND g.estado='activo'
-            ORDER BY g.nombre
+            ORDER BY g.hora_inicio
         """, TENANT)
     grupos = []
     for r in rows:
         libres = r["capacidad_max"] - r["ocu"]
         if solo_con_plaza and libres <= 0:
             continue
-        dias = r["dias_semana"] or []
-        if isinstance(dias, str):
-            dias = json.loads(dias)
-        hora = dias[0]["hi"] if dias else "?"
         grupos.append({
             "id": str(r["id"]), "nombre": r["nombre"],
-            "hora": hora,
-            "dias": dias,
+            "hora": str(r["hora_inicio"])[:5] if r["hora_inicio"] else "?",
+            "dias": r["dias_semana"],
             "ocupacion": f"{r['ocu']}/{r['capacidad_max']}",
             "libres": libres,
             "precio": float(r["precio_mensual"]) if r["precio_mensual"] else None,
@@ -746,14 +492,13 @@ async def _op_ver_grupos(args: dict) -> dict:
 
 
 async def _op_cancelar_sesiones(args: dict) -> dict:
-    """Cancelar sesiones de un cliente."""
     from uuid import UUID
     cliente_id = UUID(args["cliente_id"])
     pool = await _get_pool()
 
     async with pool.acquire() as conn:
         conditions = ["a.cliente_id=$1", "a.tenant_id=$2", "a.estado='confirmada'", "s.fecha >= CURRENT_DATE"]
-        params: list = [cliente_id, TENANT]
+        params = [cliente_id, TENANT]
         idx = 3
 
         if args.get("sesion_id"):
@@ -796,7 +541,6 @@ async def _op_cancelar_sesiones(args: dict) -> dict:
 
 
 async def _op_registrar_pago(args: dict) -> dict:
-    """Registrar pago con conciliación FIFO."""
     from uuid import UUID
     cliente_id = UUID(args["cliente_id"])
     monto = float(args["monto"])
@@ -807,10 +551,11 @@ async def _op_registrar_pago(args: dict) -> dict:
         async with conn.transaction():
             row = await conn.fetchrow("""
                 INSERT INTO om_pagos (tenant_id, cliente_id, metodo, monto, notas)
-                VALUES ($1, $2, $3, $4, 'Registrado desde cockpit') RETURNING id
-            """, TENANT, cliente_id, metodo, monto)
+                VALUES ($1, $2, $3, $4, $5) RETURNING id
+            """, TENANT, cliente_id, metodo, monto, f"Registrado desde cockpit")
             pago_id = row["id"]
 
+            # FIFO
             cargos = await conn.fetch("""
                 SELECT id, total FROM om_cargos
                 WHERE cliente_id=$1 AND tenant_id=$2 AND estado='pendiente'
@@ -834,13 +579,10 @@ async def _op_registrar_pago(args: dict) -> dict:
                     conciliados += 1
                 restante -= aplicado
 
-        # Feed
-        try:
-            nombre = await conn.fetchval("SELECT nombre FROM om_clientes WHERE id=$1", cliente_id)
-            from src.pilates.feed import feed_pago
-            await feed_pago(nombre or "?", metodo, monto, cliente_id)
-        except Exception:
-            pass
+    # Feed
+    from src.pilates.feed import feed_pago
+    nombre = await conn.fetchval("SELECT nombre FROM om_clientes WHERE id=$1", cliente_id)
+    await feed_pago(nombre or "?", metodo, monto, cliente_id)
 
     return {
         "pago_registrado": True,
@@ -851,7 +593,6 @@ async def _op_registrar_pago(args: dict) -> dict:
 
 
 async def _op_generar_facturas(args: dict) -> dict:
-    """Generar facturas desde cargos cobrados sin facturar."""
     from uuid import UUID
     import hashlib
     cliente_id = UUID(args["cliente_id"])
@@ -859,10 +600,13 @@ async def _op_generar_facturas(args: dict) -> dict:
     pool = await _get_pool()
 
     async with pool.acquire() as conn:
-        conditions = ["c.cliente_id=$1", "c.tenant_id=$2", "c.estado='cobrado'",
-                       "NOT EXISTS (SELECT 1 FROM om_factura_lineas fl WHERE fl.cargo_id=c.id)"]
-        params: list = [cliente_id, TENANT]
+        # Buscar cargos cobrados sin facturar
+        conditions = ["c.cliente_id=$1", "c.tenant_id=$2", "c.estado='cobrado'"]
+        params = [cliente_id, TENANT]
         idx = 3
+
+        # Excluir ya facturados
+        conditions.append("NOT EXISTS (SELECT 1 FROM om_factura_lineas fl WHERE fl.cargo_id=c.id)")
 
         if periodo:
             if periodo == "2025":
@@ -871,33 +615,37 @@ async def _op_generar_facturas(args: dict) -> dict:
                 conditions.append(f"c.fecha_cargo <= ${idx}")
                 params.append(date(2025,12,31)); idx += 1
             elif periodo == "ultimo_mes":
-                conditions.append("c.fecha_cargo >= date_trunc('month', CURRENT_DATE) - interval '1 month'")
-                conditions.append("c.fecha_cargo < date_trunc('month', CURRENT_DATE)")
-            elif len(periodo) == 7:
+                conditions.append(f"c.fecha_cargo >= date_trunc('month', CURRENT_DATE) - interval '1 month'")
+                conditions.append(f"c.fecha_cargo < date_trunc('month', CURRENT_DATE)")
+            elif len(periodo) == 7:  # YYYY-MM
                 conditions.append(f"to_char(c.fecha_cargo, 'YYYY-MM') = ${idx}")
                 params.append(periodo); idx += 1
 
         where = " AND ".join(conditions)
         cargos = await conn.fetch(f"""
             SELECT id, tipo, descripcion, base_imponible, total, fecha_cargo
-            FROM om_cargos c WHERE {where} ORDER BY c.fecha_cargo
+            FROM om_cargos c WHERE {where}
+            ORDER BY c.fecha_cargo
         """, *params)
 
         if not cargos:
             return {"facturas_generadas": 0, "mensaje": "No hay cargos cobrados sin facturar"}
 
-        meses: dict = {}
+        # Agrupar por mes para generar una factura por mes
+        meses = {}
         for c in cargos:
             mes_key = c["fecha_cargo"].strftime("%Y-%m") if c["fecha_cargo"] else "sin_fecha"
             meses.setdefault(mes_key, []).append(c)
 
         facturas = []
         for mes, cargos_mes in meses.items():
-            base_total = sum(float(c["base_imponible"] or c["total"]) for c in cargos_mes)
+            cargo_ids = [c["id"] for c in cargos_mes]
+            base_total = sum(float(c["base_imponible"]) for c in cargos_mes)
             iva_pct = 21.0
             iva_total = round(base_total * iva_pct / 100, 2)
             total = round(base_total + iva_total, 2)
 
+            # Número factura
             year = date.today().year
             serie = "AP"
             ultimo = await conn.fetchval("""
@@ -927,11 +675,11 @@ async def _op_generar_facturas(args: dict) -> dict:
             """, TENANT, cliente_id, numero, serie,
                 base_total, iva_pct, iva_total, total,
                 vhash, hash_ant,
-                cliente.get("nif"), f"{cliente['nombre']} {cliente['apellidos']}",
-                cliente.get("direccion"))
+                cliente["nif"], f"{cliente['nombre']} {cliente['apellidos']}",
+                cliente["direccion"])
 
             for cargo in cargos_mes:
-                bi = float(cargo["base_imponible"] or cargo["total"])
+                bi = float(cargo["base_imponible"])
                 iva_m = round(bi * iva_pct / 100, 2)
                 await conn.execute("""
                     INSERT INTO om_factura_lineas (factura_id, cargo_id, concepto, cantidad,
@@ -946,11 +694,13 @@ async def _op_generar_facturas(args: dict) -> dict:
                 "mes": mes, "total": total, "lineas": len(cargos_mes),
             })
 
-    return {"facturas_generadas": len(facturas), "facturas": facturas}
+    return {
+        "facturas_generadas": len(facturas),
+        "facturas": facturas,
+    }
 
 
 async def _op_enviar_whatsapp(args: dict) -> dict:
-    """Enviar mensaje o factura por WhatsApp."""
     from uuid import UUID
     cliente_id = UUID(args["cliente_id"])
     pool = await _get_pool()
@@ -987,7 +737,6 @@ async def _op_enviar_whatsapp(args: dict) -> dict:
 
 
 async def _op_ver_pagos_cliente(args: dict) -> dict:
-    """Ver saldo, cargos pendientes y últimos pagos."""
     from uuid import UUID
     cliente_id = UUID(args["cliente_id"])
     pool = await _get_pool()
@@ -1010,9 +759,14 @@ async def _op_ver_pagos_cliente(args: dict) -> dict:
         "cargos_pendientes": [{"tipo": c["tipo"], "desc": c["descripcion"], "total": float(c["total"])} for c in cargos_pend],
         "ultimos_pagos": [{"metodo": p["metodo"], "monto": float(p["monto"]), "fecha": str(p["fecha_pago"])} for p in pagos],
     }
+```
 
+### A3. Dispatch en chat_cockpit()
 
-# Dispatch operativo
+Actualizar el bloque de dispatch dentro del loop de tool_calls:
+
+```python
+# Dispatch de todas las tools
 TOOL_DISPATCH = {
     "buscar_cliente": _op_buscar_cliente,
     "ver_cliente": _op_ver_cliente,
@@ -1026,115 +780,71 @@ TOOL_DISPATCH = {
     "ver_pagos_cliente": _op_ver_pagos_cliente,
 }
 
+# En el loop de tool_calls:
+if fn_name == "configurar_interfaz":
+    # ... (código existente para interfaz)
+elif fn_name in TOOL_DISPATCH:
+    result = await TOOL_DISPATCH[fn_name](fn_args)
+else:
+    result = {"error": f"Herramienta desconocida: {fn_name}"}
+```
 
-async def chat_cockpit(mensaje: str, modulos_activos: list,
-                        historial: list = None) -> dict:
-    """Chat conversacional del cockpit — interfaz + operaciones."""
-    t0 = time.time()
+### A4. Aumentar max_tokens y max_iterations
 
-    if modulos_activos:
-        desc_activos = ", ".join(
-            f"{m['id']}({m.get('rol','secundario')})" if isinstance(m, dict)
-            else f"{m}(secundario)"
-            for m in modulos_activos
-        )
-        ctx = f"Módulos activos ahora: {desc_activos}."
-    else:
-        ctx = "No hay módulos activos ahora."
+Las operaciones complejas (buscar + agendar + montar módulo) requieren más iteraciones:
 
-    messages = [
-        {"role": "system", "content": SYSTEM_COCKPIT + "\n" + ctx},
-    ]
-    if historial:
-        messages.extend(historial[-10:])
-    messages.append({"role": "user", "content": mensaje})
+```python
+# En chat_cockpit():
+max_tokens=800,    # era 400
+# max iterations: 5  # era 3
+for _ in range(5):
+```
 
-    acciones = {"montar": [], "desmontar": [], "desmontar_todos": False}
-    respuesta_texto = ""
+---
 
-    for _ in range(5):
-        try:
-            async with httpx.AsyncClient(timeout=45) as client:
-                resp = await client.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
-                    headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}"},
-                    json={
-                        "model": CHAT_MODEL,
-                        "messages": messages,
-                        "tools": TOOLS_COCKPIT,
-                        "max_tokens": 800,
-                        "temperature": 0.3,
-                    },
-                )
-                resp.raise_for_status()
-                data = resp.json()
-        except Exception as e:
-            log.error("cockpit_chat_error", error=str(e))
-            return {"respuesta": "Ups, algo ha fallado. Prueba otra vez.",
-                    "acciones": acciones}
+## FASE B: Verificación
 
-        choice = data["choices"][0]
-        msg = choice["message"]
+```bash
+# B1. Buscar cliente
+curl -X POST .../cockpit/chat \
+  -d '{"mensaje":"busca a María","modulos_activos":[],"historial":[]}'
+# PASS: respuesta con datos de María (ID, grupo, saldo)
 
-        if not msg.get("tool_calls"):
-            respuesta_texto = msg.get("content", "")
-            break
+# B2. Agendar recurrente
+curl -X POST .../cockpit/chat \
+  -d '{"mensaje":"agéndame a María García los martes a las 12h y viernes a las 13h hasta junio","modulos_activos":[],"historial":[]}'
+# PASS: tools_usadas incluye buscar_cliente + agendar_sesiones_recurrentes
+# PASS: respuesta con N sesiones creadas
 
-        messages.append(msg)
-        for tc in msg["tool_calls"]:
-            fn_name = tc["function"]["name"]
-            fn_args = json.loads(tc["function"].get("arguments", "{}"))
+# B3. Inscribir en grupo
+curl -X POST .../cockpit/chat \
+  -d '{"mensaje":"añade a Pedro al grupo de las 17h L-X","modulos_activos":[],"historial":[]}'
+# PASS: tools_usadas incluye buscar_cliente + inscribir_en_grupo
 
-            if fn_name == "configurar_interfaz":
-                if fn_args.get("montar"):
-                    for m in fn_args["montar"]:
-                        mod_id = m.get("id", m) if isinstance(m, dict) else m
-                        mod_rol = m.get("rol", "secundario") if isinstance(m, dict) else "secundario"
-                        if mod_id in MODULOS:
-                            acciones["montar"].append({"id": mod_id, "rol": mod_rol})
-                if fn_args.get("desmontar"):
-                    acciones["desmontar"].extend(
-                        m for m in fn_args["desmontar"] if m in MODULOS)
-                if fn_args.get("desmontar_todos"):
-                    acciones["desmontar_todos"] = True
-                result = {"ok": True,
-                          "montados": [m["id"] for m in acciones["montar"]],
-                          "desmontados": acciones["desmontar"]}
-            elif fn_name in TOOL_DISPATCH:
-                try:
-                    result = await TOOL_DISPATCH[fn_name](fn_args)
-                except Exception as e:
-                    log.error("cockpit_tool_error", tool=fn_name, error=str(e))
-                    result = {"error": f"Error ejecutando {fn_name}: {str(e)}"}
-            else:
-                result = {"error": f"Herramienta desconocida: {fn_name}"}
+# B4. Generar facturas + enviar WA
+curl -X POST .../cockpit/chat \
+  -d '{"mensaje":"prepara las facturas de 2025 de Ana y mándaselas por WhatsApp","modulos_activos":[],"historial":[]}'
+# PASS: tools_usadas incluye buscar_cliente + generar_facturas + enviar_whatsapp
 
-            messages.append({
-                "role": "tool",
-                "tool_call_id": tc["id"],
-                "content": json.dumps(result, ensure_ascii=False),
-            })
-    else:
-        respuesta_texto = "No he pillado bien qué necesitas. Prueba de otra forma."
+# B5. Registrar pago
+curl -X POST .../cockpit/chat \
+  -d '{"mensaje":"registra un Bizum de 105€ de Sofía","modulos_activos":[],"historial":[]}'
+# PASS: tools_usadas incluye buscar_cliente + registrar_pago
 
-    # Enforce: solo 1 principal
-    principales = [m for m in acciones["montar"] if m["rol"] == "principal"]
-    if len(principales) > 1:
-        for m in acciones["montar"]:
-            m["rol"] = "secundario"
-        acciones["montar"][-1]["rol"] = "principal"
+# B6. Combo interfaz + operativo
+curl -X POST .../cockpit/chat \
+  -d '{"mensaje":"cancela las clases de Pedro la semana que viene y ponme los pagos","modulos_activos":[],"historial":[]}'
+# PASS: tools_usadas incluye buscar_cliente + cancelar_sesiones + configurar_interfaz
+# PASS: acciones.montar incluye pagos_pendientes
+```
 
-    dt = int((time.time() - t0) * 1000)
-    log.info("cockpit_chat", ms=dt, acciones=acciones)
+---
 
-    nuevo_historial = (historial or []) + [
-        {"role": "user", "content": mensaje},
-        {"role": "assistant", "content": respuesta_texto},
-    ]
+## NOTAS
 
-    return {
-        "respuesta": respuesta_texto,
-        "acciones": acciones,
-        "historial": nuevo_historial[-20:],
-        "tiempo_ms": dt,
-    }
+- **11 tools en total** (1 interfaz + 10 operativas). Deepseek-chat soporta bien function calling con 10+ tools.
+- **Siempre buscar antes de operar:** El LLM tiene instrucciones de buscar_cliente ANTES de cualquier acción. Así resuelve "María" → UUID.
+- **Cadena de tools:** El LLM puede llamar buscar → agendar → configurar_interfaz en una sola conversación (3 iteraciones del loop).
+- **Feed integrado:** registrar_pago publica en feed automáticamente. Las demás operaciones también deberían publicar.
+- **Facturas por mes:** Si pides "facturas de 2025", genera una factura por cada mes que tenga cargos.
+- **No toca el frontend:** Las tools operativas devuelven datos al LLM que los presenta en texto. La interfaz sigue igual.
