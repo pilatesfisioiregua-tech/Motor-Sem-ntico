@@ -3035,3 +3035,43 @@ async def descartar_item(item_id: str):
     """Jesús descarta una pieza de contenido del calendario."""
     from src.pilates.voz_estrategia import descartar_item_calendario
     return await descartar_item_calendario(item_id)
+
+# ============================================================
+# VOZ ESTRATÉGICO — Arquitecto de Presencia
+# B-PIL-20c
+# ============================================================
+
+@router.post("/voz/perfil/{canal}/generar")
+async def generar_perfil_canal(canal: str):
+    """Genera configuración completa del perfil de un canal.
+    Canales: whatsapp, google_business, instagram, facebook.
+    ~5 seg (1 LLM call).
+    """
+    from src.pilates.voz_arquitecto import generar_perfil
+    return await generar_perfil(canal)
+
+@router.post("/voz/perfiles/generar")
+async def generar_todos_perfiles():
+    """Genera perfiles para todos los canales con IRC >= 0.3.
+    ~20 seg (4 LLM calls secuenciales).
+    """
+    from src.pilates.voz_arquitecto import generar_todos_los_perfiles
+    return await generar_todos_los_perfiles()
+
+@router.get("/voz/perfil/{canal}")
+async def get_perfil_canal(canal: str):
+    """Devuelve plantillas del perfil de un canal, agrupadas por tipo."""
+    from src.pilates.voz_arquitecto import obtener_perfil
+    return await obtener_perfil(canal)
+
+@router.post("/voz/plantilla/{plantilla_id}/aprobar")
+async def aprobar_plantilla_endpoint(plantilla_id: str):
+    """Jesús aprueba una plantilla de perfil."""
+    from src.pilates.voz_arquitecto import aprobar_plantilla
+    return await aprobar_plantilla(plantilla_id)
+
+@router.post("/voz/plantilla/{plantilla_id}/aplicada")
+async def marcar_aplicada_endpoint(plantilla_id: str):
+    """Jesús confirma que aplicó la plantilla al canal real."""
+    from src.pilates.voz_arquitecto import marcar_aplicada
+    return await marcar_aplicada(plantilla_id)
