@@ -219,6 +219,17 @@ async def generar_briefing(semana_inicio: Optional[date] = None) -> dict:
         "voz_propuestas_pendientes": voz_pendientes,
     }
 
+    # === SECCIÓN VOZ ===
+    seccion_voz = {}
+    try:
+        from src.pilates.voz_ciclos import seccion_voz_briefing
+        seccion_voz = await seccion_voz_briefing()
+    except Exception as e:
+        log.warning("briefing_voz_error", error=str(e))
+        seccion_voz = {"error": str(e)}
+
+    briefing["voz"] = seccion_voz
+
     # Generar texto para WA
     briefing["texto_wa"] = _generar_texto_wa(briefing)
 

@@ -3075,3 +3075,53 @@ async def marcar_aplicada_endpoint(plantilla_id: str):
     """Jesús confirma que aplicó la plantilla al canal real."""
     from src.pilates.voz_arquitecto import marcar_aplicada
     return await marcar_aplicada(plantilla_id)
+
+# ============================================================
+# VOZ ESTRATÉGICO — 5 Ciclos + ISP + Telemetría
+# B-PIL-20d
+# ============================================================
+
+@router.post("/voz/ciclo/escuchar")
+async def ciclo_escuchar():
+    """Detecta señales de las 3 capas (A, B, C)."""
+    from src.pilates.voz_ciclos import escuchar
+    return await escuchar()
+
+@router.get("/voz/senales")
+async def get_senales():
+    """Devuelve señales pendientes priorizadas."""
+    from src.pilates.voz_ciclos import priorizar
+    return await priorizar()
+
+@router.post("/voz/senales/{senal_id}/procesada")
+async def senal_procesada(senal_id: str):
+    """Marca una señal como procesada."""
+    from src.pilates.voz_ciclos import marcar_procesada
+    return await marcar_procesada(senal_id)
+
+@router.post("/voz/telemetria")
+async def registrar_telemetria_endpoint(request: Request):
+    """Registra métricas de un canal. Body: {canal, periodo, metricas: {...}}"""
+    from src.pilates.voz_ciclos import registrar_telemetria
+    body = await request.json()
+    return await registrar_telemetria(
+        body["canal"], body["periodo"], body.get("metricas", {})
+    )
+
+@router.post("/voz/irc/recalcular")
+async def recalcular_irc_endpoint():
+    """Recalcula IRC de todos los canales con datos de telemetría."""
+    from src.pilates.voz_ciclos import recalcular_irc
+    return await recalcular_irc()
+
+@router.get("/voz/isp-automatico")
+async def get_isp_automatico():
+    """Calcula y devuelve ISP automático de todos los canales."""
+    from src.pilates.voz_ciclos import calcular_isp_automatico
+    return await calcular_isp_automatico()
+
+@router.post("/voz/ciclo/completo")
+async def ciclo_completo():
+    """Ejecuta los 5 ciclos en secuencia (ESCUCHAR→PRIORIZAR→PROPONER→EJECUTAR→APRENDER)."""
+    from src.pilates.voz_ciclos import ejecutar_ciclo_completo
+    return await ejecutar_ciclo_completo()
