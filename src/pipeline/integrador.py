@@ -1,4 +1,6 @@
 """Capa 6: Síntesis final (Sonnet)."""
+from __future__ import annotations
+
 import structlog
 
 from src.config.settings import MODEL_INTEGRATOR

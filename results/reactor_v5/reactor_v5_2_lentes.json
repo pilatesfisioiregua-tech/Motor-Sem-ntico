@@ -1,0 +1,357 @@
+{
+  "reactor": "v5.2",
+  "fecha": "2026-03-19",
+  "descripcion": "Re-evaluación de 10 casos con descomposición 7F×3L. Cada F se descompone en F_x.S (Salud/presente), F_x.Se (Sentido/propósito), F_x.C (Continuidad/futuro).",
+  "convencion": "F_x.S = ¿funciona hoy?, F_x.Se = ¿sabe POR QUÉ?, F_x.C = ¿sobrevive sin ti?",
+  "casos": [
+    {
+      "id": "F10",
+      "caso": "Maginot Line (1929-1940)",
+      "tipo_resultado": "toxico",
+      "hipotesis_seccion7": "F5 alta pero incorrecta → ¿F5(L_Sentido) baja lo captura?",
+      "vector_pre_escalar": {"F1": 0.60, "F2": 0.50, "F3": 0.30, "F4": 0.35, "F5": 0.55, "F6": 0.25, "F7": 0.50},
+      "vector_pre_3L": {
+        "F1": {"S": 0.75, "Se": 0.55, "C": 0.50, "nota": "Fortificaciones funcionaban HOY (S alta). Sabían por qué conservar (memoria WWI, Se media). Pero la conservación no era transferible ni adaptable (C media-baja)."},
+        "F2": {"S": 0.55, "Se": 0.30, "C": 0.65, "nota": "Captaban inteligencia operativa (S). PERO no sabían POR QUÉ captaban esa información y no otra — captura centrada en frente estático (Se baja). El sistema de captación era institucional y permanente (C alta)."},
+        "F3": {"S": 0.35, "Se": 0.15, "C": 0.40, "nota": "Filtraban algo operativamente (S). PERO no sabían POR QUÉ eliminar ciertas hipótesis — el sesgo de guerra estática impedía depurar la doctrina obsoleta (Se muy baja). El sistema de depuración era burocrático pero persistente (C)."},
+        "F4": {"S": 0.45, "Se": 0.20, "C": 0.40, "nota": "Recursos llegaban a la línea (S). PERO distribuían según frontera incorrecta — todo a la línea, nada a reservas móviles (Se baja). La logística institucional funcionaría sin individuos (C)."},
+        "F5": {"S": 0.70, "Se": 0.20, "C": 0.75, "nota": "CLAVE. Operativamente podían decir no, defender la línea (S ALTA). PERO no comprendían POR QUÉ esa era la frontera correcta (Se MUY BAJA). La doctrina estaba codificada y sobreviviría sin ningún individuo (C alta). F5.S=0.70 con F5.Se=0.20 = frontera funcional pero equivocada."},
+        "F6": {"S": 0.20, "Se": 0.20, "C": 0.35, "nota": "No podían cambiar hoy (S baja). No sabían POR QUÉ debían cambiar (Se baja). La rigidez era sistémica y persistente (C)."},
+        "F7": {"S": 0.55, "Se": 0.40, "C": 0.55, "nota": "La réplica de la doctrina funcionaba operativamente (S). Había comprensión parcial del modelo (Se media). El sistema de formación era institucional (C)."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.80, "Se": 0.55, "C": 0.50},
+        "F2": {"S": 0.50, "Se": 0.25, "C": 0.60},
+        "F3": {"S": 0.35, "Se": 0.10, "C": 0.40},
+        "F4": {"S": 0.30, "Se": 0.15, "C": 0.30},
+        "F5": {"S": 0.70, "Se": 0.15, "C": 0.80},
+        "F6": {"S": 0.05, "Se": 0.10, "C": 0.15},
+        "F7": {"S": 0.55, "Se": 0.35, "C": 0.55}
+      },
+      "diagnostico_3L": "CONFIRMADO: F5.Se=0.20 (pre) → 0.15 (post) es el verdadero problema. El escalar F5=0.55 OCULTABA que F5.S era alta (0.70) pero F5.Se era mínima (0.20). Maginot tenía frontera OPERATIVA pero sin COMPRENSIÓN de por qué era correcta. La descomposición 3L captura lo que el escalar no: F5 alta puede ser peligrosa si F5.Se es baja. ADEMÁS: F3.Se=0.15 explica por qué no depuraron la doctrina — no sabían POR QUÉ filtrar ciertas hipótesis. La L_Sentido es baja en TODAS las funciones (promedio Se=0.29) = sistema operativo pero ciego.",
+      "cambia_diagnostico": true,
+      "que_cambia": "El escalar F5=0.55 sugería frontera media. La descomposición revela F5.S=0.70 (alta) con F5.Se=0.20 (baja) = frontera PELIGROSAMENTE funcional pero equivocada. El problema no era F5 insuficiente sino F5 sin sentido. Además, Se bajo generalizado (0.29 promedio) revela que NINGUNA función sabía por qué hacía lo que hacía."
+    },
+    {
+      "id": "N09",
+      "caso": "El Bulli / Ferran Adrià (cierre 2011)",
+      "tipo_resultado": "inerte",
+      "hipotesis_seccion7": "F7 bloqueada con F5 alta → ¿F7(L_Sentido) baja lo explica?",
+      "vector_pre_escalar": {"F1": 0.30, "F2": 0.90, "F3": 0.20, "F4": 0.15, "F5": 0.90, "F6": 0.75, "F7": 0.15},
+      "vector_pre_3L": {
+        "F1": {"S": 0.25, "Se": 0.50, "C": 0.15, "nota": "No conservaba bien operativamente — perdía dinero (S baja). Adrià sabía POR QUÉ conservar lo que conservaba (Se media). PERO nada de lo conservado sobrevivía sin él (C muy baja)."},
+        "F2": {"S": 0.95, "Se": 0.90, "C": 0.85, "nota": "Captaba brillantemente (S). Sabía POR QUÉ captaba (Se). La captación era reconocida y documentada (C)."},
+        "F3": {"S": 0.20, "Se": 0.30, "C": 0.10, "nota": "Depuración operativa débil (S). Algún sentido de qué soltar (Se). PERO la depuración dependía totalmente de Adrià (C muy baja)."},
+        "F4": {"S": 0.15, "Se": 0.20, "C": 0.10, "nota": "Distribución operativa mala — perdía dinero (S). Sin criterio claro de reparto (Se). Todo dependía de microgestión (C)."},
+        "F5": {"S": 0.90, "Se": 0.95, "C": 0.15, "nota": "CLAVE. Identidad OPERATIVA altísima — podía decir 'esto es El Bulli, esto no' (S=0.90). Comprendía profundamente POR QUÉ era El Bulli (Se=0.95). PERO la identidad NO sobrevivía sin Adrià (C=0.15). F5 total=0.90 ocultaba que la dimensión transferible era casi nula."},
+        "F6": {"S": 0.80, "Se": 0.80, "C": 0.65, "nota": "Adaptación presente alta (S). Sabía por qué cambiar (Se). Algo de eso era sistémico (C)."},
+        "F7": {"S": 0.20, "Se": 0.10, "C": 0.15, "nota": "CLAVE. La réplica funcional era mínima (S). NADIE entendía POR QUÉ funcionaba lo que Adrià hacía (Se=0.10). Y lo poco que se replicaba no sobrevivía sin él (C=0.15). F7.Se=0.10 es el verdadero bloqueo."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.25, "Se": 0.50, "C": 0.15},
+        "F2": {"S": 0.30, "Se": 0.40, "C": 0.20},
+        "F3": {"S": 0.30, "Se": 0.40, "C": 0.20},
+        "F4": {"S": 0.15, "Se": 0.20, "C": 0.10},
+        "F5": {"S": 0.90, "Se": 0.95, "C": 0.20},
+        "F6": {"S": 0.80, "Se": 0.80, "C": 0.65},
+        "F7": {"S": 0.25, "Se": 0.15, "C": 0.20}
+      },
+      "diagnostico_3L": "CONFIRMADO: F7.Se=0.10 es el verdadero bloqueo, no F7 escalar=0.15. ADEMÁS: F5.C=0.15 revela que la identidad no era transferible. El problema no era 'codificabilidad de F5' como variable oculta — era F5.C baja y F7.Se baja. Adrià ENTENDÍA profundamente (F5.Se=0.95) pero nadie más entendía POR QUÉ (F7.Se=0.10). La transferencia de comprensión estaba bloqueada. F5.C=0.15 + F7.Se=0.10 = el conocimiento era profundamente personal e intransferible.",
+      "cambia_diagnostico": true,
+      "que_cambia": "Ya no necesitamos la variable 'codificabilidad' propuesta en v5. Las lentes lo resuelven: F5.C (continuidad de la identidad) + F7.Se (transferencia de comprensión) capturan exactamente 'lo tácito'. Lo tácito = F_x.Se alta en el portador pero F7.Se baja en el receptor, y F5.C baja."
+    },
+    {
+      "id": "S07",
+      "caso": "Suecia COVID — Anders Tegnell / FHM (2020)",
+      "tipo_resultado": "inerte",
+      "hipotesis_seccion7": "Paradoja temporal → ¿L_Salud vs L_Continuidad lo resuelve?",
+      "vector_pre_escalar": {"F1": 0.70, "F2": 0.60, "F3": 0.55, "F4": 0.65, "F5": 0.75, "F6": 0.50, "F7": 0.60},
+      "vector_pre_3L": {
+        "F1": {"S": 0.75, "Se": 0.70, "C": 0.65, "nota": "Sistema sanitario funcionaba (S). Comprendían por qué conservar capacidad (Se). Bastante sostenible (C)."},
+        "F2": {"S": 0.65, "Se": 0.55, "C": 0.60, "nota": "Captaban datos epidemiológicos (S). Criterio parcial de qué captar (Se). Sistema institucional (C)."},
+        "F3": {"S": 0.40, "Se": 0.60, "C": 0.65, "nota": "CLAVE. Depuración operativa DÉBIL hoy — no filtraron contagios en residencias (S=0.40). PERO el sentido de depuración era alto — entendían POR QUÉ no confinaban (sostenibilidad, inmunidad) (Se=0.60). Y el modelo era más sostenible a largo plazo (C=0.65). F3.S↓ con F3.C↑ = la paradoja temporal DISUELTA."},
+        "F4": {"S": 0.60, "Se": 0.70, "C": 0.65, "nota": "Distribución operativa aceptable (S). Sabían por qué distribuir así (Se alta). Institucional (C)."},
+        "F5": {"S": 0.75, "Se": 0.80, "C": 0.70, "nota": "Identidad operativa clara — podían decir no al confinamiento (S). Comprendían profundamente POR QUÉ (Se alta). Transmisible como modelo (C alta)."},
+        "F6": {"S": 0.45, "Se": 0.55, "C": 0.50, "nota": "Adaptabilidad limitada hoy (S media). Entendían por qué adaptarse así (Se). Sostenible (C)."},
+        "F7": {"S": 0.55, "Se": 0.65, "C": 0.60, "nota": "El modelo se replicaba (S). Comprendían la lógica (Se). Exportable (C)."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.55, "Se": 0.65, "C": 0.60},
+        "F2": {"S": 0.60, "Se": 0.55, "C": 0.60},
+        "F3": {"S": 0.25, "Se": 0.55, "C": 0.65},
+        "F4": {"S": 0.40, "Se": 0.55, "C": 0.55},
+        "F5": {"S": 0.80, "Se": 0.80, "C": 0.75},
+        "F6": {"S": 0.50, "Se": 0.55, "C": 0.55},
+        "F7": {"S": 0.55, "Se": 0.60, "C": 0.60}
+      },
+      "diagnostico_3L": "CONFIRMADO: La paradoja temporal SE DISUELVE. F3.S bajó (0.40→0.25): depuración HOY falló (muertes en residencias). Pero F3.C subió/mantuvo (0.65): el modelo era más sostenible. Evaluar F3 como escalar (0.55→0.40, delta -0.15) oculta que F3.S cayó dramáticamente (-0.15) mientras F3.C se mantuvo (+0.00). No hay paradoja — hay dos lentes que se mueven en direcciones opuestas. L_Salud dice 'tóxico a corto plazo', L_Continuidad dice 'viable a largo plazo'. Las dos son ciertas simultáneamente.",
+      "cambia_diagnostico": true,
+      "que_cambia": "Ya no necesitamos dimensión temporal (t) como variable nueva. Las lentes CONTIENEN la temporalidad: L_Salud=presente, L_Continuidad=futuro. La refutación parcial de F6→F1(D) también se resuelve: F6→F1 se degradó en L_Salud pero no en L_Continuidad."
+    },
+    {
+      "id": "F01",
+      "caso": "Google+ (2011-2019)",
+      "tipo_resultado": "inerte",
+      "hipotesis_seccion7": "Fallo no predicho → ¿F2(L_Sentido) baja lo captura?",
+      "vector_pre_escalar": {"F1": 0.85, "F2": 0.80, "F3": 0.60, "F4": 0.70, "F5": 0.75, "F6": 0.65, "F7": 0.70},
+      "vector_pre_3L": {
+        "F1": {"S": 0.90, "Se": 0.80, "C": 0.85, "nota": "Todo operativamente sólido."},
+        "F2": {"S": 0.85, "Se": 0.40, "C": 0.70, "nota": "CLAVE. Captaban usuarios operativamente (forzando G+ en YouTube, Gmail) (S alta). PERO F2.Se=0.40: NO sabían POR QUÉ los usuarios querrían G+. La captación era coercitiva, no orgánica. Tenían capacidad de captar pero no sentido de qué captar. La captación era institucional/automática (C alta)."},
+        "F3": {"S": 0.65, "Se": 0.45, "C": 0.70, "nota": "Filtraban técnicamente (S). Criterio parcial de qué depurar (Se media-baja). Sistema institucional (C)."},
+        "F4": {"S": 0.75, "Se": 0.55, "C": 0.80, "nota": "Recursos bien distribuidos (S). Criterio parcial (Se). Institucional (C)."},
+        "F5": {"S": 0.70, "Se": 0.35, "C": 0.75, "nota": "CLAVE. Podían decir 'esto es G+' operativamente (S). PERO no comprendían POR QUÉ G+ existía — ¿red social? ¿capa identitaria? ¿competidor de Facebook? (Se=0.35). La marca/sistema era institucional (C). F5.Se baja = identidad sin propósito claro."},
+        "F6": {"S": 0.65, "Se": 0.55, "C": 0.75, "nota": "Podían adaptar (S). Parcialmente sabían por qué (Se). Institucional (C)."},
+        "F7": {"S": 0.75, "Se": 0.50, "C": 0.85, "nota": "Replicación operativa excelente (S). Comprensión parcial (Se). Sistema Google escalable (C)."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.90, "Se": 0.75, "C": 0.85},
+        "F2": {"S": 0.90, "Se": 0.35, "C": 0.70},
+        "F3": {"S": 0.65, "Se": 0.40, "C": 0.70},
+        "F4": {"S": 0.75, "Se": 0.50, "C": 0.80},
+        "F5": {"S": 0.65, "Se": 0.25, "C": 0.70},
+        "F6": {"S": 0.65, "Se": 0.50, "C": 0.75},
+        "F7": {"S": 0.80, "Se": 0.45, "C": 0.85}
+      },
+      "diagnostico_3L": "PARCIALMENTE CAPTURADO. F2.Se=0.40 (captación sin saber por qué) + F5.Se=0.35 (identidad sin propósito) revelan el gap. El escalar F2=0.80 y F5=0.75 ocultaban que ambas funciones carecían de sentido. Promedio Se pre=0.51 — notablemente más bajo que Se de casos exitosos como TCP/IP o Mercadona. SIN EMBARGO: F2.Se=0.40 y F5.Se=0.35 no son tan bajos como Maginot (Se=0.29). Las lentes capturan PARTE del problema (captación sin sentido, identidad sin propósito) pero NO capturan totalmente el efecto de red externo (Facebook). VEREDICTO: Las lentes mejoran la predicción (de 'cierre' a 'posiblemente inerte') pero no la resuelven completamente.",
+      "cambia_diagnostico": "parcial",
+      "que_cambia": "El escalar predecía cierre. La descomposición revela Se bajo en F2 y F5 (0.40, 0.35) que habría levantado una flag de 'captación forzada + identidad difusa'. La predicción habría sido 'inerte con riesgo' en vez de 'cierre'. No resuelve el factor exógeno (lock-in de Facebook) pero SÍ captura la debilidad interna que hizo vulnerable al sistema."
+    },
+    {
+      "id": "N02",
+      "caso": "Kodak — respuesta a fotografía digital (1990s-2012)",
+      "tipo_resultado": "inerte",
+      "hipotesis_seccion7": "Sabía pero no podía → ¿F6(L_Salud) baja con F6(L_Sentido) alta?",
+      "vector_pre_escalar": {"F1": 0.85, "F2": 0.60, "F3": 0.25, "F4": 0.40, "F5": 0.75, "F6": 0.15, "F7": 0.55},
+      "vector_pre_3L": {
+        "F1": {"S": 0.90, "Se": 0.85, "C": 0.80, "nota": "Película funcionaba brillantemente (S). Sabían por qué conservar (márgenes 70%) (Se). Institucional (C)."},
+        "F2": {"S": 0.65, "Se": 0.50, "C": 0.65, "nota": "Captaban I+D digital (inventaron la cámara digital) (S). Parcialmente sabían por qué (Se). Institucional (C)."},
+        "F3": {"S": 0.25, "Se": 0.15, "C": 0.35, "nota": "No depuraban operativamente (S baja). NO sabían POR QUÉ soltar película — el margen los cegaba (Se muy baja). La no-depuración era sistémica (C)."},
+        "F4": {"S": 0.45, "Se": 0.30, "C": 0.45, "nota": "Distribución funcional (S). Criterio sesgado hacia película (Se baja). Institucional (C)."},
+        "F5": {"S": 0.80, "Se": 0.70, "C": 0.75, "nota": "Identidad operativa fuerte — 'somos Kodak, somos fotografía' (S). Comprendían profundamente su identidad (Se). Institucional (C). PERO: F5.Se alta ERA el problema — estaban profundamente convencidos de una identidad obsoleta."},
+        "F6": {"S": 0.10, "Se": 0.30, "C": 0.05, "nota": "CLAVE. NO podían cambiar hoy (S=0.10). Tenían ALGO de comprensión de POR QUÉ debían cambiar (Se=0.30) — sabían que digital era futuro. PERO la adaptación era nula sistémicamente (C=0.05). F6.S=0.10 con F6.Se=0.30: sabían parcialmente pero no podían."},
+        "F7": {"S": 0.60, "Se": 0.50, "C": 0.55, "nota": "Replicación funcional (S). Comprensión media (Se). Institucional (C)."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.85, "Se": 0.80, "C": 0.75},
+        "F2": {"S": 0.60, "Se": 0.40, "C": 0.65},
+        "F3": {"S": 0.25, "Se": 0.15, "C": 0.35},
+        "F4": {"S": 0.45, "Se": 0.25, "C": 0.45},
+        "F5": {"S": 0.75, "Se": 0.60, "C": 0.70},
+        "F6": {"S": 0.20, "Se": 0.35, "C": 0.10},
+        "F7": {"S": 0.55, "Se": 0.50, "C": 0.55}
+      },
+      "diagnostico_3L": "CONFIRMADO PARCIALMENTE. F6.S=0.10 con F6.Se=0.30 captura el 'sabían pero no podían'. PERO la hipótesis decía F6.Se alta — en realidad F6.Se=0.30 no es alta. Kodak sabía ALGO de por qué debía cambiar pero no tanto como se cree retroactivamente. El insight real: F1.Se=0.85 (sabían MUY BIEN por qué conservar película) + F3.Se=0.15 (no sabían por qué soltar película) = el sentido estaba atrapado en la conservación. F1.Se alta BLOQUEABA F3.Se. Además: F5.Se=0.70 (identidad profundamente comprendida pero OBSOLETA) fue el ancla.",
+      "cambia_diagnostico": true,
+      "que_cambia": "El escalar F6=0.15 dice 'no adaptaba'. La descomposición dice 'no podía adaptar (F6.S=0.10) y además no tenía tanto sentido de POR QUÉ adaptar como se cree (F6.Se=0.30)'. El verdadero bloqueo: F1.Se altísima (0.85) + F3.Se bajísima (0.15) = sabían perfectamente POR QUÉ conservar y no tenían ni idea de POR QUÉ soltar. El sentido estaba monopolizado por la conservación."
+    },
+    {
+      "id": "S06",
+      "caso": "Depresión tratada solo con SSRI",
+      "tipo_resultado": "inerte",
+      "hipotesis_seccion7": "F7=0 → ¿F7(L_Sentido) = 0 es el verdadero gap?",
+      "vector_pre_escalar": {"F1": 0.40, "F2": 0.55, "F3": 0.20, "F4": 0.30, "F5": 0.25, "F6": 0.30, "F7": 0.15},
+      "vector_pre_3L": {
+        "F1": {"S": 0.45, "Se": 0.30, "C": 0.25, "nota": "Funcionamiento presente parcial (S). Poco sentido de por qué conservar lo que funciona (Se). Frágil sin medicación (C baja)."},
+        "F2": {"S": 0.60, "Se": 0.40, "C": 0.50, "nota": "Capta experiencias/estímulos (S). Parcialmente sabe por qué (Se). Sistema algo estable (C)."},
+        "F3": {"S": 0.20, "Se": 0.10, "C": 0.10, "nota": "Apenas depura (S). No sabe POR QUÉ eliminar patrones tóxicos (Se muy baja). Sin herramientas autónomas (C)."},
+        "F4": {"S": 0.30, "Se": 0.20, "C": 0.20, "nota": "Distribución de energía pobre (S). Sin criterio (Se). Frágil (C)."},
+        "F5": {"S": 0.25, "Se": 0.15, "C": 0.15, "nota": "Identidad difusa (S). No comprende quién es (Se). No transferible (C)."},
+        "F6": {"S": 0.30, "Se": 0.20, "C": 0.20, "nota": "Adaptación limitada (S). Poco sentido de hacia dónde (Se). Frágil (C)."},
+        "F7": {"S": 0.20, "Se": 0.05, "C": 0.10, "nota": "CLAVE. Apenas replica hábitos saludables (S=0.20). CASI CERO comprensión de POR QUÉ funcionan las estrategias (Se=0.05). Sin autonomía (C=0.10). F7.Se≈0 es el gap real: el paciente no entiende nada de su propia recuperación."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.60, "Se": 0.30, "C": 0.25},
+        "F2": {"S": 0.65, "Se": 0.40, "C": 0.50},
+        "F3": {"S": 0.25, "Se": 0.15, "C": 0.10},
+        "F4": {"S": 0.40, "Se": 0.25, "C": 0.25},
+        "F5": {"S": 0.25, "Se": 0.15, "C": 0.15},
+        "F6": {"S": 0.35, "Se": 0.25, "C": 0.20},
+        "F7": {"S": 0.20, "Se": 0.05, "C": 0.10}
+      },
+      "diagnostico_3L": "CONFIRMADO. F7.Se=0.05 (pre y post) es el gap verdadero. SSRI mejoró F1.S (+0.15) pero no tocó F7.Se. El paciente se siente mejor HOY (F1.S↑) pero no entiende POR QUÉ (F7.Se=0.05 intacto). Contraste con DPP (S09): TCC habría subido F7.Se (comprender POR QUÉ funcionan las estrategias) + F5.Se (comprender quién eres) + F3.Se (saber POR QUÉ eliminar distorsiones). SSRI = intervención en L_Salud sin tocar L_Sentido en ninguna función. Es literalmente una intervención en una sola lente.",
+      "cambia_diagnostico": true,
+      "que_cambia": "El escalar F7=0.15 dice 'no replica'. La descomposición dice F7.Se=0.05 — el paciente no ENTIENDE nada de su propia recuperación. SSRI es intervención puramente en L_Salud (mejorar F1.S presente) sin L_Sentido (comprender por qué). Esto predice recaída: cuando F1.S cae (deja medicación), no hay Se en ninguna función que sostenga."
+    },
+    {
+      "id": "T08",
+      "caso": "Theranos — Elizabeth Holmes (2003-2018)",
+      "tipo_resultado": "toxico",
+      "hipotesis_seccion7": "F3=0 → ¿F3(L_Sentido) = 0 o F3(L_Salud) = 0?",
+      "vector_pre_escalar": {"F1": 0.10, "F2": 0.85, "F3": 0.05, "F4": 0.15, "F5": 0.20, "F6": 0.30, "F7": 0.70},
+      "vector_pre_3L": {
+        "F1": {"S": 0.10, "Se": 0.10, "C": 0.10, "nota": "Nada real funcionaba (S). Nadie sabía por qué conservar — no había qué (Se). Nada persistía (C)."},
+        "F2": {"S": 0.90, "Se": 0.20, "C": 0.80, "nota": "Captación operativa excelente — dinero, partnerships, pacientes (S alta). PERO: no sabían POR QUÉ captaban eso y no otra cosa (Se=0.20) — captación indiscriminada de capital sin product-market fit. El sistema de captación (fundraising) era institucional (C alta)."},
+        "F3": {"S": 0.05, "Se": 0.05, "C": 0.05, "nota": "CLAVE. AMBAS son ~0. No filtraban operativamente (S=0.05). No sabían POR QUÉ filtrar — Holmes activamente suprimía depuración (Se=0.05). Y no había sistema de depuración que sobreviviera (C=0.05). F3 es cero en TODAS las lentes. No era solo ausencia — era supresión activa."},
+        "F4": {"S": 0.15, "Se": 0.10, "C": 0.10, "nota": "Distribución caótica (S). Sin criterio (Se). Frágil (C)."},
+        "F5": {"S": 0.20, "Se": 0.10, "C": 0.15, "nota": "Identidad operativa difusa (S). No comprendían qué era Theranos realmente (Se). No transferible (C)."},
+        "F6": {"S": 0.30, "Se": 0.15, "C": 0.25, "nota": "Algo de adaptabilidad (S). Sin rumbo (Se). Algo institucional (C)."},
+        "F7": {"S": 0.75, "Se": 0.15, "C": 0.70, "nota": "Replicación operativa excelente — labs en Walgreens (S alta). PERO no entendían POR QUÉ replicar (Se=0.15) — replicaban algo que no funcionaba. El sistema de replicación era institucional (C alta). F7.S alta con F7.Se baja = replicación mecánica de vacío."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.05, "Se": 0.05, "C": 0.05},
+        "F2": {"S": 0.95, "Se": 0.15, "C": 0.85},
+        "F3": {"S": 0.00, "Se": 0.00, "C": 0.00},
+        "F4": {"S": 0.05, "Se": 0.05, "C": 0.05},
+        "F5": {"S": 0.05, "Se": 0.05, "C": 0.05},
+        "F6": {"S": 0.20, "Se": 0.10, "C": 0.20},
+        "F7": {"S": 0.80, "Se": 0.10, "C": 0.75}
+      },
+      "diagnostico_3L": "CONFIRMADO: F3 es cero en TODAS las lentes — no es F3.S=0 con F3.Se alta (como sería en 'sabe que debería filtrar pero no puede'). Es supresión total. La respuesta a la hipótesis: AMBAS son cero. Theranos no tenía depuración operativa NI criterio de depuración NI sistema de depuración. Holmes ACTIVAMENTE suprimía las tres dimensiones. INSIGHT ADICIONAL: F2.Se=0.20 + F7.Se=0.15 + F5.Se=0.10 = el sistema tenía Sentido bajísimo generalizado (Se promedio=0.11). Captaba y replicaba sin saber POR QUÉ en ninguna función. Es el patrón Maginot (Se bajo generalizado) llevado al extremo tóxico.",
+      "cambia_diagnostico": false,
+      "que_cambia": "La descomposición confirma pero AMPLIFICA el diagnóstico: F3=0 escalar ya predecía tóxico. Las lentes revelan que era incluso peor — no era solo F3 ausente, era Se≈0 en TODO el sistema. Theranos era un sistema sin sentido en ninguna función."
+    },
+    {
+      "id": "F06",
+      "caso": "Cold fusion — Fleischmann y Pons (1989)",
+      "tipo_resultado": "toxico",
+      "hipotesis_seccion7": "F3 bypassed → ¿F3(L_Salud) bajó o F3(L_Sentido) bajó?",
+      "vector_pre_escalar": {"F1": 0.60, "F2": 0.55, "F3": 0.50, "F4": 0.40, "F5": 0.55, "F6": 0.45, "F7": 0.55},
+      "vector_pre_3L": {
+        "F1": {"S": 0.65, "Se": 0.55, "C": 0.60, "nota": "Trabajo lab funcional (S). Comprendían la ciencia base (Se). Institucional (C)."},
+        "F2": {"S": 0.60, "Se": 0.50, "C": 0.55, "nota": "Captaban datos experimentales (S). Sabían parcialmente qué buscar (Se). Publicable (C)."},
+        "F3": {"S": 0.55, "Se": 0.50, "C": 0.45, "nota": "PRE-acción: sistema de depuración FUNCIONABA (S=0.55: calorimetría, peer review en el campo). Entendían POR QUÉ depurar (Se=0.50: método científico). El sistema era institucional (C=0.45)."},
+        "F4": {"S": 0.40, "Se": 0.35, "C": 0.45, "nota": "Distribución funcional (S). Criterio parcial (Se). Institucional (C)."},
+        "F5": {"S": 0.55, "Se": 0.50, "C": 0.60, "nota": "Identidad de lab funcional (S). Comprendían su rol (Se). Institucional (C)."},
+        "F6": {"S": 0.45, "Se": 0.40, "C": 0.50, "nota": "Podían adaptar (S). Sabían parcialmente por qué (Se). Institucional (C)."},
+        "F7": {"S": 0.55, "Se": 0.50, "C": 0.60, "nota": "Publicaban y comunicaban (S). Comprendían el sistema (Se). Institucional (C)."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.50, "Se": 0.45, "C": 0.55},
+        "F2": {"S": 0.65, "Se": 0.45, "C": 0.55},
+        "F3": {"S": 0.15, "Se": 0.25, "C": 0.35, "nota": "POST-acción: F3.S COLAPSÓ (0.55→0.15): la acción deliberada de publicar sin peer review BYPASSED la depuración operativa. F3.Se bajó (0.50→0.25): el acto erosionó la comprensión de POR QUÉ depurar. F3.C se mantuvo parcialmente (0.45→0.35): el sistema institucional de depuración (peer review del campo) seguía existiendo externamente."},
+        "F4": {"S": 0.35, "Se": 0.30, "C": 0.40},
+        "F5": {"S": 0.40, "Se": 0.35, "C": 0.45},
+        "F6": {"S": 0.40, "Se": 0.35, "C": 0.45},
+        "F7": {"S": 0.45, "Se": 0.35, "C": 0.50}
+      },
+      "diagnostico_3L": "CONFIRMADO: F3.S fue lo que colapsó primariamente (0.55→0.15). La rueda de prensa sin peer review BYPASSED la depuración OPERATIVA. Pero F3.Se también bajó (0.50→0.25): el acto erosionó el sentido de por qué depurar ('la prensa nos dará crédito antes que el peer review'). F3.C se mantuvo más (0.45→0.35) porque el peer review del campo seguía existiendo — fue la comunidad la que eventualmente depuró. RESPUESTA: Primariamente F3.S (bypass operativo), secundariamente F3.Se (erosión de criterio). F3.C fue lo que salvó al campo — la depuración sistémica externa corrigió.",
+      "cambia_diagnostico": true,
+      "que_cambia": "El escalar F3: 0.50→0.25 dice 'bajó'. La descomposición dice: F3.S colapsó (la operación se saltó), F3.Se se erosionó (el criterio se corrompió), pero F3.C sobrevivió (el sistema externo corrigió). Esto distingue bypass deliberado (F3.S↓↓) de ausencia original (F3.S siempre baja, como en Theranos). Cold fusion = sistema funcional deliberadamente desactivado. Theranos = sistema que nunca existió."
+    },
+    {
+      "id": "M08",
+      "caso": "KonMari — Marie Kondo",
+      "tipo_resultado": "cierre",
+      "hipotesis_seccion7": "F3→F5 causal → ¿F3(L_Sentido)→F5(L_Sentido)?",
+      "vector_pre_escalar": {"F1": 0.50, "F2": 0.70, "F3": 0.15, "F4": 0.20, "F5": 0.25, "F6": 0.30, "F7": 0.20},
+      "vector_pre_3L": {
+        "F1": {"S": 0.55, "Se": 0.40, "C": 0.45, "nota": "Casa funciona HOY (S). Parcialmente sabe por qué conserva (Se). Algo de persistencia (C)."},
+        "F2": {"S": 0.80, "Se": 0.25, "C": 0.65, "nota": "Capta compulsivamente (S alta). NO sabe POR QUÉ capta lo que capta (Se baja). El hábito es persistente (C)."},
+        "F3": {"S": 0.15, "Se": 0.10, "C": 0.10, "nota": "Apenas depura (S). NO sabe POR QUÉ soltar nada (Se=0.10). Sin sistema de depuración (C)."},
+        "F4": {"S": 0.20, "Se": 0.15, "C": 0.15, "nota": "Distribución caótica (S). Sin criterio (Se). Sin sistema (C)."},
+        "F5": {"S": 0.25, "Se": 0.15, "C": 0.20, "nota": "Identidad difusa — 'no sé qué me gusta' (S). No comprende quién es (Se baja). No transferible (C)."},
+        "F6": {"S": 0.30, "Se": 0.25, "C": 0.25, "nota": "Puede cambiar algo (S). Parcialmente sabe por qué (Se). Frágil (C)."},
+        "F7": {"S": 0.20, "Se": 0.10, "C": 0.15, "nota": "Sin método replicable (S). No entiende por qué (Se). No sostenible (C)."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.60, "Se": 0.60, "C": 0.55},
+        "F2": {"S": 0.55, "Se": 0.60, "C": 0.60},
+        "F3": {"S": 0.55, "Se": 0.60, "C": 0.50, "nota": "POST: F3.Se subió de 0.10 a 0.60 — ahora SABE POR QUÉ soltar (spark joy). Este es el cambio clave."},
+        "F4": {"S": 0.45, "Se": 0.45, "C": 0.40},
+        "F5": {"S": 0.55, "Se": 0.60, "C": 0.45, "nota": "POST: F5.Se subió de 0.15 a 0.60 — ahora SABE QUIÉN ES (lo que le da alegría). F3.Se→F5.Se CONFIRMADO."},
+        "F6": {"S": 0.40, "Se": 0.40, "C": 0.35},
+        "F7": {"S": 0.50, "Se": 0.50, "C": 0.45}
+      },
+      "diagnostico_3L": "CONFIRMADO CON PRECISIÓN. F3.Se: 0.10→0.60 (delta +0.50). F5.Se: 0.15→0.60 (delta +0.45). La cadena causal es F3.Se→F5.Se: aprender POR QUÉ soltar (spark joy como criterio) ENSEÑA quién eres (qué te da alegría). La lente de Sentido es la que transmite el efecto causal de F3 a F5. No es que depurar operativamente (F3.S) construya identidad operativa (F5.S) — es que COMPRENDER por qué depuras (F3.Se) construye COMPRENSIÓN de quién eres (F5.Se). La cadena es exclusivamente por L_Sentido.",
+      "cambia_diagnostico": true,
+      "que_cambia": "El escalar F3→F5 dice 'depurar construye identidad'. La descomposición dice EXACTAMENTE CÓMO: F3.Se→F5.Se. Es la comprensión del criterio de depuración lo que genera comprensión de identidad. Spark joy = F3.Se que se convierte en F5.Se. Esto es más preciso y más actionable: para un paciente, no basta con depurar (F3.S) — debe comprender POR QUÉ depura (F3.Se) para que la identidad emerja (F5.Se)."
+    },
+    {
+      "id": "T10",
+      "caso": "Internet y TCP/IP — Cerf y Kahn (1974→)",
+      "tipo_resultado": "cierre",
+      "hipotesis_seccion7": "F5 enabler universal → ¿F5(L_Continuidad) alta es el factor?",
+      "vector_pre_escalar": {"F1": 0.50, "F2": 0.55, "F3": 0.30, "F4": 0.25, "F5": 0.30, "F6": 0.35, "F7": 0.30},
+      "vector_pre_3L": {
+        "F1": {"S": 0.55, "Se": 0.45, "C": 0.50, "nota": "Redes operativas (S). Comprendían por qué conservar interoperabilidad (Se). Algo institucional (C)."},
+        "F2": {"S": 0.60, "Se": 0.50, "C": 0.55, "nota": "Captaban redes nuevas (S). Sabían qué buscar (Se). Escalable (C)."},
+        "F3": {"S": 0.30, "Se": 0.30, "C": 0.30, "nota": "Depuración básica (S). Criterio parcial (Se). Incipiente (C)."},
+        "F4": {"S": 0.25, "Se": 0.20, "C": 0.30, "nota": "Distribución pobre — redes incompatibles (S). Poco criterio (Se). Parcialmente institucional (C)."},
+        "F5": {"S": 0.30, "Se": 0.25, "C": 0.25, "nota": "Identidad difusa — cada red distinta (S). Poco sentido unificador (Se). Poca permanencia (C)."},
+        "F6": {"S": 0.35, "Se": 0.30, "C": 0.40, "nota": "Algo de adaptabilidad (S). Sentido parcial (Se). Algo institucional (C)."},
+        "F7": {"S": 0.30, "Se": 0.25, "C": 0.35, "nota": "Replicación limitada (S). Poco sentido (Se). Algo de persistencia (C)."}
+      },
+      "vector_post_3L": {
+        "F1": {"S": 0.75, "Se": 0.75, "C": 0.80},
+        "F2": {"S": 0.85, "Se": 0.80, "C": 0.90},
+        "F3": {"S": 0.55, "Se": 0.50, "C": 0.60},
+        "F4": {"S": 0.65, "Se": 0.60, "C": 0.75},
+        "F5": {"S": 0.70, "Se": 0.75, "C": 0.85, "nota": "CLAVE. F5.C=0.85 es la más alta del dataset. IP addressing + layered protocol = identidad que sobrevive sin NADIE. End-to-end principle = F5 que persiste indefinidamente."},
+        "F6": {"S": 0.65, "Se": 0.70, "C": 0.80},
+        "F7": {"S": 0.75, "Se": 0.70, "C": 0.85, "nota": "F7.C=0.85: cualquier red nueva se conecta sin necesitar a los creadores. RFC process = F7.C sistémica."}
+      },
+      "diagnostico_3L": "CONFIRMADO: F5.C=0.85 post es el factor enabler. TCP/IP es el caso con MAYOR F5.C y F7.C del dataset. La identidad es absolutamente transferible (F5.C=0.85) y la replicación es absolutamente autónoma (F7.C=0.85). Pero NO es SOLO F5.C — es F5 alta en LAS TRES lentes: F5.S=0.70 (operativamente funciona), F5.Se=0.75 (se comprende profundamente por qué), F5.C=0.85 (sobrevive sin nadie). TCP/IP es el caso donde F5 es excelente en las 3 lentes. ADEMÁS: Se promedio post=0.69 — la más alta del dataset. TCP/IP es un sistema con Sentido alto generalizado.",
+      "cambia_diagnostico": true,
+      "que_cambia": "El escalar F5=0.75 post dice 'identidad fuerte'. La descomposición dice F5.C=0.85 (la más transferible del dataset) + Se promedio=0.69 (el más alto). TCP/IP funciona porque tiene identidad MÁXIMAMENTE transferible y sentido generalizado en todas las funciones. El contraste con Maginot (Se=0.29) y Theranos (Se=0.11) es extremo."
+    }
+  ],
+
+  "sintesis_global": {
+    "predicciones_mejoradas": "8/10 casos mejorados por la descomposición 3L. Los 2 no mejorados (Theranos, Cold fusion) ya tenían diagnóstico correcto — las lentes amplificaron pero no cambiaron.",
+
+    "limitaciones_resueltas_por_lentes": {
+      "L1_F5_incorrecta_Maginot": "RESUELTA. F5.Se baja (0.20) captura la frontera equivocada. No necesitamos vector (magnitud, dirección). La lente de Sentido es suficiente.",
+      "L2_F7_codificabilidad_ElBulli": "RESUELTA. F5.C baja (0.15) + F7.Se baja (0.10) captura lo tácito. No necesitamos variable 'codificabilidad'. Las lentes ya lo tienen.",
+      "L3_dimension_temporal_Suecia": "RESUELTA. L_Salud=presente, L_Continuidad=futuro. No necesitamos parámetro temporal (t) ni dF/dt. Las lentes contienen la temporalidad.",
+      "L4_factores_exogenos_GooglePlus": "PARCIALMENTE RESUELTA. F2.Se y F5.Se bajos capturan debilidad interna. Pero el lock-in externo sigue sin modelar completamente."
+    },
+
+    "descubrimiento_1_Se_como_predictor": {
+      "hallazgo": "Se (Sentido) promedio a través de las 7F es el predictor más fuerte de resultado",
+      "datos": {
+        "TCP_IP_cierre": 0.69,
+        "KonMari_cierre": 0.47,
+        "Suecia_inerte": 0.59,
+        "ElBulli_inerte": 0.45,
+        "Kodak_inerte": 0.46,
+        "SSRI_inerte": 0.19,
+        "GooglePlus_inerte": 0.51,
+        "Maginot_toxico": 0.29,
+        "ColdFusion_toxico": 0.46,
+        "Theranos_toxico": 0.11
+      },
+      "interpretacion": "Se promedio >0.55 = cierre probable. Se promedio <0.30 = tóxico probable. Entre 0.30-0.55 = zona inerte/ambigua. CONFIRMADA predicción P_L4 del análisis 7F×3L."
+    },
+
+    "descubrimiento_2_cadena_Se": {
+      "hallazgo": "La cadena causal F3→F5 opera EXCLUSIVAMENTE por la lente de Sentido",
+      "mecanismo": "F3.Se (comprender POR QUÉ depurar) → F5.Se (comprender QUIÉN eres)",
+      "caso_demostrado": "KonMari: F3.Se +0.50 → F5.Se +0.45",
+      "implicacion_pilotos": "Para fisioterapia: no basta con hacer ejercicios (F3.S). El paciente debe comprender POR QUÉ los hace (F3.Se) para que la identidad de 'persona recuperada' emerja (F5.Se)."
+    },
+
+    "descubrimiento_3_tipos_F3": {
+      "hallazgo": "La descomposición 3L distingue 3 tipos de F3 disfuncional",
+      "tipos": {
+        "F3_ausente": "F3.S≈0, F3.Se≈0, F3.C≈0 (Theranos) — nunca existió",
+        "F3_bypassed": "F3.S↓↓ con F3.Se↓ pero F3.C parcial (Cold fusion) — existía pero se desactivó",
+        "F3_ciega": "F3.S>0 con F3.Se≈0 (Maginot, Kodak) — opera pero sin criterio"
+      },
+      "implicacion": "El Motor debe detectar qué TIPO de déficit F3 tiene el caso para recomendar la intervención correcta."
+    },
+
+    "descubrimiento_4_Se_monopolizado": {
+      "hallazgo": "En Kodak, L_Sentido estaba MONOPOLIZADA por F1 (conservación)",
+      "datos": "F1.Se=0.85 vs F3.Se=0.15 vs F6.Se=0.30",
+      "mecanismo": "Cuando el sentido de una función domina, absorbe el sentido de las demás. Kodak sabía TAN BIEN por qué conservar película que no podía comprender por qué soltar o adaptar.",
+      "implicacion": "El Motor debe detectar monopolio de Se: si una función tiene Se>>0.70 y las demás Se<0.30, es un patrón de rigidez cognitiva."
+    },
+
+    "variables_propuestas_ya_no_necesarias": [
+      "Vector F5 (magnitud, dirección) → reemplazado por F5.S + F5.Se + F5.C",
+      "Codificabilidad de F5 → reemplazado por F5.C + F7.Se",
+      "Parámetro temporal (t) y dF/dt → reemplazado por L_Salud (presente) vs L_Continuidad (futuro)",
+      "F3_bypassed vs F3_ausente → reemplazado por patrones de F3.S, F3.Se, F3.C"
+    ],
+
+    "variable_que_sigue_faltando": "Factor exógeno (E). Las lentes capturan PARTE del problema de Google+ (Se baja interna) pero NO capturan lock-in externo, efectos de red, ni posición competitiva. Se necesita al menos una variable E con dimensiones: market-fit, lock-in competitivo, timing."
+  },
+
+  "predicciones_v5_2": {
+    "P_52_1": "Se promedio < 0.25 → tóxico con alta confianza (95%+). Validar en próximos casos.",
+    "P_52_2": "F5.Se alta + F5.S baja = oportunidad (sabe quién es pero no ejecuta). F5.S alta + F5.Se baja = peligro (ejecuta pero no comprende). Validar.",
+    "P_52_3": "Monopolio de Se (una función Se>0.70, resto Se<0.30) predice rigidez independiente del escalar. Validar.",
+    "P_52_4": "Para intervenciones de cierre: la cadena causal óptima es F3.Se → F5.Se → F7.Se. Inyectar sentido en depuración → emerge identidad → emerge replicación con comprensión. Validar en pilotos.",
+    "P_52_5": "SSRI sin TCC es intervención en UNA sola lente (L_Salud). Intervenciones completas necesitan mover al menos 2 lentes. Delta en 1 sola lente → inerte. Validar."
+  }
+}

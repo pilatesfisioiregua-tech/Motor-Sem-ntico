@@ -252,7 +252,8 @@ def _md5(text: str) -> str:
 
 
 def ingest_folder(folder_path: str, scope_prefix: str = "repo",
-                  mode: str = "incremental", conn=None) -> dict:
+                  mode: str = "incremental", conn=None,
+                  embed: bool = True) -> dict:
     """Ingest all files in folder_path into knowledge_base.
 
     Args:
@@ -373,7 +374,7 @@ def ingest_folder(folder_path: str, scope_prefix: str = "repo",
                 # Flush batch + COMMIT incrementally (avoid giant transaction)
                 if len(batch) >= BATCH_SIZE:
                     try:
-                        _flush_batch(cur, batch)
+                        _flush_batch(cur, batch, embed=embed)
                         conn.commit()
                     except Exception as e:
                         stats["errors"] += 1
@@ -390,7 +391,7 @@ def ingest_folder(folder_path: str, scope_prefix: str = "repo",
         # Final flush
         if batch:
             try:
-                _flush_batch(cur, batch)
+                _flush_batch(cur, batch, embed=embed)
                 conn.commit()
             except Exception as e:
                 stats["errors"] += 1
@@ -414,18 +415,52 @@ def ingest_folder(folder_path: str, scope_prefix: str = "repo",
             conn.close()
 
 
-def _flush_batch(cur, batch: list) -> None:
-    """Insert a batch of rows into knowledge_base."""
+def _generate_embeddings_for_batch(texts: list) -> list:
+    """Generate embeddings for a batch of texts. Returns list of embedding vectors or Nones."""
+    try:
+        import sys
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from core.embedder import get_embedder
+        embedder = get_embedder()
+        results = embedder.embed_batch(texts)
+        return results
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).warning(f"Embedding generation failed during ingest: {e}")
+        return [None] * len(texts)
+
+
+def _flush_batch(cur, batch: list, embed: bool = True) -> None:
+    """Insert a batch of rows into knowledge_base, optionally with embeddings."""
     from psycopg2.extras import execute_values
-    execute_values(
-        cur,
-        """INSERT INTO knowledge_base
-           (scope, tipo, nivel, texto, documento, seccion, metadata)
-           VALUES %s""",
-        batch,
-        template="(%s, %s, %s, %s, %s, %s, %s::jsonb)",
-        page_size=BATCH_SIZE,
-    )
+
+    if embed:
+        texts = [row[3] for row in batch]  # texto is at index 3
+        embeddings = _generate_embeddings_for_batch(texts)
+        # Augment batch with embedding column
+        augmented = []
+        for row, emb in zip(batch, embeddings):
+            emb_str = str(emb) if emb else None
+            augmented.append(row + (emb_str,))
+        execute_values(
+            cur,
+            """INSERT INTO knowledge_base
+               (scope, tipo, nivel, texto, documento, seccion, metadata, embedding)
+               VALUES %s""",
+            augmented,
+            template="(%s, %s, %s, %s, %s, %s, %s::jsonb, %s::vector)",
+            page_size=BATCH_SIZE,
+        )
+    else:
+        execute_values(
+            cur,
+            """INSERT INTO knowledge_base
+               (scope, tipo, nivel, texto, documento, seccion, metadata)
+               VALUES %s""",
+            batch,
+            template="(%s, %s, %s, %s, %s, %s, %s::jsonb)",
+            page_size=BATCH_SIZE,
+        )
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────
@@ -436,6 +471,8 @@ def main():
     parser.add_argument("--scope", default="repo", help="Scope prefix (default: repo)")
     parser.add_argument("--mode", choices=["incremental", "full"], default="incremental",
                         help="Ingestion mode (default: incremental)")
+    parser.add_argument("--no-embed", action="store_true",
+                        help="Skip embedding generation (text-only ingest)")
     args = parser.parse_args()
 
     folder = os.path.abspath(args.folder)
@@ -448,7 +485,8 @@ def main():
     print(f"  mode: {args.mode}")
     print()
 
-    stats = ingest_folder(folder, scope_prefix=args.scope, mode=args.mode)
+    stats = ingest_folder(folder, scope_prefix=args.scope, mode=args.mode,
+                           embed=not args.no_embed)
 
     print()
     print(f"=== Ingestion complete ===")

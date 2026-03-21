@@ -160,6 +160,12 @@ async def generar_briefing(semana_inicio: Optional[date] = None) -> dict:
             ORDER BY created_at DESC LIMIT 1
         """, TENANT)
 
+        # Propuestas Voz pendientes
+        voz_pendientes = await conn.fetchval("""
+            SELECT count(*) FROM om_voz_propuestas
+            WHERE tenant_id = $1 AND estado = 'pendiente'
+        """, TENANT)
+
     # Construir briefing
     briefing = {
         "semana": f"{semana_inicio} a {semana_fin}",
@@ -209,6 +215,8 @@ async def generar_briefing(semana_inicio: Optional[date] = None) -> dict:
             "prescripcion": dict(ultimo_acd["prescripcion"]) if ultimo_acd and ultimo_acd.get("prescripcion") else None,
             "fecha": str(ultimo_acd["created_at"].date()) if ultimo_acd else None,
         },
+
+        "voz_propuestas_pendientes": voz_pendientes,
     }
 
     # Generar texto para WA

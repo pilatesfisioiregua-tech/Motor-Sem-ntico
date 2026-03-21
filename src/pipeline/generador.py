@@ -1,8 +1,54 @@
 """Capa 3: Genera prompts desde Meta-Red. Código puro, $0."""
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 
 from src.config.settings import MODEL_EXTRACTOR, MODEL_INTEGRATOR
 from src.pipeline.compositor import Algoritmo, Operacion
+from src.meta_red import load_pensamientos, load_razonamientos
+
+
+def _generar_bloque_pr(ps: list[str], rs: list[str]) -> str:
+    """Genera bloque de texto con Ps y Rs prescritos para inyectar en prompts.
+
+    Args:
+        ps: IDs de pensamientos prescritos (ej: ["P05", "P03", "P08"])
+        rs: IDs de razonamientos prescritos (ej: ["R03", "R09", "R08"])
+
+    Returns:
+        Bloque de texto formateado, o string vacío si no hay P/R.
+    """
+    if not ps and not rs:
+        return ""
+
+    ps_data = load_pensamientos()
+    rs_data = load_razonamientos()
+
+    lines = ["\n## DIRECTIVAS COGNITIVAS (cómo abordar este caso)\n"]
+
+    if ps:
+        lines.append("TIPOS DE PENSAMIENTO A APLICAR:")
+        for pid in ps:
+            p = ps_data.get(pid, {})
+            nombre = p.get("nombre", pid)
+            pregunta = p.get("pregunta_activadora", "")
+            lines.append(f"  - {pid} {nombre}: {pregunta}")
+        lines.append("")
+
+    if rs:
+        lines.append("TIPOS DE RAZONAMIENTO A USAR:")
+        for rid in rs:
+            r = rs_data.get(rid, {})
+            nombre = r.get("nombre", rid)
+            desc = r.get("descripcion", "")[:80]
+            lines.append(f"  - {rid} {nombre}: {desc}")
+        lines.append("")
+
+    lines.append("INSTRUCCIÓN: Aplica estos tipos de pensamiento y razonamiento "
+                 "ACTIVAMENTE durante tu análisis. No los menciones por nombre — "
+                 "úsalos como lentes operativas.\n")
+
+    return "\n".join(lines)
 
 
 TEMPLATE_INDIVIDUAL = """Eres la inteligencia {nombre} ({id}).
@@ -180,7 +226,7 @@ def _format_all_preguntas(meta_red: dict) -> str:
     return "\n".join(lines)
 
 
-def format_individual(intel: dict, input_text: str, contexto: str | None) -> str:
+def format_individual(intel: dict, input_text: str, contexto: str | None, bloque_pr: str = "") -> str:
     """Genera prompt individual para una inteligencia."""
     meta = intel['meta_red']
     return TEMPLATE_INDIVIDUAL.format(
@@ -197,7 +243,10 @@ def format_individual(intel: dict, input_text: str, contexto: str | None) -> str
         abstraer=meta['abstraer'],
         frontera=meta['frontera'],
         input=input_text,
-        contexto_extra=f"CONTEXTO ADICIONAL:\n{contexto}" if contexto else "",
+        contexto_extra=(
+            (bloque_pr if bloque_pr else "") +
+            (f"\nCONTEXTO ADICIONAL:\n{contexto}" if contexto else "")
+        ),
     )
 
 
@@ -246,8 +295,11 @@ def generar_prompts(
     input_text: str,
     contexto: str | None,
     inteligencias_data: dict,
+    ps: list[str] | None = None,
+    rs: list[str] | None = None,
 ) -> list[PromptPlan]:
     """Genera los prompts exactos para cada operación del algoritmo."""
+    bloque_pr = _generar_bloque_pr(ps or [], rs or [])
     prompts: list[PromptPlan] = []
     intels_con_prompt: set[str] = set()  # Track de qué intels ya tienen prompt individual
 
@@ -257,7 +309,7 @@ def generar_prompts(
             return
         intels_con_prompt.add(intel_id)
         intel = inteligencias_data[intel_id]
-        prompt = format_individual(intel, input_text, contexto)
+        prompt = format_individual(intel, input_text, contexto, bloque_pr=bloque_pr)
         prompts.append(PromptPlan(
             operacion=Operacion(
                 tipo='individual',
@@ -276,7 +328,7 @@ def generar_prompts(
             intel_id = operacion.inteligencias[0]
             intels_con_prompt.add(intel_id)
             intel = inteligencias_data[intel_id]
-            prompt = format_individual(intel, input_text, contexto)
+            prompt = format_individual(intel, input_text, contexto, bloque_pr=bloque_pr)
             prompts.append(PromptPlan(
                 operacion=operacion,
                 prompt_system="",

@@ -2,7 +2,7 @@ app = "chief-os-omni"
 primary_region = "cdg"
 
 [build]
-  dockerfile = "motor-semantico/motor_v1_validation/agent/Dockerfile"
+  dockerfile = "Dockerfile"
 
 [env]
   PORT = "8080"
@@ -20,6 +20,9 @@ primary_region = "cdg"
     type = "requests"
     hard_limit = 10
     soft_limit = 5
+
+[deploy]
+  release_command = "python3 -c 'from core.embed_maintenance import run_maintenance; run_maintenance()'"
 
 [[vm]]
   size = "shared-cpu-2x"

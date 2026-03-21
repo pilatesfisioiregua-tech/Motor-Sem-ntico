@@ -636,6 +636,15 @@ class MotorVN:
 
         Anti-patron: programa es READONLY — no modificar durante ejecucion.
         """
+        # Si tier >= 4, delegar a SwarmExecutor
+        if programa.tier >= 4:
+            from .swarm import SwarmExecutor
+            swarm = SwarmExecutor(motor=self)
+            if programa.tier == 4:
+                return await swarm.ejecutar_pizarra(programa, input_texto)
+            else:
+                return await swarm.ejecutar_cartografia(input_texto, 'motor_vn')
+
         hallazgos_totales = []
         modelos_usados = {}  # INT -> modelo real usado
         n_llm_calls = 0

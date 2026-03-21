@@ -1,8 +1,17 @@
 """Capa 5: Scorer heurístico + detección de falacias."""
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 
 from src.pipeline.ejecutor import ExecutionPlan
 from src.pipeline.compositor import Algoritmo
+from src.tcf.campo import VectorFuncional, evaluar_campo, calcular_lentes
+from src.tcf.detector_tcf import DetectorTCFResult
+from src.tcf.evaluador_acd import evaluar_acd, MetricasACD, decidir, DecisionTernaria
+from src.tcf.prescriptor import Prescripcion
+
+import structlog
+log = structlog.get_logger()
 
 
 @dataclass
@@ -13,9 +22,17 @@ class EvaluationResult:
     falacias: list[dict]
     should_relaunch: bool
     relaunch_suggestion: str | None = None
+    tcf_mejora: dict | None = None
+    metricas_acd: MetricasACD | None = None
+    decision_acd: DecisionTernaria | None = None
 
 
-def evaluar(plan: ExecutionPlan, algoritmo: Algoritmo) -> EvaluationResult:
+def evaluar(
+    plan: ExecutionPlan,
+    algoritmo: Algoritmo,
+    tcf_pre: DetectorTCFResult | None = None,
+    prescripcion: Prescripcion | None = None,
+) -> EvaluationResult:
     """Scorer heurístico. Devuelve score 0-10 y recomendaciones."""
     scores: list[tuple[str, float]] = []
     issues: list[str] = []
@@ -144,6 +161,37 @@ def evaluar(plan: ExecutionPlan, algoritmo: Algoritmo) -> EvaluationResult:
 
     should_relaunch = total_score < 6.0
 
+    # Evaluación TCF
+    tcf_mejora = evaluar_mejora_campo(tcf_pre, plan.results)
+
+    # Si la receta no se ejecutó, penalizar
+    if tcf_mejora and not tcf_mejora.get("receta_ejecutada", True):
+        total_score -= 1.0
+        issues.append("Receta TCF prescrita pero no ejecutada (cobertura < 50%)")
+
+    # Evaluar ACD si hay prescripción
+    metricas_acd = None
+    decision_acd = None
+    if prescripcion:
+        metricas_acd = evaluar_acd(plan, prescripcion)
+        # Ponderar score ACD en score final (20% del total)
+        score_acd_norm = metricas_acd.score_acd / 10.0  # normalizar a 0-1
+        total_score = total_score * 0.80 + score_acd_norm * 10.0 * 0.20
+        if metricas_acd.cobertura_ints < 0.5:
+            issues.append(
+                f"ACD: Solo {len(metricas_acd.ints_ejecutadas)}/{len(metricas_acd.ints_prescritas)} "
+                "INTs prescritas ejecutadas"
+            )
+        if metricas_acd.prohibiciones_violadas:
+            issues.append(
+                f"ACD: Prohibiciones activas: {metricas_acd.prohibiciones_violadas}"
+            )
+        decision_acd = decidir(metricas_acd)
+        log.info("acd.decision",
+                 veredicto=decision_acd.veredicto,
+                 confianza=decision_acd.confianza,
+                 razon=decision_acd.razon[:80])
+
     return EvaluationResult(
         score=round(total_score, 1),
         scores_detalle={name: round(s, 1) for name, s in scores},
@@ -151,7 +199,53 @@ def evaluar(plan: ExecutionPlan, algoritmo: Algoritmo) -> EvaluationResult:
         falacias=falacias_detectadas,
         should_relaunch=should_relaunch,
         relaunch_suggestion="Añadir inteligencia complementaria o aumentar profundidad" if should_relaunch else None,
+        tcf_mejora=tcf_mejora,
+        metricas_acd=metricas_acd,
+        decision_acd=decision_acd,
     )
+
+
+def evaluar_mejora_campo(
+    tcf_pre: DetectorTCFResult | None,
+    resultados: dict,
+) -> dict | None:
+    """Evalúa si el campo de gradientes mejoró post-ejecución.
+
+    Heurístico: analiza los outputs del ejecutor para estimar
+    qué funciones fueron "tocadas" y en qué dirección.
+
+    Retorna dict con métricas de mejora o None si no hay TCF pre.
+    """
+    if not tcf_pre or not tcf_pre.estado_campo:
+        return None
+
+    estado_pre = tcf_pre.estado_campo
+    mejora = {
+        "eslabon_debil_pre": estado_pre.eslabon_debil,
+        "toxicidad_pre": estado_pre.toxicidad_total,
+        "deps_violadas_pre": len(estado_pre.dependencias_violadas),
+        "estable_pre": estado_pre.estable,
+        "arquetipo_pre": tcf_pre.scoring.primario.arquetipo if tcf_pre.scoring else None,
+        # Post se calcula cuando haya vector post (Reactor v4)
+        "funciones_cubiertas": [],
+        "receta_ejecutada": False,
+    }
+
+    # Verificar si la receta se ejecutó (las INTs prescritas fueron usadas)
+    if tcf_pre.receta:
+        ints_receta = set(tcf_pre.receta.ints)
+        ints_ejecutadas = set()
+        for key in resultados:
+            for int_id in ints_receta:
+                if int_id in key:
+                    ints_ejecutadas.add(int_id)
+
+        cobertura_receta = len(ints_ejecutadas) / max(len(ints_receta), 1)
+        mejora["receta_ejecutada"] = cobertura_receta > 0.5
+        mejora["cobertura_receta"] = round(cobertura_receta, 2)
+        mejora["funciones_cubiertas"] = tcf_pre.receta.secuencia
+
+    return mejora
 
 
 def detectar_falacias(plan: ExecutionPlan) -> list[dict]:

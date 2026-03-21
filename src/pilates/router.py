@@ -6,6 +6,7 @@ Cadena causal: SESION > ASISTENCIA > CARGO > PAGO (FIFO).
 """
 from __future__ import annotations
 
+import json
 import structlog
 from datetime import date, datetime, time, timedelta
 from fastapi import APIRouter, HTTPException, Query, Request
@@ -592,6 +593,51 @@ async def crear_sesion(data: SesionCreate):
     log.info("sesion_creada", id=str(sesion_id), tipo=data.tipo,
              asistencias=asistencias_creadas)
     return {"id": str(sesion_id), "asistencias_creadas": asistencias_creadas}
+
+
+@router.get("/sesiones/semana")
+async def sesiones_semana(fecha: Optional[date] = None):
+    """Sesiones de una semana completa (L-V) con asistentes y estado."""
+    if fecha is None:
+        fecha = date.today()
+    lunes = fecha - timedelta(days=fecha.weekday())
+    viernes = lunes + timedelta(days=4)
+
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        sesiones = await conn.fetch("""
+            SELECT s.id, s.tipo, s.grupo_id, s.fecha, s.hora_inicio, s.hora_fin, s.estado,
+                   g.nombre as grupo_nombre, g.tipo as grupo_tipo, g.capacidad_max,
+                   (SELECT count(*) FROM om_asistencias a
+                    WHERE a.sesion_id = s.id AND a.estado IN ('confirmada','asistio','recuperacion')) as presentes,
+                   (SELECT count(*) FROM om_asistencias a
+                    WHERE a.sesion_id = s.id AND a.estado = 'no_vino') as ausentes,
+                   (SELECT count(*) FROM om_asistencias a
+                    WHERE a.sesion_id = s.id) as total_asistencias
+            FROM om_sesiones s
+            LEFT JOIN om_grupos g ON g.id = s.grupo_id
+            WHERE s.tenant_id = $1 AND s.fecha >= $2 AND s.fecha <= $3
+            ORDER BY s.fecha, s.hora_inicio
+        """, TENANT, lunes, viernes)
+
+    dias_nombre = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
+    dias = []
+    for i in range(5):
+        dia_fecha = lunes + timedelta(days=i)
+        sesiones_dia = [_row_to_dict(s) for s in sesiones if s["fecha"] == dia_fecha]
+        dias.append({
+            "fecha": str(dia_fecha),
+            "dia_nombre": dias_nombre[i],
+            "es_hoy": dia_fecha == date.today(),
+            "sesiones": sesiones_dia,
+        })
+
+    return {
+        "semana_inicio": str(lunes),
+        "semana_fin": str(viernes),
+        "dias": dias,
+        "total_sesiones": len(sesiones),
+    }
 
 
 @router.get("/sesiones/hoy")
@@ -2509,6 +2555,327 @@ async def _calcular_readiness():
 async def readiness_replicacion():
     """Calcula readiness de replicación del negocio."""
     return await _calcular_readiness()
+
+
+# ============================================================
+# BLOQUE VOZ
+# ============================================================
+
+
+@router.post("/voz/generar-propuestas")
+async def generar_propuestas_voz():
+    """Genera propuestas de comunicación basadas en datos internos."""
+    from src.pilates.voz import generar_propuestas
+    propuestas = await generar_propuestas()
+    return {"status": "ok", "propuestas_generadas": len(propuestas), "propuestas": propuestas}
+
+
+@router.get("/voz/propuestas")
+async def listar_propuestas_voz(estado: Optional[str] = "pendiente", canal: Optional[str] = None):
+    """Lista propuestas de Voz."""
+    pool = await _get_pool()
+    estado = estado or None
+    async with pool.acquire() as conn:
+        conditions = ["tenant_id = $1"]
+        params = [TENANT]
+        idx = 2
+        if estado:
+            conditions.append(f"estado = ${idx}"); params.append(estado); idx += 1
+        if canal:
+            conditions.append(f"canal = ${idx}"); params.append(canal); idx += 1
+        where = " AND ".join(conditions)
+        rows = await conn.fetch(f"""
+            SELECT * FROM om_voz_propuestas WHERE {where}
+            ORDER BY fecha_propuesta DESC LIMIT 50
+        """, *params)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.patch("/voz/propuestas/{propuesta_id}")
+async def decidir_propuesta(propuesta_id: UUID, data: dict):
+    """Aprobar, descartar o editar propuesta."""
+    pool = await _get_pool()
+    estado = data.get("estado")
+    async with pool.acquire() as conn:
+        updates = ["fecha_decision = now()"]
+        params = [propuesta_id]
+        idx = 2
+        if estado:
+            updates.append(f"estado = ${idx}"); params.append(estado); idx += 1
+        if data.get("contenido_editado"):
+            updates.append(f"contenido_propuesto = ${idx}::jsonb")
+            params.append(json.dumps(data["contenido_editado"])); idx += 1
+        set_clause = ", ".join(updates)
+        await conn.execute(
+            f"UPDATE om_voz_propuestas SET {set_clause} WHERE id = $1 AND tenant_id = '{TENANT}'",
+            *params)
+    return {"status": "updated"}
+
+
+@router.post("/voz/propuestas/{propuesta_id}/ejecutar")
+async def ejecutar_propuesta(propuesta_id: UUID):
+    """Ejecuta propuesta aprobada: envía WA, publica contenido, etc."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        prop = await conn.fetchrow("""
+            SELECT * FROM om_voz_propuestas WHERE id = $1 AND tenant_id = $2
+        """, propuesta_id, TENANT)
+        if not prop:
+            raise HTTPException(404, "Propuesta no encontrada")
+        if prop["estado"] not in ("aprobada", "editada"):
+            raise HTTPException(400, "Solo se pueden ejecutar propuestas aprobadas")
+
+        contenido = prop["contenido_propuesto"]
+        resultado = {}
+
+        # Ejecutar según canal
+        if prop["canal"] == "whatsapp" and contenido.get("telefono"):
+            from src.pilates.whatsapp import enviar_texto
+            resultado = await enviar_texto(
+                contenido["telefono"], contenido.get("texto", ""),
+                UUID(contenido["cliente_id"]) if contenido.get("cliente_id") else None)
+        else:
+            resultado = {"status": "manual", "nota": f"Canal {prop['canal']} requiere ejecución manual"}
+
+        # Marcar ejecutada
+        await conn.execute("""
+            UPDATE om_voz_propuestas SET estado = 'ejecutada', fecha_ejecucion = now(),
+                resultado = $1::jsonb WHERE id = $2
+        """, json.dumps(resultado), propuesta_id)
+
+    return {"status": "ejecutada", "resultado": resultado}
+
+
+@router.post("/voz/capa-a")
+async def consultar_capa_a_endpoint(data: dict):
+    """Consulta fuente externa de Capa A."""
+    from src.pilates.voz import consultar_capa_a
+    fuente = data.get("fuente", "perplexity")
+    query = data.get("query", "")
+    return await consultar_capa_a(fuente, query)
+
+
+@router.get("/voz/capa-a/datos")
+async def listar_datos_capa_a(fuente: Optional[str] = None, limit: int = 20):
+    """Lista datos externos almacenados."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        if fuente:
+            rows = await conn.fetch("""
+                SELECT * FROM om_voz_capa_a WHERE tenant_id = $1 AND fuente = $2
+                ORDER BY created_at DESC LIMIT $3
+            """, TENANT, fuente, limit)
+        else:
+            rows = await conn.fetch("""
+                SELECT * FROM om_voz_capa_a WHERE tenant_id = $1
+                ORDER BY created_at DESC LIMIT $2
+            """, TENANT, limit)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.get("/voz/isp/{canal}")
+async def obtener_checklist_isp(canal: str):
+    """Obtiene checklist ISP para un canal."""
+    from src.pilates.voz import calcular_isp
+    return await calcular_isp(canal)
+
+
+@router.post("/voz/isp/{canal}")
+async def guardar_auditoria_isp(canal: str, data: dict):
+    """Guarda resultado de auditoría ISP."""
+    from src.pilates.voz import guardar_isp
+    return await guardar_isp(
+        canal, data.get("elementos_cumplidos", []), data.get("score", 0))
+
+
+@router.get("/voz/isp")
+async def historial_isp():
+    """Historial de auditorías ISP por canal."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch("""
+            SELECT * FROM om_voz_isp WHERE tenant_id = $1
+            ORDER BY fecha_auditoria DESC LIMIT 20
+        """, TENANT)
+    return [_row_to_dict(r) for r in rows]
+
+
+@router.get("/voz/telemetria")
+async def telemetria_voz(canal: Optional[str] = None):
+    """Telemetría de canales de voz."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        if canal:
+            rows = await conn.fetch("""
+                SELECT * FROM om_voz_telemetria WHERE tenant_id = $1 AND canal = $2
+                ORDER BY fecha DESC LIMIT 30
+            """, TENANT, canal)
+        else:
+            rows = await conn.fetch("""
+                SELECT * FROM om_voz_telemetria WHERE tenant_id = $1
+                ORDER BY fecha DESC LIMIT 30
+            """, TENANT)
+    return [_row_to_dict(r) for r in rows]
+
+
+# ============================================================
+# COCKPIT — Interfaz generativa
+# ============================================================
+
+@router.get("/cockpit")
+async def cockpit():
+    """Contexto del día + módulos sugeridos para el Modo Estudio."""
+    from src.pilates.cockpit import contexto_del_dia
+    return await contexto_del_dia()
+
+@router.post("/cockpit/config")
+async def guardar_config_cockpit(data: dict):
+    """Guarda qué módulos ha elegido Jesús (aprende preferencias)."""
+    from src.pilates.cockpit import guardar_configuracion
+    await guardar_configuracion(data.get("modulos", []))
+    return {"status": "ok"}
+
+@router.post("/cockpit/chat")
+async def cockpit_chat(data: dict):
+    """Chat conversacional para controlar la interfaz del cockpit."""
+    from src.pilates.cockpit import chat_cockpit
+    mensaje = data.get("mensaje", "")
+    modulos_activos = data.get("modulos_activos", [])
+    historial = data.get("historial", [])
+    if not mensaje:
+        return {"respuesta": "", "acciones": {"montar": [], "desmontar": [], "desmontar_todos": False}}
+    return await chat_cockpit(mensaje, modulos_activos, historial)
+
+# Engagement resumen (para módulo cockpit)
+@router.get("/engagement")
+async def get_engagement():
+    """Resumen engagement: clientes en riesgo + top rachas."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        riesgo = await conn.fetch("""
+            SELECT cp.cliente_id, c.nombre, c.apellidos, cp.engagement_score,
+                   cp.riesgo_churn, cp.engagement_tendencia, cp.racha_actual
+            FROM om_cliente_perfil cp
+            JOIN om_clientes c ON c.id = cp.cliente_id
+            WHERE cp.tenant_id = $1 AND cp.riesgo_churn IN ('alto','critico')
+            ORDER BY cp.engagement_score ASC LIMIT 10
+        """, TENANT)
+        rachas = await conn.fetch("""
+            SELECT cp.cliente_id, c.nombre, cp.racha_actual, cp.engagement_score
+            FROM om_cliente_perfil cp
+            JOIN om_clientes c ON c.id = cp.cliente_id
+            WHERE cp.tenant_id = $1 AND cp.racha_actual >= 4
+            ORDER BY cp.racha_actual DESC LIMIT 5
+        """, TENANT)
+    return {
+        "en_riesgo": [_row_to_dict(r) for r in riesgo],
+        "top_rachas": [_row_to_dict(r) for r in rachas],
+    }
+
+
+# ============================================================
+# PORTAL PÚBLICO — Chat captación
+# ============================================================
+
+class ChatPublicoRequest(BaseModel):
+    mensaje: str
+    historial: Optional[list] = None
+
+@router.post("/publico/chat")
+async def chat_publico(data: ChatPublicoRequest):
+    """Chat público de captación — sin autenticación."""
+    from src.pilates.portal_publico import chat_captacion
+    return await chat_captacion(data.mensaje, historial=data.historial)
+
+
+# ============================================================
+# STRIPE — Webhook + Cobros Recurrentes
+# ============================================================
+
+@router.post("/stripe/webhook")
+async def stripe_webhook(request: Request):
+    """Webhook de Stripe para checkout.session.completed."""
+    payload = await request.body()
+    sig = request.headers.get("stripe-signature", "")
+    from src.pilates.stripe_pagos import procesar_webhook_stripe
+    return await procesar_webhook_stripe(payload, sig)
+
+
+@router.get("/cobros-recurrentes")
+async def get_cobros_recurrentes(limite: int = 20):
+    """Lista últimos cobros automáticos."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch("""
+            SELECT ca.*, c.nombre, c.apellidos
+            FROM om_cobros_automaticos ca
+            LEFT JOIN om_clientes c ON c.id = ca.cliente_id
+            WHERE ca.tenant_id = $1
+            ORDER BY ca.created_at DESC LIMIT $2
+        """, TENANT, limite)
+    return [_row_to_dict(r) for r in rows]
+
+
+# ============================================================
+# FEED DEL ESTUDIO
+# ============================================================
+
+@router.get("/feed")
+async def get_feed(limit: int = 20, solo_no_leidos: bool = False):
+    """Timeline de noticias del estudio."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        if solo_no_leidos:
+            rows = await conn.fetch("""
+                SELECT * FROM om_feed_estudio
+                WHERE tenant_id = $1 AND leido = FALSE
+                ORDER BY created_at DESC LIMIT $2
+            """, TENANT, limit)
+        else:
+            rows = await conn.fetch("""
+                SELECT * FROM om_feed_estudio
+                WHERE tenant_id = $1
+                ORDER BY created_at DESC LIMIT $2
+            """, TENANT, limit)
+    return [_row_to_dict(r) for r in rows]
+
+
+class MarcarLeidoRequest(BaseModel):
+    ids: Optional[list] = None
+    todos: bool = False
+
+@router.post("/feed/marcar-leido")
+async def feed_marcar_leido(data: MarcarLeidoRequest):
+    """Marcar noticias como leídas."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        if data.todos:
+            result = await conn.execute("""
+                UPDATE om_feed_estudio SET leido = TRUE
+                WHERE tenant_id = $1 AND leido = FALSE
+            """, TENANT)
+        elif data.ids:
+            from uuid import UUID as _UUID
+            uuids = [_UUID(i) for i in data.ids]
+            result = await conn.execute("""
+                UPDATE om_feed_estudio SET leido = TRUE
+                WHERE tenant_id = $1 AND id = ANY($2)
+            """, TENANT, uuids)
+        else:
+            return {"marcadas": 0}
+    return {"status": "ok"}
+
+
+@router.get("/feed/count")
+async def feed_count():
+    """Badge: número de noticias no leídas."""
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        count = await conn.fetchval("""
+            SELECT count(*) FROM om_feed_estudio
+            WHERE tenant_id = $1 AND leido = FALSE
+        """, TENANT)
+    return {"no_leidos": count}
 
 
 # ============================================================

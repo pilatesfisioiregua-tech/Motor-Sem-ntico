@@ -33,6 +33,12 @@ class ContextManager:
 
     def maybe_compress(self, history: list) -> list:
         """Compress history if it exceeds threshold. Returns new history."""
+        # Hard limit: truncar mensajes individuales > 8000 chars
+        for msg in history:
+            content = msg.get("content", "")
+            if isinstance(content, str) and len(content) > 8000:
+                msg["content"] = content[:7500] + "\n...[TRUNCADO]..."
+
         total = estimate_history_tokens(history)
         if total <= self.compress_threshold:
             return history

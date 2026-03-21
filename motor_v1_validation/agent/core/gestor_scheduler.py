@@ -175,6 +175,28 @@ class GestorScheduler:
         gestor = get_gestor()
 
         resultado = gestor.ejecutar_loop()
+
+        # Evaluar reglas de detección (genera señales si hay umbrales cruzados)
+        try:
+            from .telemetria import evaluar_reglas
+            señales_generadas = evaluar_reglas()
+            if señales_generadas:
+                logger.info(f"Reglas evaluadas: {len(señales_generadas)} señales generadas")
+        except Exception as e:
+            logger.warning(f"evaluar_reglas failed: {e}")
+
+        # Reactor v4: generate observations from telemetry
+        reactor_v4_result = None
+        try:
+            from .reactor_v4 import get_reactor_v4
+            rv4 = get_reactor_v4()
+            reactor_v4_result = rv4.observar()
+            if reactor_v4_result.get('observaciones_generadas', 0) > 0:
+                reactor_v4_result['preguntas'] = rv4.generar_preguntas()
+                logger.info(f"Reactor v4: {reactor_v4_result['observaciones_generadas']} observaciones")
+        except Exception as e:
+            logger.warning(f"Reactor v4 failed: {e}")
+
         f_n = resultado.get('tasa_media_global', 0)
         delta_n = self._calcular_delta(f_n)
 
@@ -254,6 +276,7 @@ class GestorScheduler:
             'autopoiesis': auto,
             'resultado_gestor': resultado,
             'self_healing': self_healing_result,
+            'reactor_v4': reactor_v4_result,
         }
 
     async def loop_infinito(self, delay_inicial_s: int = 60):

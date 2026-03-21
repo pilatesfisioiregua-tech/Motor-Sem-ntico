@@ -1,4 +1,6 @@
 """Capa 4: Ejecuta prompts via Anthropic API."""
+from __future__ import annotations
+
 import asyncio
 import json
 import re

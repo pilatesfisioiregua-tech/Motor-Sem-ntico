@@ -1,4 +1,6 @@
 """Cliente Anthropic con rotación de API keys y retry."""
+from __future__ import annotations
+
 import asyncio
 import itertools
 import structlog

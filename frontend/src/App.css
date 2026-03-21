@@ -23,17 +23,17 @@
 
 .app {
   display: grid;
-  grid-template-columns: 280px 1fr 320px;
+  grid-template-columns: 1fr 380px 320px;
   height: 100vh;
   gap: 1px;
   background: var(--border);
 }
 
-/* Panel izquierdo: Agenda */
+/* Panel izquierdo: Calendario */
 .panel-agenda {
-  background: var(--surface);
-  overflow-y: auto;
-  padding: 12px;
+  background: #fff;
+  overflow: hidden;
+  padding: 0;
 }
 
 .panel-agenda h2 {

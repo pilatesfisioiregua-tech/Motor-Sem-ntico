@@ -88,7 +88,10 @@ async def execute_seeds():
     if str(project_root) not in sys.path:
         sys.path.insert(0, str(project_root))
 
-    py_files = sorted(migrations_dir.glob("v4_seed_*.py"))
+    py_files = sorted(
+        list(migrations_dir.glob("v4_seed_*.py")) +
+        list(migrations_dir.glob("om_seed_*.py"))
+    )
     for py_file in py_files:
         try:
             spec = importlib.util.spec_from_file_location(py_file.stem, py_file)

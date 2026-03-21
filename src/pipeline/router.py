@@ -1,4 +1,6 @@
 """Capa 1: Selección de inteligencias (Sonnet)."""
+from __future__ import annotations
+
 import json
 import time
 import structlog
@@ -7,6 +9,9 @@ from dataclasses import dataclass, field
 from src.config.settings import MODEL_ROUTER
 from src.meta_red import load_inteligencias
 from src.pipeline.detector_huecos import DetectorResult
+from src.tcf.detector_tcf import DetectorTCFResult
+from src.config.reglas import verificar_reglas, reglas_que_fallan
+from src.gestor.programa import ProgramaCompilado
 
 log = structlog.get_logger()
 
@@ -56,6 +61,7 @@ class RouterResult:
     razon: str
     cost: float = 0.0
     time_s: float = 0.0
+    reglas_aplicadas: list[dict] = field(default_factory=list)
 
 
 def build_catalogo(inteligencias_data: dict) -> str:
@@ -111,8 +117,10 @@ async def route(
     forzadas: list[str],
     excluidas: list[str],
     huecos: DetectorResult | None = None,
+    tcf: DetectorTCFResult | None = None,
+    programa: ProgramaCompilado | None = None,
 ) -> RouterResult:
-    """Selecciona inteligencias para el input dado. Usa huecos de Capa 0 si disponibles."""
+    """Selecciona inteligencias para el input dado. Usa programa del Gestor, TCF y huecos."""
     from src.utils.llm_client import llm
 
     inteligencias_data = load_inteligencias()
@@ -128,10 +136,37 @@ async def route(
             f"Diagnóstico acople: {huecos.diagnostico_acople}"
         )
 
+    # Info TCF para el prompt
+    tcf_info = ""
+    if tcf and tcf.scoring:
+        tcf_info = (
+            f"\nARQUETIPO DETECTADO: {tcf.scoring.primario.arquetipo} "
+            f"(score {tcf.scoring.primario.score})\n"
+        )
+        if tcf.receta:
+            tcf_info += f"RECETA PRESCRITA: {', '.join(tcf.receta.ints)}\n"
+            tcf_info += f"LENTE PRIMARIA: {tcf.receta.lente}\n"
+            if tcf.receta.frenar:
+                tcf_info += f"FUNCIONES A FRENAR: {', '.join(tcf.receta.frenar)}\n"
+            tcf_info += "IMPORTANTE: La receta tiene prioridad. Tu selección COMPLEMENTA, no reemplaza.\n"
+
+    # Info del programa del Gestor para el prompt
+    programa_info = ""
+    if programa and programa.pasos:
+        programa_info = (
+            f"\nPROGRAMA COMPILADO POR EL GESTOR (tier {programa.tier}):\n"
+            f"  INTs prescritas: {', '.join(programa.inteligencias())}\n"
+            f"  Lente primaria: {programa.lente_primaria}\n"
+            f"  Funciones objetivo: {[p.funcion_objetivo for p in programa.pasos]}\n"
+        )
+        if programa.frenar:
+            programa_info += f"  FRENAR: {', '.join(programa.frenar)}\n"
+        programa_info += "IMPORTANTE: El programa del Gestor tiene prioridad. Tu selección COMPLEMENTA.\n"
+
     system_prompt = ROUTER_SYSTEM.format(
         catalogo=catalogo,
         modo=modo,
-        huecos_info=huecos_info,
+        huecos_info=huecos_info + tcf_info + programa_info,
     )
 
     user_msg = input_text
@@ -167,14 +202,52 @@ async def route(
 
     selected = data.get("inteligencias", [])
 
+    # GESTOR: si hay programa compilado, usarlo como base (tiene prioridad sobre TCF directo)
+    if programa and programa.pasos:
+        programa_ints = programa.inteligencias()
+        merged = list(programa_ints)
+        for s in selected:
+            if s not in merged and len(merged) < 6:
+                merged.append(s)
+        selected = merged
+        log.info("router_usando_programa_gestor", ints_programa=programa_ints)
+    # Fallback: TCF directo si no hay programa
+    elif tcf and tcf.receta and tcf.receta.ints:
+        receta_ints = tcf.receta.ints
+        merged = list(receta_ints)
+        for s in selected:
+            if s not in merged and len(merged) < 6:
+                merged.append(s)
+        selected = merged
+
     # Añadir forzadas, quitar excluidas
     for f in forzadas:
         if f not in selected:
             selected.append(f)
     selected = [s for s in selected if s not in excluidas]
 
-    # Aplicar reglas obligatorias
+    # Aplicar reglas obligatorias (legacy)
     selected = enforce_rules(selected, modo)
+
+    # Verificar 14 reglas del compilador
+    vector_dict = None
+    if tcf and tcf.estado_campo:
+        vector_dict = tcf.estado_campo.vector.to_dict()
+
+    fallos = reglas_que_fallan(selected, modo, vector_dict)
+    if fallos:
+        log.info("router_reglas_fallan",
+                 fallos=[(r.regla, r.nombre, r.mensaje) for r in fallos])
+        # Auto-corregir: añadir INTs sugeridas por las reglas
+        for fallo in fallos:
+            for correccion in fallo.correccion:
+                if correccion not in selected and len(selected) < 6:
+                    selected.append(correccion)
+        # Re-verificar después de corrección
+        fallos_post = reglas_que_fallan(selected, modo, vector_dict)
+        if fallos_post:
+            log.warning("router_reglas_no_corregibles",
+                        fallos=[(r.regla, r.nombre) for r in fallos_post])
 
     return RouterResult(
         inteligencias=selected,
@@ -183,4 +256,8 @@ async def route(
         razon=data.get("razon", ""),
         cost=llm.total_cost,
         time_s=elapsed,
+        reglas_aplicadas=[
+            {"regla": r.regla, "nombre": r.nombre, "passed": r.passed, "mensaje": r.mensaje}
+            for r in verificar_reglas(selected, modo, vector_dict)
+        ],
     )

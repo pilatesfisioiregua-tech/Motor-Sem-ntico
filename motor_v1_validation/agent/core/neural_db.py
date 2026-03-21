@@ -1,4 +1,8 @@
-"""Neural DB Layer — hybrid search (FTS + Hebbian) over PostgreSQL."""
+"""Neural DB Layer — hybrid search (Vector + FTS + Hebbian) over PostgreSQL.
+
+Uses nomic-embed-text-v1.5 (768 dims) via OpenRouter for semantic search.
+Combines vector similarity (55%), full-text (35%), Hebbian co-access (10%) via RRF.
+"""
 
 import os
 import json
@@ -33,8 +37,8 @@ class NeuralDB:
                         include_repo: bool = False) -> list:
         """Search knowledge_base using hybrid_search() SQL function.
 
-        Combines: full-text search (tsvector) + scope filtering + Hebbian graph boost.
-        Returns list of dicts with id, scope, tipo, texto, fts_rank, hebbian_boost, combined_score.
+        Combines: vector similarity (55%) + full-text (35%) + Hebbian boost (10%) via RRF.
+        Returns list of dicts with id, scope, tipo, texto, fts_rank, vector_rank, hebbian_boost, combined_score.
 
         Args:
             include_repo: If False (default), excludes repo-indexed chunks (scope starting with 'repo').
@@ -46,11 +50,22 @@ class NeuralDB:
         try:
             import psycopg2.extras
             fetch_limit = limit if include_repo or scope else limit * 3
+
+            # Generate query embedding for vector search
+            query_embedding = self._get_query_embedding(query)
+
             with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-                cur.execute(
-                    "SELECT * FROM hybrid_search(%s, %s, %s, %s)",
-                    [query, scope, session_id, fetch_limit]
-                )
+                if query_embedding:
+                    cur.execute(
+                        "SELECT * FROM hybrid_search(%s, %s::vector, %s, %s, %s)",
+                        [query, str(query_embedding), scope, session_id, fetch_limit]
+                    )
+                else:
+                    # Fallback: text-only search (no vector component)
+                    cur.execute(
+                        "SELECT * FROM hybrid_search(%s, NULL, %s, %s, %s)",
+                        [query, scope, session_id, fetch_limit]
+                    )
                 results = [dict(r) for r in cur.fetchall()]
 
             if not include_repo and not scope:
@@ -62,7 +77,18 @@ class NeuralDB:
                 ids = [r["id"] for r in results[:5]]
                 self._log_accesses(conn, ids, session_id, "search", query)
 
-            logger.info(f"hybrid_search('{query}', scope={scope}) → {len(results)} results")
+            has_vector = query_embedding is not None and len(query_embedding) > 0
+            logger.info(f"hybrid_search('{query}', scope={scope}, vector={has_vector}) → {len(results)} results")
+
+            # Search quality telemetry (Phase 2C)
+            try:
+                from core.search_telemetry import track_search
+                track_search(
+                    query=query, results=results, has_vector=has_vector,
+                    scope=scope, session_id=session_id,
+                )
+            except Exception:
+                pass
 
             # Telemetry (SN-03)
             try:
@@ -155,6 +181,20 @@ class NeuralDB:
                 conn.rollback()
             except Exception:
                 pass
+
+    def _get_query_embedding(self, query: str) -> list:
+        """Generate embedding for a search query. Returns [] on failure."""
+        try:
+            from core.embedder import get_embedder
+            embedder = get_embedder()
+            vector = embedder.embed_one(query)
+            # Verify we got a real vector (not all zeros)
+            if vector and any(v != 0.0 for v in vector[:10]):
+                return vector
+            return []
+        except Exception as e:
+            logger.warning(f"Failed to generate query embedding: {e}")
+            return []
 
     def log_access(self, knowledge_id: int, session_id: str,
                    access_type: str, context: str = None) -> None:

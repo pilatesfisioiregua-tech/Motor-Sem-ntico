@@ -184,13 +184,14 @@ def registrar_ejecucion(resultado: dict, conn=None) -> dict:
 
         with conn.cursor() as cur:
             # 1. INSERT datapoints_efectividad (calibrado=true for Fase 3 data)
+            # gap_cerrado and tasa_cierre are GENERATED columns, don't insert them
             cur.execute("""
                 INSERT INTO datapoints_efectividad
                   (pregunta_id, modelo, caso_id, consumidor, celda_objetivo,
-                   gap_pre, gap_post, gap_cerrado, tasa_cierre, operacion, calibrado)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, true)
+                   gap_pre, gap_post, operacion, calibrado)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, true)
             """, [pregunta_id, modelo, caso_id, consumidor, celda,
-                  gap_pre, gap_post, gap_cerrado, tasa_cierre, operacion])
+                  gap_pre, gap_post, operacion])
 
             # 2. INSERT efectos_matriz (si hay hallazgos)
             ejecucion_id = caso_id
@@ -254,7 +255,22 @@ def registrar_ejecucion(resultado: dict, conn=None) -> dict:
             except Exception:
                 pass
 
-        # 4. Computar señales PID para la celda
+        # 4a. Incrementar n_ejecuciones en programas_compilados (B27 FIX 6)
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    UPDATE programas_compilados
+                    SET n_ejecuciones = n_ejecuciones + 1
+                    WHERE consumidor = %s AND activo = true
+                """, [consumidor])
+            conn.commit()
+        except Exception:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+
+        # 4c. Computar señales PID para la celda
         señales = computar_señales_pid(celda, conn=conn)
         señales['tasa_cierre'] = round(tasa_cierre, 4)
 

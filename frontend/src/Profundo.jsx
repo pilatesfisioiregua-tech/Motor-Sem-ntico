@@ -17,6 +17,13 @@ export default function Profundo() {
   const [depList, setDepList] = useState(null);
   const [depForm, setDepForm] = useState(false);
   const [depNew, setDepNew] = useState({tipo:'proceso_redundante',descripcion:'',impacto_estimado:''});
+  // Voz
+  const [vozProps, setVozProps] = useState(null);
+  const [vozGenerando, setVozGenerando] = useState(false);
+  const [vozCapaA, setVozCapaA] = useState(null);
+  const [vozCapaQuery, setVozCapaQuery] = useState('');
+  const [vozIspCanal, setVozIspCanal] = useState('google_business');
+  const [vozIspData, setVozIspData] = useState(null);
 
   useEffect(() => { loadDashboard(); }, []);
 
@@ -89,6 +96,60 @@ export default function Profundo() {
     loadDep();
   }
 
+  async function loadVozProps() {
+    const list = await fetch(`${P}/voz/propuestas`).then(r => r.json());
+    setVozProps(list);
+  }
+
+  async function generarVozProps() {
+    setVozGenerando(true);
+    try {
+      const r = await fetch(`${P}/voz/generar-propuestas`, { method: 'POST' }).then(r => r.json());
+      alert(`Generadas ${r.propuestas_generadas} propuestas`);
+      loadVozProps();
+    } catch (e) { alert(e.message); }
+    setVozGenerando(false);
+  }
+
+  async function decidirVozProp(id, estado) {
+    await fetch(`${P}/voz/propuestas/${id}`, {
+      method: 'PATCH',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ estado }),
+    });
+    loadVozProps();
+  }
+
+  async function ejecutarVozProp(id) {
+    const r = await fetch(`${P}/voz/propuestas/${id}/ejecutar`, { method: 'POST' }).then(r => r.json());
+    alert(r.status === 'ejecutada' ? 'Propuesta ejecutada' : r.detail || 'Error');
+    loadVozProps();
+  }
+
+  async function consultarCapaA() {
+    if (!vozCapaQuery.trim()) return;
+    const r = await fetch(`${P}/voz/capa-a`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ fuente: 'perplexity', query: vozCapaQuery }),
+    }).then(r => r.json());
+    setVozCapaA(r);
+  }
+
+  async function consultarMeteo() {
+    const r = await fetch(`${P}/voz/capa-a`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ fuente: 'open_meteo' }),
+    }).then(r => r.json());
+    setVozCapaA(r);
+  }
+
+  async function loadISP(canal) {
+    const r = await fetch(`${P}/voz/isp/${canal}`).then(r => r.json());
+    setVozIspData(r);
+  }
+
   if (loading) return <div style={s.container}><p>Cargando...</p></div>;
   if (!data) return <div style={s.container}><p>Error cargando dashboard</p></div>;
 
@@ -98,8 +159,8 @@ export default function Profundo() {
   const acd = data.acd;
   const rd = data.readiness;
 
-  const TABS = ['dashboard','acd','consejo','adn','depuracion','grupos','contabilidad'];
-  const TAB_LABELS = {dashboard:'Dashboard',acd:'Diagnóstico ACD',consejo:'Consejo',adn:'ADN',depuracion:'Depuración',grupos:'Grupos',contabilidad:'Contabilidad'};
+  const TABS = ['dashboard','acd','consejo','voz','adn','depuracion','grupos','contabilidad'];
+  const TAB_LABELS = {dashboard:'Dashboard',acd:'Diagnóstico ACD',consejo:'Consejo',voz:'Voz',adn:'ADN',depuracion:'Depuración',grupos:'Grupos',contabilidad:'Contabilidad'};
 
   // Agrupar ADN por categoría
   const adnByCategory = {};
@@ -136,6 +197,7 @@ export default function Profundo() {
             if (t==='acd' && !acdHistory) loadACD();
             if (t==='adn' && !adnList) loadADN();
             if (t==='depuracion' && !depList) loadDep();
+            if (t==='voz' && !vozProps) loadVozProps();
           }} style={tab === t ? s.tabActive : s.tab}>
             {TAB_LABELS[t]}
           </button>
@@ -302,6 +364,134 @@ export default function Profundo() {
 
       {/* CONSEJO TAB */}
       {tab === 'consejo' && <Consejo />}
+
+      {/* VOZ TAB */}
+      {tab === 'voz' && (
+        <div>
+          {/* Generar propuestas */}
+          <div style={{display:'flex', gap:8, marginBottom:16}}>
+            <button style={s.btn} onClick={generarVozProps} disabled={vozGenerando}>
+              {vozGenerando ? 'Generando...' : 'Generar propuestas'}
+            </button>
+            <button style={{...s.btn, background:'#6b7280'}} onClick={loadVozProps}>
+              Refrescar
+            </button>
+          </div>
+
+          {/* Propuestas pendientes */}
+          {vozProps && vozProps.length > 0 && (
+            <div>
+              <h3 style={s.cardTitle}>Propuestas pendientes ({vozProps.length})</h3>
+              {vozProps.map((p, i) => {
+                const canalColor = {whatsapp:'#25d366', instagram:'#e1306c', web:'#3b82f6', google_business:'#4285f4', email:'#6b7280'};
+                return (
+                  <div key={p.id || i} style={{...s.card, borderLeft:`4px solid ${canalColor[p.canal]||'#9ca3af'}`}}>
+                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                      <div>
+                        <span style={{fontSize:11, fontWeight:600, textTransform:'uppercase', color:canalColor[p.canal]||'#6b7280'}}>
+                          {p.canal}
+                        </span>
+                        <span style={{fontSize:11, color:'#9ca3af', marginLeft:8}}>{p.tipo?.replace(/_/g,' ')}</span>
+                        {p.eje2_celda && <span style={{fontSize:10, color:'#9ca3af', marginLeft:6}}>({p.eje2_celda})</span>}
+                      </div>
+                      <span style={{
+                        padding:'2px 8px', borderRadius:12, fontSize:11, fontWeight:600,
+                        background: p.estado === 'pendiente' ? '#fef3c7' : p.estado === 'aprobada' ? '#dcfce7' : '#f3f4f6',
+                        color: p.estado === 'pendiente' ? '#92400e' : p.estado === 'aprobada' ? '#16a34a' : '#6b7280',
+                      }}>{p.estado}</span>
+                    </div>
+                    <div style={{fontSize:13, marginTop:6, color:'#374151'}}>{p.justificacion}</div>
+                    {p.contenido_propuesto?.texto && (
+                      <div style={{fontSize:12, color:'#6b7280', marginTop:4, fontStyle:'italic',
+                        background:'#f9fafb', padding:8, borderRadius:6}}>
+                        {p.contenido_propuesto.texto}
+                      </div>
+                    )}
+                    {p.estado === 'pendiente' && (
+                      <div style={{display:'flex', gap:6, marginTop:8}}>
+                        <button onClick={() => decidirVozProp(p.id, 'aprobada')}
+                          style={{...s.btnSm, background:'#22c55e'}}>Aprobar</button>
+                        <button onClick={() => decidirVozProp(p.id, 'descartada')}
+                          style={{...s.btnSm, background:'#9ca3af'}}>Descartar</button>
+                      </div>
+                    )}
+                    {p.estado === 'aprobada' && (
+                      <button onClick={() => ejecutarVozProp(p.id)}
+                        style={{...s.btnSm, background:'#6366f1', marginTop:8}}>Ejecutar</button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          {vozProps && vozProps.length === 0 && (
+            <div style={{...s.card, textAlign:'center', color:'#9ca3af'}}>
+              Sin propuestas pendientes. Genera nuevas basadas en datos del estudio.
+            </div>
+          )}
+
+          {/* Capa A */}
+          <div style={{...s.card, marginTop:20, borderLeft:'4px solid #8b5cf6'}}>
+            <h3 style={s.cardTitle}>Capa A — Datos externos</h3>
+            <div style={{display:'flex', gap:8, marginBottom:8}}>
+              <input placeholder="Consulta Perplexity..." value={vozCapaQuery}
+                onChange={e => setVozCapaQuery(e.target.value)}
+                style={{...s.input, flex:1}} />
+              <button onClick={consultarCapaA} style={{...s.btnSm, background:'#8b5cf6'}}>Buscar</button>
+            </div>
+            <button onClick={consultarMeteo} style={{...s.btnSm, background:'#0ea5e9'}}>
+              Clima Logroño 7d
+            </button>
+            {vozCapaA && (
+              <div style={{marginTop:12, fontSize:13, background:'#f9fafb', padding:12, borderRadius:8}}>
+                <div style={{fontWeight:600, marginBottom:4}}>
+                  {vozCapaA.fuente} — {vozCapaA.status}
+                </div>
+                {vozCapaA.respuesta && <div style={{whiteSpace:'pre-wrap'}}>{vozCapaA.respuesta}</div>}
+                {vozCapaA.prevision && (
+                  <div>
+                    {vozCapaA.prevision.time?.map((t, i) => (
+                      <div key={i} style={{display:'flex', gap:12, padding:'2px 0'}}>
+                        <span>{t}</span>
+                        <span>{vozCapaA.prevision.temperature_2m_max?.[i]}°</span>
+                        <span>{vozCapaA.prevision.precipitation_sum?.[i]}mm</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {vozCapaA.nota && <div style={{color:'#9ca3af'}}>{vozCapaA.nota}</div>}
+              </div>
+            )}
+          </div>
+
+          {/* ISP */}
+          <div style={{...s.card, marginTop:12, borderLeft:'4px solid #f97316'}}>
+            <h3 style={s.cardTitle}>ISP — Índice de Salud de Presencia</h3>
+            <div style={{display:'flex', gap:6, marginBottom:8}}>
+              {['google_business','instagram','whatsapp'].map(c => (
+                <button key={c} onClick={() => { setVozIspCanal(c); loadISP(c); }}
+                  style={vozIspCanal === c ? {...s.btnSm, background:'#f97316'} : {...s.btnSm, background:'#e5e7eb', color:'#374151'}}>
+                  {c.replace(/_/g,' ')}
+                </button>
+              ))}
+            </div>
+            {vozIspData?.checklist && (
+              <div>
+                <div style={{fontSize:12, color:'#6b7280', marginBottom:8}}>
+                  Max score: {vozIspData.max_score} — {vozIspData.nota}
+                </div>
+                {vozIspData.checklist.map((e, i) => (
+                  <div key={i} style={{display:'flex', justifyContent:'space-between', padding:'4px 0',
+                    borderBottom:'1px solid #f3f4f6', fontSize:13}}>
+                    <span>{e.elemento}</span>
+                    <span style={{color:'#6b7280', fontWeight:600}}>{e.peso}pts</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ADN TAB */}
       {tab === 'adn' && (

@@ -26,6 +26,8 @@ export const getAgendaGrupo = (id, fecha) =>
   request(`/grupos/${id}/agenda${fecha ? `?fecha=${fecha}` : ''}`);
 
 // SESIONES
+export const getSesionesSemana = (fecha) =>
+  request(`/sesiones/semana${fecha ? `?fecha=${fecha}` : ''}`);
 export const getSesionesHoy = () => request('/sesiones/hoy');
 export const crearSesion = (data) => request('/sesiones', { method: 'POST', body: JSON.stringify(data) });
 export const completarSesion = (id) => request(`/sesiones/${id}/completar`, { method: 'POST' });
@@ -126,6 +128,31 @@ export const actualizarDepuracion = (id, data) => request(`/depuracion/${id}`, {
 // Readiness
 export const getReadiness = () => request('/readiness');
 
+// VOZ
+export const generarPropuestasVoz = () => request('/voz/generar-propuestas', { method: 'POST' });
+export const getPropuestasVoz = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/voz/propuestas${qs ? `?${qs}` : ''}`);
+};
+export const decidirPropuesta = (id, data) =>
+  request(`/voz/propuestas/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
+export const ejecutarPropuesta = (id) =>
+  request(`/voz/propuestas/${id}/ejecutar`, { method: 'POST' });
+export const consultarCapaA = (data) =>
+  request('/voz/capa-a', { method: 'POST', body: JSON.stringify(data) });
+export const getDatosCapaA = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/voz/capa-a/datos${qs ? `?${qs}` : ''}`);
+};
+export const getISP = (canal) => request(`/voz/isp/${canal}`);
+export const guardarISP = (canal, data) =>
+  request(`/voz/isp/${canal}`, { method: 'POST', body: JSON.stringify(data) });
+export const getHistorialISP = () => request('/voz/isp');
+export const getTelemetriaVoz = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/voz/telemetria${qs ? `?${qs}` : ''}`);
+};
+
 // SÉQUITO
 export const convocarConsejo = (data) =>
   request('/consejo', { method: 'POST', body: JSON.stringify(data) });
@@ -134,3 +161,23 @@ export const getDetalleConsejo = (id) => request(`/consejo/${id}`);
 export const registrarDecision = (id, data) =>
   request(`/consejo/${id}/decision`, { method: 'POST', body: JSON.stringify(data) });
 export const getAsesores = () => request('/asesores');
+
+// STRIPE / COBROS
+export const getCobrosRecurrentes = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/cobros-recurrentes${qs ? `?${qs}` : ''}`);
+};
+export const cronCobros = () => request('/cron/diario', { method: 'POST' });
+
+// PORTAL PÚBLICO
+export const chatPublico = (data) =>
+  request('/publico/chat', { method: 'POST', body: JSON.stringify(data) });
+
+// FEED
+export const getFeed = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/feed${qs ? `?${qs}` : ''}`);
+};
+export const marcarLeidoFeed = (data) =>
+  request('/feed/marcar-leido', { method: 'POST', body: JSON.stringify(data) });
+export const getFeedCount = () => request('/feed/count');

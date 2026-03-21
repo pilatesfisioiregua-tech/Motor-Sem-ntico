@@ -1,0 +1,338 @@
+{
+  "sesion": 3,
+  "dominio": "STEM",
+  "fecha": "2026-03-19",
+  "pares": [
+    {
+      "id": "T01",
+      "dominio": "matematicas",
+      "escala": "macro",
+      "caso_real": "Último Teorema de Fermat — Andrew Wiles (1993-1995)",
+      "problema_resumen": "Conjetura abierta 358 años: x^n + y^n = z^n sin solución entera para n>2. Intentos de ataque directo fallidos durante siglos. Sin framework unificador.",
+      "vector_pre": {"F1": 0.70, "F2": 0.50, "F3": 0.30, "F4": 0.25, "F5": 0.40, "F6": 0.35, "F7": 0.60},
+      "arquetipo_estimado": "sin_rumbo (55%)",
+      "arquetipo_secundario": "rigido (30%)",
+      "eslabon_debil": "F4",
+      "solucion_resumen": "Wiles conectó Fermat con conjetura Taniyama-Shimura (curvas elípticas modulares). Redefinió el problema: no atacar Fermat directamente sino demostrar que toda curva elíptica semiestable es modular. 7 años de trabajo aislado + corrección de gap con Richard Taylor.",
+      "delta": {"F1": 0.10, "F2": 0.20, "F3": 0.25, "F4": 0.40, "F5": 0.35, "F6": 0.30, "F7": 0.20},
+      "vector_post": {"F1": 0.80, "F2": 0.70, "F3": 0.55, "F4": 0.65, "F5": 0.75, "F6": 0.65, "F7": 0.80},
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F4: +0.40", "F5: +0.35", "F6: +0.30", "F3: +0.25"],
+      "funciones_no_movidas": [],
+      "leyes_tcf": [
+        {"ley": "F4→F5 (B)", "status": "confirmada", "detalle": "La redistribución del esfuerzo (F4: conectar áreas antes separadas) solo fue posible tras redefinir la frontera del problema (F5: el verdadero problema era modularidad, no Fermat)."},
+        {"ley": "F6→F5 (D)", "status": "confirmada", "detalle": "La adaptación (F6: cambiar de ataque directo a Taniyama-Shimura) mantuvo coherencia con la frontera redefinida (F5). Adaptó el método, no perdió el objetivo."},
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captó técnicas de múltiples ramas (F2: Galois representations, Iwasawa theory, Hecke algebras) y depuró (F3: eliminó los approaches que no convergían). El gap encontrado en 1993 fue literalmente un fallo de F3 que se corrigió."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: Redefinición de F5 (el problema real es modularidad) desbloqueó F4 (redistribuir esfuerzo) y F6 (adaptar método). F3 (depurar approaches fallidos) habilitó F2 (captar técnicas útiles).",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.75,
+      "notas": "La redefinición de frontera (F5) es la palanca maestra en matemáticas: 'resolver el problema correcto' > 'resolver correctamente el problema incorrecto'. Paralelo con Mercadona (N04): F5 como mayor delta."
+    },
+    {
+      "id": "T02",
+      "dominio": "ingenieria",
+      "escala": "macro",
+      "caso_real": "Programa Space Shuttle — NASA, mantenimiento del Thermal Protection System (1981-2003)",
+      "problema_resumen": "Desprendimiento de espuma del tanque externo golpeaba losetas térmicas del shuttle. Problema conocido desde STS-1. 82 de 113 misiones documentaron daño por espuma. NASA normalizó el riesgo ('foam shedding is not a safety-of-flight issue').",
+      "vector_pre": {"F1": 0.70, "F2": 0.65, "F3": 0.15, "F4": 0.50, "F5": 0.55, "F6": 0.20, "F7": 0.60},
+      "arquetipo_estimado": "intoxicado (70%)",
+      "arquetipo_secundario": "rigido (35%)",
+      "eslabon_debil": "F3",
+      "solucion_resumen": "Normalización de la desviación: cada misión sin desastre reforzaba la creencia de que el daño por espuma era aceptable. No se depuró el riesgo, no se adaptó el diseño. Columbia STS-107 destruida en reentrada (2003) por impacto de espuma en ala izquierda.",
+      "delta": {"F1": -0.30, "F2": 0.00, "F3": -0.10, "F4": -0.05, "F5": -0.10, "F6": -0.10, "F7": -0.10},
+      "vector_post": {"F1": 0.40, "F2": 0.65, "F3": 0.05, "F4": 0.45, "F5": 0.45, "F6": 0.10, "F7": 0.50},
+      "tipo_resultado": "toxico",
+      "funciones_movidas": ["F1: -0.30", "F3: -0.10", "F5: -0.10", "F6: -0.10"],
+      "funciones_no_movidas": ["F2: 0.00"],
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captaban datos de daño (F2=0.65: 82/113 misiones con daño documentado) sin depurar el riesgo (F3=0.05). Acumulación textbook de evidencia ignorada."},
+        {"ley": "F1→F6 (D)", "status": "confirmada", "detalle": "Conservar el programa sin adaptar (F1=0.70 pre, F6=0.20) = rigidez fatal. 'El shuttle vuela, ergo el diseño funciona.'"},
+        {"ley": "F7→F3 (D)", "status": "confirmada", "detalle": "Replicaron la cultura de normalización de riesgo (F7=0.60) sin depurar (F3=0.15) = amplificaron el defecto organizacional."}
+      ],
+      "dependencias_violadas": [
+        "F2→F3 (B): datos captados (82 misiones con daño) sin depuración de riesgo",
+        "F1→F6 (D): conservar sin adaptar = rigidez letal",
+        "F7→F3 (D): replicar cultura de normalización sin depurar = amplificar defecto"
+      ],
+      "prediccion_tcf": "TÓXICO: F2→F3(B) predice acumulación de basura (riesgo ignorado). F1→F6(D) predice rigidez. F7→F3(D) predice amplificación del defecto cultural. Triple violación = catástrofe.",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.85,
+      "notas": "Caso documentado por CAIB (Columbia Accident Investigation Board). 'Normalización de la desviación' (Diane Vaughan) es literalmente F2→F3(B) violada: captar señales sin filtrarlas. Cross-dominio con Opioides (S03): mismo patrón de datos ignorados a escala."
+    },
+    {
+      "id": "T03",
+      "dominio": "ciencia",
+      "escala": "macro",
+      "caso_real": "Proyecto Genoma Humano — HGP vs Celera Genomics (1990-2003)",
+      "problema_resumen": "Secuenciar 3.2 billones de pares de bases del genoma humano. HGP (público, $3B, 13 años estimados) usaba map-then-sequence. Lento, costoso, sin framework para paralelismo masivo.",
+      "vector_pre": {"F1": 0.50, "F2": 0.55, "F3": 0.25, "F4": 0.20, "F5": 0.45, "F6": 0.30, "F7": 0.35},
+      "arquetipo_estimado": "semilla_dormida (55%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F4",
+      "solucion_resumen": "Craig Venter (Celera) aplicó whole-genome shotgun sequencing: fragmentar todo, secuenciar en paralelo, ensamblar computacionalmente. Redefinió distribución del esfuerzo. HGP adoptó parcialmente el approach. Ambos publicaron en 2001.",
+      "delta": {"F1": 0.15, "F2": 0.20, "F3": 0.20, "F4": 0.45, "F5": 0.20, "F6": 0.35, "F7": 0.30},
+      "vector_post": {"F1": 0.65, "F2": 0.75, "F3": 0.45, "F4": 0.65, "F5": 0.65, "F6": 0.65, "F7": 0.65},
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F4: +0.45", "F6: +0.35", "F7: +0.30"],
+      "funciones_no_movidas": [],
+      "leyes_tcf": [
+        {"ley": "F4→F5 (B)", "status": "confirmada", "detalle": "Redistribución masiva (F4: shotgun = paralelismo) funcionó porque la frontera (F5: qué es un genoma, qué queremos secuenciar) estaba definida."},
+        {"ley": "F6→F5 (D)", "status": "confirmada", "detalle": "Adaptación radical (shotgun vs map-first) mantuvo coherencia con F5: el objetivo era secuenciar, no mapear."},
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captación masiva de datos (secuencias shotgun) requirió depuración computacional (ensamblaje, eliminación de errores). F3 computacional habilitó F2 masiva."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: F4 atacada con redistribución radical. F5 ya definida. F6 (adaptar método) con F5 mantenida. F2→F3 desbloqueada por depuración computacional.",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.80,
+      "notas": "La competencia HGP/Celera fue un experimento natural: misma F5 (secuenciar genoma), distinta F4 (distribución del esfuerzo). Celera ganó en velocidad porque F4 era el eslabón real, no F2. Paralelo con Inditex (N10): la innovación fue en distribución, no en captación."
+    },
+    {
+      "id": "T04",
+      "dominio": "ingenieria",
+      "escala": "meso",
+      "caso_real": "Software Healthcare.gov — lanzamiento del marketplace de ACA (octubre 2013)",
+      "problema_resumen": "Website federal para Affordable Care Act. 55 contratistas, sin integrador principal, sin testing end-to-end previo. Requisitos cambiantes hasta semanas antes del launch. Presupuesto de $94M escaló a $1.7B.",
+      "vector_pre": {"F1": 0.25, "F2": 0.75, "F3": 0.10, "F4": 0.10, "F5": 0.20, "F6": 0.15, "F7": 0.30},
+      "arquetipo_estimado": "intoxicado (75%)",
+      "arquetipo_secundario": "expansion_sin_cimientos (40%)",
+      "eslabon_debil": "F3",
+      "solucion_resumen": "Lanzamiento sin testing adecuado. Día 1: solo 6 personas lograron inscribirse (de millones intentando). Crashes, timeouts, datos corruptos. Rescue team (USDS/Mikey Dickerson) tardó 2 meses en estabilizar.",
+      "delta": {"F1": -0.10, "F2": 0.05, "F3": -0.05, "F4": -0.05, "F5": -0.10, "F6": 0.00, "F7": 0.05},
+      "vector_post": {"F1": 0.15, "F2": 0.80, "F3": 0.05, "F4": 0.05, "F5": 0.10, "F6": 0.15, "F7": 0.35},
+      "tipo_resultado": "toxico",
+      "funciones_movidas": ["F5: -0.10", "F1: -0.10", "F3: -0.05"],
+      "funciones_no_movidas": ["F6: 0.00"],
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "55 contratistas captando código (F2=0.80) sin depuración (F3=0.05: sin testing integrado, sin QA end-to-end) = software tóxico."},
+        {"ley": "F4→F5 (B)", "status": "confirmada", "detalle": "Distribución de trabajo entre 55 contratistas (F4=0.05) sin frontera clara (F5=0.10: nadie sabía quién era responsable de qué) = fugas totales."},
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "Cada contratista replicó su módulo (F7=0.35) sin identidad del sistema completo (F5=0.10) = 55 piezas que no encajaban."}
+      ],
+      "dependencias_violadas": [
+        "F2→F3 (B): código de 55 fuentes sin testing integrado",
+        "F4→F5 (B): distribución entre 55 contratistas sin frontera de responsabilidad",
+        "F7→F5 (B): replicación de módulos sin identidad de sistema"
+      ],
+      "prediccion_tcf": "TÓXICO: Triple violación bloqueante. F2→F3(B), F4→F5(B), F7→F5(B). Mismo patrón que WeWork (N03): captación+distribución+replicación sin depuración ni frontera.",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.85,
+      "notas": "Caso GAO-14-694. El rescue team (USDS) básicamente aplicó F3 masiva + F5 redefinida: testing, triaje, ownership claro. Cross-dominio con WeWork: ingeniería de software = negocio cuando las dependencias se violan."
+    },
+    {
+      "id": "T05",
+      "dominio": "matematicas",
+      "escala": "micro",
+      "caso_real": "Conjetura de Poincaré — Grigori Perelman (2002-2003)",
+      "problema_resumen": "Problema del Milenio: toda variedad cerrada simplemente conexa de dimensión 3 es homeomorfa a la 3-esfera. Intentos directos con topología pura fallaron. Hamilton desarrolló flujo de Ricci pero no pudo manejar singularidades.",
+      "vector_pre": {"F1": 0.65, "F2": 0.55, "F3": 0.25, "F4": 0.30, "F5": 0.50, "F6": 0.40, "F7": 0.50},
+      "arquetipo_estimado": "sin_rumbo (50%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F3",
+      "solucion_resumen": "Perelman completó el programa de Hamilton: flujo de Ricci con cirugía. Innovación clave: técnicas de depuración de singularidades (surgery para cortar y reconectar donde el flujo explota). 3 preprints en arXiv (2002-2003).",
+      "delta": {"F1": 0.10, "F2": 0.15, "F3": 0.45, "F4": 0.25, "F5": 0.20, "F6": 0.25, "F7": 0.25},
+      "vector_post": {"F1": 0.75, "F2": 0.70, "F3": 0.70, "F4": 0.55, "F5": 0.70, "F6": 0.65, "F7": 0.75},
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F3: +0.45", "F6: +0.25", "F4: +0.25", "F7: +0.25"],
+      "funciones_no_movidas": [],
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Hamilton había captado la herramienta (flujo de Ricci, F2) pero no podía depurar las singularidades (F3). Perelman resolvió exactamente F3: surgery techniques que eliminan singularidades."},
+        {"ley": "F3→F5 (D)", "status": "confirmada", "detalle": "La depuración de singularidades (F3) clarificó la frontera (F5): qué casos del flujo son manejables vs cuáles necesitan cirugía. F3 definió F5."},
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "La prueba es completamente replicable (F7=0.75) porque la frontera (F5=0.70) está definida con precisión matemática. Verificada independientemente por 3 equipos."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: F3 atacada directamente (cirugía de singularidades). F2→F3(B) desbloqueada. F3→F5(D) emergente. Patrón Toyota en matemáticas: F3 como palanca maestra.",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.80,
+      "notas": "Perelman literalmente llamó su técnica 'surgery' — es F3 (depuración/eliminación) con nombre explícito. El paralelo con Toyota es notable: la herramienta existía (flujo de Ricci = producción), faltaba la depuración (surgery = eliminación de muda). Cross-dominio validado en matemáticas puras."
+    },
+    {
+      "id": "T06",
+      "dominio": "ingenieria",
+      "escala": "macro",
+      "caso_real": "Boeing 737 MAX — certificación MCAS y crashes Lion Air/Ethiopian Airlines (2018-2019)",
+      "problema_resumen": "737 MAX: motores más grandes cambiaron aerodinámica. Boeing añadió MCAS (Maneuvering Characteristics Augmentation System) para compensar. Un solo sensor AoA, sin redundancia, pilotos no informados del sistema.",
+      "vector_pre": {"F1": 0.65, "F2": 0.60, "F3": 0.20, "F4": 0.35, "F5": 0.50, "F6": 0.55, "F7": 0.65},
+      "arquetipo_estimado": "intoxicado (60%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F3",
+      "solucion_resumen": "MCAS con sensor único, sin información a pilotos, sin entrenamiento en simulador (para mantener certificación como variante del 737, no avión nuevo). FAA delegó certificación a Boeing. Presión de competencia con Airbus A320neo.",
+      "delta": {"F1": -0.25, "F2": 0.05, "F3": -0.15, "F4": -0.10, "F5": -0.20, "F6": 0.05, "F7": -0.15},
+      "vector_post": {"F1": 0.40, "F2": 0.65, "F3": 0.05, "F4": 0.25, "F5": 0.30, "F6": 0.60, "F7": 0.50},
+      "tipo_resultado": "toxico",
+      "funciones_movidas": ["F1: -0.25", "F5: -0.20", "F3: -0.15", "F7: -0.15"],
+      "funciones_no_movidas": [],
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captaron innovación (motor LEAP, MCAS) sin depurar riesgos (sensor único, sin redundancia, sin información a pilotos). Datos de problemas de AoA existían pero no se filtraron."},
+        {"ley": "F6→F5 (D)", "status": "confirmada", "detalle": "Adaptaron (nuevo motor, MCAS) pero destruyeron frontera: ¿es un 737 o un avión nuevo? La presión por mantener certificación de variante (F5) comprometió F6."},
+        {"ley": "F7→F3 (D)", "status": "confirmada", "detalle": "Replicaron cultura de autocertificación (FAA delegada) sin depurar (F3=0.05: sin revisión independiente) = amplificaron defecto sistémico. 346 muertos."}
+      ],
+      "dependencias_violadas": [
+        "F2→F3 (B): innovación sin depuración de riesgo",
+        "F6→F5 (D): adaptación destruyó frontera (¿737 o avión nuevo?)",
+        "F7→F3 (D): replicar autocertificación sin depurar"
+      ],
+      "prediccion_tcf": "TÓXICO: F2→F3(B) violada (innovación sin depurar). F6→F5(D) violada (adaptar destruyó identidad). F7→F3(D) amplificó defecto. Mismo patrón que Columbia (T02).",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.85,
+      "notas": "Informe del Congreso US (2020). Pattern idéntico a Columbia (T02): normalización del riesgo + F2→F3(B) + cultura replicada sin depurar. Boeing y NASA compartían el mismo vicio sistémico. 346 muertes."
+    },
+    {
+      "id": "T07",
+      "dominio": "ciencia",
+      "escala": "macro",
+      "caso_real": "CRISPR-Cas9 — Doudna/Charpentier, desarrollo como herramienta de edición genética (2012→)",
+      "problema_resumen": "Edición genética existía (ZFN, TALEN) pero era lenta, cara, imprecisa. CRISPR era conocido en bacterias desde 1987 pero su función como sistema inmune no se entendió hasta 2007. Sin framework de uso práctico.",
+      "vector_pre": {"F1": 0.55, "F2": 0.60, "F3": 0.30, "F4": 0.25, "F5": 0.35, "F6": 0.40, "F7": 0.25},
+      "arquetipo_estimado": "semilla_dormida (60%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F7",
+      "solucion_resumen": "Doudna y Charpentier demostraron que Cas9 podía ser programado con RNA guía para cortar ADN en sitios específicos (2012). Simplificaron el sistema de 3 componentes a 2 (crRNA + tracrRNA fusionados). Protocolo replicable publicado.",
+      "delta": {"F1": 0.10, "F2": 0.15, "F3": 0.20, "F4": 0.25, "F5": 0.30, "F6": 0.20, "F7": 0.50},
+      "vector_post": {"F1": 0.65, "F2": 0.75, "F3": 0.50, "F4": 0.50, "F5": 0.65, "F6": 0.60, "F7": 0.75},
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F7: +0.50", "F5: +0.30", "F4: +0.25", "F3: +0.20"],
+      "funciones_no_movidas": [],
+      "leyes_tcf": [
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "Replicación masiva (F7+0.50: cualquier lab puede usarlo) fue posible porque definieron frontera clara (F5: RNA guía programable + Cas9 = herramienta universal). La simplificación de 3→2 componentes fue clave para F7."},
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captaron conocimiento bacteriano (F2) y depuraron (F3: eliminaron componentes innecesarios, simplificaron de 3 a 2). La depuración habilitó la captación masiva posterior."},
+        {"ley": "F7→F3 (D)", "status": "confirmada", "detalle": "Replicaron un sistema depurado (F3=0.50: simplificado). La depuración previa evitó amplificar complejidad innecesaria."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: F7 atacada masivamente (+0.50) con F5 construida (RNA guía = frontera programable). F7→F5(B) satisfecha. Depuración (3→2 componentes) habilitó replicación.",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.80,
+      "notas": "Paralelo con Patagonia (N07): F7 como mayor delta, F5 como enabler. La simplificación (F3) fue la innovación real — CRISPR existía, la depuración lo hizo usable. Paralelo con Cuba (S01): formación masiva = F7 alta."
+    },
+    {
+      "id": "T08",
+      "dominio": "ingenieria",
+      "escala": "meso",
+      "caso_real": "Theranos — Elizabeth Holmes, dispositivo Edison para análisis de sangre (2003-2018)",
+      "problema_resumen": "Promesa de análisis completo de sangre desde una gota (finger prick). Valoración $9B. Sin validación científica del dispositivo Edison. Resultados falsificados. Usaban máquinas Siemens convencionales en secreto.",
+      "vector_pre": {"F1": 0.10, "F2": 0.85, "F3": 0.05, "F4": 0.15, "F5": 0.20, "F6": 0.30, "F7": 0.70},
+      "arquetipo_estimado": "expansion_sin_cimientos (80%)",
+      "arquetipo_secundario": "copia_sin_esencia (40%)",
+      "eslabon_debil": "F1",
+      "solucion_resumen": "Más captación de capital y partnerships (Walgreens, Safeway) sin resolver el problema técnico fundamental. Más replicación (labs en farmacias) sin conservar la base científica. Fraude como sustituto de F1.",
+      "delta": {"F1": -0.05, "F2": 0.05, "F3": -0.05, "F4": -0.10, "F5": -0.15, "F6": -0.10, "F7": 0.05},
+      "vector_post": {"F1": 0.05, "F2": 0.90, "F3": 0.00, "F4": 0.05, "F5": 0.05, "F6": 0.20, "F7": 0.75},
+      "tipo_resultado": "toxico",
+      "funciones_movidas": ["F5: -0.15", "F4: -0.10", "F6: -0.10"],
+      "funciones_no_movidas": [],
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captaron capital, partnerships, pacientes (F2=0.90) sin NINGUNA depuración (F3=0.00: sin validación, sin peer review, sin QC). Acumulación tóxica absoluta."},
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "Replicaron masivamente (F7=0.75: labs en Walgreens) sin frontera (F5=0.05: el dispositivo no funcionaba). Replicaron una mentira."},
+        {"ley": "F7→F1 (D)", "status": "confirmada", "detalle": "Replicar (F7=0.75) sin conservar (F1=0.05: sin base científica real) = copias degradadas de algo que no existía."}
+      ],
+      "dependencias_violadas": [
+        "F2→F3 (B): captación masiva sin depuración = fraude",
+        "F7→F5 (B): replicación sin frontera = propagación de mentira",
+        "F7→F1 (D): replicar sin conservar = copias de vacío"
+      ],
+      "prediccion_tcf": "TÓXICO: Mismo patrón WeWork (N03) pero peor: F1=0.05 (nada real que conservar) + F3=0.00 (depuración cero) + F7=0.75 (replicación agresiva). La TCF predice colapso total cuando F1 y F3 están en suelo y F2/F7 están en techo.",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.90,
+      "notas": "Caso con máxima confianza: hechos judiciales, testimonios bajo juramento, datos SEC. F3=0.00 es literal: cero depuración, cero validación. El patrón F2↑F7↑ con F1↓F3↓ es el más tóxico del dataset. Holmes condenada a 11 años."
+    },
+    {
+      "id": "T09",
+      "dominio": "matematicas",
+      "escala": "micro",
+      "caso_real": "Intento de prueba de la Hipótesis de Riemann — varios intentos fallidos (2000s-2020s)",
+      "problema_resumen": "Problema del Milenio abierto. Múltiples anuncios de pruebas (Atiyah 2018, De Branges recurrente, varios en arXiv) que no sobreviven peer review. Pattern: claims extraordinarios sin verificación.",
+      "vector_pre": {"F1": 0.70, "F2": 0.60, "F3": 0.55, "F4": 0.40, "F5": 0.65, "F6": 0.45, "F7": 0.60},
+      "arquetipo_estimado": "equilibrado (50%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F6",
+      "solucion_resumen": "Múltiples intentos de prueba publicados o anunciados sin depuración previa adecuada. Atiyah (2018): anuncio en conferencia, prueba con gaps fundamentales. De Branges: múltiples versiones rechazadas. Ninguno sometido a peer review riguroso antes de anunciar.",
+      "delta": {"F1": 0.00, "F2": 0.05, "F3": -0.05, "F4": 0.00, "F5": 0.00, "F6": 0.00, "F7": 0.00},
+      "vector_post": {"F1": 0.70, "F2": 0.65, "F3": 0.50, "F4": 0.40, "F5": 0.65, "F6": 0.45, "F7": 0.60},
+      "tipo_resultado": "inerte",
+      "funciones_movidas": ["F3: -0.05"],
+      "funciones_no_movidas": ["F1: 0.00", "F4: 0.00", "F5: 0.00", "F6: 0.00", "F7: 0.00"],
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captaron nuevas técnicas/ideas (F2+0.05) pero F3 bajó (-0.05): los intentos no depuraron errores antes de publicar. F2 sin F3 = ruido."},
+        {"ley": "F7→F3 (D)", "status": "confirmada", "detalle": "Intentaron replicar/comunicar (publicar prueba) sin depurar (sin verificar gaps). La comunidad actuó como F3 externa, pero los autores no la internalizaron."}
+      ],
+      "dependencias_violadas": ["F2→F3 (B): nuevas ideas captadas sin depuración de errores previo a publicación"],
+      "prediccion_tcf": "INERTE: Sin delta significativo en ninguna función. F3 ligeramente peor. La comunidad matemática funciona como F3 colectiva (peer review), pero sin F3 individual previa, el resultado es ruido.",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.65,
+      "notas": "Confianza baja porque es un meta-caso (patrón de múltiples intentos, no un intento específico). Pero el patrón es consistente: F7 sin F3 = publicar sin verificar. Contraste con Perelman (T05): Perelman verificó todo antes de publicar (F3 alta), estos no."
+    },
+    {
+      "id": "T10",
+      "dominio": "ingenieria",
+      "escala": "macro",
+      "caso_real": "Internet y TCP/IP — Vint Cerf y Bob Kahn, diseño del protocolo (1974→)",
+      "problema_resumen": "Redes incompatibles (ARPANET, redes satelitales, packet radio). Cada red tenía su propio protocolo. Sin interoperabilidad. El crecimiento requería un framework que no existía.",
+      "vector_pre": {"F1": 0.50, "F2": 0.55, "F3": 0.30, "F4": 0.25, "F5": 0.30, "F6": 0.35, "F7": 0.30},
+      "arquetipo_estimado": "semilla_dormida (55%)",
+      "arquetipo_secundario": "sin_rumbo (30%)",
+      "eslabon_debil": "F5",
+      "solucion_resumen": "TCP/IP: separación en capas (network vs transport), direccionamiento universal (IP), end-to-end principle (inteligencia en bordes, red tonta). Open standards. RFC process para evolución controlada.",
+      "delta": {"F1": 0.25, "F2": 0.30, "F3": 0.25, "F4": 0.40, "F5": 0.45, "F6": 0.35, "F7": 0.45},
+      "vector_post": {"F1": 0.75, "F2": 0.85, "F3": 0.55, "F4": 0.65, "F5": 0.75, "F6": 0.70, "F7": 0.75},
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F5: +0.45", "F7: +0.45", "F4: +0.40", "F6: +0.35"],
+      "funciones_no_movidas": [],
+      "leyes_tcf": [
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "Replicación masiva (cualquier red puede unirse) soportada por frontera cristalina (F5: IP como identidad universal, capas como contratos de interfaz). F5 habilitó F7."},
+        {"ley": "F4→F5 (B)", "status": "confirmada", "detalle": "Distribución (F4: routing, packet switching) funcionó porque F5 definía qué era un paquete, qué era una dirección. Sin F5, no hay distribución coherente."},
+        {"ley": "F6→F5 (D)", "status": "confirmada", "detalle": "Adaptación masiva (F6: nuevas tecnologías, WiFi, fibra, móvil) sin perder identidad (F5: TCP/IP sigue siendo TCP/IP). End-to-end principle = F5 que permite F6."},
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captar nuevas redes (F2) con depuración (F3: protocolos filtran paquetes malformados, routing elimina paths muertos). F3 integrada en el diseño."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: F5 atacada como palanca maestra (+0.45). Todas las dependencias bloqueantes satisfechas. F3 integrada en diseño (como Inditex). F7→F5(B) es la ley que explica por qué Internet escala.",
+      "prediccion_correcta": true,
+      "confianza_mapeo": 0.85,
+      "notas": "TCP/IP es el caso más limpio de F5 como enabler universal: identidad clara → distribución → replicación → adaptación. Paralelo con Inditex (N10): F3 integrada en diseño, no reactiva. RFC process = F6 controlada. End-to-end principle = F5 que permite F6 sin perder F1."
+    }
+  ],
+
+  "resumen": {
+    "pares_procesados": 10,
+    "distribucion_tipos": {"cierre": 5, "inerte": 1, "toxico": 4},
+    "arquetipos_cubiertos": [
+      "sin_rumbo (T01, T09)",
+      "intoxicado (T02, T04, T06)",
+      "semilla_dormida (T03, T07, T10)",
+      "expansion_sin_cimientos (T08)",
+      "equilibrado (T09)"
+    ],
+    "arquetipos_unicos": 5,
+    "leyes_tcf_confirmadas": {
+      "F2→F3 (B)": {"conteo": 9, "casos": ["T01","T02","T03","T04","T05","T06","T07","T08","T09","T10"]},
+      "F7→F5 (B)": {"conteo": 5, "casos": ["T04","T05","T07","T08","T10"]},
+      "F4→F5 (B)": {"conteo": 3, "casos": ["T01","T03","T10"]},
+      "F6→F5 (D)": {"conteo": 3, "casos": ["T01","T06","T10"]},
+      "F1→F6 (D)": {"conteo": 1, "casos": ["T02"]},
+      "F7→F3 (D)": {"conteo": 4, "casos": ["T02","T06","T07","T09"]},
+      "F3→F5 (D)": {"conteo": 1, "casos": ["T05"]},
+      "F7→F1 (D)": {"conteo": 1, "casos": ["T08"]}
+    },
+    "leyes_tcf_refutadas": [],
+    "prediccion_correcta": "10/10 (100%)",
+    "confianza_media": 0.81,
+
+    "hallazgo_principal": "F2→F3(B) confirmada en 9/10 STEM (acumulativo 20/30 total). En STEM la ley es explícita: captar datos/técnicas/innovación sin depurar errores = basura. Perelman (T05) vs intentos Riemann (T09): misma área, resultado opuesto, diferencia = F3. Columbia/Boeing (T02/T06): datos de riesgo captados sin filtrar = catástrofe.",
+
+    "hallazgo_secundario": "F3 como 'cirugía' en matemáticas: Perelman (T05) literalmente llamó su técnica 'surgery'. F3 no es solo 'eliminar basura' — en STEM es 'eliminar singularidades', 'eliminar complejidad innecesaria' (CRISPR 3→2), 'eliminar riesgo' (Columbia). La metáfora de depuración es universal y literal en cada dominio.",
+
+    "hallazgo_terciario": "F5 como enabler de escala en ingeniería: TCP/IP (T10) es el caso canónico. F5 (identidad/frontera clara) permite F7 (replicación), F4 (distribución), y F6 (adaptación) simultáneamente. Sin F5, nada escala. Contraste: Healthcare.gov (T04) tenía F5=0.10 y nada funcionó.",
+
+    "patron_toxico_STEM": "4/10 tóxicos en STEM, todos ingeniería. Patrón común: F2→F3(B) + F7→F3(D) + normalización del riesgo. Columbia (T02) y Boeing (T06) son gemelos. Theranos (T08) es el extremo: F1=0.05, F3=0.00, F7=0.75. STEM tóxico = innovar/replicar sin depurar.",
+
+    "cross_dominio_acumulado": {
+      "F2→F3_B": "20/30 casos (66%). Universal en negocio, salud Y STEM. La ley más consistente de la TCF.",
+      "intoxicado": "Toyota/Peloton/Virginia Mason/sobreentrenamiento/Columbia/Boeing/Healthcare.gov. 7 casos cross-dominio, mismo patrón.",
+      "F5_enabler": "Mercadona/Patagonia/Cuba/TCP-IP. F5 como palanca maestra cross-dominio.",
+      "F3_como_cirugía": "Toyota (muda)/Perelman (singularidades)/CRISPR (simplificación). F3 es la misma operación en cada dominio."
+    },
+
+    "alguna_ley_necesita_revision": "No. En STEM las leyes se confirman con más fuerza que en negocio/salud. Cero refutaciones en 10 casos. Pero 100% predicción en 30/30 sigue siendo sospechosamente alto — Sesión 5 (FALLIDAS) será el test real.",
+
+    "nota_metodologica": "30/30 predicciones correctas. O (a) la TCF captura patrones reales y universales, o (b) hay sesgo retrospectivo sistemático (elegimos casos conocidos y ajustamos vectores post-hoc), o (c) ambas. La Sesión 5 con casos deliberadamente counter-intuitivos será decisiva."
+  }
+}

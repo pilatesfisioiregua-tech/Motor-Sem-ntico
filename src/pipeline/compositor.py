@@ -1,4 +1,6 @@
 """Capa 2: Grafo + algoritmo óptimo (NetworkX). Código puro, $0."""
+from __future__ import annotations
+
 import networkx as nx
 from dataclasses import dataclass, field
 

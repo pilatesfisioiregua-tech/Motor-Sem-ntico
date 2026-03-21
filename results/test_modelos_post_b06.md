@@ -1,6 +1,6 @@
 # Test Validación Modelos — Post BRIEFING_06
 
-Fecha: 2026-03-18T00:05:05
+Fecha: 2026-03-18T23:10:20
 Base URL: https://chief-os-omni.fly.dev
 
 Version: 3.4.0
@@ -34,44 +34,44 @@ Tools: 61
 
 | Test | Resultado | Iteraciones | Tiempo | Errores | Notas |
 |------|-----------|-------------|--------|---------|-------|
-| T1 Quick (read+report) | ✅ PASS | 0 | 7.3s | 0 | Tools: [] / Summary: No pude completar la tarea tras 0 pasos. Razon: API_FAILURE |
-| T2 Análisis (listar métodos) | ❌ FAIL | 0 | 7.0s | 0 | Métodos encontrados: 0/6 |
-| T3 Execute (crear endpoint) | ❌ FAIL | 0 | 6.8s | 0 | Edit calls: 0 / Total tools: 0 |
-| T4 Deep (diagnóstico) | ❌ FAIL | 0 | 6.5s | 0 | HTTP calls: 0 / Keywords diagnóstico: 0/6 |
+| T1 Quick (read+report) | ✅ PASS | 0 | 0.4s | 0 | Tools: [] / Summary: No pude completar la tarea tras 0 pasos. Razon: CACHE_HIT.  |
+| T2 Análisis (listar métodos) | ✅ PASS | 0 | 0.3s | 0 | Métodos encontrados: 5/6 |
+| T3 Execute (crear endpoint) | ✅ PASS | 8 | 12.8s | 0 | Edit calls: 2 / Total tools: 8 / Tools: ['read_file', 'read_file', 'read_file',  |
+| T4 Deep (diagnóstico) | ✅ PASS | 9 | 19.4s | 0 | HTTP calls: 6 / Keywords diagnóstico: 5/6 / Tools: ['mochila', 'http_request', ' |
 
-**Total: 1/4 passed**
+**Total: 4/4 passed**
 
 ## Diagnóstico
 
-**❌ T1-T2 fallaron** → el cerebro no sirve ni para tareas básicas → CAMBIAR MODELO
+**✅ T1-T4 pasan** → los modelos son capaces, el problema era la infraestructura
 
 ## Detalle por test
 
 ### T1 Quick (read+report)
 - Resultado: PASS
 - Iteraciones: 0
-- Tiempo: 7.3s
+- Tiempo: 0.4s
 - Errores: 0
-- Notas: Tools: [] | Summary: No pude completar la tarea tras 0 pasos. Razon: API_FAILURE: API failed after 3 tries: OpenRouter HT
+- Notas: Tools: [] | Summary: No pude completar la tarea tras 0 pasos. Razon: CACHE_HIT. | [CACHE HIT: cache_exact] La función get
 
 ### T2 Análisis (listar métodos)
-- Resultado: FAIL
+- Resultado: PASS
 - Iteraciones: 0
-- Tiempo: 7.0s
+- Tiempo: 0.3s
 - Errores: 0
-- Notas: Métodos encontrados: 0/6
+- Notas: Métodos encontrados: 5/6
 
 ### T3 Execute (crear endpoint)
-- Resultado: FAIL
-- Iteraciones: 0
-- Tiempo: 6.8s
+- Resultado: PASS
+- Iteraciones: 8
+- Tiempo: 12.8s
 - Errores: 0
-- Notas: Edit calls: 0 | Total tools: 0
+- Notas: Edit calls: 2 | Total tools: 8 | Tools: ['read_file', 'read_file', 'read_file', 'read_file', 'read_file', 'read_file', 'edit_file', 'insert_at']
 
 ### T4 Deep (diagnóstico)
-- Resultado: FAIL
-- Iteraciones: 0
-- Tiempo: 6.5s
+- Resultado: PASS
+- Iteraciones: 9
+- Tiempo: 19.4s
 - Errores: 0
-- Notas: HTTP calls: 0 | Keywords diagnóstico: 0/6
+- Notas: HTTP calls: 6 | Keywords diagnóstico: 5/6 | Tools: ['mochila', 'http_request', 'http_request', 'http_request', 'http_request', 'http_request', 'http_request', 'db_query', 'db_query']
 

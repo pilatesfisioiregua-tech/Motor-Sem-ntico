@@ -212,6 +212,17 @@ async def _procesar_mensaje_entrante(msg: dict, value: dict) -> None:
             await enviar_texto(telefono, result["mensaje"], cliente_id)
         accion = result.get("accion", accion)
 
+    # Motor conversacional WA — procesar con LLM si es texto
+    if msg_type == "text" and contenido:
+        try:
+            from src.pilates.wa_chat import procesar_mensaje_wa
+            result = await procesar_mensaje_wa(telefono, contenido, cliente_id)
+            if result.get("auto_enviar") and result.get("respuesta"):
+                await enviar_texto(telefono, result["respuesta"], cliente_id)
+                log.info("wa_chat_auto", telefono=telefono[-4:])
+        except Exception as e:
+            log.error("wa_chat_error", error=str(e))
+
     log.info("wa_recibido", telefono=telefono[-4:], tipo=msg_type,
              intencion=intencion, cliente_conocido=cliente_id is not None)
 

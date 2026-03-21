@@ -1,6 +1,11 @@
-"""Capa 0: Detector de huecos sintácticos. Código puro, $0."""
+"""Capa 0: Detector de huecos sintácticos + TCF. Código puro, $0."""
+from __future__ import annotations
+
 import re
 from dataclasses import dataclass, field
+
+from src.tcf.detector_tcf import detectar_tcf, DetectorTCFResult
+from src.tcf.campo import VectorFuncional
 
 
 @dataclass
@@ -18,6 +23,7 @@ class DetectorResult:
     perfil_acoples: dict[str, int]  # {Y: 3, PERO: 2, ...}
     diagnostico_acople: str         # "dominado por condicionales = rígido"
     inteligencias_sugeridas: list[str]  # INTs sugeridas por los huecos
+    tcf: DetectorTCFResult | None = None
 
 
 # Mapeo operación → inteligencias relevantes
@@ -154,8 +160,21 @@ def diagnosticar_perfil(perfil: dict[str, int]) -> str:
     return diagnosticos.get(dominante, "Perfil mixto")
 
 
-async def detect(input_text: str) -> DetectorResult:
-    """Ejecuta detección de huecos. Síncrono envuelto en async para consistencia."""
+async def detect(input_text: str, vector_previo: dict[str, float] | None = None) -> DetectorResult:
+    """Ejecuta detección de huecos + análisis TCF."""
     from src.meta_red import load_marco_linguistico
     marco = load_marco_linguistico()
-    return detectar_huecos(input_text, marco)
+    result = detectar_huecos(input_text, marco)
+
+    # TCF: pre-screening lingüístico + campo si hay vector
+    vector = VectorFuncional.from_dict(vector_previo) if vector_previo else None
+    tcf_result = detectar_tcf(input_text, vector)
+    result.tcf = tcf_result
+
+    # Si TCF sugiere INTs por receta, añadirlas a las sugeridas
+    if tcf_result.receta and tcf_result.receta.ints:
+        for int_id in tcf_result.receta.ints:
+            if int_id not in result.inteligencias_sugeridas:
+                result.inteligencias_sugeridas.append(int_id)
+
+    return result

@@ -1,0 +1,219 @@
+{
+  "equilibrados": {
+    "E1": {
+      "id": "E1",
+      "nombre": "Muerte simétrica",
+      "tipo": "equilibrado",
+      "descripcion": "No funciona, no comprende, no persiste — pero todo por igual. Semilla no germinada o colapso total.",
+      "condicion": {
+        "gap_max": 0.15,
+        "gradiente_min": 0.00,
+        "gradiente_max": 0.20
+      },
+      "semantica": "Ausencia total. No hay energía para que las leyes se activen.",
+      "transiciones": [
+        {"destino": "E2", "via": "primera_activacion", "nota": "Cualquier función que suba rompe E1"}
+      ]
+    },
+    "E2": {
+      "id": "E2",
+      "nombre": "Latencia",
+      "tipo": "equilibrado",
+      "descripcion": "Algo funciona, algo se comprende, algo persiste — todo insuficiente. Chispas pero no fuego.",
+      "condicion": {
+        "gap_max": 0.15,
+        "gradiente_min": 0.20,
+        "gradiente_max": 0.40
+      },
+      "semantica": "Vulnerable. Atractor inestable. La primera función que suba determina el destino.",
+      "peligro": "La secuencia de activación aquí determina todo. F2 primero → operador ciego. F3/Se primero → óptimo.",
+      "transiciones": [
+        {"destino": "E3", "via": "Se_primero", "nota": "Secuencia correcta: Se → S → C"},
+        {"destino": "operador_ciego", "via": "S_primero", "nota": "F2 o F1 suben sin Se"},
+        {"destino": "zombi_inmortal", "via": "C_primero", "nota": "F7 sube sin Se ni S"}
+      ]
+    },
+    "E3": {
+      "id": "E3",
+      "nombre": "Funcional",
+      "tipo": "equilibrado",
+      "descripcion": "Funciona, comprende parcialmente, persiste parcialmente. Sistema suficiente.",
+      "condicion": {
+        "gap_max": 0.15,
+        "gradiente_min": 0.40,
+        "gradiente_max": 0.65
+      },
+      "semantica": "Equilibrio trampa: suficientemente bueno para no motivar cambio, débil ante crisis.",
+      "transiciones": [
+        {"destino": "E4", "via": "intervencion_deliberada", "nota": "Subir las 3 lentes coordinadamente"},
+        {"destino": "E3", "via": "inercia", "nota": "Sin intervención permanece estable"},
+        {"destino": "desequilibrio", "via": "tension_externa", "nota": "Modo B+N revela eslabón débil"}
+      ]
+    },
+    "E4": {
+      "id": "E4",
+      "nombre": "Plenitud",
+      "tipo": "equilibrado",
+      "descripcion": "Funciona bien, comprende profundamente, persiste robustamente. Sistema sano.",
+      "condicion": {
+        "gap_max": 0.15,
+        "gradiente_min": 0.65,
+        "gradiente_max": 1.00
+      },
+      "semantica": "Homeostasis activa. Requiere vigilancia para mantener.",
+      "requisito_minimo": ">=7 INT + >=4 P + >=3 R distribuidos entre las 3 lentes (Ley IC7)",
+      "transiciones": [
+        {"destino": "E4", "via": "homeostasis_vigilancia", "nota": "Mantenimiento activo"},
+        {"destino": "E3", "via": "degradacion_gradual", "nota": "Sin vigilancia, baja lentamente"}
+      ]
+    }
+  },
+  "desequilibrados": {
+    "operador_ciego": {
+      "id": "operador_ciego",
+      "nombre": "Operador ciego",
+      "tipo": "desequilibrado",
+      "perfil_lentes": "S↑ Se↓ C↓",
+      "descripcion": "Taller lleno de herramientas de ejecución. Ninguna de cuestionamiento. Maginot.",
+      "condicion": {
+        "gap_min": 0.15,
+        "S_alta": true,
+        "Se_baja": true,
+        "C_baja": true
+      },
+      "ints_tipicas_activas": ["INT-01", "INT-02", "INT-05", "INT-07", "INT-16"],
+      "ints_tipicas_ausentes": ["INT-17", "INT-18", "INT-03", "INT-08"],
+      "ps_tipicos": {"activos": ["P07", "P13", "P14"], "ausentes": ["P08", "P05", "P03", "P01"]},
+      "rs_tipicos": {"activos": ["R01", "R07", "R12"], "ausentes": ["R03", "R08", "R10"]},
+      "prescripcion_ps": ["P05", "P03", "P08"],
+      "prescripcion_rs": ["R03", "R09", "R08"],
+      "objetivo_prescripcion": "CUESTIONAR premisas",
+      "transiciones": [
+        {"destino": "automata_eterno", "via": "C_sube_sin_Se", "nota": "PEOR transición posible"},
+        {"destino": "genio_mortal", "via": "Se_sube", "nota": "Luego E4 con C"}
+      ]
+    },
+    "visionario_atrapado": {
+      "id": "visionario_atrapado",
+      "nombre": "Visionario atrapado",
+      "tipo": "desequilibrado",
+      "perfil_lentes": "S↓ Se↑ C↓",
+      "descripcion": "Taller filosófico extraordinario. Cero herramientas de ejecución.",
+      "condicion": {
+        "gap_min": 0.15,
+        "S_baja": true,
+        "Se_alta": true,
+        "C_baja": true
+      },
+      "ints_tipicas_activas": ["INT-17", "INT-03", "INT-06", "INT-15", "INT-14"],
+      "ints_tipicas_ausentes": ["INT-16", "INT-10", "INT-02", "INT-05"],
+      "ps_tipicos": {"activos": ["P02", "P05", "P08", "P06"], "ausentes": ["P07", "P11", "P13", "P04"]},
+      "rs_tipicos": {"activos": ["R03", "R08", "R10", "R05"], "ausentes": ["R01", "R12", "R07"]},
+      "prescripcion_ps": ["P04", "P13", "P07"],
+      "prescripcion_rs": ["R01", "R12", "R07"],
+      "objetivo_prescripcion": "EJECUTAR",
+      "transiciones": [
+        {"destino": "potencial_dormido", "via": "C_sube_sin_S", "nota": "Comprende y transfiere pero no ejecuta"},
+        {"destino": "genio_mortal", "via": "S_sube", "nota": "Luego E4 con C"}
+      ]
+    },
+    "zombi_inmortal": {
+      "id": "zombi_inmortal",
+      "nombre": "Zombi inmortal",
+      "tipo": "desequilibrado",
+      "perfil_lentes": "S↓ Se↓ C↑",
+      "descripcion": "No es ausencia sino fosilización. Las herramientas perdieron capacidad de cuestionar.",
+      "condicion": {
+        "gap_min": 0.15,
+        "S_baja": true,
+        "Se_baja": true,
+        "C_alta": true
+      },
+      "ints_tipicas_activas": ["INT-13", "INT-02", "INT-16"],
+      "ints_tipicas_ausentes": ["INT-17", "INT-14", "INT-15", "INT-04"],
+      "ps_tipicos": {"activos": ["P09", "P13"], "ausentes": ["P05", "P08", "P03", "P01"]},
+      "rs_tipicos": {"activos": ["R04", "R12"], "ausentes": ["R03", "R10", "R08", "R06"]},
+      "prescripcion_ps": ["P05", "P08", "P01"],
+      "prescripcion_rs": ["R10", "R03", "R11"],
+      "objetivo_prescripcion": "CUESTIONAR EXISTENCIA",
+      "nota": "Las INT activas están DEGRADADAS (mecánicas, rutinarias). No ausentes sino fosilizadas.",
+      "transiciones": [
+        {"destino": "E1", "via": "auditoria_Se_muerte_deliberada", "nota": "FIN si Se revela que C no tiene sustancia"},
+        {"destino": "E2", "via": "auditoria_Se_reconstruccion", "nota": "Volver a empezar desde latencia"}
+      ]
+    },
+    "genio_mortal": {
+      "id": "genio_mortal",
+      "nombre": "Genio mortal",
+      "tipo": "desequilibrado",
+      "perfil_lentes": "S↑ Se↑ C↓",
+      "descripcion": "Repertorio rico pero privado. Carencia específica: herramientas de transferencia.",
+      "condicion": {
+        "gap_min": 0.15,
+        "S_alta": true,
+        "Se_alta": true,
+        "C_baja": true
+      },
+      "ints_tipicas_activas": ["INT-01", "INT-02", "INT-03", "INT-05", "INT-07", "INT-08", "INT-16", "INT-17"],
+      "ints_tipicas_ausentes": ["INT-13", "INT-12"],
+      "ps_tipicos": {"activos": ["P02", "P03", "P04", "P05", "P08", "P15"], "ausentes": ["P12", "P09"]},
+      "rs_tipicos": {"activos": ["R01", "R02", "R03", "R05", "R08"], "ausentes": ["R04", "R12"]},
+      "prescripcion_ps": ["P12", "P13", "P04"],
+      "prescripcion_rs": ["R04", "R12", "R01"],
+      "objetivo_prescripcion": "TRANSFERIR",
+      "transiciones": [
+        {"destino": "E4", "via": "C_sube_via_F7Se", "nota": "Replicar CON sentido"},
+        {"destino": "visionario_atrapado", "via": "S_baja", "nota": "Pierde ejecución"},
+        {"destino": "potencial_dormido", "via": "Se_baja", "nota": "Pierde comprensión"}
+      ]
+    },
+    "automata_eterno": {
+      "id": "automata_eterno",
+      "nombre": "Autómata eterno",
+      "tipo": "desequilibrado",
+      "perfil_lentes": "S↑ Se↓ C↑",
+      "descripcion": "EL MÁS PELIGROSO. Operador ciego + herramientas de continuidad. S+C PARECE sano. Las herramientas ausentes son exactamente las de ALARMA.",
+      "condicion": {
+        "gap_min": 0.15,
+        "S_alta": true,
+        "Se_baja": true,
+        "C_alta": true
+      },
+      "flags": ["peligro_oculto", "invisible_metricas_convencionales"],
+      "ints_tipicas_activas": ["INT-01", "INT-02", "INT-05", "INT-07", "INT-13", "INT-16"],
+      "ints_tipicas_ausentes": ["INT-17", "INT-18", "INT-08", "INT-14"],
+      "ps_tipicos": {"activos": ["P07", "P09", "P13", "P14"], "ausentes": ["P08", "P05", "P01", "P03"]},
+      "rs_tipicos": {"activos": ["R01", "R04", "R07", "R12"], "ausentes": ["R03", "R08", "R10", "R06"]},
+      "prescripcion_ps": ["P08", "P09", "P01"],
+      "prescripcion_rs": ["R03", "R06", "R10"],
+      "objetivo_prescripcion": "VER LO INVISIBLE",
+      "transiciones": [
+        {"destino": "E3", "via": "Se_sube_a_tiempo", "nota": "Luego E4"},
+        {"destino": "colapso_catastrofico", "via": "Se_no_sube", "nota": "Boeing, Maginot"}
+      ]
+    },
+    "potencial_dormido": {
+      "id": "potencial_dormido",
+      "nombre": "Potencial dormido",
+      "tipo": "desequilibrado",
+      "perfil_lentes": "S↓ Se↑ C↑",
+      "descripcion": "EL MÁS FÁCIL. Solo necesita activar 2-3 herramientas de S y ejecutar.",
+      "condicion": {
+        "gap_min": 0.15,
+        "S_baja": true,
+        "Se_alta": true,
+        "C_alta": true
+      },
+      "ints_tipicas_activas": ["INT-03", "INT-12", "INT-13", "INT-17", "INT-04"],
+      "ints_tipicas_ausentes": ["INT-10", "INT-16", "INT-11"],
+      "ps_tipicos": {"activos": ["P02", "P05", "P09", "P12"], "ausentes": ["P11", "P04", "P07"]},
+      "rs_tipicos": {"activos": ["R03", "R05", "R08", "R04"], "ausentes": ["R01", "R12", "R07"]},
+      "prescripcion_ps": ["P11", "P04", "P14"],
+      "prescripcion_rs": ["R12", "R01", "R07"],
+      "objetivo_prescripcion": "MOVER",
+      "transiciones": [
+        {"destino": "E4", "via": "S_sube", "nota": "El más fácil de resolver"}
+      ]
+    }
+  }
+}

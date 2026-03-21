@@ -252,6 +252,65 @@ if frontend_dist.exists():
     async def profundo_page():
         return FileResponse(frontend_dist / "index.html")
 
+    @app.get("/info")
+    async def info_page():
+        return FileResponse(frontend_dist / "index.html")
+
+    @app.get("/tarjeta/{token}")
+    async def tarjeta_cumpleanos(token: str):
+        """Página HTML bonita con felicitación personalizada."""
+        import json as _json
+        from src.db.client import get_pool
+        from starlette.responses import HTMLResponse
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            evento = await conn.fetchrow("""
+                SELECT metadata FROM om_cliente_eventos
+                WHERE tipo='cumpleanos_felicitado'
+                    AND metadata->>'token_tarjeta' = $1
+                ORDER BY created_at DESC LIMIT 1
+            """, token)
+        if not evento:
+            raise HTTPException(404, "Tarjeta no encontrada")
+        meta = evento["metadata"] if isinstance(evento["metadata"], dict) else _json.loads(evento["metadata"])
+        nombre = meta.get("nombre", "")
+        html = f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Feliz cumpleaños {nombre}</title>
+<style>
+  * {{ margin:0; padding:0; box-sizing:border-box; }}
+  body {{
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    font-family:'Georgia',serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+  }}
+  .card {{
+    background: white; border-radius: 24px; padding: 48px 36px;
+    max-width: 400px; width: 100%; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }}
+  .emoji {{ font-size: 64px; margin-bottom: 16px; }}
+  h1 {{ font-size: 28px; color: #1a1a2e; margin-bottom: 8px; }}
+  .nombre {{ font-size: 36px; color: #6366f1; font-style: italic; margin-bottom: 24px; }}
+  p {{ font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 16px; }}
+  .firma {{ font-size: 14px; color: #999; margin-top: 32px; }}
+  .firma strong {{ color: #6366f1; }}
+</style></head>
+<body>
+<div class="card">
+  <div class="emoji">🎂</div>
+  <h1>Feliz cumpleaños,</h1>
+  <div class="nombre">{nombre}!</div>
+  <p>Hoy es un día especial y queríamos que supieras
+  lo mucho que nos alegra tenerte en el estudio.</p>
+  <p>Gracias por confiar en nosotros para cuidarte.
+  A por un año más lleno de fuerza y equilibrio!</p>
+  <div class="firma">Con cariño,<br><strong>Authentic Pilates</strong><br>Albelda de Iregua</div>
+</div>
+</body></html>"""
+        return HTMLResponse(html)
+
     app.mount("/assets", StaticFiles(directory=frontend_dist / "assets"), name="assets")
     log.info("frontend_mounted", path=str(frontend_dist))
 

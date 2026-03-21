@@ -1,0 +1,382 @@
+{
+  "sesion": 1,
+  "dominio": "NEGOCIO",
+  "fecha": "2026-03-19",
+  "pares": [
+    {
+      "id": "N01",
+      "dominio": "negocio",
+      "escala": "macro",
+      "caso_real": "Toyota Motor Corporation — Toyota Production System (Taiichi Ohno, 1950s-1980s)",
+
+      "problema_resumen": "Fabricante japonés postguerra con producción plagada de desperdicio (muda), baja calidad percibida, recursos limitados. Fábricas ineficientes acumulando inventario sin filtrar qué sobraba.",
+      "vector_pre": {"F1": 0.40, "F2": 0.30, "F3": 0.15, "F4": 0.25, "F5": 0.50, "F6": 0.45, "F7": 0.20},
+      "arquetipo_estimado": "intoxicado (70%)",
+      "arquetipo_secundario": "semilla_dormida (25%)",
+      "eslabon_debil": "F3",
+
+      "solucion_resumen": "Toyota Production System: just-in-time, kanban, kaizen, eliminación de 7 tipos de muda, jidoka (autonomación). Décadas de implementación sistemática.",
+      "delta": {"F1": 0.25, "F2": 0.15, "F3": 0.50, "F4": 0.30, "F5": 0.15, "F6": 0.20, "F7": 0.45},
+      "vector_post": {"F1": 0.65, "F2": 0.45, "F3": 0.65, "F4": 0.55, "F5": 0.65, "F6": 0.65, "F7": 0.65},
+
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F3: +0.50", "F7: +0.45", "F4: +0.30", "F1: +0.25"],
+      "funciones_no_movidas": [],
+
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Arreglar F3 (depuración de muda) desbloqueó mejora de F2 — captación de cuota de mercado global solo fue posible tras eliminar desperdicio"},
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "F5 ya era 0.50 (identidad clara como fabricante japonés), base suficiente para replicar TPS a proveedores y otras plantas"},
+        {"ley": "F7→F3 (D)", "status": "confirmada", "detalle": "F3 subió a 0.65 antes/junto con F7 — replicaron un sistema ya depurado, no amplificaron defectos"}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: F3 era el eslabón débil claro, la solución lo atacó directamente. F5 suficiente para soportar replicación. Dependencia F2→F3(B) predice que desbloquear F3 mejora F2.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.85,
+      "notas": "Caso canónico de depuración como palanca. El TPS es literalmente un sistema de F3. La mejora de F7 (+0.45) es notable: Toyota replicó el sistema a toda su cadena de valor."
+    },
+
+    {
+      "id": "N02",
+      "dominio": "negocio",
+      "escala": "macro",
+      "caso_real": "Eastman Kodak Company — respuesta a fotografía digital (1990s-2012)",
+
+      "problema_resumen": "Dominante en película fotográfica (90% cuota US en 1976), inventó la cámara digital en 1975 pero rehusó canibalizar ingresos de película. Margen bruto de película ~70%.",
+      "vector_pre": {"F1": 0.85, "F2": 0.60, "F3": 0.25, "F4": 0.40, "F5": 0.75, "F6": 0.15, "F7": 0.55},
+      "arquetipo_estimado": "rigido (85%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F6",
+
+      "solucion_resumen": "Iniciativas digitales tibias: línea EasyShare, adquisición de Ofoto, diversificación en impresoras. Sin reestructuración de la división de película ni depuración de dependencia de márgenes analógicos.",
+      "delta": {"F1": -0.05, "F2": -0.05, "F3": 0.00, "F4": 0.00, "F5": -0.05, "F6": 0.10, "F7": 0.00},
+      "vector_post": {"F1": 0.80, "F2": 0.55, "F3": 0.25, "F4": 0.40, "F5": 0.70, "F6": 0.25, "F7": 0.55},
+
+      "tipo_resultado": "inerte",
+      "funciones_movidas": ["F6: +0.10"],
+      "funciones_no_movidas": ["F3: 0.00", "F4: 0.00", "F7: 0.00"],
+
+      "leyes_tcf": [
+        {"ley": "F1→F6 (D)", "status": "confirmada", "detalle": "Conservar márgenes de película (F1=0.85) sin adaptar = rigidez letal. La propia fortaleza de F1 bloqueó F6."},
+        {"ley": "F6→F5 (D)", "status": "no_aplica", "detalle": "F6 apenas se movió (+0.10, de 0.15 a 0.25), insuficiente para activar la degradante. Cuando eventualmente intentaron adaptar (2010+), F5 se erosionó."}
+      ],
+      "dependencias_violadas": ["F1→F6 (D): F1 altísima (0.85) con F6 en 0.15 → rigidez sistémica"],
+      "prediccion_tcf": "INERTE: Delta en F6 de +0.10 (de 0.15 a 0.25) es trivial. F3=0.25 intacta — no depuraron la dependencia de película. La ley F1→F6(D) predice que conservar sin adaptar degrada todo el sistema.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.85,
+      "notas": "El vector_post captura el estado post-'solución' pero pre-bancarrota (2012). La caída final fue aún más dramática. F3=0.25 intacta es la señal clave: nunca depuraron el modelo de negocio de película."
+    },
+
+    {
+      "id": "N03",
+      "dominio": "negocio",
+      "escala": "meso",
+      "caso_real": "WeWork (The We Company) — expansión pre-IPO bajo Adam Neumann (2017-2019)",
+
+      "problema_resumen": "Co-working startup valorada en $47B, quemando $2B/año, sin path a rentabilidad. Gobierno corporativo errático (Neumann). 700+ localizaciones con leases a largo plazo.",
+      "vector_pre": {"F1": 0.20, "F2": 0.85, "F3": 0.10, "F4": 0.15, "F5": 0.25, "F6": 0.55, "F7": 0.75},
+      "arquetipo_estimado": "expansion_sin_cimientos (80%)",
+      "arquetipo_secundario": "intoxicado (30%)",
+      "eslabon_debil": "F3",
+
+      "solucion_resumen": "Expansión global agresiva a 700+ localizaciones, S-1 para IPO, más rondas de capital (SoftBank $10B+). Sin depuración de leases tóxicos ni definición de qué era realmente WeWork.",
+      "delta": {"F1": -0.10, "F2": 0.05, "F3": -0.05, "F4": -0.10, "F5": -0.15, "F6": 0.00, "F7": 0.05},
+      "vector_post": {"F1": 0.10, "F2": 0.90, "F3": 0.05, "F4": 0.05, "F5": 0.10, "F6": 0.55, "F7": 0.80},
+
+      "tipo_resultado": "toxico",
+      "funciones_movidas": ["F5: -0.15", "F1: -0.10", "F4: -0.10"],
+      "funciones_no_movidas": ["F6: 0.00"],
+
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Captación masiva (F2=0.90) sin depuración (F3=0.05) = acumulación de basura (leases tóxicos, empleados innecesarios, oficinas vacías)"},
+        {"ley": "F4→F5 (B)", "status": "confirmada", "detalle": "Distribuyeron recursos (F4) sin frontera clara (F5=0.10) = fugas masivas. ¿Empresa tech? ¿Inmobiliaria? ¿Comunidad?"},
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "Replicaron agresivamente (F7=0.80) sin identidad (F5=0.10) = replicaron ruido. Cada nueva oficina diluía más la propuesta."}
+      ],
+      "dependencias_violadas": [
+        "F2→F3 (B): F2=0.90 con F3=0.05 → acumulación tóxica",
+        "F4→F5 (B): distribución sin frontera → fugas",
+        "F7→F5 (B): replicación sin identidad → ruido amplificado"
+      ],
+      "prediccion_tcf": "TÓXICO: Tres dependencias bloqueantes violadas simultáneamente. F2→F3(B), F4→F5(B) y F7→F5(B) predicen que captar+distribuir+replicar sin depurar ni tener frontera = colapso.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.80,
+      "notas": "Caso textbook de violación múltiple de dependencias bloqueantes. F5=0.10 post es el dato más revelador: después de gastar $10B+, nadie sabía qué era WeWork. El S-1 fue el espejo que lo expuso."
+    },
+
+    {
+      "id": "N04",
+      "dominio": "negocio",
+      "escala": "macro",
+      "caso_real": "Mercadona S.A. — modelo interproveedores bajo Juan Roig (1993→)",
+
+      "problema_resumen": "Supermercado regional español en guerra de precios, márgenes delgados, sin diferenciación. Juan Roig hereda del padre un negocio funcional pero sin escala ni identidad clara.",
+      "vector_pre": {"F1": 0.45, "F2": 0.35, "F3": 0.30, "F4": 0.30, "F5": 0.35, "F6": 0.40, "F7": 0.25},
+      "arquetipo_estimado": "semilla_dormida (65%)",
+      "arquetipo_secundario": "sin_rumbo (30%)",
+      "eslabon_debil": "F5",
+
+      "solucion_resumen": "SPB (Siempre Precios Bajos) eliminando promociones, modelo interproveedores (proveedores exclusivos a largo plazo), inversión récord en empleados (salarios más altos del sector), desarrollo de marca propia Hacendado.",
+      "delta": {"F1": 0.30, "F2": 0.30, "F3": 0.20, "F4": 0.30, "F5": 0.40, "F6": 0.15, "F7": 0.35},
+      "vector_post": {"F1": 0.75, "F2": 0.65, "F3": 0.50, "F4": 0.60, "F5": 0.75, "F6": 0.55, "F7": 0.60},
+
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F5: +0.40", "F7: +0.35", "F1: +0.30", "F2: +0.30", "F4: +0.30"],
+      "funciones_no_movidas": [],
+
+      "leyes_tcf": [
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "Construyó F5 primero (identidad vía SPB + interproveedores), LUEGO replicó. Secuencia correcta."},
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Creció captación (Hacendado, expansión) Y depuró simultáneamente (eliminó marcas externas, simplificó surtido de 9000 a 8000 referencias)."},
+        {"ley": "F4→F5 (B)", "status": "confirmada", "detalle": "Distribución de recursos (a empleados, proveedores) con frontera clara (SPB, 'El Jefe es el cliente') → sin fugas."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: Atacó F5 (eslabón débil) directamente con SPB e interproveedores. Dependencias F7→F5(B) y F4→F5(B) satisfechas al construir frontera primero. Depuración (F3+0.20) desbloqueó captación.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.80,
+      "notas": "Mercadona es un caso de cierre sistémico: todas las funciones mejoraron porque la solución fue estructural, no parcial. F5+0.40 es el mayor delta individual — la identidad fue la palanca maestra."
+    },
+
+    {
+      "id": "N05",
+      "dominio": "negocio",
+      "escala": "macro",
+      "caso_real": "Netflix Inc. — pivot de DVD-by-mail a streaming (2007-2013)",
+
+      "problema_resumen": "Negocio exitoso de DVD por correo ($1.2B ingresos 2007) pero mercado DVD en declive. Tecnología streaming emergente. Blockbuster aún competía.",
+      "vector_pre": {"F1": 0.70, "F2": 0.65, "F3": 0.30, "F4": 0.45, "F5": 0.60, "F6": 0.35, "F7": 0.50},
+      "arquetipo_estimado": "rigido (55%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F6",
+
+      "solucion_resumen": "Lanzamiento de streaming (2007), inversión masiva en contenido original (House of Cards 2013), expansión internacional, separación del negocio DVD (Qwikster fallido → integración controlada).",
+      "delta": {"F1": 0.05, "F2": 0.20, "F3": 0.20, "F4": 0.15, "F5": 0.15, "F6": 0.40, "F7": 0.20},
+      "vector_post": {"F1": 0.75, "F2": 0.85, "F3": 0.50, "F4": 0.60, "F5": 0.75, "F6": 0.75, "F7": 0.70},
+
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F6: +0.40", "F2: +0.20", "F3: +0.20", "F7: +0.20"],
+      "funciones_no_movidas": [],
+
+      "leyes_tcf": [
+        {"ley": "F6→F1 (D)", "status": "confirmada", "detalle": "Adaptaron (streaming) conservando core (modelo suscripción, algoritmo recomendación). F1 se mantuvo e incluso mejoró (+0.05)."},
+        {"ley": "F6→F5 (D)", "status": "confirmada", "detalle": "Pivotaron pero mantuvieron identidad como destino de entretenimiento personalizado. F5 subió de 0.60 a 0.75."},
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "F3 subió +0.20 (depuraron negocio DVD) simultáneamente con F2+0.20 (nuevo mercado streaming). Depuración habilitó captación limpia."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: F6 atacada directamente. F6→F1(D) y F6→F5(D) satisfechas (adaptaron sin destruir core ni identidad). F3+0.20 desbloqueó F2. Secuencia correcta.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.85,
+      "notas": "Contraste directo con Kodak (N02): mismo arquetipo inicial (rígido), resultado opuesto. Diferencia clave: Netflix depuró (F3+0.20) y Kodak no (F3=0.00). Qwikster fue un fallo parcial de F5 pero lo corrigieron rápido."
+    },
+
+    {
+      "id": "N06",
+      "dominio": "negocio",
+      "escala": "macro",
+      "caso_real": "J.C. Penney Company Inc. — rebranding Ron Johnson (2011-2013)",
+
+      "problema_resumen": "Department store tradicional con demografía envejecida, dependiente de cupones y promociones constantes. Sin identidad clara más allá de 'todo asequible'. Contrataron a Ron Johnson (ex-Apple Retail) como CEO.",
+      "vector_pre": {"F1": 0.55, "F2": 0.45, "F3": 0.30, "F4": 0.40, "F5": 0.40, "F6": 0.25, "F7": 0.45},
+      "arquetipo_estimado": "sin_rumbo (65%)",
+      "arquetipo_secundario": "rigido (35%)",
+      "eslabon_debil": "F5",
+
+      "solucion_resumen": "Johnson eliminó cupones/promociones ('fair and square pricing'), rediseñó tiendas como boutiques, despidió equipo de marketing de fidelización, intentó crear 'town squares' dentro de las tiendas. Alienó completamente a la base de clientes existente.",
+      "delta": {"F1": -0.25, "F2": -0.25, "F3": 0.05, "F4": -0.10, "F5": -0.20, "F6": 0.15, "F7": -0.15},
+      "vector_post": {"F1": 0.30, "F2": 0.20, "F3": 0.35, "F4": 0.30, "F5": 0.20, "F6": 0.40, "F7": 0.30},
+
+      "tipo_resultado": "toxico",
+      "funciones_movidas": ["F1: -0.25", "F2: -0.25", "F5: -0.20", "F7: -0.15"],
+      "funciones_no_movidas": ["F3: +0.05"],
+
+      "leyes_tcf": [
+        {"ley": "F6→F5 (D)", "status": "confirmada", "detalle": "Adaptaron (nuevo pricing, diseño de tiendas) sin mantener frontera — destruyeron lo poco que el cliente reconocía. F5 bajó de 0.40 a 0.20."},
+        {"ley": "F6→F1 (D)", "status": "confirmada", "detalle": "Adaptaron sin conservar: eliminaron cupones que eran el motor de tráfico (F1). Destruyeron valor existente por perseguir visión Apple."}
+      ],
+      "dependencias_violadas": [
+        "F6→F5 (D): adaptación sin frontera → identidad destruida",
+        "F6→F1 (D): adaptación sin conservar → destrucción de valor existente"
+      ],
+      "prediccion_tcf": "TÓXICO: F5 ya era débil (0.40) y la 'solución' la empeoró (-0.20). Leyes F6→F5(D) y F6→F1(D) predicen que adaptar sin mantener frontera ni conservar = destrucción. La solución atacó el eslabón débil en dirección equivocada.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.85,
+      "notas": "Contraste con Netflix (N05): ambos necesitaban F6, pero Netflix mantuvo F5 y F1 mientras adaptaba, JCP las destruyó. La ley F6→F5(D) es la que explica la divergencia. Pérdida de $4.3B en ventas en 2 años."
+    },
+
+    {
+      "id": "N07",
+      "dominio": "negocio",
+      "escala": "meso",
+      "caso_real": "Patagonia Inc. — campaña 'Don't Buy This Jacket' y modelo de sostenibilidad (2011→)",
+
+      "problema_resumen": "Empresa de ropa outdoor con misión de sostenibilidad fuerte, pero presión de crecimiento de revenue. Tensión entre misión ambiental e imperativo de venta.",
+      "vector_pre": {"F1": 0.65, "F2": 0.50, "F3": 0.45, "F4": 0.50, "F5": 0.80, "F6": 0.55, "F7": 0.50},
+      "arquetipo_estimado": "equilibrado (50%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F7",
+
+      "solucion_resumen": "Campaña 'Don't Buy This Jacket' (Black Friday 2011), programa Worn Wear (reparación/reventa), 1% for the Planet, transparencia total de cadena de suministro (Footprint Chronicles). En 2022, Yvon Chouinard transfirió propiedad a trust medioambiental.",
+      "delta": {"F1": 0.05, "F2": 0.20, "F3": 0.10, "F4": 0.05, "F5": 0.10, "F6": 0.10, "F7": 0.25},
+      "vector_post": {"F1": 0.70, "F2": 0.70, "F3": 0.55, "F4": 0.55, "F5": 0.90, "F6": 0.65, "F7": 0.75},
+
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F7: +0.25", "F2: +0.20"],
+      "funciones_no_movidas": ["F4: +0.05", "F1: +0.05"],
+
+      "leyes_tcf": [
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "F5 ya era 0.80 (identidad cristalina). Replicar (comunicar misión) fue viable precisamente porque la frontera era clarísima. F7 subió +0.25."},
+        {"ley": "F2→F5 (D)", "status": "no_aplica", "detalle": "Relación inversa interesante: la fuerza de F5 (identidad) POTENCIÓ F2 (captación). Anti-consumo como mensaje → +30% ventas. No es dependencia catalogada pero es patrón relevante."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: F5 altísima (0.80) proporciona base sólida para F7. Dependencia F7→F5(B) satisfecha con margen. Paradoja de captación: anti-consumo generó más ventas — F5 fuerte amplifica F2.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.80,
+      "notas": "Caso excepcional que sugiere relación F5→F2 no catalogada: identidad fuerte POTENCIA captación incluso con mensajes contra-intuitivos. La transferencia de propiedad (2022) es el F7 definitivo — la empresa funciona sin el fundador."
+    },
+
+    {
+      "id": "N08",
+      "dominio": "negocio",
+      "escala": "meso",
+      "caso_real": "Peloton Interactive Inc. — estrategia post-COVID (2021-2023)",
+
+      "problema_resumen": "Demanda masiva COVID creó crecimiento insostenible. Sobre-inventario, sobre-contratación (8600 empleados), stock cayó 90%+. Pasó de $50B valoración a ~$4B.",
+      "vector_pre": {"F1": 0.35, "F2": 0.75, "F3": 0.15, "F4": 0.20, "F5": 0.45, "F6": 0.25, "F7": 0.50},
+      "arquetipo_estimado": "intoxicado (75%)",
+      "arquetipo_secundario": "expansion_sin_cimientos (30%)",
+      "eslabon_debil": "F3",
+
+      "solucion_resumen": "Recortes de precio en hardware, múltiples rondas de despidos, pivot a suscripción, partnerships con Amazon/Lululemon/Hilton, cambios de CEO (Foley→McCarthy→Woodworth). Medidas reactivas sin estrategia coherente.",
+      "delta": {"F1": 0.05, "F2": -0.10, "F3": 0.10, "F4": 0.05, "F5": -0.05, "F6": 0.05, "F7": 0.00},
+      "vector_post": {"F1": 0.40, "F2": 0.65, "F3": 0.25, "F4": 0.25, "F5": 0.40, "F6": 0.30, "F7": 0.50},
+
+      "tipo_resultado": "inerte",
+      "funciones_movidas": ["F3: +0.10", "F2: -0.10"],
+      "funciones_no_movidas": ["F7: 0.00", "F5: -0.05"],
+
+      "leyes_tcf": [
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "F3 subió solo +0.10 (de 0.15 a 0.25), insuficiente para desbloquear. Despidos fueron depuración parcial pero no estructural."},
+        {"ley": "F6→F5 (D)", "status": "confirmada", "detalle": "Intentos de adaptación (partnerships, pricing) sin frontera clara. Cada partnership diluía más la propuesta: ¿marca premium? ¿commodity? Múltiples CEOs empeoraron F5."}
+      ],
+      "dependencias_violadas": ["F2→F3 (B): F3 sigue críticamente baja (0.25) — depuración insuficiente mantiene el bloqueo"],
+      "prediccion_tcf": "INERTE: Delta F3 de +0.10 es insuficiente para desbloquear F2→F3(B). F5 no mejoró (incluso bajó -0.05). Sin depuración estructural ni clarificación de identidad, los deltas netos son ~0.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.75,
+      "notas": "Comparar con Toyota (N01): mismo arquetipo (intoxicado), resultado opuesto. Toyota atacó F3 masivamente (+0.50); Peloton apenas la movió (+0.10). La magnitud del delta en F3 determina si un intoxicado cierra o no."
+    },
+
+    {
+      "id": "N09",
+      "dominio": "negocio",
+      "escala": "micro",
+      "caso_real": "El Bulli / Ferran Adrià — restaurante #1 del mundo, cierre 2011",
+
+      "problema_resumen": "Restaurante 5 veces #1 mundial, 2M solicitudes de reserva para 8000 cubiertos/año, pero perdía dinero cada año. Todo dependía del genio creativo de Adrià. Modelo no escalable ni sostenible.",
+      "vector_pre": {"F1": 0.30, "F2": 0.90, "F3": 0.20, "F4": 0.15, "F5": 0.90, "F6": 0.75, "F7": 0.15},
+      "arquetipo_estimado": "maquina_sin_alma (80%)",
+      "arquetipo_secundario": "hemorragico (30%)",
+      "eslabon_debil": "F7",
+
+      "solucion_resumen": "No hubo solución de negocio. Adrià cerró el restaurante (2011) y lo convirtió en El Bulli Foundation (laboratorio/museo). Fue una salida, no una resolución del problema de sostenibilidad.",
+      "delta": {"F1": 0.00, "F2": -0.60, "F3": 0.10, "F4": 0.00, "F5": 0.00, "F6": 0.00, "F7": 0.10},
+      "vector_post": {"F1": 0.30, "F2": 0.30, "F3": 0.30, "F4": 0.15, "F5": 0.90, "F6": 0.75, "F7": 0.25},
+
+      "tipo_resultado": "inerte",
+      "funciones_movidas": ["F2: -0.60", "F7: +0.10", "F3: +0.10"],
+      "funciones_no_movidas": ["F1: 0.00", "F4: 0.00", "F5: 0.00", "F6: 0.00"],
+
+      "leyes_tcf": [
+        {"ley": "F7→F5 (B)", "status": "confirmada", "detalle": "F5 era 0.90 (identidad cristalina), pero F7 apenas se movió +0.10. La dependencia dice que F7 NECESITA F5 para funcionar — F5 estaba, pero F7 no mejoró sustancialmente. Necesario pero no suficiente."},
+        {"ley": "F7→F1 (D)", "status": "confirmada", "detalle": "F1=0.30 degradaba la replicación: sin base conservada (procesos, sostenibilidad financiera), intentar replicar el genio era imposible."}
+      ],
+      "dependencias_violadas": ["F7→F1 (D): F1=0.30 demasiado baja para soportar replicación efectiva"],
+      "prediccion_tcf": "INERTE: F7 era el eslabón débil, pero la 'solución' no lo atacó directamente. El cierre eliminó F2 sin resolver F7. La TCF predice que sin intervención directa en F7 (con F1 y F5 como soporte), el gap persiste.",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.70,
+      "notas": "Caso revelador sobre límites de F7→F5(B): la dependencia es necesaria pero no suficiente. F5=0.90 no bastó porque el conocimiento era tácito/encarnado en Adrià. Sugiere variable oculta: 'codificabilidad' del contenido de F5. Si F5 es puramente personal/tácita, F7 no puede operarla aunque F5 sea altísima. Implicación para la TCF: F7→F5(B) debería cualificarse como F7→F5_codificada(B)."
+    },
+
+    {
+      "id": "N10",
+      "dominio": "negocio",
+      "escala": "macro",
+      "caso_real": "Inditex S.A. / Zara — modelo fast fashion de Amancio Ortega (1985→)",
+
+      "problema_resumen": "Empresa textil española compitiendo contra casas de moda con ciclos de 6 meses diseño-a-tienda. Sin marca reconocida fuera de España, sin diferenciación en speed-to-market.",
+      "vector_pre": {"F1": 0.45, "F2": 0.40, "F3": 0.35, "F4": 0.30, "F5": 0.40, "F6": 0.35, "F7": 0.30},
+      "arquetipo_estimado": "semilla_dormida (55%)",
+      "arquetipo_secundario": null,
+      "eslabon_debil": "F6",
+
+      "solucion_resumen": "Integración vertical total: ciclo de 2 semanas diseño-a-tienda, lotes pequeños, feedback en tiempo real desde tiendas, distribución controlada (tiendas propias), publicidad mínima. El modelo ES la ventaja.",
+      "delta": {"F1": 0.25, "F2": 0.30, "F3": 0.25, "F4": 0.35, "F5": 0.35, "F6": 0.45, "F7": 0.30},
+      "vector_post": {"F1": 0.70, "F2": 0.70, "F3": 0.60, "F4": 0.65, "F5": 0.75, "F6": 0.80, "F7": 0.60},
+
+      "tipo_resultado": "cierre",
+      "funciones_movidas": ["F6: +0.45", "F5: +0.35", "F4: +0.35", "F2: +0.30", "F7: +0.30"],
+      "funciones_no_movidas": [],
+
+      "leyes_tcf": [
+        {"ley": "F6→F5 (D)", "status": "confirmada", "detalle": "Adaptación extrema (ciclo 2 semanas) CON frontera clara (moda accesible, no alta costura). F5 y F6 subieron juntas."},
+        {"ley": "F6→F1 (D)", "status": "confirmada", "detalle": "La rapidez de adaptación (F6) protegió F1: lotes pequeños = menor riesgo de stock muerto. Adaptar rápido ES conservar."},
+        {"ley": "F2→F3 (B)", "status": "confirmada", "detalle": "Lotes pequeños = depuración automática integrada en el modelo de captación. Lo que no vende, desaparece en 2 semanas. F3 built-in."}
+      ],
+      "dependencias_violadas": [],
+      "prediccion_tcf": "CIERRE: F6 atacada como palanca maestra con F5 construida en paralelo. Las dependencias F6→F5(D) y F6→F1(D) satisfechas. F3 integrada en el modelo (lotes pequeños = depuración automática).",
+      "prediccion_correcta": true,
+
+      "confianza_mapeo": 0.80,
+      "notas": "Caso notable donde F3 (depuración) está INTEGRADA en el modelo de negocio, no es una intervención separada. Lotes pequeños = eliminación automática. Esto es F3 como propiedad emergente del diseño del sistema, no como acción correctiva. Contraste con Peloton (N08) donde F3 fue una reacción."
+    }
+  ],
+
+  "resumen": {
+    "pares_procesados": 10,
+    "distribucion_tipos": {
+      "cierre": 5,
+      "inerte": 3,
+      "toxico": 2
+    },
+    "arquetipos_cubiertos": [
+      "intoxicado (N01, N08)",
+      "rigido (N02, N05)",
+      "expansion_sin_cimientos (N03)",
+      "semilla_dormida (N04, N10)",
+      "sin_rumbo (N06)",
+      "equilibrado (N07)",
+      "maquina_sin_alma (N09)"
+    ],
+    "arquetipos_unicos": 7,
+    "leyes_tcf_confirmadas": {
+      "F2→F3 (B)": {"conteo": 5, "casos": ["N01", "N03", "N04", "N05", "N10"]},
+      "F7→F5 (B)": {"conteo": 4, "casos": ["N01", "N04", "N07", "N09"]},
+      "F6→F5 (D)": {"conteo": 3, "casos": ["N06", "N08", "N10"]},
+      "F6→F1 (D)": {"conteo": 3, "casos": ["N05", "N06", "N10"]},
+      "F1→F6 (D)": {"conteo": 1, "casos": ["N02"]},
+      "F4→F5 (B)": {"conteo": 2, "casos": ["N03", "N04"]},
+      "F7→F1 (D)": {"conteo": 1, "casos": ["N09"]},
+      "F7→F3 (D)": {"conteo": 1, "casos": ["N01"]}
+    },
+    "leyes_tcf_refutadas": [],
+    "prediccion_correcta": "10/10 (100%)",
+    "confianza_media": 0.805,
+
+    "hallazgo_principal": "F2→F3(B) es la dependencia más consistente: activada en 5/10 casos. La depuración (F3) es el predictor más fiable de resultado — si la solución mueve F3 sustancialmente, cierra; si no la mueve, es inerte o tóxica. Toyota (+0.50)=cierre, Peloton (+0.10)=inerte, WeWork (-0.05)=tóxico.",
+
+    "hallazgo_secundario": "F7→F5(B) es necesaria pero no suficiente: El Bulli tenía F5=0.90 y F7 apenas se movió. El conocimiento tácito/encarnado no es 'replicable' aunque la identidad sea cristalina. Sugiere cualificación: F7→F5_codificada(B). Si F5 no es codificable, la dependencia bloqueante se satisface formalmente pero F7 sigue bloqueada en la práctica.",
+
+    "hallazgo_terciario": "Inditex (N10) muestra F3 como propiedad emergente: lotes pequeños = depuración automática integrada en el modelo. No fue una intervención correctiva sino un diseño sistémico. Esto es cualitativamente distinto de la depuración reactiva de Peloton (N08). Sugiere distinguir F3_diseño (built-in) vs F3_reactiva (correctiva).",
+
+    "relacion_no_catalogada": "Patagonia (N07) sugiere dependencia F5→F2 no catalogada: identidad fuerte POTENCIA captación. Anti-consumo generó +30% ventas. F5 alta no solo habilita otras funciones (ya catalogado en bloqueantes) sino que puede AMPLIFICAR F2 activamente.",
+
+    "alguna_ley_necesita_revision": "Sí. F7→F5(B) necesita cualificación: la dependencia asume que F5 es codificable/transmisible. Si F5 es puramente tácita (caso El Bulli), la dependencia se satisface formalmente pero F7 sigue bloqueada. Propuesta: F7→F5_codificada(B) o añadir condición de codificabilidad.",
+
+    "nota_metodologica": "100% de predicción correcta en 10 casos de negocio bien documentados es sospechosamente alto. Posibles explicaciones: (1) sesgo retrospectivo — sabemos el resultado y ajustamos vectores inconscientemente, (2) las leyes TCF capturan patrones reales pero los casos públicos bien conocidos tienden a tener narrativas claras que encajan fácilmente, (3) el test real será Sesión 5 (FALLIDAS) con casos counter-intuitivos. Mantener escepticismo saludable."
+  }
+}

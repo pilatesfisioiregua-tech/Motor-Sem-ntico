@@ -449,16 +449,19 @@ class ConstraintManifold:
 
         return p
 
-    def generar(self, gradientes: dict, modo: str = 'analisis') -> dict:
+    def generar(self, gradientes: dict, modo: str = 'analisis',
+                input_texto: str = None) -> dict:
         """Generar programa valido por construccion.
 
         Usa gradientes para guiar seleccion de INTs,
         luego aplica reglas como restricciones constructivas.
         Criticality-aware: uses adjusted bounds from CriticalityEngine.
+        Vector-aware: uses embedding similarity for INT selection (Phase 2B).
 
         Args:
             gradientes: dict con top_gaps (del campo de gradientes)
             modo: analisis|conversacion|generacion|confrontacion
+            input_texto: original input text for vector routing (optional)
 
         Returns:
             dict programa valido que satisface todas las reglas
@@ -491,8 +494,8 @@ class ConstraintManifold:
                 if len(ints) < n_target:
                     ints.add(candidata)
         else:
-            # Seleccionar por gaps (las inteligencias mas relevantes para los gaps detectados)
-            gap_ints = _ints_para_gaps(top_gaps)
+            # Seleccionar por gaps (static mapping + vector enrichment)
+            gap_ints = _ints_para_gaps(top_gaps, input_texto=input_texto)
             for candidata in gap_ints:
                 if len(ints) < n_target:
                     ints.add(candidata)
@@ -537,8 +540,13 @@ class ConstraintManifold:
         return programa
 
 
-def _ints_para_gaps(top_gaps: list) -> list:
-    """Mapear gaps (celda = FuncionxLente) a inteligencias relevantes."""
+def _ints_para_gaps(top_gaps: list, input_texto: str = None) -> list:
+    """Mapear gaps (celda = FuncionxLente) a inteligencias relevantes.
+
+    Uses static mapping + optional vector enrichment (Phase 2B).
+    Vector routing adds INTs that are semantically relevant but
+    not captured by the static funcion→INT mapping.
+    """
     mapping_funcion = {
         'Conservar': ['INT-07', 'INT-05'],
         'Captar': ['INT-02', 'INT-06'],
@@ -558,6 +566,14 @@ def _ints_para_gaps(top_gaps: list) -> list:
         for c in candidatas:
             if c not in resultado:
                 resultado.append(c)
+
+    # Vector enrichment: add semantically relevant INTs (Phase 2B)
+    if input_texto:
+        try:
+            from .vector_routing import enrich_gap_routing
+            resultado = enrich_gap_routing(resultado, input_texto, max_extra=2)
+        except Exception as _e:
+            pass  # Silent fallback — static mapping is sufficient
 
     return resultado
 

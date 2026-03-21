@@ -388,6 +388,13 @@ async def ejecutar_cron(tipo: str) -> dict:
     if tipo == "inicio_semana":
         resultados["sesiones"] = await generar_sesiones_semana()
         resultados["alertas"] = await detectar_alertas_retencion()
+        # Generar propuestas Voz
+        from src.pilates.voz import generar_propuestas
+        props = await generar_propuestas()
+        resultados["voz_propuestas"] = {"generadas": len(props)}
+        # Recalcular engagement
+        from src.pilates.engagement import recalcular_engagement_todos
+        resultados["engagement"] = await recalcular_engagement_todos()
         # Generar y almacenar briefing
         from src.pilates.briefing import generar_briefing
         resultados["briefing"] = await generar_briefing()
@@ -419,10 +426,155 @@ async def ejecutar_cron(tipo: str) -> dict:
         resultados["dias_esperados"] = await calcular_dias_esperados(mes)
 
     elif tipo == "diario":
-        resultados["nota"] = "Sin automatizaciones diarias en MVP"
+        resultados["cumpleanos"] = await felicitar_cumpleanos()
+        from src.pilates.stripe_pagos import cron_cobros_recurrentes
+        resultados["cobros"] = await cron_cobros_recurrentes()
 
     else:
         return {"status": "error", "detail": f"Tipo cron desconocido: {tipo}"}
 
     log.info("cron_ejecutado", tipo=tipo, resultados=list(resultados.keys()))
     return {"status": "ok", "tipo": tipo, **resultados}
+
+
+# ============================================================
+# 7. CUMPLEAÑOS AUTOMÁTICOS (cron diario)
+# ============================================================
+
+async def felicitar_cumpleanos():
+    """Cron diario: detecta cumpleaños de hoy y envía felicitación por WA."""
+    import json
+    pool = await _get_pool()
+    hoy = date.today()
+
+    async with pool.acquire() as conn:
+        cumples = await conn.fetch("""
+            SELECT c.id, c.nombre, c.apellidos, c.telefono, c.fecha_nacimiento,
+                   EXTRACT(YEAR FROM age(c.fecha_nacimiento)) as edad
+            FROM om_clientes c
+            JOIN om_cliente_tenant ct ON ct.cliente_id = c.id
+            WHERE ct.tenant_id = $1 AND ct.estado = 'activo'
+                AND c.fecha_nacimiento IS NOT NULL
+                AND EXTRACT(MONTH FROM c.fecha_nacimiento) = $2
+                AND EXTRACT(DAY FROM c.fecha_nacimiento) = $3
+        """, TENANT, hoy.month, hoy.day)
+
+        enviados = 0
+        for c in cumples:
+            ya_felicitado = await conn.fetchval("""
+                SELECT 1 FROM om_cliente_eventos
+                WHERE cliente_id=$1 AND tipo='cumpleanos_felicitado'
+                    AND created_at >= date_trunc('year', CURRENT_DATE)
+            """, c["id"])
+            if ya_felicitado:
+                continue
+
+            import secrets
+            token_tarjeta = secrets.token_urlsafe(16)
+            base_url = "https://motor-semantico-omni.fly.dev"
+
+            mensaje = (
+                f"Feliz cumpleaños, {c['nombre']}! 🎂\n\n"
+                f"Hoy es tu día y desde Authentic Pilates queríamos "
+                f"mandarte un abrazo bien grande.\n\n"
+                f"Te hemos preparado una cosita:\n"
+                f"{base_url}/tarjeta/{token_tarjeta}\n\n"
+                f"Pásalo genial! 🎉"
+            )
+
+            from src.pilates.whatsapp import enviar_texto, is_configured
+            if is_configured() and c["telefono"]:
+                await enviar_texto(c["telefono"], mensaje, c["id"])
+                enviados += 1
+
+                await conn.execute("""
+                    INSERT INTO om_cliente_eventos
+                        (tenant_id, cliente_id, tipo, metadata)
+                    VALUES ($1, $2, 'cumpleanos_felicitado', $3::jsonb)
+                """, TENANT, c["id"], json.dumps({
+                    "token_tarjeta": token_tarjeta,
+                    "nombre": c["nombre"],
+                    "edad": int(c["edad"]) if c["edad"] else None,
+                    "year": hoy.year
+                }))
+
+            from src.pilates.feed import publicar
+            await publicar("cumpleanos", "🎂",
+                f"Hoy cumple años {c['nombre']}!",
+                f"Felicitación enviada por WA", c["id"], "success")
+
+    log.info("cumpleanos_check", hoy=str(hoy), enviados=enviados)
+    return {"cumpleanos_hoy": len(cumples), "felicitaciones_enviadas": enviados}
+
+
+# ============================================================
+# 8. CHECK LISTA DE ESPERA (tras cada cancelación)
+# ============================================================
+
+async def check_lista_espera():
+    """Cuando alguien cancela, verificar si hay clientes en lista de espera que encajen.
+
+    Se ejecuta tras cada cancelación (llamado desde portal_chat.py tras cancelar_sesion).
+    """
+    pool = await _get_pool()
+    async with pool.acquire() as conn:
+        # Buscar alertas activas
+        alertas = await conn.fetch("""
+            SELECT le.*, c.nombre, c.telefono
+            FROM om_lista_espera le
+            JOIN om_clientes c ON c.id = le.cliente_id
+            WHERE le.tenant_id = $1 AND le.estado = 'activa'
+        """, TENANT)
+
+        for alerta in alertas:
+            # Buscar sesiones futuras que encajen con la preferencia
+            query = """
+                SELECT s.id, s.fecha, s.hora_inicio, g.nombre as grupo
+                FROM om_sesiones s
+                JOIN om_grupos g ON g.id = s.grupo_id
+                WHERE s.tenant_id = $1 AND s.fecha > CURRENT_DATE
+                    AND s.fecha <= CURRENT_DATE + 14 AND s.estado = 'programada'
+            """
+            params = [TENANT]
+
+            if alerta["dia_semana"] is not None:
+                query += " AND EXTRACT(DOW FROM s.fecha) = $" + str(len(params) + 1)
+                # PostgreSQL DOW: Sunday=0, Monday=1... adjust from Python weekday
+                pg_dow = (alerta["dia_semana"] + 1) % 7
+                params.append(pg_dow)
+
+            if alerta["franja"] == "manana":
+                query += f" AND s.hora_inicio < '14:00'"
+            elif alerta["franja"] == "tarde":
+                query += f" AND s.hora_inicio >= '14:00'"
+
+            query += " ORDER BY s.fecha, s.hora_inicio LIMIT 3"
+            sesiones = await conn.fetch(query, *params)
+
+            for ses in sesiones:
+                # Verificar que haya plaza
+                ocupadas = await conn.fetchval("""
+                    SELECT count(*) FROM om_asistencias
+                    WHERE sesion_id=$1 AND estado IN ('confirmada','asistio','recuperacion')
+                """, ses["id"])
+                cap = await conn.fetchval(
+                    "SELECT capacidad_max FROM om_grupos g JOIN om_sesiones s ON s.grupo_id=g.id WHERE s.id=$1",
+                    ses["id"])
+
+                if ocupadas < cap:
+                    # Notificar por WhatsApp
+                    from src.pilates.whatsapp import enviar_texto
+                    dia_nombre = ["lun","mar","mié","jue","vie","sáb","dom"][ses["fecha"].weekday()]
+                    msg = (
+                        f"🔔 ¡Se ha liberado un hueco!\n\n"
+                        f"{dia_nombre} {ses['fecha'].strftime('%d/%m')} a las {str(ses['hora_inicio'])[:5]}\n"
+                        f"Grupo: {ses['grupo']}\n\n"
+                        f"Entra en tu portal para reservar tu plaza."
+                    )
+                    await enviar_texto(alerta["telefono"], msg, alerta["cliente_id"])
+
+                    await conn.execute("""
+                        UPDATE om_lista_espera SET estado='notificada', fecha_notificacion=now()
+                        WHERE id=$1
+                    """, alerta["id"])
+                    break  # Una notificación por alerta

@@ -47,24 +47,19 @@ TOOL_DESCRIPTIONS = {
     "http_request": "http_request(method, url) — llamadas HTTP",
     "search_files": "search_files(pattern) — busca archivos por patrón",
     "finish": "finish(result) — TERMINAR con resultado. PON TU RESPUESTA AQUÍ.",
-    "mochila": "mochila() — contexto del proyecto (máx 3 llamadas)",
+    "mochila": "mochila(seccion) — referencia: herramientas|reglas|errores|proyecto. Solo si necesitas algo específico.",
 }
 
-CODE_OS_SYSTEM = """Eres Code OS — agente técnico de OMNI-MIND. SIEMPRE en ESPAÑOL.
+CODE_OS_SYSTEM = """Eres Code OS — agente técnico de OMNI-MIND. ESPAÑOL siempre.
 
-HERRAMIENTAS DISPONIBLES (usa SOLO estas, ninguna más):
+TOOLS:
 {tools_section}
 
 RUTAS: @project/ = proyecto real. Sin prefijo = sandbox temporal.
 
-CÓMO TRABAJAR:
-1. ¿Qué necesito saber? → read_file (muestra números de línea)
-2. ¿Necesito añadir código? → insert_at(path, línea, código_nuevo)
-3. ¿Necesito cambiar código existente? → edit_file(path, texto_viejo, texto_nuevo)
-4. ¿Ya tengo la respuesta? → finish(result='mi respuesta completa')
-
-REGLA: Tu análisis va DENTRO de finish(result='...'), no como texto suelto.
-Si solo te piden leer/analizar: lee → finish(result='lo que encontré').
+PROTOCOLO:
+1. Lee (read_file) → 2. Edita (edit_file/insert_at) → 3. Verifica (run_command) → 4. finish(result='respuesta')
+Tu respuesta va DENTRO de finish(result='...').
 
 {context_section}
 """
