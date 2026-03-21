@@ -1,4 +1,5 @@
 """Motor Semántico OMNI-MIND — API endpoint."""
+import asyncio
 import structlog
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
@@ -34,6 +35,13 @@ async def lifespan(app: FastAPI):
     from src.meta_red import load_inteligencias
     load_inteligencias()
     log.info("startup_complete")
+    # Iniciar cron de tareas programadas
+    try:
+        from src.pilates.cron import cron_loop
+        asyncio.create_task(cron_loop())
+        log.info("startup_cron_started")
+    except Exception as e:
+        log.warning("startup_cron_failed", error=str(e))
     yield
     try:
         from src.db.client import close_pool

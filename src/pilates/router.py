@@ -3125,3 +3125,22 @@ async def ciclo_completo():
     """Ejecuta los 5 ciclos en secuencia (ESCUCHAR→PRIORIZAR→PROPONER→EJECUTAR→APRENDER)."""
     from src.pilates.voz_ciclos import ejecutar_ciclo_completo
     return await ejecutar_ciclo_completo()
+
+# ============================================================
+# VOZ ESTRATÉGICO — Cron manual
+# B-PIL-20e
+# ============================================================
+
+@router.post("/voz/cron/diaria")
+async def cron_diaria_manual():
+    """Dispara la tarea diaria manualmente (escuchar señales)."""
+    from src.pilates.cron import _tarea_diaria
+    await _tarea_diaria()
+    return {"status": "ok", "tarea": "diaria"}
+
+@router.post("/voz/cron/semanal")
+async def cron_semanal_manual():
+    """Dispara la tarea semanal manualmente (ciclo completo + estrategia)."""
+    from src.pilates.cron import _tarea_semanal
+    await _tarea_semanal()
+    return {"status": "ok", "tarea": "semanal"}

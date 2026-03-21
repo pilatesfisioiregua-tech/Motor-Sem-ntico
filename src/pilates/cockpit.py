@@ -28,7 +28,7 @@ MODULOS = {
     "buscar":           {"nombre": "Buscar cliente",       "icono": "🔍", "endpoint": "/buscar"},
     "grupos":           {"nombre": "Ocupación grupos",    "icono": "👥", "endpoint": "/grupos"},
     "sequito":          {"nombre": "Consejo asesores",     "icono": "🧠", "endpoint": "/consejo"},
-    "voz":              {"nombre": "Propuestas Voz",       "icono": "💬", "endpoint": "/voz/propuestas"},
+    "voz":              {"nombre": "Voz estratégica",      "icono": "📢", "endpoint": "/voz/estrategia"},
     "depuracion":       {"nombre": "Depuración",          "icono": "🗑️", "endpoint": "/depuracion"},
     "adn":              {"nombre": "ADN del negocio",      "icono": "🧬", "endpoint": "/adn"},
     "readiness":        {"nombre": "Readiness",            "icono": "📈", "endpoint": "/readiness"},
@@ -298,6 +298,12 @@ Además de controlar la interfaz, puedes ejecutar operaciones del estudio:
 - Generar facturas desde cargos cobrados
 - Enviar facturas o mensajes por WhatsApp
 - Ver detalles de clientes, grupos, pagos
+- Ver estrategia de comunicación y calendario de contenido semanal
+- Ver señales pendientes (ocupación, inactivos, oportunidades, clima)
+- Ver salud de presencia digital (ISP por canal)
+- Recalcular estrategia de comunicación (~5 seg)
+- Generar perfiles optimizados para canales digitales (~20 seg)
+- Ejecutar ciclo completo de escucha y análisis (~2 seg)
 
 REGLAS OPERATIVAS:
 1. Antes de ejecutar cualquier acción, BUSCA al cliente por nombre para obtener su ID.
@@ -307,6 +313,7 @@ REGLAS OPERATIVAS:
 5. Para facturas: primero busca cargos cobrados sin facturar, luego genera la factura.
 6. Puedes combinar operaciones de interfaz con operativas en la misma respuesta.
 7. Tras una operación, muestra el módulo relevante (ej: tras agendar → montar "calendario").
+8. Para consultas de Voz ("¿cuál es mi estrategia?", "¿cómo va mi presencia?", "prepárame posts"), usa las herramientas voz_*. Tras consultar, monta el módulo "voz".
 
 REGLAS GENERALES:
 1. Si pide ver algo → configurar_interfaz.
@@ -511,6 +518,80 @@ TOOLS_COCKPIT = [
                     "cliente_id": {"type": "string"}
                 },
                 "required": ["cliente_id"]
+            }
+        }
+    },
+    # --- VOZ: ESTRATEGIA ---
+    {
+        "type": "function",
+        "function": {
+            "name": "voz_estrategia",
+            "description": "Ver la estrategia de comunicación activa: foco, narrativa, canales prioridad, calendario semanal con contenido propuesto.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    # --- VOZ: SEÑALES ---
+    {
+        "type": "function",
+        "function": {
+            "name": "voz_senales",
+            "description": "Ver señales pendientes del negocio: ocupación baja, clientes inactivos, oportunidades, lluvia prevista, etc.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    # --- VOZ: ISP (salud de presencia digital) ---
+    {
+        "type": "function",
+        "function": {
+            "name": "voz_isp",
+            "description": "Ver el Índice de Salud de Presencia de cada canal: qué está bien configurado y qué falta.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    # --- VOZ: RECALCULAR ESTRATEGIA ---
+    {
+        "type": "function",
+        "function": {
+            "name": "voz_recalcular",
+            "description": "Recalcular la estrategia semanal de comunicación completa (IRC x Matriz x PCA). Genera nuevo calendario. ~5 seg.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
+    # --- VOZ: GENERAR PERFILES ---
+    {
+        "type": "function",
+        "function": {
+            "name": "voz_generar_perfiles",
+            "description": "Generar configuración optimizada de todos los perfiles digitales (WA, Google, IG, FB). ~20 seg.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "canal": {"type": "string", "description": "Canal específico (whatsapp/google_business/instagram/facebook). Si vacío, genera todos."}
+                }
+            }
+        }
+    },
+    # --- VOZ: EJECUTAR CICLO ---
+    {
+        "type": "function",
+        "function": {
+            "name": "voz_ciclo",
+            "description": "Ejecutar ciclo completo: escuchar señales + priorizar + recalcular IRC + ISP. ~2 seg.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
             }
         }
     },
@@ -1012,6 +1093,82 @@ async def _op_ver_pagos_cliente(args: dict) -> dict:
     }
 
 
+# ============================================================
+# TOOLS VOZ — dispatch functions (B-PIL-20e)
+# ============================================================
+
+async def _op_voz_estrategia(args: dict) -> dict:
+    """Devuelve estrategia activa + calendario."""
+    from src.pilates.voz_estrategia import obtener_estrategia_activa
+    result = await obtener_estrategia_activa()
+    if "error" in result:
+        return result
+    # Simplificar para el LLM del cockpit
+    est = result.get("estrategia", {})
+    cal = result.get("calendario", [])
+    return {
+        "foco": est.get("foco_principal", "sin_estrategia"),
+        "narrativa": est.get("narrativa", ""),
+        "canales": est.get("canales_prioridad", []),
+        "evitar": est.get("evitar", []),
+        "calendario": [
+            {
+                "canal": c["canal"],
+                "tipo": c["tipo"],
+                "titulo": c["titulo"],
+                "dia": c["dia"],
+                "estado": c["estado"],
+            }
+            for c in cal[:8]
+        ],
+        "total_items": len(cal),
+    }
+
+
+async def _op_voz_senales(args: dict) -> dict:
+    """Devuelve señales pendientes priorizadas."""
+    from src.pilates.voz_ciclos import priorizar
+    result = await priorizar()
+    return {
+        "total": result.get("total", 0),
+        "criticas": result.get("criticas", 0),
+        "altas": result.get("altas", 0),
+        "senales": [
+            {"tipo": s["tipo"], "urgencia": s["urgencia"], "resumen": s["resumen"]}
+            for s in result.get("senales", [])[:10]
+        ],
+    }
+
+
+async def _op_voz_isp(args: dict) -> dict:
+    """Devuelve ISP automático."""
+    from src.pilates.voz_ciclos import calcular_isp_automatico
+    return await calcular_isp_automatico()
+
+
+async def _op_voz_recalcular(args: dict) -> dict:
+    """Recalcula estrategia semanal."""
+    from src.pilates.voz_estrategia import calcular_estrategia
+    return await calcular_estrategia()
+
+
+async def _op_voz_generar_perfiles(args: dict) -> dict:
+    """Genera perfiles de canales."""
+    canal = args.get("canal", "")
+    if canal:
+        from src.pilates.voz_arquitecto import generar_perfil
+        return await generar_perfil(canal)
+    else:
+        from src.pilates.voz_arquitecto import generar_todos_los_perfiles
+        return await generar_todos_los_perfiles()
+
+
+async def _op_voz_ciclo(args: dict) -> dict:
+    """Ejecuta ciclo completo."""
+    from src.pilates.voz_ciclos import ejecutar_ciclo_completo
+    return await ejecutar_ciclo_completo()
+
+
 # Dispatch operativo
 TOOL_DISPATCH = {
     "buscar_cliente": _op_buscar_cliente,
@@ -1024,6 +1181,12 @@ TOOL_DISPATCH = {
     "generar_facturas": _op_generar_facturas,
     "enviar_whatsapp": _op_enviar_whatsapp,
     "ver_pagos_cliente": _op_ver_pagos_cliente,
+    "voz_estrategia": _op_voz_estrategia,
+    "voz_senales": _op_voz_senales,
+    "voz_isp": _op_voz_isp,
+    "voz_recalcular": _op_voz_recalcular,
+    "voz_generar_perfiles": _op_voz_generar_perfiles,
+    "voz_ciclo": _op_voz_ciclo,
 }
 
 
