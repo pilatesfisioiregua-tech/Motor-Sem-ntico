@@ -3002,3 +3002,36 @@ async def get_diagnostico():
     """
     from src.pilates.voz_identidad import diagnosticar_presencia
     return await diagnosticar_presencia()
+
+
+# ============================================================
+# VOZ ESTRATÉGICO — Motor Tridimensional + Calendario
+# B-PIL-20b
+# ============================================================
+
+@router.post("/voz/estrategia/calcular")
+async def calcular_estrategia_endpoint():
+    """Calcula estrategia semanal cruzando IRC x Matriz x PCA.
+    Genera calendario de contenido con justificación de 3 ejes.
+    ~5 seg (1 LLM call).
+    """
+    from src.pilates.voz_estrategia import calcular_estrategia
+    return await calcular_estrategia()
+
+@router.get("/voz/estrategia")
+async def get_estrategia():
+    """Devuelve estrategia activa + calendario de la semana."""
+    from src.pilates.voz_estrategia import obtener_estrategia_activa
+    return await obtener_estrategia_activa()
+
+@router.post("/voz/calendario/{item_id}/aprobar")
+async def aprobar_item(item_id: str):
+    """Jesús aprueba una pieza de contenido del calendario."""
+    from src.pilates.voz_estrategia import aprobar_item_calendario
+    return await aprobar_item_calendario(item_id)
+
+@router.post("/voz/calendario/{item_id}/descartar")
+async def descartar_item(item_id: str):
+    """Jesús descarta una pieza de contenido del calendario."""
+    from src.pilates.voz_estrategia import descartar_item_calendario
+    return await descartar_item_calendario(item_id)

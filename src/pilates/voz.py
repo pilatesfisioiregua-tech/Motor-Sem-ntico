@@ -46,12 +46,14 @@ async def _get_pool():
 # ============================================================
 
 async def generar_propuestas() -> list[dict]:
-    """Genera propuestas de Voz basadas en datos internos.
+    """[DEPRECADO — usar voz_estrategia.calcular_estrategia()]
 
-    Analiza: ocupación baja, clientes inactivos, estacionalidad,
-    deuda antigua, hitos (nuevo cliente, 100 sesiones, etc.).
+    Generador táctico de propuestas basado en reglas.
+    Mantenido para backward compatibility con endpoints existentes.
+    El Motor Tridimensional (B-PIL-20b) lo reemplaza con
+    propuestas estratégicas cruzadas por los 3 ejes.
 
-    Returns: lista de propuestas creadas.
+    Migración: POST /pilates/voz/estrategia/calcular
     """
     pool = await _get_pool()
     propuestas = []
