@@ -2953,3 +2953,52 @@ def _generar_html_factura(factura, lineas) -> str:
     Este documento es una factura simplificada. Preparado para VeriFactu (La Rioja ~2027).
   </div>
 </body></html>"""
+
+
+# ============================================================
+# VOZ ESTRATÉGICO — Identidad + IRC + PCA + Diagnóstico
+# B-PIL-20a
+# ============================================================
+
+@router.post("/voz/seed")
+async def seed_voz_completo():
+    """Seed completo: identidad + IRC + PCA + competidores.
+    Idempotente — se puede ejecutar múltiples veces sin duplicar datos.
+    """
+    from src.pilates.voz_identidad import (
+        seed_identidad, seed_irc_inicial,
+        seed_pca_inicial, seed_competidores,
+    )
+    r1 = await seed_identidad()
+    r2 = await seed_irc_inicial()
+    r3 = await seed_pca_inicial()
+    r4 = await seed_competidores()
+    return {"identidad": r1, "irc": r2, "pca": r3, "competidores": r4}
+
+@router.get("/voz/identidad")
+async def get_identidad():
+    from src.pilates.voz_identidad import obtener_identidad
+    return await obtener_identidad()
+
+@router.get("/voz/irc")
+async def get_irc():
+    from src.pilates.voz_identidad import obtener_irc
+    return await obtener_irc()
+
+@router.get("/voz/pca")
+async def get_pca(segmento: Optional[str] = None):
+    from src.pilates.voz_identidad import obtener_pca
+    return await obtener_pca(segmento)
+
+@router.get("/voz/competidores")
+async def get_competidores():
+    from src.pilates.voz_identidad import obtener_competidores
+    return await obtener_competidores()
+
+@router.get("/voz/diagnostico")
+async def get_diagnostico():
+    """Diagnóstico cruzado de presencia digital.
+    Cruza Identidad x IRC x PCA x Competidores.
+    """
+    from src.pilates.voz_identidad import diagnosticar_presencia
+    return await diagnosticar_presencia()
