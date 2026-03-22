@@ -47,7 +47,7 @@ class QueryConocimiento(BaseModel):
     query: str
     top_k: int = Field(default=5, ge=1, le=20)
     tipo: Optional[str] = None
-    umbral_similaridad: float = Field(default=0.70, ge=0, le=1)
+    umbral_similaridad: float = Field(default=0.40, ge=0, le=1)
 
 
 # ============================================================
