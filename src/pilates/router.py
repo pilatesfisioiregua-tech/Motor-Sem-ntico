@@ -11,6 +11,7 @@ import structlog
 from datetime import date, datetime, time, timedelta
 from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, Field
+import asyncio
 from typing import Optional
 from uuid import UUID
 
@@ -216,6 +217,15 @@ def _row_to_dict(row) -> dict:
     return d
 
 
+async def _observar_crud(entidad: str, accion: str, datos: dict):
+    """Helper fire-and-forget: emite señal DATO al bus vía OBSERVADOR."""
+    try:
+        from src.pilates.observador import observar
+        await observar(entidad, accion, datos)
+    except Exception:
+        pass  # Nunca bloquear CRUD
+
+
 # ============================================================
 # CLIENTES
 # ============================================================
@@ -306,6 +316,7 @@ async def crear_cliente(data: ClienteCreate):
             """, cliente_id, TENANT)
 
     log.info("cliente_creado", id=str(cliente_id), nombre=f"{data.nombre} {data.apellidos}")
+    asyncio.create_task(_observar_crud("cliente", "crear", {"id": str(cliente_id), "nombre": data.nombre}))
     return {"id": str(cliente_id), "status": "created"}
 
 
@@ -402,6 +413,7 @@ async def crear_contrato(data: ContratoCreate):
 
     contrato_id = row["id"]
     log.info("contrato_creado", id=str(contrato_id), tipo=data.tipo)
+    asyncio.create_task(_observar_crud("contrato", "crear", {"id": str(contrato_id), "cliente_id": str(data.cliente_id), "tipo": data.tipo}))
     return {"id": str(contrato_id), "status": "created"}
 
 
@@ -811,6 +823,7 @@ async def marcar_asistencia(sesion_id: UUID, data: MarcarAsistencia):
 
     log.info("asistencia_marcada", sesion=str(sesion_id),
              cliente=str(data.cliente_id), estado=data.estado, cargo=cargo_creado)
+    asyncio.create_task(_observar_crud("asistencia", "crear", {"sesion_id": str(sesion_id), "cliente_id": str(data.cliente_id), "estado": data.estado}))
     return {"status": "marcada", "estado": data.estado, "cargo_creado": cargo_creado}
 
 
@@ -1044,6 +1057,7 @@ async def registrar_pago(data: PagoCreate):
 
     log.info("pago_registrado", id=str(pago_id), monto=data.monto,
              cargos_conciliados=cargos_conciliados, remanente=round(remanente, 2))
+    asyncio.create_task(_observar_crud("pago", "crear", {"id": str(pago_id), "cliente_id": str(data.cliente_id), "monto": str(data.monto)}))
     return {
         "id": str(pago_id),
         "monto": data.monto,
@@ -3144,3 +3158,81 @@ async def cron_semanal_manual():
     from src.pilates.cron import _tarea_semanal
     await _tarea_semanal()
     return {"status": "ok", "tarea": "semanal"}
+
+
+# ============================================================
+# BUS DE SEÑALES — Sistema nervioso del organismo
+# ============================================================
+
+class SenalCreate(BaseModel):
+    tipo: str = Field(pattern="^(DATO|ALERTA|DIAGNOSTICO|OPORTUNIDAD|PRESCRIPCION|ACCION)$")
+    origen: str
+    destino: Optional[str] = None
+    prioridad: int = Field(default=5, ge=1, le=10)
+    payload: dict = {}
+
+
+@router.post("/bus/emitir")
+async def bus_emitir(data: SenalCreate):
+    """Emite una señal al bus de agentes."""
+    from src.pilates.bus import emitir
+    señal_id = await emitir(
+        tipo=data.tipo,
+        origen=data.origen,
+        payload=data.payload,
+        destino=data.destino,
+        prioridad=data.prioridad,
+    )
+    return {"id": señal_id, "status": "emitida"}
+
+
+@router.get("/bus/pendientes")
+async def bus_pendientes(
+    destino: Optional[str] = None,
+    tipo: Optional[str] = None,
+    limite: int = Query(default=20, le=100),
+):
+    """Lee señales pendientes del bus."""
+    from src.pilates.bus import leer_pendientes
+    señales = await leer_pendientes(destino=destino, tipo=tipo, limite=limite)
+    return {"señales": señales, "total": len(señales)}
+
+
+@router.patch("/bus/{senal_id}/procesar")
+async def bus_procesar(senal_id: UUID, procesada_por: str = Query(...)):
+    """Marca una señal como procesada."""
+    from src.pilates.bus import marcar_procesada
+    ok = await marcar_procesada(senal_id, procesada_por)
+    if not ok:
+        raise HTTPException(404, "Señal no encontrada o ya procesada")
+    return {"status": "procesada"}
+
+
+@router.get("/bus/historial")
+async def bus_historial(
+    limite: int = Query(default=50, le=200),
+    tipo: Optional[str] = None,
+    origen: Optional[str] = None,
+):
+    """Historial de señales del bus."""
+    from src.pilates.bus import historial
+    señales = await historial(limite=limite, tipo=tipo, origen=origen)
+    return {"señales": señales, "total": len(señales)}
+
+
+# ============================================================
+# DIAGNOSTICADOR + BUSCADOR — Agentes autónomos ACD
+# ============================================================
+
+@router.post("/acd/diagnosticar-tenant")
+async def acd_diagnosticar_tenant():
+    """Ejecuta diagnóstico ACD sobre datos reales de Authentic Pilates."""
+    from src.pilates.diagnosticador import diagnosticar_tenant
+    return await diagnosticar_tenant()
+
+
+@router.post("/acd/buscar-por-gaps")
+async def acd_buscar_por_gaps():
+    """Busca información dirigida por gaps ACD vía Perplexity."""
+    from src.pilates.buscador import buscar_por_gaps
+    return await buscar_por_gaps()

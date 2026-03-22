@@ -38,7 +38,7 @@ async def _tarea_diaria():
 
 
 async def _tarea_semanal():
-    """Tarea semanal (lunes): ciclo completo + estrategia."""
+    """Tarea semanal (lunes): ciclo completo + estrategia + ACD + búsqueda."""
     try:
         # 1. Ciclo completo (escuchar + priorizar + IRC + ISP)
         from src.pilates.voz_ciclos import ejecutar_ciclo_completo
@@ -51,6 +51,16 @@ async def _tarea_semanal():
         log.info("cron_semanal_estrategia_ok",
                  foco=est.get("estrategia", {}).get("foco_principal"),
                  items=est.get("calendario_items"))
+
+        # 3. Diagnóstico ACD autónomo
+        from src.pilates.diagnosticador import diagnosticar_tenant
+        diag = await diagnosticar_tenant()
+        log.info("cron_semanal_acd_ok", estado=diag.get("estado"), cambio=diag.get("cambio_vs_anterior"))
+
+        # 4. Búsqueda dirigida por gaps
+        from src.pilates.buscador import buscar_por_gaps
+        busq = await buscar_por_gaps()
+        log.info("cron_semanal_busqueda_ok", gaps=busq.get("gaps_identificados"), resultados=busq.get("resultados_perplexity"))
 
     except Exception as e:
         log.error("cron_semanal_error", error=str(e))
