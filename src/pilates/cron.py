@@ -100,6 +100,14 @@ async def _tarea_semanal():
             señales=snap["bus"]["emitidas"],
             drift=snap.get("alerta_drift") is not None)
 
+        # 9. Ejecutor + Convergencia + Gestor — cierre del circuito
+        from src.pilates.ejecutor_convergencia import ejecutar_circuito_completo
+        circ = await ejecutar_circuito_completo()
+        log.info("cron_semanal_circuito_ok",
+            acciones=circ["ejecutor"]["acciones_emitidas"],
+            convergencias=circ["convergencia"]["total"],
+            archivadas=circ["gestor"]["archivadas_eliminadas"])
+
     except Exception as e:
         log.error("cron_semanal_error", error=str(e))
 

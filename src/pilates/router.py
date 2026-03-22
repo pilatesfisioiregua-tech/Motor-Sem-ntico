@@ -3488,3 +3488,35 @@ async def af_todos():
     """Ejecuta TODOS los AF restantes (AF2+AF4+AF6+AF7) de una vez."""
     from src.pilates.af_restantes import ejecutar_af_restantes
     return await ejecutar_af_restantes()
+
+
+# ============================================================
+# EJECUTOR + CONVERGENCIA + GESTOR — Cierre del circuito
+# ============================================================
+
+@router.post("/sistema/ejecutor")
+async def sistema_ejecutor():
+    """Ejecutor: lee prescripciones del bus y emite ACCIONes a AF."""
+    from src.pilates.ejecutor_convergencia import ejecutar_prescripciones
+    return await ejecutar_prescripciones()
+
+
+@router.post("/sistema/convergencia")
+async def sistema_convergencia():
+    """Detecta cuando 2+ AF señalan el mismo cliente/grupo."""
+    from src.pilates.ejecutor_convergencia import detectar_convergencia
+    return await detectar_convergencia()
+
+
+@router.post("/sistema/gestor")
+async def sistema_gestor():
+    """Gestor: limpia bus + resumen de actividad."""
+    from src.pilates.ejecutor_convergencia import gestionar_bus
+    return await gestionar_bus()
+
+
+@router.post("/sistema/circuito")
+async def sistema_circuito():
+    """Ejecuta Ejecutor + Convergencia + Gestor de una vez."""
+    from src.pilates.ejecutor_convergencia import ejecutar_circuito_completo
+    return await ejecutar_circuito_completo()
