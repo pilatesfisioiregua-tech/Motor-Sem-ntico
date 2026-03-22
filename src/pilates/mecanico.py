@@ -1,0 +1,164 @@
+"""Mecánico — Agente META: procesa ALERTAs del Vigía, clasifica y actúa.
+
+FONTANERÍA: auto-fix (limpiar bus, disparar ACD, etc.)
+ARQUITECTURAL: registra en om_mejoras_pendientes para CR1.
+
+Componentes protegidos (siempre ARQUITECTURAL):
+  pipeline, orchestrator, tcf, diagnostico, prescriptor, motor_vn, database
+"""
+from __future__ import annotations
+
+import json
+import structlog
+
+from src.db.client import get_pool
+
+log = structlog.get_logger()
+
+TENANT = "authentic_pilates"
+ORIGEN = "MECANICO"
+
+PROTEGIDOS = {
+    "pipeline", "orchestrator", "tcf", "diagnostico",
+    "prescriptor", "motor_vn", "database",
+}
+
+
+def clasificar(alerta: dict) -> str:
+    """Clasifica alerta como FONTANERIA o ARQUITECTURAL."""
+    subsistema = alerta.get("subsistema", "")
+    severidad = alerta.get("severidad", "medium")
+    auto_fixable = alerta.get("auto_fixable", False)
+
+    if subsistema in PROTEGIDOS:
+        return "ARQUITECTURAL"
+    if severidad == "critical":
+        return "ARQUITECTURAL"
+    if auto_fixable:
+        return "FONTANERIA"
+    return "ARQUITECTURAL"
+
+
+async def _ensure_mejoras_table():
+    """Crea tabla om_mejoras_pendientes si no existe."""
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute("""
+            CREATE TABLE IF NOT EXISTS om_mejoras_pendientes (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                created_at TIMESTAMPTZ DEFAULT now(),
+                tenant_id TEXT NOT NULL DEFAULT 'authentic_pilates',
+                tipo TEXT NOT NULL CHECK (tipo IN ('FONTANERIA', 'ARQUITECTURAL', 'AUTOFAGIA')),
+                estado TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'aprobada', 'rechazada', 'completada')),
+                origen TEXT NOT NULL,
+                descripcion TEXT NOT NULL,
+                senal_id TEXT,
+                metadata JSONB DEFAULT '{}'
+            )
+        """)
+
+
+async def _fix_bus_acumulacion() -> dict:
+    """Fix: marcar como error señales pendientes >24h."""
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        result = await conn.execute("""
+            UPDATE om_senales_agentes
+            SET estado = 'error', procesada_por = 'MECANICO',
+                procesada_at = now(), error_detalle = 'Expirada por antigüedad (>24h)'
+            WHERE estado = 'pendiente' AND tenant_id = $1
+            AND created_at < now() - interval '24 hours'
+        """, TENANT)
+    count = int(result.split()[-1]) if result else 0
+    return {"accion": "bus_limpiado", "expiradas": count}
+
+
+async def _fix_diagnostico_ausente() -> dict:
+    """Fix: disparar diagnóstico ACD."""
+    try:
+        from src.pilates.diagnosticador import diagnosticar_tenant
+        diag = await diagnosticar_tenant()
+        return {"accion": "acd_ejecutado", "estado": diag.get("estado")}
+    except Exception as e:
+        return {"accion": "acd_fallido", "error": str(e)[:200]}
+
+
+async def _auto_fix(alerta: dict) -> dict:
+    """Intenta auto-fix para alertas FONTANERIA."""
+    subsistema = alerta.get("subsistema", "")
+    if subsistema == "bus":
+        return await _fix_bus_acumulacion()
+    if subsistema == "acd":
+        return await _fix_diagnostico_ausente()
+    return {"accion": "sin_fix_auto", "subsistema": subsistema,
+            "nota": "Marcada como procesada. Revisar si persiste."}
+
+
+async def _registrar_mejora(tipo: str, origen: str, descripcion: str,
+                            senal_id: str = None, metadata: dict = None) -> str:
+    """Registra mejora pendiente. Devuelve UUID."""
+    await _ensure_mejoras_table()
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            INSERT INTO om_mejoras_pendientes (tenant_id, tipo, origen, descripcion, senal_id, metadata)
+            VALUES ($1, $2, $3, $4, $5, $6::jsonb)
+            RETURNING id
+        """, TENANT, tipo, origen, descripcion, senal_id,
+            json.dumps(metadata or {}))
+    return str(row["id"])
+
+
+async def procesar_alertas() -> dict:
+    """Lee ALERTAs pendientes del bus y las procesa."""
+    from src.pilates.bus import leer_pendientes, marcar_procesada, marcar_error
+
+    alertas = await leer_pendientes(destino="MECANICO", tipo="ALERTA", limite=20)
+
+    fixes = []
+    arquitecturales = []
+    errores = []
+
+    for señal in alertas:
+        señal_id = str(señal["id"])
+        payload = señal["payload"]
+        if isinstance(payload, str):
+            payload = json.loads(payload)
+
+        try:
+            clase = clasificar(payload)
+
+            if clase == "FONTANERIA":
+                fix = await _auto_fix(payload)
+                fixes.append({"señal_id": señal_id, **fix})
+                await marcar_procesada(señal_id, ORIGEN)
+            else:
+                mejora_id = await _registrar_mejora(
+                    "ARQUITECTURAL", ORIGEN,
+                    payload.get("mensaje", "Sin descripción"),
+                    señal_id, payload)
+                arquitecturales.append({"señal_id": señal_id, "mejora_id": mejora_id,
+                    "subsistema": payload.get("subsistema")})
+                await marcar_procesada(señal_id, ORIGEN)
+                log.warning("mecanico_arquitectural",
+                    subsistema=payload.get("subsistema"),
+                    mensaje=payload.get("mensaje"))
+
+        except Exception as e:
+            errores.append({"señal_id": señal_id, "error": str(e)[:200]})
+            await marcar_error(señal_id, ORIGEN, str(e)[:500])
+
+    resultado = {
+        "alertas_procesadas": len(alertas),
+        "fixes_fontaneria": len(fixes),
+        "arquitecturales": len(arquitecturales),
+        "errores": len(errores),
+        "detalle_fixes": fixes,
+        "detalle_arquitectural": arquitecturales,
+    }
+
+    if alertas:
+        log.info("mecanico_procesado",
+            total=len(alertas), fixes=len(fixes), arq=len(arquitecturales))
+
+    return resultado

@@ -3236,3 +3236,139 @@ async def acd_buscar_por_gaps():
     """Busca información dirigida por gaps ACD vía Perplexity."""
     from src.pilates.buscador import buscar_por_gaps
     return await buscar_por_gaps()
+
+
+# ============================================================
+# VIGÍA + MECÁNICO + AUTÓFAGO — Goma META del organismo
+# ============================================================
+
+@router.post("/sistema/vigilar")
+async def sistema_vigilar():
+    """Ejecuta health checks del Vigía. Emite ALERTAs al bus."""
+    from src.pilates.vigia import vigilar
+    return await vigilar()
+
+
+@router.post("/sistema/mecanico")
+async def sistema_mecanico():
+    """Ejecuta el Mecánico: procesa ALERTAs pendientes."""
+    from src.pilates.mecanico import procesar_alertas
+    return await procesar_alertas()
+
+
+@router.post("/sistema/autofagia")
+async def sistema_autofagia():
+    """Ejecuta autofagia: detecta código muerto, datos caducados, archivos obsoletos.
+    NO borra nada. Solo registra propuestas en om_mejoras_pendientes."""
+    from src.pilates.autofago import ejecutar_autofagia
+    return await ejecutar_autofagia()
+
+
+@router.get("/sistema/estado")
+async def sistema_estado():
+    """Estado completo del sistema: checks + bus + diagnóstico + mejoras pendientes."""
+    from src.pilates.vigia import ejecutar_checks
+    from src.pilates.bus import contar_pendientes
+
+    checks = await ejecutar_checks()
+    bus = await contar_pendientes()
+
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        ultimo_diag = await conn.fetchrow("""
+            SELECT estado_pre, lentes_pre, created_at FROM diagnosticos
+            WHERE caso_input LIKE 'Diagnóstico autónomo%'
+            ORDER BY created_at DESC LIMIT 1
+        """)
+
+        mejoras_pend = 0
+        try:
+            mejoras_pend = await conn.fetchval("""
+                SELECT count(*) FROM om_mejoras_pendientes
+                WHERE estado = 'pendiente' AND tenant_id = 'authentic_pilates'
+            """) or 0
+        except Exception:
+            pass
+
+        autofagia_pend = 0
+        try:
+            autofagia_pend = await conn.fetchval("""
+                SELECT count(*) FROM om_mejoras_pendientes
+                WHERE estado = 'pendiente' AND tipo = 'AUTOFAGIA' AND tenant_id = 'authentic_pilates'
+            """) or 0
+        except Exception:
+            pass
+
+    return {
+        "health": [{"subsistema": c.subsistema, "estado": c.estado, "mensaje": c.mensaje}
+                   for c in checks],
+        "bus_pendientes": bus,
+        "ultimo_diagnostico": {
+            "estado": ultimo_diag["estado_pre"] if ultimo_diag else None,
+            "lentes": ultimo_diag["lentes_pre"] if ultimo_diag else None,
+            "fecha": str(ultimo_diag["created_at"])[:10] if ultimo_diag else None,
+        } if ultimo_diag else None,
+        "mejoras_arquitecturales_pendientes": mejoras_pend,
+        "propuestas_autofagia_pendientes": autofagia_pend,
+    }
+
+
+@router.get("/sistema/mejoras")
+async def sistema_mejoras(
+    estado: Optional[str] = "pendiente",
+    tipo: Optional[str] = None,
+    limite: int = Query(default=30, le=100),
+):
+    """Lista mejoras pendientes (ARQUITECTURAL + AUTOFAGIA). Para revisión CR1."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    conditions = ["tenant_id = $1"]
+    params: list = [TENANT]
+    idx = 2
+
+    if estado:
+        conditions.append(f"estado = ${idx}")
+        params.append(estado)
+        idx += 1
+
+    if tipo:
+        conditions.append(f"tipo = ${idx}")
+        params.append(tipo)
+        idx += 1
+
+    where = " AND ".join(conditions)
+    params.append(limite)
+
+    try:
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(f"""
+                SELECT id, created_at, tipo, estado, origen, descripcion, metadata
+                FROM om_mejoras_pendientes
+                WHERE {where}
+                ORDER BY created_at DESC
+                LIMIT ${idx}
+            """, *params)
+        return [_row_to_dict(r) for r in rows]
+    except Exception:
+        return []
+
+
+@router.patch("/sistema/mejoras/{mejora_id}")
+async def sistema_mejora_decidir(
+    mejora_id: UUID,
+    decision: str = Query(..., pattern="^(aprobada|rechazada|completada)$"),
+):
+    """CR1: Aprobar, rechazar o completar una mejora pendiente."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        result = await conn.execute("""
+            UPDATE om_mejoras_pendientes SET estado = $1
+            WHERE id = $2 AND tenant_id = $3
+        """, decision, mejora_id, TENANT)
+        if result == "UPDATE 0":
+            raise HTTPException(404, "Mejora no encontrada")
+
+    log.info("mejora_decidida", id=str(mejora_id), decision=decision)
+    return {"status": decision, "id": str(mejora_id)}

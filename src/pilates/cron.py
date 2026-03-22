@@ -66,6 +66,20 @@ async def _tarea_semanal():
         log.error("cron_semanal_error", error=str(e))
 
 
+async def _tarea_mensual():
+    """Tarea mensual (día 1): autofagia — el sistema se poda a sí mismo."""
+    try:
+        from src.pilates.autofago import ejecutar_autofagia
+        result = await ejecutar_autofagia()
+        log.info("cron_mensual_autofagia_ok",
+            muertos=result["codigo_muerto"]["funciones_huerfanas"],
+            sospechosos=len(result["archivos_sospechosos"]),
+            caducados=len(result["datos_caducados"]),
+            propuestas=result["propuestas_registradas"])
+    except Exception as e:
+        log.error("cron_mensual_error", error=str(e))
+
+
 async def cron_loop():
     """Loop principal del cron. Se ejecuta como background task.
 
@@ -99,6 +113,27 @@ async def cron_loop():
 
         except Exception as e:
             log.error("cron_loop_error", error=str(e))
+
+        # Vigía + Mecánico: cada iteración (cada 15 min)
+        try:
+            from src.pilates.vigia import vigilar
+            vigia_result = await vigilar()
+            if vigia_result.get("alertas_emitidas", 0) > 0:
+                from src.pilates.mecanico import procesar_alertas
+                mec_result = await procesar_alertas()
+                log.info("cron_mecanico_ok",
+                    fixes=mec_result.get("fixes_fontaneria", 0),
+                    arq=mec_result.get("arquitecturales", 0))
+        except Exception as e:
+            log.error("cron_vigia_error", error=str(e))
+
+        # Tarea mensual: día 1 después de las 08:00
+        if hoy.day == 1 and hora >= time(8, 0):
+            mes_actual = f"{hoy.year}-{hoy.month:02d}"
+            if not hasattr(cron_loop, '_ultimo_mensual') or cron_loop._ultimo_mensual != mes_actual:
+                log.info("cron_ejecutando_mensual", mes=mes_actual)
+                await _tarea_mensual()
+                cron_loop._ultimo_mensual = mes_actual
 
         # Dormir 15 minutos
         await asyncio.sleep(900)
