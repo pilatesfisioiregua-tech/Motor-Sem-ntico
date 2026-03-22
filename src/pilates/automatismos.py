@@ -388,10 +388,15 @@ async def ejecutar_cron(tipo: str) -> dict:
     if tipo == "inicio_semana":
         resultados["sesiones"] = await generar_sesiones_semana()
         resultados["alertas"] = await detectar_alertas_retencion()
-        # Generar propuestas Voz
-        from src.pilates.voz import generar_propuestas
-        props = await generar_propuestas()
-        resultados["voz_propuestas"] = {"generadas": len(props)}
+        # Ciclo Voz estratégico (reemplaza generar_propuestas viejo)
+        try:
+            from src.pilates.voz_ciclos import ejecutar_ciclo_completo
+            resultados["voz_ciclo"] = await ejecutar_ciclo_completo()
+            from src.pilates.voz_estrategia import calcular_estrategia
+            resultados["voz_estrategia"] = await calcular_estrategia()
+        except Exception as e:
+            log.warning("automatismo_voz_error", error=str(e))
+            resultados["voz_error"] = str(e)
         # Recalcular engagement
         from src.pilates.engagement import recalcular_engagement_todos
         resultados["engagement"] = await recalcular_engagement_todos()
