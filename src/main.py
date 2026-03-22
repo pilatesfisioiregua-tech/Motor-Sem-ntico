@@ -78,6 +78,14 @@ try:
 except Exception as e:
     log.warning("portal_router_mount_failed", error=str(e))
 
+# Mount Conocimiento router (MCP endpoint)
+try:
+    from src.conocimiento import router as conocimiento_router
+    app.include_router(conocimiento_router)
+    log.info("conocimiento_router_mounted")
+except Exception as e:
+    log.warning("conocimiento_router_mount_failed", error=str(e))
+
 # Mount Code OS sub-app (agent endpoints at /code-os/*)
 try:
     from motor_v1_validation.agent.api import app as code_os_app
