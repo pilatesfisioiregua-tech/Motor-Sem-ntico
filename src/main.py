@@ -70,6 +70,14 @@ try:
 except Exception as e:
     log.warning("pilates_router_mount_failed", error=str(e))
 
+# Mount Redsys router (pagos Caja Rural)
+try:
+    from src.pilates.redsys_router import router as redsys_router
+    app.include_router(redsys_router)
+    log.info("redsys_router_mounted")
+except Exception as e:
+    log.warning("redsys_router_mount_failed", error=str(e))
+
 # Mount Portal router (público, sin auth)
 try:
     from src.pilates.portal import router as portal_router
