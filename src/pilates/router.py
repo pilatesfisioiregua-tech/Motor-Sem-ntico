@@ -3372,3 +3372,40 @@ async def sistema_mejora_decidir(
 
     log.info("mejora_decidida", id=str(mejora_id), decision=decision)
     return {"status": decision, "id": str(mejora_id)}
+
+
+# ============================================================
+# AF1 CONSERVACIÓN + AF3 DEPURACIÓN — Agentes funcionales
+# ============================================================
+
+@router.post("/af/conservacion")
+async def af_conservacion():
+    """AF1: Detecta clientes en riesgo de abandono. Emite ALERTAs al bus."""
+    from src.pilates.af1_conservacion import ejecutar_af1
+    return await ejecutar_af1()
+
+
+@router.post("/af/depuracion")
+async def af_depuracion():
+    """AF3: Detecta sesiones y servicios ineficientes. Emite ALERTAs + VETOs al bus."""
+    from src.pilates.af3_depuracion import ejecutar_af3
+    return await ejecutar_af3()
+
+
+# ============================================================
+# PROPIOCEPCIÓN — El organismo se mide a sí mismo
+# ============================================================
+
+@router.post("/sistema/propiocepcion")
+async def sistema_propiocepcion(periodo: str = Query(default="diario", pattern="^(diario|semanal)$")):
+    """Genera snapshot de telemetría del organismo."""
+    from src.pilates.propiocepcion import snapshot
+    return await snapshot(periodo)
+
+
+@router.get("/sistema/tendencia")
+async def sistema_tendencia(n: int = Query(default=10, le=30)):
+    """Últimos N snapshots de telemetría para visualizar tendencia."""
+    from src.pilates.propiocepcion import obtener_tendencia
+    snapshots = await obtener_tendencia(n)
+    return {"snapshots": snapshots, "total": len(snapshots)}

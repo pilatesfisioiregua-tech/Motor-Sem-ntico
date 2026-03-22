@@ -28,13 +28,23 @@ def _hora_madrid() -> datetime:
 
 
 async def _tarea_diaria():
-    """Tarea diaria: escuchar señales de las 3 capas."""
+    """Tarea diaria: escuchar señales + snapshot propiocepción."""
     try:
         from src.pilates.voz_ciclos import escuchar
         result = await escuchar()
         log.info("cron_diaria_ok", senales=result.get("senales_creadas", 0))
     except Exception as e:
         log.error("cron_diaria_error", error=str(e))
+
+    # Propiocepción: snapshot diario
+    try:
+        from src.pilates.propiocepcion import snapshot
+        snap = await snapshot("diario")
+        log.info("cron_diaria_propiocepcion_ok",
+            señales=snap["bus"]["emitidas"],
+            silenciosos=len(snap["bus"]["agentes_silenciosos"]))
+    except Exception as e:
+        log.error("cron_diaria_propiocepcion_error", error=str(e))
 
 
 async def _tarea_semanal():
@@ -61,6 +71,23 @@ async def _tarea_semanal():
         from src.pilates.buscador import buscar_por_gaps
         busq = await buscar_por_gaps()
         log.info("cron_semanal_busqueda_ok", gaps=busq.get("gaps_identificados"), resultados=busq.get("resultados_perplexity"))
+
+        # 5. AF1 Conservación — detectar clientes en riesgo
+        from src.pilates.af1_conservacion import ejecutar_af1
+        af1 = await ejecutar_af1()
+        log.info("cron_semanal_af1_ok", riesgos=af1.get("total_riesgos"), alertas=af1.get("alertas_emitidas"))
+
+        # 6. AF3 Depuración — detectar ineficiencias + VETO
+        from src.pilates.af3_depuracion import ejecutar_af3
+        af3 = await ejecutar_af3()
+        log.info("cron_semanal_af3_ok", detecciones=af3.get("total_detecciones"), vetos=af3.get("vetos_emitidos"))
+
+        # 7. Propiocepción: snapshot semanal
+        from src.pilates.propiocepcion import snapshot
+        snap = await snapshot("semanal")
+        log.info("cron_semanal_propiocepcion_ok",
+            señales=snap["bus"]["emitidas"],
+            drift=snap.get("alerta_drift") is not None)
 
     except Exception as e:
         log.error("cron_semanal_error", error=str(e))
