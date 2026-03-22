@@ -72,6 +72,12 @@ async def _tarea_semanal():
         busq = await buscar_por_gaps()
         log.info("cron_semanal_busqueda_ok", gaps=busq.get("gaps_identificados"), resultados=busq.get("resultados_perplexity"))
 
+        # 4b. AF5 propaga diagnóstico a voz + señales cross-AF
+        from src.pilates.voz_reactivo import propagar_diagnostico_a_voz, emitir_señales_cross_af
+        await propagar_diagnostico_a_voz()
+        await emitir_señales_cross_af()
+        log.info("cron_semanal_voz_reactivo_ok")
+
         # 5. AF1 Conservación — detectar clientes en riesgo
         from src.pilates.af1_conservacion import ejecutar_af1
         af1 = await ejecutar_af1()

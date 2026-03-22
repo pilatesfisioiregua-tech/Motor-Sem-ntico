@@ -1865,11 +1865,33 @@ async def webhook_verify(request: Request):
 
 @router.post("/webhook/whatsapp")
 async def webhook_recibir(request: Request):
-    """Recibe mensajes de WhatsApp (POST webhook)."""
+    """Recibe mensajes de WhatsApp (POST webhook). B2.9: emite señales al bus."""
     body = await request.json()
     from src.pilates.whatsapp import procesar_webhook
     result = await procesar_webhook(body)
+
+    # B2.9 Reactivo: emitir señales al bus tras procesar el mensaje
+    if result.get("mensaje_guardado"):
+        asyncio.create_task(_wa_reactivo(result))
+
     return {"status": "ok", **result}
+
+
+async def _wa_reactivo(result: dict):
+    """Fire-and-forget: WA webhook → señales al bus."""
+    try:
+        from src.pilates.voz_reactivo import procesar_mensaje_wa_reactivo
+        await procesar_mensaje_wa_reactivo(
+            telefono=result.get("telefono", ""),
+            mensaje_texto=result.get("contenido", ""),
+            mensaje_id=result.get("mensaje_id"),
+            cliente_id=result.get("cliente_id"),
+            es_cliente_existente=result.get("es_cliente", False),
+            intencion=result.get("intencion", "otro"),
+        )
+    except Exception as e:
+        import structlog
+        structlog.get_logger().warning("wa_reactivo_error", error=str(e))
 
 
 @router.get("/whatsapp/mensajes")
@@ -3409,3 +3431,21 @@ async def sistema_tendencia(n: int = Query(default=10, le=30)):
     from src.pilates.propiocepcion import obtener_tendencia
     snapshots = await obtener_tendencia(n)
     return {"snapshots": snapshots, "total": len(snapshots)}
+
+
+# ============================================================
+# B2.9 VOZ REACTIVO — Sub-circuito de señales AF5
+# ============================================================
+
+@router.post("/voz/propagar-diagnostico")
+async def voz_propagar_diagnostico():
+    """Propaga cambio de diagnóstico ACD a la estrategia de voz."""
+    from src.pilates.voz_reactivo import propagar_diagnostico_a_voz
+    return await propagar_diagnostico_a_voz()
+
+
+@router.post("/voz/cross-af")
+async def voz_cross_af():
+    """AF5 emite señales cross-AF: leads sin atender, canales bajo IRC."""
+    from src.pilates.voz_reactivo import emitir_señales_cross_af
+    return await emitir_señales_cross_af()
