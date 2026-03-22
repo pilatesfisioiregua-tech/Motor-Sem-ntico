@@ -3449,3 +3449,42 @@ async def voz_cross_af():
     """AF5 emite señales cross-AF: leads sin atender, canales bajo IRC."""
     from src.pilates.voz_reactivo import emitir_señales_cross_af
     return await emitir_señales_cross_af()
+
+
+# ============================================================
+# AF2 + AF4 + AF6 + AF7 — Agentes funcionales restantes
+# ============================================================
+
+@router.post("/af/captacion")
+async def af_captacion():
+    """AF2: Detecta leads perdidos + tasa conversión. Respeta VETOs de AF3."""
+    from src.pilates.af_restantes import ejecutar_af2
+    return await ejecutar_af2()
+
+
+@router.post("/af/distribucion")
+async def af_distribucion():
+    """AF4: Detecta desequilibrios horarios y ratio individual/grupo."""
+    from src.pilates.af_restantes import ejecutar_af4
+    return await ejecutar_af4()
+
+
+@router.post("/af/adaptacion")
+async def af_adaptacion():
+    """AF6: Detecta tensiones sin resolver y señala necesidad de adaptación."""
+    from src.pilates.af_restantes import ejecutar_af6
+    return await ejecutar_af6()
+
+
+@router.post("/af/replicacion")
+async def af_replicacion():
+    """AF7: Detecta gaps en documentación y readiness de replicación."""
+    from src.pilates.af_restantes import ejecutar_af7
+    return await ejecutar_af7()
+
+
+@router.post("/af/todos")
+async def af_todos():
+    """Ejecuta TODOS los AF restantes (AF2+AF4+AF6+AF7) de una vez."""
+    from src.pilates.af_restantes import ejecutar_af_restantes
+    return await ejecutar_af_restantes()

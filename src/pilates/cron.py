@@ -88,7 +88,12 @@ async def _tarea_semanal():
         af3 = await ejecutar_af3()
         log.info("cron_semanal_af3_ok", detecciones=af3.get("total_detecciones"), vetos=af3.get("vetos_emitidos"))
 
-        # 7. Propiocepción: snapshot semanal
+        # 7. AF2 + AF4 + AF6 + AF7 — agentes funcionales restantes
+        from src.pilates.af_restantes import ejecutar_af_restantes
+        af_rest = await ejecutar_af_restantes()
+        log.info("cron_semanal_af_restantes_ok", alertas=af_rest.get("total_alertas", 0))
+
+        # 8. Propiocepción: snapshot semanal
         from src.pilates.propiocepcion import snapshot
         snap = await snapshot("semanal")
         log.info("cron_semanal_propiocepcion_ok",
