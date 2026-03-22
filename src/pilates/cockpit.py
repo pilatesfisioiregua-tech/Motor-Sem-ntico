@@ -595,6 +595,17 @@ TOOLS_COCKPIT = [
             }
         }
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "voz_collectors",
+            "description": "Ejecutar collectors de métricas: Instagram, Google Business, WhatsApp. ~5 seg.",
+            "parameters": {
+                "type": "object",
+                "properties": {}
+            }
+        }
+    },
 ]
 
 
@@ -1169,6 +1180,12 @@ async def _op_voz_ciclo(args: dict) -> dict:
     return await ejecutar_ciclo_completo()
 
 
+async def _op_voz_collectors(args: dict) -> dict:
+    """Ejecuta collectors de métricas de canales."""
+    from src.pilates.collectors import collect_all
+    return await collect_all()
+
+
 # Dispatch operativo
 TOOL_DISPATCH = {
     "buscar_cliente": _op_buscar_cliente,
@@ -1187,6 +1204,7 @@ TOOL_DISPATCH = {
     "voz_recalcular": _op_voz_recalcular,
     "voz_generar_perfiles": _op_voz_generar_perfiles,
     "voz_ciclo": _op_voz_ciclo,
+    "voz_collectors": _op_voz_collectors,
 }
 
 

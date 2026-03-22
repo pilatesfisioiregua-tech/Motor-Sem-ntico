@@ -3520,3 +3520,14 @@ async def sistema_circuito():
     """Ejecuta Ejecutor + Convergencia + Gestor de una vez."""
     from src.pilates.ejecutor_convergencia import ejecutar_circuito_completo
     return await ejecutar_circuito_completo()
+
+
+# ============================================================
+# COLLECTORS — Pull métricas de canales
+# ============================================================
+
+@router.post("/collectors")
+async def run_collectors():
+    """Ejecuta collectors: Instagram, Google Business, WhatsApp."""
+    from src.pilates.collectors import collect_all
+    return await collect_all()

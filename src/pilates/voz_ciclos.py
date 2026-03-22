@@ -40,6 +40,14 @@ async def escuchar() -> dict:
     Las APIs de Google Business, Instagram, WA Business se conectarán
     en el futuro como detectores adicionales — la arquitectura está lista.
     """
+    # ── COLLECTORS: Pull datos reales de canales ─────
+    try:
+        from src.pilates.collectors import collect_all
+        coll_result = await collect_all()
+        log.info("escuchar_collectors", activos=coll_result.get("collectors_activos", 0))
+    except Exception as e:
+        log.warning("escuchar_collectors_error", error=str(e))
+
     pool = await _get_pool()
     senales_creadas = 0
 

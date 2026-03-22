@@ -36,6 +36,14 @@ async def _tarea_diaria():
     except Exception as e:
         log.error("cron_diaria_error", error=str(e))
 
+    # Collectors: pull métricas de canales
+    try:
+        from src.pilates.collectors import collect_all
+        coll = await collect_all()
+        log.info("cron_diaria_collectors_ok", activos=coll.get("collectors_activos", 0))
+    except Exception as e:
+        log.error("cron_diaria_collectors_error", error=str(e))
+
     # Propiocepción: snapshot diario
     try:
         from src.pilates.propiocepcion import snapshot
