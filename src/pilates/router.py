@@ -3606,3 +3606,224 @@ async def run_collectors():
     """Ejecuta collectors: Instagram, Google Business, WhatsApp."""
     from src.pilates.collectors import collect_all
     return await collect_all()
+
+
+# ============================================================
+# ORGANISMO — Dashboard del sistema cognitivo
+# ============================================================
+
+@router.get("/organismo/dashboard")
+async def organismo_dashboard():
+    """Dashboard completo del organismo: gomas, agentes, diagnóstico, bus."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        # Último diagnóstico ACD
+        diag = await conn.fetchrow("""
+            SELECT estado_pre, lentes_pre, vector_pre, metricas, created_at
+            FROM diagnosticos
+            WHERE caso_input LIKE 'Diagnóstico autónomo%'
+            ORDER BY created_at DESC LIMIT 1
+        """)
+
+        # Último enjambre G4
+        g4 = await conn.fetchrow("""
+            SELECT estado_acd_base, resultado_lentes, resultado_funciones,
+                   resultado_clusters, señales_emitidas, tiempo_total_s, created_at
+            FROM om_enjambre_diagnosticos
+            ORDER BY created_at DESC LIMIT 1
+        """)
+
+        # Configs activas de agentes (recompilador)
+        configs = await conn.fetch("""
+            SELECT agente, version, created_at, aprobada_por
+            FROM om_config_agentes
+            WHERE tenant_id='authentic_pilates' AND activa=TRUE
+            ORDER BY agente
+        """)
+
+        # Bus: resumen últimas 48h
+        bus_resumen = await conn.fetch("""
+            SELECT tipo, count(*) as total, max(prioridad) as max_prioridad,
+                   max(created_at) as ultimo
+            FROM om_senales_agentes
+            WHERE tenant_id='authentic_pilates'
+                AND created_at > now() - interval '48 hours'
+            GROUP BY tipo ORDER BY total DESC
+        """)
+
+        # Bus: señales de alta prioridad no procesadas
+        urgentes = await conn.fetch("""
+            SELECT tipo, origen, prioridad,
+                   payload->>'descripcion' as descripcion,
+                   created_at
+            FROM om_senales_agentes
+            WHERE tenant_id='authentic_pilates'
+                AND estado='pendiente' AND prioridad <= 3
+            ORDER BY prioridad, created_at DESC LIMIT 10
+        """)
+
+        # Propiocepción: último snapshot
+        propio = await conn.fetchrow("""
+            SELECT periodo, senales_emitidas, senales_procesadas, senales_pendientes,
+                   actividad_agentes, agentes_silenciosos,
+                   acd_estado, acd_lentes, acd_delta_lentes,
+                   fixes_fontaneria, mejoras_arquitecturales, created_at
+            FROM om_telemetria_sistema
+            WHERE tenant_id='authentic_pilates'
+            ORDER BY created_at DESC LIMIT 1
+        """)
+
+        # Actividad de agentes: quién emitió señales en los últimos 7 días
+        agentes_activos = await conn.fetch("""
+            SELECT origen, count(*) as señales, max(created_at) as ultimo
+            FROM om_senales_agentes
+            WHERE tenant_id='authentic_pilates'
+                AND created_at > now() - interval '7 days'
+            GROUP BY origen ORDER BY señales DESC
+        """)
+
+        # Feed organismo: últimas 10 noticias del sistema
+        feed_org = await conn.fetch("""
+            SELECT tipo, icono, titulo, detalle, severidad, created_at
+            FROM om_feed_estudio
+            WHERE tenant_id='authentic_pilates'
+                AND tipo LIKE 'organismo_%'
+            ORDER BY created_at DESC LIMIT 10
+        """)
+
+    def _safe(row):
+        if not row:
+            return None
+        d = dict(row)
+        for k, v in d.items():
+            if hasattr(v, 'isoformat'):
+                d[k] = v.isoformat()
+            elif isinstance(v, (dict, list)):
+                pass
+            elif isinstance(v, str):
+                try:
+                    d[k] = json.loads(v)
+                except (json.JSONDecodeError, TypeError):
+                    pass
+        return d
+
+    return {
+        "diagnostico_acd": _safe(diag),
+        "diagnostico_cognitivo_g4": _safe(g4),
+        "configs_agentes": [_safe(c) for c in configs],
+        "bus": {
+            "resumen_48h": [_safe(r) for r in bus_resumen],
+            "urgentes": [_safe(u) for u in urgentes],
+        },
+        "agentes_activos_7d": [_safe(a) for a in agentes_activos],
+        "propiocepcion": _safe(propio),
+        "feed_organismo": [_safe(f) for f in feed_org],
+        "gomas": {
+            "G1_datos_senales": True,
+            "G2_senales_diagnostico": True,
+            "G3_diagnostico_busqueda": True,
+            "G4_busqueda_prescripcion": True,
+            "G5_prescripcion_accion": True,
+            "G6_accion_aprendizaje": True,
+            "META_rotura_reparacion": True,
+        },
+    }
+
+
+@router.get("/organismo/bus")
+async def organismo_bus(horas: int = 48, limit: int = 50):
+    """Señales del bus en las últimas N horas."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        señales = await conn.fetch(f"""
+            SELECT id, tipo, origen, estado, prioridad,
+                   payload, created_at
+            FROM om_senales_agentes
+            WHERE tenant_id='authentic_pilates'
+                AND created_at > now() - interval '{min(horas, 168)} hours'
+            ORDER BY created_at DESC LIMIT {min(limit, 200)}
+        """)
+    return [{
+        "id": str(s["id"]),
+        "tipo": s["tipo"],
+        "origen": s["origen"],
+        "estado": s["estado"],
+        "prioridad": s["prioridad"],
+        "payload": s["payload"] if isinstance(s["payload"], dict) else json.loads(s["payload"]) if s["payload"] else {},
+        "created_at": s["created_at"].isoformat(),
+    } for s in señales]
+
+
+@router.get("/organismo/diagnostico-cognitivo")
+async def organismo_diagnostico_cognitivo():
+    """Último diagnóstico G4 completo: perfil INT×P×R + disfunciones + prescripción."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        g4 = await conn.fetchrow("""
+            SELECT estado_acd_base, resultado_lentes, resultado_funciones,
+                   resultado_clusters, señales_emitidas, tiempo_total_s, created_at
+            FROM om_enjambre_diagnosticos
+            ORDER BY created_at DESC LIMIT 1
+        """)
+        if not g4:
+            return {"status": "sin_diagnostico", "mensaje": "Aún no se ha ejecutado el enjambre cognitivo."}
+
+        # Lentes contiene repertorio + disfunciones
+        lentes = g4["resultado_lentes"]
+        if isinstance(lentes, str):
+            lentes = json.loads(lentes)
+
+        # Funciones contiene mecanismo causal o prescripción
+        funciones = g4["resultado_funciones"]
+        if isinstance(funciones, str):
+            funciones = json.loads(funciones)
+
+        # Clusters
+        clusters = g4["resultado_clusters"]
+        if isinstance(clusters, str):
+            clusters = json.loads(clusters)
+
+    return {
+        "perfil": g4["estado_acd_base"],
+        "repertorio_y_disfunciones": lentes,
+        "mecanismo_causal_o_prescripcion": funciones,
+        "clusters": clusters,
+        "señales_emitidas": g4["señales_emitidas"],
+        "tiempo_s": float(g4["tiempo_total_s"]) if g4["tiempo_total_s"] else 0,
+        "fecha": g4["created_at"].isoformat(),
+    }
+
+
+@router.get("/organismo/pizarra")
+async def organismo_pizarra():
+    """Pizarra compartida del ciclo actual."""
+    from src.pilates.pizarra import leer_todo, resumen_narrativo, _ciclo_actual
+    return {
+        "ciclo": _ciclo_actual(),
+        "entradas": await leer_todo(),
+        "resumen": await resumen_narrativo(),
+    }
+
+
+@router.get("/organismo/config-agentes")
+async def organismo_config_agentes():
+    """Configuración INT×P×R actual de cada agente (recompilador)."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        configs = await conn.fetch("""
+            SELECT agente, config, version, aprobada_por, created_at
+            FROM om_config_agentes
+            WHERE tenant_id='authentic_pilates' AND activa=TRUE
+            ORDER BY agente
+        """)
+    return [{
+        "agente": c["agente"],
+        "config": c["config"] if isinstance(c["config"], dict) else json.loads(c["config"]),
+        "version": c["version"],
+        "aprobada_por": c["aprobada_por"],
+        "fecha": c["created_at"].isoformat(),
+    } for c in configs]
