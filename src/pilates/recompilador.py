@@ -305,6 +305,15 @@ Genera las configs para cada agente del organismo."""
             prioridad=1,
         )
 
+    # Publicar al feed
+    try:
+        from src.pilates.feed import feed_recompilacion
+        await feed_recompilacion(
+            [c["agente"] for c in resultado.get("configs", [])],
+            len(cambios_estruct))
+    except Exception as e:
+        log.warning("recompilador_feed_error", error=str(e))
+
     log.info("recompilador_ok", configs=configs_aplicadas,
              estructurales=len(cambios_estruct))
 
@@ -398,14 +407,14 @@ async def _cargar_config_agente(agente: str) -> dict | None:
 # ============================================================
 
 async def ejecutar_g4_con_recompilacion() -> dict:
-    """G4 completa + recompilación de agentes.
+    """G4 completa + recompilación + Director Opus.
 
     1. Enjambre diagnostica INT×P×R
     2. Compositor integra
     3. Estratega prescribe en Nivel 1
     4. Orquestador valida
-    5. RECOMPILADOR traduce a configs de agentes
-    6. Los agentes se reconfiguran para el próximo ciclo
+    5. RECOMPILADOR traduce a configs de agentes (Sonnet, fallback)
+    6. DIRECTOR OPUS diseña prompts D_híbrido (Opus, reemplaza si OK)
     """
     from src.pilates.compositor import ejecutar_g4
 
@@ -414,7 +423,7 @@ async def ejecutar_g4_con_recompilacion() -> dict:
     if g4.get("status") != "ok":
         return g4
 
-    # 5. Recompilar
+    # 5. Recompilar (Sonnet — fallback si Opus falla)
     prescripcion = g4.get("prescripcion_completa", {})
     if prescripcion and "error" not in prescripcion:
         recomp = await recompilar(
@@ -424,5 +433,18 @@ async def ejecutar_g4_con_recompilacion() -> dict:
         g4["recompilacion"] = recomp
     else:
         g4["recompilacion"] = {"status": "skip", "razon": "Sin prescripción válida"}
+
+    # 6. Director Opus — diseña prompts D_híbrido (sobrescribe configs Sonnet)
+    try:
+        from src.pilates.director_opus import dirigir_orquesta
+        director = await dirigir_orquesta()
+        g4["director_opus"] = director
+        if director.get("status") == "ok":
+            log.info("g4_director_opus_ok",
+                     configs=director.get("configs_aplicadas"),
+                     tiempo=director.get("tiempo_s"))
+    except Exception as e:
+        log.warning("g4_director_opus_error", error=str(e))
+        g4["director_opus"] = {"status": "error", "error": str(e)[:200]}
 
     return g4
