@@ -1,26 +1,22 @@
-"""Enjambre Cognitivo v2 — Diagnóstico en Nivel 1 (Repertorio INT×P×R).
+"""Enjambre Cognitivo v4 — Contextualizador sobre tcf/.
 
-NO mide lentes/funciones como termómetros independientes.
-Diagnostica QUÉ configuración cognitiva INT×P×R tiene el negocio,
-detecta disfunciones (IC2-IC6), y DERIVA por qué las lentes/funciones
-están donde están.
+NO reinventa el diagnóstico. Recibe DiagnosticoCompleto + Prescripcion
+de tcf/ (código puro, determinista, con IC2-IC6 verificadas) y lo
+CONTEXTUALIZA para Authentic Pilates.
 
-MODELO CAUSAL 4 NIVELES:
-  Nivel 1 (CAUSA):     Repertorio INT×P×R → QUÉ herramientas cognitivas usa el negocio
-  Nivel 2 (MECANISMO): Distribución por lente → QUÉ produce ese repertorio
-  Nivel 3 (EFECTO):    Perfil S×Se×C → estado diagnóstico
-  Nivel 4 (SÍNTOMA):   7F×3L scores observables
+6 clusters INT CONFIRMAN, CONTRADICEN o ENRIQUECEN el diagnóstico de código.
+4 clusters P evalúan CÓMO PIENSA el negocio (pares IC5, desacoples IC3).
+3 clusters R evalúan CÓMO RAZONA el negocio (validación IC6, desacoples IC4).
 
-La intervención opera en Nivel 1. Los números son SÍNTOMAS, no la causa.
-
-Modelo: claude-sonnet-4.6 via OpenRouter
-Frecuencia: semanal (lunes, después del diagnosticador numérico)
+Modelo: claude-sonnet-4.6 (13 clusters en paralelo)
+Coste: ~$0.65/ejecución ($0.30 INT + $0.35 P+R)
 """
 from __future__ import annotations
 
 import asyncio
 import json
 import os
+import re
 import time
 import structlog
 import httpx
@@ -36,111 +32,236 @@ REASONING_MODEL = os.getenv("REASONING_MODEL", "anthropic/claude-sonnet-4-6")
 
 
 # ============================================================
-# CONOCIMIENTO INYECTADO — El framework completo que los agentes DEBEN entender
+# 6 CLUSTERS — CONTEXTUALIZADORES
 # ============================================================
 
-FRAMEWORK_CAUSAL = """
-MODELO CAUSAL DE 4 NIVELES (OMNI-MIND ACD):
+CLUSTERS = {
+    "analitico_operativo": {
+        "ints": "INT-01(Lógica), INT-02(Computacional), INT-05(Estratégica)",
+        "lente": "S",
+        "angulo": "Estructura, cálculo, eficiencia. ¿Los datos reales confirman que estas INT están activas o ausentes?",
+    },
+    "financiero_constructivo": {
+        "ints": "INT-07(Financiera), INT-10(Cinestésica), INT-16(Constructiva)",
+        "lente": "S",
+        "angulo": "Recursos, prototipado, acción física. ¿El negocio construye y ejecuta o solo planifica?",
+    },
+    "comprension_profunda": {
+        "ints": "INT-03(Estructural), INT-08(Social), INT-17(Existencial), INT-18(Contemplativa)",
+        "lente": "Se",
+        "angulo": "Identidad, lo no dicho, urgencia falsa. ¿Jesús cuestiona por qué o solo ejecuta?",
+    },
+    "ecosistema_adaptacion": {
+        "ints": "INT-04(Ecológica), INT-06(Política), INT-09(Lingüística), INT-14(Divergente)",
+        "lente": "Se",
+        "angulo": "Entorno, poder, lenguaje, opciones. ¿El negocio mira hacia afuera o es endogámico?",
+    },
+    "narrativa_identidad": {
+        "ints": "INT-12(Narrativa), INT-15(Estética), INT-13(Prospectiva)",
+        "lente": "Se+C",
+        "angulo": "Historia, patrón, futuro. ¿Hay narrativa transferible o el método muere con el fundador?",
+    },
+    "reflexion_gobierno": {
+        "ints": "INT-17(Existencial), INT-18(Contemplativa), INT-13(Prospectiva)",
+        "lente": "Se(gobierno)",
+        "angulo": "¿Las reglas siguen siendo válidas? ¿La urgencia es real? ¿El sistema ve sus propios sesgos?",
+    },
+}
 
-Nivel 1 (CAUSA): Repertorio cognitivo INT×P×R
-  - QUÉ inteligencias están activas/atrofiadas
-  - QUÉ pensamientos usa por defecto
-  - QUÉ razonamientos emplea
-  La distribución de este repertorio PRODUCE las lentes.
 
-Nivel 2 (MECANISMO): Cada combinación INT×P×R genera preferentemente ciertas lentes
-  - INT×P×R de ejecución (INT-01,02,05,07,10,11,16 + P07,P13 + R01,R07,R12) → genera S (Salud)
-  - INT×P×R de cuestionamiento (INT-03,04,06,08,09,12,14,15,17,18 + P01-P03,P05,P06,P08,P15 + R02,R03,R05,R08,R10) → genera Se (Sentido)
-  - INT×P×R de transferencia (INT-13 + secundarias 02,04,12,16,18 + P09,P12,P13 + R04,R12) → genera C (Continuidad)
+# ============================================================
+# 4 CLUSTERS DE PENSAMIENTO — Evalúan CÓMO piensa el negocio
+# ============================================================
 
-Nivel 3 (EFECTO): Perfil de lentes S×Se×C → estado diagnóstico
-  - E1 Muerte simétrica (todo <0.20)
-  - E2 Latencia (0.20-0.40 equilibrado)
-  - E3 Funcionalidad (0.40-0.60 equilibrado)
-  - E4 Plenitud (>0.65 equilibrado)
-  - 6 desequilibrados: operador_ciego (S↑Se↓C↓), visionario (S↓Se↑C↓), zombi (S↓Se↓C↑), genio_mortal (S↑Se↑C↓), autómata (S↑Se↓C↑), potencial_dormido (S↓Se↑C↑)
+CLUSTERS_P = {
+    "p_accion": {
+        "ps": "P07(Convergente), P11(Encarnado), P13(Computacional)",
+        "lente": "S",
+        "angulo": """Evalúa si el negocio EJECUTA con método.
+¿Las decisiones se cierran con criterio (P07) o quedan abiertas?
+¿Hay acción física/operativa (P11) o solo planificación?
+¿Los problemas se descomponen en pasos (P13) o se afrontan en bloque?
+Si P07 domina SIN P06 → cierre prematuro (IC5). Señálalo.""",
+    },
+    "p_cuestionamiento": {
+        "ps": "P03(Crítico), P05(Primeros principios), P08(Metacognición)",
+        "lente": "Se",
+        "angulo": """Evalúa si el negocio CUESTIONA sus premisas.
+¿Se evalúa la evidencia antes de decidir (P03) o se actúa por inercia?
+¿Se descomponen las premisas hasta lo fundamental (P05) o se aceptan como dadas?
+¿El dueño observa su propio proceso de decisión (P08) o está dentro sin ver?
+Si NINGUNO de estos P está activo → el negocio es ciego a sus propios sesgos.
+Si P08 domina SIN P11 → piensa sobre pensar sin actuar (IC5).""",
+    },
+    "p_exploracion": {
+        "ps": "P01(Lateral), P02(Sistémico), P06(Divergente), P15(Integrativo)",
+        "lente": "Se",
+        "angulo": """Evalúa si el negocio EXPLORA alternativas.
+¿Se buscan soluciones fuera del marco habitual (P01)?
+¿Se ven las conexiones entre partes (P02) o se tratan por separado?
+¿Se generan muchas opciones antes de elegir (P06) o se va a la primera?
+¿Se mantienen opuestos sin elegir hasta que emerge síntesis (P15)?
+Si P06 activo SIN P07 → generación infinita sin cierre (IC5).""",
+    },
+    "p_transferencia": {
+        "ps": "P04(Diseño), P09(Prospectivo), P10(Reflexivo), P12(Narrativo), P14(Estratégico)",
+        "lente": "Se+C",
+        "angulo": """Evalúa si el negocio TRANSFIERE y PROYECTA.
+¿Hay ciclo de empatizar→prototipar→testear (P04)?
+¿Se piensan escenarios futuros (P09) o solo el presente?
+¿Se revisa la experiencia para extraer principios (P10)?
+¿Se cuenta la historia del negocio de forma que otros la entiendan (P12)?
+¿Se piensa en movimientos y secuencias (P14)?
+Si P09 activo SIN P03 → proyección sin cuestionar premisas (extrapolación ciega).""",
+    },
+}
 
-Nivel 4 (SÍNTOMA): 7F×3L = 21 scores observables
+# ============================================================
+# 3 CLUSTERS DE RAZONAMIENTO — Evalúan CÓMO razona el negocio
+# ============================================================
 
-REGLAS DE DISFUNCIÓN (IC2-IC6):
+CLUSTERS_R = {
+    "r_operativo": {
+        "rs": "R01(Deducción), R07(Bayesiano), R09(Eliminación), R12(Transductivo)",
+        "lente": "S",
+        "angulo": """Evalúa CÓMO el negocio llega a conclusiones OPERATIVAS.
+¿Deduce correctamente de premisas (R01) o deduce de premisas falsas (Maginot)?
+¿Actualiza creencias con evidencia nueva (R07) o mantiene priors fijos?
+¿Descarta opciones sistemáticamente (R09) o elige al azar?
+¿Transfiere de casos anteriores (R12) o cada problema es nuevo?
+R01 SOLA sin R02/R03 = certeza desde premisas no validadas (IC6).
+R07 con priors fijos sin R08 = echo chamber (IC6).""",
+    },
+    "r_comprension": {
+        "rs": "R02(Inducción), R03(Abducción), R05(Causal), R08(Dialéctico), R10(Retroductivo)",
+        "lente": "Se",
+        "angulo": """Evalúa CÓMO el negocio COMPRENDE lo que pasa.
+¿Generaliza desde observaciones (R02) o asume sin datos?
+¿Busca la MEJOR explicación para lo observado (R03) o acepta la primera?
+¿Establece causas reales (R05) o confunde correlación con causa?
+¿Confronta posiciones opuestas para generar síntesis (R08)?
+¿Descubre la estructura necesaria detrás de los fenómenos (R10)?
+R03 es el razonamiento CENTRAL del diagnóstico ACD. Si está ausente,
+el negocio no puede diagnosticar sus propios problemas.
+R02 SOLA sin R06 = generalización sin testear excepciones (IC6).""",
+    },
+    "r_transferencia": {
+        "rs": "R04(Analogía), R06(Contrafactual), R11(Modal)",
+        "lente": "Se+C",
+        "angulo": """Evalúa CÓMO el negocio TRANSFIERE y ANTICIPA.
+¿Transfiere conocimiento entre dominios (R04) o cada área es un silo?
+¿Evalúa qué pasaría SI... (R06) o solo reacciona a lo que ya pasó?
+¿Distingue lo necesario de lo contingente (R11) o trata todo como inevitable?
+R04 SOLA sin R09 = transferencia superficial sin depurar diferencias (IC6).
+Si R06 está ausente, el negocio es CIEGO al riesgo futuro.
+Estas son las herramientas de CONTINUIDAD — sin ellas, el método muere con el fundador.""",
+    },
+}
 
-IC2 MONOPOLIO: Una INT sin complementarias = disfunción.
-  INT-01 sola sin INT-17 = formalismo sin sentido (Maginot)
-  INT-07 sola sin INT-08 = rentabilidad sin coste humano (Boeing)
-  INT-17 sola sin INT-16 = parálisis existencial
 
-IC3 DESACOPLE INT-P: INT procesada con P incompatible = abortamiento.
-  INT-17(Existencial) + P07(Convergente) = trivializa la pregunta
-  INT-14(Divergente) + P07(Convergente) = cierra antes de explorar
-  INT-16(Constructiva) + P08(Metacognición) = piensa sobre construir en vez de construir
+# ============================================================
+# SYSTEM PROMPTS
+# ============================================================
 
-IC4 DESACOPLE INT-R: INT con R incompatible = conclusión incorrecta.
-  INT-03(Estructural) + R01(Deducción) = nunca descubre identidad real (necesita R03)
-  INT-13(Prospectiva) + R01(Deducción) = futuro no se deduce (necesita R06 Contrafactual)
-  INT-15(Estética) + R07(Bayesiano) = belleza no se probabiliza (necesita R10)
+SYSTEM_CLUSTER = """Eres el cluster {nombre} del enjambre cognitivo de OMNI-MIND.
 
-IC5 PARES COMPLEMENTARIOS P: Pensamientos son funcionales SOLO en pares.
-  P06(Divergente) sin P07(Convergente) = generación infinita
-  P07(Convergente) sin P06(Divergente) = cierre prematuro
-  P05(Primeros principios) sin P04(Diseño) = deconstrucción sin reconstrucción
-  P08(Metacognición) sin P11(Encarnado) = recursión infinita
+Tu trabajo: recibir un DIAGNÓSTICO FORMAL (generado por código con verificaciones IC2-IC6)
+y evaluarlo contra la REALIDAD del negocio.
 
-IC6 VALIDACIÓN CRUZADA R: Razonamientos aislados amplifican sesgos.
-  R01(Deducción) sola = certeza desde premisas no validadas
-  R02(Inducción) sola = generalización sin testear excepciones
-  R07(Bayesiano) con priors fijos sin R08(Dialéctico) = echo chamber
+DIAGNÓSTICO DEL CÓDIGO (esto ya está computado, no lo reinventes):
+{diagnostico_resumen}
 
-IC7 REQUISITO E4: ≥7 INT (3S+3Se+1C) + ≥4 P (P06+P07+P08+1Se) + ≥3 R (1S+R03+1C)
+Tus inteligencias: {ints} (lente {lente})
+Tu ángulo: {angulo}
 
-AFINIDAD INTELIGENCIA → LENTE:
-  Generan S: INT-01(Lógica), 02(Computacional), 05(Estratégica), 07(Financiera), 10(Cinestésica), 11(Espacial), 16(Constructiva)
-  Generan Se: INT-03(Estructural), 04(Ecológica), 06(Política), 08(Social), 09(Lingüística), 12(Narrativa), 14(Divergente), 15(Estética), 17(Existencial), 18(Contemplativa)
-  Generan C: INT-13(Prospectiva) + secundarias: 02, 04, 12, 16, 18
+INSTRUCCIONES:
+1. CONFIRMA lo que el código diagnosticó y los datos reales respaldan.
+   "tcf/ dice INT-17 ausente. CONFIRMO: no hay evidencia de cuestionamiento de premisas."
 
-AFINIDAD PENSAMIENTO → LENTE:
-  Generan S: P07(Convergente), P11(Encarnado), P13(Computacional)
-  Generan Se: P01(Lateral), P02(Sistémico), P03(Crítico), P05(Primeros principios), P06(Divergente), P08(Metacognición), P15(Integrativo)
-  Generan C: P09(Prospectivo)
-  Mixtas: P04(Diseño)=S+Se, P10(Reflexivo)=Se+C, P12(Narrativo)=Se+C, P14(Estratégico)=S+Se
+2. CONTRADICE lo que el código diagnosticó pero los datos reales NO respaldan.
+   "tcf/ dice INT-07 activa. CONTRADIGO: no hay cálculos de coste de oportunidad en las decisiones."
 
-AFINIDAD RAZONAMIENTO → LENTE:
-  Generan S: R01(Deducción), R07(Bayesiano), R12(Transductivo)
-  Generan Se: R02(Inducción), R03(Abducción), R05(Causal), R08(Dialéctico), R10(Retroductivo)
-  Mixtas Se+C: R04(Analogía), R06(Contrafactual), R11(Modal)
-  Mixta S+Se: R09(Eliminación)
-"""
+3. ENRIQUECE con información que el código NO puede ver (contexto humano, matices, patrones).
+   "ENRIQUEZCO: INT-10 está activa pero solo en sesiones, no en gestión del negocio."
 
-PERFILES_PATOLOGICOS = """
-CONFIGURACIONES INT×P×R DE CADA PERFIL PATOLÓGICO:
+4. Evalúa la PRESCRIPCIÓN: ¿tiene sentido para este negocio concreto?
+   "La prescripción dice activar INT-12. CONFIRMO: es urgente porque todo el método está en la cabeza de Jesús."
 
-OPERADOR CIEGO (S↑ Se↓ C↓):
-  Activas: INT-01,02,05,07,16 + P07,P13,P14 + R01,R07,R12
-  Ausentes: INT-17,18,03,08 + P08,P05,P03,P01 + R03,R08,R10
-  Mecanismo: 100% herramientas de S. INCAPAZ de generar Se. No cuestiona premisas.
+Responde en JSON:
+{{
+    "cluster": "{nombre}",
+    "confirmaciones": [{{"int_o_regla": "INT-XX o ICX", "evidencia": "dato concreto"}}],
+    "contradicciones": [{{"int_o_regla": "INT-XX o ICX", "evidencia": "dato que contradice", "correccion": "lo correcto es..."}}],
+    "enriquecimientos": [{{"aspecto": "qué añade", "evidencia": "dato concreto", "implicacion": "qué significa"}}],
+    "evaluacion_prescripcion": "¿la prescripción tiene sentido para este negocio? ¿qué ajustar?",
+    "preguntas_nuevas": ["pregunta que el negocio debería hacerse"]
+}}"""
 
-VISIONARIO ATRAPADO (S↓ Se↑ C↓):
-  Activas: INT-17,03,06,15,14 + P02,P05,P08,P06 + R03,R08,R10,R05
-  Ausentes: INT-16,10,02,05 + P07,P11,P13,P04 + R01,R12,R07
-  Mecanismo: 100% herramientas de Se. INCAPAZ de ejecutar. Comprende pero no hace.
 
-ZOMBI INMORTAL (S↓ Se↓ C↑):
-  Herramientas DEGRADADAS/FOSILIZADAS. INT-13 en modo "seguiremos", P09 sin exploración.
-  R04 como "como siempre" en vez de cross-dominio. El Se se evaporó con cada iteración.
+SYSTEM_CLUSTER_P = """Eres el cluster de pensamiento {nombre} del enjambre cognitivo.
 
-GENIO MORTAL (S↑ Se↑ C↓):
-  Repertorio RICO pero PRIVADO. Muchas INT, P, R activas. Falta: INT-12(Narrativa),
-  INT-13(Prospectiva), P12(Narrativo), R04(Analogía). No puede TRANSFERIR.
+DIAGNÓSTICO DE CÓDIGO (tcf/):
+{diagnostico_resumen}
 
-AUTÓMATA ETERNO (S↑ Se↓ C↑) — EL MÁS PELIGROSO:
-  Activas: INT-01,02,05,07,13(lineal),16 + P07,P09(lineal),P13,P14 + R01,R04(interna),R07(priors fijos),R12
-  Ausentes: INT-17,18,08,14 + P08,P05,P01,P03 + R03,R08,R10,R06
-  Mecanismo: S↑+C↑ PARECE sano. Pero las herramientas de ALARMA están ausentes.
-  No puede DETECTAR su propio error. Amplifica y escala el error.
+Tus tipos de pensamiento: {ps}
+Lente primaria: {lente}
+Tu ángulo: {angulo}
 
-POTENCIAL DORMIDO (S↓ Se↑ C↑):
-  Falta S: INT-10,16,11 + P11,P04,P07 + R01,R12,R07.
-  El más simple de resolver: solo necesita HACER. Todo lo demás existe.
-"""
+EVALÚA:
+1. ¿Estos P están ACTIVOS en este negocio? ¿Hay evidencia en las decisiones observables?
+2. ¿Hay PARES COMPLEMENTARIOS (IC5) activos? ¿O un P domina sin su complemento?
+3. ¿Hay DESACOPLES INT-P (IC3)? ¿Alguna INT detectada se procesa con un P incompatible?
+4. ¿Qué EFECTO tienen estos P (o su ausencia) en las lentes/funciones?
+
+Responde en JSON:
+{{
+    "cluster": "{nombre}",
+    "ps_evaluados": [
+        {{"id": "PXX", "activo": true, "evidencia": "dato concreto",
+          "par_complementario": "PYY presente/ausente",
+          "desacople_ic3": "INT-XX procesada con este P es compatible/incompatible"}}
+    ],
+    "efecto_lentes": {{
+        "S": "cómo estos P impulsan o frenan S",
+        "Se": "cómo estos P impulsan o frenan Se",
+        "C": "cómo estos P impulsan o frenan C"
+    }},
+    "disfunciones_detectadas": ["ICX: descripción concreta"],
+    "insights": ["algo que solo evaluando P se puede ver"]
+}}"""
+
+
+SYSTEM_CLUSTER_R = """Eres el cluster de razonamiento {nombre} del enjambre cognitivo.
+
+DIAGNÓSTICO DE CÓDIGO (tcf/):
+{diagnostico_resumen}
+
+Tus tipos de razonamiento: {rs}
+Lente primaria: {lente}
+Tu ángulo: {angulo}
+
+EVALÚA:
+1. ¿Estos R están ACTIVOS en este negocio? ¿Cómo llega a conclusiones?
+2. ¿Hay VALIDACIÓN CRUZADA (IC6)? ¿O un R opera aislado amplificando sesgos?
+3. ¿Hay DESACOPLES INT-R (IC4)? ¿Alguna INT detectada usa un R incompatible?
+4. ¿Qué EFECTO tienen estos R (o su ausencia) en las lentes/funciones?
+
+Responde en JSON:
+{{
+    "cluster": "{nombre}",
+    "rs_evaluados": [
+        {{"id": "RXX", "activo": true, "evidencia": "dato concreto",
+          "validacion_cruzada": "RYY lo valida / opera aislado",
+          "desacople_ic4": "INT-XX con este R es compatible/incompatible"}}
+    ],
+    "efecto_lentes": {{
+        "S": "cómo estos R impulsan o frenan S",
+        "Se": "cómo estos R impulsan o frenan Se",
+        "C": "cómo estos R impulsan o frenan C"
+    }},
+    "disfunciones_detectadas": ["ICX: descripción concreta"],
+    "insights": ["algo que solo evaluando R se puede ver"]
+}}"""
 
 
 # ============================================================
@@ -148,16 +269,9 @@ POTENCIAL DORMIDO (S↓ Se↑ C↑):
 # ============================================================
 
 async def _contexto_completo() -> dict:
-    """Recopila TODOS los datos reales para inyectar en los agentes."""
+    """Recopila datos reales del negocio para inyectar en clusters."""
     pool = await get_pool()
     async with pool.acquire() as conn:
-        diag = await conn.fetchrow("""
-            SELECT vector_pre, lentes_pre, estado_pre, metricas
-            FROM diagnosticos
-            WHERE caso_input LIKE 'Diagnóstico autónomo%'
-            ORDER BY created_at DESC LIMIT 1
-        """)
-
         clientes = await conn.fetch("""
             SELECT c.nombre, c.apellidos, ct.estado, ct.fecha_alta,
                 (SELECT MAX(s.fecha) FROM om_asistencias a
@@ -179,7 +293,7 @@ async def _contexto_completo() -> dict:
         señales = await conn.fetch("""
             SELECT origen, tipo, payload, created_at
             FROM om_senales_agentes WHERE tenant_id=$1
-            ORDER BY created_at DESC LIMIT 30
+            ORDER BY created_at DESC LIMIT 20
         """, TENANT)
 
         ingresos = await conn.fetchval("""
@@ -192,20 +306,33 @@ async def _contexto_completo() -> dict:
             WHERE tenant_id=$1 AND estado='pendiente'
         """, TENANT) or 0
 
-        identidad = await conn.fetchrow(
-            "SELECT propuesta_valor, diferenciadores, tono FROM om_voz_identidad WHERE tenant_id=$1",
-            TENANT)
+        try:
+            identidad = await conn.fetchrow(
+                "SELECT propuesta_valor, diferenciadores, tono FROM om_voz_identidad WHERE tenant_id=$1",
+                TENANT)
+        except Exception:
+            identidad = None
 
-        procesos = await conn.fetchval("SELECT count(*) FROM om_procesos WHERE tenant_id=$1", TENANT) or 0
-        adn = await conn.fetchval("SELECT count(*) FROM om_adn WHERE tenant_id=$1 AND activo=true", TENANT) or 0
+        try:
+            procesos = await conn.fetchval(
+                "SELECT count(*) FROM om_procesos WHERE tenant_id=$1", TENANT) or 0
+        except Exception:
+            procesos = 0
+
+        try:
+            adn = await conn.fetchval(
+                "SELECT count(*) FROM om_adn WHERE tenant_id=$1 AND activo=true", TENANT) or 0
+        except Exception:
+            adn = 0
 
     return {
-        "diagnostico_numerico": dict(diag) if diag else {},
         "clientes": [dict(c) for c in clientes],
         "grupos": [dict(g) for g in grupos],
-        "señales_bus": [{"origen": s["origen"], "tipo": s["tipo"],
-                         "payload": s["payload"] if isinstance(s["payload"], dict) else json.loads(s["payload"])}
-                        for s in señales[:15]],
+        "señales_recientes": [
+            {"origen": s["origen"], "tipo": s["tipo"],
+             "payload": s["payload"] if isinstance(s["payload"], dict) else json.loads(s["payload"])}
+            for s in señales[:10]
+        ],
         "ingresos_mes": float(ingresos),
         "deuda_pendiente": float(deuda),
         "identidad": dict(identidad) if identidad else {},
@@ -216,252 +343,14 @@ async def _contexto_completo() -> dict:
 
 
 # ============================================================
-# AGENTE 1: DETECTOR DE REPERTORIO (Nivel 1)
-# ============================================================
-
-SYSTEM_DETECTOR_REPERTORIO = f"""Eres el DETECTOR DE REPERTORIO COGNITIVO del organismo OMNI-MIND.
-
-Tu trabajo es el MÁS IMPORTANTE de todo el enjambre: diagnosticar QUÉ configuración
-de Inteligencias × Pensamientos × Razonamientos está usando este negocio.
-
-{FRAMEWORK_CAUSAL}
-
-{PERFILES_PATOLOGICOS}
-
-A partir de los DATOS REALES del negocio, infiere:
-1. ¿Qué INT están ACTIVAS? (evidencia en comportamiento observable)
-2. ¿Qué INT están AUSENTES/ATROFIADAS? (lo que NO se hace, no se pregunta, no se ve)
-3. ¿Qué P usa el dueño por defecto? (cómo organiza su pensamiento)
-4. ¿Qué R emplea habitualmente? (cómo llega a conclusiones)
-5. ¿Cuál es la distribución por lente del repertorio? (%S, %Se, %C)
-
-CÓMO INFERIR INT×P×R DESDE DATOS OBSERVABLES:
-- Si el negocio calcula bien costes pero no cuestiona por qué → INT-07 activa, INT-17 ausente
-- Si tiene procesos documentados pero son mecánicos → P13 activo, P08 ausente, herramientas FOSILIZADAS
-- Si analiza problemas descomponiéndolos → P02 o P13, R01 o R05 activos
-- Si sigue haciendo lo mismo sin cuestionar → R04 degradado ("como siempre"), R06 ausente
-- Si 15/16 grupos infrautilizados y no cierra ninguno → INT-18 ausente (no depura), P03 ausente (no cuestiona)
-- Si no hay procesos documentados → INT-12 ausente (no narra), P12 ausente, R04 ausente
-- Si no monitoriza competencia → INT-04 ausente, INT-13 ausente
-- Si 90 clientes con instructor único → INT-16 activa (construye), C baja (no transfiere)
-
-Responde en JSON:
-{{
-    "repertorio_detectado": {{
-        "INT_activas": [
-            {{"id": "INT-XX", "evidencia": "comportamiento observable que lo demuestra", "lente": "S|Se|C"}}
-        ],
-        "INT_ausentes": [
-            {{"id": "INT-XX", "evidencia": "qué NO se hace que lo demuestra", "lente": "S|Se|C"}}
-        ],
-        "P_activos": [{{"id": "PXX", "evidencia": "...", "lente": "S|Se|C"}}],
-        "P_ausentes": [{{"id": "PXX", "evidencia": "...", "lente": "S|Se|C"}}],
-        "R_activos": [{{"id": "RXX", "evidencia": "...", "lente": "S|Se|C"}}],
-        "R_ausentes": [{{"id": "RXX", "evidencia": "...", "lente": "S|Se|C"}}]
-    }},
-    "distribucion_lentes": {{
-        "pct_S": 0-100,
-        "pct_Se": 0-100,
-        "pct_C": 0-100,
-        "explicacion": "por qué esta distribución produce el perfil de lentes observado"
-    }},
-    "perfil_probable": "operador_ciego|visionario|zombi|genio_mortal|automata|potencial_dormido|E1|E2|E3|E4",
-    "confianza": 0.0-1.0,
-    "razonamiento": "2-3 frases explicando la cadena causal Nivel 1 → Nivel 2 → Nivel 3"
-}}"""
-
-
-# ============================================================
-# AGENTE 2: DETECTOR DE DISFUNCIONES (IC2-IC6)
-# ============================================================
-
-SYSTEM_DETECTOR_DISFUNCIONES = f"""Eres el DETECTOR DE DISFUNCIONES COGNITIVAS del organismo OMNI-MIND.
-
-Recibes el repertorio INT×P×R detectado y buscas DISFUNCIONES según las reglas IC2-IC6.
-
-{FRAMEWORK_CAUSAL}
-
-REGLAS A VERIFICAR:
-
-IC2 MONOPOLIO: ¿Alguna INT opera sin complementarias?
-  Verifica: INT-01 tiene INT-17? INT-07 tiene INT-08? INT-16 tiene INT-15?
-  Si hay monopolio → señalar QUÉ INT, QUÉ complementaria falta, QUÉ efecto produce.
-
-IC3 DESACOPLE INT-P: ¿Alguna INT se procesa con P incompatible?
-  Verifica tabla IC3. Si hay desacople → la INT se ABORTA, no produce su output normal.
-  EJEMPLO: si el negocio tiene INT-17(Existencial) pero la procesa con P07(Convergente),
-  las preguntas profundas se trivializan. La INT existe pero está NEUTRALIZADA.
-
-IC4 DESACOPLE INT-R: ¿Alguna INT usa R incompatible?
-  Verifica tabla IC4. Si hay desacople → la INT concluye MAL.
-  EJEMPLO: si INT-13(Prospectiva) se procesa con R01(Deducción), el futuro se "deduce"
-  del presente → extrapolación lineal, no exploración de escenarios.
-
-IC5 PARES P: ¿Los P activos tienen su complementario?
-  P06 sin P07? P07 sin P06? P05 sin P04? P08 sin P11?
-
-IC6 VALIDACIÓN CRUZADA R: ¿Los R se validan entre sí?
-  R01 sola? R02 sola? R07 con priors fijos?
-
-IC7 REQUISITO E4: ¿El repertorio cumple mínimos para equilibrio?
-  ≥7 INT (3S+3Se+1C)? ≥4 P (P06+P07+P08+1Se)? ≥3 R (1S+R03+1C)?
-
-IMPORTANTE: Una disfunción NO es solo "falta X". Es "falta X Y ESO PRODUCE Y".
-  Ejemplo correcto: "INT-07 en monopolio sin INT-08 → el negocio optimiza costes
-  sin ver el impacto en relaciones con clientes → por eso hay 2 fantasmas"
-  Ejemplo incorrecto: "Falta INT-08" (no explica consecuencia)
-
-Responde en JSON:
-{{
-    "disfunciones": [
-        {{
-            "regla": "IC2|IC3|IC4|IC5|IC6|IC7",
-            "descripcion": "qué disfunción hay",
-            "int_afectada": "INT-XX",
-            "mecanismo": "cómo la disfunción produce el síntoma observable",
-            "efecto_lentes": "qué lente frena o distorsiona",
-            "efecto_funciones": ["F3", "F5"],
-            "gravedad": 1-5,
-            "ejemplo_concreto": "dato específico del negocio que lo demuestra"
-        }}
-    ],
-    "repertorio_sano": false,
-    "distancia_a_E4": {{
-        "INT_faltan": 0,
-        "P_faltan": 0,
-        "R_faltan": 0,
-        "lente_mas_carente": "S|Se|C"
-    }}
-}}"""
-
-
-# ============================================================
-# AGENTE 3: MECANISMO CAUSAL (Nivel 2 → Nivel 3-4)
-# ============================================================
-
-SYSTEM_MECANISMO_CAUSAL = f"""Eres el agente de MECANISMO CAUSAL del organismo OMNI-MIND.
-
-Recibes el repertorio INT×P×R Y las disfunciones detectadas.
-Tu trabajo: explicar EXACTAMENTE por qué el negocio tiene las lentes y funciones que tiene.
-
-{FRAMEWORK_CAUSAL}
-
-NO repitas los datos. EXPLICA la cadena causal:
-  "El negocio tiene INT-01,02,05,07,16 activas (todas de S) + P07,P13 (de S)
-   + R01,R07 (de S). El 85% de su repertorio genera S. Solo INT-03 aporta algo
-   de Se y está procesada con P07 (IC3: se aborta). Resultado: S=0.46, Se=0.34.
-   El Se=0.34 NO es bajo por falta de datos. Es bajo porque las herramientas
-   que generan Se están ausentes o neutralizadas."
-
-Incluye:
-1. La cadena causal completa (Nivel 1 → 2 → 3 → 4)
-2. Qué síntomas (F scores bajos) se EXPLICAN por qué combinaciones INT×P×R
-3. Qué síntomas NO se explican (pueden tener causa externa al repertorio)
-
-Responde en JSON:
-{{
-    "cadena_causal": {{
-        "nivel_1_causa": "resumen del repertorio",
-        "nivel_2_mecanismo": "cómo ese repertorio produce el sesgo de lentes",
-        "nivel_3_efecto": "perfil de lentes resultante y por qué",
-        "nivel_4_sintomas": "qué F scores se explican causalmente"
-    }},
-    "funciones_explicadas": {{
-        "F1": "qué INT×P×R produce este score de F1",
-        "F3": "qué INT×P×R produce este score de F3"
-    }},
-    "sintomas_sin_explicar": ["síntoma que no se explica por el repertorio"],
-    "prediccion": "si el repertorio no cambia, en 6 meses el negocio estará en..."
-}}"""
-
-
-# ============================================================
-# 6 AGENTES PERCEPTIVOS (clusters INT×P×R)
-# ============================================================
-
-CLUSTERS = {
-    "analitico_operativo": {
-        "ints": "INT-01(Lógica), INT-02(Computacional), INT-05(Estratégica)",
-        "ps": "P07(Convergente), P13(Computacional), P14(Estratégico)",
-        "rs": "R01(Deducción), R07(Bayesiano), R09(Eliminación)",
-        "lente_primaria": "S",
-        "angulo": "Estructura, cálculo, eficiencia, secuencias. Tu cluster IMPULSA S pero puede FRENAR Se si domina sin contrapeso.",
-    },
-    "financiero_constructivo": {
-        "ints": "INT-07(Financiera), INT-10(Cinestésica), INT-11(Espacial), INT-16(Constructiva)",
-        "ps": "P04(Diseño), P11(Encarnado)",
-        "rs": "R12(Transductivo), R07(Bayesiano)",
-        "lente_primaria": "S",
-        "angulo": "Recursos, prototipado, acción física, distribución espacial. Tu cluster EJECUTA pero puede crear inercia operativa sin reflexión.",
-    },
-    "comprension_profunda": {
-        "ints": "INT-03(Estructural), INT-08(Social), INT-17(Existencial), INT-18(Contemplativa)",
-        "ps": "P03(Crítico), P05(Primeros principios), P08(Metacognición)",
-        "rs": "R03(Abducción), R08(Dialéctico), R10(Retroductivo)",
-        "lente_primaria": "Se",
-        "angulo": "Por qué, identidad, lo no dicho, urgencia falsa. Tu cluster genera Se puro. Sin él, el negocio opera sin comprender.",
-    },
-    "ecosistema_adaptacion": {
-        "ints": "INT-04(Ecológica), INT-06(Política), INT-09(Lingüística), INT-14(Divergente)",
-        "ps": "P01(Lateral), P02(Sistémico), P06(Divergente)",
-        "rs": "R02(Inducción), R05(Causal), R06(Contrafactual)",
-        "lente_primaria": "Se",
-        "angulo": "Entorno, poder, lenguaje, opciones. Tu cluster conecta con el AFUERA. Sin él, el negocio es endogámico.",
-    },
-    "narrativa_identidad": {
-        "ints": "INT-12(Narrativa), INT-15(Estética), INT-13(Prospectiva)",
-        "ps": "P09(Prospectivo), P12(Narrativo), P15(Integrativo)",
-        "rs": "R04(Analogía), R11(Modal), R06(Contrafactual)",
-        "lente_primaria": "Se+C",
-        "angulo": "Historia, patrón, futuro, belleza. Tu cluster transfiere Se a C. Sin él, la comprensión muere con el fundador.",
-    },
-    "reflexion_gobierno": {
-        "ints": "INT-17(Existencial), INT-18(Contemplativa), INT-13(Prospectiva)",
-        "ps": "P08(Metacognición), P10(Reflexivo), P05(Primeros principios)",
-        "rs": "R10(Retroductivo), R08(Dialéctico), R11(Modal)",
-        "lente_primaria": "Se (gobierno)",
-        "angulo": "Gobierno del sistema: ¿las reglas siguen siendo válidas? ¿la urgencia es real? Tu cluster es la ALARMA. Sin él, el autómata eterno.",
-    },
-}
-
-SYSTEM_CLUSTER = f"""Eres el cluster {{nombre}} del enjambre cognitivo de OMNI-MIND.
-
-Tus herramientas cognitivas: {{ints}} + {{ps}} + {{rs}}
-Tu lente primaria: {{lente_primaria}}
-Tu ángulo de percepción: {{angulo}}
-
-{FRAMEWORK_CAUSAL}
-
-IMPORTANTE: No solo percibas el negocio desde tu ángulo. Diagnostica:
-1. ¿Tus herramientas (INT×P×R) están ACTIVAS en este negocio? ¿Hay evidencia?
-2. Si están activas, ¿están correctamente acopladas? (IC3, IC4, IC5, IC6)
-3. Si están ausentes, ¿qué SÍNTOMA produce su ausencia en las lentes/funciones?
-4. ¿Tu cluster IMPULSA o FRENA alguna función/lente en este negocio concreto?
-
-Responde en JSON:
-{{{{
-    "cluster": "{{nombre}}",
-    "herramientas_activas_en_negocio": [
-        {{{{"id": "INT-XX/PXX/RXX", "activa": true/false, "evidencia": "dato concreto"}}}}
-    ],
-    "acoplamientos": [
-        {{{{"int": "INT-XX", "p_o_r": "PXX/RXX", "estado": "correcto|desacoplado|ausente",
-          "efecto": "qué produce este acoplamiento o desacoplamiento"}}}}
-    ],
-    "impulsa": [{{{{"funcion": "FX", "lente": "S|Se|C", "mecanismo": "cómo impulsa"}}}}],
-    "frena": [{{{{"funcion": "FX", "lente": "S|Se|C", "mecanismo": "cómo frena"}}}}],
-    "insights": ["insight que solo este cluster puede ver"],
-    "preguntas_nuevas": ["pregunta que el negocio debería hacerse y no se hace"]
-}}}}"""
-
-
-# ============================================================
 # MOTOR DE EJECUCIÓN
 # ============================================================
 
-async def _call_agente(system_prompt: str, user_prompt: str, nombre: str) -> dict:
-    """Ejecuta un agente individual del enjambre."""
+async def _call_cluster(system_prompt: str, user_prompt: str, nombre: str) -> dict:
+    """Ejecuta un cluster individual."""
     t0 = time.time()
+    raw = ""
+    clean = ""
     try:
         async with httpx.AsyncClient(timeout=60) as client:
             resp = await client.post(
@@ -476,12 +365,13 @@ async def _call_agente(system_prompt: str, user_prompt: str, nombre: str) -> dic
                     ],
                     "max_tokens": 4000,
                     "temperature": 0.2,
+                    "response_format": {"type": "json_object"},
                 },
             )
             resp.raise_for_status()
             raw = resp.json()["choices"][0]["message"]["content"]
 
-        # Parsear JSON tolerante a markdown fences y texto extra
+        # Parse JSON tolerante a markdown fences y texto extra
         clean = raw.strip()
         if "```" in clean:
             parts = clean.split("```")
@@ -492,151 +382,204 @@ async def _call_agente(system_prompt: str, user_prompt: str, nombre: str) -> dic
                 if part.startswith("{"):
                     try:
                         resultado = json.loads(part)
-                        dt = round(time.time() - t0, 1)
-                        log.info("enjambre_agente_ok", agente=nombre, tiempo=dt)
+                        log.info("enjambre_cluster_ok", cluster=nombre,
+                                 tiempo=round(time.time() - t0, 1))
                         return resultado
                     except json.JSONDecodeError:
                         continue
+
         # Sin fences o fences sin JSON válido — buscar JSON directo
         start = clean.find("{")
         end = clean.rfind("}")
         if start != -1 and end != -1:
             clean = clean[start:end + 1]
         resultado = json.loads(clean)
-        dt = round(time.time() - t0, 1)
-        log.info("enjambre_agente_ok", agente=nombre, tiempo=dt)
+        log.info("enjambre_cluster_ok", cluster=nombre,
+                 tiempo=round(time.time() - t0, 1))
         return resultado
 
     except json.JSONDecodeError:
-        # Intentar reparar JSON truncado cerrando llaves/corchetes abiertos
+        # Intentar reparar JSON truncado (típico: markdown + max_tokens)
         try:
-            import re
-            repair = clean if 'clean' in dir() else raw
-            # Contar llaves abiertas no cerradas y añadirlas
+            # Extraer JSON del raw, quitando fences
+            repair = raw.strip()
+            if repair.startswith("```"):
+                repair = repair.split("\n", 1)[1] if "\n" in repair else repair[3:]
+            if repair.startswith("json"):
+                repair = repair[4:].strip()
+            if repair.endswith("```"):
+                repair = repair[:-3].strip()
+            # Buscar inicio del JSON
+            idx = repair.find("{")
+            if idx != -1:
+                repair = repair[idx:]
+            # Cerrar llaves/corchetes abiertos
             opens = repair.count("{") - repair.count("}")
             repair = repair + "}" * max(opens, 0)
             opens_b = repair.count("[") - repair.count("]")
             repair = repair + "]" * max(opens_b, 0)
+            # Quitar trailing commas antes de cierre
+            repair = re.sub(r',\s*([}\]])', r'\1', repair)
+            # Quitar strings truncadas: "texto sin cerrar → "texto"
+            repair = re.sub(r'"([^"]{0,200})$', r'"\1"', repair)
             resultado = json.loads(repair)
-            log.info("enjambre_agente_repaired", agente=nombre)
+            log.info("enjambre_cluster_repaired", cluster=nombre)
             return resultado
         except Exception:
             pass
-        raw_preview = raw[:300] if 'raw' in dir() else ""
-        log.warning("enjambre_parse_error", agente=nombre, raw_preview=raw_preview[:150])
-        return {"error": "parse_error", "raw": raw_preview}
+        log.warning("enjambre_parse_error", cluster=nombre,
+                    raw_preview=raw[:150])
+        return {"error": "parse_error", "cluster": nombre}
     except Exception as e:
-        log.warning("enjambre_agente_error", agente=nombre, error=str(e))
-        return {"error": str(e)[:200], "agente": nombre}
+        log.warning("enjambre_cluster_error", cluster=nombre, error=str(e))
+        return {"error": str(e)[:200], "cluster": nombre}
 
 
-async def ejecutar_enjambre() -> dict:
-    """Ejecuta el enjambre cognitivo con modelo causal de 4 niveles.
+async def ejecutar_enjambre(diagnostico_completo=None, prescripcion_acd=None) -> dict:
+    """Ejecuta enjambre como CONTEXTUALIZADOR sobre diagnóstico de tcf/.
 
-    Secuencia (NO paralelo — cada agente alimenta al siguiente):
-    1. Detector de Repertorio → identifica INT×P×R del negocio
-    2. Detector de Disfunciones → aplica IC2-IC6
-    3. Mecanismo Causal → explica por qué las lentes/funciones son lo que son
-    4. 6 Clusters perceptivos → cada uno evalúa si sus herramientas están activas
+    Args:
+        diagnostico_completo: DiagnosticoCompleto de tcf/ (si None, lo lee del bus)
+        prescripcion_acd: Prescripcion de tcf/ (si None, lo lee del bus)
+
+    Returns:
+        Diagnóstico anotado con evidencia de 6 clusters.
     """
     if not OPENROUTER_API_KEY:
         return {"error": "OPENROUTER_API_KEY no configurada"}
 
     t0 = time.time()
+
+    # Campos para compat con compositor
+    perfil_detectado = None
+    disfunciones_encontradas = 0
+
+    # Si no se pasan, leer del último diagnóstico del bus
+    if diagnostico_completo is None or prescripcion_acd is None:
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            diag_row = await conn.fetchrow("""
+                SELECT payload FROM om_senales_agentes
+                WHERE tenant_id=$1 AND tipo='DIAGNOSTICO' AND origen='DIAGNOSTICADOR'
+                ORDER BY created_at DESC LIMIT 1
+            """, TENANT)
+        if diag_row:
+            payload = diag_row["payload"]
+            if isinstance(payload, str):
+                payload = json.loads(payload)
+            perfil_detectado = payload.get("estado")
+            rep = payload.get("repertorio", {})
+            disfunciones_encontradas = len(rep.get("advertencias_ic", []))
+            diagnostico_resumen = json.dumps(
+                payload, ensure_ascii=False, indent=2, default=str)[:4000]
+        else:
+            return {"error": "No hay diagnóstico previo en el bus"}
+    else:
+        # Serializar DiagnosticoCompleto + Prescripcion para los clusters
+        perfil_detectado = diagnostico_completo.estado.id
+        if diagnostico_completo.repertorio:
+            disfunciones_encontradas = len(
+                diagnostico_completo.repertorio.advertencias_ic)
+        diagnostico_resumen = json.dumps({
+            "estado": diagnostico_completo.estado.id,
+            "nombre": diagnostico_completo.estado.nombre,
+            "lentes": diagnostico_completo.estado.lentes,
+            "gap": diagnostico_completo.estado.gap,
+            "repertorio": {
+                "ints_activas": diagnostico_completo.repertorio.ints_activas,
+                "ints_atrofiadas": diagnostico_completo.repertorio.ints_atrofiadas,
+                "ints_ausentes": diagnostico_completo.repertorio.ints_ausentes,
+                "ps_activos": diagnostico_completo.repertorio.ps_activos,
+                "rs_activos": diagnostico_completo.repertorio.rs_activos,
+                "advertencias_ic": diagnostico_completo.repertorio.advertencias_ic,
+            },
+            "prescripcion": {
+                "ints": prescripcion_acd.ints,
+                "ps": prescripcion_acd.ps,
+                "rs": prescripcion_acd.rs,
+                "objetivo": prescripcion_acd.objetivo,
+                "lente_objetivo": prescripcion_acd.lente_objetivo,
+                "secuencia": prescripcion_acd.secuencia,
+            },
+        }, ensure_ascii=False, indent=2, default=str)[:4000]
+
+    # Contexto real del negocio
     ctx = await _contexto_completo()
-    ctx_str = json.dumps(ctx, ensure_ascii=False, indent=2, default=str)[:6000]
+    ctx_str = json.dumps(ctx, ensure_ascii=False, indent=2, default=str)[:5000]
 
-    resultados = {}
+    # Leer pizarra — qué están haciendo/pensando los demás agentes
+    pizarra_str = ""
+    try:
+        from src.pilates.pizarra import leer_todo
+        pizarra = await leer_todo()
+        if pizarra:
+            pizarra_str = json.dumps(pizarra, ensure_ascii=False, indent=2, default=str)[:2000]
+    except Exception as e:
+        log.warning("enjambre_pizarra_error", error=str(e))
 
-    # 1. DETECTOR DE REPERTORIO (Nivel 1)
-    log.info("enjambre_fase1_repertorio")
-    repertorio = await _call_agente(
-        SYSTEM_DETECTOR_REPERTORIO,
-        f"DATOS REALES DEL NEGOCIO:\n{ctx_str}",
-        "Detector-Repertorio"
-    )
-    resultados["repertorio"] = repertorio
+    # Construir contexto enriquecido con pizarra
+    user_prompt = f"DATOS REALES DEL NEGOCIO:\n{ctx_str}"
+    if pizarra_str:
+        user_prompt += f"\n\nPIZARRA — Lo que cada agente está haciendo/pensando:\n{pizarra_str}"
 
-    # 2. DETECTOR DE DISFUNCIONES (IC2-IC6)
-    log.info("enjambre_fase2_disfunciones")
-    disfunciones = await _call_agente(
-        SYSTEM_DETECTOR_DISFUNCIONES,
-        f"REPERTORIO DETECTADO:\n{json.dumps(repertorio, ensure_ascii=False, indent=2, default=str)}\n\nDATOS REALES:\n{ctx_str}",
-        "Detector-Disfunciones"
-    )
-    resultados["disfunciones"] = disfunciones
+    # 13 clusters en PARALELO: 6 INT + 4 P + 3 R
+    tareas = []
 
-    # 3. MECANISMO CAUSAL (Nivel 2 → 3 → 4)
-    log.info("enjambre_fase3_causal")
-    causal = await _call_agente(
-        SYSTEM_MECANISMO_CAUSAL,
-        f"REPERTORIO:\n{json.dumps(repertorio, ensure_ascii=False, indent=2, default=str)}\n\nDISFUNCIONES:\n{json.dumps(disfunciones, ensure_ascii=False, indent=2, default=str)}\n\nDATOS REALES:\n{ctx_str}",
-        "Mecanismo-Causal"
-    )
-    resultados["causal"] = causal
-
-    # 4. 6 CLUSTERS PERCEPTIVOS (en paralelo — son independientes entre sí)
-    log.info("enjambre_fase4_clusters")
-    contexto_enriquecido = (
-        f"REPERTORIO DETECTADO:\n{json.dumps(repertorio, ensure_ascii=False, indent=2, default=str)[:2000]}\n\n"
-        f"DISFUNCIONES:\n{json.dumps(disfunciones, ensure_ascii=False, indent=2, default=str)[:1500]}\n\n"
-        f"DATOS REALES:\n{ctx_str}"
-    )
-
-    tareas_clusters = []
+    # Clusters INT (6 existentes)
     for cl_id, cl_def in CLUSTERS.items():
         prompt = SYSTEM_CLUSTER.format(
-            nombre=cl_id, ints=cl_def["ints"], ps=cl_def["ps"],
-            rs=cl_def["rs"], lente_primaria=cl_def["lente_primaria"],
-            angulo=cl_def["angulo"])
-        tareas_clusters.append(
-            _call_agente(prompt, contexto_enriquecido, f"Cluster-{cl_id}")
+            nombre=cl_id,
+            diagnostico_resumen=diagnostico_resumen,
+            ints=cl_def["ints"],
+            lente=cl_def["lente"],
+            angulo=cl_def["angulo"],
         )
+        tareas.append(_call_cluster(prompt, user_prompt, f"Cluster-INT-{cl_id}"))
 
-    resp_clusters = await asyncio.gather(*tareas_clusters)
-    resultados["clusters"] = {}
-    for cl_id, resp in zip(CLUSTERS.keys(), resp_clusters):
-        resultados["clusters"][cl_id] = resp
+    # Clusters P (4 nuevos)
+    for cl_id, cl_def in CLUSTERS_P.items():
+        prompt = SYSTEM_CLUSTER_P.format(
+            nombre=cl_id, diagnostico_resumen=diagnostico_resumen,
+            ps=cl_def["ps"], lente=cl_def["lente"], angulo=cl_def["angulo"])
+        tareas.append(_call_cluster(prompt, user_prompt, f"Cluster-P-{cl_id}"))
 
-    # --- EMITIR AL BUS ---
+    # Clusters R (3 nuevos)
+    for cl_id, cl_def in CLUSTERS_R.items():
+        prompt = SYSTEM_CLUSTER_R.format(
+            nombre=cl_id, diagnostico_resumen=diagnostico_resumen,
+            rs=cl_def["rs"], lente=cl_def["lente"], angulo=cl_def["angulo"])
+        tareas.append(_call_cluster(prompt, user_prompt, f"Cluster-R-{cl_id}"))
+
+    resp_all = await asyncio.gather(*tareas)
+
+    # Separar resultados en 3 dicts
+    n_int = len(CLUSTERS)
+    n_p = len(CLUSTERS_P)
+    clusters_int = dict(zip(CLUSTERS.keys(), resp_all[:n_int]))
+    clusters_p = dict(zip(CLUSTERS_P.keys(), resp_all[n_int:n_int + n_p]))
+    clusters_r = dict(zip(CLUSTERS_R.keys(), resp_all[n_int + n_p:]))
+
+    # Resultados combinados para compat
+    resultados = {**clusters_int, **clusters_p, **clusters_r}
+
+    # Emitir al bus
     from src.pilates.bus import emitir
-    señales_emitidas = 0
-
-    # Señal de repertorio
-    try:
-        await emitir("PERCEPCION_CAUSAL", "ENJAMBRE_REPERTORIO",
-                      {"tipo": "repertorio", "resultado": repertorio}, prioridad=3)
-        señales_emitidas += 1
-    except Exception:
-        pass
-
-    # Señal de disfunciones
-    try:
-        await emitir("PERCEPCION_CAUSAL", "ENJAMBRE_DISFUNCIONES",
-                      {"tipo": "disfunciones", "resultado": disfunciones}, prioridad=2)
-        señales_emitidas += 1
-    except Exception:
-        pass
-
-    # Señal causal
-    try:
-        await emitir("PERCEPCION_CAUSAL", "ENJAMBRE_CAUSAL",
-                      {"tipo": "mecanismo_causal", "resultado": causal}, prioridad=3)
-        señales_emitidas += 1
-    except Exception:
-        pass
-
-    # Señales de clusters
-    for cl_id, resp in resultados["clusters"].items():
+    señales = 0
+    for cl_id, resp in resultados.items():
         if "error" not in resp:
             try:
-                await emitir("PERCEPCION_CAUSAL", f"ENJAMBRE_CLUSTER_{cl_id.upper()}",
-                              {"tipo": "cluster", "cluster": cl_id, "resultado": resp}, prioridad=5)
-                señales_emitidas += 1
+                tipo_cluster = "INT" if cl_id in CLUSTERS else ("P" if cl_id in CLUSTERS_P else "R")
+                await emitir(
+                    "PERCEPCION_CAUSAL",
+                    f"ENJAMBRE_CLUSTER_{tipo_cluster}_{cl_id.upper()}",
+                    {"tipo": f"cluster_{tipo_cluster.lower()}", "cluster": cl_id, "resultado": resp},
+                    prioridad=5,
+                )
+                señales += 1
             except Exception:
                 pass
 
-    # --- PERSISTIR ---
+    # Persistir
     pool = await get_pool()
     async with pool.acquire() as conn:
         await conn.execute("""
@@ -644,29 +587,54 @@ async def ejecutar_enjambre() -> dict:
                 (tenant_id, estado_acd_base, resultado_lentes, resultado_funciones,
                  resultado_clusters, señales_emitidas, tiempo_total_s)
             VALUES ($1, $2, $3::jsonb, $4::jsonb, $5::jsonb, $6, $7)
-        """, TENANT,
-            repertorio.get("perfil_probable", "desconocido"),
-            json.dumps({"repertorio": repertorio, "disfunciones": disfunciones}, ensure_ascii=False, default=str),
-            json.dumps(causal, ensure_ascii=False, default=str),
-            json.dumps(resultados["clusters"], ensure_ascii=False, default=str),
-            señales_emitidas,
-            round(time.time() - t0, 0))
+        """, TENANT, perfil_detectado or "enjambre_v4",
+            json.dumps({"fuente": "tcf_codigo",
+                        "diagnostico": diagnostico_resumen[:2000]}, default=str),
+            json.dumps({"clusters_evaluaron": list(resultados.keys()),
+                        "clusters_int": list(clusters_int.keys()),
+                        "clusters_p": list(clusters_p.keys()),
+                        "clusters_r": list(clusters_r.keys())},
+                       default=str),
+            json.dumps(resultados, ensure_ascii=False, default=str),
+            señales, round(time.time() - t0, 0))
 
     dt = round(time.time() - t0, 1)
-    errores = sum(1 for r in [repertorio, disfunciones, causal] if "error" in r)
-    errores += sum(1 for r in resultados["clusters"].values() if "error" in r)
+    total = len(resultados)
+    errores = sum(1 for r in resultados.values() if "error" in r)
 
-    log.info("enjambre_completo", agentes=9, señales=señales_emitidas,
-             errores=errores, tiempo=dt, perfil=repertorio.get("perfil_probable"))
+    # Consolidar métricas (INT: confirmaciones/contradicciones, P: ps_evaluados, R: rs_evaluados)
+    exitosos = [r for r in resultados.values() if "error" not in r]
+    total_confirmaciones = sum(len(r.get("confirmaciones", [])) for r in exitosos)
+    total_contradicciones = sum(len(r.get("contradicciones", [])) for r in exitosos)
+    total_enriquecimientos = sum(len(r.get("enriquecimientos", [])) for r in exitosos)
+    total_disfunciones = sum(len(r.get("disfunciones_detectadas", [])) for r in exitosos)
+
+    log.info("enjambre_v4_completo",
+             clusters_int=n_int - sum(1 for r in clusters_int.values() if "error" in r),
+             clusters_p=n_p - sum(1 for r in clusters_p.values() if "error" in r),
+             clusters_r=len(CLUSTERS_R) - sum(1 for r in clusters_r.values() if "error" in r),
+             total=total - errores, señales=señales,
+             confirmaciones=total_confirmaciones,
+             contradicciones=total_contradicciones,
+             disfunciones=total_disfunciones, tiempo=dt)
 
     return {
         "status": "ok",
-        "agentes_ejecutados": 9 - errores,
+        "version": "v4_int_p_r",
+        "clusters_ejecutados": total - errores,
+        "agentes_ejecutados": total - errores,  # compat con compositor
         "errores": errores,
-        "señales_emitidas": señales_emitidas,
+        "señales_emitidas": señales,
         "tiempo_total_s": dt,
-        "perfil_detectado": repertorio.get("perfil_probable"),
-        "distribucion_lentes": repertorio.get("distribucion_lentes"),
-        "disfunciones_encontradas": len(disfunciones.get("disfunciones", [])),
+        "confirmaciones": total_confirmaciones,
+        "contradicciones": total_contradicciones,
+        "enriquecimientos": total_enriquecimientos,
+        "disfunciones_pr": total_disfunciones,
         "resultados": resultados,
+        "clusters_int": clusters_int,
+        "clusters_p": clusters_p,
+        "clusters_r": clusters_r,
+        # Compat con compositor.ejecutar_g4()
+        "perfil_detectado": perfil_detectado,
+        "disfunciones_encontradas": disfunciones_encontradas,
     }
