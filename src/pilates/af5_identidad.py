@@ -260,16 +260,47 @@ async def ejecutar_af5() -> dict:
         },
     )
 
+    # 6. DISPARAR VOZ con contexto del organismo
+    propuestas_voz = 0
+    if razonamiento.get("acciones"):
+        try:
+            # Obtener config del Director para AF5 (si existe)
+            config_director = {}
+            pool = await get_pool()
+            async with pool.acquire() as conn:
+                cfg_row = await conn.fetchrow("""
+                    SELECT config FROM om_config_agentes
+                    WHERE tenant_id=$1 AND agente='AF5' AND activa=TRUE
+                    ORDER BY version DESC LIMIT 1
+                """, TENANT)
+                if cfg_row:
+                    cfg = cfg_row["config"]
+                    config_director = cfg if isinstance(cfg, dict) else json.loads(cfg)
+
+            from src.pilates.voz_ciclos import ejecutar_ciclo_completo
+            voz_result = await ejecutar_ciclo_completo(
+                contexto_organismo={
+                    "partitura_af5": config_director,
+                    "pizarra_resumen": pizarra_str,
+                    "gaps_identidad": datos_sensor["detecciones"],
+                },
+            )
+            propuestas_voz = voz_result.get("ciclos", {}).get("escuchar", {}).get("senales_creadas", 0)
+        except Exception as e:
+            log.warning("af5_voz_error", error=str(e))
+
     resultado = {
         "gaps_identidad": len(datos_sensor["detecciones"]),
         "tiene_identidad": datos_sensor["tiene_identidad"],
         "adn_count": datos_sensor["adn_count"],
         "tiene_estrategia": datos_sensor["tiene_estrategia"],
         "alertas_emitidas": alertas_emitidas,
+        "propuestas_voz_generadas": propuestas_voz,
         "razonamiento": razonamiento,
         "detalle": datos_sensor["detecciones"][:10],
     }
 
     log.info("af5_completo", gaps=len(datos_sensor["detecciones"]),
-             identidad=datos_sensor["tiene_identidad"], adn=datos_sensor["adn_count"])
+             identidad=datos_sensor["tiene_identidad"], adn=datos_sensor["adn_count"],
+             propuestas_voz=propuestas_voz)
     return resultado

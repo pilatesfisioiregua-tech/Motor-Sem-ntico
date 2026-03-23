@@ -591,23 +591,79 @@ async def calcular_isp_automatico() -> dict:
 # CICLO COMPLETO — Ejecutar los 5 ciclos en secuencia
 # ============================================================
 
-async def ejecutar_ciclo_completo() -> dict:
+def _enriquecer_con_organismo(señales: list, ctx: dict) -> list:
+    """Enriquece señales con contexto cognitivo del organismo."""
+    extras = []
+
+    # Si la partitura del Director tiene preguntas, convertirlas en señales
+    partitura = ctx.get("partitura_af5", {})
+    if isinstance(partitura, dict):
+        preguntas = partitura.get("prompt_d_hibrido", {}).get("preguntas", [])
+        provocacion = partitura.get("prompt_d_hibrido", {}).get("provocacion", "")
+
+        for q in (preguntas or [])[:3]:
+            pregunta = q.get("pregunta", q) if isinstance(q, dict) else str(q)
+            extras.append({
+                "tipo": "directiva_director",
+                "contenido": pregunta,
+                "prioridad": 1,
+                "origen": "DIRECTOR_OPUS",
+            })
+        if provocacion:
+            extras.append({
+                "tipo": "provocacion_frontera",
+                "contenido": provocacion,
+                "prioridad": 2,
+                "origen": "DIRECTOR_OPUS",
+            })
+
+    # Si hay gaps de identidad, convertirlos en señales urgentes
+    for gap in ctx.get("gaps_identidad", []):
+        if gap.get("severidad") in ("alta", "critica"):
+            extras.append({
+                "tipo": "gap_identidad",
+                "contenido": gap.get("detalle", ""),
+                "prioridad": 2,
+                "origen": "AF5_SENSOR",
+            })
+
+    # Si la pizarra dice que AF3 cerró algo, oportunidad narrativa
+    pizarra = ctx.get("pizarra_resumen", "")
+    if "cerrar" in pizarra.lower() or "depurar" in pizarra.lower():
+        extras.append({
+            "tipo": "oportunidad_narrativa",
+            "contenido": "AF3 depuró — oportunidad de comunicar 'menos pero mejor'",
+            "prioridad": 3,
+            "origen": "PIZARRA_AF3",
+        })
+
+    return extras + señales
+
+
+async def ejecutar_ciclo_completo(contexto_organismo: dict = None) -> dict:
     """Ejecuta los 5 ciclos en orden.
 
     1. ESCUCHAR → detectar señales
-    2. PRIORIZAR → clasificar pendientes
+    2. PRIORIZAR → clasificar pendientes (enriquecido con contexto organismo)
     3. PROPONER → ya existe en calendario (no recalcula aquí)
     4. EJECUTAR → pendiente de APIs reales (devuelve estado actual)
     5. APRENDER → recalcular IRC + ISP
 
     Se ejecutará cada lunes vía cron (20e).
     También bajo demanda desde cockpit.
+
+    Args:
+        contexto_organismo: Contexto del organismo (diagnóstico, partitura, pizarra, gaps).
     """
     resultados = {}
 
     # 1. ESCUCHAR
     r1 = await escuchar()
     resultados["escuchar"] = r1
+
+    # Enriquecer señales con contexto del organismo si disponible
+    if contexto_organismo:
+        resultados["contexto_organismo"] = True
 
     # 2. PRIORIZAR
     r2 = await priorizar()

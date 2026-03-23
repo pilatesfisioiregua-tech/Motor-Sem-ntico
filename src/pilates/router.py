@@ -3382,6 +3382,27 @@ async def sistema_g4_recompilar():
     return await ejecutar_g4_con_recompilacion()
 
 
+@router.post("/sistema/evaluador")
+async def sistema_evaluador():
+    """Evaluador: compara prescripción anterior con resultados actuales."""
+    from src.pilates.evaluador_organismo import evaluar_semana
+    return await evaluar_semana()
+
+
+@router.post("/sistema/metacognitivo")
+async def sistema_metacognitivo():
+    """Meta-Cognitivo Opus: evalúa si la capa cognitiva funciona."""
+    from src.pilates.metacognitivo import ejecutar_metacognitivo
+    return await ejecutar_metacognitivo()
+
+
+@router.post("/sistema/ingeniero")
+async def sistema_ingeniero():
+    """Ingeniero: procesa instrucciones pendientes del Meta-Cognitivo."""
+    from src.pilates.ingeniero import procesar_instrucciones_pendientes
+    return await procesar_instrucciones_pendientes()
+
+
 @router.get("/sistema/estado")
 async def sistema_estado():
     """Estado completo del sistema: checks + bus + diagnóstico + mejoras pendientes."""

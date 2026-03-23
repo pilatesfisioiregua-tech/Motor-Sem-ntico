@@ -85,6 +85,15 @@ async def _tarea_semanal():
         else:
             log.info("cron_semanal_busqueda_skip", razon="frecuencia_baja")
 
+        # 4b-pre. Evaluador: ¿la prescripción anterior funcionó?
+        try:
+            from src.pilates.evaluador_organismo import evaluar_semana
+            evaluacion = await evaluar_semana()
+            log.info("cron_semanal_evaluador_ok",
+                     funciono=evaluacion.get("interpretacion", {}).get("evaluacion_global", {}).get("prescripcion_funciono"))
+        except Exception as e:
+            log.error("cron_semanal_evaluador_error", error=str(e))
+
         # 4b. G4 completa: Enjambre → Compositor → Estratega → Recompilador
         try:
             from src.pilates.recompilador import ejecutar_g4_con_recompilacion
