@@ -3187,7 +3187,7 @@ async def cron_semanal_manual():
 # ============================================================
 
 class SenalCreate(BaseModel):
-    tipo: str = Field(pattern="^(DATO|ALERTA|DIAGNOSTICO|OPORTUNIDAD|PRESCRIPCION|ACCION)$")
+    tipo: str = Field(pattern="^(DATO|ALERTA|DIAGNOSTICO|OPORTUNIDAD|PRESCRIPCION|ACCION|PERCEPCION|PERCEPCION_CAUSAL|PRESCRIPCION_ESTRATEGICA|RECOMPILACION|BRIEFING_PENDIENTE)$")
     origen: str
     destino: Optional[str] = None
     prioridad: int = Field(default=5, ge=1, le=10)
@@ -3258,6 +3258,56 @@ async def acd_buscar_por_gaps():
     """Busca información dirigida por gaps ACD vía Perplexity."""
     from src.pilates.buscador import buscar_por_gaps
     return await buscar_por_gaps()
+
+
+@router.post("/acd/enjambre")
+async def acd_enjambre():
+    """Ejecuta el enjambre cognitivo v2: modelo causal 4 niveles (3 secuenciales + 6 clusters paralelos)."""
+    from src.pilates.enjambre import ejecutar_enjambre
+    return await ejecutar_enjambre()
+
+
+@router.post("/acd/g4")
+async def acd_g4():
+    """Ejecuta G4 completa: Enjambre → Compositor → Estratega → Orquestador."""
+    from src.pilates.compositor import ejecutar_g4
+    return await ejecutar_g4()
+
+
+@router.post("/acd/g4-recompilar")
+async def acd_g4_recompilar():
+    """G4 + Recompilador: diagnostica y reconfigura agentes automáticamente."""
+    from src.pilates.recompilador import ejecutar_g4_con_recompilacion
+    return await ejecutar_g4_con_recompilacion()
+
+
+@router.post("/acd/recompilar")
+async def acd_recompilar(request: Request):
+    """Recompila configs de agentes desde prescripción manual."""
+    body = await request.json()
+    from src.pilates.recompilador import recompilar
+    return await recompilar(body.get("prescripcion", body))
+
+
+@router.get("/acd/config-agentes")
+async def acd_config_agentes(agente: Optional[str] = None):
+    """Lista configs dinámicas activas de agentes."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    conditions = ["tenant_id = $1", "activa = TRUE"]
+    params: list = [TENANT]
+    idx = 2
+    if agente:
+        conditions.append(f"agente = ${idx}")
+        params.append(agente)
+    where = " AND ".join(conditions)
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(f"""
+            SELECT agente, version, config, aprobada_por, created_at
+            FROM om_config_agentes WHERE {where}
+            ORDER BY agente, version DESC
+        """, *params)
+    return [_row_to_dict(r) for r in rows]
 
 
 # ============================================================

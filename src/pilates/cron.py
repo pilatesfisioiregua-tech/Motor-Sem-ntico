@@ -80,7 +80,14 @@ async def _tarea_semanal():
         busq = await buscar_por_gaps()
         log.info("cron_semanal_busqueda_ok", gaps=busq.get("gaps_identificados"), resultados=busq.get("resultados_perplexity"))
 
-        # 4b. AF5 propaga diagnóstico a voz + señales cross-AF
+        # 4b. G4 completa: Enjambre → Compositor → Estratega → Recompilador
+        from src.pilates.recompilador import ejecutar_g4_con_recompilacion
+        g4 = await ejecutar_g4_con_recompilacion()
+        log.info("cron_semanal_g4_ok",
+                 perfil=g4.get("perfil_detectado"),
+                 recompilados=g4.get("recompilacion", {}).get("configs_aplicadas", 0))
+
+        # 4c. AF5 propaga diagnóstico a voz + señales cross-AF
         from src.pilates.voz_reactivo import propagar_diagnostico_a_voz, emitir_señales_cross_af
         await propagar_diagnostico_a_voz()
         await emitir_señales_cross_af()
@@ -115,6 +122,17 @@ async def _tarea_semanal():
             acciones=circ["ejecutor"]["acciones_emitidas"],
             convergencias=circ["convergencia"]["total"],
             archivadas=circ["gestor"]["archivadas_eliminadas"])
+
+        # 10. G4 — Enjambre cognitivo + prescripción en Nivel 1
+        try:
+            from src.pilates.compositor import ejecutar_g4
+            g4 = await ejecutar_g4()
+            log.info("cron_semanal_g4_ok",
+                     perfil=g4.get("perfil_detectado"),
+                     nivel=g4.get("nivel_alcanzado"),
+                     tiempo=g4.get("tiempo_total_s"))
+        except Exception as e:
+            log.error("cron_semanal_g4_error", error=str(e))
 
     except Exception as e:
         log.error("cron_semanal_error", error=str(e))
