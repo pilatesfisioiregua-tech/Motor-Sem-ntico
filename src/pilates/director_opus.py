@@ -27,6 +27,7 @@ import time
 from pathlib import Path
 
 from src.db.client import get_pool
+from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
@@ -146,108 +147,13 @@ async def _cargar_manual() -> str:
 def _parse_json_robusto(raw: str) -> dict:
     """Parsea JSON con reparación de truncamiento y markdown fences.
 
-    Estrategia en orden:
-    1. Parse directo (feliz path)
-    2. Extraer de markdown fences
-    3. Reparar truncamiento (cerrar strings, brackets, braces)
-    4. Último recurso: buscar último } que cierra JSON válido
+    Delega en extraer_json (json_utils) que aplica todas las estrategias
+    de extracción robusta: parse directo, markdown fences, primer/último brace.
     """
-    clean = raw.strip()
-
-    # Quitar markdown fences
-    if "```" in clean:
-        parts = clean.split("```")
-        for part in parts:
-            part = part.strip()
-            if part.startswith("json"):
-                part = part[4:].strip()
-            if part.startswith("{"):
-                try:
-                    return json.loads(part)
-                except json.JSONDecodeError:
-                    clean = part
-                    break
-
-    # Extraer JSON principal (del primer { al último })
-    start = clean.find("{")
-    if start != -1:
-        clean = clean[start:]
-
-    # Intento directo
-    try:
-        return json.loads(clean)
-    except json.JSONDecodeError:
-        pass
-
-    # --- REPARACIÓN DE TRUNCAMIENTO ---
-    repaired = clean.rstrip()
-
-    # 1. Detectar y cerrar string abierto
-    in_string = False
-    escaped = False
-    for ch in repaired:
-        if escaped:
-            escaped = False
-            continue
-        if ch == "\\":
-            escaped = True
-            continue
-        if ch == '"':
-            in_string = not in_string
-    if in_string:
-        repaired += '"'
-
-    # 2. Limpiar trailing parcial (comas, dos puntos, keys sin valor)
-    # Eliminar patrones inválidos al final: `, "key":` o `, "key"` o trailing comma
-    import re
-    repaired = re.sub(r',\s*"[^"]*"\s*:\s*$', '', repaired)  # trailing key sin valor
-    repaired = re.sub(r',\s*"[^"]*"\s*$', '', repaired)      # trailing key sin :
-    repaired = re.sub(r',\s*$', '', repaired)                  # trailing comma
-
-    # 3. Cerrar brackets y braces en orden correcto
-    # Rastrear la pila de apertura
-    stack = []
-    in_str = False
-    esc = False
-    for ch in repaired:
-        if esc:
-            esc = False
-            continue
-        if ch == '\\':
-            esc = True
-            continue
-        if ch == '"':
-            in_str = not in_str
-            continue
-        if in_str:
-            continue
-        if ch in ('{', '['):
-            stack.append(ch)
-        elif ch == '}' and stack and stack[-1] == '{':
-            stack.pop()
-        elif ch == ']' and stack and stack[-1] == '[':
-            stack.pop()
-
-    # Cerrar en orden inverso
-    for opener in reversed(stack):
-        repaired += ']' if opener == '[' else '}'
-
-    try:
-        return json.loads(repaired)
-    except json.JSONDecodeError:
-        pass
-
-    # --- ÚLTIMO RECURSO: buscar último } que forma JSON válido ---
-    # Buscar desde posiciones de } hacia atrás
-    brace_positions = [i for i, ch in enumerate(clean) if ch == '}']
-    for pos in reversed(brace_positions):
-        candidate = clean[:pos + 1]
-        try:
-            return json.loads(candidate)
-        except json.JSONDecodeError:
-            continue
-
-    raise ValueError(f"No se pudo parsear JSON de Opus ({len(raw)} chars)")
+    result = extraer_json(raw)
+    if not result and raw and raw.strip():
+        raise ValueError(f"No se pudo parsear JSON de Opus ({len(raw)} chars)")
+    return result
 
 
 # ============================================================

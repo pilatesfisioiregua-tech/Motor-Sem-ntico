@@ -10,21 +10,60 @@ Tareas:
 from __future__ import annotations
 
 import asyncio
+import os
 import structlog
 from datetime import datetime, time, timedelta
+from zoneinfo import ZoneInfo
 
 log = structlog.get_logger()
 
-# Zona horaria: Madrid = UTC+1 (invierno) / UTC+2 (verano)
-# Simplificación: usamos UTC+1 fijo. Suficiente para un cron de SMB.
-MADRID_OFFSET = timedelta(hours=1)
+MADRID_TZ = ZoneInfo("Europe/Madrid")
 
 
 def _hora_madrid() -> datetime:
-    """Devuelve datetime actual en hora de Madrid (aprox)."""
-    from datetime import timezone
-    utc_now = datetime.now(timezone.utc)
-    return utc_now + MADRID_OFFSET
+    """Devuelve datetime actual en hora de Madrid (con DST correcto)."""
+    return datetime.now(MADRID_TZ)
+
+
+async def _ya_ejecutado(tarea: str, periodo: str) -> bool:
+    """Consulta om_cron_state para saber si la tarea ya se ejecutó en este periodo.
+
+    periodo: 'dia' (hoy), 'semana' (esta semana ISO), 'mes' (este mes)
+    """
+    from src.db.client import get_pool
+    pool = await get_pool()
+    ahora = _hora_madrid()
+
+    if periodo == "dia":
+        inicio = ahora.replace(hour=0, minute=0, second=0, microsecond=0)
+    elif periodo == "semana":
+        inicio = ahora - timedelta(days=ahora.weekday())
+        inicio = inicio.replace(hour=0, minute=0, second=0, microsecond=0)
+    elif periodo == "mes":
+        inicio = ahora.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    else:
+        return False
+
+    async with pool.acquire() as conn:
+        row = await conn.fetchval("""
+            SELECT 1 FROM om_cron_state
+            WHERE tenant_id = 'authentic_pilates' AND tarea = $1
+                AND ultima_ejecucion >= $2
+        """, tarea, inicio)
+    return row is not None
+
+
+async def _marcar_ejecutado(tarea: str, resultado: str = "ok"):
+    """Marca tarea como ejecutada en om_cron_state."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute("""
+            INSERT INTO om_cron_state (tenant_id, tarea, ultima_ejecucion, resultado)
+            VALUES ('authentic_pilates', $1, now(), $2)
+            ON CONFLICT (tenant_id, tarea)
+            DO UPDATE SET ultima_ejecucion = now(), resultado = $2
+        """, tarea, resultado)
 
 
 async def _tarea_diaria():
@@ -53,6 +92,34 @@ async def _tarea_diaria():
             silenciosos=len(snap["bus"]["agentes_silenciosos"]))
     except Exception as e:
         log.error("cron_diaria_propiocepcion_error", error=str(e))
+
+    # Cobros recurrentes Redsys (día del mes correcto)
+    try:
+        from src.pilates.redsys_pagos import cron_cobros_recurrentes, is_configured
+        if is_configured():
+            cobros = await cron_cobros_recurrentes()
+            log.info("cron_diaria_cobros_ok", cobrados=cobros.get("cobrados", 0))
+        else:
+            log.debug("cron_diaria_cobros_skip", razon="redsys_no_configurado")
+    except Exception as e:
+        log.error("cron_diaria_cobros_error", error=str(e))
+
+    # Confirmaciones pre-sesión (24h antes)
+    try:
+        from src.pilates.whatsapp import enviar_confirmaciones_manana, is_configured as wa_configured
+        if wa_configured():
+            conf = await enviar_confirmaciones_manana()
+            log.info("cron_diaria_confirmaciones_ok", enviados=conf.get("enviados", 0))
+    except Exception as e:
+        log.error("cron_diaria_confirmaciones_error", error=str(e))
+
+    # Cumpleaños automáticos
+    try:
+        from src.pilates.automatismos import felicitar_cumpleanos
+        cumple = await felicitar_cumpleanos()
+        log.info("cron_diaria_cumpleanos_ok", enviados=cumple.get("felicitaciones_enviadas", 0))
+    except Exception as e:
+        log.error("cron_diaria_cumpleanos_error", error=str(e))
 
 
 async def _tarea_semanal():
@@ -147,6 +214,28 @@ async def _tarea_semanal():
             convergencias=circ["convergencia"]["total"],
             archivadas=circ["gestor"]["archivadas_eliminadas"])
 
+        # 10. Briefing semanal por WA a Jesús
+        try:
+            from src.pilates.briefing import generar_briefing
+            from src.pilates.whatsapp import enviar_texto, is_configured as wa_configured
+            briefing = await generar_briefing()
+            telefono_jesus = os.getenv("JESUS_TELEFONO", "")
+            if wa_configured() and telefono_jesus and briefing.get("texto_wa"):
+                await enviar_texto(telefono_jesus, briefing["texto_wa"])
+                log.info("cron_semanal_briefing_wa_ok")
+        except Exception as e:
+            log.error("cron_semanal_briefing_wa_error", error=str(e))
+
+        # 11. Snapshot de todas las pizarras (P65 — "git del organismo")
+        try:
+            from src.pilates.pizarras import snapshot_todas
+            semana_iso = _hora_madrid().isocalendar()
+            ciclo = f"W{semana_iso[1]:02d}-{semana_iso[0]}"
+            snap = await snapshot_todas("authentic_pilates", ciclo)
+            log.info("cron_semanal_snapshot_ok", ciclo=ciclo, pizarras=len(snap))
+        except Exception as e:
+            log.error("cron_semanal_snapshot_error", error=str(e))
+
     except Exception as e:
         log.error("cron_semanal_error", error=str(e))
 
@@ -163,6 +252,29 @@ async def _tarea_mensual():
             propuestas=result["propuestas_registradas"])
     except Exception as e:
         log.error("cron_mensual_error", error=str(e))
+
+    # Reactor v4: detectar patrones en datos reales → pizarra evolución
+    try:
+        import json as _json
+        from src.reactor.v4_telemetria import detectar_patrones
+        informe = await detectar_patrones()
+        if informe and hasattr(informe, 'to_dict'):
+            datos = informe.to_dict()
+            if datos.get("patrones"):
+                from src.db.client import get_pool as _gp
+                pool = await _gp()
+                async with pool.acquire() as conn:
+                    for patron in datos["patrones"][:10]:
+                        await conn.execute("""
+                            INSERT INTO om_pizarra_evolucion
+                                (tenant_id, tipo, descripcion, datos, confianza)
+                            VALUES ('authentic_pilates', 'reactor_v4', $1, $2::jsonb, $3)
+                        """, patron.get("descripcion", "")[:500],
+                            _json.dumps(patron, default=str),
+                            patron.get("confianza", 0.5))
+        log.info("cron_mensual_reactor_v4_ok")
+    except Exception as e:
+        log.error("cron_mensual_reactor_v4_error", error=str(e))
 
     # Cristalizador mensual (después del autófago)
     try:
@@ -193,16 +305,46 @@ async def _tarea_mensual():
         log.error("cron_mensual_ingeniero_error", error=str(e))
 
 
+async def _escuchar_senales_urgentes():
+    """Listener permanente de señales urgentes via LISTEN/NOTIFY (P65).
+
+    Cuando om_senales_agentes recibe una señal con prioridad <= 2,
+    el trigger notify_senal_urgente() dispara un NOTIFY que llega aquí.
+    """
+    try:
+        from src.db.client import get_pool
+        pool = await get_pool()
+        conn = await pool.acquire()
+
+        def callback(conn_ref, pid, channel, payload):
+            import json as _json
+            try:
+                data = _json.loads(payload)
+                log.warning("senal_urgente_recibida",
+                           tipo=data.get("tipo"), origen=data.get("origen"),
+                           prioridad=data.get("prioridad"))
+            except Exception as e:
+                log.error("senal_urgente_parse_error", error=str(e))
+
+        await conn.add_listener("senal_urgente", callback)
+        log.info("listen_notify_activo", canal="senal_urgente")
+
+        while True:
+            await asyncio.sleep(3600)
+    except Exception as e:
+        log.error("listen_notify_error", error=str(e))
+
+
 async def cron_loop():
     """Loop principal del cron. Se ejecuta como background task.
 
     Revisa cada 15 minutos si hay tareas pendientes.
-    Marca las ejecutadas para no repetir en el mismo día/semana.
+    Usa om_cron_state en DB para no repetir tras restart/deploy.
     """
     log.info("cron_iniciado")
 
-    ultima_diaria = None
-    ultima_semanal = None
+    # Listener de señales urgentes (LISTEN/NOTIFY, P65)
+    asyncio.create_task(_escuchar_senales_urgentes())
 
     while True:
         try:
@@ -211,23 +353,29 @@ async def cron_loop():
             hora = ahora.time()
 
             # Tarea diaria: después de las 06:00, una vez al día
-            if hora >= time(6, 0) and ultima_diaria != hoy:
+            if hora >= time(6, 0) and not await _ya_ejecutado("diaria", "dia"):
                 log.info("cron_ejecutando_diaria", hora=str(hora))
                 await _tarea_diaria()
-                ultima_diaria = hoy
+                await _marcar_ejecutado("diaria")
 
             # Tarea semanal: lunes después de las 07:00, una vez por semana
             if ahora.weekday() == 0 and hora >= time(7, 0):
-                semana = hoy.isocalendar()[1]
-                if ultima_semanal != semana:
-                    log.info("cron_ejecutando_semanal", semana=semana)
+                if not await _ya_ejecutado("semanal", "semana"):
+                    log.info("cron_ejecutando_semanal", semana=hoy.isocalendar()[1])
                     await _tarea_semanal()
-                    ultima_semanal = semana
+                    await _marcar_ejecutado("semanal")
+
+            # Tarea mensual: día 1 después de las 08:00
+            if hoy.day == 1 and hora >= time(8, 0):
+                if not await _ya_ejecutado("mensual", "mes"):
+                    log.info("cron_ejecutando_mensual", mes=f"{hoy.year}-{hoy.month:02d}")
+                    await _tarea_mensual()
+                    await _marcar_ejecutado("mensual")
 
         except Exception as e:
             log.error("cron_loop_error", error=str(e))
 
-        # Vigía + Mecánico: cada iteración (cada 15 min)
+        # Vigía + Mecánico: cada iteración (cada 15 min) — sin state, siempre corre
         try:
             from src.pilates.vigia import vigilar
             vigia_result = await vigilar()
@@ -239,14 +387,6 @@ async def cron_loop():
                     arq=mec_result.get("arquitecturales", 0))
         except Exception as e:
             log.error("cron_vigia_error", error=str(e))
-
-        # Tarea mensual: día 1 después de las 08:00
-        if hoy.day == 1 and hora >= time(8, 0):
-            mes_actual = f"{hoy.year}-{hoy.month:02d}"
-            if not hasattr(cron_loop, '_ultimo_mensual') or cron_loop._ultimo_mensual != mes_actual:
-                log.info("cron_ejecutando_mensual", mes=mes_actual)
-                await _tarea_mensual()
-                cron_loop._ultimo_mensual = mes_actual
 
         # Dormir 15 minutos
         await asyncio.sleep(900)

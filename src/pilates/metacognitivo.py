@@ -19,7 +19,7 @@ import httpx
 import time
 
 from src.db.client import get_pool
-from src.pilates.director_opus import _parse_json_robusto
+from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
@@ -208,7 +208,7 @@ Evalúa el sistema cognitivo. ¿Las prescripciones funcionaron? ¿Qué ajustar?"
             resp.raise_for_status()
             raw = resp.json()["choices"][0]["message"]["content"]
 
-        resultado = _parse_json_robusto(raw)
+        resultado = extraer_json(raw)
 
     except Exception as e:
         log.error("metacognitivo_error", error=str(e))

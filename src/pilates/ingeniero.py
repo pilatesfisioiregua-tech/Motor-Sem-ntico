@@ -44,7 +44,6 @@ ARCHIVOS_PROHIBIDOS = {
     "src/pilates/router.py",
     "src/db/client.py",
     "src/pilates/redsys_pagos.py",
-    "src/pilates/stripe_pagos.py",
 }
 
 

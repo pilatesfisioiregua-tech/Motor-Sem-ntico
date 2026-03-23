@@ -267,7 +267,7 @@ TOOLS_SPEC = [
         "type": "function",
         "function": {
             "name": "iniciar_pago_tarjeta",
-            "description": "Iniciar configuración de pago recurrente con tarjeta (Stripe). Genera un enlace para que el cliente registre su tarjeta de forma segura. Usar cuando pregunte por pago automático o quiera pagar con tarjeta.",
+            "description": "Iniciar configuración de pago recurrente con tarjeta. Genera un enlace para que el cliente registre su tarjeta de forma segura. Usar cuando pregunte por pago automático o quiera pagar con tarjeta.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -760,7 +760,7 @@ async def _tool_iniciar_pago_tarjeta(cliente_id: UUID, args: dict, token: str) -
             WHERE co.cliente_id=$1 AND co.tenant_id=$2 AND co.estado='activo' LIMIT 1
         """, cliente_id, TENANT)
 
-    from src.pilates.stripe_pagos import crear_checkout_session
+    from src.pilates.redsys_pagos import crear_checkout_session
     result = await crear_checkout_session(cliente_id, token,
                                            importe=float(importe) if importe else None,
                                            dia_cobro=dia_cobro)

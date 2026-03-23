@@ -114,57 +114,25 @@ FORMATO DE CONFIG PARA UN AGENTE:
 # 1. RECOMPILADOR — Traduce prescripción a configs de agentes
 # ============================================================
 
-SYSTEM_RECOMPILADOR = f"""Eres el RECOMPILADOR del organismo cognitivo de OMNI-MIND.
-
-Tu trabajo: recibir la prescripción del Estratega (Nivel 1: qué INT×P×R activar)
-y traducirla en CONFIGURACIONES CONCRETAS para cada agente del organismo.
-
-{PROMPT_ARCHITECTURE}
-
-{TEMPLATE_CONFIG}
-
-REGLAS:
-1. Cada agente recibe SU config específica. AF1 no tiene la misma config que AF3.
-2. Las preguntas deben ser ESPECÍFICAS al contexto de Authentic Pilates (no genéricas).
-3. Los P se codifican como INSTRUCCIONES IMPERATIVAS en el prompt (la parte que dice CÓMO procesar).
-4. Los R se codifican como INSTRUCCIONES INFERENCIALES (la parte que dice CÓMO concluir).
-5. Las INT se codifican como PREGUNTAS (la parte que determina QUÉ percibir).
-6. Verificar IC3 (INT-P compatible), IC4 (INT-R compatible), IC5 (pares P), IC6 (validación cruzada R).
-7. Distinguir cambios RUNTIME (config en DB) de cambios ESTRUCTURALES (código nuevo).
-
-AGENTES A CONFIGURAR:
-- AF1 (Conservación): proteger clientes
-- AF2 (Captación): atraer nuevos clientes
-- AF3 (Depuración): eliminar lo que no sirve
-- AF4 (Distribución): equilibrar carga
-- AF6 (Adaptación): responder a cambios
-- AF7 (Replicación): sistematizar
-- EJECUTOR: priorizar y resolver conflictos cross-AF
-- CONVERGENCIA: detectar patrones sistémicos
-
-Responde en JSON:
-{{{{
-    "configs": [
-        {{{{
-            "agente": "AF3",
-            "cambio_tipo": "runtime",
-            "INT_activas": [...],
-            "P_activos": [...],
-            "R_activos": [...],
-            "instruccion_completa": "instrucción integrada que combina INT+P+R",
-            "justificacion": "por qué esta config y no otra"
-        }}}}
-    ],
-    "cambios_estructurales": [
-        {{{{
-            "tipo": "nuevo_agente|modificar_enjambre|nueva_inteligencia|modificar_compilador",
-            "descripcion": "qué cambio estructural se necesita",
-            "requiere_cr1": true,
-            "briefing_sugerido": "resumen de lo que Claude Code debería hacer"
-        }}}}
-    ],
-    "secuencia_activacion": "en qué orden aplicar los cambios (Se→S→C)"
-}}}}"""
+SYSTEM_RECOMPILADOR = (
+    "Eres el RECOMPILADOR del organismo cognitivo de OMNI-MIND.\n\n"
+    "Recibes la prescripción del Estratega y la traduces en configs de agentes.\n"
+    "Cada agente tiene: INT_activas (preguntas), P_activos (cómo procesar), R_activos (cómo inferir).\n\n"
+    + PROMPT_ARCHITECTURE + "\n\n"
+    "AGENTES: AF1(Conservación), AF2(Captación), AF3(Depuración), AF4(Distribución), "
+    "AF6(Adaptación), AF7(Replicación), EJECUTOR, CONVERGENCIA.\n\n"
+    "REGLAS: Configs ESPECÍFICAS al contexto de Authentic Pilates. "
+    "P=instrucción imperativa, INT=preguntas, R=instrucción inferencial. "
+    "Distinguir runtime (config DB) de estructural (código nuevo, requiere CR1).\n\n"
+    'Responde SOLO JSON válido con esta estructura:\n'
+    '{"configs": [{"agente": "AF3", "cambio_tipo": "runtime", '
+    '"INT_activas": [{"id": "INT-XX", "nombre": "...", "lente": "S/Se/C", "preguntas": ["..."]}], '
+    '"P_activos": [{"id": "PXX", "nombre": "...", "instruccion_imperativa": "..."}], '
+    '"R_activos": [{"id": "RXX", "nombre": "...", "instruccion_inferencial": "..."}], '
+    '"instruccion_completa": "texto corto", "justificacion": "por qué"}], '
+    '"cambios_estructurales": [], '
+    '"secuencia_activacion": "Se→S→C"}'
+)
 
 
 async def recompilar(prescripcion: dict, diagnostico_id: str | None = None) -> dict:
@@ -201,56 +169,15 @@ CONTEXTO DEL NEGOCIO:
 
 Genera las configs para cada agente del organismo."""
 
-    try:
-        async with httpx.AsyncClient(timeout=90) as client:
-            resp = await client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                         "HTTP-Referer": "https://motor-semantico-omni.fly.dev"},
-                json={
-                    "model": REASONING_MODEL,
-                    "messages": [
-                        {"role": "system", "content": SYSTEM_RECOMPILADOR},
-                        {"role": "user", "content": user_prompt + "\n\nIMPORTANTE: Responde SOLO con JSON válido. Sin texto antes ni después. Escapa comillas dentro de strings."},
-                    ],
-                    "max_tokens": 6000,
-                    "temperature": 0.1,
-                },
-            )
-            resp.raise_for_status()
-            raw = resp.json()["choices"][0]["message"]["content"]
+    # Usar _call_llm del compositor (JSON parsing ultrarrobusto)
+    from src.pilates.compositor import _call_llm
+    resultado = await _call_llm(
+        REASONING_MODEL, SYSTEM_RECOMPILADOR, user_prompt, "recompilador",
+        max_tokens=8000)
 
-        clean = raw.strip()
-        if clean.startswith("```"):
-            clean = clean.split("\n", 1)[1] if "\n" in clean else clean[3:]
-        if clean.endswith("```"):
-            clean = clean[:-3]
-        clean = clean.strip()
-        start = clean.find("{")
-        end = clean.rfind("}")
-        if start != -1 and end != -1:
-            clean = clean[start:end + 1]
-
-        try:
-            resultado = json.loads(clean)
-        except json.JSONDecodeError:
-            # Intento de reparación
-            import re
-            fixed = re.sub(r',\s*([}\]])', r'\1', clean)  # trailing commas
-            fixed = re.sub(r'[\x00-\x1f]', ' ', fixed)  # control chars
-            try:
-                resultado = json.loads(fixed)
-            except json.JSONDecodeError:
-                # Truncado: cerrar brackets/braces faltantes
-                open_b = fixed.count('{') - fixed.count('}')
-                open_a = fixed.count('[') - fixed.count(']')
-                fixed = fixed.rstrip(',\n\r\t ')
-                fixed += ']' * max(0, open_a) + '}' * max(0, open_b)
-                resultado = json.loads(fixed)
-
-    except Exception as e:
-        log.error("recompilador_error", error=str(e))
-        return {"error": str(e)[:200]}
+    if "error" in resultado:
+        log.error("recompilador_error", error=resultado["error"])
+        return {"error": resultado["error"]}
 
     # Persistir configs en DB
     configs_aplicadas = 0
@@ -423,28 +350,39 @@ async def ejecutar_g4_con_recompilacion() -> dict:
     if g4.get("status") != "ok":
         return g4
 
-    # 5. Recompilar (Sonnet — fallback si Opus falla)
-    prescripcion = g4.get("prescripcion_completa", {})
-    if prescripcion and "error" not in prescripcion:
-        recomp = await recompilar(
-            prescripcion.get("prescripcion_nivel_1", prescripcion),
-            diagnostico_id=None,
-        )
-        g4["recompilacion"] = recomp
-    else:
-        g4["recompilacion"] = {"status": "skip", "razon": "Sin prescripción válida"}
+    # Añadir campos esperados por cron/tests
+    g4["perfil_detectado"] = g4.get("diagnostico_codigo", {}).get("estado")
+    g4["nivel_alcanzado"] = 1  # Nivel 1: INT×P×R
 
-    # 6. Director Opus — diseña prompts D_híbrido (sobrescribe configs Sonnet)
+    # 5. Director Opus primero — diseña prompts D_híbrido
+    director_ok = False
     try:
         from src.pilates.director_opus import dirigir_orquesta
         director = await dirigir_orquesta()
         g4["director_opus"] = director
         if director.get("status") == "ok":
+            director_ok = True
             log.info("g4_director_opus_ok",
                      configs=director.get("configs_aplicadas"),
                      tiempo=director.get("tiempo_s"))
     except Exception as e:
         log.warning("g4_director_opus_error", error=str(e))
         g4["director_opus"] = {"status": "error", "error": str(e)[:200]}
+
+    # 6. Recompilar con Sonnet SOLO si Opus falló (fallback)
+    if not director_ok:
+        prescripcion = g4.get("prescripcion_completa") or g4.get("prescripcion_contextualizada") or {}
+        es_error_llm = isinstance(prescripcion, dict) and list(prescripcion.keys()) == ["error"]
+        if prescripcion and not es_error_llm:
+            recomp = await recompilar(
+                prescripcion.get("prescripcion_nivel_1", prescripcion),
+                diagnostico_id=None,
+            )
+            g4["recompilacion"] = recomp
+            log.info("g4_recompilador_sonnet_fallback")
+        else:
+            g4["recompilacion"] = {"status": "skip", "razon": "Sin prescripción válida"}
+    else:
+        g4["recompilacion"] = {"status": "skip", "razon": "Opus ya configuró"}
 
     return g4

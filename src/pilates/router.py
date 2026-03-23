@@ -2825,16 +2825,8 @@ async def chat_publico(data: ChatPublicoRequest):
 
 
 # ============================================================
-# STRIPE — Webhook + Cobros Recurrentes
+# COBROS RECURRENTES
 # ============================================================
-
-@router.post("/stripe/webhook")
-async def stripe_webhook(request: Request):
-    """Webhook de Stripe para checkout.session.completed."""
-    payload = await request.body()
-    sig = request.headers.get("stripe-signature", "")
-    from src.pilates.stripe_pagos import procesar_webhook_stripe
-    return await procesar_webhook_stripe(payload, sig)
 
 
 @router.get("/cobros-recurrentes")
@@ -3292,15 +3284,23 @@ async def acd_recompilar(request: Request):
 @router.post("/acd/director-opus")
 async def acd_director_opus():
     """Director Opus: lee manual, comprende estado, diseña prompts D_híbrido."""
-    from src.pilates.director_opus import dirigir_orquesta
-    return await dirigir_orquesta()
+    from src.pilates.rate_limit import semaforo_opus
+    if semaforo_opus.locked():
+        raise HTTPException(status_code=429, detail="Director Opus ocupado")
+    async with semaforo_opus:
+        from src.pilates.director_opus import dirigir_orquesta
+        return await dirigir_orquesta()
 
 
 @router.post("/acd/metacognitivo")
 async def acd_metacognitivo():
     """Meta-Cognitivo Opus: evalúa el sistema cognitivo mensualmente."""
-    from src.pilates.metacognitivo import ejecutar_metacognitivo
-    return await ejecutar_metacognitivo()
+    from src.pilates.rate_limit import semaforo_metacog
+    if semaforo_metacog.locked():
+        raise HTTPException(status_code=429, detail="Metacognitivo ocupado")
+    async with semaforo_metacog:
+        from src.pilates.metacognitivo import ejecutar_metacognitivo
+        return await ejecutar_metacognitivo()
 
 
 @router.post("/acd/ingeniero")

@@ -18,6 +18,8 @@ import structlog
 from datetime import date, timedelta
 from typing import Optional
 
+from src.pilates.json_utils import extraer_json
+
 log = structlog.get_logger()
 TENANT = "authentic_pilates"
 STRATEGY_MODEL = os.getenv("STRATEGY_MODEL", "openai/gpt-4o")
@@ -387,17 +389,9 @@ Genera la estrategia semanal en JSON."""
         return {"error": f"LLM call failed: {e}"}
 
     # 4. Parsear JSON (tolerante a markdown fences)
-    clean = raw.strip()
-    if clean.startswith("```"):
-        clean = clean.split("\n", 1)[1] if "\n" in clean else clean[3:]
-    if clean.endswith("```"):
-        clean = clean[:-3]
-    clean = clean.strip()
-
-    try:
-        estrategia = json.loads(clean)
-    except json.JSONDecodeError as e:
-        log.error("voz_estrategia_parse_error", raw=raw[:500], error=str(e))
+    estrategia = extraer_json(raw)
+    if not estrategia:
+        log.error("voz_estrategia_parse_error", raw=raw[:500])
         return {"error": "LLM response not valid JSON", "raw": raw[:500]}
 
     # 5. Almacenar estrategia

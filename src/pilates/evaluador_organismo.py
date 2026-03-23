@@ -17,6 +17,7 @@ import httpx
 from datetime import datetime, timezone, timedelta
 
 from src.db.client import get_pool
+from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
@@ -283,25 +284,7 @@ PIZARRA (qué hicieron los agentes esta semana):
                 raw = resp.json()["choices"][0]["message"]["content"]
 
             # Parse JSON robusto
-            clean = raw.strip()
-            if "```" in clean:
-                parts = clean.split("```")
-                for part in parts:
-                    part = part.strip()
-                    if part.startswith("json"):
-                        part = part[4:].strip()
-                    if part.startswith("{"):
-                        try:
-                            resultado_interpretacion = json.loads(part)
-                            break
-                        except json.JSONDecodeError:
-                            continue
-            if not resultado_interpretacion:
-                start = clean.find("{")
-                end = clean.rfind("}")
-                if start != -1 and end != -1:
-                    clean = clean[start:end + 1]
-                resultado_interpretacion = json.loads(clean)
+            resultado_interpretacion = extraer_json(raw)
 
         except Exception as e:
             log.warning("evaluador_interpretacion_error", error=str(e))

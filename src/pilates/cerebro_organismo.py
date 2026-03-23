@@ -14,6 +14,8 @@ import structlog
 import httpx
 from datetime import date
 
+from src.pilates.json_utils import extraer_json
+
 log = structlog.get_logger()
 
 TENANT = "authentic_pilates"
@@ -115,19 +117,11 @@ async def _call_llm(model: str, system_prompt: str, user_prompt: str,
 
 
 def _parse_json(raw: str) -> dict:
-    """Parsea JSON tolerante a markdown fences y prefijos."""
-    clean = raw.strip()
-    # Quitar fences markdown (```json ... ``` o ``` ... ```)
-    if "```" in clean:
-        # Extraer contenido entre primer y último ```
-        parts = clean.split("```")
-        for part in parts:
-            part = part.strip()
-            if part.startswith("json"):
-                part = part[4:].strip()
-            if part.startswith("{"):
-                return json.loads(part)
-    return json.loads(clean)
+    """Parsea JSON tolerante a markdown fences y prefijos.
+
+    Delega en extraer_json (json_utils).
+    """
+    return extraer_json(raw)
 
 
 async def razonar(

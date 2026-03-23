@@ -33,9 +33,7 @@ ORIGEN = "AUTOFAGO"
 SRC_ROOT = Path(__file__).parent.parent  # src/
 
 # Archivos que sabemos obsoletos o sospechosos (patrón: nombre sugiere tecnología abandonada)
-PATRONES_SOSPECHOSOS = {
-    "stripe_pagos.py": "Pagos migrados a Redsys/Caja Rural. Stripe no se usa.",
-}
+PATRONES_SOSPECHOSOS = {}
 
 # Archivos protegidos que NUNCA se proponen para eliminar
 ARCHIVOS_PROTEGIDOS = {
@@ -271,6 +269,28 @@ async def ejecutar_autofagia() -> dict:
         })
         propuestas_registradas += 1
 
+    # Limpieza de señales procesadas > 30 días
+    senales_limpiadas = False
+    try:
+        from datetime import timedelta
+        hace_30_dias = datetime.now(timezone.utc) - timedelta(days=30)
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            await conn.execute("""
+                DELETE FROM om_senales_agentes
+                WHERE tenant_id = $1 AND estado IN ('procesada', 'error') AND created_at < $2
+            """, TENANT, hace_30_dias)
+            try:
+                await conn.execute("""
+                    DELETE FROM om_bus_senales
+                    WHERE tenant_id = $1 AND procesada = true AND created_at < $2
+                """, TENANT, hace_30_dias)
+            except Exception:
+                pass
+        senales_limpiadas = True
+    except Exception as e:
+        log.warning("autofago_limpieza_bus_error", error=str(e))
+
     # Emitir señal resumen al bus
     try:
         from src.pilates.bus import emitir
@@ -301,7 +321,15 @@ async def ejecutar_autofagia() -> dict:
         "archivos_sospechosos": archivos_sospechosos,
         "datos_caducados": datos_caducados,
         "propuestas_registradas": propuestas_registradas,
+        "senales_limpiadas": senales_limpiadas,
     }
+
+    # Publicar al feed
+    try:
+        from src.pilates.feed import feed_autofago
+        await feed_autofago(len(codigo_muerto), propuestas_registradas)
+    except Exception as e:
+        log.warning("autofago_feed_error", error=str(e))
 
     log.info("autofago_completo",
         muertos=len(codigo_muerto),
