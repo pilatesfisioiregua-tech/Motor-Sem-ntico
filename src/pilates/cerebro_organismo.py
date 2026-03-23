@@ -167,7 +167,20 @@ async def razonar(
     model = BRAIN_MODEL if nivel == 1 else REASONING_MODEL
     contexto = await _contexto_negocio()
 
-    system_prompt = f"""Eres el cerebro del agente {agente} ({funcion}) del organismo cognitivo de Authentic Pilates.
+    # Intentar cargar config dinámica (Recompilador)
+    try:
+        from src.pilates.recompilador import construir_prompt_desde_config
+        prompt_dinamico = await construir_prompt_desde_config(agente, funcion, contexto)
+        if prompt_dinamico:
+            log.info("cerebro_usando_config_dinamica", agente=agente)
+            system_prompt = prompt_dinamico
+        else:
+            system_prompt = None
+    except Exception:
+        system_prompt = None
+
+    if system_prompt is None:
+        system_prompt = f"""Eres el cerebro del agente {agente} ({funcion}) del organismo cognitivo de Authentic Pilates.
 
 Tu trabajo: interpretar datos operativos y proponer acciones CONCRETAS, PRIORIZADAS y ACCIONABLES.
 

@@ -19,7 +19,11 @@ from src.db.client import get_pool
 log = structlog.get_logger()
 
 TENANT = "authentic_pilates"
-TIPOS_VALIDOS = {"DATO", "ALERTA", "DIAGNOSTICO", "OPORTUNIDAD", "PRESCRIPCION", "ACCION"}
+TIPOS_VALIDOS = {
+    "DATO", "ALERTA", "DIAGNOSTICO", "OPORTUNIDAD", "PRESCRIPCION", "ACCION",
+    "PERCEPCION", "PERCEPCION_CAUSAL", "PRESCRIPCION_ESTRATEGICA",
+    "RECOMPILACION", "BRIEFING_PENDIENTE",
+}
 
 
 async def emitir(

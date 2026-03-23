@@ -17,7 +17,9 @@ CREATE TABLE IF NOT EXISTS om_enjambre_diagnosticos (
 );
 CREATE INDEX IF NOT EXISTS idx_enjambre_tenant ON om_enjambre_diagnosticos(tenant_id, created_at DESC);
 
--- Añadir tipo PERCEPCION al CHECK constraint del bus de señales
+-- Añadir todos los tipos al CHECK constraint del bus de señales
 ALTER TABLE om_senales_agentes DROP CONSTRAINT IF EXISTS om_senales_agentes_tipo_check;
 ALTER TABLE om_senales_agentes ADD CONSTRAINT om_senales_agentes_tipo_check
-    CHECK (tipo IN ('DATO', 'ALERTA', 'DIAGNOSTICO', 'OPORTUNIDAD', 'PRESCRIPCION', 'ACCION', 'PERCEPCION', 'PERCEPCION_CAUSAL', 'RECOMPILACION'));
+    CHECK (tipo IN ('DATO', 'ALERTA', 'DIAGNOSTICO', 'OPORTUNIDAD', 'PRESCRIPCION', 'ACCION',
+                    'PERCEPCION', 'PERCEPCION_CAUSAL', 'PRESCRIPCION_ESTRATEGICA',
+                    'RECOMPILACION', 'BRIEFING_PENDIENTE'));
