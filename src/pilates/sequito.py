@@ -171,6 +171,12 @@ Tu ángulo: {asesor['angulo']}
 Tu pensamiento asignado: {p_id} — {p_desc}
 Tu razonamiento asignado: {r_id} — {r_desc}
 
+FRAMEWORK COGNITIVO (Álgebra Cognitiva Diagnóstica):
+- El negocio se diagnostica en 3 LENTES: Salud (S), Sentido (Se), Continuidad (C)
+- Cada lente se evalúa a través de 7 FUNCIONES: F1 Conservación, F2 Captación, F3 Depuración, F4 Distribución, F5 Identidad, F6 Adaptación, F7 Replicación
+- Tu perspectiva como {int_id} debe cruzar tu PENSAMIENTO ({p_id}) con tu RAZONAMIENTO ({r_id}) para producir un análisis que ningún otro asesor puede dar
+- La composición INT×P×R no es conmutativa: el orden importa. Tu ángulo primero, tu pensamiento después, tu razonamiento como método
+
 DATOS REALES DEL NEGOCIO:
 {contexto}
 
@@ -184,7 +190,7 @@ Sé directo, concreto, con datos. Máximo 200 palabras. Sin preámbulos."""
     try:
         import httpx
         api_key = os.getenv("OPENROUTER_API_KEY", "")
-        model = os.getenv("SEQUITO_MODEL", "mistralai/devstral-2512")
+        model = os.getenv("SEQUITO_MODEL", "anthropic/claude-sonnet-4.6")
 
         async with httpx.AsyncClient(timeout=30) as client:
             resp = await client.post(
@@ -245,7 +251,7 @@ PUNTOS_CIEGOS:
     try:
         import httpx
         api_key = os.getenv("OPENROUTER_API_KEY", "")
-        model = os.getenv("SEQUITO_SYNTH_MODEL", "z-ai/glm-5")
+        model = os.getenv("SEQUITO_SYNTH_MODEL", "anthropic/claude-sonnet-4.6")
 
         async with httpx.AsyncClient(timeout=60) as client:
             resp = await client.post(

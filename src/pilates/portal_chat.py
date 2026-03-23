@@ -20,7 +20,7 @@ log = structlog.get_logger()
 
 TENANT = "authentic_pilates"
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-CHAT_MODEL = os.getenv("PORTAL_CHAT_MODEL", "deepseek/deepseek-chat")
+CHAT_MODEL = os.getenv("CHAT_MODEL", "openai/gpt-4o")
 
 
 async def _get_pool():
@@ -1020,7 +1020,7 @@ async def chat(token: str, mensaje: str, historial: list[dict] = None) -> dict:
 
     # 5. Log para analytics
     dt = int((time.time() - t0) * 1000)
-    coste = data.get("usage", {}).get("total_tokens", 0) * 0.0000003  # deepseek pricing approx
+    coste = data.get("usage", {}).get("total_tokens", 0) * 0.000005  # gpt-4o pricing approx
     try:
         async with pool.acquire() as conn:
             await conn.execute("""

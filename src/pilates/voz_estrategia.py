@@ -20,6 +20,7 @@ from typing import Optional
 
 log = structlog.get_logger()
 TENANT = "authentic_pilates"
+STRATEGY_MODEL = os.getenv("STRATEGY_MODEL", "openai/gpt-4o")
 
 
 async def _get_pool():
@@ -307,7 +308,7 @@ async def calcular_estrategia() -> dict:
 
     1. Recoge datos de los 3 ejes + señales internas + identidad
     2. Construye prompt contextualizado
-    3. Llama a LLM (deepseek-chat via OpenRouter)
+    3. Llama a LLM (STRATEGY_MODEL via OpenRouter)
     4. Parsea respuesta y almacena en om_voz_estrategia + om_voz_calendario
 
     Returns: dict con estrategia + calendario generados.
@@ -368,7 +369,7 @@ Genera la estrategia semanal en JSON."""
                     "HTTP-Referer": "https://motor-semantico-omni.fly.dev",
                 },
                 json={
-                    "model": "deepseek/deepseek-chat",
+                    "model": STRATEGY_MODEL,
                     "messages": [
                         {"role": "system", "content": SYSTEM_PROMPT_ESTRATEGIA},
                         {"role": "user", "content": user_prompt},

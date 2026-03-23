@@ -22,6 +22,7 @@ from datetime import date
 
 log = structlog.get_logger()
 TENANT = "authentic_pilates"
+STRATEGY_MODEL = os.getenv("STRATEGY_MODEL", "openai/gpt-4o")
 
 
 async def _get_pool():
@@ -272,7 +273,7 @@ Genera la configuración completa en JSON."""
                     "HTTP-Referer": "https://motor-semantico-omni.fly.dev",
                 },
                 json={
-                    "model": "deepseek/deepseek-chat",
+                    "model": STRATEGY_MODEL,
                     "messages": [
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": user_prompt},

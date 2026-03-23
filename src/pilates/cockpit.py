@@ -14,7 +14,7 @@ from datetime import date, datetime, timedelta
 log = structlog.get_logger()
 TENANT = "authentic_pilates"
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-CHAT_MODEL = os.getenv("PORTAL_CHAT_MODEL", "deepseek/deepseek-chat")
+CHAT_MODEL = os.getenv("CHAT_MODEL", "openai/gpt-4o")
 
 MODULOS = {
     "agenda":           {"nombre": "Agenda de hoy",       "icono": "📅", "endpoint": "/sesiones/hoy"},

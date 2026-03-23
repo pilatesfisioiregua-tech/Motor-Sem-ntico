@@ -13,7 +13,7 @@ from uuid import UUID
 log = structlog.get_logger()
 TENANT = "authentic_pilates"
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-CHAT_MODEL = os.getenv("PORTAL_CHAT_MODEL", "deepseek/deepseek-chat")
+CHAT_MODEL = os.getenv("CHAT_MODEL", "openai/gpt-4o")
 
 
 SYSTEM_CAPTACION = """Eres el asistente de Authentic Pilates, un estudio de Pilates
