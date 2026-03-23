@@ -240,6 +240,233 @@ async def _buscar_perplexity(query: str, contexto: str = "") -> dict | None:
 
 
 # ============================================================
+# 3b. BUSCADORES ESPECIALIZADOS
+# ============================================================
+
+async def _buscar_sectorial(query: str, contexto: str) -> dict | None:
+    """Perplexity para tendencias sectoriales, mejores prácticas, innovación."""
+    result = await _buscar_perplexity(query, contexto)
+    if result:
+        result["tipo"] = "sectorial"
+    return result
+
+
+async def _buscar_cientifico(query: str, contexto: str) -> dict | None:
+    """Perplexity modo académico para evidencia científica.
+
+    Crucial para Authentic Pilates: Pilates terapéutico, dolor lumbar,
+    escoliosis, suelo pélvico. F5 diferenciación basada en datos.
+    """
+    if not PERPLEXITY_API_KEY:
+        return None
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                "https://api.perplexity.ai/chat/completions",
+                headers={"Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                         "Content-Type": "application/json"},
+                json={
+                    "model": "llama-3.1-sonar-small-128k-online",
+                    "messages": [
+                        {"role": "system", "content":
+                            "Eres un investigador académico. Busca SOLO evidencia científica: "
+                            "ensayos clínicos, revisiones sistemáticas, meta-análisis. "
+                            "Cita fuentes con autor, año, journal. "
+                            "Si no hay evidencia fuerte, di 'evidencia limitada'. "
+                            f"Contexto: {contexto[:150]}"},
+                        {"role": "user", "content": query},
+                    ],
+                    "max_tokens": 500,
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return {"query": query, "respuesta": data["choices"][0]["message"]["content"],
+                    "tipo": "cientifico"}
+    except Exception as e:
+        log.warning("buscador_cientifico_error", query=query[:50], error=str(e))
+        return None
+
+
+async def _buscar_regulatorio(query: str, contexto: str) -> dict | None:
+    """Perplexity modo legal/fiscal para normativa española."""
+    if not PERPLEXITY_API_KEY:
+        return None
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                "https://api.perplexity.ai/chat/completions",
+                headers={"Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                         "Content-Type": "application/json"},
+                json={
+                    "model": "llama-3.1-sonar-small-128k-online",
+                    "messages": [
+                        {"role": "system", "content":
+                            "Eres un asesor legal/fiscal español. Busca normativa vigente, "
+                            "cambios recientes en BOE, regulación autonómica de La Rioja, "
+                            "obligaciones fiscales para autónomos/PYMES del sector servicios. "
+                            "Cita la norma exacta (Real Decreto, Ley, BOE fecha). "
+                            f"Contexto: {contexto[:150]}"},
+                        {"role": "user", "content": query},
+                    ],
+                    "max_tokens": 500,
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return {"query": query, "respuesta": data["choices"][0]["message"]["content"],
+                    "tipo": "regulatorio"}
+    except Exception as e:
+        log.warning("buscador_regulatorio_error", query=query[:50], error=str(e))
+        return None
+
+
+async def _buscar_financiero(query: str, contexto: str) -> dict | None:
+    """Perplexity modo financiero para subvenciones, benchmarks, costes."""
+    if not PERPLEXITY_API_KEY:
+        return None
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                "https://api.perplexity.ai/chat/completions",
+                headers={"Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                         "Content-Type": "application/json"},
+                json={
+                    "model": "llama-3.1-sonar-small-128k-online",
+                    "messages": [
+                        {"role": "system", "content":
+                            "Eres un asesor financiero para PYMES en España. Busca: "
+                            "subvenciones disponibles (CDTI, ICO, autonómicas La Rioja), "
+                            "benchmarks del sector fitness/wellness, costes de referencia. "
+                            "Incluye plazos de solicitud si los hay. "
+                            f"Contexto: {contexto[:150]}"},
+                        {"role": "user", "content": query},
+                    ],
+                    "max_tokens": 500,
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return {"query": query, "respuesta": data["choices"][0]["message"]["content"],
+                    "tipo": "financiero"}
+    except Exception as e:
+        log.warning("buscador_financiero_error", query=query[:50], error=str(e))
+        return None
+
+
+async def _buscar_mercado_local(query: str, contexto: str) -> dict | None:
+    """Perplexity modo mercado local: competencia, demografía, tendencias La Rioja."""
+    if not PERPLEXITY_API_KEY:
+        return None
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                "https://api.perplexity.ai/chat/completions",
+                headers={"Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                         "Content-Type": "application/json"},
+                json={
+                    "model": "llama-3.1-sonar-small-128k-online",
+                    "messages": [
+                        {"role": "system", "content":
+                            "Eres un analista de mercado local en España. Busca: "
+                            "competencia directa en La Rioja, tendencias de demanda, "
+                            "datos demográficos de la zona, aperturas/cierres recientes "
+                            "en el sector fitness/wellness/pilates. Sé específico con "
+                            "nombres de competidores si los encuentras. "
+                            f"Contexto: {contexto[:150]}"},
+                        {"role": "user", "content": query},
+                    ],
+                    "max_tokens": 500,
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return {"query": query, "respuesta": data["choices"][0]["message"]["content"],
+                    "tipo": "mercado_local"}
+    except Exception as e:
+        log.warning("buscador_mercado_error", query=query[:50], error=str(e))
+        return None
+
+
+async def _buscar_tecnologico(query: str, contexto: str) -> dict | None:
+    """Perplexity modo tech para herramientas y plataformas de gestión."""
+    if not PERPLEXITY_API_KEY:
+        return None
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                "https://api.perplexity.ai/chat/completions",
+                headers={"Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                         "Content-Type": "application/json"},
+                json={
+                    "model": "llama-3.1-sonar-small-128k-online",
+                    "messages": [
+                        {"role": "system", "content":
+                            "Eres un analista de tecnología para negocios pequeños. Busca: "
+                            "herramientas de gestión para estudios fitness/pilates, "
+                            "plataformas de e-learning, apps de seguimiento de clientes, "
+                            "soluciones de automatización para PYMES. Incluye precios. "
+                            f"Contexto: {contexto[:150]}"},
+                        {"role": "user", "content": query},
+                    ],
+                    "max_tokens": 500,
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return {"query": query, "respuesta": data["choices"][0]["message"]["content"],
+                    "tipo": "tecnologico"}
+    except Exception as e:
+        log.warning("buscador_tech_error", query=query[:50], error=str(e))
+        return None
+
+
+async def _buscar_consumo(query: str, contexto: str) -> dict | None:
+    """Perplexity modo audiencia para hábitos de consumo del público."""
+    if not PERPLEXITY_API_KEY:
+        return None
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(
+                "https://api.perplexity.ai/chat/completions",
+                headers={"Authorization": f"Bearer {PERPLEXITY_API_KEY}",
+                         "Content-Type": "application/json"},
+                json={
+                    "model": "llama-3.1-sonar-small-128k-online",
+                    "messages": [
+                        {"role": "system", "content":
+                            "Eres un analista de comportamiento del consumidor español. Busca: "
+                            "qué valoran los clientes de 30-55 años en servicios de pilates/wellness, "
+                            "cómo consumen contenido de salud, qué redes usan, "
+                            "qué influencers/cuentas siguen, horarios de consumo digital. "
+                            f"Contexto: {contexto[:150]}"},
+                        {"role": "user", "content": query},
+                    ],
+                    "max_tokens": 500,
+                },
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            return {"query": query, "respuesta": data["choices"][0]["message"]["content"],
+                    "tipo": "consumo"}
+    except Exception as e:
+        log.warning("buscador_consumo_error", query=query[:50], error=str(e))
+        return None
+
+
+# ROUTER: tipo_buscador → función
+BUSCADORES = {
+    "sectorial": _buscar_sectorial,
+    "cientifico": _buscar_cientifico,
+    "regulatorio": _buscar_regulatorio,
+    "financiero": _buscar_financiero,
+    "mercado_local": _buscar_mercado_local,
+    "tecnologico": _buscar_tecnologico,
+    "consumo": _buscar_consumo,
+}
+
+
+# ============================================================
 # 4. FILTRO ACD (triple lente)
 # ============================================================
 
@@ -331,8 +558,13 @@ async def buscar_por_gaps() -> dict:
 
     contexto_negocio = f"Estudio Pilates Albelda de Iregua, estado ACD: {estado['estado']}"
 
+    tipos_usados = set()
+
     for q in queries_plan.get("motor_gap", []):
-        result = await _buscar_perplexity(q["query"], contexto_negocio)
+        tipo = q.get("tipo_buscador", "sectorial")
+        buscador_fn = BUSCADORES.get(tipo, _buscar_sectorial)
+        result = await buscador_fn(q["query"], contexto_negocio)
+        tipos_usados.add(tipo)
         if result:
             filtrado = await _filtrar_acd(result, estado["lentes"])
             if not filtrado["descartado"]:
@@ -341,6 +573,8 @@ async def buscar_por_gaps() -> dict:
                     "gap", filtrado["lentes_tocadas"], filtrado["prioridad_acd"])
                 resultados.append({
                     **q, "motor": "gap",
+                    "tipo_buscador": tipo,
+                    "tipo_respuesta": result.get("tipo", "sectorial"),
                     "respuesta_preview": result["respuesta"][:200],
                     "lentes_tocadas": filtrado["lentes_tocadas"],
                 })
@@ -348,7 +582,10 @@ async def buscar_por_gaps() -> dict:
                 descartados += 1
 
     for q in queries_plan.get("motor_gradiente", []):
-        result = await _buscar_perplexity(q["query"], contexto_negocio)
+        tipo = q.get("tipo_buscador", "sectorial")
+        buscador_fn = BUSCADORES.get(tipo, _buscar_sectorial)
+        result = await buscador_fn(q["query"], contexto_negocio)
+        tipos_usados.add(tipo)
         if result:
             filtrado = await _filtrar_acd(result, estado["lentes"])
             if not filtrado["descartado"]:
@@ -357,6 +594,8 @@ async def buscar_por_gaps() -> dict:
                     "gradiente", filtrado["lentes_tocadas"], filtrado["prioridad_acd"])
                 resultados.append({
                     **q, "motor": "gradiente",
+                    "tipo_buscador": tipo,
+                    "tipo_respuesta": result.get("tipo", "sectorial"),
                     "respuesta_preview": result["respuesta"][:200],
                     "lentes_tocadas": filtrado["lentes_tocadas"],
                 })
@@ -399,7 +638,40 @@ async def buscar_por_gaps() -> dict:
             "motor_gap": len(queries_plan.get("motor_gap", [])),
             "motor_gradiente": len(queries_plan.get("motor_gradiente", [])),
         },
+        "tipos_buscador_usados": sorted(tipos_usados),
         "resultados_utiles": len(resultados),
         "descartados_filtro_acd": descartados,
         "detalle": resultados,
     }
+
+
+# ============================================================
+# 7. FRECUENCIA DIRIGIDA POR URGENCIA
+# ============================================================
+
+async def decidir_frecuencia_busqueda() -> bool:
+    """Decide si ejecutar búsqueda hoy según urgencia de gaps.
+
+    - Gap crítico (F < 0.20): buscar diario
+    - Gap alto (F < 0.40): buscar L/M/V
+    - Todo > 0.40: buscar solo lunes (semanal)
+    """
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        diag = await conn.fetchrow("""
+            SELECT vector_pre FROM diagnosticos
+            WHERE caso_input LIKE 'Diagnóstico autónomo%'
+            ORDER BY created_at DESC LIMIT 1
+        """)
+    if not diag:
+        return True  # Sin diagnóstico, buscar siempre
+
+    vector = diag["vector_pre"]
+    if isinstance(vector, str):
+        vector = json.loads(vector)
+
+    if any(v < 0.20 for v in vector.values()):
+        return True  # Gap crítico → diario
+    if any(v < 0.40 for v in vector.values()):
+        return date.today().weekday() in (0, 2, 4)  # Gap alto → L/M/V
+    return date.today().weekday() == 0  # Todo OK → solo lunes

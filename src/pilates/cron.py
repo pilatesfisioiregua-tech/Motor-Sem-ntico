@@ -75,10 +75,15 @@ async def _tarea_semanal():
         diag = await diagnosticar_tenant()
         log.info("cron_semanal_acd_ok", estado=diag.get("estado"), cambio=diag.get("cambio_vs_anterior"))
 
-        # 4. Búsqueda dirigida por gaps
-        from src.pilates.buscador import buscar_por_gaps
-        busq = await buscar_por_gaps()
-        log.info("cron_semanal_busqueda_ok", gaps=busq.get("gaps_identificados"), resultados=busq.get("resultados_perplexity"))
+        # 4. Búsqueda dirigida por gaps (frecuencia según urgencia)
+        from src.pilates.buscador import buscar_por_gaps, decidir_frecuencia_busqueda
+        if await decidir_frecuencia_busqueda():
+            busq = await buscar_por_gaps()
+            log.info("cron_semanal_busqueda_ok",
+                     resultados=busq.get("resultados_utiles"),
+                     tipos=busq.get("tipos_buscador_usados"))
+        else:
+            log.info("cron_semanal_busqueda_skip", razon="frecuencia_baja")
 
         # 4b. G4 completa: Enjambre → Compositor → Estratega → Recompilador
         try:
