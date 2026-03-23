@@ -1,8 +1,245 @@
 import { useState, useEffect } from 'react';
 import Consejo from './Consejo';
+import Card from './design/Card';
+import Metric from './design/Metric';
+import LensBar from './design/LensBar';
+import AgentBadge from './design/AgentBadge';
+import SignalFlow from './design/SignalFlow';
+import ConflictLine from './design/ConflictLine';
+import Pulse from './design/Pulse';
+import { TABS_PROFUNDO, ESTADO_ACD } from './design/theme';
+import * as api from './api';
 
 const BASE = import.meta.env.VITE_API_URL || '';
 const P = `${BASE}/pilates`;
+
+// ============================================================
+// HEADER PROFUNDO
+// ============================================================
+
+function HeaderProfundo({ estado, lentes, semana }) {
+  const cfg = ESTADO_ACD[estado] || { color: 'slate', label: estado || 'Sin diagnostico' };
+  const badgeColors = {
+    amber:   'bg-amber-500/10 border-amber-500/20 text-amber-400',
+    violet:  'bg-violet-500/10 border-violet-500/20 text-violet-400',
+    red:     'bg-red-500/10 border-red-500/20 text-red-400',
+    cyan:    'bg-cyan-500/10 border-cyan-500/20 text-cyan-400',
+    rose:    'bg-rose-500/10 border-rose-500/20 text-rose-400',
+    emerald: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
+    slate:   'bg-slate-500/10 border-slate-500/20 text-slate-400',
+  };
+
+  return (
+    <header className="px-8 py-6 border-b border-[var(--border)] bg-[var(--bg-deep)]">
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+            Modo Profundo
+          </h1>
+          <span className="text-sm text-[var(--text-tertiary)]">
+            Authentic Pilates {semana ? `\u00B7 ${semana}` : ''}
+          </span>
+        </div>
+        <div className={`px-4 py-2 rounded-xl border ${badgeColors[cfg.color] || badgeColors.slate}`}>
+          <span className="text-sm font-bold">{cfg.label}</span>
+        </div>
+      </div>
+      {lentes && <LensBar salud={lentes.S || lentes.salud || 0.5} sentido={lentes.Se || lentes.sentido || 0.5} continuidad={lentes.C || lentes.continuidad || 0.5} />}
+    </header>
+  );
+}
+
+// ============================================================
+// TAB ORGANISMO (NUEVO)
+// ============================================================
+
+function TabOrganismo() {
+  const [pizarra, setPizarra] = useState(null);
+  const [bus, setBus] = useState(null);
+  const [configs, setConfigs] = useState(null);
+
+  useEffect(() => {
+    api.getOrganismoPizarra().then(setPizarra).catch(() => {});
+    api.getOrganismoBus().then(setBus).catch(() => {});
+    api.getOrganismoConfigAgentes().then(setConfigs).catch(() => {});
+  }, []);
+
+  const entradas = pizarra?.entradas || [];
+  const porCapa = {};
+  for (const e of entradas) {
+    const capa = e.capa || 'otro';
+    if (!porCapa[capa]) porCapa[capa] = [];
+    porCapa[capa].push(e);
+  }
+  const conflictos = entradas.filter(e => e.conflicto_con);
+  const rawBus = Array.isArray(bus) ? bus : (bus?.recientes || bus?.señales || []);
+  const signals = rawBus.slice(0, 20);
+
+  return (
+    <div className="space-y-6">
+      {/* Gomas activas */}
+      {configs && configs.length > 0 && (
+        <Card variant="organism">
+          <h3 className="text-sm font-bold text-[var(--accent-violet)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+            Agentes activos
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {configs.map((c, i) => (
+              <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--bg-elevated)] border border-[var(--border)]">
+                <Pulse color="emerald" size={6} />
+                <span className="text-xs font-medium text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-mono)' }}>{c.agente}</span>
+                <span className="text-[10px] text-[var(--text-ghost)]">v{c.version}</span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* Pizarra por capas */}
+      <Card variant="organism">
+        <h3 className="text-sm font-bold text-[var(--accent-violet)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+          Pizarra colectiva
+        </h3>
+        {Object.keys(porCapa).length === 0 && <p className="text-sm text-[var(--text-tertiary)]">Sin entradas en la pizarra</p>}
+        {Object.entries(porCapa).map(([capa, agentes]) => (
+          <div key={capa} className="mb-4">
+            <div className="text-[10px] font-bold tracking-wider uppercase text-[var(--text-ghost)] mb-2">{capa}</div>
+            <div className="space-y-2">
+              {agentes.map(a => (
+                <div key={a.agente} className="flex items-start gap-3 p-2 rounded-lg hover:bg-[var(--bg-elevated)] transition-colors">
+                  <AgentBadge agent={a.agente} status={a.estado} confidence={a.confianza} />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs text-[var(--text-primary)]">{a.detectando}</div>
+                    {a.accion_propuesta && <div className="text-[11px] text-[var(--text-tertiary)] mt-0.5">{a.accion_propuesta}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        {conflictos.length > 0 && (
+          <div className="mt-4 space-y-2">
+            <div className="text-[10px] font-bold tracking-wider uppercase text-[var(--accent-red)] mb-1">Conflictos</div>
+            {conflictos.map((c, i) => (
+              <ConflictLine key={i} from={c.agente} to={c.conflicto_con} description={c.detectando} />
+            ))}
+          </div>
+        )}
+      </Card>
+
+      {/* Bus de senales */}
+      <Card>
+        <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+          Bus de senales
+        </h3>
+        {signals.length === 0 ? (
+          <p className="text-sm text-[var(--text-tertiary)]">Sin senales recientes</p>
+        ) : (
+          <SignalFlow signals={signals} />
+        )}
+      </Card>
+
+      {/* Resumen narrativo */}
+      {pizarra?.resumen && (
+        <Card variant="elevated">
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+            Resumen del organismo
+          </h3>
+          <p className="text-sm text-[var(--text-secondary)] whitespace-pre-wrap">{pizarra.resumen}</p>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// TAB DIRECTOR (NUEVO)
+// ============================================================
+
+function TabDirector() {
+  const [data, setData] = useState(null);
+  useEffect(() => { api.getOrganismoDirector().then(setData).catch(() => {}); }, []);
+
+  if (!data || !data.estrategia_global) return (
+    <Card><p className="text-sm text-[var(--text-tertiary)] text-center py-8">El Director Opus no ha ejecutado aun. Se ejecuta en el cron semanal.</p></Card>
+  );
+
+  const configs = data.configs || [];
+
+  return (
+    <div className="space-y-6">
+      {/* Estrategia global */}
+      <Card variant="elevated" glow>
+        <h3 className="text-sm font-bold text-[var(--accent-indigo)] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+          Estrategia global
+        </h3>
+        {data.estado_sistema && <p className="text-sm text-[var(--text-secondary)] mb-3">{data.estado_sistema}</p>}
+        <p className="text-sm text-[var(--text-primary)] font-medium">{data.estrategia_global}</p>
+        {data.fecha && <div className="text-[10px] text-[var(--text-ghost)] mt-3">Actualizado: {new Date(data.fecha).toLocaleDateString('es-ES')}</div>}
+      </Card>
+
+      {/* Configs por agente */}
+      {configs.map((cfg, i) => {
+        const config = typeof cfg.config === 'string' ? JSON.parse(cfg.config) : cfg.config;
+        const ints = config?.ints || config?.inteligencias || [];
+        const preguntas = config?.preguntas || config?.calculo_semantico || [];
+        const provocacion = config?.provocacion || '';
+        const razonamiento = config?.razonamiento || '';
+
+        return (
+          <Card key={i}>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+                {cfg.agente}
+              </span>
+              <span className="text-[10px] text-[var(--text-ghost)]" style={{ fontFamily: 'var(--font-mono)' }}>v{cfg.version}</span>
+            </div>
+
+            {/* INTs como pills */}
+            {ints.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {ints.map((int, j) => (
+                  <span key={j} className="px-2 py-0.5 rounded-full bg-[var(--accent-indigo-glow)] text-[10px] text-[var(--accent-indigo)] font-bold"
+                        style={{ fontFamily: 'var(--font-mono)' }}>
+                    {typeof int === 'string' ? int : int.id || int.nombre}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* Preguntas del calculo semantico */}
+            {preguntas.length > 0 && (
+              <div className="space-y-1.5 mb-3">
+                {preguntas.slice(0, 5).map((p, j) => (
+                  <div key={j} className="text-xs text-[var(--text-secondary)] flex gap-2">
+                    <span className="text-[var(--accent-cyan)] shrink-0">{'\u2022'}</span>
+                    <span>{typeof p === 'string' ? p : p.pregunta || JSON.stringify(p)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Provocacion */}
+            {provocacion && (
+              <div className="px-3 py-2 rounded-lg bg-amber-500/5 border border-amber-500/10 text-xs text-[var(--accent-amber)] mb-2">
+                {provocacion}
+              </div>
+            )}
+
+            {/* Razonamiento */}
+            {razonamiento && (
+              <div className="text-xs text-[var(--text-tertiary)] italic">{razonamiento}</div>
+            )}
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
+
+// ============================================================
+// PROFUNDO PRINCIPAL
+// ============================================================
 
 export default function Profundo() {
   const [data, setData] = useState(null);
@@ -13,7 +250,7 @@ export default function Profundo() {
   const [adnList, setAdnList] = useState(null);
   const [adnForm, setAdnForm] = useState(false);
   const [adnNew, setAdnNew] = useState({categoria:'principio_innegociable',titulo:'',descripcion:''});
-  // Depuración
+  // Depuracion
   const [depList, setDepList] = useState(null);
   const [depForm, setDepForm] = useState(false);
   const [depNew, setDepNew] = useState({tipo:'proceso_redundante',descripcion:'',impacto_estimado:''});
@@ -29,129 +266,63 @@ export default function Profundo() {
 
   async function loadDashboard() {
     setLoading(true);
-    try {
-      const d = await fetch(`${P}/dashboard`).then(r => r.json());
-      setData(d);
-    } catch (e) { console.error(e); }
+    try { setData(await fetch(`${P}/dashboard`).then(r => r.json())); } catch {}
     setLoading(false);
   }
-
-  async function loadACD() {
-    const h = await fetch(`${P}/acd/historial`).then(r => r.json());
-    setAcdHistory(h);
-  }
-
-  async function ejecutarACD() {
-    const r = await fetch(`${P}/acd/diagnosticar`, { method: 'POST' }).then(r => r.json());
-    alert(`Diagnóstico: ${r.estado || r.detail}`);
-    loadDashboard();
-    loadACD();
-  }
-
-  async function loadADN() {
-    const list = await fetch(`${P}/adn`).then(r => r.json());
-    setAdnList(list);
-  }
+  async function loadACD() { setAcdHistory(await fetch(`${P}/acd/historial`).then(r => r.json())); }
+  async function loadADN() { setAdnList(await fetch(`${P}/adn`).then(r => r.json())); }
+  async function loadDep() { setDepList(await fetch(`${P}/depuracion`).then(r => r.json())); }
+  async function loadVozProps() { setVozProps(await fetch(`${P}/voz/propuestas`).then(r => r.json())); }
 
   async function crearADN(e) {
     e.preventDefault();
-    await fetch(`${P}/adn`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(adnNew),
-    });
-    setAdnForm(false);
-    setAdnNew({categoria:'principio_innegociable',titulo:'',descripcion:''});
-    loadADN();
+    await fetch(`${P}/adn`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(adnNew) });
+    setAdnForm(false); setAdnNew({categoria:'principio_innegociable',titulo:'',descripcion:''}); loadADN();
   }
-
-  async function desactivarADN(id) {
-    await fetch(`${P}/adn/${id}`, { method: 'DELETE' });
-    loadADN();
-  }
-
-  async function loadDep() {
-    const list = await fetch(`${P}/depuracion`).then(r => r.json());
-    setDepList(list);
-  }
-
+  async function desactivarADN(id) { await fetch(`${P}/adn/${id}`, { method: 'DELETE' }); loadADN(); }
   async function crearDep(e) {
     e.preventDefault();
-    await fetch(`${P}/depuracion`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(depNew),
-    });
-    setDepForm(false);
-    setDepNew({tipo:'proceso_redundante',descripcion:'',impacto_estimado:''});
-    loadDep();
+    await fetch(`${P}/depuracion`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(depNew) });
+    setDepForm(false); setDepNew({tipo:'proceso_redundante',descripcion:'',impacto_estimado:''}); loadDep();
   }
-
   async function cambiarEstadoDep(id, estado) {
-    await fetch(`${P}/depuracion/${id}`, {
-      method: 'PATCH',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ estado }),
-    });
-    loadDep();
+    await fetch(`${P}/depuracion/${id}`, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ estado }) }); loadDep();
   }
-
-  async function loadVozProps() {
-    const list = await fetch(`${P}/voz/propuestas`).then(r => r.json());
-    setVozProps(list);
-  }
-
   async function generarVozProps() {
     setVozGenerando(true);
-    try {
-      const r = await fetch(`${P}/voz/generar-propuestas`, { method: 'POST' }).then(r => r.json());
-      alert(`Generadas ${r.propuestas_generadas} propuestas`);
-      loadVozProps();
-    } catch (e) { alert(e.message); }
+    try { await fetch(`${P}/voz/generar-propuestas`, { method: 'POST' }).then(r => r.json()); loadVozProps(); } catch {}
     setVozGenerando(false);
   }
-
   async function decidirVozProp(id, estado) {
-    await fetch(`${P}/voz/propuestas/${id}`, {
-      method: 'PATCH',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ estado }),
-    });
-    loadVozProps();
+    await fetch(`${P}/voz/propuestas/${id}`, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ estado }) }); loadVozProps();
   }
-
   async function ejecutarVozProp(id) {
-    const r = await fetch(`${P}/voz/propuestas/${id}/ejecutar`, { method: 'POST' }).then(r => r.json());
-    alert(r.status === 'ejecutada' ? 'Propuesta ejecutada' : r.detail || 'Error');
-    loadVozProps();
+    await fetch(`${P}/voz/propuestas/${id}/ejecutar`, { method: 'POST' }); loadVozProps();
   }
-
   async function consultarCapaA() {
     if (!vozCapaQuery.trim()) return;
-    const r = await fetch(`${P}/voz/capa-a`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ fuente: 'perplexity', query: vozCapaQuery }),
-    }).then(r => r.json());
-    setVozCapaA(r);
+    setVozCapaA(await fetch(`${P}/voz/capa-a`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ fuente: 'perplexity', query: vozCapaQuery }) }).then(r => r.json()));
   }
-
   async function consultarMeteo() {
-    const r = await fetch(`${P}/voz/capa-a`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ fuente: 'open_meteo' }),
-    }).then(r => r.json());
-    setVozCapaA(r);
+    setVozCapaA(await fetch(`${P}/voz/capa-a`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ fuente: 'open_meteo' }) }).then(r => r.json()));
   }
-
   async function loadISP(canal) {
-    const r = await fetch(`${P}/voz/isp/${canal}`).then(r => r.json());
-    setVozIspData(r);
+    setVozIspData(await fetch(`${P}/voz/isp/${canal}`).then(r => r.json()));
   }
 
-  if (loading) return <div style={s.container}><p>Cargando...</p></div>;
-  if (!data) return <div style={s.container}><p>Error cargando dashboard</p></div>;
+  if (loading) return (
+    <div className="min-h-screen bg-[var(--bg-void)] flex items-center justify-center">
+      <div className="flex items-center gap-3 text-[var(--text-tertiary)]">
+        <Pulse color="indigo" size={10} /><span>Cargando...</span>
+      </div>
+    </div>
+  );
+
+  if (!data) return (
+    <div className="min-h-screen bg-[var(--bg-void)] flex items-center justify-center text-[var(--text-tertiary)]">
+      Error cargando dashboard
+    </div>
+  );
 
   const n = data.numeros;
   const f = data.financiero;
@@ -159,539 +330,396 @@ export default function Profundo() {
   const acd = data.acd;
   const rd = data.readiness;
 
-  const TABS = ['dashboard','acd','consejo','voz','adn','depuracion','grupos','contabilidad'];
-  const TAB_LABELS = {dashboard:'Dashboard',acd:'Diagnóstico ACD',consejo:'Consejo',voz:'Voz',adn:'ADN',depuracion:'Depuración',grupos:'Grupos',contabilidad:'Contabilidad'};
-
-  // Agrupar ADN por categoría
-  const adnByCategory = {};
-  if (adnList) {
-    adnList.forEach(a => {
-      if (!adnByCategory[a.categoria]) adnByCategory[a.categoria] = [];
-      adnByCategory[a.categoria].push(a);
-    });
-  }
-
   const CAT_LABELS = {
-    principio_innegociable: 'Principios Innegociables',
-    principio_flexible: 'Principios Flexibles',
-    metodo: 'Método',
-    filosofia: 'Filosofía',
-    antipatron: 'Antipatrones',
-    criterio_depuracion: 'Criterios de Depuración',
+    principio_innegociable: 'Principios Innegociables', principio_flexible: 'Principios Flexibles',
+    metodo: 'Metodo', filosofia: 'Filosofia', antipatron: 'Antipatrones', criterio_depuracion: 'Criterios de Depuracion',
   };
 
-  const DEP_ESTADOS = {propuesta:'#eab308', aprobada:'#3b82f6', ejecutada:'#22c55e', descartada:'#9ca3af'};
+  const adnByCategory = {};
+  if (adnList) adnList.forEach(a => { if (!adnByCategory[a.categoria]) adnByCategory[a.categoria] = []; adnByCategory[a.categoria].push(a); });
+
+  const channelColor = { whatsapp: 'text-emerald-400', instagram: 'text-rose-400', web: 'text-cyan-400', google_business: 'text-blue-400', email: 'text-amber-400' };
 
   return (
-    <div style={s.container}>
-      <div style={s.header}>
-        <h1 style={s.h1}>Modo Profundo</h1>
-        <span style={{color:'#6b7280', fontSize:13}}>Authentic Pilates · {data.semana}</span>
-      </div>
-
-      {/* Tabs */}
-      <div style={s.tabs}>
-        {TABS.map(t => (
-          <button key={t} onClick={() => {
-            setTab(t);
-            if (t==='acd' && !acdHistory) loadACD();
-            if (t==='adn' && !adnList) loadADN();
-            if (t==='depuracion' && !depList) loadDep();
-            if (t==='voz' && !vozProps) loadVozProps();
-          }} style={tab === t ? s.tabActive : s.tab}>
-            {TAB_LABELS[t]}
+    <div className="min-h-screen bg-[var(--bg-void)] flex">
+      {/* VERTICAL TABS */}
+      <nav className="w-48 min-w-[192px] border-r border-[var(--border)] bg-[var(--bg-deep)] flex flex-col py-4 shrink-0">
+        {TABS_PROFUNDO.map(t => (
+          <button
+            key={t.id}
+            onClick={() => {
+              setTab(t.id);
+              if (t.id === 'diagnostico' && !acdHistory) loadACD();
+              if (t.id === 'adn' && !adnList) loadADN();
+              if (t.id === 'depuracion' && !depList) loadDep();
+              if (t.id === 'voz' && !vozProps) loadVozProps();
+            }}
+            className={`w-full text-left px-4 py-2.5 text-sm transition-all duration-150 cursor-pointer border-none bg-transparent
+              ${tab === t.id
+                ? 'text-[var(--text-primary)] bg-[var(--accent-indigo-glow)] border-r-2 border-r-[var(--accent-indigo)]'
+                : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)]'
+              }`}
+          >
+            <span className="mr-2">{t.icon}</span>{t.label}
           </button>
         ))}
-      </div>
+      </nav>
 
-      {/* DASHBOARD */}
-      {tab === 'dashboard' && (
-        <div>
-          {/* Readiness prominente */}
-          {rd && (
-            <div style={{...s.card, borderLeft:'4px solid #6366f1', marginBottom:16}}>
-              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                <div>
-                  <div style={s.kpiLabel}>Readiness de Replicación</div>
-                  <div style={{fontSize:32, fontWeight:700, color: rd.readiness_pct >= 50 ? '#22c55e' : '#f97316'}}>
-                    {rd.readiness_pct}%
+      {/* MAIN */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <HeaderProfundo
+          estado={acd?.estado}
+          lentes={acd?.lentes}
+          semana={data.semana}
+        />
+
+        <div className="flex-1 overflow-y-auto p-8">
+          {/* DASHBOARD */}
+          {tab === 'dashboard' && (
+            <div className="space-y-6 module-enter">
+              {/* Readiness */}
+              {rd && (
+                <Card variant="elevated" glow>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <Metric label="Readiness" value={`${rd.readiness_pct}%`} size="lg"
+                              delta={rd.readiness_pct >= 50 ? 1 : -1} />
+                    </div>
+                    <div className="text-xs text-[var(--text-tertiary)] text-right space-y-1">
+                      <div>Procesos: {rd.componentes.procesos.pct}%</div>
+                      <div>ADN: {rd.componentes.adn.pct}%</div>
+                      <div>Conocimiento: {rd.componentes.conocimiento.pct}%</div>
+                    </div>
                   </div>
-                </div>
-                <div style={{fontSize:12, color:'#6b7280', textAlign:'right'}}>
-                  <div>Procesos: {rd.componentes.procesos.pct}%</div>
-                  <div>ADN: {rd.componentes.adn.pct}%</div>
-                  <div>Conocimiento: {rd.componentes.conocimiento.pct}%</div>
-                </div>
+                  {rd.prescripcion_c && <p className="text-xs text-[var(--text-tertiary)] mt-3">{rd.prescripcion_c}</p>}
+                </Card>
+              )}
+
+              {/* KPIs */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card><Metric label="Asistencia" value={`${n.asistencia_pct}%`} size="md" /><p className="text-xs text-[var(--text-tertiary)] mt-1">{n.asistencia_asistidas}/{n.asistencia_total} sesiones</p></Card>
+                <Card><Metric label="Ingresos mes" value={`${f.ingresos_mes_acumulado.toFixed(0)}\u20AC`} size="md" delta={1} /><p className="text-xs text-[var(--text-tertiary)] mt-1">Semana: {f.ingresos_semana.toFixed(0)}&euro;</p></Card>
+                <Card><Metric label="Ocupacion" value={`${o.pct}%`} size="md" /><p className="text-xs text-[var(--text-tertiary)] mt-1">{o.plazas_ocupadas}/{o.plazas_totales} plazas</p></Card>
+                <Card><Metric label="Clientes" value={n.clientes_activos} size="md" /><p className="text-xs text-[var(--text-tertiary)] mt-1">+{n.nuevos_semana} -{n.bajas_semana} semana</p></Card>
               </div>
-              <div style={{fontSize:12, color:'#6b7280', marginTop:6}}>{rd.prescripcion_c}</div>
-            </div>
-          )}
 
-          {/* KPIs */}
-          <div style={s.grid4}>
-            <div style={s.kpi}>
-              <div style={s.kpiLabel}>Asistencia</div>
-              <div style={s.kpiValue}>{n.asistencia_pct}%</div>
-              <div style={s.kpiSub}>{n.asistencia_asistidas}/{n.asistencia_total} sesiones</div>
-            </div>
-            <div style={s.kpi}>
-              <div style={s.kpiLabel}>Ingresos mes</div>
-              <div style={{...s.kpiValue, color:'#16a34a'}}>{f.ingresos_mes_acumulado.toFixed(0)}€</div>
-              <div style={s.kpiSub}>Semana: {f.ingresos_semana.toFixed(0)}€</div>
-            </div>
-            <div style={s.kpi}>
-              <div style={s.kpiLabel}>Ocupación</div>
-              <div style={s.kpiValue}>{o.pct}%</div>
-              <div style={s.kpiSub}>{o.plazas_ocupadas}/{o.plazas_totales} plazas</div>
-            </div>
-            <div style={s.kpi}>
-              <div style={s.kpiLabel}>Clientes</div>
-              <div style={s.kpiValue}>{n.clientes_activos}</div>
-              <div style={s.kpiSub}>+{n.nuevos_semana} -{n.bajas_semana} semana</div>
-            </div>
-          </div>
-
-          {/* Deuda */}
-          {f.deuda_pendiente > 0 && (
-            <div style={{...s.card, borderLeft:'4px solid #ef4444'}}>
-              <h3 style={s.cardTitle}>Deuda pendiente: {f.deuda_pendiente.toFixed(0)}€</h3>
-              {f.top_deudores.map((d,i) => (
-                <div key={i} style={{display:'flex', justifyContent:'space-between', padding:'4px 0',
-                  fontSize:13}}>
-                  <span>{d.nombre}</span>
-                  <span style={{fontWeight:600, color:'#ef4444'}}>{d.deuda.toFixed(0)}€ (desde {d.desde})</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Tendencia asistencia */}
-          <div style={s.card}>
-            <h3 style={s.cardTitle}>Tendencia asistencia (4 semanas)</h3>
-            <div style={{display:'flex', gap:12, alignItems:'flex-end', height:80}}>
-              {data.tendencia_asistencia.map((t,i) => (
-                <div key={i} style={{flex:1, textAlign:'center'}}>
-                  <div style={{
-                    height: `${t.asistencia_pct * 0.7}px`,
-                    background: t.asistencia_pct >= 80 ? '#22c55e' : t.asistencia_pct >= 60 ? '#eab308' : '#ef4444',
-                    borderRadius: '4px 4px 0 0',
-                    minHeight: 4,
-                  }}/>
-                  <div style={{fontSize:11, color:'#6b7280', marginTop:4}}>{t.asistencia_pct}%</div>
-                  <div style={{fontSize:10, color:'#9ca3af'}}>{t.semana.slice(5)}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ACD resumen */}
-          {acd.tiene_diagnostico && (
-            <div style={{...s.card, borderLeft:`4px solid ${acd.estado_tipo==='equilibrado'?'#22c55e':'#f97316'}`}}>
-              <h3 style={s.cardTitle}>Diagnóstico ACD</h3>
-              <div style={{fontSize:15, fontWeight:600}}>{acd.estado} ({acd.estado_tipo})</div>
-              {acd.lentes && (
-                <div style={{fontSize:13, color:'#6b7280', marginTop:4}}>
-                  S={acd.lentes.S} · Se={acd.lentes.Se} · C={acd.lentes.C}
-                  {acd.gap && ` · gap=${acd.gap.toFixed(3)}`}
-                </div>
+              {/* Deuda */}
+              {f.deuda_pendiente > 0 && (
+                <Card variant="danger">
+                  <h3 className="text-sm font-bold text-[var(--accent-red)] mb-2">Deuda pendiente: {f.deuda_pendiente.toFixed(0)}&euro;</h3>
+                  {f.top_deudores.map((d, i) => (
+                    <div key={i} className="flex justify-between py-1 text-sm">
+                      <span>{d.nombre}</span>
+                      <span className="font-semibold text-[var(--accent-red)]">{d.deuda.toFixed(0)}&euro; (desde {d.desde})</span>
+                    </div>
+                  ))}
+                </Card>
               )}
-              {acd.prescripcion?.objetivo && (
-                <div style={{marginTop:8, padding:8, background:'#f9fafb', borderRadius:6, fontSize:13}}>
-                  Objetivo: <strong>{acd.prescripcion.objetivo}</strong>
+
+              {/* Tendencia */}
+              <Card>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Tendencia asistencia (4 semanas)</h3>
+                <div className="flex gap-3 items-end h-20">
+                  {data.tendencia_asistencia.map((t, i) => (
+                    <div key={i} className="flex-1 text-center">
+                      <div className="rounded-t" style={{
+                        height: `${t.asistencia_pct * 0.7}px`, minHeight: 4,
+                        background: t.asistencia_pct >= 80 ? 'var(--accent-green)' : t.asistencia_pct >= 60 ? 'var(--accent-amber)' : 'var(--accent-red)',
+                      }} />
+                      <div className="text-[11px] text-[var(--text-tertiary)] mt-1">{t.asistencia_pct}%</div>
+                      <div className="text-[10px] text-[var(--text-ghost)]">{t.semana.slice(5)}</div>
+                    </div>
+                  ))}
                 </div>
+              </Card>
+
+              {/* ACD */}
+              {acd.tiene_diagnostico && (
+                <Card variant={acd.estado_tipo === 'equilibrado' ? 'success' : 'alert'}>
+                  <h3 className="text-sm font-bold text-[var(--text-primary)] mb-2">Diagnostico ACD</h3>
+                  <div className="text-base font-semibold">{acd.estado} ({acd.estado_tipo})</div>
+                  {acd.lentes && (
+                    <div className="mt-3">
+                      <LensBar salud={acd.lentes.S || 0.5} sentido={acd.lentes.Se || 0.5} continuidad={acd.lentes.C || 0.5} />
+                    </div>
+                  )}
+                  {acd.prescripcion?.objetivo && (
+                    <div className="mt-3 p-3 rounded-lg bg-[var(--bg-elevated)] text-sm">
+                      Objetivo: <strong>{acd.prescripcion.objetivo}</strong>
+                    </div>
+                  )}
+                  <div className="text-[11px] text-[var(--text-ghost)] mt-2">Ultimo: {acd.fecha}</div>
+                </Card>
               )}
-              <div style={{fontSize:11, color:'#9ca3af', marginTop:4}}>Último: {acd.fecha}</div>
+
+              {/* Alertas */}
+              {data.total_alertas > 0 && (
+                <Card variant="alert">
+                  <h3 className="text-sm font-bold text-[var(--accent-amber)] mb-2">Alertas ({data.total_alertas})</h3>
+                  {data.alertas.slice(0, 5).map((a, i) => (
+                    <div key={i} className="py-1.5 border-b border-[var(--border)] text-sm">
+                      <span className="font-medium">{a.nombre}</span>
+                      <span className="text-[var(--text-tertiary)] ml-2">{a.detalle}</span>
+                    </div>
+                  ))}
+                </Card>
+              )}
             </div>
           )}
 
-          {/* Alertas */}
-          {data.total_alertas > 0 && (
-            <div style={s.card}>
-              <h3 style={s.cardTitle}>Alertas ({data.total_alertas})</h3>
-              {data.alertas.slice(0,5).map((a,i) => (
-                <div key={i} style={{padding:'6px 0', borderBottom:'1px solid #f3f4f6', fontSize:13}}>
-                  <span style={{fontWeight:500}}>{a.nombre}</span>
-                  <span style={{color:'#6b7280', marginLeft:8}}>{a.detalle}</span>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Depuraciones F3 */}
-          {data.depuraciones?.length > 0 && (
-            <div style={{...s.card, borderLeft:'4px solid #8b5cf6'}}>
-              <h3 style={s.cardTitle}>Depuración (F3) — lo que dejar de hacer</h3>
-              {data.depuraciones.map((d,i) => (
-                <div key={i} style={{padding:'6px 0', fontSize:13}}>
-                  <div style={{fontWeight:500}}>{d.descripcion}</div>
-                  <div style={{color:'#6b7280'}}>{d.impacto_estimado} · {d.estado}</div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ACD TAB */}
-      {tab === 'acd' && (
-        <div>
-          <button style={s.btn} onClick={ejecutarACD}>
-            Ejecutar diagnóstico ACD (~$0.01)
-          </button>
-          {acdHistory && (
-            <div style={{marginTop:16}}>
-              <h3 style={s.cardTitle}>Historial de diagnósticos</h3>
-              {acdHistory.map((d,i) => (
-                <div key={i} style={{...s.card, marginBottom:8}}>
-                  <div style={{display:'flex', justifyContent:'space-between'}}>
-                    <span style={{fontWeight:600}}>{d.estado} ({d.estado_tipo})</span>
-                    <span style={{fontSize:12, color:'#9ca3af'}}>{String(d.created_at).slice(0,10)}</span>
+          {/* DIAGNOSTICO TAB */}
+          {tab === 'diagnostico' && (
+            <div className="space-y-4 module-enter">
+              {acd?.tiene_diagnostico && (
+                <Card variant={acd.estado_tipo === 'equilibrado' ? 'success' : 'alert'}>
+                  <div className="text-lg font-bold text-[var(--text-primary)] mb-2">{acd.estado}</div>
+                  {acd.lentes && <LensBar salud={acd.lentes.S || 0.5} sentido={acd.lentes.Se || 0.5} continuidad={acd.lentes.C || 0.5} />}
+                  {acd.prescripcion?.objetivo && (
+                    <div className="mt-4 p-3 rounded-lg bg-[var(--bg-elevated)] text-sm">
+                      <div className="text-xs font-bold text-[var(--text-ghost)] uppercase tracking-wider mb-1">Prescripcion</div>
+                      {acd.prescripcion.objetivo}
+                    </div>
+                  )}
+                </Card>
+              )}
+              {acdHistory && acdHistory.map((d, i) => (
+                <Card key={i}>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold text-sm">{d.estado} ({d.estado_tipo})</span>
+                    <span className="text-xs text-[var(--text-ghost)]">{String(d.created_at).slice(0, 10)}</span>
                   </div>
                   {d.lentes && (
-                    <div style={{fontSize:13, color:'#6b7280'}}>
-                      S={d.lentes.S} Se={d.lentes.Se} C={d.lentes.C} gap={d.gap?.toFixed(3)}
-                    </div>
+                    <LensBar salud={d.lentes.S || 0.5} sentido={d.lentes.Se || 0.5} continuidad={d.lentes.C || 0.5} />
                   )}
-                  {d.prescripcion?.objetivo && (
-                    <div style={{fontSize:13, marginTop:4}}>Objetivo: {d.prescripcion.objetivo}</div>
-                  )}
-                </div>
+                  {d.prescripcion?.objetivo && <p className="text-sm text-[var(--text-secondary)] mt-2">Objetivo: {d.prescripcion.objetivo}</p>}
+                </Card>
               ))}
             </div>
           )}
-        </div>
-      )}
 
-      {/* CONSEJO TAB */}
-      {tab === 'consejo' && <Consejo />}
+          {/* ORGANISMO TAB */}
+          {tab === 'organismo' && <div className="module-enter"><TabOrganismo /></div>}
 
-      {/* VOZ TAB */}
-      {tab === 'voz' && (
-        <div>
-          {/* Generar propuestas */}
-          <div style={{display:'flex', gap:8, marginBottom:16}}>
-            <button style={s.btn} onClick={generarVozProps} disabled={vozGenerando}>
-              {vozGenerando ? 'Generando...' : 'Generar propuestas'}
-            </button>
-            <button style={{...s.btn, background:'#6b7280'}} onClick={loadVozProps}>
-              Refrescar
-            </button>
-          </div>
+          {/* DIRECTOR TAB */}
+          {tab === 'director' && <div className="module-enter"><TabDirector /></div>}
 
-          {/* Propuestas pendientes */}
-          {vozProps && vozProps.length > 0 && (
-            <div>
-              <h3 style={s.cardTitle}>Propuestas pendientes ({vozProps.length})</h3>
-              {vozProps.map((p, i) => {
-                const canalColor = {whatsapp:'#25d366', instagram:'#e1306c', web:'#3b82f6', google_business:'#4285f4', email:'#6b7280'};
-                return (
-                  <div key={p.id || i} style={{...s.card, borderLeft:`4px solid ${canalColor[p.canal]||'#9ca3af'}`}}>
-                    <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                      <div>
-                        <span style={{fontSize:11, fontWeight:600, textTransform:'uppercase', color:canalColor[p.canal]||'#6b7280'}}>
-                          {p.canal}
-                        </span>
-                        <span style={{fontSize:11, color:'#9ca3af', marginLeft:8}}>{p.tipo?.replace(/_/g,' ')}</span>
-                        {p.eje2_celda && <span style={{fontSize:10, color:'#9ca3af', marginLeft:6}}>({p.eje2_celda})</span>}
-                      </div>
-                      <span style={{
-                        padding:'2px 8px', borderRadius:12, fontSize:11, fontWeight:600,
-                        background: p.estado === 'pendiente' ? '#fef3c7' : p.estado === 'aprobada' ? '#dcfce7' : '#f3f4f6',
-                        color: p.estado === 'pendiente' ? '#92400e' : p.estado === 'aprobada' ? '#16a34a' : '#6b7280',
-                      }}>{p.estado}</span>
+          {/* CONSEJO TAB */}
+          {tab === 'consejo' && <div className="module-enter"><Consejo /></div>}
+
+          {/* VOZ TAB */}
+          {tab === 'voz' && (
+            <div className="space-y-4 module-enter">
+              <div className="flex gap-3">
+                <button className="px-5 py-2.5 rounded-[var(--radius-md)] bg-[var(--accent-indigo)] text-white text-sm font-medium cursor-pointer border-none hover:bg-[var(--accent-indigo-dim)] transition-colors disabled:opacity-50"
+                        onClick={generarVozProps} disabled={vozGenerando}>
+                  {vozGenerando ? 'Generando...' : 'Generar propuestas'}
+                </button>
+                <button className="px-5 py-2.5 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-sm font-medium cursor-pointer border border-[var(--border)] hover:bg-[var(--bg-overlay)] transition-colors"
+                        onClick={loadVozProps}>Refrescar</button>
+              </div>
+
+              {vozProps && vozProps.length > 0 && vozProps.map((p, i) => (
+                <Card key={p.id || i}>
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs font-bold uppercase ${channelColor[p.canal] || 'text-[var(--text-tertiary)]'}`}>{p.canal}</span>
+                      <span className="text-xs text-[var(--text-ghost)]">{p.tipo?.replace(/_/g, ' ')}</span>
                     </div>
-                    <div style={{fontSize:13, marginTop:6, color:'#374151'}}>{p.justificacion}</div>
-                    {p.contenido_propuesto?.texto && (
-                      <div style={{fontSize:12, color:'#6b7280', marginTop:4, fontStyle:'italic',
-                        background:'#f9fafb', padding:8, borderRadius:6}}>
-                        {p.contenido_propuesto.texto}
-                      </div>
-                    )}
-                    {p.estado === 'pendiente' && (
-                      <div style={{display:'flex', gap:6, marginTop:8}}>
-                        <button onClick={() => decidirVozProp(p.id, 'aprobada')}
-                          style={{...s.btnSm, background:'#22c55e'}}>Aprobar</button>
-                        <button onClick={() => decidirVozProp(p.id, 'descartada')}
-                          style={{...s.btnSm, background:'#9ca3af'}}>Descartar</button>
-                      </div>
-                    )}
-                    {p.estado === 'aprobada' && (
-                      <button onClick={() => ejecutarVozProp(p.id)}
-                        style={{...s.btnSm, background:'#6366f1', marginTop:8}}>Ejecutar</button>
-                    )}
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      p.estado === 'pendiente' ? 'bg-amber-500/15 text-amber-400' :
+                      p.estado === 'aprobada' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-[var(--bg-elevated)] text-[var(--text-ghost)]'
+                    }`}>{p.estado}</span>
                   </div>
-                );
-              })}
-            </div>
-          )}
-          {vozProps && vozProps.length === 0 && (
-            <div style={{...s.card, textAlign:'center', color:'#9ca3af'}}>
-              Sin propuestas pendientes. Genera nuevas basadas en datos del estudio.
-            </div>
-          )}
+                  <p className="text-sm text-[var(--text-secondary)]">{p.justificacion}</p>
+                  {p.contenido_propuesto?.texto && (
+                    <div className="mt-2 p-3 rounded-lg bg-[var(--bg-elevated)] text-xs text-[var(--text-tertiary)] italic">{p.contenido_propuesto.texto}</div>
+                  )}
+                  {p.estado === 'pendiente' && (
+                    <div className="flex gap-2 mt-3">
+                      <button className="px-3 py-1 rounded-md bg-emerald-500 text-white text-xs cursor-pointer border-none" onClick={() => decidirVozProp(p.id, 'aprobada')}>Aprobar</button>
+                      <button className="px-3 py-1 rounded-md bg-[var(--bg-overlay)] text-[var(--text-tertiary)] text-xs cursor-pointer border-none" onClick={() => decidirVozProp(p.id, 'descartada')}>Descartar</button>
+                    </div>
+                  )}
+                  {p.estado === 'aprobada' && (
+                    <button className="px-3 py-1 rounded-md bg-[var(--accent-indigo)] text-white text-xs cursor-pointer border-none mt-3" onClick={() => ejecutarVozProp(p.id)}>Ejecutar</button>
+                  )}
+                </Card>
+              ))}
 
-          {/* Capa A */}
-          <div style={{...s.card, marginTop:20, borderLeft:'4px solid #8b5cf6'}}>
-            <h3 style={s.cardTitle}>Capa A — Datos externos</h3>
-            <div style={{display:'flex', gap:8, marginBottom:8}}>
-              <input placeholder="Consulta Perplexity..." value={vozCapaQuery}
-                onChange={e => setVozCapaQuery(e.target.value)}
-                style={{...s.input, flex:1}} />
-              <button onClick={consultarCapaA} style={{...s.btnSm, background:'#8b5cf6'}}>Buscar</button>
-            </div>
-            <button onClick={consultarMeteo} style={{...s.btnSm, background:'#0ea5e9'}}>
-              Clima Logroño 7d
-            </button>
-            {vozCapaA && (
-              <div style={{marginTop:12, fontSize:13, background:'#f9fafb', padding:12, borderRadius:8}}>
-                <div style={{fontWeight:600, marginBottom:4}}>
-                  {vozCapaA.fuente} — {vozCapaA.status}
+              {/* Capa A */}
+              <Card variant="elevated">
+                <h3 className="text-sm font-bold text-[var(--accent-violet)] mb-3">Capa A &mdash; Datos externos</h3>
+                <div className="flex gap-2 mb-3">
+                  <input className="flex-1 bg-[var(--bg-void)] border border-[var(--border)] rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none focus:border-[var(--border-active)]"
+                         placeholder="Consulta Perplexity..." value={vozCapaQuery} onChange={e => setVozCapaQuery(e.target.value)} />
+                  <button className="px-3 py-1.5 rounded-md bg-[var(--accent-violet)] text-white text-xs cursor-pointer border-none" onClick={consultarCapaA}>Buscar</button>
                 </div>
-                {vozCapaA.respuesta && <div style={{whiteSpace:'pre-wrap'}}>{vozCapaA.respuesta}</div>}
-                {vozCapaA.prevision && (
-                  <div>
-                    {vozCapaA.prevision.time?.map((t, i) => (
-                      <div key={i} style={{display:'flex', gap:12, padding:'2px 0'}}>
-                        <span>{t}</span>
-                        <span>{vozCapaA.prevision.temperature_2m_max?.[i]}°</span>
-                        <span>{vozCapaA.prevision.precipitation_sum?.[i]}mm</span>
+                <button className="px-3 py-1.5 rounded-md bg-cyan-500 text-white text-xs cursor-pointer border-none" onClick={consultarMeteo}>Clima Logrono 7d</button>
+                {vozCapaA && (
+                  <div className="mt-3 p-3 rounded-lg bg-[var(--bg-surface)] text-sm">
+                    <div className="font-semibold text-[var(--text-primary)] mb-1">{vozCapaA.fuente} &mdash; {vozCapaA.status}</div>
+                    {vozCapaA.respuesta && <div className="text-[var(--text-secondary)] whitespace-pre-wrap">{vozCapaA.respuesta}</div>}
+                    {vozCapaA.prevision && vozCapaA.prevision.time?.map((t, i) => (
+                      <div key={i} className="flex gap-4 py-0.5 text-xs text-[var(--text-tertiary)]">
+                        <span>{t}</span><span>{vozCapaA.prevision.temperature_2m_max?.[i]}&deg;</span><span>{vozCapaA.prevision.precipitation_sum?.[i]}mm</span>
                       </div>
                     ))}
                   </div>
                 )}
-                {vozCapaA.nota && <div style={{color:'#9ca3af'}}>{vozCapaA.nota}</div>}
-              </div>
-            )}
-          </div>
+              </Card>
 
-          {/* ISP */}
-          <div style={{...s.card, marginTop:12, borderLeft:'4px solid #f97316'}}>
-            <h3 style={s.cardTitle}>ISP — Índice de Salud de Presencia</h3>
-            <div style={{display:'flex', gap:6, marginBottom:8}}>
-              {['google_business','instagram','whatsapp'].map(c => (
-                <button key={c} onClick={() => { setVozIspCanal(c); loadISP(c); }}
-                  style={vozIspCanal === c ? {...s.btnSm, background:'#f97316'} : {...s.btnSm, background:'#e5e7eb', color:'#374151'}}>
-                  {c.replace(/_/g,' ')}
-                </button>
+              {/* ISP */}
+              <Card>
+                <h3 className="text-sm font-bold text-[var(--accent-amber)] mb-3">ISP &mdash; Salud de Presencia</h3>
+                <div className="flex gap-2 mb-3">
+                  {['google_business','instagram','whatsapp'].map(c => (
+                    <button key={c} onClick={() => { setVozIspCanal(c); loadISP(c); }}
+                      className={`px-3 py-1.5 rounded-md text-xs cursor-pointer border-none transition-colors ${
+                        vozIspCanal === c ? 'bg-[var(--accent-amber)] text-white' : 'bg-[var(--bg-elevated)] text-[var(--text-secondary)]'
+                      }`}>{c.replace(/_/g, ' ')}</button>
+                  ))}
+                </div>
+                {vozIspData?.checklist && (
+                  <div>
+                    <p className="text-xs text-[var(--text-tertiary)] mb-2">Max score: {vozIspData.max_score} &mdash; {vozIspData.nota}</p>
+                    {vozIspData.checklist.map((e, i) => (
+                      <div key={i} className="flex justify-between py-1 border-b border-[var(--border)] text-sm">
+                        <span className="text-[var(--text-secondary)]">{e.elemento}</span>
+                        <span className="font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-mono)' }}>{e.peso}pts</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </Card>
+            </div>
+          )}
+
+          {/* ADN TAB */}
+          {tab === 'adn' && (
+            <div className="space-y-4 module-enter">
+              {rd && (
+                <Card variant="elevated" glow>
+                  <div className="flex justify-between items-center">
+                    <Metric label="Readiness Replicacion" value={`${rd.readiness_pct}%`} size="md" delta={rd.readiness_pct >= 50 ? 1 : -1} />
+                    <div className="text-xs text-[var(--text-tertiary)] text-right">
+                      ADN: {rd.componentes.adn.categorias_cubiertas}/{rd.componentes.adn.categorias_total} cat. &middot; {rd.componentes.adn.total} principios
+                    </div>
+                  </div>
+                </Card>
+              )}
+
+              <button className="px-5 py-2.5 rounded-[var(--radius-md)] bg-[var(--accent-indigo)] text-white text-sm font-medium cursor-pointer border-none"
+                      onClick={() => setAdnForm(!adnForm)}>
+                {adnForm ? 'Cancelar' : '+ Nuevo principio ADN'}
+              </button>
+
+              {adnForm && (
+                <Card>
+                  <form onSubmit={crearADN} className="space-y-3">
+                    <select value={adnNew.categoria} onChange={e => setAdnNew({...adnNew, categoria: e.target.value})}
+                      className="w-full bg-[var(--bg-void)] border border-[var(--border)] rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none">
+                      {Object.entries(CAT_LABELS).map(([k,v]) => <option key={k} value={k}>{v}</option>)}
+                    </select>
+                    <input placeholder="Titulo" value={adnNew.titulo} required onChange={e => setAdnNew({...adnNew, titulo: e.target.value})}
+                      className="w-full bg-[var(--bg-void)] border border-[var(--border)] rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none" />
+                    <textarea placeholder="Descripcion" value={adnNew.descripcion} required rows={3} onChange={e => setAdnNew({...adnNew, descripcion: e.target.value})}
+                      className="w-full bg-[var(--bg-void)] border border-[var(--border)] rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none" />
+                    <button type="submit" className="px-4 py-2 rounded-md bg-[var(--accent-indigo)] text-white text-sm cursor-pointer border-none">Crear</button>
+                  </form>
+                </Card>
+              )}
+
+              {adnList && Object.entries(adnByCategory).map(([cat, items]) => (
+                <div key={cat}>
+                  <h3 className="text-xs font-bold text-[var(--accent-indigo)] uppercase tracking-wider mb-2 mt-4">{CAT_LABELS[cat] || cat}</h3>
+                  {items.map(a => (
+                    <Card key={a.id} className="mb-3">
+                      <div className="flex justify-between items-start">
+                        <span className="font-semibold text-sm text-[var(--text-primary)]">{a.titulo}</span>
+                        <button onClick={() => desactivarADN(a.id)} className="text-xs text-[var(--accent-red)] cursor-pointer bg-transparent border-none">Desactivar</button>
+                      </div>
+                      <p className="text-sm text-[var(--text-secondary)] mt-1">{a.descripcion}</p>
+                      {a.lente && <span className="text-[11px] text-[var(--text-ghost)]">Lente: {a.lente}</span>}
+                    </Card>
+                  ))}
+                </div>
               ))}
             </div>
-            {vozIspData?.checklist && (
-              <div>
-                <div style={{fontSize:12, color:'#6b7280', marginBottom:8}}>
-                  Max score: {vozIspData.max_score} — {vozIspData.nota}
-                </div>
-                {vozIspData.checklist.map((e, i) => (
-                  <div key={i} style={{display:'flex', justifyContent:'space-between', padding:'4px 0',
-                    borderBottom:'1px solid #f3f4f6', fontSize:13}}>
-                    <span>{e.elemento}</span>
-                    <span style={{color:'#6b7280', fontWeight:600}}>{e.peso}pts</span>
+          )}
+
+          {/* DEPURACION TAB */}
+          {tab === 'depuracion' && (
+            <div className="space-y-4 module-enter">
+              <button className="px-5 py-2.5 rounded-[var(--radius-md)] bg-[var(--accent-indigo)] text-white text-sm font-medium cursor-pointer border-none"
+                      onClick={() => setDepForm(!depForm)}>
+                {depForm ? 'Cancelar' : '+ Nueva depuracion'}
+              </button>
+
+              {depForm && (
+                <Card>
+                  <form onSubmit={crearDep} className="space-y-3">
+                    <select value={depNew.tipo} onChange={e => setDepNew({...depNew, tipo: e.target.value})}
+                      className="w-full bg-[var(--bg-void)] border border-[var(--border)] rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none">
+                      <option value="servicio_eliminar">Servicio a eliminar</option>
+                      <option value="cliente_toxico">Cliente toxico</option>
+                      <option value="gasto_innecesario">Gasto innecesario</option>
+                      <option value="proceso_redundante">Proceso redundante</option>
+                      <option value="canal_inefectivo">Canal inefectivo</option>
+                      <option value="habito_operativo">Habito operativo</option>
+                      <option value="creencia_limitante">Creencia limitante</option>
+                    </select>
+                    <textarea placeholder="Descripcion" value={depNew.descripcion} required rows={2} onChange={e => setDepNew({...depNew, descripcion: e.target.value})}
+                      className="w-full bg-[var(--bg-void)] border border-[var(--border)] rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none" />
+                    <input placeholder="Impacto estimado" value={depNew.impacto_estimado} onChange={e => setDepNew({...depNew, impacto_estimado: e.target.value})}
+                      className="w-full bg-[var(--bg-void)] border border-[var(--border)] rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--text-primary)] outline-none" />
+                    <button type="submit" className="px-4 py-2 rounded-md bg-[var(--accent-indigo)] text-white text-sm cursor-pointer border-none">Crear</button>
+                  </form>
+                </Card>
+              )}
+
+              {depList && depList.map((d, i) => {
+                const statusColor = {
+                  propuesta: 'bg-amber-500/15 text-amber-400', aprobada: 'bg-blue-500/15 text-blue-400',
+                  ejecutada: 'bg-emerald-500/15 text-emerald-400', descartada: 'bg-[var(--bg-elevated)] text-[var(--text-ghost)]',
+                };
+                return (
+                  <Card key={d.id || i} variant={d.estado === 'propuesta' ? 'alert' : 'default'}>
+                    <div className="flex justify-between items-center mb-2">
+                      <div className="font-semibold text-sm text-[var(--text-primary)]">{d.descripcion}</div>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${statusColor[d.estado] || ''}`}>{d.estado}</span>
+                    </div>
+                    <p className="text-xs text-[var(--text-tertiary)]">{d.tipo?.replace(/_/g, ' ')} &middot; {d.impacto_estimado || 'Sin impacto estimado'}</p>
+                    <div className="flex gap-2 mt-3">
+                      {d.estado === 'propuesta' && <button className="px-3 py-1 rounded-md bg-blue-500 text-white text-xs cursor-pointer border-none" onClick={() => cambiarEstadoDep(d.id, 'aprobada')}>Aprobar</button>}
+                      {d.estado === 'aprobada' && <button className="px-3 py-1 rounded-md bg-emerald-500 text-white text-xs cursor-pointer border-none" onClick={() => cambiarEstadoDep(d.id, 'ejecutada')}>Ejecutada</button>}
+                      {(d.estado === 'propuesta' || d.estado === 'aprobada') && <button className="px-3 py-1 rounded-md bg-[var(--bg-overlay)] text-[var(--text-ghost)] text-xs cursor-pointer border-none" onClick={() => cambiarEstadoDep(d.id, 'descartada')}>Descartar</button>}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+
+          {/* CONTABILIDAD TAB */}
+          {tab === 'contabilidad' && (
+            <div className="space-y-4 module-enter">
+              <Card>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Ingresos mensuales</h3>
+                {data.ingresos_mensuales?.map((m, i) => (
+                  <div key={i} className="flex justify-between py-1.5 border-b border-[var(--border)] text-sm">
+                    <span className="text-[var(--text-secondary)]">{m.mes}</span>
+                    <span className="font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-mono)' }}>{m.total.toFixed(0)}&euro;</span>
                   </div>
                 ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ADN TAB */}
-      {tab === 'adn' && (
-        <div>
-          {/* Readiness prominente */}
-          {rd && (
-            <div style={{...s.card, borderLeft:'4px solid #6366f1', marginBottom:16}}>
-              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                <div>
-                  <div style={{fontSize:11, color:'#9ca3af', textTransform:'uppercase'}}>Readiness Replicación</div>
-                  <div style={{fontSize:28, fontWeight:700, color: rd.readiness_pct >= 50 ? '#22c55e' : '#f97316'}}>
-                    {rd.readiness_pct}%
-                  </div>
-                </div>
-                <div style={{fontSize:12, color:'#6b7280'}}>
-                  ADN: {rd.componentes.adn.categorias_cubiertas}/{rd.componentes.adn.categorias_total} cat. · {rd.componentes.adn.total} principios
-                </div>
-              </div>
-            </div>
-          )}
-
-          <button style={s.btn} onClick={() => setAdnForm(!adnForm)}>
-            {adnForm ? 'Cancelar' : '+ Nuevo principio ADN'}
-          </button>
-
-          {adnForm && (
-            <form onSubmit={crearADN} style={{...s.card, marginTop:12}}>
-              <select value={adnNew.categoria} onChange={e => setAdnNew({...adnNew, categoria: e.target.value})}
-                style={s.input}>
-                {Object.entries(CAT_LABELS).map(([k,v]) => <option key={k} value={k}>{v}</option>)}
-              </select>
-              <input placeholder="Título" value={adnNew.titulo} required
-                onChange={e => setAdnNew({...adnNew, titulo: e.target.value})} style={{...s.input, marginTop:8}} />
-              <textarea placeholder="Descripción" value={adnNew.descripcion} required rows={3}
-                onChange={e => setAdnNew({...adnNew, descripcion: e.target.value})} style={{...s.input, marginTop:8}} />
-              <button type="submit" style={{...s.btn, marginTop:8}}>Crear</button>
-            </form>
-          )}
-
-          {adnList && Object.entries(adnByCategory).map(([cat, items]) => (
-            <div key={cat} style={{marginTop:16}}>
-              <h3 style={{...s.cardTitle, fontSize:13, color:'#6366f1'}}>{CAT_LABELS[cat] || cat}</h3>
-              {items.map(a => (
-                <div key={a.id} style={{...s.card, marginBottom:8}}>
-                  <div style={{display:'flex', justifyContent:'space-between'}}>
-                    <span style={{fontWeight:600}}>{a.titulo}</span>
-                    <button onClick={() => desactivarADN(a.id)}
-                      style={{background:'none', border:'none', color:'#ef4444', fontSize:12, cursor:'pointer'}}>
-                      Desactivar
-                    </button>
-                  </div>
-                  <div style={{fontSize:13, color:'#374151', marginTop:4}}>{a.descripcion}</div>
-                  {a.lente && <div style={{fontSize:11, color:'#9ca3af', marginTop:4}}>Lente: {a.lente}</div>}
-                  {a.funcion_l07 && <div style={{fontSize:11, color:'#9ca3af'}}>Función: {a.funcion_l07}</div>}
-                </div>
-              ))}
-            </div>
-          ))}
-
-          {adnList && adnList.length === 0 && (
-            <div style={{...s.card, marginTop:16, textAlign:'center', color:'#9ca3af'}}>
-              Sin principios ADN. Crea el primero para codificar la identidad del negocio.
+              </Card>
+              <button className="px-5 py-2.5 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-sm cursor-pointer border border-[var(--border)]"
+                      onClick={() => window.open(`${BASE}/pilates/facturas/paquete-gestor`, '_blank')}>
+                Descargar paquete gestor
+              </button>
             </div>
           )}
         </div>
-      )}
-
-      {/* DEPURACIÓN TAB */}
-      {tab === 'depuracion' && (
-        <div>
-          <button style={s.btn} onClick={() => setDepForm(!depForm)}>
-            {depForm ? 'Cancelar' : '+ Nueva depuración'}
-          </button>
-
-          {depForm && (
-            <form onSubmit={crearDep} style={{...s.card, marginTop:12}}>
-              <select value={depNew.tipo} onChange={e => setDepNew({...depNew, tipo: e.target.value})}
-                style={s.input}>
-                <option value="servicio_eliminar">Servicio a eliminar</option>
-                <option value="cliente_toxico">Cliente tóxico</option>
-                <option value="gasto_innecesario">Gasto innecesario</option>
-                <option value="proceso_redundante">Proceso redundante</option>
-                <option value="canal_inefectivo">Canal inefectivo</option>
-                <option value="habito_operativo">Hábito operativo</option>
-                <option value="creencia_limitante">Creencia limitante</option>
-              </select>
-              <textarea placeholder="Descripción" value={depNew.descripcion} required rows={2}
-                onChange={e => setDepNew({...depNew, descripcion: e.target.value})} style={{...s.input, marginTop:8}} />
-              <input placeholder="Impacto estimado" value={depNew.impacto_estimado}
-                onChange={e => setDepNew({...depNew, impacto_estimado: e.target.value})} style={{...s.input, marginTop:8}} />
-              <button type="submit" style={{...s.btn, marginTop:8}}>Crear</button>
-            </form>
-          )}
-
-          {depList && depList.map((d,i) => (
-            <div key={d.id || i} style={{...s.card, marginTop:i===0?16:0, borderLeft:`4px solid ${DEP_ESTADOS[d.estado]||'#9ca3af'}`}}>
-              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                <div>
-                  <div style={{fontWeight:600, fontSize:14}}>{d.descripcion}</div>
-                  <div style={{fontSize:12, color:'#6b7280', marginTop:2}}>
-                    {d.tipo?.replace(/_/g,' ')} · {d.impacto_estimado || 'Sin impacto estimado'}
-                  </div>
-                </div>
-                <span style={{
-                  padding:'2px 8px', borderRadius:12, fontSize:11, fontWeight:600,
-                  background: DEP_ESTADOS[d.estado]||'#9ca3af', color:'#fff',
-                }}>{d.estado}</span>
-              </div>
-              <div style={{display:'flex', gap:8, marginTop:8}}>
-                {d.estado === 'propuesta' && (
-                  <button onClick={() => cambiarEstadoDep(d.id, 'aprobada')}
-                    style={{...s.btnSm, background:'#3b82f6'}}>Aprobar</button>
-                )}
-                {d.estado === 'aprobada' && (
-                  <button onClick={() => cambiarEstadoDep(d.id, 'ejecutada')}
-                    style={{...s.btnSm, background:'#22c55e'}}>Ejecutada</button>
-                )}
-                {(d.estado === 'propuesta' || d.estado === 'aprobada') && (
-                  <button onClick={() => cambiarEstadoDep(d.id, 'descartada')}
-                    style={{...s.btnSm, background:'#9ca3af'}}>Descartar</button>
-                )}
-              </div>
-              {d.origen && d.origen !== 'manual' && (
-                <div style={{fontSize:11, color:'#9ca3af', marginTop:4}}>Origen: {d.origen}</div>
-              )}
-            </div>
-          ))}
-
-          {depList && depList.length === 0 && (
-            <div style={{...s.card, marginTop:16, textAlign:'center', color:'#9ca3af'}}>
-              Sin depuraciones. F3 identifica lo que dejar de hacer.
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* GRUPOS TAB */}
-      {tab === 'grupos' && data.grupos_detalle && (
-        <div>
-          {data.grupos_detalle.map((g,i) => (
-            <div key={i} style={s.card}>
-              <div style={{display:'flex', justifyContent:'space-between'}}>
-                <span style={{fontWeight:600}}>{g.nombre}</span>
-                <span style={{
-                  color: g.ocupadas >= g.capacidad_max ? '#ef4444' : '#16a34a',
-                  fontWeight:600,
-                }}>{g.ocupadas}/{g.capacidad_max}</span>
-              </div>
-              <div style={{fontSize:12, color:'#6b7280'}}>
-                {g.tipo} · {parseFloat(g.precio_mensual).toFixed(0)}€/mes
-              </div>
-              <div style={{height:4, background:'#f3f4f6', borderRadius:2, marginTop:6}}>
-                <div style={{
-                  height:4, borderRadius:2,
-                  width:`${(g.ocupadas/g.capacidad_max)*100}%`,
-                  background: g.ocupadas >= g.capacidad_max ? '#ef4444' : '#22c55e',
-                }}/>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* CONTABILIDAD TAB */}
-      {tab === 'contabilidad' && (
-        <div>
-          <div style={s.card}>
-            <h3 style={s.cardTitle}>Ingresos mensuales</h3>
-            {data.ingresos_mensuales?.map((m,i) => (
-              <div key={i} style={{display:'flex', justifyContent:'space-between', padding:'4px 0', fontSize:13}}>
-                <span>{m.mes}</span>
-                <span style={{fontWeight:600}}>{m.total.toFixed(0)}€</span>
-              </div>
-            ))}
-          </div>
-          <button style={{...s.btn, background:'#6b7280', marginTop:8}}
-            onClick={() => window.open(`${BASE}/pilates/facturas/paquete-gestor`, '_blank')}>
-            Descargar paquete gestor
-          </button>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
-
-const s = {
-  container: { maxWidth:800, margin:'0 auto', padding:20, fontFamily:"'Inter',-apple-system,sans-serif" },
-  header: { marginBottom:20 },
-  h1: { fontSize:24, fontWeight:700, margin:0, color:'#111827' },
-  tabs: { display:'flex', gap:4, marginBottom:20, borderBottom:'1px solid #e5e7eb', paddingBottom:8, flexWrap:'wrap' },
-  tab: { padding:'8px 16px', background:'none', border:'none', fontSize:13, color:'#6b7280', cursor:'pointer', borderRadius:'6px 6px 0 0' },
-  tabActive: { padding:'8px 16px', background:'#6366f1', border:'none', fontSize:13, color:'#fff', cursor:'pointer', borderRadius:6 },
-  grid4: { display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginBottom:16 },
-  kpi: { background:'#fff', borderRadius:12, padding:16, boxShadow:'0 1px 3px rgba(0,0,0,0.08)' },
-  kpiLabel: { fontSize:11, color:'#9ca3af', textTransform:'uppercase', letterSpacing:'0.05em' },
-  kpiValue: { fontSize:28, fontWeight:700, color:'#111827', marginTop:4 },
-  kpiSub: { fontSize:12, color:'#6b7280', marginTop:2 },
-  card: { background:'#fff', borderRadius:12, padding:16, marginBottom:12, boxShadow:'0 1px 3px rgba(0,0,0,0.08)' },
-  cardTitle: { fontSize:14, fontWeight:600, color:'#374151', marginBottom:8 },
-  btn: { padding:'10px 20px', background:'#6366f1', color:'#fff', border:'none', borderRadius:8, fontSize:14, fontWeight:500, cursor:'pointer' },
-  btnSm: { padding:'4px 12px', color:'#fff', border:'none', borderRadius:6, fontSize:12, cursor:'pointer' },
-  input: { width:'100%', padding:'8px 12px', border:'1px solid #d1d5db', borderRadius:8, fontSize:14, boxSizing:'border-box' },
-};

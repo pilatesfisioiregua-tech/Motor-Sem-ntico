@@ -1,1 +1,125 @@
-/* Reset - styles handled in App.css */
+@import "tailwindcss";
+
+/* === NEURAL DARK — Sistema de diseño OMNI-MIND === */
+
+@theme {
+  --color-bg-void: #08090d;
+  --color-bg-deep: #0c0e14;
+  --color-bg-surface: #12151e;
+  --color-bg-elevated: #181c28;
+  --color-bg-overlay: #1e2233;
+
+  --color-text-primary: #e8eaf0;
+  --color-text-secondary: #9498a8;
+  --color-text-tertiary: #5c6070;
+  --color-text-ghost: #363a48;
+
+  --color-accent-indigo: #6366f1;
+  --color-accent-indigo-dim: #4f46e5;
+  --color-accent-green: #34d399;
+  --color-accent-amber: #fbbf24;
+  --color-accent-red: #f87171;
+  --color-accent-violet: #a78bfa;
+  --color-accent-cyan: #22d3ee;
+  --color-accent-rose: #fb7185;
+}
+
+:root {
+  /* === FONDOS === */
+  --bg-void: #08090d;
+  --bg-deep: #0c0e14;
+  --bg-surface: #12151e;
+  --bg-elevated: #181c28;
+  --bg-overlay: #1e2233;
+
+  /* === TEXTO === */
+  --text-primary: #e8eaf0;
+  --text-secondary: #9498a8;
+  --text-tertiary: #5c6070;
+  --text-ghost: #363a48;
+
+  /* === ACENTOS === */
+  --accent-indigo: #6366f1;
+  --accent-indigo-dim: #4f46e5;
+  --accent-indigo-glow: rgba(99, 102, 241, 0.15);
+  --accent-green: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-red: #f87171;
+  --accent-violet: #a78bfa;
+  --accent-cyan: #22d3ee;
+  --accent-rose: #fb7185;
+
+  /* === SUPERFICIES === */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-active: rgba(99, 102, 241, 0.3);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-glow: 0 0 20px var(--accent-indigo-glow);
+
+  /* === TIPOGRAFIA === */
+  --font-display: 'Instrument Sans', 'DM Sans', sans-serif;
+  --font-body: 'Inter Tight', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* === ESPACIADO === */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* === TRANSICIONES === */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-void);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-void);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === ANIMACIONES PREMIUM === */
+
+@keyframes moduleReveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.module-enter { animation: moduleReveal 0.4s var(--ease-out) forwards; }
+.module-enter:nth-child(1) { animation-delay: 0ms; }
+.module-enter:nth-child(2) { animation-delay: 60ms; }
+.module-enter:nth-child(3) { animation-delay: 120ms; }
+.module-enter:nth-child(4) { animation-delay: 180ms; }
+.module-enter:nth-child(5) { animation-delay: 240ms; }
+.module-enter:nth-child(6) { animation-delay: 300ms; }
+
+@keyframes agentPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(99, 102, 241, 0); }
+}
+.agent-active { animation: agentPulse 2s infinite; }
+
+.metric-value { transition: all 0.6s var(--ease-out); }
+.lens-bar-fill { transition: width 0.8s var(--ease-out); }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in { animation: fadeIn 0.3s var(--ease-out) forwards; }
+
+/* Scrollbar estilizado */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--text-ghost); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }

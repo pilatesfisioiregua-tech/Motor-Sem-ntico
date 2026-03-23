@@ -3,13 +3,21 @@ import toast, { Toaster } from 'react-hot-toast';
 import * as api from './api';
 import Calendario from './Calendario';
 import PanelWA from './PanelWA';
-import FeedEstudio from './FeedEstudio';
+import Card from './design/Card';
+import Metric from './design/Metric';
+import LensBar from './design/LensBar';
+import AgentBadge from './design/AgentBadge';
+import SignalFlow from './design/SignalFlow';
+import ConflictLine from './design/ConflictLine';
+import Pulse from './design/Pulse';
+import VoicePanel, { speak } from './shared/VoicePanel';
+import { CAPAS } from './design/theme';
 
 const BASE = import.meta.env.VITE_API_URL || '';
 const PREFIX = `${BASE}/pilates`;
 
 // ============================================================
-// MÓDULOS INLINE
+// MÓDULOS INLINE — migrados a Tailwind
 // ============================================================
 
 function AgendaHoy() {
@@ -17,12 +25,12 @@ function AgendaHoy() {
   useEffect(() => { api.getSesionesHoy().then(r => setSesiones(r.sesiones || [])).catch(() => {}); }, []);
   return (
     <div>
-      {sesiones.length === 0 && <div style={S.empty}>No hay sesiones hoy</div>}
+      {sesiones.length === 0 && <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">No hay sesiones hoy</p>}
       {sesiones.map(s => (
-        <div key={s.id} style={S.row}>
-          <span style={{fontWeight:600}}>{s.hora_inicio?.slice(0,5)}</span>
-          <span style={{flex:1, marginLeft:8}}>{s.grupo_nombre || 'Individual'}</span>
-          <span style={S.badge}>{s.asistentes_count || 0} alumnos</span>
+        <div key={s.id} className="flex justify-between items-center py-1.5 border-b border-[var(--border)] text-sm">
+          <span className="font-semibold">{s.hora_inicio?.slice(0,5)}</span>
+          <span className="flex-1 ml-2 text-[var(--text-secondary)]">{s.grupo_nombre || 'Individual'}</span>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--bg-void)] text-[var(--text-tertiary)]">{s.asistentes_count || 0} alumnos</span>
         </div>
       ))}
     </div>
@@ -35,16 +43,18 @@ function PagosPendientes() {
   const total = cargos.reduce((s, c) => s + parseFloat(c.total || 0), 0);
   return (
     <div>
-      {cargos.length === 0 && <div style={S.empty}>Todo al día</div>}
+      {cargos.length === 0 && <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Todo al dia</p>}
       {cargos.slice(0, 10).map(c => (
-        <div key={c.id} style={S.row}>
-          <span style={{flex:1}}>{c.cliente_nombre || c.descripcion || c.tipo}</span>
-          <span style={{fontWeight:600, color:'var(--red)'}}>{parseFloat(c.total).toFixed(0)}€</span>
+        <div key={c.id} className="flex justify-between items-center py-1.5 border-b border-[var(--border)] text-sm">
+          <span className="flex-1">{c.cliente_nombre || c.descripcion || c.tipo}</span>
+          <span className="font-semibold text-[var(--accent-red)]">{parseFloat(c.total).toFixed(0)}&euro;</span>
         </div>
       ))}
-      {total > 0 && <div style={{...S.row, fontWeight:700, borderTop:'1px solid var(--border)', paddingTop:8, marginTop:4}}>
-        <span>Total</span><span style={{color:'var(--red)'}}>{total.toFixed(0)}€</span>
-      </div>}
+      {total > 0 && (
+        <div className="flex justify-between items-center pt-2 mt-1 border-t border-[var(--border)] font-bold text-sm">
+          <span>Total</span><span className="text-[var(--accent-red)]">{total.toFixed(0)}&euro;</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -52,13 +62,14 @@ function PagosPendientes() {
 function ResumenMes() {
   const [r, setR] = useState(null);
   useEffect(() => { api.getResumen().then(setR).catch(() => {}); }, []);
-  if (!r) return <div style={S.empty}>Cargando...</div>;
+  if (!r) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Cargando...</p>;
   return (
-    <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:8}}>
-      <div style={S.stat}><div style={S.statLabel}>Ingresos</div><div style={{...S.statVal, color:'var(--green)'}}>{r.ingresos?.toFixed(0) || 0}€</div></div>
-      <div style={S.stat}><div style={S.statLabel}>Deuda</div><div style={{...S.statVal, color: r.deuda_pendiente_total > 0 ? 'var(--red)':'var(--text)'}}>{r.deuda_pendiente_total?.toFixed(0) || 0}€</div></div>
-      <div style={S.stat}><div style={S.statLabel}>Clientes</div><div style={S.statVal}>{r.clientes_activos || 0}</div></div>
-      <div style={S.stat}><div style={S.statLabel}>Sesiones mes</div><div style={S.statVal}>{r.sesiones_mes || 0}</div></div>
+    <div className="grid grid-cols-2 gap-3">
+      <Metric label="Ingresos" value={`${r.ingresos?.toFixed(0) || 0}\u20AC`} size="sm" />
+      <Metric label="Deuda" value={`${r.deuda_pendiente_total?.toFixed(0) || 0}\u20AC`} size="sm"
+              delta={r.deuda_pendiente_total > 0 ? -1 : 0} />
+      <Metric label="Clientes" value={r.clientes_activos || 0} size="sm" />
+      <Metric label="Sesiones mes" value={r.sesiones_mes || 0} size="sm" />
     </div>
   );
 }
@@ -68,13 +79,11 @@ function AlertasPanel() {
   useEffect(() => { api.getAlertas().then(r => setAlertas(r.alertas || [])).catch(() => {}); }, []);
   return (
     <div>
-      {alertas.length === 0 && <div style={S.empty}>Sin alertas activas</div>}
+      {alertas.length === 0 && <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin alertas activas</p>}
       {alertas.map((a, i) => (
-        <div key={i} style={{...S.row, background: a.severidad === 'alta' ? 'rgba(239,68,68,0.1)' : 'transparent'}}>
-          <div>
-            <div style={{fontWeight:500}}>{a.nombre}</div>
-            <div style={{fontSize:11, color:'var(--text-dim)'}}>{a.detalle}</div>
-          </div>
+        <div key={i} className={`py-2 border-b border-[var(--border)] text-sm ${a.severidad === 'alta' ? 'bg-red-500/5' : ''}`}>
+          <div className="font-medium">{a.nombre}</div>
+          <div className="text-xs text-[var(--text-tertiary)]">{a.detalle}</div>
         </div>
       ))}
     </div>
@@ -91,11 +100,12 @@ function BuscadorCliente() {
   }, [q]);
   return (
     <div>
-      <input style={S.input} placeholder="Nombre, teléfono..." value={q} onChange={e => setQ(e.target.value)} autoFocus />
+      <input className="w-full bg-[var(--bg-void)] border border-[var(--border)] rounded-[var(--radius-sm)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)] outline-none focus:border-[var(--border-active)] mb-2"
+             placeholder="Nombre, telefono..." value={q} onChange={e => setQ(e.target.value)} autoFocus />
       {results.map(r => (
-        <div key={r.id} style={S.row}>
-          <span style={{flex:1}}>{r.nombre} {r.apellidos}</span>
-          <span style={{fontSize:11, color:'var(--text-dim)'}}>{r.telefono}</span>
+        <div key={r.id} className="flex justify-between items-center py-1.5 border-b border-[var(--border)] text-sm">
+          <span className="flex-1">{r.nombre} {r.apellidos}</span>
+          <span className="text-xs text-[var(--text-tertiary)]">{r.telefono}</span>
         </div>
       ))}
     </div>
@@ -108,9 +118,9 @@ function GruposPanel() {
   return (
     <div>
       {grupos.map(g => (
-        <div key={g.id} style={S.row}>
-          <span style={{flex:1}}>{g.nombre}</span>
-          <span style={{fontSize:12}}>{g.inscritos || 0}/{g.capacidad_max || '?'}</span>
+        <div key={g.id} className="flex justify-between items-center py-1.5 border-b border-[var(--border)] text-sm">
+          <span className="flex-1">{g.nombre}</span>
+          <span className="text-xs">{g.inscritos || 0}/{g.capacidad_max || '?'}</span>
         </div>
       ))}
     </div>
@@ -122,13 +132,11 @@ function VozPanel() {
   useEffect(() => { api.getPropuestasVoz({estado:'pendiente'}).then(r => setProps(Array.isArray(r) ? r : [])).catch(() => {}); }, []);
   return (
     <div>
-      {props.length === 0 && <div style={S.empty}>Sin propuestas pendientes</div>}
+      {props.length === 0 && <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin propuestas pendientes</p>}
       {props.slice(0, 5).map(p => (
-        <div key={p.id} style={S.row}>
-          <div style={{flex:1}}>
-            <div style={{fontWeight:500, fontSize:13}}>{p.titulo || p.tipo}</div>
-            <div style={{fontSize:11, color:'var(--text-dim)'}}>{p.resumen?.slice(0, 80)}</div>
-          </div>
+        <div key={p.id} className="py-2 border-b border-[var(--border)]">
+          <div className="font-medium text-sm">{p.titulo || p.tipo}</div>
+          <div className="text-xs text-[var(--text-tertiary)]">{p.resumen?.slice(0, 80)}</div>
         </div>
       ))}
     </div>
@@ -137,24 +145,22 @@ function VozPanel() {
 
 function EngagementPanel() {
   const [data, setData] = useState(null);
-  useEffect(() => {
-    fetch(`${PREFIX}/engagement`).then(r => r.json()).then(setData).catch(() => {});
-  }, []);
-  if (!data) return <div style={S.empty}>Cargando...</div>;
+  useEffect(() => { fetch(`${PREFIX}/engagement`).then(r => r.json()).then(setData).catch(() => {}); }, []);
+  if (!data) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Cargando...</p>;
   return (
     <div>
-      {data.en_riesgo?.length > 0 && <div style={{fontSize:11, color:'var(--red)', fontWeight:600, marginBottom:4}}>EN RIESGO</div>}
+      {data.en_riesgo?.length > 0 && <div className="text-xs text-[var(--accent-red)] font-semibold mb-1">EN RIESGO</div>}
       {data.en_riesgo?.map(r => (
-        <div key={r.cliente_id} style={S.row}>
-          <span style={{flex:1}}>{r.nombre} {r.apellidos}</span>
-          <span style={{fontSize:12, color:'var(--red)'}}>{r.engagement_score}pts</span>
+        <div key={r.cliente_id} className="flex justify-between items-center py-1 text-sm">
+          <span className="flex-1">{r.nombre} {r.apellidos}</span>
+          <span className="text-xs text-[var(--accent-red)]">{r.engagement_score}pts</span>
         </div>
       ))}
-      {data.top_rachas?.length > 0 && <div style={{fontSize:11, color:'var(--green)', fontWeight:600, marginBottom:4, marginTop:8}}>TOP RACHAS</div>}
+      {data.top_rachas?.length > 0 && <div className="text-xs text-[var(--accent-green)] font-semibold mb-1 mt-3">TOP RACHAS</div>}
       {data.top_rachas?.map(r => (
-        <div key={r.cliente_id} style={S.row}>
-          <span style={{flex:1}}>{r.nombre}</span>
-          <span style={{fontSize:12, color:'var(--green)'}}>{r.racha_actual} sem</span>
+        <div key={r.cliente_id} className="flex justify-between items-center py-1 text-sm">
+          <span className="flex-1">{r.nombre}</span>
+          <span className="text-xs text-[var(--accent-green)]">{r.racha_actual} sem</span>
         </div>
       ))}
     </div>
@@ -164,36 +170,184 @@ function EngagementPanel() {
 function FeedInline() {
   const [items, setItems] = useState([]);
   useEffect(() => { api.getFeed({limit: 10}).then(r => setItems(Array.isArray(r) ? r : [])).catch(() => {}); }, []);
-  const severityColor = { danger:'#ef4444', warning:'#f59e0b', success:'#22c55e', info:'#6366f1' };
+  const severityColor = { danger:'border-l-red-400', warning:'border-l-amber-400', success:'border-l-emerald-400', info:'border-l-indigo-400' };
   return (
     <div>
       {items.map(f => (
-        <div key={f.id} style={{...S.row, borderLeft: `3px solid ${severityColor[f.severidad] || '#6366f1'}`, paddingLeft:8}}>
-          <div style={{flex:1}}>
-            <div style={{fontSize:13}}>{f.icono} {f.titulo}</div>
-            {f.detalle && <div style={{fontSize:11, color:'var(--text-dim)'}}>{f.detalle}</div>}
+        <div key={f.id} className={`flex items-start gap-2 py-2 border-b border-[var(--border)] border-l-2 pl-2 ${severityColor[f.severidad] || 'border-l-indigo-400'}`}>
+          <div className="flex-1">
+            <div className="text-sm">{f.icono} {f.titulo}</div>
+            {f.detalle && <div className="text-xs text-[var(--text-tertiary)]">{f.detalle}</div>}
           </div>
-          <span style={{fontSize:10, color:'var(--text-dim)'}}>{timeAgo(f.created_at)}</span>
+          <span className="text-[10px] text-[var(--text-ghost)]">{timeAgo(f.created_at)}</span>
         </div>
       ))}
     </div>
   );
 }
 
+// === 5 MÓDULOS NUEVOS DEL ORGANISMO ===
+
+function PizarraPanel() {
+  const [data, setData] = useState(null);
+  useEffect(() => { api.getOrganismoPizarra().then(setData).catch(() => {}); }, []);
+  if (!data) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Cargando pizarra...</p>;
+
+  const entradas = data.entradas || [];
+  const porCapa = {};
+  for (const e of entradas) {
+    const capa = e.capa || 'otro';
+    if (!porCapa[capa]) porCapa[capa] = [];
+    porCapa[capa].push(e);
+  }
+
+  const conflictos = entradas.filter(e => e.conflicto_con);
+
+  return (
+    <div className="space-y-3">
+      {Object.entries(porCapa).map(([capa, agentes]) => (
+        <div key={capa}>
+          <div className="text-[10px] font-bold tracking-wider uppercase text-[var(--text-ghost)] mb-1.5">{capa}</div>
+          <div className="flex flex-wrap gap-1.5">
+            {agentes.map(a => (
+              <div key={a.agente} className="group relative">
+                <AgentBadge agent={a.agente} status={a.estado} confidence={a.confianza} />
+                <div className="hidden group-hover:block absolute z-10 top-full left-0 mt-1 p-2 rounded-lg bg-[var(--bg-overlay)] border border-[var(--border)] text-xs max-w-[240px] shadow-[var(--shadow-elevated)]">
+                  <div className="text-[var(--text-primary)] mb-1">{a.detectando}</div>
+                  {a.accion_propuesta && <div className="text-[var(--text-tertiary)]">{a.accion_propuesta}</div>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      {conflictos.length > 0 && (
+        <div>
+          <div className="text-[10px] font-bold tracking-wider uppercase text-[var(--accent-red)] mb-1.5">Conflictos</div>
+          {conflictos.map((c, i) => (
+            <ConflictLine key={i} from={c.agente} to={c.conflicto_con} description={c.detectando} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function EstrategiaPanel() {
+  const [data, setData] = useState(null);
+  useEffect(() => { api.getOrganismoDirector().then(setData).catch(() => {}); }, []);
+  if (!data || !data.estrategia_global) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin estrategia activa</p>;
+  return (
+    <div className="space-y-3">
+      {data.estado_sistema && (
+        <div className="text-sm text-[var(--text-secondary)]">{data.estado_sistema}</div>
+      )}
+      <div className="text-sm text-[var(--text-primary)] font-medium">{data.estrategia_global}</div>
+      {data.configs && data.configs.length > 0 && (
+        <div>
+          <div className="text-[10px] font-bold tracking-wider uppercase text-[var(--text-ghost)] mb-1.5">Agentes reconfigurados</div>
+          <div className="flex flex-wrap gap-1.5">
+            {data.configs.map((c, i) => (
+              <span key={i} className="px-2 py-1 rounded-full bg-[var(--accent-indigo-glow)] text-xs text-[var(--accent-indigo)] font-medium">
+                {c.agente || c}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+      {data.fecha && <div className="text-[10px] text-[var(--text-ghost)]">Actualizado: {new Date(data.fecha).toLocaleDateString('es-ES')}</div>}
+    </div>
+  );
+}
+
+function EvaluacionPanel() {
+  const [data, setData] = useState(null);
+  useEffect(() => { api.getOrganismoEvaluacion().then(setData).catch(() => {}); }, []);
+  if (!data || !data.evaluacion_global) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin evaluacion reciente</p>;
+  return (
+    <div className="space-y-3">
+      {data.delta_lentes && (
+        <LensBar
+          salud={data.delta_lentes?.salud || 0.5}
+          sentido={data.delta_lentes?.sentido || 0.5}
+          continuidad={data.delta_lentes?.continuidad || 0.5}
+        />
+      )}
+      <div className="text-sm text-[var(--text-primary)]">{data.evaluacion_global?.conclusion || data.evaluacion_global}</div>
+      {data.fecha && <div className="text-[10px] text-[var(--text-ghost)]">{new Date(data.fecha).toLocaleDateString('es-ES')}</div>}
+    </div>
+  );
+}
+
+function VozProactivaPanel() {
+  const [props, setProps] = useState([]);
+  useEffect(() => { api.getPropuestasVoz({estado:'pendiente'}).then(r => setProps(Array.isArray(r) ? r : [])).catch(() => {}); }, []);
+  const channelColor = { instagram: 'text-rose-400', web: 'text-cyan-400', whatsapp: 'text-emerald-400', email: 'text-amber-400' };
+  return (
+    <div>
+      {props.length === 0 && <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin propuestas pendientes</p>}
+      {props.slice(0, 5).map(p => (
+        <div key={p.id} className="py-2 border-b border-[var(--border)]">
+          <div className="flex items-center gap-2">
+            <span className={`text-xs font-bold uppercase ${channelColor[p.canal] || 'text-[var(--text-tertiary)]'}`}>{p.canal}</span>
+            <span className="text-sm font-medium text-[var(--text-primary)]">{p.titulo || p.tipo}</span>
+          </div>
+          <div className="text-xs text-[var(--text-tertiary)] mt-0.5">{p.resumen?.slice(0, 100)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FeedCognitivo() {
+  const [items, setItems] = useState([]);
+  useEffect(() => { api.getFeed({categoria: 'organismo', limit: 10}).then(r => setItems(Array.isArray(r) ? r : [])).catch(() => {}); }, []);
+  const severityColor = { danger:'border-l-red-400', warning:'border-l-amber-400', success:'border-l-emerald-400', info:'border-l-violet-400' };
+  return (
+    <div>
+      {items.length === 0 && <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin eventos cognitivos</p>}
+      {items.map(f => (
+        <div key={f.id} className={`flex items-start gap-2 py-2 border-b border-[var(--border)] border-l-2 pl-2 ${severityColor[f.severidad] || 'border-l-violet-400'}`}>
+          <div className="flex-1">
+            <div className="text-sm">{f.icono} {f.titulo}</div>
+            {f.detalle && <div className="text-xs text-[var(--text-tertiary)]">{f.detalle}</div>}
+          </div>
+          <span className="text-[10px] text-[var(--text-ghost)]">{timeAgo(f.created_at)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function BusPanel() {
+  const [data, setData] = useState(null);
+  useEffect(() => { api.getOrganismoBus().then(setData).catch(() => {}); }, []);
+  if (!data) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Cargando bus...</p>;
+  const raw = Array.isArray(data) ? data : (data.recientes || data.señales || []);
+  const signals = raw.slice(0, 15);
+  if (signals.length === 0) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin senales recientes</p>;
+  return <SignalFlow signals={signals} />;
+}
+
+function CalendarioSemanal() {
+  return <Calendario onSelectSesion={() => {}} sesionSeleccionadaId={null} />;
+}
+
+function Placeholder({ nombre }) {
+  return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Modulo &ldquo;{nombre}&rdquo; disponible proximamente</p>;
+}
+
 function timeAgo(ts) {
+  if (!ts) return '';
   const diff = (Date.now() - new Date(ts).getTime()) / 60000;
   if (diff < 60) return `${Math.round(diff)}m`;
   if (diff < 1440) return `${Math.round(diff / 60)}h`;
   return `${Math.round(diff / 1440)}d`;
 }
 
-function CalendarioSemanal({ onSelectSesion }) {
-  return <Calendario onSelectSesion={onSelectSesion || (() => {})} sesionSeleccionadaId={null} />;
-}
-
-function Placeholder({ nombre }) {
-  return <div style={S.empty}>Módulo "{nombre}" disponible próximamente</div>;
-}
+// ============================================================
+// MAPA MODULO → COMPONENTE
+// ============================================================
 
 const MODULO_COMPONENTS = {
   agenda: AgendaHoy,
@@ -207,14 +361,103 @@ const MODULO_COMPONENTS = {
   voz: VozPanel,
   engagement: EngagementPanel,
   wa: PanelWA,
+  pizarra: PizarraPanel,
+  estrategia: EstrategiaPanel,
+  evaluacion: EvaluacionPanel,
+  feed_cognitivo: FeedCognitivo,
+  bus: BusPanel,
+  voz_proactiva: VozProactivaPanel,
+};
+
+// Módulos que necesitan Card variant especial
+const MODULO_VARIANTS = {
+  pizarra: 'organism',
+  estrategia: 'elevated',
+  evaluacion: 'default',
+  bus: 'default',
 };
 
 // ============================================================
-// COCKPIT PRINCIPAL — con jerarquía visual
+// SIDEBAR
+// ============================================================
+
+function Sidebar({ modulos, activos, onToggle }) {
+  return (
+    <aside className="w-56 min-w-[224px] border-r border-[var(--border)] bg-[var(--bg-deep)]
+                      flex flex-col py-4 overflow-y-auto shrink-0">
+      {Object.entries(CAPAS).map(([key, capa]) => (
+        <div key={key} className="mb-4">
+          <div className="px-4 mb-2 text-[10px] font-bold tracking-[0.1em] uppercase text-[var(--text-ghost)]">
+            {capa.icon} {capa.label}
+          </div>
+          {capa.modulos.map(id => {
+            const mod = modulos.find(m => m.id === id);
+            if (!mod) return null;
+            const isActive = activos.has(id);
+            return (
+              <button
+                key={id}
+                onClick={() => onToggle(id)}
+                className={`w-full text-left px-4 py-2 text-sm transition-all duration-150 cursor-pointer border-none bg-transparent
+                  ${isActive
+                    ? 'text-[var(--text-primary)] bg-[var(--accent-indigo-glow)] border-r-2 border-r-[var(--accent-indigo)]'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface)]'
+                  }`}
+              >
+                {mod.icono} {mod.nombre}
+              </button>
+            );
+          })}
+        </div>
+      ))}
+    </aside>
+  );
+}
+
+// ============================================================
+// HEADER
+// ============================================================
+
+function HeaderEstudio({ saludo, lentes, chatInput, setChatInput, onChat, chatLoading, chatResp, onVoiceTranscript }) {
+  return (
+    <header className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-deep)]">
+      <div className="shrink-0">
+        <h1 className="text-lg font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+          {saludo}
+        </h1>
+      </div>
+
+      {lentes && (
+        <div className="hidden lg:flex items-center gap-6 w-80 mx-6">
+          <LensBar salud={lentes.salud || 0.5} sentido={lentes.sentido || 0.5} continuidad={lentes.continuidad || 0.5} />
+        </div>
+      )}
+
+      <div className="flex items-center gap-3">
+        <div className="relative">
+          <input
+            className="w-72 bg-[var(--bg-surface)] border border-[var(--border)] rounded-xl
+                       px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)]
+                       focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)]
+                       transition-all duration-200"
+            placeholder="Que necesitas?"
+            value={chatInput}
+            onChange={e => setChatInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && onChat()}
+            disabled={chatLoading}
+          />
+        </div>
+        <VoicePanel onTranscript={onVoiceTranscript} />
+      </div>
+    </header>
+  );
+}
+
+// ============================================================
+// COCKPIT PRINCIPAL
 // ============================================================
 
 export default function EstudioCockpit() {
-  // modulosActivos: [{id: "agenda", rol: "principal"}, {id: "feed", rol: "secundario"}, ...]
   const [contexto, setContexto] = useState(null);
   const [modulosActivos, setModulosActivos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -222,21 +465,24 @@ export default function EstudioCockpit() {
   const [chatResp, setChatResp] = useState('');
   const [chatLoading, setChatLoading] = useState(false);
   const [chatHistorial, setChatHistorial] = useState([]);
+  const [lentes, setLentes] = useState(null);
 
   useEffect(() => {
     fetch(`${PREFIX}/cockpit`).then(r => r.json()).then(data => {
       setContexto(data);
-      // Sugeridos ya vienen con rol
       const sugeridos = (data.modulos_sugeridos || []).map(m => ({
-        id: m.id,
-        rol: m.rol || 'secundario'
+        id: m.id, rol: m.rol || 'secundario'
       }));
       setModulosActivos(sugeridos.length > 0 ? sugeridos : [{id: 'agenda', rol: 'principal'}]);
       setLoading(false);
     }).catch(() => setLoading(false));
+
+    // Cargar lentes ACD
+    fetch(`${PREFIX}/organismo/evaluacion`).then(r => r.json()).then(data => {
+      if (data.delta_lentes) setLentes(data.delta_lentes);
+    }).catch(() => {});
   }, []);
 
-  // Guardar config en backend
   const saveConfig = useCallback((modulos) => {
     fetch(`${PREFIX}/cockpit/config`, {
       method: 'POST', headers: {'Content-Type':'application/json'},
@@ -244,7 +490,6 @@ export default function EstudioCockpit() {
     }).catch(() => {});
   }, []);
 
-  // Toggle módulo desde chips
   const toggleModulo = useCallback((id) => {
     setModulosActivos(prev => {
       const existing = prev.find(m => m.id === id);
@@ -252,7 +497,6 @@ export default function EstudioCockpit() {
       if (existing) {
         next = prev.filter(m => m.id !== id);
       } else {
-        // Si no hay principal, el nuevo es principal. Si ya hay, es secundario.
         const hasPrincipal = prev.some(m => m.rol === 'principal');
         next = [...prev, {id, rol: hasPrincipal ? 'secundario' : 'principal'}];
       }
@@ -261,27 +505,6 @@ export default function EstudioCockpit() {
     });
   }, [saveConfig]);
 
-  // Promover módulo a principal (click en la estrella)
-  const promoverPrincipal = useCallback((id) => {
-    setModulosActivos(prev => {
-      const next = prev.map(m => ({
-        ...m,
-        rol: m.id === id ? 'principal' : (m.rol === 'principal' ? 'secundario' : m.rol)
-      }));
-      saveConfig(next);
-      return next;
-    });
-  }, [saveConfig]);
-
-  const removeModulo = useCallback((id) => {
-    setModulosActivos(prev => {
-      const next = prev.filter(m => m.id !== id);
-      saveConfig(next);
-      return next;
-    });
-  }, [saveConfig]);
-
-  // Chat conversacional
   const enviarChat = useCallback(async () => {
     const msg = chatInput.trim();
     if (!msg || chatLoading) return;
@@ -291,318 +514,202 @@ export default function EstudioCockpit() {
     try {
       const resp = await fetch(`${PREFIX}/cockpit/chat`, {
         method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          mensaje: msg,
-          modulos_activos: modulosActivos,
-          historial: chatHistorial,
-        }),
+        body: JSON.stringify({ mensaje: msg, modulos_activos: modulosActivos, historial: chatHistorial }),
       });
       const data = await resp.json();
 
       if (data.acciones) {
         setModulosActivos(prev => {
           let next = [...prev];
-
-          // Desmontar todos
           if (data.acciones.desmontar_todos) next = [];
-
-          // Desmontar específicos
-          if (data.acciones.desmontar?.length) {
-            next = next.filter(m => !data.acciones.desmontar.includes(m.id));
-          }
-
-          // Montar nuevos con sus roles
+          if (data.acciones.desmontar?.length) next = next.filter(m => !data.acciones.desmontar.includes(m.id));
           if (data.acciones.montar?.length) {
             for (const nuevo of data.acciones.montar) {
-              const id = nuevo.id || nuevo;
+              const nid = nuevo.id || nuevo;
               const rol = nuevo.rol || 'secundario';
-              // Si viene un nuevo principal, degradar el anterior
-              if (rol === 'principal') {
-                next = next.map(m => m.rol === 'principal' ? {...m, rol: 'secundario'} : m);
-              }
-              // Quitar si ya existía (para actualizar rol)
-              next = next.filter(m => m.id !== id);
-              next.push({id, rol});
+              if (rol === 'principal') next = next.map(m => m.rol === 'principal' ? {...m, rol: 'secundario'} : m);
+              next = next.filter(m => m.id !== nid);
+              next.push({id: nid, rol});
             }
           }
-
           saveConfig(next);
           return next;
         });
       }
-      if (data.respuesta) setChatResp(data.respuesta);
+      if (data.respuesta) {
+        setChatResp(data.respuesta);
+        speak(data.respuesta);
+      }
       if (data.historial) setChatHistorial(data.historial);
-    } catch (e) {
-      setChatResp('Error de conexión.');
+    } catch {
+      setChatResp('Error de conexion.');
     }
     setChatLoading(false);
   }, [chatInput, chatLoading, modulosActivos, chatHistorial, saveConfig]);
 
-  if (loading) return <div style={{...S.container, justifyContent:'center', alignItems:'center'}}>
-    <div style={{color:'var(--text-dim)'}}>Cargando cockpit...</div>
-  </div>;
+  const handleVoiceTranscript = useCallback((text) => {
+    setChatInput(text);
+    setTimeout(() => {
+      setChatInput(prev => {
+        if (prev === text) {
+          // Trigger send
+          setChatLoading(true);
+          fetch(`${PREFIX}/cockpit/chat`, {
+            method: 'POST', headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ mensaje: text, modulos_activos: modulosActivos, historial: chatHistorial }),
+          }).then(r => r.json()).then(data => {
+            if (data.acciones) {
+              setModulosActivos(prev2 => {
+                let next = [...prev2];
+                if (data.acciones.desmontar_todos) next = [];
+                if (data.acciones.desmontar?.length) next = next.filter(m => !data.acciones.desmontar.includes(m.id));
+                if (data.acciones.montar?.length) {
+                  for (const nuevo of data.acciones.montar) {
+                    const nid = nuevo.id || nuevo;
+                    const rol = nuevo.rol || 'secundario';
+                    if (rol === 'principal') next = next.map(m => m.rol === 'principal' ? {...m, rol: 'secundario'} : m);
+                    next = next.filter(m => m.id !== nid);
+                    next.push({id: nid, rol});
+                  }
+                }
+                saveConfig(next);
+                return next;
+              });
+            }
+            if (data.respuesta) { setChatResp(data.respuesta); speak(data.respuesta); }
+            if (data.historial) setChatHistorial(data.historial);
+            setChatLoading(false);
+          }).catch(() => { setChatResp('Error de conexion.'); setChatLoading(false); });
+        }
+        return '';
+      });
+    }, 100);
+  }, [modulosActivos, chatHistorial, saveConfig]);
+
+  if (loading) return (
+    <div className="min-h-screen bg-[var(--bg-void)] flex items-center justify-center">
+      <div className="flex items-center gap-3 text-[var(--text-tertiary)]">
+        <Pulse color="indigo" size={10} />
+        <span>Cargando cockpit...</span>
+      </div>
+    </div>
+  );
 
   const allModulos = contexto?.modulos_disponibles || [];
   const activosIds = new Set(modulosActivos.map(m => m.id));
-  const sugeridosIds = new Set((contexto?.modulos_sugeridos || []).map(m => m.id));
-
-  // Separar por rol para renderizar en orden
   const principal = modulosActivos.find(m => m.rol === 'principal');
   const secundarios = modulosActivos.filter(m => m.rol === 'secundario');
   const compactos = modulosActivos.filter(m => m.rol === 'compacto');
 
   return (
-    <div style={S.container}>
+    <div className="min-h-screen bg-[var(--bg-void)] flex">
       <Toaster position="top-right" toastOptions={{
-        style: { background:'#1a1d27', color:'#e4e4e7', border:'1px solid #2a2e3a' }
+        style: { background: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--border)' }
       }} />
 
-      {/* HEADER */}
-      <div style={S.header}>
-        <div style={S.saludo}>{contexto?.saludo || 'Buenos días.'}</div>
-        <div style={S.chatBox}>
-          <input
-            style={S.chatInput}
-            placeholder="¿Qué necesitas hoy?"
-            value={chatInput}
-            onChange={e => setChatInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && enviarChat()}
-            disabled={chatLoading}
-          />
-          <button style={S.chatBtn} onClick={enviarChat} disabled={chatLoading}>
-            {chatLoading ? '...' : '→'}
-          </button>
-        </div>
-        {chatResp && <div style={S.chatResp}>{chatResp}</div>}
-      </div>
+      {/* SIDEBAR */}
+      <Sidebar modulos={allModulos} activos={activosIds} onToggle={toggleModulo} />
 
-      {/* CHIPS */}
-      <div style={S.chips}>
-        {allModulos.map(m => {
-          const activo = activosIds.has(m.id);
-          const sugerido = sugeridosIds.has(m.id);
-          return (
-            <button key={m.id}
-              style={{...S.chip, ...(activo ? S.chipActivo : {}), ...(sugerido && !activo ? S.chipSugerido : {})}}
-              onClick={() => toggleModulo(m.id)}>
-              {m.icono} {m.nombre}
-            </button>
-          );
-        })}
-      </div>
+      {/* MAIN AREA */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* HEADER */}
+        <HeaderEstudio
+          saludo={contexto?.saludo || 'Buenos dias.'}
+          lentes={lentes}
+          chatInput={chatInput}
+          setChatInput={setChatInput}
+          onChat={enviarChat}
+          chatLoading={chatLoading}
+          chatResp={chatResp}
+          onVoiceTranscript={handleVoiceTranscript}
+        />
 
-      {/* LAYOUT JERÁRQUICO */}
-      <div style={S.layoutContainer}>
-
-        {/* PRINCIPAL — Grande, ancho completo */}
-        {principal && (
-          <div style={S.moduloPrincipal}>
-            <div style={S.moduloHeaderPrincipal}>
-              <span style={{fontSize:15}}>
-                {allModulos.find(m => m.id === principal.id)?.icono} {allModulos.find(m => m.id === principal.id)?.nombre}
-              </span>
-              <div style={{display:'flex', gap:8, alignItems:'center'}}>
-                <span style={S.rolBadgePrincipal}>FOCO</span>
-                <button style={S.closeBtn} onClick={() => removeModulo(principal.id)}>×</button>
-              </div>
-            </div>
-            <div style={S.moduloBodyPrincipal}>
-              {MODULO_COMPONENTS[principal.id]
-                ? (() => { const C = MODULO_COMPONENTS[principal.id]; return <C />; })()
-                : <Placeholder nombre={allModulos.find(m => m.id === principal.id)?.nombre || principal.id} />
-              }
-            </div>
+        {/* CHAT RESPONSE */}
+        {chatResp && (
+          <div className="mx-6 mt-3 px-4 py-3 rounded-[var(--radius-md)] bg-[var(--bg-surface)] border-l-2 border-l-[var(--accent-indigo)] text-sm text-[var(--text-primary)] fade-in">
+            {chatResp}
           </div>
         )}
 
-        {/* SECUNDARIOS + COMPACTOS — Grid debajo */}
-        {(secundarios.length > 0 || compactos.length > 0) && (
-          <div style={S.gridSecundario}>
-            {/* Secundarios — tamaño normal */}
-            {secundarios.map(mod => {
-              const info = allModulos.find(m => m.id === mod.id);
-              if (!info) return null;
-              const Comp = MODULO_COMPONENTS[mod.id];
-              return (
-                <div key={mod.id} style={S.moduloSecundario}>
-                  <div style={S.moduloHeader}>
-                    <span>{info.icono} {info.nombre}</span>
-                    <div style={{display:'flex', gap:4, alignItems:'center'}}>
-                      <button style={S.promoteBtn} onClick={() => promoverPrincipal(mod.id)}
-                        title="Poner como foco principal">
-                        ↑
-                      </button>
-                      <button style={S.closeBtn} onClick={() => removeModulo(mod.id)}>×</button>
+        {/* MÓDULOS */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {modulosActivos.length === 0 && (
+            <div className="text-center py-20 text-[var(--text-tertiary)]">
+              Selecciona modulos en la barra lateral o escribe lo que necesitas
+            </div>
+          )}
+
+          {/* PRINCIPAL */}
+          {principal && (() => {
+            const info = allModulos.find(m => m.id === principal.id);
+            const Comp = MODULO_COMPONENTS[principal.id];
+            const variant = MODULO_VARIANTS[principal.id] || 'elevated';
+            return (
+              <div className="mb-6 module-enter">
+                <Card variant={variant} glow>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center gap-2">
+                      <Pulse color="indigo" size={6} />
+                      <span className="text-sm font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+                        {info?.icono} {info?.nombre || principal.id}
+                      </span>
                     </div>
+                    <span className="text-[9px] font-bold tracking-widest uppercase px-2 py-0.5 rounded-md bg-[var(--accent-indigo)] text-white">FOCO</span>
                   </div>
-                  <div style={S.moduloBody}>
-                    {Comp ? <Comp /> : <Placeholder nombre={info.nombre} />}
+                  <div className="min-h-[150px]">
+                    {Comp ? <Comp /> : <Placeholder nombre={info?.nombre || principal.id} />}
                   </div>
-                </div>
-              );
-            })}
+                </Card>
+              </div>
+            );
+          })()}
 
-            {/* Compactos — más estrechos, info mínima */}
-            {compactos.map(mod => {
-              const info = allModulos.find(m => m.id === mod.id);
-              if (!info) return null;
-              const Comp = MODULO_COMPONENTS[mod.id];
-              return (
-                <div key={mod.id} style={S.moduloCompacto}>
-                  <div style={S.moduloHeaderCompacto}>
-                    <span style={{fontSize:12}}>{info.icono} {info.nombre}</span>
-                    <button style={S.closeBtn} onClick={() => removeModulo(mod.id)}>×</button>
+          {/* SECUNDARIOS + COMPACTOS */}
+          {(secundarios.length > 0 || compactos.length > 0) && (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {secundarios.map((mod, idx) => {
+                const info = allModulos.find(m => m.id === mod.id);
+                if (!info) return null;
+                const Comp = MODULO_COMPONENTS[mod.id];
+                const variant = MODULO_VARIANTS[mod.id] || 'default';
+                return (
+                  <div key={mod.id} className="module-enter" style={{ animationDelay: `${idx * 60}ms` }}>
+                    <Card variant={variant}>
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="text-sm font-semibold text-[var(--text-primary)]">{info.icono} {info.nombre}</span>
+                        <button className="text-[var(--text-ghost)] hover:text-[var(--text-secondary)] transition-colors text-lg leading-none cursor-pointer bg-transparent border-none"
+                                onClick={() => toggleModulo(mod.id)}>&times;</button>
+                      </div>
+                      <div className="max-h-[350px] overflow-y-auto">
+                        {Comp ? <Comp /> : <Placeholder nombre={info.nombre} />}
+                      </div>
+                    </Card>
                   </div>
-                  <div style={S.moduloBodyCompacto}>
-                    {Comp ? <Comp /> : <Placeholder nombre={info.nombre} />}
+                );
+              })}
+              {compactos.map((mod, idx) => {
+                const info = allModulos.find(m => m.id === mod.id);
+                if (!info) return null;
+                const Comp = MODULO_COMPONENTS[mod.id];
+                return (
+                  <div key={mod.id} className="module-enter" style={{ animationDelay: `${(secundarios.length + idx) * 60}ms` }}>
+                    <Card className="opacity-90">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-semibold text-[var(--text-secondary)]">{info.icono} {info.nombre}</span>
+                        <button className="text-[var(--text-ghost)] hover:text-[var(--text-secondary)] text-sm leading-none cursor-pointer bg-transparent border-none"
+                                onClick={() => toggleModulo(mod.id)}>&times;</button>
+                      </div>
+                      <div className="max-h-[180px] overflow-y-auto text-xs">
+                        {Comp ? <Comp /> : <Placeholder nombre={info.nombre} />}
+                      </div>
+                    </Card>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {modulosActivos.length === 0 && (
-        <div style={{textAlign:'center', padding:40, color:'var(--text-dim)'}}>
-          Pulsa un módulo arriba o escribe lo que necesitas
+                );
+              })}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
-
-// ============================================================
-// ESTILOS
-// ============================================================
-
-const S = {
-  container: {
-    minHeight: '100vh', background: 'var(--bg, #0f1117)',
-    color: 'var(--text, #e4e4e7)', padding: 20,
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-  },
-  header: { marginBottom: 16 },
-  saludo: { fontSize: 16, color: 'var(--text, #e4e4e7)', lineHeight: 1.5, marginBottom: 12 },
-  chatBox: { display: 'flex', gap: 8, marginBottom: 8 },
-  chatInput: {
-    flex: 1, background: 'var(--surface, #1a1d27)', border: '1px solid var(--border, #2a2e3a)',
-    borderRadius: 10, padding: '10px 14px', color: 'var(--text, #e4e4e7)',
-    fontSize: 14, outline: 'none',
-  },
-  chatBtn: {
-    background: 'var(--indigo, #6366f1)', border: 'none', borderRadius: 10,
-    padding: '10px 16px', color: '#fff', fontSize: 16, cursor: 'pointer', fontWeight: 700,
-  },
-  chatResp: {
-    fontSize: 13, color: 'var(--text, #e4e4e7)', background: 'var(--surface, #1a1d27)',
-    borderRadius: 8, padding: '8px 12px', marginBottom: 4,
-    borderLeft: '3px solid var(--indigo, #6366f1)',
-  },
-  chips: {
-    display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20,
-    paddingBottom: 16, borderBottom: '1px solid var(--border, #2a2e3a)',
-  },
-  chip: {
-    background: 'var(--surface, #1a1d27)', border: '1px solid var(--border, #2a2e3a)',
-    borderRadius: 20, padding: '5px 12px', fontSize: 12,
-    color: 'var(--text-dim, #71717a)', cursor: 'pointer', transition: 'all 0.15s',
-  },
-  chipActivo: {
-    background: 'var(--indigo, #6366f1)', color: '#fff',
-    borderColor: 'var(--indigo, #6366f1)',
-  },
-  chipSugerido: {
-    borderColor: 'var(--indigo, #6366f1)', color: 'var(--indigo, #6366f1)',
-  },
-
-  // === LAYOUT JERÁRQUICO ===
-  layoutContainer: {
-    display: 'flex', flexDirection: 'column', gap: 16,
-  },
-
-  // PRINCIPAL — Ancho completo, destacado
-  moduloPrincipal: {
-    background: 'var(--surface, #1a1d27)', borderRadius: 14,
-    border: '2px solid var(--indigo, #6366f1)',
-    overflow: 'hidden',
-    boxShadow: '0 4px 24px rgba(99, 102, 241, 0.15)',
-  },
-  moduloHeaderPrincipal: {
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    padding: '12px 18px',
-    background: 'rgba(99, 102, 241, 0.08)',
-    borderBottom: '1px solid var(--border, #2a2e3a)',
-    fontWeight: 700,
-  },
-  moduloBodyPrincipal: {
-    padding: 16, minHeight: 200,
-  },
-  rolBadgePrincipal: {
-    fontSize: 9, fontWeight: 700, letterSpacing: '0.08em',
-    background: 'var(--indigo, #6366f1)', color: '#fff',
-    padding: '2px 8px', borderRadius: 6,
-  },
-
-  // SECUNDARIO + COMPACTO — Grid debajo del principal
-  gridSecundario: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    gap: 14,
-  },
-
-  // SECUNDARIO — Tamaño normal
-  moduloSecundario: {
-    background: 'var(--surface, #1a1d27)', borderRadius: 12,
-    border: '1px solid var(--border, #2a2e3a)', overflow: 'hidden',
-  },
-  moduloHeader: {
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    padding: '10px 14px', borderBottom: '1px solid var(--border, #2a2e3a)',
-    fontSize: 13, fontWeight: 600,
-  },
-  moduloBody: { padding: 12, maxHeight: 350, overflowY: 'auto' },
-
-  // COMPACTO — Más pequeño, info mínima
-  moduloCompacto: {
-    background: 'var(--surface, #1a1d27)', borderRadius: 10,
-    border: '1px solid var(--border, #2a2e3a)', overflow: 'hidden',
-    opacity: 0.9,
-  },
-  moduloHeaderCompacto: {
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    padding: '6px 10px', borderBottom: '1px solid var(--border, #2a2e3a)',
-    fontSize: 11, fontWeight: 600, color: 'var(--text-dim, #71717a)',
-  },
-  moduloBodyCompacto: { padding: 8, maxHeight: 180, overflowY: 'auto', fontSize: 12 },
-
-  // Botones
-  closeBtn: {
-    background: 'none', border: 'none', color: 'var(--text-dim, #71717a)',
-    fontSize: 18, cursor: 'pointer', padding: '0 4px', lineHeight: 1,
-  },
-  promoteBtn: {
-    background: 'none', border: '1px solid var(--border, #2a2e3a)',
-    color: 'var(--text-dim, #71717a)', fontSize: 12, cursor: 'pointer',
-    padding: '1px 6px', borderRadius: 4, lineHeight: 1,
-  },
-
-  // Shared
-  row: {
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-    padding: '6px 0', borderBottom: '1px solid var(--border, #2a2e3a)', fontSize: 13,
-  },
-  badge: {
-    fontSize: 11, background: 'var(--bg, #0f1117)', padding: '2px 8px',
-    borderRadius: 10, color: 'var(--text-dim, #71717a)',
-  },
-  stat: { background: 'var(--bg, #0f1117)', borderRadius: 8, padding: 12, textAlign: 'center' },
-  statLabel: { fontSize: 11, color: 'var(--text-dim, #71717a)', marginBottom: 4 },
-  statVal: { fontSize: 20, fontWeight: 700 },
-  empty: { color: 'var(--text-dim, #71717a)', fontSize: 13, padding: '12px 0', textAlign: 'center' },
-  input: {
-    width: '100%', background: 'var(--bg, #0f1117)', border: '1px solid var(--border, #2a2e3a)',
-    borderRadius: 8, padding: '8px 12px', color: 'var(--text, #e4e4e7)',
-    fontSize: 13, outline: 'none', marginBottom: 8,
-  },
-};

@@ -35,10 +35,18 @@ MODULOS = {
     "facturas":         {"nombre": "Facturación",         "icono": "📄", "endpoint": "/facturas"},
     "engagement":       {"nombre": "Engagement clientes",  "icono": "❤️", "endpoint": "/engagement"},
     "wa":               {"nombre": "Panel WhatsApp",       "icono": "💬", "endpoint": "/whatsapp/mensajes"},
+    "organismo":        {"nombre": "Organismo cognitivo",  "icono": "🧬", "endpoint": "/organismo/dashboard"},
+    "diagnostico_cog":  {"nombre": "Diagnóstico INT×P×R", "icono": "🔬", "endpoint": "/organismo/diagnostico-cognitivo"},
+    "pizarra":          {"nombre": "Pizarra organismo",   "icono": "📋", "endpoint": "/organismo/pizarra"},
+    "estrategia":       {"nombre": "Estrategia semana",   "icono": "🎼", "endpoint": "/organismo/director"},
+    "evaluacion":       {"nombre": "Funcionó?",           "icono": "📊", "endpoint": "/organismo/evaluacion"},
+    "feed_cognitivo":   {"nombre": "Feed cognitivo",      "icono": "🧠", "endpoint": "/feed?categoria=organismo"},
+    "bus":              {"nombre": "Bus señales",         "icono": "📡", "endpoint": "/organismo/bus"},
+    "voz_proactiva":    {"nombre": "Voz proactiva",       "icono": "📢", "endpoint": "/voz/propuestas?estado=pendiente"},
 }
 
 # Módulos que visualmente necesitan más espacio
-MODULOS_GRANDES = {"calendario", "sequito", "wa", "briefing"}
+MODULOS_GRANDES = {"calendario", "sequito", "wa", "briefing", "organismo", "diagnostico_cog", "pizarra", "estrategia"}
 
 
 async def _get_pool():
@@ -1223,8 +1231,24 @@ async def chat_cockpit(mensaje: str, modulos_activos: list,
     else:
         ctx = "No hay módulos activos ahora."
 
+    # Inyectar pizarra del organismo para que el chat conozca el estado
+    pizarra_ctx = ""
+    try:
+        from src.pilates.pizarra import resumen_narrativo
+        pizarra_resumen = await resumen_narrativo()
+        if pizarra_resumen:
+            pizarra_ctx = (
+                "\n\nPIZARRA DEL ORGANISMO (lo que cada agente piensa AHORA):\n"
+                + pizarra_resumen[:1500]
+                + "\n\nPuedes responder preguntas sobre el organismo: "
+                "qué piensa un agente, conflictos entre agentes, "
+                "si la prescripción funcionó, qué dice el Director."
+            )
+    except Exception:
+        pass
+
     messages = [
-        {"role": "system", "content": SYSTEM_COCKPIT + "\n" + ctx},
+        {"role": "system", "content": SYSTEM_COCKPIT + "\n" + ctx + pizarra_ctx},
     ]
     if historial:
         messages.extend(historial[-10:])

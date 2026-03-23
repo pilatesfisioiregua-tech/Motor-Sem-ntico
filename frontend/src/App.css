@@ -1,25 +1,21 @@
-/* Modo Estudio — Teclado-first, <30s por acción */
+/* Modo Estudio — Legacy CSS classes para componentes no migrados (Calendario, PanelWA, etc.) */
+/* Las variables :root y reset están en index.css (Neural Dark) */
 
+/* Alias legacy → Neural Dark (para componentes que usan las variables antiguas) */
 :root {
-  --bg: #0f1117;
-  --surface: #1a1d27;
-  --surface-hover: #242833;
-  --border: #2a2e3a;
-  --text: #e4e4e7;
-  --text-dim: #71717a;
-  --accent: #6366f1;
+  --bg: var(--bg-void, #08090d);
+  --surface: var(--bg-surface, #12151e);
+  --surface-hover: var(--bg-elevated, #181c28);
+  --border: rgba(255, 255, 255, 0.06);
+  --text: var(--text-primary, #e8eaf0);
+  --text-dim: var(--text-tertiary, #5c6070);
+  --accent: var(--accent-indigo, #6366f1);
   --accent-hover: #818cf8;
-  --green: #22c55e;
-  --red: #ef4444;
-  --yellow: #eab308;
+  --green: var(--accent-green, #34d399);
+  --red: var(--accent-red, #f87171);
+  --yellow: var(--accent-amber, #fbbf24);
   --orange: #f97316;
-  font-family: 'Inter', -apple-system, system-ui, sans-serif;
-  font-size: 14px;
-  color: var(--text);
-  background: var(--bg);
 }
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
 
 .app {
   display: grid;

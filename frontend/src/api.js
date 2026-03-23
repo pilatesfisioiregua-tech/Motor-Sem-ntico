@@ -181,3 +181,10 @@ export const getFeed = (params = {}) => {
 export const marcarLeidoFeed = (data) =>
   request('/feed/marcar-leido', { method: 'POST', body: JSON.stringify(data) });
 export const getFeedCount = () => request('/feed/count');
+
+// ORGANISMO
+export const getOrganismoPizarra = () => request('/organismo/pizarra');
+export const getOrganismoBus = () => request('/organismo/bus');
+export const getOrganismoDirector = () => request('/organismo/director');
+export const getOrganismoEvaluacion = () => request('/organismo/evaluacion');
+export const getOrganismoConfigAgentes = () => request('/organismo/config-agentes');

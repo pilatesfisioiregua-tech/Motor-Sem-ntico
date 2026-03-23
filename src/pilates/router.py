@@ -3876,3 +3876,37 @@ async def organismo_config_agentes():
         "aprobada_por": c["aprobada_por"],
         "fecha": c["created_at"].isoformat(),
     } for c in configs]
+
+
+@router.get("/organismo/director")
+async def organismo_director():
+    """Última ejecución del Director Opus."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        señal = await conn.fetchrow("""
+            SELECT payload, created_at FROM om_senales_agentes
+            WHERE tenant_id='authentic_pilates' AND origen='DIRECTOR_OPUS'
+            ORDER BY created_at DESC LIMIT 1
+        """)
+    if not señal:
+        return {"estado_sistema": None, "estrategia_global": None, "configs": []}
+    payload = señal["payload"] if isinstance(señal["payload"], dict) else json.loads(señal["payload"])
+    return {**payload, "fecha": str(señal["created_at"])}
+
+
+@router.get("/organismo/evaluacion")
+async def organismo_evaluacion():
+    """Última evaluación de prescripción."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        señal = await conn.fetchrow("""
+            SELECT payload, created_at FROM om_senales_agentes
+            WHERE tenant_id='authentic_pilates' AND origen='EVALUADOR'
+            ORDER BY created_at DESC LIMIT 1
+        """)
+    if not señal:
+        return {"evaluacion_global": None, "delta_lentes": None}
+    payload = señal["payload"] if isinstance(señal["payload"], dict) else json.loads(señal["payload"])
+    return {**payload, "fecha": str(señal["created_at"])}
