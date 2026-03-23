@@ -168,7 +168,12 @@ Genera queries de búsqueda dirigidas por los gaps y gradientes de este diagnós
             clean = clean.split("\n", 1)[1] if "\n" in clean else clean[3:]
         if clean.endswith("```"):
             clean = clean[:-3]
-        return json.loads(clean.strip())
+        clean = clean.strip()
+        start = clean.find("{")
+        end = clean.rfind("}")
+        if start != -1 and end != -1:
+            clean = clean[start:end + 1]
+        return json.loads(clean)
 
     except Exception as e:
         log.warning("buscador_query_gen_error", error=str(e))
@@ -278,15 +283,19 @@ async def _persistir_resultado(funcion: str, query: str, respuesta: str,
     pool = await get_pool()
     async with pool.acquire() as conn:
         await conn.execute("""
-            INSERT INTO om_voz_capa_a (tenant_id, funcion, query, respuesta, fuente, metadata)
-            VALUES ($1, $2, $3, $4, 'perplexity', $5)
-        """, TENANT, funcion, query, respuesta,
+            INSERT INTO om_voz_capa_a (tenant_id, fuente, tipo_dato, datos, fecha_dato, funcion_l07)
+            VALUES ($1, 'perplexity', $2, $3::jsonb, CURRENT_DATE, $4)
+        """, TENANT,
+            f"buscador_{motor}",
             json.dumps({
+                "query": query,
+                "respuesta": respuesta,
                 "motor": motor,
                 "lentes_tocadas": lentes_tocadas,
                 "prioridad_acd": prioridad,
                 "fecha": str(date.today()),
-            }))
+            }),
+            funcion)
 
 
 # ============================================================

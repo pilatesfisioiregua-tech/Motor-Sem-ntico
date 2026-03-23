@@ -300,11 +300,13 @@ async def collect_gbp() -> dict:
         async with pool.acquire() as conn:
             await conn.execute("""
                 INSERT INTO om_voz_capa_a
-                    (tenant_id, funcion, query, respuesta, fuente, metadata)
-                VALUES ($1, 'F2', 'google_search_keywords', $2, 'gbp_api', $3)
+                    (tenant_id, fuente, tipo_dato, datos, fecha_dato, funcion_l07)
+                VALUES ($1, 'gbp_api', 'search_keywords', $2::jsonb, CURRENT_DATE, 'F2')
             """, TENANT,
-                json.dumps(resultado["search_keywords"][:10], ensure_ascii=False),
-                json.dumps({"fecha": str(date.today()), "total": len(resultado["search_keywords"])}))
+                json.dumps({
+                    "keywords": resultado["search_keywords"][:10],
+                    "total": len(resultado["search_keywords"]),
+                }, ensure_ascii=False))
 
     log.info("collector_gbp_ok",
              impressions=sum(v for k, v in resultado["metricas"].items() if "impression" in k),

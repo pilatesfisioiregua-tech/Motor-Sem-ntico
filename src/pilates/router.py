@@ -3336,6 +3336,31 @@ async def sistema_autofagia():
     return await ejecutar_autofagia()
 
 
+# ============================================================
+# G4 — Motor Cognitivo (Enjambre + Compositor + Recompilador)
+# ============================================================
+
+@router.post("/sistema/enjambre")
+async def sistema_enjambre():
+    """Ejecuta enjambre cognitivo: 9 agentes diagnostican INT×P×R."""
+    from src.pilates.enjambre import ejecutar_enjambre
+    return await ejecutar_enjambre()
+
+
+@router.post("/sistema/g4")
+async def sistema_g4():
+    """G4 completa: enjambre + compositor + estratega + orquestador."""
+    from src.pilates.compositor import ejecutar_g4
+    return await ejecutar_g4()
+
+
+@router.post("/sistema/g4-recompilar")
+async def sistema_g4_recompilar():
+    """G4 + recompilación: diagnostica, prescribe y reconfigura agentes."""
+    from src.pilates.recompilador import ejecutar_g4_con_recompilacion
+    return await ejecutar_g4_con_recompilacion()
+
+
 @router.get("/sistema/estado")
 async def sistema_estado():
     """Estado completo del sistema: checks + bus + diagnóstico + mejoras pendientes."""
