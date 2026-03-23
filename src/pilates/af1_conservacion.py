@@ -23,6 +23,15 @@ log = structlog.get_logger()
 TENANT = "authentic_pilates"
 ORIGEN = "AF1"
 
+INSTRUCCION_AF1 = """Analiza los clientes en riesgo de pérdida.
+Para cada cliente fantasma, deduce POR QUÉ puede haber dejado de venir
+(lesión mejorada, vacaciones, insatisfacción, vergüenza, problemas de dinero)
+y propón una acción DIFERENTE para cada caso.
+Para engagement cayendo, identifica si es tendencia o evento puntual.
+Para deuda silenciosa, evalúa si el cliente vale la pena retener o si
+es mejor dejarlo ir.
+Prioriza: ¿a quién salvar primero y cómo?"""
+
 
 async def _detectar_fantasmas() -> list[dict]:
     """Clientes con contrato activo pero sin asistencia en 3+ semanas."""
@@ -116,51 +125,77 @@ async def _detectar_deuda_silenciosa() -> list[dict]:
 
 
 async def ejecutar_af1() -> dict:
-    """Ejecuta AF1 Conservación: detecta riesgos y emite al bus.
+    """Ejecuta AF1 Conservación: detecta riesgos, razona con LLM, emite al bus.
 
-    Returns dict con resumen de detecciones y alertas emitidas.
+    Returns dict con resumen de detecciones, razonamiento y alertas emitidas.
     """
     log.info("af1_inicio")
 
+    # === SENSORES (código puro, sin cambios) ===
     fantasmas = await _detectar_fantasmas()
     engagement = await _detectar_engagement_cayendo()
     deuda = await _detectar_deuda_silenciosa()
 
-    todas = fantasmas + engagement + deuda
+    datos_sensor = {
+        "fantasmas": fantasmas,
+        "engagement_cayendo": engagement,
+        "deuda_silenciosa": deuda,
+    }
 
-    # Emitir ALERTA por cada detección
+    # === CEREBRO (NIVEL 1: gpt-4o — razonamiento de negocio en español) ===
+    from src.pilates.cerebro_organismo import razonar
+    razonamiento = await razonar(
+        agente="AF1",
+        funcion="F1 Conservación",
+        datos_detectados=datos_sensor,
+        instruccion_especifica=INSTRUCCION_AF1,
+        nivel=1,
+    )
+
+    # === EMISIÓN AL BUS (prescripciones razonadas) ===
+    from src.pilates.bus import emitir
     alertas_emitidas = 0
-    for det in todas:
+
+    for accion in razonamiento.get("acciones", []):
         try:
-            from src.pilates.bus import emitir
-
-            # Prioridad según tipo
-            prioridad = {
-                "cliente_fantasma": 3,
-                "engagement_cayendo": 4,
-                "deuda_silenciosa": 3,
-            }.get(det["tipo"], 5)
-
-            await emitir(
-                "ALERTA", ORIGEN,
-                {**det, "funcion": "F1", "accion_sugerida": _sugerir_accion(det)},
-                prioridad=prioridad,
-            )
+            await emitir("PRESCRIPCION", ORIGEN, {
+                "funcion": "F1",
+                "accion": accion.get("accion", ""),
+                "prioridad": accion.get("prioridad", 3),
+                "impacto": accion.get("impacto", ""),
+                "esfuerzo": accion.get("esfuerzo", ""),
+                "cliente_id": accion.get("cliente_id"),
+                "grupo_id": accion.get("grupo_id"),
+                "interpretacion": razonamiento["interpretacion"],
+            }, prioridad=accion.get("prioridad", 3))
             alertas_emitidas += 1
         except Exception as e:
-            log.warning("af1_bus_error", tipo=det["tipo"], error=str(e))
+            log.warning("af1_bus_error", error=str(e))
+
+    if razonamiento.get("alerta_critica"):
+        try:
+            await emitir("ALERTA", ORIGEN, {
+                "funcion": "F1",
+                "alerta_critica": razonamiento["alerta_critica"],
+                "urgente": True,
+            }, prioridad=1)
+            alertas_emitidas += 1
+        except Exception as e:
+            log.warning("af1_alerta_critica_error", error=str(e))
 
     resultado = {
         "fantasmas": len(fantasmas),
         "engagement_cayendo": len(engagement),
         "deuda_silenciosa": len(deuda),
-        "total_riesgos": len(todas),
+        "total_riesgos": len(fantasmas) + len(engagement) + len(deuda),
         "alertas_emitidas": alertas_emitidas,
-        "detalle": todas[:20],  # Máx 20 en respuesta
+        "razonamiento": razonamiento,
+        "detalle": (fantasmas + engagement + deuda)[:20],
     }
 
     log.info("af1_completo", fantasmas=len(fantasmas),
-        engagement=len(engagement), deuda=len(deuda))
+        engagement=len(engagement), deuda=len(deuda),
+        acciones_cerebro=len(razonamiento.get("acciones", [])))
     return resultado
 
 

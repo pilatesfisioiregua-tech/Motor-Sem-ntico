@@ -28,6 +28,12 @@ log = structlog.get_logger()
 TENANT = "authentic_pilates"
 ORIGEN = "AF3"
 
+INSTRUCCION_AF3 = """Analiza grupos y contratos ineficientes.
+Para grupos infrautilizados: ¿cuáles fusionar entre sí? ¿cuáles cerrar?
+¿cuáles cambiar de horario? Razona compatibilidad de alumnos y horarios.
+Para zombis: ¿llamar o dar de baja? Calcula impacto en ingresos de cada decisión.
+Di claramente QUÉ CORTAR y por qué."""
+
 
 async def _detectar_grupos_infrautilizados() -> list[dict]:
     """Grupos con media <3 alumnos en las últimas 4 semanas."""
@@ -102,106 +108,78 @@ async def _detectar_contratos_zombi() -> list[dict]:
 
 
 async def ejecutar_af3() -> dict:
-    """Ejecuta AF3 Depuración: detecta ineficiencias y emite al bus.
+    """Ejecuta AF3 Depuración: detecta ineficiencias, razona con LLM, emite al bus.
 
-    Emite dos tipos de señal:
-    - ALERTA: algo ineficiente detectado (informativo)
-    - PRESCRIPCION con subtipo VETO: propuesta de cortar algo + señal
-      para que otros AF la respeten
-
-    Returns dict con resumen.
+    Returns dict con resumen + razonamiento.
     """
     log.info("af3_inicio")
 
+    # === SENSORES (código puro) ===
     grupos = await _detectar_grupos_infrautilizados()
     zombis = await _detectar_contratos_zombi()
 
+    datos_sensor = {
+        "grupos_infrautilizados": grupos,
+        "contratos_zombi": zombis,
+    }
+
+    # === CEREBRO (NIVEL 1: gpt-4o — razonamiento de negocio) ===
+    from src.pilates.cerebro_organismo import razonar
+    razonamiento = await razonar(
+        agente="AF3",
+        funcion="F3 Depuración",
+        datos_detectados=datos_sensor,
+        instruccion_especifica=INSTRUCCION_AF3,
+        nivel=1,
+    )
+
+    # === EMISIÓN AL BUS ===
+    from src.pilates.bus import emitir
     alertas_emitidas = 0
     vetos_emitidos = 0
-    depuraciones_creadas = 0
 
-    from src.pilates.bus import emitir
+    # Prescripciones razonadas del cerebro
+    for accion in razonamiento.get("acciones", []):
+        try:
+            await emitir("PRESCRIPCION", ORIGEN, {
+                "funcion": "F3",
+                "accion": accion.get("accion", ""),
+                "prioridad": accion.get("prioridad", 3),
+                "impacto": accion.get("impacto", ""),
+                "esfuerzo": accion.get("esfuerzo", ""),
+                "cliente_id": accion.get("cliente_id"),
+                "grupo_id": accion.get("grupo_id"),
+                "interpretacion": razonamiento["interpretacion"],
+            }, prioridad=accion.get("prioridad", 3))
+            alertas_emitidas += 1
+        except Exception as e:
+            log.warning("af3_bus_error", error=str(e))
 
-    # Grupos infrautilizados → ALERTA + VETO + registrar depuración
+    # VETOs para grupos <30% ocupación (determinista, no LLM)
     for g in grupos:
-        try:
-            # ALERTA informativa
-            await emitir(
-                "ALERTA", ORIGEN,
-                {
-                    **g,
+        if g["ocupacion_pct"] < 30:
+            try:
+                await emitir("PRESCRIPCION", ORIGEN, {
+                    "subtipo": "VETO",
+                    "objeto": f"grupo:{g['grupo_id']}",
+                    "razon": f"Grupo '{g['nombre']}' a {g['ocupacion_pct']}% ocupación. No captar para este horario.",
                     "funcion": "F3",
-                    "accion_sugerida": f"Grupo '{g['nombre']}' con media {g['media_asistentes']} alumnos ({g['ocupacion_pct']}% ocupación). Considerar cerrar o fusionar.",
-                },
-                prioridad=4,
-            )
-            alertas_emitidas += 1
-
-            # VETO: si ocupación <30%, emitir señal VETO para bloquear captación en ese horario
-            if g["ocupacion_pct"] < 30:
-                await emitir(
-                    "PRESCRIPCION", ORIGEN,
-                    {
-                        "subtipo": "VETO",
-                        "objeto": f"grupo:{g['grupo_id']}",
-                        "razon": f"Grupo '{g['nombre']}' a {g['ocupacion_pct']}% ocupación. No captar para este horario hasta resolver.",
-                        "funcion": "F3",
-                        "bloquea_af": ["AF2"],  # AF2 Captación no debería llenar un horario que debería cerrarse
-                    },
-                    prioridad=2,
-                )
+                    "bloquea_af": ["AF2"],
+                }, prioridad=2)
                 vetos_emitidos += 1
-
-            # Registrar en om_depuracion
-            try:
-                pool = await get_pool()
-                async with pool.acquire() as conn:
-                    await conn.execute("""
-                        INSERT INTO om_depuracion (tenant_id, tipo, descripcion,
-                            impacto_estimado, funcion_l07, lente, origen)
-                        VALUES ($1, 'servicio_eliminar', $2, $3, 'F3', 'salud', 'automatizacion')
-                        ON CONFLICT DO NOTHING
-                    """, TENANT,
-                        f"Grupo '{g['nombre']}': {g['media_asistentes']} alumnos media, {g['ocupacion_pct']}% ocupación.",
-                        f"Liberar franja horaria. {g['capacidad']} plazas infrautilizadas.")
-                depuraciones_creadas += 1
             except Exception as e:
-                log.warning("af3_depuracion_error", error=str(e))
+                log.warning("af3_veto_error", error=str(e))
 
-        except Exception as e:
-            log.warning("af3_bus_error", tipo="grupo", error=str(e))
-
-    # Contratos zombi → ALERTA
-    for z in zombis:
+    if razonamiento.get("alerta_critica"):
         try:
-            await emitir(
-                "ALERTA", ORIGEN,
-                {
-                    **z,
-                    "funcion": "F3",
-                    "accion_sugerida": f"Contrato zombi de {z['nombre']}: ni asiste ni paga desde hace >6 semanas. Proponer baja formal o conversación.",
-                },
-                prioridad=4,
-            )
+            await emitir("ALERTA", ORIGEN, {
+                "funcion": "F3",
+                "alerta_critica": razonamiento["alerta_critica"],
+                "urgente": True,
+            }, prioridad=1)
             alertas_emitidas += 1
-
-            # Registrar en om_depuracion
-            try:
-                pool = await get_pool()
-                async with pool.acquire() as conn:
-                    await conn.execute("""
-                        INSERT INTO om_depuracion (tenant_id, tipo, descripcion,
-                            funcion_l07, lente, origen)
-                        VALUES ($1, 'cliente_toxico', $2, 'F3', 'salud', 'automatizacion')
-                        ON CONFLICT DO NOTHING
-                    """, TENANT,
-                        f"Contrato zombi de {z['nombre']}: sin asistencia ni pago en 6+ semanas. Considerar baja formal.")
-                depuraciones_creadas += 1
-            except Exception as e:
-                pass
-
         except Exception as e:
-            log.warning("af3_bus_error", tipo="zombi", error=str(e))
+            log.warning("af3_alerta_critica_error", error=str(e))
 
     resultado = {
         "grupos_infrautilizados": len(grupos),
@@ -209,10 +187,11 @@ async def ejecutar_af3() -> dict:
         "total_detecciones": len(grupos) + len(zombis),
         "alertas_emitidas": alertas_emitidas,
         "vetos_emitidos": vetos_emitidos,
-        "depuraciones_registradas": depuraciones_creadas,
+        "razonamiento": razonamiento,
         "detalle_grupos": grupos[:10],
         "detalle_zombis": zombis[:10],
     }
 
-    log.info("af3_completo", grupos=len(grupos), zombis=len(zombis), vetos=vetos_emitidos)
+    log.info("af3_completo", grupos=len(grupos), zombis=len(zombis),
+        vetos=vetos_emitidos, acciones_cerebro=len(razonamiento.get("acciones", [])))
     return resultado

@@ -19,25 +19,41 @@ log = structlog.get_logger()
 
 TENANT = "authentic_pilates"
 
+INSTRUCCION_EJECUTOR = """Tienes prescripciones de múltiples agentes.
+Prioriza y resuelve conflictos:
+- ¿AF3 dice cerrar un grupo pero AF2 dice captar para él?
+- ¿AF1 dice retener un cliente pero AF3 dice que es zombi?
+Genera un plan de acción UNIFICADO para la semana con máximo 5 acciones
+priorizadas. Sin contradicciones. Cada acción debe indicar qué AF la originó."""
+
+INSTRUCCION_CONVERGENCIA = """Múltiples agentes señalan al mismo cliente/grupo.
+¿Qué SIGNIFICA esta convergencia? ¿Es una oportunidad oculta o un problema
+sistémico? Genera un insight que ningún agente individual podría haber visto.
+Si Carlos aparece como fantasma (AF1) Y como zombi (AF3), eso no son 2
+problemas — es 1 decisión: ¿retener con esfuerzo o soltar limpiamente?"""
+
+INSTRUCCION_GESTOR = """Resume la actividad de la semana del organismo.
+¿Qué aprendió el sistema? ¿Qué acciones se propusieron? ¿Hay patrones
+que emergen semana tras semana? Genera un briefing narrativo en español
+coloquial para Jesús — como un socio inteligente que le cuenta
+qué ha pasado esta semana en el negocio y qué debería hacer."""
+
 
 # ============================================================
 # EJECUTOR — Lee prescripciones y coordina AF
 # ============================================================
 
 async def ejecutar_prescripciones() -> dict:
-    """Lee señales PRESCRIPCION del bus y las traduce en ACCIONes para AF específicos.
+    """Lee señales PRESCRIPCION del bus, razona con LLM y emite plan unificado.
 
-    Flujo: Diagnosticador/Estratega emite PRESCRIPCION → Ejecutor la lee →
-    determina qué AF debe actuar → emite ACCION dirigida a ese AF.
-
-    También procesa VETOs: los registra como restricciones activas.
+    CEREBRO NIVEL 2 (Claude Sonnet 4.6): resuelve conflictos cross-AF.
     """
     from src.pilates.bus import leer_pendientes, marcar_procesada, emitir
 
     prescripciones = await leer_pendientes(tipo="PRESCRIPCION", limite=30)
 
-    acciones_emitidas = 0
     vetos_registrados = 0
+    prescripciones_normales = []
 
     for señal in prescripciones:
         señal_id = str(señal["id"])
@@ -46,35 +62,45 @@ async def ejecutar_prescripciones() -> dict:
             payload = json.loads(payload)
 
         try:
-            subtipo = payload.get("subtipo", "")
-
-            if subtipo == "VETO":
-                # VETOs: no generan ACCION, solo se registran y se marcan
+            if payload.get("subtipo") == "VETO":
                 vetos_registrados += 1
                 await marcar_procesada(señal_id, "EJECUTOR")
-                continue
-
-            # Prescripción normal: determinar AF destino
-            funcion = payload.get("funcion", "")
-            af_destino = _funcion_a_af(funcion)
-
-            if af_destino:
-                await emitir(
-                    "ACCION", "EJECUTOR",
-                    {
-                        "af_destino": af_destino,
-                        "prescripcion": payload,
-                        "instruccion": payload.get("accion_sugerida", "Ejecutar según prescripción"),
-                    },
-                    destino=af_destino,
-                    prioridad=payload.get("prioridad", 5),
-                )
-                acciones_emitidas += 1
-
-            await marcar_procesada(señal_id, "EJECUTOR")
-
+            else:
+                prescripciones_normales.append({
+                    "id": señal_id,
+                    "origen": señal.get("origen", ""),
+                    "payload": payload,
+                })
+                await marcar_procesada(señal_id, "EJECUTOR")
         except Exception as e:
             log.warning("ejecutor_error", señal_id=señal_id, error=str(e))
+
+    # === CEREBRO NIVEL 2 (Claude Sonnet 4.6) — resolución cross-AF ===
+    razonamiento = None
+    acciones_emitidas = 0
+
+    if prescripciones_normales:
+        from src.pilates.cerebro_organismo import razonar
+        razonamiento = await razonar(
+            agente="EJECUTOR",
+            funcion="Orquestación cross-AF",
+            datos_detectados={"prescripciones": prescripciones_normales},
+            instruccion_especifica=INSTRUCCION_EJECUTOR,
+            nivel=2,
+        )
+
+        for accion in razonamiento.get("acciones", []):
+            try:
+                await emitir("ACCION", "EJECUTOR", {
+                    "accion": accion.get("accion", ""),
+                    "prioridad": accion.get("prioridad", 3),
+                    "impacto": accion.get("impacto", ""),
+                    "esfuerzo": accion.get("esfuerzo", ""),
+                    "interpretacion": razonamiento["interpretacion"],
+                }, prioridad=accion.get("prioridad", 3))
+                acciones_emitidas += 1
+            except Exception as e:
+                log.warning("ejecutor_accion_error", error=str(e))
 
     log.info("ejecutor_completo", prescripciones=len(prescripciones),
         acciones=acciones_emitidas, vetos=vetos_registrados)
@@ -83,6 +109,7 @@ async def ejecutar_prescripciones() -> dict:
         "prescripciones_leidas": len(prescripciones),
         "acciones_emitidas": acciones_emitidas,
         "vetos_registrados": vetos_registrados,
+        "razonamiento": razonamiento,
     }
 
 
@@ -177,17 +204,29 @@ async def detectar_convergencia() -> dict:
         except Exception as e:
             log.warning("convergencia_grupo_error", error=str(e))
 
-    # Emitir OPORTUNIDAD por cada convergencia
+    # === CEREBRO NIVEL 2 (Claude Sonnet 4.6) — insights sistémicos ===
+    razonamiento = None
     emitidas = 0
+
     if convergencias:
+        from src.pilates.cerebro_organismo import razonar
+        razonamiento = await razonar(
+            agente="CONVERGENCIA",
+            funcion="Detección de patrones sistémicos",
+            datos_detectados={"convergencias": convergencias},
+            instruccion_especifica=INSTRUCCION_CONVERGENCIA,
+            nivel=2,
+        )
+
         try:
             from src.pilates.bus import emitir
-            for conv in convergencias:
-                await emitir(
-                    "OPORTUNIDAD", "CONVERGENCIA",
-                    conv,
-                    prioridad=3,  # Alta — convergencias son señales fuertes
-                )
+            for accion in razonamiento.get("acciones", []):
+                await emitir("OPORTUNIDAD", "CONVERGENCIA", {
+                    "accion": accion.get("accion", ""),
+                    "insight": razonamiento["interpretacion"],
+                    "prioridad": accion.get("prioridad", 3),
+                    "patron": razonamiento.get("patron_detectado"),
+                }, prioridad=accion.get("prioridad", 3))
                 emitidas += 1
         except Exception as e:
             log.warning("convergencia_bus_error", error=str(e))
@@ -198,6 +237,7 @@ async def detectar_convergencia() -> dict:
         "convergencias_grupo": len([c for c in convergencias if c["tipo"] == "convergencia_grupo"]),
         "total": len(convergencias),
         "oportunidades_emitidas": emitidas,
+        "razonamiento": razonamiento,
         "detalle": convergencias[:15],
     }
 
@@ -258,11 +298,26 @@ async def gestionar_bus() -> dict:
         for r in actividad:
             resumen[r["origen"]][r["tipo"]] = r["n"]
 
-    resultado = {
+    # === CEREBRO NIVEL 1 (gpt-4o) — briefing narrativo semanal ===
+    datos_gestor = {
         "archivadas_eliminadas": archivadas,
         "expiradas": expiradas,
         "actividad_7d": dict(resumen),
         "agentes_activos": len(resumen),
+    }
+
+    from src.pilates.cerebro_organismo import razonar
+    razonamiento = await razonar(
+        agente="GESTOR",
+        funcion="Gestión autónoma del bus",
+        datos_detectados=datos_gestor,
+        instruccion_especifica=INSTRUCCION_GESTOR,
+        nivel=1,
+    )
+
+    resultado = {
+        **datos_gestor,
+        "razonamiento": razonamiento,
     }
 
     log.info("gestor_bus_completo", archivadas=archivadas, expiradas=expiradas,

@@ -19,6 +19,30 @@ log = structlog.get_logger()
 
 TENANT = "authentic_pilates"
 
+INSTRUCCION_AF2 = """Analiza los leads y la conversión.
+Para cada lead perdido, evalúa si merece rescate basándote en su intención original.
+Para conversión baja, diagnostica si el problema es el canal, el mensaje, el timing
+o el precio. Propón cambios concretos al proceso de cierre.
+Respeta los VETOs de AF3: no propongas captar para horarios vetados."""
+
+INSTRUCCION_AF4 = """Analiza la carga semanal.
+¿Qué sesiones mover de días sobrecargados a vacíos?
+¿Qué clientes podrían cambiar de horario sin impacto?
+Si ratio individual es alto, propón cómo migrar clientes de individual a grupo
+(qué grupo, cuándo, cómo comunicarlo). Calcula impacto en facturación."""
+
+INSTRUCCION_AF6 = """Analiza tensiones del entorno.
+¿Qué está cambiando en el mercado que afecte al negocio?
+¿Hay oportunidades que no se están aprovechando? ¿Competidores nuevos?
+Si no hay tensiones registradas, eso ES una señal: significa que no estás
+monitorizando el entorno. Señala qué debería estar vigilando y no lo está."""
+
+INSTRUCCION_AF7 = """Analiza la capacidad de replicar el negocio.
+¿Qué proceso documentar PRIMERO para máximo impacto?
+¿Qué principio del ADN es más urgente definir con contra-ejemplos?
+Si tuvieras que formar a un instructor sustituto mañana,
+¿qué le faltaría saber? Prioriza por riesgo operativo."""
+
 
 # ============================================================
 # AF2 CAPTACIÓN — Proteger y acelerar la entrada de clientes nuevos
@@ -106,11 +130,22 @@ async def ejecutar_af2() -> dict:
     except Exception:
         pass
 
-    # Emitir señales
+    # === CEREBRO (NIVEL 1) ===
+    datos_sensor = {"detecciones": detecciones, "vetos_af3": vetos}
+    from src.pilates.cerebro_organismo import razonar
+    razonamiento = await razonar("AF2", "F2 Captación", datos_sensor, INSTRUCCION_AF2, nivel=1)
+
+    # Emitir prescripciones razonadas
     alertas = 0
-    for det in detecciones:
+    for accion in razonamiento.get("acciones", []):
         try:
-            await emitir("ALERTA", "AF2", {**det, "funcion": "F2", "vetos_activos": len(vetos)}, prioridad=4)
+            await emitir("PRESCRIPCION", "AF2", {
+                "funcion": "F2", "accion": accion.get("accion", ""),
+                "prioridad": accion.get("prioridad", 4),
+                "impacto": accion.get("impacto", ""), "esfuerzo": accion.get("esfuerzo", ""),
+                "cliente_id": accion.get("cliente_id"), "grupo_id": accion.get("grupo_id"),
+                "interpretacion": razonamiento["interpretacion"],
+            }, prioridad=accion.get("prioridad", 4))
             alertas += 1
         except Exception:
             pass
@@ -121,6 +156,7 @@ async def ejecutar_af2() -> dict:
         "alertas_conversion": len([d for d in detecciones if "conversion" in d["tipo"]]),
         "vetos_af3_activos": len(vetos),
         "alertas_emitidas": alertas,
+        "razonamiento": razonamiento,
         "detalle": detecciones[:10],
     }
 
@@ -201,10 +237,20 @@ async def ejecutar_af4() -> dict:
         except Exception as e:
             log.warning("af4_ratio_error", error=str(e))
 
+    # === CEREBRO (NIVEL 1) ===
+    datos_sensor = {"detecciones": detecciones}
+    from src.pilates.cerebro_organismo import razonar
+    razonamiento = await razonar("AF4", "F4 Distribución", datos_sensor, INSTRUCCION_AF4, nivel=1)
+
     alertas = 0
-    for det in detecciones:
+    for accion in razonamiento.get("acciones", []):
         try:
-            await emitir("ALERTA", "AF4", {**det, "funcion": "F4"}, prioridad=6)
+            await emitir("PRESCRIPCION", "AF4", {
+                "funcion": "F4", "accion": accion.get("accion", ""),
+                "prioridad": accion.get("prioridad", 5),
+                "impacto": accion.get("impacto", ""), "esfuerzo": accion.get("esfuerzo", ""),
+                "interpretacion": razonamiento["interpretacion"],
+            }, prioridad=accion.get("prioridad", 5))
             alertas += 1
         except Exception:
             pass
@@ -215,6 +261,7 @@ async def ejecutar_af4() -> dict:
         "dias_vacios": len([d for d in detecciones if d["tipo"] == "dia_vacio"]),
         "alerta_ratio": len([d for d in detecciones if d["tipo"] == "exceso_individual"]),
         "alertas_emitidas": alertas,
+        "razonamiento": razonamiento,
         "detalle": detecciones[:10],
     }
 
@@ -282,11 +329,20 @@ async def ejecutar_af6() -> dict:
         except Exception as e:
             log.warning("af6_criticas_error", error=str(e))
 
+    # === CEREBRO (NIVEL 1) ===
+    datos_sensor = {"detecciones": detecciones}
+    from src.pilates.cerebro_organismo import razonar
+    razonamiento = await razonar("AF6", "F6 Adaptación", datos_sensor, INSTRUCCION_AF6, nivel=1)
+
     alertas = 0
-    for det in detecciones:
+    for accion in razonamiento.get("acciones", []):
         try:
-            prio = 3 if det.get("severidad") in ("alta", "critica") else 5
-            await emitir("ALERTA", "AF6", {**det, "funcion": "F6"}, prioridad=prio)
+            await emitir("PRESCRIPCION", "AF6", {
+                "funcion": "F6", "accion": accion.get("accion", ""),
+                "prioridad": accion.get("prioridad", 4),
+                "impacto": accion.get("impacto", ""), "esfuerzo": accion.get("esfuerzo", ""),
+                "interpretacion": razonamiento["interpretacion"],
+            }, prioridad=accion.get("prioridad", 4))
             alertas += 1
         except Exception:
             pass
@@ -296,6 +352,7 @@ async def ejecutar_af6() -> dict:
         "tensiones_sin_resolver": len([d for d in detecciones if d["tipo"] == "tension_sin_resolver"]),
         "tensiones_criticas": len([d for d in detecciones if d["tipo"] == "tension_critica"]),
         "alertas_emitidas": alertas,
+        "razonamiento": razonamiento,
         "detalle": detecciones[:10],
     }
 
@@ -385,10 +442,20 @@ async def ejecutar_af7() -> dict:
         except Exception as e:
             log.warning("af7_readiness_error", error=str(e))
 
+    # === CEREBRO (NIVEL 1) ===
+    datos_sensor = {"detecciones": detecciones}
+    from src.pilates.cerebro_organismo import razonar
+    razonamiento = await razonar("AF7", "F7 Replicación", datos_sensor, INSTRUCCION_AF7, nivel=1)
+
     alertas = 0
-    for det in detecciones:
+    for accion in razonamiento.get("acciones", []):
         try:
-            await emitir("ALERTA", "AF7", {**det, "funcion": "F7"}, prioridad=7)
+            await emitir("PRESCRIPCION", "AF7", {
+                "funcion": "F7", "accion": accion.get("accion", ""),
+                "prioridad": accion.get("prioridad", 6),
+                "impacto": accion.get("impacto", ""), "esfuerzo": accion.get("esfuerzo", ""),
+                "interpretacion": razonamiento["interpretacion"],
+            }, prioridad=accion.get("prioridad", 6))
             alertas += 1
         except Exception:
             pass
@@ -399,6 +466,7 @@ async def ejecutar_af7() -> dict:
         "adn_sin_limites": len([d for d in detecciones if d["tipo"] == "adn_sin_limites"]),
         "readiness_bajo": len([d for d in detecciones if d["tipo"] == "readiness_bajo"]),
         "alertas_emitidas": alertas,
+        "razonamiento": razonamiento,
         "detalle": detecciones[:10],
     }
 
