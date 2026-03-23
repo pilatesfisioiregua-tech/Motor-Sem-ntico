@@ -3296,6 +3296,20 @@ async def acd_director_opus():
     return await dirigir_orquesta()
 
 
+@router.post("/acd/metacognitivo")
+async def acd_metacognitivo():
+    """Meta-Cognitivo Opus: evalúa el sistema cognitivo mensualmente."""
+    from src.pilates.metacognitivo import ejecutar_metacognitivo
+    return await ejecutar_metacognitivo()
+
+
+@router.post("/acd/ingeniero")
+async def acd_ingeniero():
+    """Ingeniero: procesa instrucciones pendientes del Meta-Cognitivo."""
+    from src.pilates.ingeniero import procesar_instrucciones_pendientes
+    return await procesar_instrucciones_pendientes()
+
+
 @router.get("/acd/config-agentes")
 async def acd_config_agentes(agente: Optional[str] = None):
     """Lista configs dinámicas activas de agentes."""

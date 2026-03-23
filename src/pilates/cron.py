@@ -164,6 +164,25 @@ async def _tarea_mensual():
     except Exception as e:
         log.error("cron_mensual_cristalizador_error", error=str(e))
 
+    # Meta-Cognitivo: evalúa el sistema cognitivo
+    try:
+        from src.pilates.metacognitivo import ejecutar_metacognitivo
+        metacog = await ejecutar_metacognitivo()
+        log.info("cron_mensual_metacog_ok",
+                 instrucciones=len(metacog.get("resultado", {}).get("instrucciones_ingeniero", [])))
+    except Exception as e:
+        log.error("cron_mensual_metacog_error", error=str(e))
+
+    # Ingeniero: procesa instrucciones del Meta-Cognitivo
+    try:
+        from src.pilates.ingeniero import procesar_instrucciones_pendientes
+        ing = await procesar_instrucciones_pendientes()
+        log.info("cron_mensual_ingeniero_ok",
+                 safe=ing.get("safe_ejecutadas", 0),
+                 cr1=ing.get("pendientes_cr1", 0))
+    except Exception as e:
+        log.error("cron_mensual_ingeniero_error", error=str(e))
+
 
 async def cron_loop():
     """Loop principal del cron. Se ejecuta como background task.
