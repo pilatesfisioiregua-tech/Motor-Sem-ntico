@@ -3289,6 +3289,13 @@ async def acd_recompilar(request: Request):
     return await recompilar(body.get("prescripcion", body))
 
 
+@router.post("/acd/director-opus")
+async def acd_director_opus():
+    """Director Opus: lee manual, comprende estado, diseña prompts D_híbrido."""
+    from src.pilates.director_opus import dirigir_orquesta
+    return await dirigir_orquesta()
+
+
 @router.get("/acd/config-agentes")
 async def acd_config_agentes(agente: Optional[str] = None):
     """Lista configs dinámicas activas de agentes."""
@@ -3487,6 +3494,13 @@ async def af_depuracion():
     """AF3: Detecta sesiones y servicios ineficientes. Emite ALERTAs + VETOs al bus."""
     from src.pilates.af3_depuracion import ejecutar_af3
     return await ejecutar_af3()
+
+
+@router.post("/af/identidad")
+async def af_identidad():
+    """AF5: Detecta gaps de identidad, coherencia de canales, diferenciación."""
+    from src.pilates.af5_identidad import ejecutar_af5
+    return await ejecutar_af5()
 
 
 # ============================================================

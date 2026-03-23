@@ -113,6 +113,11 @@ async def _tarea_semanal():
         af3 = await ejecutar_af3()
         log.info("cron_semanal_af3_ok", detecciones=af3.get("total_detecciones"), vetos=af3.get("vetos_emitidos"))
 
+        # 6b. AF5 Identidad — detectar gaps de identidad + coherencia
+        from src.pilates.af5_identidad import ejecutar_af5
+        af5 = await ejecutar_af5()
+        log.info("cron_semanal_af5_ok", gaps=af5.get("gaps_identidad"), adn=af5.get("adn_count"))
+
         # 7. AF2 + AF4 + AF6 + AF7 — agentes funcionales restantes
         from src.pilates.af_restantes import ejecutar_af_restantes
         af_rest = await ejecutar_af_restantes()
@@ -149,6 +154,15 @@ async def _tarea_mensual():
             propuestas=result["propuestas_registradas"])
     except Exception as e:
         log.error("cron_mensual_error", error=str(e))
+
+    # Cristalizador mensual (después del autófago)
+    try:
+        from src.pilates.generativa import cristalizar_patrones
+        crist = await cristalizar_patrones()
+        log.info("cron_mensual_cristalizador_ok",
+                 patrones=len(crist.get("patrones_detectados", [])))
+    except Exception as e:
+        log.error("cron_mensual_cristalizador_error", error=str(e))
 
 
 async def cron_loop():
