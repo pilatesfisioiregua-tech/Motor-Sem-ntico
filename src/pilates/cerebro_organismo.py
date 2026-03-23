@@ -92,7 +92,8 @@ Fecha: {date.today()}"""
 async def _call_llm(model: str, system_prompt: str, user_prompt: str,
                      max_tokens: int = 1500, temperature: float = 0.4) -> str:
     """Llamada genérica a LLM via OpenRouter."""
-    async with httpx.AsyncClient(timeout=45) as client:
+    timeout = 90 if max_tokens > 1500 else 45
+    async with httpx.AsyncClient(timeout=timeout) as client:
         resp = await client.post(
             "https://openrouter.ai/api/v1/chat/completions",
             headers={
@@ -204,8 +205,10 @@ Responde SOLO en JSON válido con esta estructura:
 DATOS DETECTADOS POR LOS SENSORES:
 {json.dumps(datos_detectados, ensure_ascii=False, indent=2)}"""
 
+    tokens = 2500 if nivel == 2 else 1500
+
     try:
-        raw = await _call_llm(model, system_prompt, user_prompt)
+        raw = await _call_llm(model, system_prompt, user_prompt, max_tokens=tokens)
         resultado = _parse_json(raw)
     except json.JSONDecodeError:
         log.warning("cerebro_parse_error", agente=agente, model=model)
