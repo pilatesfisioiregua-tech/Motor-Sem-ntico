@@ -922,11 +922,13 @@ async def get_pizarra_interfaz():
 
     if not layout:
         return {"source": "default", "capas": {
-            "operativo":  {"label": "Operativo",  "icon": "zap", "modulos": ["agenda", "calendario", "buscar", "grupos", "wa"]},
-            "financiero": {"label": "Financiero", "icon": "coins", "modulos": ["pagos_pendientes", "resumen_mes", "facturas"]},
-            "cognitivo":  {"label": "Cognitivo",  "icon": "brain", "modulos": ["pizarra", "estrategia", "evaluacion", "feed_cognitivo", "bus"]},
-            "voz":        {"label": "Voz",        "icon": "megaphone", "modulos": ["voz_proactiva", "voz"]},
-            "identidad":  {"label": "Identidad",  "icon": "dna", "modulos": ["adn", "depuracion", "readiness", "engagement"]},
+            "operativo":  {"label": "Operativo",  "icon": "\u26a1", "modulos": ["agenda", "calendario", "buscar", "grupos", "wa"]},
+            "financiero": {"label": "Financiero", "icon": "\U0001f4b0", "modulos": ["pagos_pendientes", "resumen_mes", "facturas"]},
+            "cognitivo":  {"label": "Cognitivo",  "icon": "\U0001f9e0", "modulos": ["pizarra", "estrategia", "evaluacion", "feed_cognitivo", "bus"]},
+            "voz":        {"label": "Voz",        "icon": "\U0001f4e2", "modulos": ["voz_proactiva", "voz"]},
+            "motor":      {"label": "Motor",      "icon": "\u2699\ufe0f", "modulos": ["motor"]},
+            "identidad":  {"label": "Identidad",  "icon": "\U0001f9ec", "modulos": ["adn", "depuracion", "readiness", "engagement", "contenido", "presencia"]},
+            "autonomia":  {"label": "Autonomia",  "icon": "\U0001f916", "modulos": ["autonomia"]},
         }}
 
     return {"source": "pizarra", "ciclo": ciclo, "layout": layout}
