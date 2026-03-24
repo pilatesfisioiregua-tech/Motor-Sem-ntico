@@ -456,6 +456,16 @@ async def _tarea_mensual():
     except Exception as e:
         log.error("cron_mensual_ingeniero_error", error=str(e))
 
+    # DB Cleanup: archivar datos antiguos (tablas que crecen sin bound)
+    try:
+        from src.db.client import get_pool
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            result = await conn.fetchval("SELECT om_cleanup_old_data('authentic_pilates')")
+            log.info("cron_mensual_cleanup_ok", resultado=str(result)[:200])
+    except Exception as e:
+        log.error("cron_mensual_cleanup_error", error=str(e))
+
 
 async def _escuchar_senales_urgentes():
     """Listener permanente de señales urgentes via LISTEN/NOTIFY (P65).

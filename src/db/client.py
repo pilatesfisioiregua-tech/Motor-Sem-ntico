@@ -1,6 +1,8 @@
-"""Pool de conexiones asyncpg para Postgres."""
+"""Pool de conexiones asyncpg para Postgres — production-grade."""
 from __future__ import annotations
 
+import asyncio
+import hashlib
 import asyncpg
 import structlog
 from src.config.settings import DATABASE_URL
@@ -9,32 +11,67 @@ log = structlog.get_logger()
 
 _pool: asyncpg.Pool | None = None
 
+# ============================================================
+# POOL con retry + health check
+# ============================================================
 
 async def get_pool() -> asyncpg.Pool:
     global _pool
-    if _pool is None:
-        _pool = await asyncpg.create_pool(
-            DATABASE_URL,
-            min_size=2,
-            max_size=10,
-            command_timeout=60,
-        )
-        log.info("db_pool_created")
+    if _pool is None or _pool._closed:
+        _pool = await _create_pool_with_retry()
     return _pool
+
+
+async def _create_pool_with_retry(max_retries: int = 3) -> asyncpg.Pool:
+    """Crea pool con retry + backoff exponencial."""
+    for attempt in range(max_retries):
+        try:
+            pool = await asyncpg.create_pool(
+                DATABASE_URL,
+                min_size=2,
+                max_size=10,
+                command_timeout=60,
+                server_settings={'application_name': 'omni-mind'},
+            )
+            log.info("db_pool_created", attempt=attempt + 1)
+            return pool
+        except Exception as e:
+            wait = 2 ** attempt
+            log.warning("db_pool_retry", attempt=attempt + 1, error=str(e)[:100], wait_s=wait)
+            if attempt < max_retries - 1:
+                await asyncio.sleep(wait)
+            else:
+                raise
 
 
 async def close_pool():
     global _pool
-    if _pool:
+    if _pool and not _pool._closed:
         await _pool.close()
         _pool = None
         log.info("db_pool_closed")
 
 
+async def health_check() -> dict:
+    """Verifica que el pool funciona."""
+    try:
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            result = await conn.fetchval("SELECT 1")
+            size = pool.get_size()
+            idle = pool.get_idle_size()
+        return {"ok": True, "pool_size": size, "pool_idle": idle}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:100]}
+
+
+# ============================================================
+# SCHEMA + MIGRATIONS con tracking
+# ============================================================
+
 async def execute_schema():
     """Ejecuta schema.sql para crear tablas."""
     pool = await get_pool()
-    import importlib.resources as pkg_resources
     from pathlib import Path
     schema_path = Path(__file__).parent / "schema.sql"
     schema = schema_path.read_text()
@@ -43,19 +80,8 @@ async def execute_schema():
     log.info("schema_executed")
 
 
-async def execute_seed():
-    """Ejecuta seed.sql para poblar datos."""
-    pool = await get_pool()
-    from pathlib import Path
-    seed_path = Path(__file__).parent / "seed.sql"
-    seed = seed_path.read_text()
-    async with pool.acquire() as conn:
-        await conn.execute(seed)
-    log.info("seed_executed")
-
-
 async def execute_migrations():
-    """Ejecuta migrations SQL idempotentes (V4+)."""
+    """Ejecuta migrations SQL con tracking (no repite las ya aplicadas)."""
     from pathlib import Path
     pool = await get_pool()
     migrations_dir = Path(__file__).parent.parent.parent / "migrations"
@@ -64,13 +90,41 @@ async def execute_migrations():
 
     sql_files = sorted(migrations_dir.glob("*.sql"))
     async with pool.acquire() as conn:
+        # Asegurar tabla de tracking
+        await conn.execute("""
+            CREATE TABLE IF NOT EXISTS om_schema_migrations (
+                version TEXT PRIMARY KEY,
+                filename TEXT NOT NULL,
+                applied_at TIMESTAMPTZ DEFAULT now(),
+                checksum TEXT
+            )
+        """)
+
+        # Obtener migraciones ya aplicadas
+        applied = set()
+        rows = await conn.fetch("SELECT version FROM om_schema_migrations")
+        for r in rows:
+            applied.add(r["version"])
+
         for sql_file in sql_files:
+            version = sql_file.stem
+            if version in applied:
+                continue
+
             try:
                 sql = sql_file.read_text()
+                checksum = hashlib.md5(sql.encode()).hexdigest()
                 await conn.execute(sql)
+                await conn.execute("""
+                    INSERT INTO om_schema_migrations (version, filename, checksum)
+                    VALUES ($1, $2, $3)
+                    ON CONFLICT (version) DO NOTHING
+                """, version, sql_file.name, checksum)
                 log.info("migration_ok", file=sql_file.name)
             except Exception as e:
-                log.warning("migration_skip", file=sql_file.name, error=str(e))
+                log.error("migration_error", file=sql_file.name, error=str(e)[:200])
+                # No continuar si una migración falla — DB puede quedar inconsistente
+                break
 
 
 async def execute_seeds():
@@ -83,7 +137,6 @@ async def execute_seeds():
     if not migrations_dir.exists():
         return
 
-    # Añadir raíz del proyecto al path para imports
     project_root = Path(__file__).parent.parent.parent
     if str(project_root) not in sys.path:
         sys.path.insert(0, str(project_root))
@@ -101,33 +154,32 @@ async def execute_seeds():
                 await mod.seed()
                 log.info("seed_ok", file=py_file.name)
         except Exception as e:
-            log.warning("seed_skip", file=py_file.name, error=str(e))
+            log.warning("seed_skip", file=py_file.name, error=str(e)[:100])
 
+
+# ============================================================
+# QUERIES MOTOR SEMÁNTICO
+# ============================================================
 
 async def fetch_all_inteligencias() -> list[dict]:
-    """Carga todas las inteligencias de la DB."""
     pool = await get_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch("SELECT * FROM inteligencias ORDER BY id")
+        rows = await conn.fetch("SELECT id, nombre, descripcion, tipo, red_preguntas FROM inteligencias ORDER BY id")
         return [dict(r) for r in rows]
 
 
 async def fetch_aristas(tipo: str | None = None) -> list[dict]:
-    """Carga aristas del grafo. Filtra por tipo si se indica."""
     pool = await get_pool()
     async with pool.acquire() as conn:
         if tipo:
             rows = await conn.fetch(
-                "SELECT * FROM aristas_grafo WHERE tipo = $1 ORDER BY peso DESC",
-                tipo
-            )
+                "SELECT origen, destino, tipo, peso, justificacion FROM aristas_grafo WHERE tipo = $1 ORDER BY peso DESC", tipo)
         else:
-            rows = await conn.fetch("SELECT * FROM aristas_grafo ORDER BY peso DESC")
+            rows = await conn.fetch("SELECT origen, destino, tipo, peso, justificacion FROM aristas_grafo ORDER BY peso DESC")
         return [dict(r) for r in rows]
 
 
 async def log_ejecucion(data: dict) -> str:
-    """Guarda una ejecución y devuelve su UUID."""
     pool = await get_pool()
     async with pool.acquire() as conn:
         row = await conn.fetchrow("""
@@ -142,41 +194,27 @@ async def log_ejecucion(data: dict) -> str:
 
 
 async def fetch_operaciones_sintacticas() -> list[dict]:
-    """Carga las 8 operaciones del Marco Lingüístico."""
     pool = await get_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch("SELECT * FROM operaciones_sintacticas ORDER BY id")
+        rows = await conn.fetch("SELECT id, nombre, descripcion, tipo FROM operaciones_sintacticas ORDER BY id")
         return [dict(r) for r in rows]
 
 
 async def fetch_falacias() -> list[dict]:
-    """Carga las falacias aritméticas."""
     pool = await get_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch("SELECT * FROM falacias_aritmeticas ORDER BY id")
+        rows = await conn.fetch("SELECT id, nombre, descripcion, tipo FROM falacias_aritmeticas ORDER BY id")
         return [dict(r) for r in rows]
 
 
 async def fetch_tipos_acople() -> list[dict]:
-    """Carga los 6 tipos de acople."""
     pool = await get_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch("SELECT * FROM tipos_acople ORDER BY id")
+        rows = await conn.fetch("SELECT id, nombre, descripcion FROM tipos_acople ORDER BY id")
         return [dict(r) for r in rows]
 
 
 async def log_diagnostico(data: dict) -> str:
-    """Guarda un diagnóstico ACD y devuelve su UUID.
-
-    Args:
-        data: dict con campos de la tabla diagnosticos.
-              Campos obligatorios: caso_input, vector_pre, lentes_pre, estado_pre.
-              Campos opcionales: ejecucion_id, flags_pre, repertorio_inferido,
-                                 prescripcion, resultado, metricas.
-
-    Returns:
-        UUID del diagnóstico creado.
-    """
     pool = await get_pool()
     async with pool.acquire() as conn:
         row = await conn.fetchrow("""
