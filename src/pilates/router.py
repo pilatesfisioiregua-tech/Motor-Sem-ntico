@@ -3912,6 +3912,43 @@ async def organismo_evaluacion():
     return {**payload, "fecha": str(señal["created_at"])}
 
 
+@router.get("/comunicaciones")
+async def get_comunicaciones(estado: Optional[str] = None, limit: int = 50):
+    """Lee pizarra de comunicaciones — tracking WA."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        query = """
+            SELECT * FROM om_pizarra_comunicacion
+            WHERE tenant_id = 'authentic_pilates'
+        """
+        params = []
+        if estado:
+            query += " AND estado = $1"
+            params.append(estado)
+        query += " ORDER BY created_at DESC LIMIT $" + str(len(params) + 1)
+        params.append(limit)
+        rows = await conn.fetch(query, *params)
+    return [dict(r) for r in rows]
+
+
+@router.get("/mediaciones")
+async def get_mediaciones(ciclo: Optional[str] = None):
+    """Historial de mediaciones cross-AF."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        if ciclo:
+            rows = await conn.fetch(
+                "SELECT * FROM om_mediaciones WHERE tenant_id=$1 AND ciclo=$2 ORDER BY created_at DESC",
+                TENANT, ciclo)
+        else:
+            rows = await conn.fetch(
+                "SELECT * FROM om_mediaciones WHERE tenant_id=$1 ORDER BY created_at DESC LIMIT 50",
+                TENANT)
+    return [dict(r) for r in rows]
+
+
 @router.get("/motor/telemetria")
 async def motor_telemetria(ciclo: Optional[str] = None):
     """Telemetría del motor unificado: coste, tokens, cache hits por ciclo."""

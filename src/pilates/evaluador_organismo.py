@@ -11,9 +11,7 @@ Se ejecuta ANTES del Compositor — le alimenta con evidencia de qué funcionó.
 from __future__ import annotations
 
 import json
-import os
 import structlog
-import httpx
 from datetime import datetime, timezone, timedelta
 
 from src.db.client import get_pool
@@ -22,8 +20,6 @@ from src.pilates.json_utils import extraer_json
 log = structlog.get_logger()
 
 TENANT = "authentic_pilates"
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-REASONING_MODEL = os.getenv("REASONING_MODEL", "anthropic/claude-sonnet-4-6")
 
 
 # ============================================================
@@ -249,10 +245,9 @@ async def evaluar_semana() -> dict:
     # 3. Pizarras de la semana
     pizarras = await _obtener_pizarras_semana()
 
-    # 4. Interpretación narrativa (Sonnet)
+    # 4. Interpretación narrativa (Sonnet via motor.pensar)
     resultado_interpretacion = {}
-    if OPENROUTER_API_KEY:
-        user_prompt = f"""DELTAS NUMÉRICOS (esta semana vs anterior):
+    user_prompt = f"""DELTAS NUMÉRICOS (esta semana vs anterior):
 {json.dumps(comparacion, ensure_ascii=False, indent=2, default=str)[:2500]}
 
 PRESCRIPCIÓN QUE SE APLICÓ:
@@ -263,32 +258,20 @@ PIZARRA (qué hicieron los agentes esta semana):
 
 ¿La prescripción funcionó? ¿Qué cambiar para la próxima semana?"""
 
-        try:
-            async with httpx.AsyncClient(timeout=60) as client:
-                resp = await client.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
-                    headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                             "HTTP-Referer": "https://motor-semantico-omni.fly.dev"},
-                    json={
-                        "model": REASONING_MODEL,
-                        "messages": [
-                            {"role": "system", "content": SYSTEM_EVALUADOR},
-                            {"role": "user", "content": user_prompt},
-                        ],
-                        "max_tokens": 3000,
-                        "temperature": 0.2,
-                        "response_format": {"type": "json_object"},
-                    },
-                )
-                resp.raise_for_status()
-                raw = resp.json()["choices"][0]["message"]["content"]
+    try:
+        from src.motor.pensar import pensar, ConfigPensamiento
+        config = ConfigPensamiento(
+            funcion="*", complejidad="media",
+            max_tokens=3000, temperature=0.2,
+            usar_cache=False,
+        )
+        resultado_llm = await pensar(
+            system=SYSTEM_EVALUADOR, user=user_prompt, config=config)
+        resultado_interpretacion = extraer_json(resultado_llm.texto)
 
-            # Parse JSON robusto
-            resultado_interpretacion = extraer_json(raw)
-
-        except Exception as e:
-            log.warning("evaluador_interpretacion_error", error=str(e))
-            resultado_interpretacion = {"error": str(e)[:200]}
+    except Exception as e:
+        log.warning("evaluador_interpretacion_error", error=str(e))
+        resultado_interpretacion = {"error": str(e)[:200]}
 
     # 5. Pizarra + bus + feed
     from src.pilates.pizarra import escribir

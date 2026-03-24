@@ -214,6 +214,16 @@ async def _tarea_semanal():
             señales=snap["bus"]["emitidas"],
             drift=snap.get("alerta_drift") is not None)
 
+        # 8b. Mediador: resolver conflictos cross-AF ANTES de actuar
+        try:
+            from src.pilates.mediador import mediar
+            med = await mediar(ciclo=f"W{_hora_madrid().isocalendar()[1]:02d}-{_hora_madrid().isocalendar()[0]}")
+            log.info("cron_semanal_mediador_ok",
+                     conflictos=med.get("conflictos", 0),
+                     resoluciones=med.get("resoluciones", 0))
+        except Exception as e:
+            log.error("cron_semanal_mediador_error", error=str(e))
+
         # 9. Ejecutor + Convergencia + Gestor — cierre del circuito
         from src.pilates.ejecutor_convergencia import ejecutar_circuito_completo
         circ = await ejecutar_circuito_completo()
@@ -243,6 +253,16 @@ async def _tarea_semanal():
             log.info("cron_semanal_snapshot_ok", ciclo=ciclo, pizarras=len(snap))
         except Exception as e:
             log.error("cron_semanal_snapshot_error", error=str(e))
+
+        # 12. Traductor: álgebra → castellano pueblo → WA lunes 07:00
+        try:
+            from src.pilates.traductor import traducir_acciones_semana
+            trad = await traducir_acciones_semana()
+            log.info("cron_semanal_traductor_ok",
+                     programado=trad.get("programado_para"),
+                     coste=trad.get("coste"))
+        except Exception as e:
+            log.error("cron_semanal_traductor_error", error=str(e))
 
     except Exception as e:
         log.error("cron_semanal_error", error=str(e))
@@ -303,6 +323,14 @@ async def _tarea_mensual():
     except Exception as e:
         log.error("cron_mensual_cristalizador_error", error=str(e))
 
+    # Memoria: patrones cross-ciclo → pizarra evolución
+    try:
+        from src.pilates.memoria import detectar_patrones_cross_ciclo
+        mem = await detectar_patrones_cross_ciclo()
+        log.info("cron_mensual_memoria_ok", patrones=mem.get("patrones", 0))
+    except Exception as e:
+        log.error("cron_mensual_memoria_error", error=str(e))
+
     # Meta-Cognitivo: evalúa el sistema cognitivo
     try:
         from src.pilates.metacognitivo import ejecutar_metacognitivo
@@ -341,6 +369,8 @@ async def _escuchar_senales_urgentes():
                 log.warning("senal_urgente_recibida",
                            tipo=data.get("tipo"), origen=data.get("origen"),
                            prioridad=data.get("prioridad"))
+                # Disparar Reactivo
+                asyncio.create_task(_dispatch_reactivo(data))
             except Exception as e:
                 log.error("senal_urgente_parse_error", error=str(e))
 
@@ -351,6 +381,16 @@ async def _escuchar_senales_urgentes():
             await asyncio.sleep(3600)
     except Exception as e:
         log.error("listen_notify_error", error=str(e))
+
+
+async def _dispatch_reactivo(payload: dict):
+    """Dispatch señal urgente al Reactivo."""
+    try:
+        from src.pilates.reactivo import procesar_senal_urgente
+        result = await procesar_senal_urgente(payload)
+        log.info("reactivo_dispatch_ok", tipo=payload.get("tipo"), result=result.get("status"))
+    except Exception as e:
+        log.error("reactivo_dispatch_error", error=str(e))
 
 
 async def cron_loop():
@@ -405,6 +445,15 @@ async def cron_loop():
                     arq=mec_result.get("arquitecturales", 0))
         except Exception as e:
             log.error("cron_vigia_error", error=str(e))
+
+        # Despachar comunicaciones pendientes (pizarra comunicación)
+        try:
+            from src.pilates.reactivo import despachar_comunicaciones
+            desp = await despachar_comunicaciones()
+            if desp.get("enviados", 0) > 0:
+                log.info("cron_despachar_ok", enviados=desp["enviados"])
+        except Exception as e:
+            log.error("cron_despachar_error", error=str(e))
 
         # Dormir 15 minutos
         await asyncio.sleep(900)
