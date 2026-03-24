@@ -1,26 +1,29 @@
 /** Constantes del sistema de diseno Neural Dark */
 
+// Usamos String.fromCodePoint para evitar que el bundler reemplace emojis
+const E = (cp) => String.fromCodePoint(cp);
+
 export const CAPAS = {
-  operativo:  { label: 'Operativo',  icon: '⚡', modulos: ['agenda', 'calendario', 'buscar', 'grupos', 'wa'] },
-  financiero: { label: 'Financiero', icon: '💰', modulos: ['pagos_pendientes', 'resumen_mes', 'facturas'] },
-  cognitivo:  { label: 'Cognitivo',  icon: '🧠', modulos: ['pizarra', 'estrategia', 'evaluacion', 'feed_cognitivo', 'bus'] },
-  voz:        { label: 'Voz',        icon: '📢', modulos: ['voz_proactiva', 'voz'] },
-  motor:      { label: 'Motor',      icon: '⚙️', modulos: ['motor'] },
-  identidad:  { label: 'Identidad',  icon: '🧬', modulos: ['adn', 'depuracion', 'readiness', 'engagement', 'contenido', 'presencia'] },
-  autonomia:  { label: 'Autonomia',  icon: '🤖', modulos: ['autonomia'] },
+  operativo:  { label: 'Operativo',  icon: E(0x26A1),  modulos: ['agenda', 'calendario', 'buscar', 'grupos', 'wa'] },
+  financiero: { label: 'Financiero', icon: E(0x1F4B0), modulos: ['pagos_pendientes', 'resumen_mes', 'facturas'] },
+  cognitivo:  { label: 'Cognitivo',  icon: E(0x1F9E0), modulos: ['pizarra', 'estrategia', 'evaluacion', 'feed_cognitivo', 'bus'] },
+  voz:        { label: 'Voz',        icon: E(0x1F4E2), modulos: ['voz_proactiva', 'voz'] },
+  motor:      { label: 'Motor',      icon: E(0x2699),  modulos: ['motor'] },
+  identidad:  { label: 'Identidad',  icon: E(0x1F9EC), modulos: ['adn', 'depuracion', 'readiness', 'engagement', 'contenido', 'presencia'] },
+  autonomia:  { label: 'Autonomia',  icon: E(0x1F916), modulos: ['autonomia'] },
 };
 
 export const TABS_PROFUNDO = [
-  { id: 'dashboard',    icon: '📊', label: 'Dashboard' },
-  { id: 'diagnostico',  icon: '🔬', label: 'Diagnostico' },
-  { id: 'organismo',    icon: '🧬', label: 'Organismo' },
-  { id: 'director',     icon: '🎼', label: 'Director' },
-  { id: 'consejo',      icon: '🧠', label: 'Consejo' },
-  { id: 'voz',          icon: '📢', label: 'Voz' },
-  { id: 'adn',          icon: '🧬', label: 'ADN' },
-  { id: 'depuracion',   icon: '🗑️', label: 'Depuracion' },
-  { id: 'contabilidad', icon: '💰', label: 'Contabilidad' },
-  { id: 'contenido',    icon: '📱', label: 'Contenido' },
+  { id: 'dashboard',    icon: E(0x1F4CA), label: 'Dashboard' },
+  { id: 'diagnostico',  icon: E(0x1F52C), label: 'Diagnostico' },
+  { id: 'organismo',    icon: E(0x1F9EC), label: 'Organismo' },
+  { id: 'director',     icon: E(0x1F3BC), label: 'Director' },
+  { id: 'consejo',      icon: E(0x1F9E0), label: 'Consejo' },
+  { id: 'voz',          icon: E(0x1F4E2), label: 'Voz' },
+  { id: 'adn',          icon: E(0x1F9EC), label: 'ADN' },
+  { id: 'depuracion',   icon: E(0x1F5D1), label: 'Depuracion' },
+  { id: 'contabilidad', icon: E(0x1F4B0), label: 'Contabilidad' },
+  { id: 'contenido',    icon: E(0x1F4F1), label: 'Contenido' },
 ];
 
 export const ESTADO_ACD = {
