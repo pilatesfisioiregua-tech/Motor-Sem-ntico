@@ -19,6 +19,21 @@ log = structlog.get_logger()
 
 MADRID_TZ = ZoneInfo("Europe/Madrid")
 
+# Advisory lock IDs (únicos por tarea, evita ejecución paralela en múltiples instancias)
+LOCK_DIARIA = 100001
+LOCK_SEMANAL = 100002
+LOCK_MENSUAL = 100003
+
+
+async def _try_advisory_lock(conn, lock_id: int) -> bool:
+    """Intenta adquirir advisory lock de PostgreSQL. Non-blocking."""
+    return await conn.fetchval("SELECT pg_try_advisory_lock($1)", lock_id)
+
+
+async def _release_advisory_lock(conn, lock_id: int):
+    """Libera advisory lock."""
+    await conn.execute("SELECT pg_advisory_unlock($1)", lock_id)
+
 
 def _hora_madrid() -> datetime:
     """Devuelve datetime actual en hora de Madrid (con DST correcto)."""
@@ -454,32 +469,59 @@ async def cron_loop():
 
             # Tarea diaria: después de las 06:00, una vez al día
             if hora >= time(6, 0) and not await _ya_ejecutado("diaria", "dia"):
-                log.info("cron_ejecutando_diaria", hora=str(hora))
-                try:
-                    await asyncio.wait_for(_tarea_diaria(), timeout=1800)  # 30min max
-                except asyncio.TimeoutError:
-                    log.error("cron_diaria_timeout", timeout_s=1800)
-                await _marcar_ejecutado("diaria")
+                from src.db.client import get_pool
+                pool = await get_pool()
+                async with pool.acquire() as lock_conn:
+                    if await _try_advisory_lock(lock_conn, LOCK_DIARIA):
+                        try:
+                            log.info("cron_ejecutando_diaria", hora=str(hora))
+                            await asyncio.wait_for(_tarea_diaria(), timeout=1800)
+                            await _marcar_ejecutado("diaria")
+                        except asyncio.TimeoutError:
+                            log.error("cron_diaria_timeout", timeout_s=1800)
+                            await _marcar_ejecutado("diaria", "timeout")
+                        finally:
+                            await _release_advisory_lock(lock_conn, LOCK_DIARIA)
+                    else:
+                        log.info("cron_diaria_skip_locked", razon="otra instancia ejecutando")
 
             # Tarea semanal: lunes después de las 07:00, una vez por semana
             if ahora.weekday() == 0 and hora >= time(7, 0):
                 if not await _ya_ejecutado("semanal", "semana"):
-                    log.info("cron_ejecutando_semanal", semana=hoy.isocalendar()[1])
-                    try:
-                        await asyncio.wait_for(_tarea_semanal(), timeout=3600)  # 60min max
-                    except asyncio.TimeoutError:
-                        log.error("cron_semanal_timeout", timeout_s=3600)
-                    await _marcar_ejecutado("semanal")
+                    from src.db.client import get_pool
+                    pool = await get_pool()
+                    async with pool.acquire() as lock_conn:
+                        if await _try_advisory_lock(lock_conn, LOCK_SEMANAL):
+                            try:
+                                log.info("cron_ejecutando_semanal", semana=hoy.isocalendar()[1])
+                                await asyncio.wait_for(_tarea_semanal(), timeout=3600)
+                                await _marcar_ejecutado("semanal")
+                            except asyncio.TimeoutError:
+                                log.error("cron_semanal_timeout", timeout_s=3600)
+                                await _marcar_ejecutado("semanal", "timeout")
+                            finally:
+                                await _release_advisory_lock(lock_conn, LOCK_SEMANAL)
+                        else:
+                            log.info("cron_semanal_skip_locked", razon="otra instancia ejecutando")
 
             # Tarea mensual: día 1 después de las 08:00
             if hoy.day == 1 and hora >= time(8, 0):
                 if not await _ya_ejecutado("mensual", "mes"):
-                    log.info("cron_ejecutando_mensual", mes=f"{hoy.year}-{hoy.month:02d}")
-                    try:
-                        await asyncio.wait_for(_tarea_mensual(), timeout=1800)  # 30min max
-                    except asyncio.TimeoutError:
-                        log.error("cron_mensual_timeout", timeout_s=1800)
-                    await _marcar_ejecutado("mensual")
+                    from src.db.client import get_pool
+                    pool = await get_pool()
+                    async with pool.acquire() as lock_conn:
+                        if await _try_advisory_lock(lock_conn, LOCK_MENSUAL):
+                            try:
+                                log.info("cron_ejecutando_mensual", mes=f"{hoy.year}-{hoy.month:02d}")
+                                await asyncio.wait_for(_tarea_mensual(), timeout=1800)
+                                await _marcar_ejecutado("mensual")
+                            except asyncio.TimeoutError:
+                                log.error("cron_mensual_timeout", timeout_s=1800)
+                                await _marcar_ejecutado("mensual", "timeout")
+                            finally:
+                                await _release_advisory_lock(lock_conn, LOCK_MENSUAL)
+                        else:
+                            log.info("cron_mensual_skip_locked", razon="otra instancia ejecutando")
 
         except Exception as e:
             log.error("cron_loop_error", error=str(e))
