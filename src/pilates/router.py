@@ -3910,3 +3910,112 @@ async def organismo_evaluacion():
         return {"evaluacion_global": None, "delta_lentes": None}
     payload = señal["payload"] if isinstance(señal["payload"], dict) else json.loads(señal["payload"])
     return {**payload, "fecha": str(señal["created_at"])}
+
+
+@router.get("/motor/telemetria")
+async def motor_telemetria(ciclo: Optional[str] = None):
+    """Telemetría del motor unificado: coste, tokens, cache hits por ciclo."""
+    from src.db.client import get_pool
+    from src.motor.pensar import presupuesto_restante, PRESUPUESTO_MAX_SEMANAL
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        if ciclo:
+            rows = await conn.fetch("""
+                SELECT funcion, modelo, count(*) as llamadas,
+                       sum(tokens_input) as tokens_in, sum(tokens_output) as tokens_out,
+                       sum(coste_usd) as coste_total, sum(case when cache_hit then 1 else 0 end) as cache_hits,
+                       avg(tiempo_ms) as avg_ms
+                FROM om_motor_telemetria WHERE tenant_id=$1 AND ciclo=$2
+                GROUP BY funcion, modelo ORDER BY coste_total DESC
+            """, TENANT, ciclo)
+        else:
+            rows = await conn.fetch("""
+                SELECT funcion, modelo, count(*) as llamadas,
+                       sum(tokens_input) as tokens_in, sum(tokens_output) as tokens_out,
+                       sum(coste_usd) as coste_total, sum(case when cache_hit then 1 else 0 end) as cache_hits,
+                       avg(tiempo_ms) as avg_ms
+                FROM om_motor_telemetria WHERE tenant_id=$1
+                  AND created_at >= now() - interval '7 days'
+                GROUP BY funcion, modelo ORDER BY coste_total DESC
+            """, TENANT)
+        cache_stats = await conn.fetchrow("""
+            SELECT count(*) as entradas, sum(hits) as total_hits
+            FROM om_pizarra_cache_llm WHERE tenant_id=$1 AND expires_at > now()
+        """, TENANT)
+    return {
+        "presupuesto_restante": presupuesto_restante(),
+        "presupuesto_max_semanal": PRESUPUESTO_MAX_SEMANAL,
+        "cache": {"entradas_activas": cache_stats["entradas"], "total_hits": cache_stats["total_hits"] or 0},
+        "detalle": [{
+            "funcion": r["funcion"], "modelo": r["modelo"],
+            "llamadas": r["llamadas"], "tokens_in": r["tokens_in"],
+            "tokens_out": r["tokens_out"], "coste_usd": round(float(r["coste_total"] or 0), 4),
+            "cache_hits": r["cache_hits"], "avg_ms": round(float(r["avg_ms"] or 0)),
+        } for r in rows],
+    }
+
+
+@router.get("/pizarra/dominio")
+async def get_pizarra_dominio():
+    """Lee la pizarra dominio del tenant."""
+    from src.pilates.pizarras import leer_dominio
+    return await leer_dominio()
+
+
+@router.get("/pizarra/interfaz")
+async def get_pizarra_interfaz():
+    """Lee la pizarra interfaz para el ciclo actual."""
+    from src.pilates.pizarras import leer_layout_ciclo
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    ahora = datetime.now(ZoneInfo("Europe/Madrid"))
+    ciclo = f"W{ahora.isocalendar()[1]:02d}-{ahora.isocalendar()[0]}"
+    layout = await leer_layout_ciclo("authentic_pilates", ciclo)
+
+    if not layout:
+        return {"source": "default", "capas": {
+            "operativo":  {"label": "Operativo",  "icon": "\u26A1", "modulos": ["agenda", "calendario", "buscar", "grupos", "wa"]},
+            "financiero": {"label": "Financiero", "icon": "\uD83D\uDCB0", "modulos": ["pagos_pendientes", "resumen_mes", "facturas"]},
+            "cognitivo":  {"label": "Cognitivo",  "icon": "\uD83E\uDDE0", "modulos": ["pizarra", "estrategia", "evaluacion", "feed_cognitivo", "bus"]},
+            "voz":        {"label": "Voz",        "icon": "\uD83D\uDCE2", "modulos": ["voz_proactiva", "voz"]},
+            "identidad":  {"label": "Identidad",  "icon": "\uD83E\uDDEC", "modulos": ["adn", "depuracion", "readiness", "engagement"]},
+        }}
+
+    return {"source": "pizarra", "ciclo": ciclo, "layout": layout}
+
+
+@router.get("/sse/pizarra")
+async def sse_pizarra():
+    """SSE: retransmite cambios de pizarra en tiempo real."""
+    import asyncio as _asyncio
+    from fastapi.responses import StreamingResponse
+
+    async def event_generator():
+        from src.db.client import get_pool
+        pool = await get_pool()
+        conn = await pool.acquire()
+
+        queue = _asyncio.Queue()
+
+        def on_notify(conn_ref, pid, channel, payload):
+            queue.put_nowait(payload)
+
+        await conn.add_listener("pizarra_actualizada", on_notify)
+        yield f"data: {json.dumps({'type': 'connected'})}\n\n"
+
+        try:
+            while True:
+                try:
+                    payload = await _asyncio.wait_for(queue.get(), timeout=30)
+                    yield f"data: {payload}\n\n"
+                except _asyncio.TimeoutError:
+                    yield ": keepalive\n\n"
+        finally:
+            await conn.remove_listener("pizarra_actualizada", on_notify)
+            await pool.release(conn)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "Connection": "keep-alive"},
+    )

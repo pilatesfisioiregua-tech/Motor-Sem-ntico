@@ -124,6 +124,14 @@ async def _tarea_diaria():
 
 async def _tarea_semanal():
     """Tarea semanal (lunes): ciclo completo + estrategia + ACD + búsqueda."""
+    # Resetear presupuesto LLM del motor al inicio de cada ciclo semanal
+    try:
+        from src.motor.pensar import resetear_presupuesto
+        resetear_presupuesto()
+        log.info("cron_semanal_presupuesto_reset")
+    except Exception as e:
+        log.error("cron_semanal_presupuesto_error", error=str(e))
+
     try:
         # 1. Ciclo completo (escuchar + priorizar + IRC + ISP)
         from src.pilates.voz_ciclos import ejecutar_ciclo_completo
@@ -275,6 +283,16 @@ async def _tarea_mensual():
         log.info("cron_mensual_reactor_v4_ok")
     except Exception as e:
         log.error("cron_mensual_reactor_v4_error", error=str(e))
+
+    # Limpieza de caché LLM expirado
+    try:
+        from src.db.client import get_pool
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            await conn.execute("SELECT limpiar_cache_expirado()")
+        log.info("cron_mensual_cache_limpiado")
+    except Exception as e:
+        log.error("cron_mensual_cache_error", error=str(e))
 
     # Cristalizador mensual (después del autófago)
     try:

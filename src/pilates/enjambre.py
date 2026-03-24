@@ -16,10 +16,8 @@ from __future__ import annotations
 import asyncio
 import json
 import os
-import re
 import time
 import structlog
-import httpx
 from datetime import date
 
 from src.db.client import get_pool
@@ -28,7 +26,6 @@ log = structlog.get_logger()
 
 TENANT = "authentic_pilates"
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-REASONING_MODEL = os.getenv("REASONING_MODEL", "anthropic/claude-sonnet-4-6")
 
 
 # ============================================================
@@ -347,89 +344,42 @@ async def _contexto_completo() -> dict:
 # ============================================================
 
 async def _call_cluster(system_prompt: str, user_prompt: str, nombre: str) -> dict:
-    """Ejecuta un cluster individual."""
+    """Ejecuta un cluster individual via motor.pensar()."""
+    from src.motor.pensar import pensar, ConfigPensamiento
+    from src.pilates.json_utils import extraer_json
+
     t0 = time.time()
-    raw = ""
-    clean = ""
     try:
-        async with httpx.AsyncClient(timeout=60) as client:
-            resp = await client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers={"Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                         "HTTP-Referer": "https://motor-semantico-omni.fly.dev"},
-                json={
-                    "model": REASONING_MODEL,
-                    "messages": [
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": user_prompt},
-                    ],
-                    "max_tokens": 4000,
-                    "temperature": 0.2,
-                    "response_format": {"type": "json_object"},
-                },
-            )
-            resp.raise_for_status()
-            raw = resp.json()["choices"][0]["message"]["content"]
+        # Determinar lente desde el nombre del cluster
+        lente = None
+        for clusters_dict in (CLUSTERS, CLUSTERS_P, CLUSTERS_R):
+            for cl_id, cl_def in clusters_dict.items():
+                if cl_id in nombre.lower() or nombre.lower().endswith(cl_id):
+                    lente = cl_def.get("lente")
+                    break
 
-        # Parse JSON tolerante a markdown fences y texto extra
-        clean = raw.strip()
-        if "```" in clean:
-            parts = clean.split("```")
-            for part in parts:
-                part = part.strip()
-                if part.startswith("json"):
-                    part = part[4:].strip()
-                if part.startswith("{"):
-                    try:
-                        resultado = json.loads(part)
-                        log.info("enjambre_cluster_ok", cluster=nombre,
-                                 tiempo=round(time.time() - t0, 1))
-                        return resultado
-                    except json.JSONDecodeError:
-                        continue
+        config = ConfigPensamiento(
+            funcion="*",
+            lente=lente,
+            complejidad="media",
+            max_tokens=4000,
+            temperature=0.2,
+            usar_cache=True,
+            timeout=60.0,
+        )
+        resultado_llm = await pensar(system=system_prompt, user=user_prompt, config=config)
+        raw = resultado_llm.texto
 
-        # Sin fences o fences sin JSON válido — buscar JSON directo
-        start = clean.find("{")
-        end = clean.rfind("}")
-        if start != -1 and end != -1:
-            clean = clean[start:end + 1]
-        resultado = json.loads(clean)
-        log.info("enjambre_cluster_ok", cluster=nombre,
-                 tiempo=round(time.time() - t0, 1))
-        return resultado
+        parsed = extraer_json(raw)
+        if parsed:
+            log.info("enjambre_cluster_ok", cluster=nombre,
+                     tiempo=round(time.time() - t0, 1))
+            return parsed
 
-    except json.JSONDecodeError:
-        # Intentar reparar JSON truncado (típico: markdown + max_tokens)
-        try:
-            # Extraer JSON del raw, quitando fences
-            repair = raw.strip()
-            if repair.startswith("```"):
-                repair = repair.split("\n", 1)[1] if "\n" in repair else repair[3:]
-            if repair.startswith("json"):
-                repair = repair[4:].strip()
-            if repair.endswith("```"):
-                repair = repair[:-3].strip()
-            # Buscar inicio del JSON
-            idx = repair.find("{")
-            if idx != -1:
-                repair = repair[idx:]
-            # Cerrar llaves/corchetes abiertos
-            opens = repair.count("{") - repair.count("}")
-            repair = repair + "}" * max(opens, 0)
-            opens_b = repair.count("[") - repair.count("]")
-            repair = repair + "]" * max(opens_b, 0)
-            # Quitar trailing commas antes de cierre
-            repair = re.sub(r',\s*([}\]])', r'\1', repair)
-            # Quitar strings truncadas: "texto sin cerrar → "texto"
-            repair = re.sub(r'"([^"]{0,200})$', r'"\1"', repair)
-            resultado = json.loads(repair)
-            log.info("enjambre_cluster_repaired", cluster=nombre)
-            return resultado
-        except Exception:
-            pass
         log.warning("enjambre_parse_error", cluster=nombre,
                     raw_preview=raw[:150])
         return {"error": "parse_error", "cluster": nombre}
+
     except Exception as e:
         log.warning("enjambre_cluster_error", cluster=nombre, error=str(e))
         return {"error": str(e)[:200], "cluster": nombre}

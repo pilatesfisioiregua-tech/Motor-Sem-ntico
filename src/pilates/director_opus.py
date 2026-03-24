@@ -22,7 +22,6 @@ from __future__ import annotations
 import json
 import os
 import structlog
-import httpx
 import time
 from pathlib import Path
 
@@ -287,26 +286,19 @@ Recuerda:
 - Ley C4: Se primero → S → C (§9)"""
 
     try:
-        async with httpx.AsyncClient(timeout=240) as client:
-            resp = await client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers={
-                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                    "HTTP-Referer": "https://motor-semantico-omni.fly.dev",
-                },
-                json={
-                    "model": OPUS_MODEL,
-                    "messages": [
-                        {"role": "system", "content": SYSTEM_DIRECTOR},
-                        {"role": "user", "content": user_message},
-                    ],
-                    "max_tokens": 8000,
-                    "temperature": 0.2,
-                    "response_format": {"type": "json_object"},
-                },
-            )
-            resp.raise_for_status()
-            raw = resp.json()["choices"][0]["message"]["content"]
+        from src.motor.pensar import pensar, ConfigPensamiento
+        config = ConfigPensamiento(
+            funcion="F5",
+            lente="sentido",
+            complejidad="alta",
+            max_tokens=8000,
+            temperature=0.2,
+            usar_cache=False,
+            timeout=240.0,
+        )
+        resultado_llm = await pensar(
+            system=SYSTEM_DIRECTOR, user=user_message, config=config)
+        raw = resultado_llm.texto
 
         # Parse JSON robusto con reparación de truncamiento
         resultado = _parse_json_robusto(raw)
@@ -390,6 +382,9 @@ MECANISMO INFERENCIAL (cómo llegar a conclusiones):
             """, TENANT, agente, json.dumps(config_completa, ensure_ascii=False))
             configs_aplicadas += 1
 
+    # 4b. ESCRIBIR PIZARRAS COGNITIVA / TEMPORAL / INTERFAZ
+    await _escribir_pizarras(pool, resultado)
+
     # 5. EMITIR + PIZARRA + FEED
     from src.pilates.bus import emitir
     await emitir("RECOMPILACION", "DIRECTOR_OPUS", {
@@ -439,3 +434,57 @@ MECANISMO INFERENCIAL (cómo llegar a conclusiones):
         "tiempo_s": dt,
         "resultado_completo": resultado,
     }
+
+
+async def _escribir_pizarras(pool, resultado: dict):
+    """Escribe recetas del Director en pizarras cognitiva/temporal/interfaz.
+
+    - Cognitiva: una receta por agente reconfigurado (prompt + INTs + lente)
+    - Temporal: plan semanal si resultado incluye estrategia
+    - Interfaz: layout de módulos si resultado lo sugiere
+    """
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    ahora = datetime.now(ZoneInfo("Europe/Madrid"))
+    ciclo = f"W{ahora.isocalendar()[1]:02d}-{ahora.isocalendar()[0]}"
+
+    async with pool.acquire() as conn:
+        # Cognitiva: recetas por agente
+        for config in resultado.get("configs", []):
+            agente = config.get("agente")
+            if not agente:
+                continue
+            prompt_d = config.get("prompt_d_hibrido", {})
+            ints = [i.get("id", "") for i in config.get("INT_activas", [])]
+            lente = None
+            if ints:
+                lentes_map = {i.get("id"): i.get("lente") for i in config.get("INT_activas", [])}
+                lente = next(iter(lentes_map.values()), None)
+            await conn.execute("""
+                INSERT INTO om_pizarra_cognitiva
+                    (tenant_id, ciclo, funcion, intencion, prompt_imperativo,
+                     prompt_preguntas, prompt_provocacion, prompt_razonamiento,
+                     ints, lente, origen)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'director_opus')
+            """, TENANT, ciclo, agente,
+                config.get("justificacion", ""),
+                json.dumps(prompt_d.get("imperativo", []), ensure_ascii=False),
+                json.dumps(prompt_d.get("preguntas", []), ensure_ascii=False),
+                prompt_d.get("provocacion", ""),
+                json.dumps(prompt_d.get("razonamiento", {}), ensure_ascii=False),
+                ints, lente)
+
+        # Temporal: plan del ciclo — registrar agentes reconfigurados como fases
+        estrategia = resultado.get("estrategia_global", "")
+        agentes_cfg = [c.get("agente", "?") for c in resultado.get("configs", [])]
+        for i, agente in enumerate(agentes_cfg):
+            await conn.execute("""
+                INSERT INTO om_pizarra_temporal
+                    (tenant_id, ciclo, fase, orden, componente, activo, motivo)
+                VALUES ($1, $2, 'reconfig_director', $3, $4, true, $5)
+            """, TENANT, ciclo, i + 1, agente, estrategia[:500])
+
+    log.info("director_pizarras_ok", ciclo=ciclo,
+             cognitiva=len(resultado.get("configs", [])),
+             temporal=len(agentes_cfg))
