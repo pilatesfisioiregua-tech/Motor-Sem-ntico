@@ -253,14 +253,15 @@ async def crear_adn(data: ADNCreate):
 
 @router.patch("/adn/{adn_id}")
 async def actualizar_adn(adn_id: UUID, data: ADNUpdate):
-    updates = {k: v for k, v in data.model_dump().items() if v is not None}
+    _CAMPOS_ADN = {"titulo", "descripcion", "ejemplos", "contra_ejemplos", "activo"}
+    updates = {k: v for k, v in data.model_dump().items() if v is not None and k in _CAMPOS_ADN}
     if not updates:
         raise HTTPException(400, "Nada que actualizar")
     pool = await _get_pool()
     for k in ("ejemplos", "contra_ejemplos"):
         if k in updates and isinstance(updates[k], list):
             updates[k] = json.dumps(updates[k])
-    set_clauses = ", ".join(f"{k} = ${i+2}" for i, k in enumerate(updates.keys()))
+    set_clauses = ", ".join(f'"{k}" = ${i+2}' for i, k in enumerate(updates.keys()))
     values = [adn_id] + list(updates.values())
     tenant_idx = len(values) + 1
     values.append(TENANT)
@@ -520,21 +521,24 @@ async def crear_depuracion(data: DepuracionCreate):
 @router.patch("/depuracion/{depuracion_id}")
 async def actualizar_depuracion(depuracion_id: UUID, data: dict):
     """Cambiar estado: propuesta -> aprobada -> ejecutada / descartada."""
+    _ESTADOS_DEPURACION = {"propuesta", "aprobada", "ejecutada", "descartada"}
     pool = await _get_pool()
     estado = data.get("estado")
     resultado = data.get("resultado")
+    if estado and estado not in _ESTADOS_DEPURACION:
+        raise HTTPException(400, f"Estado inválido: {estado}")
     async with pool.acquire() as conn:
         updates = []
         params = [depuracion_id]
         idx = 2
         if estado:
-            updates.append(f"estado = ${idx}"); params.append(estado); idx += 1
+            updates.append(f'"estado" = ${idx}'); params.append(estado); idx += 1
             if estado == "aprobada":
-                updates.append("fecha_decision = CURRENT_DATE")
+                updates.append('"fecha_decision" = CURRENT_DATE')
             elif estado == "ejecutada":
-                updates.append("fecha_ejecucion = CURRENT_DATE")
+                updates.append('"fecha_ejecucion" = CURRENT_DATE')
         if resultado:
-            updates.append(f"resultado = ${idx}"); params.append(resultado); idx += 1
+            updates.append(f'"resultado" = ${idx}'); params.append(resultado); idx += 1
         if not updates:
             raise HTTPException(400, "Nada que actualizar")
         set_clause = ", ".join(updates)
@@ -582,16 +586,19 @@ async def listar_propuestas_voz(estado: Optional[str] = "pendiente", canal: Opti
 @router.patch("/voz/propuestas/{propuesta_id}")
 async def decidir_propuesta(propuesta_id: UUID, data: dict):
     """Aprobar, descartar o editar propuesta."""
+    _ESTADOS_PROPUESTA = {"aprobada", "descartada", "pendiente", "ejecutada"}
     pool = await _get_pool()
     estado = data.get("estado")
+    if estado and estado not in _ESTADOS_PROPUESTA:
+        raise HTTPException(400, f"Estado inválido: {estado}")
     async with pool.acquire() as conn:
-        updates = ["fecha_decision = now()"]
+        updates = ['"fecha_decision" = now()']
         params = [propuesta_id]
         idx = 2
         if estado:
-            updates.append(f"estado = ${idx}"); params.append(estado); idx += 1
+            updates.append(f'"estado" = ${idx}'); params.append(estado); idx += 1
         if data.get("contenido_editado"):
-            updates.append(f"contenido_propuesto = ${idx}::jsonb")
+            updates.append(f'"contenido_propuesto" = ${idx}::jsonb')
             params.append(json.dumps(data["contenido_editado"])); idx += 1
         set_clause = ", ".join(updates)
         tenant_idx = len(params) + 1
@@ -949,14 +956,14 @@ async def actualizar_identidad(request: Request):
     body = await request.json()
     from src.db.client import get_pool
     pool = await get_pool()
-    campos_permitidos = ["esencia", "narrativa", "valores", "anti_identidad",
-                         "depuraciones_deliberadas", "tono", "angulo_diferencial"]
+    campos_permitidos = {"esencia", "narrativa", "valores", "anti_identidad",
+                         "depuraciones_deliberadas", "tono", "angulo_diferencial"}
     sets = []
     params = ["authentic_pilates"]
-    for campo in campos_permitidos:
+    for campo in sorted(campos_permitidos):
         if campo in body:
             params.append(body[campo])
-            sets.append(f"{campo} = ${len(params)}")
+            sets.append(f'"{campo}" = ${len(params)}')
     if not sets:
         raise HTTPException(400, "Sin campos válidos")
     sets.append("updated_at = now()")

@@ -118,12 +118,18 @@ async def crear_cliente(data: ClienteCreate):
 @router.patch("/clientes/{cliente_id}")
 async def actualizar_cliente(cliente_id: UUID, data: ClienteUpdate):
     """Actualiza campos del cliente (solo los enviados)."""
-    updates = {k: v for k, v in data.model_dump().items() if v is not None}
+    _CAMPOS_CLIENTE = {
+        "nombre", "apellidos", "telefono", "email", "fecha_nacimiento",
+        "nif", "direccion", "metodo_pago_habitual",
+        "consentimiento_datos", "consentimiento_marketing",
+        "consentimiento_compartir_tenants",
+    }
+    updates = {k: v for k, v in data.model_dump().items() if v is not None and k in _CAMPOS_CLIENTE}
     if not updates:
         raise HTTPException(400, "Nada que actualizar")
 
     pool = await _get_pool()
-    set_clauses = ", ".join(f"{k} = ${i+2}" for i, k in enumerate(updates.keys()))
+    set_clauses = ", ".join(f'"{k}" = ${i+2}' for i, k in enumerate(updates.keys()))
     values = [cliente_id] + list(updates.values())
 
     async with pool.acquire() as conn:
@@ -215,15 +221,15 @@ async def crear_contrato(data: ContratoCreate):
 @router.patch("/contratos/{contrato_id}")
 async def actualizar_contrato(contrato_id: UUID, data: ContratoUpdate):
     """Actualiza contrato (estado, precios, fecha_fin)."""
-    updates = {k: v for k, v in data.model_dump().items() if v is not None}
+    _CAMPOS_CONTRATO = {"estado", "precio_sesion", "precio_mensual", "ciclo_cobro", "fecha_fin"}
+    updates = {k: v for k, v in data.model_dump().items() if v is not None and k in _CAMPOS_CONTRATO}
     if not updates:
         raise HTTPException(400, "Nada que actualizar")
 
     pool = await _get_pool()
-    set_clauses = ", ".join(f"{k} = ${i+2}" for i, k in enumerate(updates.keys()))
+    set_clauses = ", ".join(f'"{k}" = ${i+2}' for i, k in enumerate(updates.keys()))
     values = [contrato_id] + list(updates.values())
 
-    # TENANT como parámetro (no interpolado) para prevenir SQL injection
     tenant_idx = len(values) + 1
     values.append(TENANT)
     async with pool.acquire() as conn:
