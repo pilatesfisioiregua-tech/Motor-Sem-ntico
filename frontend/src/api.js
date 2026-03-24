@@ -191,3 +191,15 @@ export const getComunicaciones = (params = {}) => {
   const qs = new URLSearchParams(params).toString();
   return request(`/comunicaciones${qs ? `?${qs}` : ''}`);
 };
+
+// IDENTIDAD + CONTENIDO (F7)
+export const getIdentidad = () => request('/identidad');
+export const actualizarIdentidad = (data) => request('/identidad', { method: 'PATCH', body: JSON.stringify(data) });
+export const getContenido = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/contenido${qs ? `?${qs}` : ''}`);
+};
+export const aprobarContenido = (id) => request(`/contenido/${id}/aprobar`, { method: 'POST' });
+export const programarContenido = (id) => request(`/contenido/${id}/programar`, { method: 'POST', body: '{}' });
+export const filtrarContenido = (data) => request('/contenido/filtrar', { method: 'POST', body: JSON.stringify(data) });
+export const getCompetencia = () => request('/competencia');

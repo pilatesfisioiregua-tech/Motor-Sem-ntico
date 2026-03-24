@@ -106,12 +106,32 @@ async def _procesar_cliente(telefono: str, mensaje: str, cliente_id: UUID) -> di
 async def _procesar_lead(telefono: str, mensaje: str) -> dict:
     """Procesa mensaje de persona NO cliente — captación.
 
-    Usa el motor del portal público (Fase I).
+    Filtra por identidad (F7): si el lead busca algo incompatible,
+    responder educadamente. Registra en om_leads_externos.
     """
+    # Filtro identidad (F7)
+    try:
+        from src.pilates.filtro_identidad import filtrar_por_identidad
+        filtro = await filtrar_por_identidad(mensaje, "whatsapp")
+        compatible = filtro.get("compatible", True)
+
+        # Registrar lead externo
+        from src.db.client import get_pool
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            await conn.execute("""
+                INSERT INTO om_leads_externos
+                    (tenant_id, canal, contacto, mensaje, compatible_identidad, score_compatibilidad, estado)
+                VALUES ($1, 'whatsapp', $2, $3, $4, $5, 'nuevo')
+            """, TENANT, telefono, mensaje[:500], compatible, filtro.get("score", 0.5))
+    except Exception:
+        compatible = True  # En caso de error, dejar pasar
+
     from src.pilates.portal_publico import chat_captacion
     result = await chat_captacion(mensaje, telefono)
 
     return {
         "respuesta": result["respuesta"],
-        "auto_enviar": True
+        "auto_enviar": True,
+        "compatible_identidad": compatible,
     }

@@ -264,6 +264,16 @@ async def _tarea_semanal():
         except Exception as e:
             log.error("cron_semanal_traductor_error", error=str(e))
 
+        # 13. Generar contenido semanal (F7 — presencia digital)
+        try:
+            from src.pilates.contenido import generar_contenido_semana
+            cont = await generar_contenido_semana()
+            log.info("cron_semanal_contenido_ok",
+                     creados=cont.get("creados", 0),
+                     filtrados=cont.get("filtrados_f3", 0))
+        except Exception as e:
+            log.error("cron_semanal_contenido_error", error=str(e))
+
     except Exception as e:
         log.error("cron_semanal_error", error=str(e))
 
@@ -330,6 +340,14 @@ async def _tarea_mensual():
         log.info("cron_mensual_memoria_ok", patrones=mem.get("patrones", 0))
     except Exception as e:
         log.error("cron_mensual_memoria_error", error=str(e))
+
+    # Anti-dilución: detectar drift de identidad en contenido publicado
+    try:
+        from src.pilates.anti_dilucion import detectar_drift_identidad
+        drift = await detectar_drift_identidad()
+        log.info("cron_mensual_anti_dilucion", status=drift.get("status"))
+    except Exception as e:
+        log.error("cron_mensual_anti_dilucion_error", error=str(e))
 
     # Meta-Cognitivo: evalúa el sistema cognitivo
     try:

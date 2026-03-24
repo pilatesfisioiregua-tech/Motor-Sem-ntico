@@ -491,3 +491,24 @@ async def collect_all() -> dict:
             "metricas": len(v.get("metricas", {})) if isinstance(v, dict) else 0,
         } for k, v in resultados.items() if k != "irc_recalculado"},
     }
+
+
+async def collect_competencia() -> dict:
+    """Recoge datos públicos de competidores monitorizados.
+
+    Lee om_competencia → para cada uno, scrape público (sin API, datos públicos).
+    Frecuencia: semanal.
+    """
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        competidores = await conn.fetch(
+            "SELECT * FROM om_competencia WHERE tenant_id = $1", TENANT)
+
+    if not competidores:
+        return {"status": "skip", "razon": "Sin competidores configurados"}
+
+    # Por ahora, log que están configurados pero no scrapeamos aún
+    # (scraping de IG requiere sesión — usar Perplexity para análisis)
+    log.info("collector_competencia", total=len(competidores))
+    return {"status": "ok", "competidores": len(competidores)}

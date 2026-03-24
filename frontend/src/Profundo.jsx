@@ -13,6 +13,55 @@ import { fetchApi } from './context/AppContext';
 
 const P = '/pilates';
 
+function IdentidadTab() {
+  const [d, setD] = useState(null);
+  useEffect(() => { api.getIdentidad().then(setD).catch(() => {}); }, []);
+  if (!d || !d.esencia) return <p className="text-[var(--text-tertiary)] text-sm">Sin identidad</p>;
+  return (
+    <div className="space-y-2">
+      <p className="text-sm">{d.esencia}</p>
+      <div className="flex flex-wrap gap-1">{d.valores?.map(v => <span key={v} className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">{v}</span>)}</div>
+      <div className="flex flex-wrap gap-1">{d.anti_identidad?.map(a => <span key={a} className="text-[10px] px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-300">{a}</span>)}</div>
+      <p className="text-xs text-[var(--text-tertiary)]">Tono: {d.tono}</p>
+      <p className="text-xs text-[var(--text-tertiary)]">Angulo: {d.angulo_diferencial}</p>
+    </div>
+  );
+}
+
+function ContenidoTab() {
+  const [items, setItems] = useState([]);
+  useEffect(() => { api.getContenido({limit: 10}).then(r => setItems(Array.isArray(r) ? r : [])).catch(() => {}); }, []);
+  const estadoColor = { borrador: 'bg-gray-500/20 text-gray-300', aprobado: 'bg-emerald-500/20 text-emerald-300', programado: 'bg-cyan-500/20 text-cyan-300', publicado: 'bg-violet-500/20 text-violet-300' };
+  return (
+    <div>
+      {items.length === 0 && <p className="text-[var(--text-tertiary)] text-sm">Sin contenido</p>}
+      {items.map(c => (
+        <div key={c.id} className="py-2 border-b border-[var(--border)]">
+          <div className="flex justify-between"><span className="text-sm font-medium">{c.titulo}</span><span className={`text-[10px] px-1.5 py-0.5 rounded-full ${estadoColor[c.estado] || ''}`}>{c.estado}</span></div>
+          <p className="text-xs text-[var(--text-tertiary)] truncate">{c.cuerpo?.slice(0, 120)}</p>
+          <div className="flex gap-1 mt-1">{c.hashtags?.map(h => <span key={h} className="text-[10px] text-[var(--text-ghost)]">#{h}</span>)}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CompetenciaTab() {
+  const [items, setItems] = useState([]);
+  useEffect(() => { api.getCompetencia().then(r => setItems(Array.isArray(r) ? r : [])).catch(() => {}); }, []);
+  return (
+    <div>
+      {items.length === 0 && <p className="text-[var(--text-tertiary)] text-sm">Sin competidores configurados</p>}
+      {items.map(c => (
+        <div key={c.id} className="flex justify-between items-center py-1.5 border-b border-[var(--border)] text-sm">
+          <span>{c.nombre}</span>
+          <span className="text-xs text-[var(--text-ghost)]">{c.canal} · {c.tipo}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ============================================================
 // HEADER PROFUNDO
 // ============================================================
@@ -871,6 +920,22 @@ export default function Profundo() {
                       onClick={() => window.open(`/pilates/facturas/paquete-gestor`, '_blank')}>
                 Descargar paquete gestor
               </button>
+            </div>
+          )}
+          {tab === 'contenido' && (
+            <div className="space-y-4 module-enter">
+              <Card>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Identidad</h3>
+                <IdentidadTab />
+              </Card>
+              <Card>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Contenido semanal</h3>
+                <ContenidoTab />
+              </Card>
+              <Card>
+                <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3">Competencia</h3>
+                <CompetenciaTab />
+              </Card>
             </div>
           )}
         </div>

@@ -675,3 +675,51 @@ async def decidir_frecuencia_busqueda() -> bool:
     if any(v < 0.40 for v in vector.values()):
         return date.today().weekday() in (0, 2, 4)  # Gap alto → L/M/V
     return date.today().weekday() == 0  # Todo OK → solo lunes
+
+
+# ============================================================
+# F7: CONTEXTO PRESENCIA DIGITAL
+# ============================================================
+
+async def buscar_contexto_presencia(tenant_id: str = TENANT) -> dict:
+    """Busca contexto externo para la presencia digital.
+
+    Queries:
+    - Tendencias Pilates en España 2026
+    - Competencia estudios Pilates en Logroño/La Rioja
+    - Mejores prácticas contenido para estudios pequeños
+    """
+    from datetime import datetime
+    from src.pilates.filtro_identidad import leer_identidad
+    identidad = await leer_identidad(tenant_id)
+
+    queries = [
+        f"tendencias pilates España {datetime.now().year}",
+        f"estudios pilates {identidad.get('angulo_diferencial', 'La Rioja')} opiniones",
+        "contenido instagram pilates estudio pequeño que funciona",
+    ]
+
+    if not PERPLEXITY_API_KEY:
+        return {"status": "skip", "razon": "Perplexity no configurada", "queries": queries}
+
+    resultados = []
+    for q in queries:
+        try:
+            async with httpx.AsyncClient(timeout=30) as client:
+                resp = await client.post(
+                    "https://api.perplexity.ai/chat/completions",
+                    headers={"Authorization": f"Bearer {PERPLEXITY_API_KEY}"},
+                    json={
+                        "model": "llama-3.1-sonar-small-128k-online",
+                        "messages": [{"role": "user", "content": q}],
+                    },
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                texto = data["choices"][0]["message"]["content"]
+                resultados.append({"query": q, "resultado": texto[:500]})
+        except Exception as e:
+            resultados.append({"query": q, "error": str(e)[:100]})
+
+    log.info("buscar_contexto_presencia", queries=len(queries), ok=len([r for r in resultados if "error" not in r]))
+    return {"status": "ok", "resultados": resultados}

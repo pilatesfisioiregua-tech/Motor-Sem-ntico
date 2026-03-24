@@ -4183,3 +4183,93 @@ async def diagnostico_sistema():
             checks["bus_pendientes"] = "tabla_no_existe"
 
     return {"timestamp": str(datetime.now()), "checks": checks}
+
+
+# ============================================================
+# IDENTIDAD + CONTENIDO (F7)
+# ============================================================
+
+@router.get("/identidad")
+async def get_identidad():
+    """Lee la pizarra identidad del tenant."""
+    from src.pilates.filtro_identidad import leer_identidad
+    return await leer_identidad()
+
+
+@router.patch("/identidad")
+async def actualizar_identidad(request: Request):
+    """Actualiza campos de la pizarra identidad (CR1 Jesús)."""
+    body = await request.json()
+    from src.db.client import get_pool
+    pool = await get_pool()
+    campos_permitidos = ["esencia", "narrativa", "valores", "anti_identidad",
+                         "depuraciones_deliberadas", "tono", "angulo_diferencial"]
+    sets = []
+    params = ["authentic_pilates"]
+    for campo in campos_permitidos:
+        if campo in body:
+            params.append(body[campo])
+            sets.append(f"{campo} = ${len(params)}")
+    if not sets:
+        raise HTTPException(400, "Sin campos válidos")
+    sets.append("updated_at = now()")
+    query = f"UPDATE om_pizarra_identidad SET {', '.join(sets)} WHERE tenant_id = $1"
+    async with pool.acquire() as conn:
+        await conn.execute(query, *params)
+    return {"status": "ok"}
+
+
+@router.get("/contenido")
+async def get_contenido(ciclo: str = None, estado: str = None, limit: int = 20):
+    """Lista contenido generado."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    query = "SELECT * FROM om_contenido WHERE tenant_id = 'authentic_pilates'"
+    params = []
+    if ciclo:
+        params.append(ciclo)
+        query += f" AND ciclo = ${len(params)}"
+    if estado:
+        params.append(estado)
+        query += f" AND estado = ${len(params)}"
+    query += f" ORDER BY created_at DESC LIMIT ${len(params) + 1}"
+    params.append(limit)
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(query, *params)
+    return [dict(r) for r in rows]
+
+
+@router.post("/contenido/{contenido_id}/aprobar")
+async def aprobar(contenido_id):
+    """CR1: Jesús aprueba contenido para publicación."""
+    from uuid import UUID
+    from src.pilates.contenido import aprobar_contenido
+    return await aprobar_contenido(UUID(contenido_id))
+
+
+@router.post("/contenido/{contenido_id}/programar")
+async def programar(contenido_id, request: Request):
+    """Programa contenido aprobado."""
+    from uuid import UUID
+    from src.pilates.contenido import programar_publicacion
+    body = await request.json()
+    return await programar_publicacion(UUID(contenido_id))
+
+
+@router.post("/contenido/filtrar")
+async def filtrar_contenido_manual(request: Request):
+    """Filtra texto contra identidad (para preview)."""
+    body = await request.json()
+    from src.pilates.filtro_identidad import filtrar_por_identidad
+    return await filtrar_por_identidad(body.get("texto", ""), body.get("canal", "instagram"))
+
+
+@router.get("/competencia")
+async def get_competencia():
+    """Lista competidores monitorizados."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            "SELECT * FROM om_competencia WHERE tenant_id = 'authentic_pilates'")
+    return [dict(r) for r in rows]

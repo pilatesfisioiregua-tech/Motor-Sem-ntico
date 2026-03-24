@@ -387,6 +387,55 @@ function timeAgo(ts) {
 // MAPA MODULO → COMPONENTE
 // ============================================================
 
+function IdentidadPresenciaPanel() {
+  const [identidad, setIdentidad] = useState(null);
+  useEffect(() => { api.getIdentidad().then(setIdentidad).catch(() => {}); }, []);
+  if (!identidad || !identidad.esencia) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin identidad configurada</p>;
+  return (
+    <div className="space-y-2">
+      <div className="text-sm font-semibold text-[var(--text-primary)]">{identidad.esencia}</div>
+      <div className="flex flex-wrap gap-1">
+        {identidad.valores?.map(v => (
+          <span key={v} className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">{v}</span>
+        ))}
+      </div>
+      {identidad.anti_identidad?.length > 0 && (
+        <div className="flex flex-wrap gap-1 mt-1">
+          {identidad.anti_identidad.map(a => (
+            <span key={a} className="text-[10px] px-1.5 py-0.5 rounded-full bg-red-500/20 text-red-300">{a}</span>
+          ))}
+        </div>
+      )}
+      <div className="text-xs text-[var(--text-tertiary)] mt-1">{identidad.tono}</div>
+    </div>
+  );
+}
+
+function ContenidoPresenciaPanel() {
+  const [contenido, setContenido] = useState([]);
+  useEffect(() => { api.getContenido({limit: 5}).then(r => setContenido(Array.isArray(r) ? r : [])).catch(() => {}); }, []);
+  const estadoColor = { borrador: 'text-gray-400', aprobado: 'text-emerald-400', programado: 'text-cyan-400', publicado: 'text-violet-400' };
+  const filtroIcon = { compatible: '\u2705', incompatible: '\u274C', pendiente: '\u23F3' };
+  return (
+    <div>
+      {contenido.length === 0 && <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Sin contenido generado</p>}
+      {contenido.map(c => (
+        <div key={c.id} className="py-2 border-b border-[var(--border)]">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-medium">{c.titulo || 'Sin titulo'}</span>
+            <span className={`text-[10px] ${estadoColor[c.estado] || 'text-gray-400'}`}>{c.estado}</span>
+          </div>
+          <div className="text-xs text-[var(--text-tertiary)] truncate">{c.cuerpo?.slice(0, 80)}...</div>
+          <div className="flex justify-between items-center mt-0.5">
+            <span className="text-[10px] text-[var(--text-ghost)]">{c.canal} · {c.ciclo}</span>
+            <span className="text-[10px]">{filtroIcon[c.filtro_identidad] || ''} {c.filtro_identidad}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 const MODULO_COMPONENTS = {
   agenda: AgendaHoy,
   calendario: CalendarioSemanal,
@@ -406,6 +455,8 @@ const MODULO_COMPONENTS = {
   bus: BusPanel,
   voz_proactiva: VozProactivaPanel,
   motor: MotorPanel,
+  contenido: ContenidoPresenciaPanel,
+  presencia: IdentidadPresenciaPanel,
 };
 
 // Módulos que necesitan Card variant especial

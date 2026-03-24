@@ -6,7 +6,7 @@ export const CAPAS = {
   cognitivo:  { label: 'Cognitivo',  icon: '\uD83E\uDDE0', modulos: ['pizarra', 'estrategia', 'evaluacion', 'feed_cognitivo', 'bus'] },
   voz:        { label: 'Voz',        icon: '\uD83D\uDCE2', modulos: ['voz_proactiva', 'voz'] },
   motor:      { label: 'Motor',      icon: '\u2699\uFE0F', modulos: ['motor'] },
-  identidad:  { label: 'Identidad',  icon: '\uD83E\uDDEC', modulos: ['adn', 'depuracion', 'readiness', 'engagement'] },
+  identidad:  { label: 'Identidad',  icon: '\uD83E\uDDEC', modulos: ['adn', 'depuracion', 'readiness', 'engagement', 'contenido', 'presencia'] },
 };
 
 export const TABS_PROFUNDO = [
@@ -19,6 +19,7 @@ export const TABS_PROFUNDO = [
   { id: 'adn',          icon: '\uD83E\uDDEC', label: 'ADN' },
   { id: 'depuracion',   icon: '\uD83D\uDDD1\uFE0F', label: 'Depuraci\u00F3n' },
   { id: 'contabilidad', icon: '\uD83D\uDCB0', label: 'Contabilidad' },
+  { id: 'contenido',    icon: '\uD83D\uDCF1', label: 'Contenido' },
 ];
 
 export const ESTADO_ACD = {
