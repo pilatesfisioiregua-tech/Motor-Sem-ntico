@@ -1,33 +1,20 @@
-const sizes = {
-  sm: { value: 'text-xl', label: 'text-[10px]' },
-  md: { value: 'text-3xl', label: 'text-[11px]' },
-  lg: { value: 'text-5xl', label: 'text-xs' },
-};
-
-export default function Metric({ label, value, unit = '', delta = null, size = 'md' }) {
-  const s = sizes[size] || sizes.md;
-  const deltaColor = delta > 0 ? 'text-emerald-400' : delta < 0 ? 'text-red-400' : 'text-[var(--text-tertiary)]';
+/** iOS-native metric display */
+export default function Metric({ label, value, unit = '', delta = null, color = 'var(--accent-blue)' }) {
+  const deltaColor = delta > 0 ? 'var(--accent-green)' : delta < 0 ? 'var(--accent-red)' : 'var(--text-tertiary)';
   const deltaArrow = delta > 0 ? '\u2191' : delta < 0 ? '\u2193' : '';
-  const deltaBg = delta > 0 ? 'bg-emerald-400/10' : delta < 0 ? 'bg-red-400/10' : 'bg-white/5';
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <span className={`${s.label} font-semibold tracking-[0.06em] uppercase text-[var(--text-ghost)]`}>
-        {label}
+    <div className="flex flex-col items-center gap-1 p-3">
+      <span className="text-[28px] font-bold tracking-tight tabular-nums" style={{ color, fontFamily: 'var(--font-system)' }}>
+        {value}
+        {unit && <span className="text-[14px] font-medium ml-0.5" style={{ color: 'var(--text-tertiary)' }}>{unit}</span>}
       </span>
-      <div className="flex items-baseline gap-2">
-        <span className={`${s.value} font-bold tracking-tighter text-[var(--text-primary)] metric-value`}
-              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.03em' }}>
-          {value}
-          {unit && <span className="text-[0.45em] text-[var(--text-tertiary)] ml-0.5 font-medium">{unit}</span>}
+      {delta !== null && delta !== 0 && (
+        <span className="text-[11px] font-semibold tabular-nums" style={{ color: deltaColor }}>
+          {deltaArrow}{Math.abs(delta)}%
         </span>
-        {delta !== null && delta !== 0 && (
-          <span className={`text-[10px] font-semibold ${deltaColor} ${deltaBg} px-1.5 py-0.5 rounded-md`}
-                style={{ fontFamily: 'var(--font-mono)' }}>
-            {deltaArrow}{Math.abs(delta)}%
-          </span>
-        )}
-      </div>
+      )}
+      <span className="text-[11px] font-medium" style={{ color: 'var(--text-secondary)' }}>{label}</span>
     </div>
   );
 }

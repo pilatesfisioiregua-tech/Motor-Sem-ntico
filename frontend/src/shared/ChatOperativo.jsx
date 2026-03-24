@@ -1,19 +1,11 @@
 /**
- * ChatOperativo — Chat Operativo Universal con confirmación de acciones.
- *
- * Flujo:
- * 1. Jesús escribe/habla → POST /cockpit/chat
- * 2. Si respuesta tiene action_plan → mostrar plan con botones Ejecutar/Cancelar
- * 3. Si Jesús confirma → POST /cockpit/confirm → feedback paso a paso
- * 4. Historial visible con burbujas
+ * ChatOperativo — iMessage-style Chat with action confirmation.
  */
 import { useState, useRef, useEffect, useCallback } from 'react';
-import * as api from '../api';
 import { fetchApi } from '../context/AppContext';
 import Pulse from '../design/Pulse';
 import VoicePanel, { speak } from './VoicePanel';
 
-// Iconos por tipo de acción
 const ACTION_ICONS = {
   registrar_pago: '\u{1F4B0}',
   cancelar_sesiones_cliente: '\u{274C}',
@@ -29,104 +21,95 @@ const ACTION_ICONS = {
   voz_senales: '\u{1F4E1}',
 };
 
+/* ---- Action Plan Card ---- */
 function ActionPlan({ plan, onConfirm, onCancel, executing, results }) {
   return (
-    <div className="glass rounded-2xl p-4 border border-[var(--accent-amber)]/30 space-y-3 fade-in">
-      <div className="flex items-center gap-2 mb-1">
-        <span className="text-xs font-bold tracking-widest uppercase text-[var(--accent-amber)]">
-          Plan de acciones
-        </span>
-        {!executing && !results && (
-          <span className="text-[10px] text-[var(--text-ghost)] ml-auto">Requiere confirmaci\u00F3n</span>
-        )}
+    <div className="mx-4 my-2 rounded-2xl overflow-hidden anim-scale-in" style={{ background: 'rgba(255, 214, 10, 0.08)', border: '1px solid rgba(255, 214, 10, 0.2)' }}>
+      <div className="px-4 pt-3 pb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-[11px] font-bold tracking-wider uppercase" style={{ color: 'var(--accent-amber)' }}>
+            Plan de acciones
+          </span>
+          {!executing && !results && (
+            <span className="ios-pill ml-auto" style={{ background: 'rgba(255, 214, 10, 0.15)', color: 'var(--accent-amber)', fontSize: 10 }}>
+              Confirmar
+            </span>
+          )}
+        </div>
+        <p className="text-[14px] mt-2 font-medium" style={{ color: 'var(--text-primary)' }}>{plan.resumen}</p>
       </div>
 
-      <p className="text-sm text-[var(--text-primary)] font-medium">{plan.resumen}</p>
-
-      <div className="space-y-2">
+      <div className="px-3 pb-2 space-y-1">
         {plan.pasos.map((paso, i) => {
           const icon = ACTION_ICONS[paso.accion] || '\u{2699}\u{FE0F}';
           const result = results?.[i];
-          const statusClass = result
-            ? result.estado === 'ok'
-              ? 'border-l-green-500 bg-green-500/5'
-              : 'border-l-red-500 bg-red-500/5'
-            : executing && i < (results?.length || 0)
-            ? 'border-l-[var(--accent-indigo)] bg-[var(--accent-indigo)]/5'
-            : 'border-l-[var(--border)]';
+          const bg = result
+            ? result.estado === 'ok' ? 'rgba(48, 209, 88, 0.08)' : 'rgba(255, 69, 58, 0.08)'
+            : 'transparent';
+          const border = result
+            ? result.estado === 'ok' ? 'rgba(48, 209, 88, 0.25)' : 'rgba(255, 69, 58, 0.25)'
+            : 'var(--separator)';
 
           return (
-            <div key={i} className={`flex items-start gap-3 p-3 rounded-xl border-l-2 ${statusClass} transition-all duration-300`}>
-              <span className="text-lg shrink-0">{icon}</span>
-              <div className="flex-1 min-w-0">
-                <span className="text-sm text-[var(--text-primary)]">{paso.descripcion}</span>
-                {result?.estado === 'ok' && (
-                  <span className="text-[10px] text-green-400 ml-2">{String.fromCodePoint(0x2705)}</span>
-                )}
-                {result?.estado === 'error' && (
-                  <div className="text-[11px] text-red-400 mt-1">
-                    {String.fromCodePoint(0x274C)} {result.error || result.resultado?.error || 'Error'}
-                  </div>
-                )}
-              </div>
-              {executing && !result && i === (results?.length || 0) && (
-                <Pulse color="amber" size={5} />
-              )}
+            <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all" style={{ background: bg, borderLeft: `2px solid ${border}` }}>
+              <span className="text-base shrink-0 emoji-icon">{icon}</span>
+              <span className="flex-1 text-[13px]" style={{ color: 'var(--text-primary)' }}>{paso.descripcion}</span>
+              {result?.estado === 'ok' && <span className="text-[var(--accent-green)] text-sm">{String.fromCodePoint(0x2705)}</span>}
+              {result?.estado === 'error' && <span className="text-[var(--accent-red)] text-[11px]">{String.fromCodePoint(0x274C)}</span>}
+              {executing && !result && i === (results?.length || 0) && <Pulse color="amber" size={5} />}
             </div>
           );
         })}
       </div>
 
       {!executing && !results && (
-        <div className="flex gap-2 pt-2">
-          <button
-            onClick={onConfirm}
-            className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold bg-[var(--accent-indigo)] text-white hover:brightness-110 transition-all cursor-pointer border-none active:scale-[0.98]"
-          >
-            {String.fromCodePoint(0x2705)} Ejecutar
+        <div className="flex gap-2 px-4 pb-4 pt-2">
+          <button onClick={onConfirm} className="ios-btn ios-btn-primary flex-1 text-[14px] py-2.5">
+            Ejecutar
           </button>
-          <button
-            onClick={onCancel}
-            className="px-4 py-2.5 rounded-xl text-sm font-medium bg-white/5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/10 transition-all cursor-pointer border border-[var(--border)] active:scale-[0.98]"
-          >
+          <button onClick={onCancel} className="ios-btn ios-btn-secondary py-2.5 text-[14px]">
             Cancelar
           </button>
         </div>
       )}
 
       {results && (
-        <div className={`text-xs font-semibold pt-1 ${results.every(r => r.estado === 'ok') ? 'text-green-400' : 'text-red-400'}`}>
-          {results.every(r => r.estado === 'ok')
-            ? `${String.fromCodePoint(0x2705)} ${results.length} ${results.length === 1 ? 'acci\u00F3n ejecutada' : 'acciones ejecutadas'}`
-            : `${results.filter(r => r.estado === 'ok').length}/${results.length} completadas`
-          }
+        <div className="px-4 pb-3">
+          <span className="text-[12px] font-semibold" style={{ color: results.every(r => r.estado === 'ok') ? 'var(--accent-green)' : 'var(--accent-red)' }}>
+            {results.every(r => r.estado === 'ok')
+              ? `${String.fromCodePoint(0x2705)} ${results.length} completada${results.length > 1 ? 's' : ''}`
+              : `${results.filter(r => r.estado === 'ok').length}/${results.length} completadas`
+            }
+          </span>
         </div>
       )}
     </div>
   );
 }
 
-
+/* ---- iMessage Bubble ---- */
 function ChatBubble({ role, content, timestamp }) {
   const isUser = role === 'user';
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} fade-in`}>
-      <div className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed
-        ${isUser
-          ? 'bg-[var(--accent-indigo)]/15 text-[var(--text-primary)] rounded-br-md'
-          : 'bg-[var(--bg-surface)] text-[var(--text-primary)] border border-[var(--border)] rounded-bl-md'
-        }`}
+    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} px-4 anim-fade-in`}>
+      <div
+        className="max-w-[82%] px-3.5 py-2 text-[15px] leading-[1.35]"
+        style={{
+          background: isUser ? 'var(--accent-blue)' : 'var(--bg-elevated)',
+          color: isUser ? '#fff' : 'var(--text-primary)',
+          borderRadius: isUser ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+        }}
       >
         {content}
         {timestamp && (
-          <div className="text-[9px] text-[var(--text-ghost)] mt-1 text-right">{timestamp}</div>
+          <div className="text-[10px] mt-1 text-right" style={{ opacity: 0.5 }}>{timestamp}</div>
         )}
       </div>
     </div>
   );
 }
 
-
+/* ---- Main Chat Component ---- */
 export default function ChatOperativo({ modulosActivos, onAcciones, onSaveConfig, compact = false }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -161,19 +144,11 @@ export default function ChatOperativo({ modulosActivos, onAcciones, onSaveConfig
     try {
       const data = await fetchApi('/pilates/cockpit/chat', {
         method: 'POST',
-        body: JSON.stringify({
-          mensaje: msg,
-          modulos_activos: modulosActivos,
-          historial,
-        }),
+        body: JSON.stringify({ mensaje: msg, modulos_activos: modulosActivos, historial }),
       });
 
-      // Aplicar acciones de interfaz
-      if (data.acciones && onAcciones) {
-        onAcciones(data.acciones);
-      }
+      if (data.acciones && onAcciones) onAcciones(data.acciones);
 
-      // Si hay plan de acciones → mostrar para confirmar
       if (data.action_plan) {
         setPendingPlan(data.action_plan);
         if (data.respuesta) addMessage('assistant', data.respuesta);
@@ -184,7 +159,7 @@ export default function ChatOperativo({ modulosActivos, onAcciones, onSaveConfig
 
       if (data.historial) setHistorial(data.historial);
     } catch {
-      addMessage('assistant', 'Error de conexi\u00F3n. Prueba otra vez.');
+      addMessage('assistant', 'Error de conexi\u00F3n.');
     }
     setLoading(false);
   }, [input, loading, modulosActivos, historial, addMessage, onAcciones]);
@@ -201,13 +176,12 @@ export default function ChatOperativo({ modulosActivos, onAcciones, onSaveConfig
       });
 
       setPlanResults(data.resultados || []);
-
       if (data.todos_ok) {
-        addMessage('assistant', `Hecho. ${data.ejecutados} ${data.ejecutados === 1 ? 'acci\u00F3n completada' : 'acciones completadas'}.`);
+        addMessage('assistant', `Hecho. ${data.ejecutados} acci\u00F3n${data.ejecutados > 1 ? 'es' : ''} completada${data.ejecutados > 1 ? 's' : ''}.`);
         speak('Hecho.');
       } else {
         const ok = data.resultados?.filter(r => r.estado === 'ok').length || 0;
-        addMessage('assistant', `${ok} de ${data.total} acciones completadas. Revisa los errores.`);
+        addMessage('assistant', `${ok} de ${data.total} completadas.`);
       }
     } catch {
       addMessage('assistant', 'Error ejecutando el plan.');
@@ -227,76 +201,66 @@ export default function ChatOperativo({ modulosActivos, onAcciones, onSaveConfig
   }, [handleSend]);
 
   const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
   }, [handleSend]);
 
-  // El chat se auto-expande cuando hay mensajes o loading
   const showChat = expanded || messages.length > 0 || loading || pendingPlan;
 
   return (
     <div className="flex flex-col">
-      {/* Input siempre visible */}
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1 group">
-          <div className="absolute inset-0 rounded-2xl bg-[var(--accent-indigo)] opacity-0 group-focus-within:opacity-[0.06] blur-xl transition-opacity duration-300" />
-          <input
-            ref={inputRef}
-            className="relative w-full glass rounded-2xl px-5 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)] focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)] transition-all duration-200"
-            placeholder="Pregunta lo que necesites..."
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={loading || executing}
-          />
-          {loading && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2">
-              <Pulse color="indigo" size={6} />
-            </div>
-          )}
+      {/* iOS-style search/input bar */}
+      <div className="px-4 pb-2">
+        <div className="flex items-center gap-2">
+          <div className="ios-search flex-1">
+            <svg width="16" height="16" fill="none" stroke="rgba(235,235,245,0.3)" strokeWidth="1.5">
+              <circle cx="7" cy="7" r="5.5" /><path d="m11 11 3.5 3.5" />
+            </svg>
+            <input
+              ref={inputRef}
+              placeholder="Pregunta lo que necesites..."
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={loading || executing}
+              onFocus={() => setExpanded(true)}
+            />
+            {loading && <Pulse color="blue" size={5} />}
+          </div>
+          <VoicePanel onTranscript={handleVoice} />
         </div>
-        <VoicePanel onTranscript={handleVoice} />
       </div>
 
-      {/* Panel de conversación — se expande debajo del input */}
+      {/* Chat sheet — slides up from below input */}
       {showChat && (
-        <div className="mt-2 glass rounded-2xl border border-[var(--border)] overflow-hidden fade-in">
-          {/* Header con botón cerrar */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--border)]/50">
-            <span className="text-[10px] font-bold tracking-widest uppercase text-[var(--accent-indigo)]">Chat operativo</span>
+        <div className="mx-4 rounded-2xl overflow-hidden anim-fade-in" style={{ background: 'var(--bg-surface)', border: '0.5px solid var(--separator)' }}>
+          {/* Handle + close */}
+          <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: '0.5px solid var(--separator)' }}>
+            <span className="text-[11px] font-bold tracking-wider uppercase" style={{ color: 'var(--accent-blue)' }}>Chat</span>
             {messages.length > 0 && !loading && !pendingPlan && (
               <button
                 onClick={() => { setExpanded(false); setMessages([]); setPendingPlan(null); setPlanResults(null); }}
-                className="text-[var(--text-ghost)] hover:text-[var(--text-secondary)] text-sm cursor-pointer bg-transparent border-none px-1"
+                className="text-[13px] font-medium bg-transparent border-none cursor-pointer"
+                style={{ color: 'var(--accent-blue)' }}
               >
-                {String.fromCodePoint(0x2715)}
+                Cerrar
               </button>
             )}
           </div>
 
-          {/* Mensajes */}
-          <div className="overflow-y-auto px-4 py-3 space-y-3 max-h-[350px]">
+          {/* Messages */}
+          <div className="overflow-y-auto py-3 space-y-2" style={{ maxHeight: 320 }}>
             {messages.map((msg, i) => (
               <ChatBubble key={i} role={msg.role} content={msg.content} timestamp={msg.timestamp} />
             ))}
 
-            {/* Plan de acciones pendiente */}
             {pendingPlan && (
-              <ActionPlan
-                plan={pendingPlan}
-                onConfirm={handleConfirm}
-                onCancel={handleCancel}
-                executing={executing}
-                results={planResults}
-              />
+              <ActionPlan plan={pendingPlan} onConfirm={handleConfirm} onCancel={handleCancel} executing={executing} results={planResults} />
             )}
 
             {loading && !pendingPlan && (
-              <div className="flex justify-start fade-in">
-                <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl rounded-bl-md px-4 py-3">
-                  <Pulse color="indigo" size={6} />
+              <div className="flex justify-start px-4 anim-fade-in">
+                <div className="px-4 py-3 rounded-2xl" style={{ background: 'var(--bg-elevated)' }}>
+                  <Pulse color="blue" size={6} />
                 </div>
               </div>
             )}
