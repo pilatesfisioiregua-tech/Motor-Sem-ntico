@@ -317,6 +317,46 @@ function FeedCognitivo() {
   );
 }
 
+function MotorPanel() {
+  const [motor, setMotor] = useState(null);
+  useEffect(() => { api.getMotorResumen().then(setMotor).catch(() => {}); }, []);
+  if (!motor) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Cargando motor...</p>;
+  const pctUsed = motor.presupuesto_restante > 0
+    ? ((5 - motor.presupuesto_restante) / 5 * 100).toFixed(0)
+    : 100;
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-xs text-[var(--text-tertiary)]">Presupuesto semanal</span>
+        <span className="text-xs font-mono text-[var(--text-primary)]">
+          ${motor.gastado_ciclo?.toFixed(2)} / $5.00
+        </span>
+      </div>
+      <div className="w-full h-2 bg-[var(--bg-void)] rounded-full overflow-hidden mb-3">
+        <div
+          className={`h-full rounded-full transition-all ${
+            pctUsed > 80 ? 'bg-red-500' : pctUsed > 50 ? 'bg-amber-500' : 'bg-emerald-500'
+          }`}
+          style={{ width: `${Math.min(100, pctUsed)}%` }}
+        />
+      </div>
+      {motor.por_modelo?.length > 0 && (
+        <div className="space-y-1">
+          {motor.por_modelo.map((m, i) => (
+            <div key={i} className="flex justify-between text-xs">
+              <span className="text-[var(--text-secondary)]">{m.modelo?.split('/')[1] || m.modelo}</span>
+              <span className="font-mono text-[var(--text-tertiary)]">
+                {m.calls} calls · ${(parseFloat(m.coste) || 0).toFixed(3)}
+                {m.cache_hits > 0 && ` · ${m.cache_hits} cache`}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function BusPanel() {
   const [data, setData] = useState(null);
   useEffect(() => { api.getOrganismoBus().then(setData).catch(() => {}); }, []);
@@ -365,6 +405,7 @@ const MODULO_COMPONENTS = {
   feed_cognitivo: FeedCognitivo,
   bus: BusPanel,
   voz_proactiva: VozProactivaPanel,
+  motor: MotorPanel,
 };
 
 // Módulos que necesitan Card variant especial

@@ -3912,6 +3912,71 @@ async def organismo_evaluacion():
     return {**payload, "fecha": str(señal["created_at"])}
 
 
+@router.get("/organismo/pizarra-cognitiva")
+async def get_pizarra_cognitiva():
+    """Recetas del Director para cada función — lo que piensa el organismo."""
+    from src.pilates.pizarras import leer_recetas_ciclo
+    from zoneinfo import ZoneInfo
+    ahora = datetime.now(ZoneInfo("Europe/Madrid"))
+    ciclo = f"W{ahora.isocalendar()[1]:02d}-{ahora.isocalendar()[0]}"
+    recetas = await leer_recetas_ciclo("authentic_pilates", ciclo)
+    return {"ciclo": ciclo, "recetas": recetas, "total": len(recetas)}
+
+
+@router.get("/organismo/plan-temporal")
+async def get_plan_temporal():
+    """Plan de ejecución del ciclo — qué componentes corren y en qué orden."""
+    from src.pilates.pizarras import leer_plan_ciclo
+    from zoneinfo import ZoneInfo
+    ahora = datetime.now(ZoneInfo("Europe/Madrid"))
+    ciclo = f"W{ahora.isocalendar()[1]:02d}-{ahora.isocalendar()[0]}"
+    plan = await leer_plan_ciclo("authentic_pilates", ciclo)
+    return {"ciclo": ciclo, "plan": plan, "total": len(plan)}
+
+
+@router.get("/organismo/patrones")
+async def get_patrones():
+    """Patrones aprendidos por el sistema — pizarra evolución."""
+    from src.pilates.pizarras import leer_patrones
+    patrones = await leer_patrones("authentic_pilates", min_confianza=0.3)
+    return {"patrones": patrones, "total": len(patrones)}
+
+
+@router.get("/organismo/mediaciones")
+async def get_mediaciones_recientes():
+    """Conflictos cross-AF resueltos por el Mediador."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch("""
+            SELECT * FROM om_mediaciones
+            WHERE tenant_id = 'authentic_pilates'
+            ORDER BY created_at DESC LIMIT 10
+        """)
+    return [dict(r) for r in rows]
+
+
+@router.get("/organismo/motor-resumen")
+async def get_motor_resumen():
+    """Resumen del motor: gasto, caché hits, presupuesto."""
+    from src.motor.pensar import presupuesto_restante, _presupuesto_ciclo
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        semana = await conn.fetch("""
+            SELECT modelo, count(*) as calls, SUM(coste_usd) as coste,
+                   SUM(CASE WHEN cache_hit THEN 1 ELSE 0 END) as cache_hits
+            FROM om_motor_telemetria
+            WHERE tenant_id='authentic_pilates' AND created_at >= date_trunc('week', now())
+            GROUP BY modelo ORDER BY coste DESC
+        """)
+    return {
+        "presupuesto_restante": round(presupuesto_restante(), 2),
+        "gastado_ciclo": round(_presupuesto_ciclo, 4),
+        "por_modelo": [dict(r) for r in semana],
+    }
+
+
 @router.get("/comunicaciones")
 async def get_comunicaciones(estado: Optional[str] = None, limit: int = 50):
     """Lee pizarra de comunicaciones — tracking WA."""

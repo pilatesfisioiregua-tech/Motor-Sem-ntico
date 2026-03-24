@@ -57,11 +57,17 @@ function TabOrganismo() {
   const [pizarra, setPizarra] = useState(null);
   const [bus, setBus] = useState(null);
   const [configs, setConfigs] = useState(null);
+  const [mediaciones, setMediaciones] = useState([]);
+  const [patrones, setPatrones] = useState([]);
+  const [motorResumen, setMotorResumen] = useState(null);
 
   useEffect(() => {
     api.getOrganismoPizarra().then(setPizarra).catch(() => {});
     api.getOrganismoBus().then(setBus).catch(() => {});
     api.getOrganismoConfigAgentes().then(setConfigs).catch(() => {});
+    api.getMediaciones().then(r => setMediaciones(Array.isArray(r) ? r : [])).catch(() => {});
+    api.getPatrones().then(r => setPatrones(r?.patrones || [])).catch(() => {});
+    api.getMotorResumen().then(setMotorResumen).catch(() => {});
   }, []);
 
   const entradas = pizarra?.entradas || [];
@@ -75,9 +81,62 @@ function TabOrganismo() {
   const rawBus = Array.isArray(bus) ? bus : (bus?.recientes || bus?.señales || []);
   const signals = rawBus.slice(0, 20);
 
+  const gomas = [
+    { id: 'G1', label: 'Datos\u2192Se\u00F1ales', desc: 'Negocio genera, AF escuchan' },
+    { id: 'G2', label: 'Se\u00F1ales\u2192Diagn\u00F3stico', desc: 'Bus acumula, ACD diagnostica' },
+    { id: 'G3', label: 'Diagn\u00F3stico\u2192B\u00FAsqueda', desc: 'Gaps generan queries' },
+    { id: 'G4', label: 'B\u00FAsqueda\u2192Prescripci\u00F3n', desc: 'Cognitiva diagnostica, Estratega prescribe' },
+    { id: 'G5', label: 'Prescripci\u00F3n\u2192Acci\u00F3n', desc: 'AF1-AF7 ejecutan via bus' },
+    { id: 'G6', label: 'Acci\u00F3n\u2192Aprendizaje', desc: 'Gestor registra, poda, promueve' },
+  ];
+
   return (
     <div className="space-y-6">
-      {/* Gomas activas */}
+      {/* GOMAS DEL MOTOR PERPETUO */}
+      <Card>
+        <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>Motor Perpetuo — 6 Gomas</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          {gomas.map(g => (
+            <div key={g.id} className="p-2 rounded-lg bg-[var(--bg-void)] border border-[var(--border)]">
+              <div className="flex items-center gap-1 mb-1">
+                <Pulse active size={6} />
+                <span className="text-xs font-bold text-[var(--accent-indigo)]" style={{ fontFamily: 'var(--font-mono)' }}>{g.id}</span>
+              </div>
+              <p className="text-[10px] text-[var(--text-secondary)]">{g.label}</p>
+              <p className="text-[10px] text-[var(--text-ghost)]">{g.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* MOTOR LLM */}
+      {motorResumen && (
+        <Card>
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>Motor LLM</h3>
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xs text-[var(--text-tertiary)]">Presupuesto semanal</span>
+            <span className="text-xs text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-mono)' }}>
+              ${motorResumen.gastado_ciclo?.toFixed(2)} / $5.00
+            </span>
+          </div>
+          <div className="w-full h-2 bg-[var(--bg-void)] rounded-full overflow-hidden mb-3">
+            <div className={`h-full rounded-full transition-all ${
+              ((5 - motorResumen.presupuesto_restante) / 5 * 100) > 80 ? 'bg-red-500' :
+              ((5 - motorResumen.presupuesto_restante) / 5 * 100) > 50 ? 'bg-amber-500' : 'bg-emerald-500'
+            }`} style={{ width: `${Math.min(100, (5 - motorResumen.presupuesto_restante) / 5 * 100)}%` }} />
+          </div>
+          {motorResumen.por_modelo?.length > 0 && motorResumen.por_modelo.map((m, i) => (
+            <div key={i} className="flex justify-between text-xs py-0.5">
+              <span className="text-[var(--text-secondary)]">{m.modelo?.split('/')[1] || m.modelo}</span>
+              <span className="text-[var(--text-tertiary)]" style={{ fontFamily: 'var(--font-mono)' }}>
+                {m.calls} calls · ${(parseFloat(m.coste) || 0).toFixed(3)}
+              </span>
+            </div>
+          ))}
+        </Card>
+      )}
+
+      {/* Agentes activos */}
       {configs && configs.length > 0 && (
         <Card variant="organism">
           <h3 className="text-sm font-bold text-[var(--accent-violet)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
@@ -92,6 +151,46 @@ function TabOrganismo() {
               </div>
             ))}
           </div>
+        </Card>
+      )}
+
+      {/* MEDIACIONES */}
+      {mediaciones.length > 0 && (
+        <Card>
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+            Mediaciones ({mediaciones.length})
+          </h3>
+          {mediaciones.map((m, i) => {
+            const res = typeof m.resolucion === 'string' ? JSON.parse(m.resolucion) : (m.resolucion || {});
+            return (
+              <div key={i} className="py-2 border-b border-[var(--border)]">
+                <div className="flex gap-1 mb-1">
+                  {m.af_involucrados?.map(af => <AgentBadge key={af} agent={af} size="xs" />)}
+                </div>
+                <p className="text-xs text-[var(--text-secondary)]">{res?.resolucion || res?.accion_final || ''}</p>
+              </div>
+            );
+          })}
+        </Card>
+      )}
+
+      {/* PATRONES APRENDIDOS */}
+      {patrones.length > 0 && (
+        <Card>
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+            Patrones Aprendidos ({patrones.length})
+          </h3>
+          {patrones.slice(0, 5).map((p, i) => (
+            <div key={i} className="py-2 border-b border-[var(--border)]">
+              <div className="flex justify-between mb-1">
+                <span className="text-xs font-bold text-[var(--accent-amber)]">{p.tipo}</span>
+                <span className="text-[10px] text-[var(--text-ghost)]">
+                  confianza {((p.confianza || 0) * 100).toFixed(0)}% · {p.evidencia_ciclos || 0} ciclos
+                </span>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)]">{p.descripcion}</p>
+            </div>
+          ))}
         </Card>
       )}
 
@@ -158,33 +257,97 @@ function TabOrganismo() {
 
 function TabDirector() {
   const [data, setData] = useState(null);
-  useEffect(() => { api.getOrganismoDirector().then(setData).catch(() => {}); }, []);
+  const [cognitiva, setCognitiva] = useState(null);
+  const [plan, setPlan] = useState(null);
 
-  if (!data || !data.estrategia_global) return (
-    <Card><p className="text-sm text-[var(--text-tertiary)] text-center py-8">El Director Opus no ha ejecutado aun. Se ejecuta en el cron semanal.</p></Card>
-  );
-
-  const configs = data.configs || [];
+  useEffect(() => {
+    api.getOrganismoDirector().then(setData).catch(() => {});
+    api.getPizarraCognitiva().then(setCognitiva).catch(() => {});
+    api.getPlanTemporal().then(setPlan).catch(() => {});
+  }, []);
 
   return (
     <div className="space-y-6">
-      {/* Estrategia global */}
+      {/* Estado Director */}
       <Card variant="elevated" glow>
         <h3 className="text-sm font-bold text-[var(--accent-indigo)] mb-2" style={{ fontFamily: 'var(--font-display)' }}>
-          Estrategia global
+          Director Opus
         </h3>
-        {data.estado_sistema && <p className="text-sm text-[var(--text-secondary)] mb-3">{data.estado_sistema}</p>}
-        <p className="text-sm text-[var(--text-primary)] font-medium">{data.estrategia_global}</p>
-        {data.fecha && <div className="text-[10px] text-[var(--text-ghost)] mt-3">Actualizado: {new Date(data.fecha).toLocaleDateString('es-ES')}</div>}
+        {data?.estrategia_global ? (
+          <div>
+            {data.estado_sistema && <p className="text-sm text-[var(--text-secondary)] mb-3">{data.estado_sistema}</p>}
+            <p className="text-sm text-[var(--text-primary)] font-medium">{data.estrategia_global}</p>
+            {data.fecha && <div className="text-[10px] text-[var(--text-ghost)] mt-3">Actualizado: {new Date(data.fecha).toLocaleDateString('es-ES')}</div>}
+          </div>
+        ) : (
+          <p className="text-sm text-[var(--text-tertiary)]">No ejecutado este ciclo</p>
+        )}
       </Card>
 
-      {/* Configs por agente */}
-      {configs.map((cfg, i) => {
+      {/* Recetas (Pizarra Cognitiva) */}
+      {cognitiva?.recetas?.length > 0 && (
+        <Card>
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+            Partituras D_hibrido — Ciclo {cognitiva.ciclo}
+          </h3>
+          {cognitiva.recetas.map((r, i) => (
+            <div key={i} className="py-3 border-b border-[var(--border)]">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-bold text-sm text-[var(--accent-violet)]">{r.funcion}</span>
+                <span className="text-xs text-[var(--text-ghost)]">
+                  {r.lente || '*'} · p{r.prioridad}
+                </span>
+              </div>
+              {r.intencion && <p className="text-xs text-[var(--text-secondary)] mb-2">{r.intencion}</p>}
+              <div className="flex flex-wrap gap-1">
+                {(r.ints || []).map(int => (
+                  <span key={int} className="px-1.5 py-0.5 rounded-full bg-[var(--accent-indigo-glow)] text-[var(--accent-indigo)] text-[10px] font-bold"
+                        style={{ fontFamily: 'var(--font-mono)' }}>
+                    {int}
+                  </span>
+                ))}
+                {(r.ps || []).map(p => (
+                  <span key={p} className="px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-bold"
+                        style={{ fontFamily: 'var(--font-mono)' }}>
+                    {p}
+                  </span>
+                ))}
+              </div>
+              {r.prompt_imperativo && (
+                <details className="mt-2">
+                  <summary className="text-[10px] text-[var(--text-ghost)] cursor-pointer">Ver prompt</summary>
+                  <pre className="text-[10px] text-[var(--text-tertiary)] bg-[var(--bg-void)] p-2 rounded mt-1 whitespace-pre-wrap">
+                    {r.prompt_imperativo?.slice(0, 300)}
+                  </pre>
+                </details>
+              )}
+            </div>
+          ))}
+        </Card>
+      )}
+
+      {/* Plan Temporal */}
+      {plan?.plan?.length > 0 && (
+        <Card>
+          <h3 className="text-sm font-bold text-[var(--text-primary)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+            Plan Temporal — {plan.ciclo}
+          </h3>
+          {plan.plan.map((p, i) => (
+            <div key={i} className={`flex items-center gap-2 py-1.5 border-b border-[var(--border)] text-sm ${!p.activo ? 'opacity-40' : ''}`}>
+              <span className="text-xs w-6 text-[var(--text-ghost)]" style={{ fontFamily: 'var(--font-mono)' }}>{p.orden}</span>
+              <span className="text-[var(--text-primary)]">{p.componente}</span>
+              <span className="text-xs text-[var(--text-tertiary)] ml-auto">{p.fase}</span>
+            </div>
+          ))}
+        </Card>
+      )}
+
+      {/* Configs por agente (legacy) */}
+      {data?.configs?.map((cfg, i) => {
         const config = typeof cfg.config === 'string' ? JSON.parse(cfg.config) : cfg.config;
-        const ints = config?.ints || config?.inteligencias || [];
-        const preguntas = config?.preguntas || config?.calculo_semantico || [];
-        const provocacion = config?.provocacion || '';
-        const razonamiento = config?.razonamiento || '';
+        const ints = config?.ints || config?.inteligencias || config?.INT_activas || [];
+        const ps = config?.ps || config?.P_activos || [];
+        const rs = config?.rs || config?.R_activos || [];
 
         return (
           <Card key={i}>
@@ -194,41 +357,33 @@ function TabDirector() {
               </span>
               <span className="text-[10px] text-[var(--text-ghost)]" style={{ fontFamily: 'var(--font-mono)' }}>v{cfg.version}</span>
             </div>
-
-            {/* INTs como pills */}
-            {ints.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mb-3">
-                {ints.map((int, j) => (
-                  <span key={j} className="px-2 py-0.5 rounded-full bg-[var(--accent-indigo-glow)] text-[10px] text-[var(--accent-indigo)] font-bold"
-                        style={{ fontFamily: 'var(--font-mono)' }}>
-                    {typeof int === 'string' ? int : int.id || int.nombre}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Preguntas del calculo semantico */}
-            {preguntas.length > 0 && (
-              <div className="space-y-1.5 mb-3">
-                {preguntas.slice(0, 5).map((p, j) => (
-                  <div key={j} className="text-xs text-[var(--text-secondary)] flex gap-2">
-                    <span className="text-[var(--accent-cyan)] shrink-0">{'\u2022'}</span>
-                    <span>{typeof p === 'string' ? p : p.pregunta || JSON.stringify(p)}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Provocacion */}
-            {provocacion && (
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {ints.map((int, j) => (
+                <span key={j} className="px-2 py-0.5 rounded-full bg-[var(--accent-indigo-glow)] text-[10px] text-[var(--accent-indigo)] font-bold"
+                      style={{ fontFamily: 'var(--font-mono)' }}>
+                  {typeof int === 'string' ? int : int.id || int.nombre}
+                </span>
+              ))}
+              {ps.map((p, j) => (
+                <span key={`p${j}`} className="px-2 py-0.5 rounded-full bg-amber-500/10 text-[10px] text-amber-400 font-bold"
+                      style={{ fontFamily: 'var(--font-mono)' }}>
+                  {typeof p === 'string' ? p : p.id || p.nombre}
+                </span>
+              ))}
+              {rs.map((r, j) => (
+                <span key={`r${j}`} className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-[10px] text-cyan-400 font-bold"
+                      style={{ fontFamily: 'var(--font-mono)' }}>
+                  {typeof r === 'string' ? r : r.id || r.nombre}
+                </span>
+              ))}
+            </div>
+            {config?.provocacion && (
               <div className="px-3 py-2 rounded-lg bg-amber-500/5 border border-amber-500/10 text-xs text-[var(--accent-amber)] mb-2">
-                {provocacion}
+                {config.provocacion}
               </div>
             )}
-
-            {/* Razonamiento */}
-            {razonamiento && (
-              <div className="text-xs text-[var(--text-tertiary)] italic">{razonamiento}</div>
+            {config?.razonamiento && (
+              <div className="text-xs text-[var(--text-tertiary)] italic">{config.razonamiento}</div>
             )}
           </Card>
         );

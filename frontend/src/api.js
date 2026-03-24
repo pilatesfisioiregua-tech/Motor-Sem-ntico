@@ -180,3 +180,14 @@ export const getOrganismoBus = () => request('/organismo/bus');
 export const getOrganismoDirector = () => request('/organismo/director');
 export const getOrganismoEvaluacion = () => request('/organismo/evaluacion');
 export const getOrganismoConfigAgentes = () => request('/organismo/config-agentes');
+
+// ORGANISMO — Paneles nuevos (F6B)
+export const getPizarraCognitiva = () => request('/organismo/pizarra-cognitiva');
+export const getPlanTemporal = () => request('/organismo/plan-temporal');
+export const getPatrones = () => request('/organismo/patrones');
+export const getMediaciones = () => request('/organismo/mediaciones');
+export const getMotorResumen = () => request('/organismo/motor-resumen');
+export const getComunicaciones = (params = {}) => {
+  const qs = new URLSearchParams(params).toString();
+  return request(`/comunicaciones${qs ? `?${qs}` : ''}`);
+};

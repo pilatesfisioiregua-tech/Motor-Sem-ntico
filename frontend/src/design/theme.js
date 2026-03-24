@@ -5,6 +5,7 @@ export const CAPAS = {
   financiero: { label: 'Financiero', icon: '\uD83D\uDCB0', modulos: ['pagos_pendientes', 'resumen_mes', 'facturas'] },
   cognitivo:  { label: 'Cognitivo',  icon: '\uD83E\uDDE0', modulos: ['pizarra', 'estrategia', 'evaluacion', 'feed_cognitivo', 'bus'] },
   voz:        { label: 'Voz',        icon: '\uD83D\uDCE2', modulos: ['voz_proactiva', 'voz'] },
+  motor:      { label: 'Motor',      icon: '\u2699\uFE0F', modulos: ['motor'] },
   identidad:  { label: 'Identidad',  icon: '\uD83E\uDDEC', modulos: ['adn', 'depuracion', 'readiness', 'engagement'] },
 };
 
