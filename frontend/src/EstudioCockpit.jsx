@@ -554,38 +554,53 @@ function Sidebar({ modulos, activos, onToggle, capas, visible }) {
 
 function HeaderEstudio({ saludo, lentes, chatInput, setChatInput, onChat, chatLoading, chatResp, onVoiceTranscript, onToggleSidebar }) {
   return (
-    <header className="glass-subtle sticky top-0 z-20 flex items-center justify-between px-5 md:px-8 py-4">
-      <div className="flex items-center gap-4 shrink-0">
-        <button
-          className="md:hidden p-2 rounded-[var(--radius-sm)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5 bg-transparent border-none cursor-pointer transition-all"
-          onClick={onToggleSidebar}
-        >
-          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <path d="M3 10h14M3 5h14M3 15h14" />
-          </svg>
-        </button>
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>
-            {saludo}
-          </h1>
-          <p className="text-[11px] text-[var(--text-tertiary)] mt-0.5 font-medium tracking-wide uppercase">Authentic Pilates</p>
+    <header className="glass-subtle sticky top-0 z-20 px-5 md:px-8 pt-[max(env(safe-area-inset-top),12px)] pb-3">
+      {/* Fila 1: Saludo + hamburger (mobile) o saludo + lentes + search (desktop) */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            className="md:hidden p-2.5 -ml-2 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5 bg-transparent border-none cursor-pointer transition-all active:scale-95"
+            onClick={onToggleSidebar}
+          >
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <path d="M3 11h16M3 5.5h16M3 16.5h16" />
+            </svg>
+          </button>
+          <div>
+            <h1 className="text-lg md:text-xl font-bold tracking-tight text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>
+              {saludo}
+            </h1>
+            <p className="text-[10px] text-[var(--text-ghost)] mt-0.5 font-semibold tracking-widest uppercase">Authentic Pilates</p>
+          </div>
+        </div>
+
+        {/* Desktop: lentes + search inline */}
+        <div className="hidden md:flex items-center gap-4">
+          {lentes && (
+            <div className="w-72">
+              <LensBar salud={lentes.salud || 0.5} sentido={lentes.sentido || 0.5} continuidad={lentes.continuidad || 0.5} />
+            </div>
+          )}
+          <div className="relative group">
+            <input
+              className="relative w-72 lg:w-80 glass rounded-2xl px-5 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)] focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)] transition-all duration-200"
+              placeholder="Pregunta lo que necesites..."
+              value={chatInput}
+              onChange={e => setChatInput(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && onChat()}
+              disabled={chatLoading}
+            />
+          </div>
+          <VoicePanel onTranscript={onVoiceTranscript} />
         </div>
       </div>
 
-      {lentes && (
-        <div className="hidden lg:flex items-center gap-6 w-80 mx-8">
-          <LensBar salud={lentes.salud || 0.5} sentido={lentes.sentido || 0.5} continuidad={lentes.continuidad || 0.5} />
-        </div>
-      )}
-
-      <div className="flex items-center gap-3">
-        <div className="relative group">
+      {/* Fila 2 (solo mobile): barra de búsqueda grande */}
+      <div className="md:hidden mt-3 flex items-center gap-2">
+        <div className="relative flex-1 group">
           <div className="absolute inset-0 rounded-2xl bg-[var(--accent-indigo)] opacity-0 group-focus-within:opacity-[0.06] blur-xl transition-opacity duration-300" />
           <input
-            className="relative w-64 lg:w-80 glass rounded-2xl
-                       px-5 py-3 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)]
-                       focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)]
-                       transition-all duration-200"
+            className="relative w-full glass rounded-2xl px-5 py-3.5 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-ghost)] focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)] transition-all duration-200"
             placeholder="Pregunta lo que necesites..."
             value={chatInput}
             onChange={e => setChatInput(e.target.value)}
@@ -799,7 +814,7 @@ export default function EstudioCockpit() {
         )}
 
         {/* MÓDULOS */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-28 md:pb-6">
           {modulosActivos.length === 0 && (
             <div className="flex flex-col items-center justify-center py-24 fade-in">
               <div className="w-16 h-16 rounded-3xl glass flex items-center justify-center mb-6 breathe">
@@ -887,20 +902,23 @@ export default function EstudioCockpit() {
       </div>
 
       {/* Bottom nav mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 glass-subtle flex justify-around py-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))] md:hidden z-50">
-        {Object.entries(capas).map(([key, capa]) => (
-          <button
-            key={key}
-            onClick={() => setCapaActiva(key)}
-            className={`flex flex-col items-center text-[10px] font-medium px-3 py-1.5 rounded-xl transition-all duration-200 bg-transparent border-none cursor-pointer
-              ${capaActiva === key
-                ? 'text-[var(--accent-indigo)] scale-105'
-                : 'text-[var(--text-ghost)] active:scale-95'}`}
-          >
-            <span className="text-lg mb-0.5 emoji-icon">{capa.icon}</span>
-            <span className="tracking-wide">{capa.label}</span>
-          </button>
-        ))}
+      <nav className="fixed bottom-0 left-0 right-0 glass flex justify-around items-end pt-2 pb-[max(8px,env(safe-area-inset-bottom))] md:hidden z-50"
+           style={{ borderTop: '0.5px solid rgba(255,255,255,0.08)' }}>
+        {Object.entries(capas).map(([key, capa]) => {
+          const isActive = capaActiva === key;
+          return (
+            <button
+              key={key}
+              onClick={() => setCapaActiva(key)}
+              className={`flex flex-col items-center gap-0.5 min-w-[52px] py-1 bg-transparent border-none cursor-pointer transition-all duration-200
+                ${isActive ? 'active:scale-95' : 'active:scale-90 opacity-50'}`}
+            >
+              <span className={`text-2xl emoji-icon transition-transform duration-200 ${isActive ? 'scale-110' : ''}`}>{capa.icon}</span>
+              <span className={`text-[9px] font-semibold tracking-wide ${isActive ? 'text-[var(--accent-indigo)]' : 'text-[var(--text-ghost)]'}`}>{capa.label}</span>
+              {isActive && <div className="w-5 h-[3px] rounded-full bg-[var(--accent-indigo)] mt-0.5" />}
+            </button>
+          );
+        })}
       </nav>
     </div>
   );
