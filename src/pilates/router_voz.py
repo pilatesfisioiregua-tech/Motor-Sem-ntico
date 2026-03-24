@@ -727,7 +727,11 @@ async def guardar_config_cockpit(data: dict):
 
 @router.post("/cockpit/chat")
 async def cockpit_chat(data: dict):
-    """Chat conversacional para controlar la interfaz del cockpit."""
+    """Chat conversacional para controlar la interfaz del cockpit.
+
+    Devuelve action_plan si hay acciones que requieren confirmación.
+    El frontend debe mostrar el plan y llamar a /cockpit/confirm para ejecutar.
+    """
     from src.pilates.cockpit import chat_cockpit
     mensaje = data.get("mensaje", "")
     modulos_activos = data.get("modulos_activos", [])
@@ -735,6 +739,20 @@ async def cockpit_chat(data: dict):
     if not mensaje:
         return {"respuesta": "", "acciones": {"montar": [], "desmontar": [], "desmontar_todos": False}}
     return await chat_cockpit(mensaje, modulos_activos, historial)
+
+
+@router.post("/cockpit/confirm")
+async def cockpit_confirm(data: dict):
+    """Ejecuta un plan de acciones confirmado por Jesús.
+
+    Input: {"pasos": [{"accion": "...", "args": {...}, "descripcion": "..."}]}
+    Output: {"ejecutados": N, "total": N, "todos_ok": bool, "resultados": [...]}
+    """
+    from src.pilates.cockpit import ejecutar_plan
+    pasos = data.get("pasos", [])
+    if not pasos:
+        return {"error": "No hay pasos que ejecutar"}
+    return await ejecutar_plan(pasos)
 
 
 # ============================================================

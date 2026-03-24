@@ -316,13 +316,15 @@ Además de controlar la interfaz, puedes ejecutar operaciones del estudio:
 
 REGLAS OPERATIVAS:
 1. Antes de ejecutar cualquier acción, BUSCA al cliente por nombre para obtener su ID.
-2. Para acciones destructivas (cancelar, eliminar), CONFIRMA con Jesús antes de ejecutar.
-3. Si Jesús dice "agéndame a X los martes y viernes hasta junio", calcula todas las fechas y crea las sesiones de golpe.
-4. Si dice "ponle en el grupo de las 17h", busca el grupo que encaje por hora y lo inscribe.
-5. Para facturas: primero busca cargos cobrados sin facturar, luego genera la factura.
-6. Puedes combinar operaciones de interfaz con operativas en la misma respuesta.
-7. Tras una operación, muestra el módulo relevante (ej: tras agendar → montar "calendario").
-8. Para consultas de Voz ("¿cuál es mi estrategia?", "¿cómo va mi presencia?", "prepárame posts"), usa las herramientas voz_*. Tras consultar, monta el módulo "voz".
+2. Para acciones destructivas (cancelar, eliminar) y acciones con dinero (cobrar, pagar, facturar, enviar WhatsApp), genera un PLAN DE ACCIONES con confirmar_plan en vez de ejecutar directamente. El plan se mostrará a Jesús para que lo apruebe.
+3. Para acciones de SOLO LECTURA (buscar, ver cliente, ver grupos, ver pagos, ver estrategia), ejecuta directamente sin confirmación.
+4. Si Jesús dice "agéndame a X los martes y viernes hasta junio", calcula todas las fechas y crea las sesiones de golpe.
+5. Si dice "ponle en el grupo de las 17h", busca el grupo que encaje por hora y lo inscribe.
+6. Para facturas: primero busca cargos cobrados sin facturar, luego genera la factura.
+7. Puedes combinar operaciones de interfaz con operativas en la misma respuesta.
+8. Tras una operación, muestra el módulo relevante (ej: tras agendar → montar "calendario").
+9. Para consultas de Voz ("¿cuál es mi estrategia?", "¿cómo va mi presencia?", "prepárame posts"), usa las herramientas voz_*. Tras consultar, monta el módulo "voz".
+10. Si tienes varias acciones (ej: "cobra a los 3 de la clase que acaba de terminar"), agrúpalas en UN SOLO plan con múltiples pasos.
 
 REGLAS GENERALES:
 1. Si pide ver algo → configurar_interfaz.
@@ -612,6 +614,36 @@ TOOLS_COCKPIT = [
             "parameters": {
                 "type": "object",
                 "properties": {}
+            }
+        }
+    },
+    # --- CONFIRMAR PLAN (acciones destructivas/monetarias) ---
+    {
+        "type": "function",
+        "function": {
+            "name": "confirmar_plan",
+            "description": "Genera un plan de acciones para que Jesús lo apruebe antes de ejecutar. Usar para: cancelar sesiones, registrar pagos, generar facturas, enviar WhatsApp, inscribir en grupo, agendar recurrentes. NO usar para lecturas.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "resumen": {
+                        "type": "string",
+                        "description": "Resumen breve de lo que se va a hacer, en lenguaje natural."
+                    },
+                    "pasos": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "accion": {"type": "string", "description": "Nombre de la tool a ejecutar"},
+                                "args": {"type": "object", "description": "Argumentos de la tool"},
+                                "descripcion": {"type": "string", "description": "Qué hace este paso, legible para humanos"}
+                            },
+                            "required": ["accion", "args", "descripcion"]
+                        }
+                    }
+                },
+                "required": ["resumen", "pasos"]
             }
         }
     },
@@ -1217,9 +1249,23 @@ TOOL_DISPATCH = {
 }
 
 
+# Acciones que requieren confirmación
+ACTIONS_REQUIRE_CONFIRM = {
+    "cancelar_sesiones_cliente", "registrar_pago", "generar_facturas",
+    "enviar_whatsapp", "inscribir_en_grupo", "agendar_sesiones_recurrentes",
+}
+
+
 async def chat_cockpit(mensaje: str, modulos_activos: list,
                         historial: list = None) -> dict:
-    """Chat conversacional del cockpit — interfaz + operaciones."""
+    """Chat conversacional del cockpit — interfaz + operaciones.
+
+    Devuelve:
+      - respuesta: texto del asistente
+      - acciones: montar/desmontar módulos
+      - action_plan: si hay acciones destructivas, plan pendiente de confirmación
+      - historial: historial actualizado
+    """
     t0 = time.time()
 
     if modulos_activos:
@@ -1256,6 +1302,7 @@ async def chat_cockpit(mensaje: str, modulos_activos: list,
     messages.append({"role": "user", "content": mensaje})
 
     acciones = {"montar": [], "desmontar": [], "desmontar_todos": False}
+    action_plan = None  # Plan pendiente de confirmación
     respuesta_texto = ""
 
     for _ in range(5):
@@ -1306,6 +1353,15 @@ async def chat_cockpit(mensaje: str, modulos_activos: list,
                 result = {"ok": True,
                           "montados": [m["id"] for m in acciones["montar"]],
                           "desmontados": acciones["desmontar"]}
+            elif fn_name == "confirmar_plan":
+                # El LLM genera un plan — no ejecutar, devolver al frontend
+                action_plan = {
+                    "resumen": fn_args.get("resumen", ""),
+                    "pasos": fn_args.get("pasos", []),
+                    "estado": "pendiente",
+                }
+                result = {"ok": True, "plan_generado": True,
+                          "mensaje": "Plan creado. Esperando confirmación de Jesús."}
             elif fn_name in TOOL_DISPATCH:
                 try:
                     result = await TOOL_DISPATCH[fn_name](fn_args)
@@ -1331,16 +1387,69 @@ async def chat_cockpit(mensaje: str, modulos_activos: list,
         acciones["montar"][-1]["rol"] = "principal"
 
     dt = int((time.time() - t0) * 1000)
-    log.info("cockpit_chat", ms=dt, acciones=acciones)
+    log.info("cockpit_chat", ms=dt, acciones=acciones,
+             has_plan=action_plan is not None)
 
     nuevo_historial = (historial or []) + [
         {"role": "user", "content": mensaje},
         {"role": "assistant", "content": respuesta_texto},
     ]
 
-    return {
+    result = {
         "respuesta": respuesta_texto,
         "acciones": acciones,
         "historial": nuevo_historial[-20:],
         "tiempo_ms": dt,
+    }
+    if action_plan:
+        result["action_plan"] = action_plan
+    return result
+
+
+async def ejecutar_plan(pasos: list) -> dict:
+    """Ejecuta un plan de acciones confirmado por Jesús.
+
+    Cada paso: {"accion": "registrar_pago", "args": {...}, "descripcion": "..."}
+    Ejecuta secuencialmente. Si un paso falla, para y reporta.
+    """
+    resultados = []
+    for i, paso in enumerate(pasos):
+        accion = paso.get("accion", "")
+        args = paso.get("args", {})
+        desc = paso.get("descripcion", accion)
+
+        if accion not in TOOL_DISPATCH:
+            resultados.append({
+                "paso": i + 1, "descripcion": desc,
+                "estado": "error", "error": f"Acción desconocida: {accion}",
+            })
+            break
+
+        try:
+            resultado = await TOOL_DISPATCH[accion](args)
+            tiene_error = "error" in resultado and resultado["error"]
+            resultados.append({
+                "paso": i + 1, "descripcion": desc,
+                "estado": "error" if tiene_error else "ok",
+                "resultado": resultado,
+            })
+            if tiene_error:
+                break
+        except Exception as e:
+            log.error("plan_exec_error", paso=i+1, accion=accion, error=str(e))
+            resultados.append({
+                "paso": i + 1, "descripcion": desc,
+                "estado": "error", "error": str(e),
+            })
+            break
+
+    todos_ok = all(r["estado"] == "ok" for r in resultados)
+    ejecutados = len(resultados)
+    total = len(pasos)
+
+    return {
+        "ejecutados": ejecutados,
+        "total": total,
+        "todos_ok": todos_ok,
+        "resultados": resultados,
     }

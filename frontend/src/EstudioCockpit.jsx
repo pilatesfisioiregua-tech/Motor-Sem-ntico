@@ -12,6 +12,7 @@ import SignalFlow from './design/SignalFlow';
 import ConflictLine from './design/ConflictLine';
 import Pulse from './design/Pulse';
 import VoicePanel, { speak } from './shared/VoicePanel';
+import ChatOperativo from './shared/ChatOperativo';
 import { CAPAS as CAPAS_DEFAULT } from './design/theme';
 
 // ============================================================
@@ -723,10 +724,10 @@ function Sidebar({ modulos, activos, onToggle, capas, visible }) {
 // HEADER
 // ============================================================
 
-function HeaderEstudio({ saludo, lentes, chatInput, setChatInput, onChat, chatLoading, chatResp, onVoiceTranscript, onToggleSidebar }) {
+function HeaderEstudio({ saludo, lentes, modulosActivos, onAcciones, onSaveConfig, onToggleSidebar }) {
   return (
     <header className="glass-subtle sticky top-0 z-20 px-5 md:px-8 pt-[max(env(safe-area-inset-top),12px)] pb-3">
-      {/* Fila 1: Saludo + hamburger (mobile) o saludo + lentes + search (desktop) */}
+      {/* Fila 1: Saludo + hamburger + lentes */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 shrink-0">
           <button
@@ -745,46 +746,24 @@ function HeaderEstudio({ saludo, lentes, chatInput, setChatInput, onChat, chatLo
           </div>
         </div>
 
-        {/* Desktop: lentes + search inline */}
+        {/* Desktop: lentes */}
         <div className="hidden md:flex items-center gap-4">
           {lentes && (
             <div className="w-72">
               <LensBar salud={lentes.salud || 0.5} sentido={lentes.sentido || 0.5} continuidad={lentes.continuidad || 0.5} />
             </div>
           )}
-          <div className="relative group">
-            <input
-              className="relative w-72 lg:w-80 glass rounded-2xl px-5 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)] focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)] transition-all duration-200"
-              placeholder="Pregunta lo que necesites..."
-              value={chatInput}
-              onChange={e => setChatInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && onChat()}
-              disabled={chatLoading}
-            />
-          </div>
-          <VoicePanel onTranscript={onVoiceTranscript} />
         </div>
       </div>
 
-      {/* Fila 2 (solo mobile): barra de búsqueda grande */}
-      <div className="md:hidden mt-3 flex items-center gap-2">
-        <div className="relative flex-1 group">
-          <div className="absolute inset-0 rounded-2xl bg-[var(--accent-indigo)] opacity-0 group-focus-within:opacity-[0.06] blur-xl transition-opacity duration-300" />
-          <input
-            className="relative w-full glass rounded-2xl px-5 py-3.5 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-ghost)] focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)] transition-all duration-200"
-            placeholder="Pregunta lo que necesites..."
-            value={chatInput}
-            onChange={e => setChatInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && onChat()}
-            disabled={chatLoading}
-          />
-          {chatLoading && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2">
-              <Pulse color="indigo" size={6} />
-            </div>
-          )}
-        </div>
-        <VoicePanel onTranscript={onVoiceTranscript} />
+      {/* Fila 2: Chat Operativo Universal */}
+      <div className="mt-3">
+        <ChatOperativo
+          modulosActivos={modulosActivos}
+          onAcciones={onAcciones}
+          onSaveConfig={onSaveConfig}
+          compact
+        />
       </div>
     </header>
   );
@@ -798,10 +777,6 @@ export default function EstudioCockpit() {
   const [contexto, setContexto] = useState(null);
   const [modulosActivos, setModulosActivos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [chatInput, setChatInput] = useState('');
-  const [chatResp, setChatResp] = useState('');
-  const [chatLoading, setChatLoading] = useState(false);
-  const [chatHistorial, setChatHistorial] = useState([]);
   const [lentes, setLentes] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
   const [capas, setCapas] = useState(CAPAS_DEFAULT);
@@ -857,83 +832,26 @@ export default function EstudioCockpit() {
     });
   }, [saveConfig]);
 
-  const enviarChat = useCallback(async () => {
-    const msg = chatInput.trim();
-    if (!msg || chatLoading) return;
-    setChatLoading(true);
-    setChatInput('');
-    setChatResp('');
-    try {
-      const data = await fetchApi('/pilates/cockpit/chat', {
-        method: 'POST', body: JSON.stringify({ mensaje: msg, modulos_activos: modulosActivos, historial: chatHistorial }),
-      });
-
-      if (data.acciones) {
-        setModulosActivos(prev => {
-          let next = [...prev];
-          if (data.acciones.desmontar_todos) next = [];
-          if (data.acciones.desmontar?.length) next = next.filter(m => !data.acciones.desmontar.includes(m.id));
-          if (data.acciones.montar?.length) {
-            for (const nuevo of data.acciones.montar) {
-              const nid = nuevo.id || nuevo;
-              const rol = nuevo.rol || 'secundario';
-              if (rol === 'principal') next = next.map(m => m.rol === 'principal' ? {...m, rol: 'secundario'} : m);
-              next = next.filter(m => m.id !== nid);
-              next.push({id: nid, rol});
-            }
-          }
-          saveConfig(next);
-          return next;
-        });
-      }
-      if (data.respuesta) {
-        setChatResp(data.respuesta);
-        speak(data.respuesta);
-      }
-      if (data.historial) setChatHistorial(data.historial);
-    } catch {
-      setChatResp('Error de conexion.');
-    }
-    setChatLoading(false);
-  }, [chatInput, chatLoading, modulosActivos, chatHistorial, saveConfig]);
-
-  const handleVoiceTranscript = useCallback((text) => {
-    setChatInput(text);
-    setTimeout(() => {
-      setChatInput(prev => {
-        if (prev === text) {
-          // Trigger send
-          setChatLoading(true);
-          fetchApi('/pilates/cockpit/chat', {
-            method: 'POST', body: JSON.stringify({ mensaje: text, modulos_activos: modulosActivos, historial: chatHistorial }),
-          }).then(data => {
-            if (data.acciones) {
-              setModulosActivos(prev2 => {
-                let next = [...prev2];
-                if (data.acciones.desmontar_todos) next = [];
-                if (data.acciones.desmontar?.length) next = next.filter(m => !data.acciones.desmontar.includes(m.id));
-                if (data.acciones.montar?.length) {
-                  for (const nuevo of data.acciones.montar) {
-                    const nid = nuevo.id || nuevo;
-                    const rol = nuevo.rol || 'secundario';
-                    if (rol === 'principal') next = next.map(m => m.rol === 'principal' ? {...m, rol: 'secundario'} : m);
-                    next = next.filter(m => m.id !== nid);
-                    next.push({id: nid, rol});
-                  }
-                }
-                saveConfig(next);
-                return next;
-              });
-            }
-            if (data.respuesta) { setChatResp(data.respuesta); speak(data.respuesta); }
-            if (data.historial) setChatHistorial(data.historial);
-            setChatLoading(false);
-          }).catch(() => { setChatResp('Error de conexion.'); setChatLoading(false); });
+  // Handler de acciones del ChatOperativo (montar/desmontar módulos)
+  const handleChatAcciones = useCallback((acciones) => {
+    if (!acciones) return;
+    setModulosActivos(prev => {
+      let next = [...prev];
+      if (acciones.desmontar_todos) next = [];
+      if (acciones.desmontar?.length) next = next.filter(m => !acciones.desmontar.includes(m.id));
+      if (acciones.montar?.length) {
+        for (const nuevo of acciones.montar) {
+          const nid = nuevo.id || nuevo;
+          const rol = nuevo.rol || 'secundario';
+          if (rol === 'principal') next = next.map(m => m.rol === 'principal' ? {...m, rol: 'secundario'} : m);
+          next = next.filter(m => m.id !== nid);
+          next.push({id: nid, rol});
         }
-        return '';
-      });
-    }, 100);
-  }, [modulosActivos, chatHistorial, saveConfig]);
+      }
+      saveConfig(next);
+      return next;
+    });
+  }, [saveConfig]);
 
   if (loading) return (
     <div className="min-h-screen bg-mesh flex items-center justify-center">
@@ -964,25 +882,15 @@ export default function EstudioCockpit() {
 
       {/* MAIN AREA */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* HEADER */}
+        {/* HEADER CON CHAT OPERATIVO UNIVERSAL */}
         <HeaderEstudio
           saludo={contexto?.saludo || 'Buenos dias.'}
           lentes={lentes}
-          chatInput={chatInput}
-          setChatInput={setChatInput}
-          onChat={enviarChat}
-          chatLoading={chatLoading}
-          chatResp={chatResp}
-          onVoiceTranscript={handleVoiceTranscript}
+          modulosActivos={modulosActivos}
+          onAcciones={handleChatAcciones}
+          onSaveConfig={saveConfig}
           onToggleSidebar={() => setSidebarOpen(p => !p)}
         />
-
-        {/* CHAT RESPONSE */}
-        {chatResp && (
-          <div className="mx-6 mt-3 px-4 py-3 rounded-[var(--radius-md)] bg-[var(--bg-surface)] border-l-2 border-l-[var(--accent-indigo)] text-sm text-[var(--text-primary)] fade-in">
-            {chatResp}
-          </div>
-        )}
 
         {/* MÓDULOS */}
         <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-28 md:pb-6">

@@ -165,6 +165,12 @@ export const cronCobros = () => request('/cron/diario', { method: 'POST' });
 export const chatPublico = (data) =>
   request('/publico/chat', { method: 'POST', body: JSON.stringify(data) });
 
+// COCKPIT CHAT OPERATIVO
+export const cockpitChat = (data) =>
+  request('/cockpit/chat', { method: 'POST', body: JSON.stringify(data) });
+export const cockpitConfirm = (data) =>
+  request('/cockpit/confirm', { method: 'POST', body: JSON.stringify(data) });
+
 // FEED
 export const getFeed = (params = {}) => {
   const qs = new URLSearchParams(params).toString();
