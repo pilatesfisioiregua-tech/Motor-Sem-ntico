@@ -49,8 +49,8 @@ async def lifespan(app: FastAPI):
     try:
         from src.db.client import close_pool
         await close_pool()
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
     log.info("shutdown_complete")
 
 

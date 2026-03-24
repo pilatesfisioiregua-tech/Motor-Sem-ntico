@@ -161,7 +161,7 @@ async def analizar() -> InformeGestor:
                 for int_id in (presc.get('ints') or []):
                     toxic_ints[int_id] += 1
             except (json.JSONDecodeError, TypeError):
-                pass
+                pass  # expected
         for int_id, count in sorted(toxic_ints.items(), key=lambda x: -x[1]):
             if count >= 2:
                 informe.investigar.append(

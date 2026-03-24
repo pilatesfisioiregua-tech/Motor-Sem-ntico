@@ -123,7 +123,7 @@ async def detectar_patrones() -> InformeReactor:
                 for r in (presc.get('rs') or []):
                     r_cierre[r] += 1
             except (json.JSONDecodeError, TypeError):
-                pass
+                pass  # expected
 
         if int_cierre:
             top_ints = sorted(int_cierre.items(), key=lambda x: -x[1])[:5]
