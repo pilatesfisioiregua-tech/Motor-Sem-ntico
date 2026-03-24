@@ -636,9 +636,21 @@ export default function EstudioCockpit() {
       if (data.delta_lentes) setLentes(data.delta_lentes);
     }).catch(() => {});
 
-    // Cargar layout de pizarra interfaz (P64)
+    // Cargar layout de pizarra interfaz (P64) — preservar iconos del theme.js
     fetchApi('/pilates/pizarra/interfaz').then(data => {
-      if (data.capas) setCapas(data.capas);
+      if (data.capas) {
+        // Merge: usar modulos del backend pero iconos/labels del theme.js
+        const merged = {};
+        for (const [key, serverCapa] of Object.entries(data.capas)) {
+          const local = CAPAS_DEFAULT[key];
+          merged[key] = {
+            ...serverCapa,
+            icon: local?.icon || serverCapa.icon,
+            label: local?.label || serverCapa.label,
+          };
+        }
+        setCapas(merged);
+      }
     }).catch(() => {}); // Fallback a CAPAS_DEFAULT
   }, []);
 
