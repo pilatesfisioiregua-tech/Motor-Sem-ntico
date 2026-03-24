@@ -13,7 +13,8 @@ from uuid import UUID
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 async def _get_pool():
@@ -82,3 +83,97 @@ async def feed_lista_espera(nombre: str, detalle: str, cliente_id: UUID):
 async def feed_engagement(nombre: str, de_score: int, a_score: int, cliente_id: UUID):
     await publicar("engagement", "📉", f"Engagement cayendo: {nombre}",
                    f"De {de_score} a {a_score}", cliente_id, "warning")
+
+
+# ============================================================
+# FEED DEL ORGANISMO — El sistema se hace visible
+# ============================================================
+
+async def feed_af_deteccion(agente: str, tipo: str, detalle: str,
+                             cliente_id: UUID = None):
+    """AF detectó algo: riesgo, ineficiencia, oportunidad, etc."""
+    iconos = {
+        "AF1": "🛡️", "AF2": "🎯", "AF3": "🗑️",
+        "AF4": "⚖️", "AF6": "🔄", "AF7": "📖",
+    }
+    await publicar(
+        f"organismo_{agente.lower()}", iconos.get(agente, "🤖"),
+        f"{agente}: {tipo}", detalle[:200],
+        cliente_id, "info" if "oportunidad" in tipo.lower() else "warning")
+
+
+async def feed_af_veto(agente_origen: str, agente_bloqueado: str,
+                        motivo: str, cliente_id: UUID = None):
+    """Un AF vetó la acción de otro."""
+    await publicar(
+        "organismo_veto", "🚫",
+        f"VETO: {agente_origen} bloquea {agente_bloqueado}",
+        motivo[:200], cliente_id, "danger")
+
+
+async def feed_convergencia(clientes: list[str], agentes: list[str], detalle: str):
+    """Múltiples AF señalan al mismo cliente/grupo."""
+    nombres = ", ".join(clientes[:3])
+    await publicar(
+        "organismo_convergencia", "🔗",
+        f"Convergencia: {nombres}",
+        f"{'+'.join(agentes)} coinciden. {detalle[:150]}",
+        severidad="warning")
+
+
+async def feed_diagnostico_acd(estado: str, s: float, se: float, c: float,
+                                 cambio: str = None):
+    """Resultado del diagnóstico ACD semanal."""
+    await publicar(
+        "organismo_acd", "🧠",
+        f"Diagnóstico ACD: {estado}",
+        f"S={s:.2f} Se={se:.2f} C={c:.2f}" + (f" — {cambio}" if cambio else ""),
+        severidad="info")
+
+
+async def feed_perfil_cognitivo(perfil: str, disfunciones: int, confianza: float):
+    """Resultado del enjambre: perfil INT×P×R."""
+    sev = "danger" if perfil in ("automata", "operador_ciego") else "warning" if not perfil.startswith("E") else "info"
+    await publicar(
+        "organismo_perfil", "🔬",
+        f"Perfil cognitivo: {perfil}",
+        f"{disfunciones} disfunciones IC detectadas. Confianza: {confianza:.0%}",
+        severidad=sev)
+
+
+async def feed_prescripcion(resumen: str, agentes_afectados: int):
+    """Prescripción del Estratega."""
+    await publicar(
+        "organismo_prescripcion", "💊",
+        f"Prescripción Nivel 1",
+        f"{resumen[:200]}. {agentes_afectados} agentes afectados.",
+        severidad="info")
+
+
+async def feed_recompilacion(agentes: list[str], cambios_estruct: int):
+    """Recompilador modificó agentes."""
+    nombres = ", ".join(agentes[:5])
+    titulo = "Agentes reconfigurados" if cambios_estruct == 0 else "Recompilación + cambios estructurales pendientes CR1"
+    sev = "info" if cambios_estruct == 0 else "warning"
+    await publicar("organismo_recompilacion", "🔧", titulo,
+                   f"Modificados: {nombres}", severidad=sev)
+
+
+async def feed_vigia_alerta(tipo_alerta: str, detalle: str):
+    """Vigía detectó un problema."""
+    await publicar("organismo_vigia", "👁️", f"Vigía: {tipo_alerta}",
+                   detalle[:200], severidad="warning")
+
+
+async def feed_mecanico_fix(tipo_fix: str, detalle: str):
+    """Mecánico reparó algo."""
+    await publicar("organismo_mecanico", "🔨", f"Mecánico: {tipo_fix}",
+                   detalle[:200], severidad="success")
+
+
+async def feed_autofago(funciones_huerfanas: int, propuestas: int):
+    """Autófago ejecutó la poda mensual."""
+    await publicar("organismo_autofago", "♻️",
+                   f"Autofagia mensual completada",
+                   f"{funciones_huerfanas} funciones huérfanas, {propuestas} propuestas registradas.",
+                   severidad="info")

@@ -21,7 +21,8 @@ from typing import Optional
 from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 STRATEGY_MODEL = os.getenv("STRATEGY_MODEL", "openai/gpt-4o")
 
 
@@ -146,8 +147,8 @@ async def _recoger_eje2_posicion() -> dict:
                 FROM diagnosticos
                 ORDER BY created_at DESC LIMIT 1
             """)
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     if diag and diag["estado_id"]:
         return {
@@ -456,7 +457,7 @@ Genera la estrategia semanal en JSON."""
                     parts = hora_str.split(":")
                     hora_pub = dt_time(int(parts[0]), int(parts[1]))
                 except (ValueError, IndexError):
-                    pass
+                    pass  # expected
 
             # Buscar IRC del canal
             irc_canal = next((c["irc_score"] for c in irc if c["canal"] == item.get("canal")), None)

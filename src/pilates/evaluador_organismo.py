@@ -19,7 +19,8 @@ from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 # ============================================================
@@ -310,8 +311,8 @@ PIZARRA (qué hicieron los agentes esta semana):
                        f"Evaluador: prescripción {funciono}",
                        eval_global.get("conclusion", "")[:200],
                        severidad="info" if funciono == "si" else "warning")
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     log.info("evaluador_ok",
              funciono=eval_global.get("prescripcion_funciono"),

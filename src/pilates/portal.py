@@ -20,7 +20,8 @@ log = structlog.get_logger()
 
 router = APIRouter(prefix="/portal", tags=["portal"])
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 async def _get_pool():
@@ -416,3 +417,77 @@ async def portal_chat(token: str, data: ChatRequest):
     """Portal conversacional — el cliente habla en lenguaje natural."""
     from src.pilates.portal_chat import chat
     return await chat(token, data.mensaje, data.historial)
+
+
+# ============================================================
+# RGPD — Derechos del interesado
+# ============================================================
+
+@router.get("/{token}/mis-datos")
+async def mis_datos(token: str):
+    """RGPD: El cliente puede ver todos sus datos."""
+    import json as _json
+    link = await _verificar_token(token)
+    cliente_id = link["cliente_id"]
+    pool = await _get_pool()
+
+    async with pool.acquire() as conn:
+        cliente = await conn.fetchrow(
+            "SELECT * FROM om_clientes WHERE id = $1", cliente_id)
+        if not cliente:
+            raise HTTPException(404, "Cliente no encontrado")
+
+        datos = dict(cliente)
+        for k, v in datos.items():
+            if hasattr(v, 'isoformat'):
+                datos[k] = v.isoformat()
+            elif hasattr(v, 'hex'):
+                datos[k] = str(v)
+
+        contratos = await conn.fetch(
+            "SELECT * FROM om_contratos WHERE cliente_id=$1", cliente_id)
+        datos["contratos"] = [dict(c) for c in contratos]
+
+        pagos = await conn.fetch(
+            "SELECT * FROM om_pagos WHERE cliente_id=$1 ORDER BY fecha_pago DESC LIMIT 50",
+            cliente_id)
+        datos["pagos"] = [dict(p) for p in pagos]
+
+        asistencias = await conn.fetch("""
+            SELECT a.*, s.fecha, s.hora_inicio FROM om_asistencias a
+            JOIN om_sesiones s ON s.id = a.sesion_id
+            WHERE a.cliente_id=$1 ORDER BY s.fecha DESC LIMIT 100
+        """, cliente_id)
+        datos["asistencias"] = [dict(a) for a in asistencias]
+
+    return _json.loads(_json.dumps(datos, default=str))
+
+
+@router.post("/{token}/solicitar-baja")
+async def solicitar_baja(token: str, motivo: str = ""):
+    """RGPD: El cliente solicita eliminación de datos."""
+    import os as _os
+    link = await _verificar_token(token)
+    cliente_id = link["cliente_id"]
+    nombre = link.get("nombre", "")
+    pool = await _get_pool()
+
+    async with pool.acquire() as conn:
+        await conn.execute("""
+            INSERT INTO om_solicitudes_baja (tenant_id, cliente_id, motivo)
+            VALUES ('authentic_pilates', $1, $2)
+        """, cliente_id, motivo or "Sin motivo especificado")
+
+    # Notificar a Jesús por WA
+    try:
+        from src.pilates.whatsapp import enviar_texto, is_configured
+        telefono_jesus = _os.getenv("JESUS_TELEFONO", "")
+        if is_configured() and telefono_jesus:
+            await enviar_texto(
+                telefono_jesus,
+                f"⚠️ Solicitud de baja RGPD de {nombre}. Revisar en admin.",
+            )
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
+
+    return {"status": "ok", "mensaje": "Solicitud registrada. Te contactaremos en 48h."}

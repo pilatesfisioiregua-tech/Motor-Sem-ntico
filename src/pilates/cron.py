@@ -455,21 +455,30 @@ async def cron_loop():
             # Tarea diaria: después de las 06:00, una vez al día
             if hora >= time(6, 0) and not await _ya_ejecutado("diaria", "dia"):
                 log.info("cron_ejecutando_diaria", hora=str(hora))
-                await _tarea_diaria()
+                try:
+                    await asyncio.wait_for(_tarea_diaria(), timeout=1800)  # 30min max
+                except asyncio.TimeoutError:
+                    log.error("cron_diaria_timeout", timeout_s=1800)
                 await _marcar_ejecutado("diaria")
 
             # Tarea semanal: lunes después de las 07:00, una vez por semana
             if ahora.weekday() == 0 and hora >= time(7, 0):
                 if not await _ya_ejecutado("semanal", "semana"):
                     log.info("cron_ejecutando_semanal", semana=hoy.isocalendar()[1])
-                    await _tarea_semanal()
+                    try:
+                        await asyncio.wait_for(_tarea_semanal(), timeout=3600)  # 60min max
+                    except asyncio.TimeoutError:
+                        log.error("cron_semanal_timeout", timeout_s=3600)
                     await _marcar_ejecutado("semanal")
 
             # Tarea mensual: día 1 después de las 08:00
             if hoy.day == 1 and hora >= time(8, 0):
                 if not await _ya_ejecutado("mensual", "mes"):
                     log.info("cron_ejecutando_mensual", mes=f"{hoy.year}-{hoy.month:02d}")
-                    await _tarea_mensual()
+                    try:
+                        await asyncio.wait_for(_tarea_mensual(), timeout=1800)  # 30min max
+                    except asyncio.TimeoutError:
+                        log.error("cron_mensual_timeout", timeout_s=1800)
                     await _marcar_ejecutado("mensual")
 
         except Exception as e:

@@ -20,7 +20,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 ORIGEN = "AF1"
 
 INSTRUCCION_AF1 = """Analiza los clientes en riesgo de pérdida.
@@ -192,6 +193,18 @@ async def ejecutar_af1() -> dict:
         "razonamiento": razonamiento,
         "detalle": (fantasmas + engagement + deuda)[:20],
     }
+
+    # Publicar al feed
+    try:
+        from src.pilates.feed import feed_af_deteccion
+        riesgos = fantasmas + engagement + deuda
+        for riesgo in riesgos[:5]:
+            await feed_af_deteccion(
+                "AF1", f"Riesgo: {riesgo.get('tipo', 'retención')}",
+                f"{riesgo.get('nombre', 'Cliente')} — {riesgo.get('motivo', riesgo.get('tipo', ''))}",
+                riesgo.get("cliente_id"))
+    except Exception as e:
+        log.warning("af1_feed_error", error=str(e))
 
     log.info("af1_completo", fantasmas=len(fantasmas),
         engagement=len(engagement), deuda=len(deuda),

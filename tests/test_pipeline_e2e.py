@@ -129,7 +129,11 @@ async def _server_reachable() -> bool:
 
 
 def _skip_if_no_server():
-    """Marca para saltar tests live si el servidor no está disponible."""
+    """Marca para saltar tests live si el servidor no está disponible.
+    Requiere MOTOR_E2E=true para activar (evita fallos en CI).
+    """
+    if os.getenv("MOTOR_E2E", "").lower() != "true":
+        return pytest.mark.skip(reason="Set MOTOR_E2E=true para ejecutar tests live")
     import asyncio
     loop = asyncio.new_event_loop()
     reachable = loop.run_until_complete(_server_reachable())

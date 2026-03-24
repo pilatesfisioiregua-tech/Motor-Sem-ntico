@@ -30,7 +30,8 @@ from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 OPUS_MODEL = os.getenv("OPUS_MODEL", "anthropic/claude-opus-4.6")
 
@@ -415,8 +416,8 @@ MECANISMO INFERENCIAL (cómo llegar a conclusiones):
             f"Director Opus: {configs_aplicadas} agentes rediseñados",
             resultado.get("estrategia_global", "")[:200],
             severidad="info")
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     dt = round(time.time() - t0, 1)
     log.info("director_opus_ok", configs=configs_aplicadas, tiempo=dt,

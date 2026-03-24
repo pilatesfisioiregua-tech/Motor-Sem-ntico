@@ -15,7 +15,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 ORIGEN = "MECANICO"
 
 PROTEGIDOS = {
@@ -235,8 +236,8 @@ async def procesar_alertas() -> dict:
     for fix in fixes[:3]:
         try:
             await informe_postmortem(fix.get("accion", "reparación"), fix, fix)
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     return resultado
 

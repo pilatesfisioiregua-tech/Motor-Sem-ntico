@@ -23,7 +23,8 @@ from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 SYSTEM_MEDIADOR = """Eres el Mediador del organismo cognitivo.
 Tu trabajo: resolver CONFLICTOS entre agentes funcionales ANTES de que actúen.

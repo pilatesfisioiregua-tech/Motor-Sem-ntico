@@ -18,7 +18,8 @@ from uuid import UUID
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 CHAT_MODEL = os.getenv("CHAT_MODEL", "openai/gpt-4o")
 
@@ -362,8 +363,8 @@ async def _tool_cancelar_sesion(cliente_id: UUID, args: dict) -> dict:
                                str(asistencia["hora_inicio"])[:5], cliente_id)
         from src.pilates.automatismos import check_lista_espera
         await check_lista_espera()
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     return {
         "cancelada": True,
@@ -732,8 +733,8 @@ async def _tool_registrar_solicitud(cliente_id: UUID, args: dict, nombre_cliente
     try:
         from src.pilates.feed import feed_solicitud
         await feed_solicitud(nombre_cliente, args["tipo"], args["descripcion"], cliente_id)
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     return {"registrada": True, "tipo": args["tipo"],
             "mensaje": "Solicitud registrada. Jesús te contactará pronto."}
@@ -929,8 +930,8 @@ async def chat(token: str, mensaje: str, historial: list[dict] = None) -> dict:
         contexto_eng = await obtener_contexto_engagement(cliente_id)
         if contexto_eng:
             system += f"\n\nCONTEXTO SOBRE ESTE CLIENTE (usa discretamente):\n{contexto_eng}"
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     # Proactividad saldo
     try:
@@ -942,8 +943,8 @@ async def chat(token: str, mensaje: str, historial: list[dict] = None) -> dict:
         if float(saldo_pendiente) > 0:
             system += f"\n\n{nombre} tiene {float(saldo_pendiente):.2f}EUR pendientes. "
             system += "Si el contexto lo permite, menciona el saldo y ofrece configurar pago automático."
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     # 2. Construir mensajes
     messages = [{"role": "system", "content": system}]

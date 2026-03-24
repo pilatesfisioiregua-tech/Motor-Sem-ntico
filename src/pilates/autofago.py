@@ -26,7 +26,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 ORIGEN = "AUTOFAGO"
 
 # Raíz del código a escanear
@@ -164,8 +165,8 @@ async def escanear_datos_caducados() -> list[dict]:
                     "razon": f"{senales_viejas} señales procesadas/error >30 días. Propongo DELETE.",
                     "sql_propuesto": "DELETE FROM om_senales_agentes WHERE estado IN ('procesada','error') AND created_at < now() - interval '30 days'",
                 })
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         # Diagnósticos muy antiguos
         try:
@@ -180,8 +181,8 @@ async def escanear_datos_caducados() -> list[dict]:
                     "registros": diags_viejos,
                     "razon": f"{diags_viejos} diagnósticos >180 días. Propongo archivar o eliminar.",
                 })
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         # Ejecuciones motor antiguas
         try:
@@ -196,8 +197,8 @@ async def escanear_datos_caducados() -> list[dict]:
                     "registros": exec_viejas,
                     "razon": f"{exec_viejas} ejecuciones motor >90 días. Propongo archivar.",
                 })
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         # Mejoras completadas/rechazadas antiguas
         try:
@@ -213,8 +214,8 @@ async def escanear_datos_caducados() -> list[dict]:
                     "registros": mejoras_cerradas,
                     "razon": f"{mejoras_cerradas} mejoras cerradas >60 días. Propongo DELETE.",
                 })
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     return resultados
 
@@ -285,8 +286,8 @@ async def ejecutar_autofagia() -> dict:
                     DELETE FROM om_bus_senales
                     WHERE tenant_id = $1 AND procesada = true AND created_at < $2
                 """, TENANT, hace_30_dias)
-            except Exception:
-                pass
+            except Exception as e:
+                log.debug("silenced_exception", exc=str(e))
         senales_limpiadas = True
     except Exception as e:
         log.warning("autofago_limpieza_bus_error", error=str(e))

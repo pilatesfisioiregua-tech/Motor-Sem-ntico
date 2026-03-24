@@ -24,7 +24,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 # Archivos que el Ingeniero puede modificar sin CR1
@@ -185,8 +186,8 @@ async def _registrar_pendiente_cr1(instruccion: dict) -> dict:
                        "Ingeniero: cambio pendiente CR1",
                        f"{instruccion.get('archivo', '?')}: {instruccion.get('cambio', '?')[:100]}",
                        severidad="warning")
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     log.info("ingeniero_pendiente_cr1", archivo=instruccion.get("archivo"),
              tipo=instruccion.get("tipo"))

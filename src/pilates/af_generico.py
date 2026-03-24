@@ -15,7 +15,8 @@ from src.motor.verificar import verificar
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 async def ejecutar_af(
@@ -152,7 +153,7 @@ async def _emitir_senales(funcion: str, acciones: list) -> int:
                 """, TENANT, funcion, tipo, prioridad,
                     a.get("descripcion", str(a)[:500]))
                 emitidas += 1
-            except Exception:
-                pass
+            except Exception as e:
+                log.debug("silenced_exception", exc=str(e))
 
     return emitidas

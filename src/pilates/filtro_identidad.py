@@ -16,7 +16,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 async def leer_identidad(tenant_id: str = TENANT) -> dict:
@@ -155,7 +156,7 @@ async def filtrar_contenido_db(contenido_id, tenant_id: str = TENANT) -> dict:
                     {"tipo": "contenido_incompatible", "contenido_id": str(contenido_id),
                      "motivo": resultado["motivo"], "score": resultado["score"]},
                     destino="AF3", prioridad=3)
-            except Exception:
-                pass
+            except Exception as e:
+                log.debug("silenced_exception", exc=str(e))
 
     return resultado

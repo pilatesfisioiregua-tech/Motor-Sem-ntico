@@ -25,7 +25,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 ORIGEN = "AF3"
 
 INSTRUCCION_AF3 = """Analiza grupos y contratos ineficientes.
@@ -191,6 +192,19 @@ async def ejecutar_af3() -> dict:
         "detalle_grupos": grupos[:10],
         "detalle_zombis": zombis[:10],
     }
+
+    # Publicar al feed
+    try:
+        from src.pilates.feed import feed_af_veto, feed_af_deteccion
+        for det in (grupos + zombis)[:5]:
+            await feed_af_deteccion("AF3", det.get("tipo", "ineficiencia"),
+                                     det.get("nombre", det.get("tipo", "")))
+        for g in grupos:
+            if g["ocupacion_pct"] < 30:
+                await feed_af_veto("AF3", "AF2",
+                                    f"Grupo '{g['nombre']}' a {g['ocupacion_pct']}% — no captar")
+    except Exception as e:
+        log.warning("af3_feed_error", error=str(e))
 
     log.info("af3_completo", grupos=len(grupos), zombis=len(zombis),
         vetos=vetos_emitidos, acciones_cerebro=len(razonamiento.get("acciones", [])))

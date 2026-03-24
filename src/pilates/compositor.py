@@ -28,7 +28,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 REASONING_MODEL = os.getenv("REASONING_MODEL", "anthropic/claude-sonnet-4-6")
 BRAIN_MODEL = os.getenv("BRAIN_MODEL", "openai/gpt-4o")
@@ -237,8 +238,8 @@ async def _call_llm(model: str, system: str, user: str, nombre: str,
             resultado = json.loads(repair)
             log.info(f"{nombre}_repaired", tiempo=round(time.time() - t0, 1))
             return resultado
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
         raw_len = len(raw)
         log.error(f"{nombre}_parse_error", raw_len=raw_len, raw_tail=raw[-100:][:80])
         return {"error": f"JSON parse error (len={raw_len})"}
@@ -438,6 +439,7 @@ CONFIRMACIONES clusters: {enjambre.get('confirmaciones', 0)}, CONTRADICCIONES: {
         },
         "diagnostico_anotado": diagnostico_anotado,
         "prescripcion_contextualizada": prescripcion_ctx,
+        "prescripcion_completa": prescripcion_ctx,
         "orquestador": control,
         "tiempo_total_s": dt,
     }

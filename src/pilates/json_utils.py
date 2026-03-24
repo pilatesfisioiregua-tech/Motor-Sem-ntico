@@ -26,7 +26,7 @@ def extraer_json(texto: str, fallback: dict = None) -> dict:
     try:
         return json.loads(texto)
     except (json.JSONDecodeError, TypeError):
-        pass
+        pass  # expected
 
     # 2. Bloque markdown
     match = re.search(r'```(?:json)?\s*\n?(.*?)\n?```', texto, re.DOTALL)
@@ -34,7 +34,7 @@ def extraer_json(texto: str, fallback: dict = None) -> dict:
         try:
             return json.loads(match.group(1).strip())
         except (json.JSONDecodeError, TypeError):
-            pass
+            pass  # expected
 
     # 3. Primer { ... último }
     start = texto.find('{')
@@ -43,7 +43,7 @@ def extraer_json(texto: str, fallback: dict = None) -> dict:
         try:
             return json.loads(texto[start:end + 1])
         except (json.JSONDecodeError, TypeError):
-            pass
+            pass  # expected
 
     # 4. Array?
     start = texto.find('[')
@@ -53,7 +53,7 @@ def extraer_json(texto: str, fallback: dict = None) -> dict:
             arr = json.loads(texto[start:end + 1])
             return {"items": arr}
         except (json.JSONDecodeError, TypeError):
-            pass
+            pass  # expected
 
     log.warning("json_extract_failed", preview=texto[:100])
     return fallback or {}

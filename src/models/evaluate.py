@@ -58,8 +58,8 @@ def _eval_c1() -> dict:
                 pred_ids = {p[0] for p in preds}
                 if pred_ids & expected:
                     correct += 1
-            except Exception:
-                pass
+            except Exception as e:
+                log.debug("silenced_exception", exc=str(e))
 
         acc = correct / total if total > 0 else 0.0
         return {

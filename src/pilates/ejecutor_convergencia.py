@@ -17,7 +17,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 INSTRUCCION_EJECUTOR = """Tienes prescripciones de múltiples agentes.
 Prioriza y resuelve conflictos:
@@ -230,6 +231,16 @@ async def detectar_convergencia() -> dict:
                 emitidas += 1
         except Exception as e:
             log.warning("convergencia_bus_error", error=str(e))
+
+    # Publicar al feed
+    try:
+        from src.pilates.feed import feed_convergencia as feed_conv
+        for conv in convergencias[:3]:
+            await feed_conv(
+                [conv.get("nombre", "")], conv.get("agentes", []),
+                conv.get("insight", ""))
+    except Exception as e:
+        log.warning("convergencia_feed_error", error=str(e))
 
     log.info("convergencia_completa", encontradas=len(convergencias))
     return {

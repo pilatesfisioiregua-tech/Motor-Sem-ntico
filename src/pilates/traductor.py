@@ -18,7 +18,8 @@ from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 SYSTEM_TRADUCTOR = """Eres el Traductor del organismo cognitivo de un estudio de Pilates
 en un pueblo de La Rioja (~4.000 habitantes).

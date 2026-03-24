@@ -23,7 +23,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 # Agentes que esperamos que emitan al menos una señal por semana
 AGENTES_ESPERADOS = {
@@ -137,8 +138,8 @@ async def _metricas_mecanico(desde: datetime) -> dict:
                     resultado["arquitecturales"] = r["n"]
                 elif r["tipo"] == "AUTOFAGIA":
                     resultado["autofagia"] = r["n"]
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     return resultado
 

@@ -29,7 +29,8 @@ from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 REASONING_MODEL = os.getenv("REASONING_MODEL", "anthropic/claude-sonnet-4-6")
 BRAIN_MODEL = os.getenv("BRAIN_MODEL", "openai/gpt-4o")
@@ -165,8 +166,8 @@ async def detectar_preguntas_huerfanas(resultados_g4: dict) -> dict:
             confianza=0.6,
             prioridad=5,
         )
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     # Feed
     if n > 0:
@@ -177,8 +178,8 @@ async def detectar_preguntas_huerfanas(resultados_g4: dict) -> dict:
                            f"{n} preguntas huerfanas detectadas",
                            f"Mas importante: {primera}",
                            severidad="info")
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     log.info("huerfanas_ok", detectadas=n, tiempo=round(time.time() - t0, 1))
     return resultado
@@ -297,8 +298,8 @@ async def cristalizar_patrones() -> dict:
                     "regla_propuesta": patron["regla_propuesta"],
                     "requiere_cr1": True,
                 }, prioridad=3)
-            except Exception:
-                pass
+            except Exception as e:
+                log.debug("silenced_exception", exc=str(e))
 
     # Feed
     n = len(resultado.get("patrones_detectados", []))
@@ -309,8 +310,8 @@ async def cristalizar_patrones() -> dict:
                            f"{n} patrones cristalizados",
                            resultado["patrones_detectados"][0]["regla_propuesta"][:150],
                            severidad="info")
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     log.info("cristalizador_ok", patrones=n)
     return resultado
@@ -392,8 +393,8 @@ async def evaluar_semillas() -> dict:
                     "contenido": sd["contenido"],
                     "razon": sd["razon"],
                 }, prioridad=4)
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     log.info("semillas_evaluadas", total=len(semillas), despertadas=len(despertadas))
     return {"total_dormidas": len(semillas), "despertadas": len(despertadas),

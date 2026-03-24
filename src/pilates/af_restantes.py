@@ -17,7 +17,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 INSTRUCCION_AF2 = """Analiza los leads y la conversión.
 Para cada lead perdido, evalúa si merece rescate basándote en su intención original.
@@ -127,8 +128,8 @@ async def ejecutar_af2() -> dict:
             p = s["payload"] if isinstance(s["payload"], dict) else json.loads(s["payload"])
             if p.get("subtipo") == "VETO" and "AF2" in p.get("bloquea_af", []):
                 vetos.append(p.get("objeto", "desconocido"))
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     # === CEREBRO (NIVEL 1) ===
     datos_sensor = {"detecciones": detecciones, "vetos_af3": vetos}
@@ -147,8 +148,8 @@ async def ejecutar_af2() -> dict:
                 "interpretacion": razonamiento["interpretacion"],
             }, prioridad=accion.get("prioridad", 4))
             alertas += 1
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     log.info("af2_completo", detecciones=len(detecciones), vetos=len(vetos))
     return {
@@ -252,8 +253,8 @@ async def ejecutar_af4() -> dict:
                 "interpretacion": razonamiento["interpretacion"],
             }, prioridad=accion.get("prioridad", 5))
             alertas += 1
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     log.info("af4_completo", detecciones=len(detecciones))
     return {
@@ -344,8 +345,8 @@ async def ejecutar_af6() -> dict:
                 "interpretacion": razonamiento["interpretacion"],
             }, prioridad=accion.get("prioridad", 4))
             alertas += 1
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     log.info("af6_completo", detecciones=len(detecciones))
     return {
@@ -457,8 +458,8 @@ async def ejecutar_af7() -> dict:
                 "interpretacion": razonamiento["interpretacion"],
             }, prioridad=accion.get("prioridad", 6))
             alertas += 1
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     log.info("af7_completo", detecciones=len(detecciones))
     return {

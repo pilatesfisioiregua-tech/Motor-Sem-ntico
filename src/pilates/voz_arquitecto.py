@@ -21,7 +21,8 @@ import structlog
 from datetime import date
 
 log = structlog.get_logger()
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 STRATEGY_MODEL = os.getenv("STRATEGY_MODEL", "openai/gpt-4o")
 
 

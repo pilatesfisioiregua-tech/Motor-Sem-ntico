@@ -21,7 +21,8 @@ from Crypto.Cipher import DES3
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 BASE_URL = os.getenv("BASE_URL", "https://motor-semantico-omni.fly.dev")
 
 # Config desde env
@@ -312,8 +313,8 @@ async def cobrar_recurrente(pago_recurrente_id: UUID) -> dict:
                 nombre = await conn.fetchval(
                     "SELECT nombre FROM om_clientes WHERE id=$1", pr["cliente_id"])
                 await feed_pago(nombre or "Cliente", "tarjeta", float(pr["importe"]), pr["cliente_id"])
-            except Exception:
-                pass
+            except Exception as e:
+                log.debug("silenced_exception", exc=str(e))
 
             log.info("redsys_cobro_ok", order=order, importe=float(pr["importe"]))
             return {"status": "ok", "order": order, "response_code": response_code}
@@ -348,8 +349,8 @@ async def cobrar_recurrente(pago_recurrente_id: UUID) -> dict:
                                f"{float(pr['importe']):.2f}€. "
                                f"Puedes pagar por Bizum o contactar con el estudio.")
                         await enviar_texto(tel, msg, pr["cliente_id"])
-                except Exception:
-                    pass
+                except Exception as e:
+                    log.debug("silenced_exception", exc=str(e))
 
             log.warning("redsys_cobro_fallido", order=order,
                        response_code=response_code, intentos=intentos)
@@ -581,8 +582,8 @@ async def procesar_notificacion(
             nombre = await conn.fetchval(
                 "SELECT nombre FROM om_clientes WHERE id=$1", cliente_id)
             await feed_pago(nombre or "Cliente", "tarjeta", importe, cliente_id)
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     log.info("redsys_pago_ok", order=order, importe=importe)
     return {"status": "ok", "order": order, "importe": importe}

@@ -19,7 +19,8 @@ log = structlog.get_logger()
 
 router = APIRouter(prefix="/pilates", tags=["pilates"])
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 # ============================================================
@@ -428,9 +429,12 @@ async def actualizar_contrato(contrato_id: UUID, data: ContratoUpdate):
     set_clauses = ", ".join(f"{k} = ${i+2}" for i, k in enumerate(updates.keys()))
     values = [contrato_id] + list(updates.values())
 
+    # TENANT como parámetro (no interpolado) para prevenir SQL injection
+    tenant_idx = len(values) + 1
+    values.append(TENANT)
     async with pool.acquire() as conn:
         result = await conn.execute(
-            f"UPDATE om_contratos SET {set_clauses}, updated_at = now() WHERE id = $1 AND tenant_id = '{TENANT}'",
+            f"UPDATE om_contratos SET {set_clauses}, updated_at = now() WHERE id = $1 AND tenant_id = ${tenant_idx}",
             *values)
         if result == "UPDATE 0":
             raise HTTPException(404, "Contrato no encontrado")
@@ -1866,7 +1870,19 @@ async def webhook_verify(request: Request):
 @router.post("/webhook/whatsapp")
 async def webhook_recibir(request: Request):
     """Recibe mensajes de WhatsApp (POST webhook). B2.9: emite señales al bus."""
-    body = await request.json()
+    import hashlib, hmac, os as _os
+    app_secret = _os.getenv("WHATSAPP_APP_SECRET", "")
+    if app_secret:
+        signature = request.headers.get("X-Hub-Signature-256", "")
+        raw_body = await request.body()
+        expected = "sha256=" + hmac.new(
+            app_secret.encode(), raw_body, hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(signature, expected):
+            log.warning("wa_webhook_firma_invalida")
+            raise HTTPException(403, "Firma inválida")
+        body = json.loads(raw_body)
+    else:
+        body = await request.json()
     from src.pilates.whatsapp import procesar_webhook
     result = await procesar_webhook(body)
 
@@ -2243,9 +2259,11 @@ async def actualizar_adn(adn_id: UUID, data: ADNUpdate):
             updates[k] = json.dumps(updates[k])
     set_clauses = ", ".join(f"{k} = ${i+2}" for i, k in enumerate(updates.keys()))
     values = [adn_id] + list(updates.values())
+    tenant_idx = len(values) + 1
+    values.append(TENANT)
     async with pool.acquire() as conn:
         await conn.execute(
-            f"UPDATE om_adn SET {set_clauses}, version = version + 1, fecha_modificacion = CURRENT_DATE WHERE id = $1 AND tenant_id = '{TENANT}'",
+            f"UPDATE om_adn SET {set_clauses}, version = version + 1, fecha_modificacion = CURRENT_DATE WHERE id = $1 AND tenant_id = ${tenant_idx}",
             *values)
     return {"status": "updated"}
 
@@ -2521,8 +2539,10 @@ async def actualizar_depuracion(depuracion_id: UUID, data: dict):
         if not updates:
             raise HTTPException(400, "Nada que actualizar")
         set_clause = ", ".join(updates)
+        tenant_idx = len(params) + 1
+        params.append(TENANT)
         await conn.execute(
-            f"UPDATE om_depuracion SET {set_clause} WHERE id = $1 AND tenant_id = '{TENANT}'",
+            f"UPDATE om_depuracion SET {set_clause} WHERE id = $1 AND tenant_id = ${tenant_idx}",
             *params)
     return {"status": "updated"}
 
@@ -2642,8 +2662,10 @@ async def decidir_propuesta(propuesta_id: UUID, data: dict):
             updates.append(f"contenido_propuesto = ${idx}::jsonb")
             params.append(json.dumps(data["contenido_editado"])); idx += 1
         set_clause = ", ".join(updates)
+        tenant_idx = len(params) + 1
+        params.append(TENANT)
         await conn.execute(
-            f"UPDATE om_voz_propuestas SET {set_clause} WHERE id = $1 AND tenant_id = '{TENANT}'",
+            f"UPDATE om_voz_propuestas SET {set_clause} WHERE id = $1 AND tenant_id = ${tenant_idx}",
             *params)
     return {"status": "updated"}
 
@@ -3427,8 +3449,8 @@ async def sistema_estado():
                 SELECT count(*) FROM om_mejoras_pendientes
                 WHERE estado = 'pendiente' AND tenant_id = 'authentic_pilates'
             """) or 0
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         autofagia_pend = 0
         try:
@@ -3436,8 +3458,8 @@ async def sistema_estado():
                 SELECT count(*) FROM om_mejoras_pendientes
                 WHERE estado = 'pendiente' AND tipo = 'AUTOFAGIA' AND tenant_id = 'authentic_pilates'
             """) or 0
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     return {
         "health": [{"subsistema": c.subsistema, "estado": c.estado, "mensaje": c.mensaje}
@@ -3754,7 +3776,7 @@ async def organismo_dashboard():
                 try:
                     d[k] = json.loads(v)
                 except (json.JSONDecodeError, TypeError):
-                    pass
+                    pass  # expected
         return d
 
     return {
@@ -4170,7 +4192,8 @@ async def diagnostico_sistema():
         for tabla in ["om_pizarra_dominio", "om_pizarra_cognitiva", "om_pizarra_temporal",
                       "om_pizarra_modelos", "om_pizarra_evolucion", "om_pizarra_interfaz"]:
             try:
-                count = await conn.fetchval(f"SELECT count(*) FROM {tabla}")
+                # SEGURO: tabla viene de lista hardcoded arriba, no de input usuario
+                count = await conn.fetchval(f"SELECT count(*) FROM {tabla}")  # noqa: S608
                 checks[f"pizarra_{tabla[13:]}"] = count
             except Exception:
                 checks[f"pizarra_{tabla[13:]}"] = "no_existe"

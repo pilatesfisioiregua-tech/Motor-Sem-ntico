@@ -19,7 +19,8 @@ from src.pilates.json_utils import extraer_json
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 SYSTEM_MEMORIA = """Eres el agente Memoria del organismo cognitivo.
 Tu trabajo: detectar PATRONES que emergen de múltiples ciclos semanales.

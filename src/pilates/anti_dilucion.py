@@ -13,7 +13,8 @@ from src.pilates.filtro_identidad import leer_identidad, filtrar_por_identidad
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 CICLOS_DRIFT_UMBRAL = 4
 
 
@@ -66,8 +67,8 @@ async def detectar_drift_identidad() -> dict:
                  "accion": "Director debe recalibrar contenido"},
                 destino="DIRECTOR", prioridad=2)
             log.warning("anti_dilucion_drift", ratio=ratio_incoherente, incoherentes=incoherentes)
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         return {"status": "drift", "ratio": ratio_incoherente, "incoherentes": incoherentes}
 

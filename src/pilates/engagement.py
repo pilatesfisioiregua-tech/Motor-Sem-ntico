@@ -14,7 +14,8 @@ from uuid import UUID
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 async def _get_pool():
@@ -103,8 +104,8 @@ async def recalcular_engagement_todos() -> dict:
                         f"{cl['nombre']} {cl['apellidos']}",
                         old_score, result["score"], cl["id"]
                     )
-                except Exception:
-                    pass
+                except Exception as e:
+                    log.debug("silenced_exception", exc=str(e))
 
     log.info("engagement_recalculado", clientes=recalculados, alertas=alertas)
     return {"recalculados": recalculados, "alertas": alertas}
@@ -248,8 +249,8 @@ async def _recalcular_engagement_cliente(conn, cliente_id: UUID, created_at) -> 
             from src.pilates.feed import feed_milestone
             nombre = await conn.fetchval("SELECT nombre FROM om_clientes WHERE id = $1", cliente_id)
             await feed_milestone(nombre or "Cliente", label, cliente_id)
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     # Susceptible cross-sell
     contrato_tipo = await conn.fetchval("""

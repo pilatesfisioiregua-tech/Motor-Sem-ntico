@@ -12,7 +12,8 @@ import json, os, time, httpx, structlog
 from datetime import date, datetime, timedelta
 
 log = structlog.get_logger()
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 CHAT_MODEL = os.getenv("CHAT_MODEL", "openai/gpt-4o")
 
@@ -92,8 +93,8 @@ async def contexto_del_dia() -> dict:
                 SELECT count(*) FROM om_tensiones
                 WHERE tenant_id=$1 AND estado='activa' AND severidad IN ('alta','critica')
             """, TENANT) or 0
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         solicitudes = 0
         try:
@@ -101,8 +102,8 @@ async def contexto_del_dia() -> dict:
                 SELECT count(*) FROM om_procesos
                 WHERE tenant_id=$1 AND titulo LIKE 'Solicitud%'
             """, TENANT) or 0
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         voz_pendientes = 0
         try:
@@ -110,8 +111,8 @@ async def contexto_del_dia() -> dict:
                 SELECT count(*) FROM om_voz_propuestas
                 WHERE tenant_id=$1 AND estado='pendiente'
             """, TENANT) or 0
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         wa_sin_leer = 0
         try:
@@ -119,8 +120,8 @@ async def contexto_del_dia() -> dict:
                 SELECT count(*) FROM om_mensajes_wa
                 WHERE tenant_id=$1 AND direccion='entrante' AND leido=false
             """, TENANT) or 0
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         churn_alto = 0
         try:
@@ -128,8 +129,8 @@ async def contexto_del_dia() -> dict:
                 SELECT count(*) FROM om_cliente_perfil
                 WHERE tenant_id=$1 AND riesgo_churn IN ('alto','critico')
             """, TENANT) or 0
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     # Saludo
     partes = [f"Hoy es {dia_nombre} {hoy.day} de {_nombre_mes(hoy.month)}."]
@@ -193,8 +194,8 @@ async def contexto_del_dia() -> dict:
                     if m not in ids_ya and m in MODULOS:
                         sugeridos.append({"id": m, "rol": "secundario"})
                 sugeridos = sugeridos[:6]
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     datos = {
         "sesiones_hoy": sesiones_hoy,
@@ -252,8 +253,8 @@ async def guardar_configuracion(modulos_activos: list):
             try:
                 meta = freq_raw if isinstance(freq_raw, dict) else json.loads(freq_raw)
                 frecuencia = meta if isinstance(meta, dict) else {}
-            except Exception:
-                pass
+            except Exception as e:
+                log.debug("silenced_exception", exc=str(e))
 
         for m in ids:
             frecuencia[m] = frecuencia.get(m, 0) + 1
@@ -939,8 +940,8 @@ async def _op_registrar_pago(args: dict) -> dict:
             nombre = await conn.fetchval("SELECT nombre FROM om_clientes WHERE id=$1", cliente_id)
             from src.pilates.feed import feed_pago
             await feed_pago(nombre or "?", metodo, monto, cliente_id)
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     return {
         "pago_registrado": True,
@@ -1244,8 +1245,8 @@ async def chat_cockpit(mensaje: str, modulos_activos: list,
                 "qué piensa un agente, conflictos entre agentes, "
                 "si la prescripción funcionó, qué dice el Director."
             )
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
 
     messages = [
         {"role": "system", "content": SYSTEM_COCKPIT + "\n" + ctx + pizarra_ctx},

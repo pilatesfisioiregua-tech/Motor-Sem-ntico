@@ -22,7 +22,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 ORIGEN = "BUSCADOR"
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
 BRAIN_MODEL = os.getenv("BRAIN_MODEL", "openai/gpt-4o")

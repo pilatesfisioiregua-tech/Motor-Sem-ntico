@@ -18,7 +18,8 @@ from uuid import UUID
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 # 24 asesores con su ángulo único
 ASESORES = {

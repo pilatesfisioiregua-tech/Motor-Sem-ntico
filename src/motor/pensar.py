@@ -287,8 +287,8 @@ async def _buscar_cache(system: str, user: str, modelo: str) -> Optional[str]:
                     "UPDATE om_pizarra_cache_llm SET hits = hits + 1 WHERE id = $1",
                     row["id"])
                 return row["respuesta"]
-    except Exception:
-        pass
+    except Exception as e:
+        log.debug("silenced_exception", exc=str(e))
     return None
 
 

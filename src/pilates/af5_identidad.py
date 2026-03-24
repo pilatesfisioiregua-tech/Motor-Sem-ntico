@@ -25,7 +25,8 @@ from src.db.client import get_pool
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 ORIGEN = "AF5"
 
 INSTRUCCION_AF5 = """Analiza la IDENTIDAD del negocio: qué dice que es, qué hace realmente, y qué perciben los clientes.
@@ -98,8 +99,8 @@ async def _detectar_gaps_identidad() -> dict:
                                    "Puede indicar mensaje inconsistente entre canales.",
                         "canales": [dict(c) for c in canales],
                     })
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         # 4. ADN del negocio (diferenciación documentada)
         adn_count = await conn.fetchval(
@@ -140,8 +141,8 @@ async def _detectar_gaps_identidad() -> dict:
                     "severidad": t["severidad"] or "media",
                     "detalle": f"Tensión abierta: {t['tipo']} — {t['descripcion'][:100]}",
                 })
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
         # 6. Feedback de clientes sobre identidad (WA)
         try:
@@ -162,8 +163,8 @@ async def _detectar_gaps_identidad() -> dict:
                     "detalle": "0 menciones de diferenciación en mensajes WA en 4 semanas. "
                                "Los clientes no perciben (o no articulan) qué hace diferente a este estudio.",
                 })
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     return {
         "identidad_declarada": dict(identidad) if identidad else None,
@@ -236,8 +237,8 @@ async def ejecutar_af5() -> dict:
                 "urgente": True,
             }, prioridad=1)
             alertas_emitidas += 1
-        except Exception:
-            pass
+        except Exception as e:
+            log.debug("silenced_exception", exc=str(e))
 
     # 5. ESCRIBIR EN PIZARRA
     from src.pilates.pizarra import escribir
