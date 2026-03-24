@@ -91,6 +91,13 @@
   --font-emoji: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
 }
 
+/* Forzar emoji rendering en elementos marcados */
+.emoji-icon {
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif !important;
+  font-style: normal;
+  line-height: 1;
+}
+
 /* === AUTHENTIC LIGHT — tema para clientes === */
 [data-theme="light"] {
   --bg-void: #f8f9fc;

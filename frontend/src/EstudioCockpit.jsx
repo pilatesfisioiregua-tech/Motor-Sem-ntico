@@ -522,7 +522,7 @@ function Sidebar({ modulos, activos, onToggle, capas, visible }) {
       {Object.entries(capas).map(([key, capa]) => (
         <div key={key} className="mb-3">
           <div className="px-5 mb-1.5 text-[10px] font-semibold tracking-[0.08em] uppercase text-[var(--text-ghost)]">
-            <span style={{ fontFamily: 'var(--font-emoji)' }}>{capa.icon}</span> {capa.label}
+            <span className="emoji-icon">{capa.icon}</span> {capa.label}
           </div>
           {capa.modulos.map(id => {
             const mod = modulos.find(m => m.id === id);
@@ -889,7 +889,7 @@ export default function EstudioCockpit() {
                 ? 'text-[var(--accent-indigo)] scale-105'
                 : 'text-[var(--text-ghost)] active:scale-95'}`}
           >
-            <span className="text-lg mb-0.5" style={{ fontFamily: 'var(--font-emoji)' }}>{capa.icon}</span>
+            <span className="text-lg mb-0.5 emoji-icon">{capa.icon}</span>
             <span className="tracking-wide">{capa.label}</span>
           </button>
         ))}
