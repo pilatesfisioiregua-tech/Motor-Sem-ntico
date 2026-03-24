@@ -23,9 +23,9 @@ import structlog
 from typing import Optional
 from uuid import UUID
 
-log = structlog.get_logger()
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
 
-DEFAULT_TENANT = "authentic_pilates"
+log = structlog.get_logger()
 
 DEFAULT_DOMINIO = {
     "tenant_id": DEFAULT_TENANT,

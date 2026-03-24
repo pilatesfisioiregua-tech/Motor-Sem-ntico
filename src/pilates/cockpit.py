@@ -659,7 +659,7 @@ async def _op_ver_cliente(args: dict) -> dict:
     cliente_id = UUID(args["cliente_id"])
     pool = await _get_pool()
     async with pool.acquire() as conn:
-        c = await conn.fetchrow("SELECT * FROM om_clientes WHERE id=$1", cliente_id)
+        c = await conn.fetchrow("SELECT id, nombre, apellidos, telefono, email FROM om_clientes WHERE id=$1", cliente_id)
         if not c:
             return {"error": "Cliente no encontrado"}
         co = await conn.fetchrow("""

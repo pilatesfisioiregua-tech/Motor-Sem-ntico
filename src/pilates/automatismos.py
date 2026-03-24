@@ -181,7 +181,7 @@ async def actualizar_dias_esperados_asistencia(sesion_id: UUID) -> None:
     """
     pool = await _get_pool()
     async with pool.acquire() as conn:
-        sesion = await conn.fetchrow("SELECT * FROM om_sesiones WHERE id = $1", sesion_id)
+        sesion = await conn.fetchrow("SELECT id, grupo_id, fecha FROM om_sesiones WHERE id = $1", sesion_id)
         if not sesion or not sesion["grupo_id"]:
             return
 

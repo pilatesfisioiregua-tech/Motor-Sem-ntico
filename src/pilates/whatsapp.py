@@ -18,6 +18,7 @@ from uuid import UUID
 log = structlog.get_logger()
 
 from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+from src.pilates.http_client import get_http_client
 TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 # Config desde env (fly.io secrets)
@@ -55,24 +56,24 @@ async def enviar_texto(telefono: str, mensaje: str, cliente_id: Optional[UUID] =
     }
 
     try:
-        async with httpx.AsyncClient(timeout=15) as client:
-            resp = await client.post(url, json=payload, headers=headers)
-            resp.raise_for_status()
-            data = resp.json()
-            wa_message_id = data.get("messages", [{}])[0].get("id")
+        client = await get_http_client()
+        resp = await client.post(url, json=payload, headers=headers)
+        resp.raise_for_status()
+        data = resp.json()
+        wa_message_id = data.get("messages", [{}])[0].get("id")
 
-            await _registrar_mensaje(
-                direccion="saliente",
-                remitente=WA_PHONE_ID,
-                destinatario=telefono,
-                cliente_id=cliente_id,
-                tipo_contenido="texto",
-                contenido=mensaje,
-                wa_message_id=wa_message_id,
-            )
+        await _registrar_mensaje(
+            direccion="saliente",
+            remitente=WA_PHONE_ID,
+            destinatario=telefono,
+            cliente_id=cliente_id,
+            tipo_contenido="texto",
+            contenido=mensaje,
+            wa_message_id=wa_message_id,
+        )
 
-            log.info("wa_enviado", telefono=telefono[-4:], chars=len(mensaje))
-            return {"status": "sent", "wa_message_id": wa_message_id}
+        log.info("wa_enviado", telefono=telefono[-4:], chars=len(mensaje))
+        return {"status": "sent", "wa_message_id": wa_message_id}
 
     except httpx.HTTPStatusError as e:
         log.error("wa_envio_error", status=e.response.status_code, detail=str(e))

@@ -1,8 +1,16 @@
 """Exocortex Pilates — Endpoints CRUD + Lógica de Negocio.
 
 Montado en /pilates/* en main.py.
-Todas las operaciones usan tenant_id='authentic_pilates'.
 Cadena causal: SESION > ASISTENCIA > CARGO > PAGO (FIFO).
+
+TODO(DEUDA): Este archivo tiene 192 endpoints en 4400+ líneas.
+Dividir en sub-routers por dominio:
+  - router_clientes.py (clientes, contratos, onboarding)
+  - router_sesiones.py (sesiones, asistencias, grupos)
+  - router_pagos.py (cargos, pagos, facturas, bizum)
+  - router_whatsapp.py (webhook, mensajes, enviar)
+  - router_sistema.py (cron, alertas, diagnóstico, autonomía)
+  - router_voz.py (voz, estrategia, contenido, identidad)
 """
 from __future__ import annotations
 
@@ -277,7 +285,7 @@ async def obtener_cliente(cliente_id: UUID):
         """, cliente_id, TENANT)
 
         tenant = await conn.fetchrow(
-            "SELECT * FROM om_cliente_tenant WHERE cliente_id = $1 AND tenant_id = $2",
+            "SELECT cliente_id, tenant_id, estado FROM om_cliente_tenant WHERE cliente_id = $1 AND tenant_id = $2",
             cliente_id, TENANT)
 
     return {
@@ -470,7 +478,7 @@ async def obtener_grupo(grupo_id: UUID):
     pool = await _get_pool()
     async with pool.acquire() as conn:
         grupo = await conn.fetchrow(
-            "SELECT * FROM om_grupos WHERE id = $1 AND tenant_id = $2",
+            "SELECT id, nombre, tipo, capacidad_max, dias_semana, hora_inicio, hora_fin, precio_mensual, frecuencia_semanal, estado, tenant_id FROM om_grupos WHERE id = $1 AND tenant_id = $2",  # TODO: specify columns — revisa si faltan
             grupo_id, TENANT)
         if not grupo:
             raise HTTPException(404, "Grupo no encontrado")
@@ -499,7 +507,8 @@ async def agenda_grupo(grupo_id: UUID, fecha: Optional[date] = None):
     async with pool.acquire() as conn:
         # Buscar sesión de ese día
         sesion = await conn.fetchrow("""
-            SELECT * FROM om_sesiones
+            SELECT id, grupo_id, fecha, hora_inicio, hora_fin, tipo, estado, tenant_id
+            FROM om_sesiones
             WHERE grupo_id = $1 AND fecha = $2 AND tenant_id = $3
         """, grupo_id, fecha, TENANT)
 
@@ -695,7 +704,7 @@ async def completar_sesion(sesion_id: UUID):
     async with pool.acquire() as conn:
         async with conn.transaction():
             sesion = await conn.fetchrow(
-                "SELECT * FROM om_sesiones WHERE id = $1 AND tenant_id = $2",
+                "SELECT id, grupo_id, tipo, estado, fecha, tenant_id FROM om_sesiones WHERE id = $1 AND tenant_id = $2",
                 sesion_id, TENANT)
             if not sesion:
                 raise HTTPException(404, "Sesión no encontrada")
@@ -762,7 +771,7 @@ async def marcar_asistencia(sesion_id: UUID, data: MarcarAsistencia):
     async with pool.acquire() as conn:
         async with conn.transaction():
             sesion = await conn.fetchrow(
-                "SELECT * FROM om_sesiones WHERE id = $1 AND tenant_id = $2",
+                "SELECT id, tipo, estado, fecha, grupo_id, tenant_id FROM om_sesiones WHERE id = $1 AND tenant_id = $2",
                 sesion_id, TENANT)
             if not sesion:
                 raise HTTPException(404, "Sesión no encontrada")
@@ -838,7 +847,7 @@ async def marcar_grupo(sesion_id: UUID, data: MarcarAsistenciaGrupo):
     async with pool.acquire() as conn:
         async with conn.transaction():
             sesion = await conn.fetchrow(
-                "SELECT * FROM om_sesiones WHERE id = $1 AND tenant_id = $2",
+                "SELECT id, tipo, estado, fecha, grupo_id, tenant_id FROM om_sesiones WHERE id = $1 AND tenant_id = $2",
                 sesion_id, TENANT)
             if not sesion:
                 raise HTTPException(404, "Sesión no encontrada")
@@ -1540,13 +1549,14 @@ async def crear_factura(data: FacturaCreate):
         async with conn.transaction():
             # Verificar cliente
             cliente = await conn.fetchrow(
-                "SELECT * FROM om_clientes WHERE id = $1", data.cliente_id)
+                "SELECT id, nombre, apellidos FROM om_clientes WHERE id = $1", data.cliente_id)
             if not cliente:
                 raise HTTPException(404, "Cliente no encontrado")
 
             # Obtener cargos
             cargos = await conn.fetch("""
-                SELECT * FROM om_cargos
+                SELECT id, concepto, base_imponible, total, estado, cliente_id, tenant_id
+                FROM om_cargos
                 WHERE id = ANY($1::uuid[]) AND cliente_id = $2 AND tenant_id = $3
             """, data.cargo_ids, data.cliente_id, TENANT)
             if len(cargos) != len(data.cargo_ids):

@@ -37,7 +37,7 @@ async def procesar_senal_urgente(payload: dict) -> dict:
     async with pool.acquire() as conn:
         # Leer señal completa
         senal = await conn.fetchrow(
-            "SELECT * FROM om_senales_agentes WHERE id = $1", senal_id)
+            "SELECT id, tipo, payload FROM om_senales_agentes WHERE id = $1", senal_id)
         if not senal:
             return {"status": "senal_no_encontrada"}
 
