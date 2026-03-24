@@ -4415,3 +4415,35 @@ async def onboarding_nuevo_tenant(request: Request):
 
     log.info("onboarding_tenant_creado", tenant_id=tenant_id, tipo=tipo)
     return {"status": "ok", "tenant_id": tenant_id}
+
+
+# ============================================================
+# RGPD — Derechos del interesado (Apple-grade privacy)
+# ============================================================
+
+@router.get("/publico/mis-datos/{cliente_id}")
+async def rgpd_mis_datos(cliente_id: UUID):
+    """RGPD Art. 15+20: Exporta todos los datos del cliente."""
+    from src.pilates.rgpd import exportar_datos_cliente
+    return await exportar_datos_cliente(cliente_id)
+
+
+@router.post("/publico/borrar-cuenta/{cliente_id}")
+async def rgpd_borrar_cuenta(cliente_id: UUID):
+    """RGPD Art. 17: Solicita borrado de datos personales."""
+    from src.pilates.rgpd import solicitar_borrado
+    return await solicitar_borrado(cliente_id)
+
+
+@router.get("/sistema/audit-log")
+async def get_audit_log(
+    entidad: Optional[str] = None,
+    entidad_id: Optional[str] = None,
+    limite: int = Query(default=50, le=200),
+):
+    """Consulta el audit log (solo admin)."""
+    from src.db.client import get_pool
+    from src.pilates.audit_log import consultar
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        return await consultar(conn, entidad=entidad, entidad_id=entidad_id, limite=limite)

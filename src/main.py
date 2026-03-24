@@ -9,11 +9,13 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from typing import Optional
 
+_is_production = os.getenv("FLY_APP_NAME", "") != ""
 structlog.configure(
     processors=[
         structlog.contextvars.merge_contextvars,
         structlog.stdlib.add_log_level,
-        structlog.dev.ConsoleRenderer(),
+        structlog.processors.TimeStamper(fmt="iso") if _is_production else structlog.stdlib.add_log_level,
+        structlog.processors.JSONRenderer() if _is_production else structlog.dev.ConsoleRenderer(),
     ]
 )
 
@@ -46,11 +48,25 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         log.warning("startup_cron_failed", error=str(e))
     yield
+    # Graceful shutdown — cerrar recursos en orden
+    log.info("shutdown_begin")
+    try:
+        from src.pilates.rate_limit import close_http_client
+        await close_http_client()
+        log.info("shutdown_http_client_closed")
+    except Exception as e:
+        log.debug("shutdown_http_close_error", exc=str(e))
+    try:
+        from src.pilates.http_client import close_http_client as close_http2
+        await close_http2()
+    except Exception as e:
+        log.debug("shutdown_http2_close_error", exc=str(e))
     try:
         from src.db.client import close_pool
         await close_pool()
+        log.info("shutdown_db_pool_closed")
     except Exception as e:
-        log.debug("silenced_exception", exc=str(e))
+        log.debug("shutdown_db_close_error", exc=str(e))
     log.info("shutdown_complete")
 
 
@@ -127,6 +143,58 @@ async def auth_middleware(request: Request, call_next):
 
 
 @app.middleware("http")
+async def security_headers_middleware(request: Request, call_next):
+    """Apple-grade: security headers en cada response."""
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    if request.url.path.startswith("/portal/") or request.url.path == "/":
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline'; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+            "font-src 'self' https://fonts.gstatic.com; "
+            "img-src 'self' data:; "
+            "connect-src 'self' https://motor-semantico-omni.fly.dev"
+        )
+    return response
+
+
+# Rate limit por IP — endpoints públicos
+_rate_limit_cache: dict[str, list] = {}
+RATE_LIMIT_MAX = int(os.getenv("RATE_LIMIT_MAX", "60"))  # req/minuto por IP
+RATE_LIMIT_WINDOW = 60  # segundos
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    """Rate limit por IP en endpoints públicos."""
+    import time
+    path = request.url.path
+    # Solo limitar endpoints públicos (portal, webhook, onboarding)
+    if not any(path.startswith(p) for p in ("/portal/", "/pilates/webhook/", "/pilates/publico/")):
+        return await call_next(request)
+
+    ip = request.client.host if request.client else "unknown"
+    now = time.time()
+    key = f"{ip}:{path.split('/')[1]}"
+
+    # Limpiar ventana
+    if key not in _rate_limit_cache:
+        _rate_limit_cache[key] = []
+    _rate_limit_cache[key] = [t for t in _rate_limit_cache[key] if now - t < RATE_LIMIT_WINDOW]
+
+    if len(_rate_limit_cache[key]) >= RATE_LIMIT_MAX:
+        log.warning("rate_limit_exceeded", ip=ip, path=path)
+        return JSONResponse(status_code=429, content={"detail": "Demasiadas peticiones"})
+
+    _rate_limit_cache[key].append(now)
+    return await call_next(request)
+
+
+@app.middleware("http")
 async def correlation_id_middleware(request: Request, call_next):
     """Añade correlation ID a cada request para trazabilidad."""
     correlation_id = request.headers.get("X-Correlation-ID", str(_uuid.uuid4())[:8])
@@ -155,6 +223,21 @@ async def tenant_middleware(request: Request, call_next):
         request.state.tenant_config = None
 
     return await call_next(request)
+
+
+@app.middleware("http")
+async def conn_pool_middleware(request: Request, call_next):
+    """Inyecta conexión DB en request.state para reutilizar en la request."""
+    try:
+        from src.db.client import get_pool
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            request.state.conn = conn
+            response = await call_next(request)
+        return response
+    except Exception:
+        request.state.conn = None
+        return await call_next(request)
 
 
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://motor-semantico-omni.fly.dev,http://localhost:5173").split(",")
