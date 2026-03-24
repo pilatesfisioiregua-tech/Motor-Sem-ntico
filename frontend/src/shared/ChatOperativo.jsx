@@ -233,99 +233,77 @@ export default function ChatOperativo({ modulosActivos, onAcciones, onSaveConfig
     }
   }, [handleSend]);
 
-  // Modo compacto: solo barra de búsqueda
-  if (compact && !expanded) {
-    return (
-      <div className="relative group">
-        <input
-          ref={inputRef}
-          className="w-full glass rounded-2xl px-5 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)] focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)] transition-all duration-200"
-          placeholder="Pregunta lo que necesites..."
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onFocus={() => setExpanded(true)}
-          disabled={loading}
-        />
-        {loading && (
-          <div className="absolute right-4 top-1/2 -translate-y-1/2">
-            <Pulse color="indigo" size={6} />
-          </div>
-        )}
-      </div>
-    );
-  }
+  // El chat se auto-expande cuando hay mensajes o loading
+  const showChat = expanded || messages.length > 0 || loading || pendingPlan;
 
   return (
-    <div className={`flex flex-col ${compact ? 'fixed inset-x-0 bottom-0 z-50 max-h-[70vh] bg-[var(--bg)] border-t border-[var(--border)] rounded-t-3xl shadow-2xl' : ''}`}>
-      {/* Header si es expandido desde compacto */}
-      {compact && expanded && (
-        <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)]">
-          <span className="text-xs font-bold tracking-widest uppercase text-[var(--accent-indigo)]">Chat operativo</span>
-          <button
-            onClick={() => { setExpanded(false); }}
-            className="text-[var(--text-ghost)] hover:text-[var(--text-secondary)] text-lg cursor-pointer bg-transparent border-none"
-          >
-            {String.fromCodePoint(0x2715)}
-          </button>
-        </div>
-      )}
-
-      {/* Mensajes */}
-      <div className={`flex-1 overflow-y-auto px-4 py-3 space-y-3 ${compact ? 'max-h-[50vh]' : 'max-h-[400px]'}`}>
-        {messages.length === 0 && (
-          <div className="text-center py-8 text-[var(--text-ghost)] text-sm">
-            Pregunta lo que necesites: cobrar, cancelar, buscar clientes, enviar facturas...
-          </div>
-        )}
-        {messages.map((msg, i) => (
-          <ChatBubble key={i} role={msg.role} content={msg.content} timestamp={msg.timestamp} />
-        ))}
-
-        {/* Plan de acciones pendiente */}
-        {pendingPlan && (
-          <ActionPlan
-            plan={pendingPlan}
-            onConfirm={handleConfirm}
-            onCancel={handleCancel}
-            executing={executing}
-            results={planResults}
+    <div className="flex flex-col">
+      {/* Input siempre visible */}
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1 group">
+          <div className="absolute inset-0 rounded-2xl bg-[var(--accent-indigo)] opacity-0 group-focus-within:opacity-[0.06] blur-xl transition-opacity duration-300" />
+          <input
+            ref={inputRef}
+            className="relative w-full glass rounded-2xl px-5 py-2.5 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)] focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)] transition-all duration-200"
+            placeholder="Pregunta lo que necesites..."
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            disabled={loading || executing}
           />
-        )}
-
-        {loading && !pendingPlan && (
-          <div className="flex justify-start fade-in">
-            <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl rounded-bl-md px-4 py-3">
+          {loading && (
+            <div className="absolute right-4 top-1/2 -translate-y-1/2">
               <Pulse color="indigo" size={6} />
             </div>
-          </div>
-        )}
-        <div ref={chatEndRef} />
+          )}
+        </div>
+        <VoicePanel onTranscript={handleVoice} />
       </div>
 
-      {/* Input */}
-      <div className="px-4 pb-4 pt-2">
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1 group">
-            <div className="absolute inset-0 rounded-2xl bg-[var(--accent-indigo)] opacity-0 group-focus-within:opacity-[0.06] blur-xl transition-opacity duration-300" />
-            <input
-              ref={inputRef}
-              className="relative w-full glass rounded-2xl px-5 py-3 text-sm text-[var(--text-primary)] placeholder-[var(--text-ghost)] focus:outline-none focus:border-[var(--border-active)] focus:shadow-[var(--shadow-glow)] transition-all duration-200"
-              placeholder="Pregunta lo que necesites..."
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={loading || executing}
-            />
-            {loading && (
-              <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                <Pulse color="indigo" size={6} />
-              </div>
+      {/* Panel de conversación — se expande debajo del input */}
+      {showChat && (
+        <div className="mt-2 glass rounded-2xl border border-[var(--border)] overflow-hidden fade-in">
+          {/* Header con botón cerrar */}
+          <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--border)]/50">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-[var(--accent-indigo)]">Chat operativo</span>
+            {messages.length > 0 && !loading && !pendingPlan && (
+              <button
+                onClick={() => { setExpanded(false); setMessages([]); setPendingPlan(null); setPlanResults(null); }}
+                className="text-[var(--text-ghost)] hover:text-[var(--text-secondary)] text-sm cursor-pointer bg-transparent border-none px-1"
+              >
+                {String.fromCodePoint(0x2715)}
+              </button>
             )}
           </div>
-          <VoicePanel onTranscript={handleVoice} />
+
+          {/* Mensajes */}
+          <div className="overflow-y-auto px-4 py-3 space-y-3 max-h-[350px]">
+            {messages.map((msg, i) => (
+              <ChatBubble key={i} role={msg.role} content={msg.content} timestamp={msg.timestamp} />
+            ))}
+
+            {/* Plan de acciones pendiente */}
+            {pendingPlan && (
+              <ActionPlan
+                plan={pendingPlan}
+                onConfirm={handleConfirm}
+                onCancel={handleCancel}
+                executing={executing}
+                results={planResults}
+              />
+            )}
+
+            {loading && !pendingPlan && (
+              <div className="flex justify-start fade-in">
+                <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-2xl rounded-bl-md px-4 py-3">
+                  <Pulse color="indigo" size={6} />
+                </div>
+              </div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

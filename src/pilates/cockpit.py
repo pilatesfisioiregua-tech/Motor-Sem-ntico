@@ -316,8 +316,8 @@ Además de controlar la interfaz, puedes ejecutar operaciones del estudio:
 
 REGLAS OPERATIVAS:
 1. Antes de ejecutar cualquier acción, BUSCA al cliente por nombre para obtener su ID.
-2. Para acciones destructivas (cancelar, eliminar) y acciones con dinero (cobrar, pagar, facturar, enviar WhatsApp), genera un PLAN DE ACCIONES con confirmar_plan en vez de ejecutar directamente. El plan se mostrará a Jesús para que lo apruebe.
-3. Para acciones de SOLO LECTURA (buscar, ver cliente, ver grupos, ver pagos, ver estrategia), ejecuta directamente sin confirmación.
+2. OBLIGATORIO: Para CUALQUIER acción que MODIFIQUE datos (registrar_pago, cancelar_sesiones_cliente, generar_facturas, enviar_whatsapp, inscribir_en_grupo, agendar_sesiones_recurrentes), SIEMPRE usa confirmar_plan. NUNCA llames directamente a estas funciones. SIEMPRE genera primero el plan con confirmar_plan.
+3. Para acciones de SOLO LECTURA (buscar_cliente, ver_cliente, ver_grupos, ver_pagos_cliente, voz_estrategia, voz_senales, voz_isp, configurar_interfaz), ejecuta directamente sin confirmación.
 4. Si Jesús dice "agéndame a X los martes y viernes hasta junio", calcula todas las fechas y crea las sesiones de golpe.
 5. Si dice "ponle en el grupo de las 17h", busca el grupo que encaje por hora y lo inscribe.
 6. Para facturas: primero busca cargos cobrados sin facturar, luego genera la factura.
@@ -1362,6 +1362,18 @@ async def chat_cockpit(mensaje: str, modulos_activos: list,
                 }
                 result = {"ok": True, "plan_generado": True,
                           "mensaje": "Plan creado. Esperando confirmación de Jesús."}
+            elif fn_name in ACTIONS_REQUIRE_CONFIRM:
+                # Safety net: el LLM llamó directo a una acción que requiere confirmación
+                # Interceptar y convertir en plan automático
+                action_plan = {
+                    "resumen": f"Ejecutar {fn_name}",
+                    "pasos": [{"accion": fn_name, "args": fn_args, "descripcion": fn_name.replace('_', ' ').capitalize()}],
+                    "estado": "pendiente",
+                }
+                result = {"ok": True, "plan_generado": True,
+                          "mensaje": "Acción requiere confirmación. Plan creado."}
+                log.warning("cockpit_action_intercepted", tool=fn_name,
+                            msg="LLM bypassed confirmar_plan, auto-generated plan")
             elif fn_name in TOOL_DISPATCH:
                 try:
                     result = await TOOL_DISPATCH[fn_name](fn_args)
