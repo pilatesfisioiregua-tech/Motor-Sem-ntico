@@ -1388,6 +1388,10 @@ async def chat_cockpit(mensaje: str, modulos_activos: list,
                 "tool_call_id": tc["id"],
                 "content": json.dumps(result, ensure_ascii=False),
             })
+
+        # Si se generó un plan, parar el loop — no seguir con más LLM calls
+        if action_plan:
+            break
     else:
         respuesta_texto = "No he pillado bien qué necesitas. Prueba de otra forma."
 
