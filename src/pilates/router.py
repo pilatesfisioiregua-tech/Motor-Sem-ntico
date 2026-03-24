@@ -4056,3 +4056,65 @@ async def sse_pizarra():
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "Connection": "keep-alive"},
     )
+
+
+# ============================================================
+# DIAGNÓSTICO DEL SISTEMA
+# ============================================================
+
+@router.get("/sistema/diagnostico")
+async def diagnostico_sistema():
+    """Diagnóstico completo del sistema — para Jesús en Modo Profundo."""
+    from src.db.client import get_pool
+    from src.motor.pensar import presupuesto_restante, _presupuesto_ciclo
+
+    pool = await get_pool()
+    checks = {}
+
+    async with pool.acquire() as conn:
+        # Tablas
+        checks["tablas_om"] = await conn.fetchval(
+            "SELECT count(*) FROM pg_tables WHERE tablename LIKE 'om_%'")
+
+        # Tamaño DB
+        checks["db_size_mb"] = await conn.fetchval(
+            "SELECT pg_database_size(current_database()) / 1024 / 1024")
+
+        # Cron state
+        cron_rows = await conn.fetch(
+            "SELECT tarea, ultima_ejecucion, resultado FROM om_cron_state ORDER BY ultima_ejecucion DESC")
+        checks["cron"] = [dict(r) for r in cron_rows]
+
+        # Motor LLM
+        checks["motor"] = {
+            "presupuesto_restante": presupuesto_restante(),
+            "gastado_ciclo": _presupuesto_ciclo,
+        }
+
+        # Caché
+        try:
+            cache = await conn.fetchrow("""
+                SELECT count(*) as entradas, SUM(hits) as total_hits
+                FROM om_pizarra_cache_llm WHERE tenant_id='authentic_pilates'
+            """)
+            checks["cache_llm"] = dict(cache) if cache else {}
+        except Exception:
+            checks["cache_llm"] = "tabla_no_existe"
+
+        # Pizarras
+        for tabla in ["om_pizarra_dominio", "om_pizarra_cognitiva", "om_pizarra_temporal",
+                      "om_pizarra_modelos", "om_pizarra_evolucion", "om_pizarra_interfaz"]:
+            try:
+                count = await conn.fetchval(f"SELECT count(*) FROM {tabla}")
+                checks[f"pizarra_{tabla[13:]}"] = count
+            except Exception:
+                checks[f"pizarra_{tabla[13:]}"] = "no_existe"
+
+        # Señales bus
+        try:
+            checks["bus_pendientes"] = await conn.fetchval(
+                "SELECT count(*) FROM om_senales_agentes WHERE procesada=false AND tenant_id='authentic_pilates'")
+        except Exception:
+            checks["bus_pendientes"] = "tabla_no_existe"
+
+    return {"timestamp": str(datetime.now()), "checks": checks}

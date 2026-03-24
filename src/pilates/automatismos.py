@@ -14,7 +14,8 @@ from uuid import UUID
 
 log = structlog.get_logger()
 
-TENANT = "authentic_pilates"
+from src.pilates.tenant_context import get_tenant_id, DEFAULT_TENANT
+TENANT = DEFAULT_TENANT  # Fallback para llamadas sin request
 
 
 async def _get_pool():
@@ -432,7 +433,7 @@ async def ejecutar_cron(tipo: str) -> dict:
 
     elif tipo == "diario":
         resultados["cumpleanos"] = await felicitar_cumpleanos()
-        from src.pilates.stripe_pagos import cron_cobros_recurrentes
+        from src.pilates.redsys_pagos import cron_cobros_recurrentes
         resultados["cobros"] = await cron_cobros_recurrentes()
 
     else:

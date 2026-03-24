@@ -1,5 +1,7 @@
 """Motor Semántico OMNI-MIND — API endpoint."""
 import asyncio
+import os
+import uuid as _uuid
 import structlog
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
@@ -9,6 +11,7 @@ from typing import Optional
 
 structlog.configure(
     processors=[
+        structlog.contextvars.merge_contextvars,
         structlog.stdlib.add_log_level,
         structlog.dev.ConsoleRenderer(),
     ]
@@ -51,15 +54,24 @@ async def lifespan(app: FastAPI):
     log.info("shutdown_complete")
 
 
-import os
-
-_docs_enabled = os.getenv("ENABLE_DOCS", "false").lower() == "true"
+_docs_enabled = os.getenv("ENABLE_DOCS", "true").lower() == "true"
 app = FastAPI(
     title="Motor Semántico OMNI-MIND",
     version="0.3.0",
     lifespan=lifespan,
     docs_url="/docs" if _docs_enabled else None,
     redoc_url="/redoc" if _docs_enabled else None,
+    openapi_tags=[
+        {"name": "clientes", "description": "Gestión de clientes"},
+        {"name": "sesiones", "description": "Sesiones, asistencias, calendario"},
+        {"name": "pagos", "description": "Pagos, cargos, facturación, Redsys"},
+        {"name": "voz", "description": "Bloque Voz: estrategia, propuestas, ISP"},
+        {"name": "organismo", "description": "Pizarras, bus, director, agentes"},
+        {"name": "sistema", "description": "Health, diagnóstico, cron, backups"},
+        {"name": "motor", "description": "Motor semántico, telemetría, caché"},
+        {"name": "redsys", "description": "Webhooks Redsys (público)"},
+        {"name": "portal", "description": "Portal cliente (público)"},
+    ],
 )
 
 # ============================================================
@@ -113,6 +125,38 @@ async def auth_middleware(request: Request, call_next):
 
     return await call_next(request)
 
+
+@app.middleware("http")
+async def correlation_id_middleware(request: Request, call_next):
+    """Añade correlation ID a cada request para trazabilidad."""
+    correlation_id = request.headers.get("X-Correlation-ID", str(_uuid.uuid4())[:8])
+    request.state.correlation_id = correlation_id
+
+    structlog.contextvars.clear_contextvars()
+    structlog.contextvars.bind_contextvars(correlation_id=correlation_id)
+
+    response = await call_next(request)
+    response.headers["X-Correlation-ID"] = correlation_id
+    return response
+
+
+@app.middleware("http")
+async def tenant_middleware(request: Request, call_next):
+    """Resuelve el tenant desde header o pizarra dominio."""
+    tenant_id = request.headers.get("X-Tenant-ID", "authentic_pilates")
+
+    try:
+        from src.pilates.pizarras import leer_dominio
+        config = await leer_dominio(tenant_id)
+        request.state.tenant_id = config["tenant_id"]
+        request.state.tenant_config = config
+    except Exception:
+        request.state.tenant_id = "authentic_pilates"
+        request.state.tenant_config = None
+
+    return await call_next(request)
+
+
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://motor-semantico-omni.fly.dev,http://localhost:5173").split(",")
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
@@ -120,7 +164,7 @@ app.add_middleware(
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["X-API-Key", "Content-Type", "Authorization"],
+    allow_headers=["X-API-Key", "X-Tenant-ID", "X-Correlation-ID", "Content-Type", "Authorization"],
 )
 
 # Mount Pilates router
