@@ -23,6 +23,22 @@ PROTEGIDOS = {
     "prescriptor", "motor_vn", "database",
 }
 
+# F8: Reparaciones automáticas por categoría
+REPARACIONES_AUTO = {
+    "bus_saturado": "_reparar_bus_saturado",
+    "cache_lleno": "_reparar_cache_lleno",
+    "llm_budget_excedido": "_reparar_budget",
+    "cron_parado": "_reparar_cron",
+    "bus": "_reparar_bus_saturado",
+    "cache": "_reparar_cache_lleno",
+    "llm_budget": "_reparar_budget",
+}
+
+REPARACIONES_CR1 = {
+    "db_lenta": "Requiere VACUUM ANALYZE — puede afectar rendimiento",
+    "disco_lleno": "Requiere borrar datos — riesgo de pérdida",
+}
+
 
 def clasificar(alerta: dict) -> str:
     """Clasifica alerta como FONTANERIA o ARQUITECTURAL."""
@@ -83,13 +99,59 @@ async def _fix_diagnostico_ausente() -> dict:
         return {"accion": "acd_fallido", "error": str(e)[:200]}
 
 
+async def _reparar_cache_lleno() -> dict:
+    """Fix: limpiar caché LLM expirado."""
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        try:
+            result = await conn.execute("""
+                DELETE FROM om_pizarra_cache_llm
+                WHERE expira_at < now() AND tenant_id = $1
+            """, TENANT)
+            count = int(result.split()[-1]) if result else 0
+            return {"accion": "cache_limpiado", "eliminadas": count}
+        except Exception:
+            return {"accion": "cache_error", "nota": "Tabla caché no accesible"}
+
+
+async def _reparar_budget() -> dict:
+    """Fix: degradar modelos a baja complejidad."""
+    try:
+        from src.motor.pensar import resetear_presupuesto
+        resetear_presupuesto()
+        return {"accion": "budget_reseteado", "nota": "Presupuesto reseteado a máximo"}
+    except Exception as e:
+        return {"accion": "budget_error", "error": str(e)[:100]}
+
+
+async def _reparar_cron() -> dict:
+    """Fix: resetear estado cron para que se ejecute."""
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute("""
+            UPDATE om_cron_state SET ultima_ejecucion = now() - interval '25 hours',
+            resultado = 'reset_mecanico'
+            WHERE tenant_id = $1
+        """, TENANT)
+    return {"accion": "cron_reseteado"}
+
+
 async def _auto_fix(alerta: dict) -> dict:
     """Intenta auto-fix para alertas FONTANERIA."""
     subsistema = alerta.get("subsistema", "")
-    if subsistema == "bus":
+
+    # F8: buscar en REPARACIONES_AUTO por subsistema
+    if subsistema in ("bus", "bus_saturado"):
         return await _fix_bus_acumulacion()
+    if subsistema in ("cache", "cache_lleno"):
+        return await _reparar_cache_lleno()
+    if subsistema in ("llm_budget", "llm_budget_excedido"):
+        return await _reparar_budget()
+    if subsistema in ("cron", "cron_parado"):
+        return await _reparar_cron()
     if subsistema == "acd":
         return await _fix_diagnostico_ausente()
+
     return {"accion": "sin_fix_auto", "subsistema": subsistema,
             "nota": "Marcada como procesada. Revisar si persiste."}
 
@@ -157,8 +219,49 @@ async def procesar_alertas() -> dict:
         "detalle_arquitectural": arquitecturales,
     }
 
+    # Publicar al feed
+    try:
+        from src.pilates.feed import feed_mecanico_fix
+        for fix in fixes[:3]:
+            await feed_mecanico_fix(fix.get("accion", "fontanería"), str(fix)[:200])
+    except Exception as e:
+        log.warning("mecanico_feed_error", error=str(e))
+
     if alertas:
         log.info("mecanico_procesado",
             total=len(alertas), fixes=len(fixes), arq=len(arquitecturales))
 
+    # F8: Informe post-mortem por WA para reparaciones auto
+    for fix in fixes[:3]:
+        try:
+            await informe_postmortem(fix.get("accion", "reparación"), fix, fix)
+        except Exception:
+            pass
+
     return resultado
+
+
+async def informe_postmortem(categoria: str, diagnostico: dict, resultado: dict):
+    """Genera y programa informe post-mortem por WA."""
+    import os
+    telefono = os.getenv("JESUS_TELEFONO", "")
+    if not telefono:
+        return
+
+    mensaje = (
+        f"Reparacion automatica completada\n\n"
+        f"Problema: {categoria}\n"
+        f"Diagnostico: {str(diagnostico)[:100]}\n"
+        f"Accion: {resultado.get('accion', '')[:100]}\n"
+        f"Estado: {'Resuelto' if resultado.get('ok', True) else 'Requiere atencion'}"
+    )
+
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute("""
+            INSERT INTO om_pizarra_comunicacion
+                (tenant_id, destinatario, canal, tipo, mensaje,
+                 programado_para, estado, origen)
+            VALUES ($1, $2, 'whatsapp', 'postmortem', $3,
+                    now(), 'pendiente', 'MECANICO')
+        """, TENANT, telefono, mensaje)

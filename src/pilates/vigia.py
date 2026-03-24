@@ -23,6 +23,17 @@ log = structlog.get_logger()
 TENANT = "authentic_pilates"
 ORIGEN = "VIGIA"
 
+# Categorías de degradación F8
+CATEGORIAS_DEGRADACION = {
+    "db_lenta": {"check": "avg query time > 500ms", "reparacion": "VACUUM ANALYZE", "auto": False},
+    "cron_parado": {"check": "última ejecución > 36h", "reparacion": "restart cron task", "auto": True},
+    "llm_budget_excedido": {"check": "presupuesto_restante <= 0", "reparacion": "degradar modelos", "auto": True},
+    "bus_saturado": {"check": "señales pendientes > 100", "reparacion": "marcar antiguas procesadas", "auto": True},
+    "api_lenta": {"check": "health check > 5s", "reparacion": "liberar semáforos", "auto": False},
+    "cache_lleno": {"check": "entradas caché > 1000", "reparacion": "limpiar expiradas", "auto": True},
+    "disco_lleno": {"check": "DB size > 1GB", "reparacion": "limpiar telemetría vieja", "auto": False},
+}
+
 
 @dataclass
 class CheckResult:
@@ -143,7 +154,38 @@ async def ejecutar_checks() -> list[CheckResult]:
         await _check_ultimo_diagnostico(),
         await _check_cobros_pendientes(),
         await _check_clientes_activos(),
+        await _check_llm_budget(),
+        await _check_cache(),
     ]
+
+
+async def _check_llm_budget() -> CheckResult:
+    try:
+        from src.motor.pensar import presupuesto_restante
+        restante = presupuesto_restante()
+        if restante <= 0:
+            return CheckResult("llm_budget", "error", f"Presupuesto LLM agotado (${restante:.2f})",
+                             "critical", True, "Degradar modelos a baja complejidad")
+        if restante < 0.5:
+            return CheckResult("llm_budget", "warning", f"Presupuesto LLM bajo (${restante:.2f})",
+                             "medium")
+        return CheckResult("llm_budget", "ok", f"Presupuesto: ${restante:.2f}")
+    except Exception as e:
+        return CheckResult("llm_budget", "warning", f"No se pudo leer presupuesto: {str(e)[:60]}", "low")
+
+
+async def _check_cache() -> CheckResult:
+    try:
+        pool = await get_pool()
+        async with pool.acquire() as conn:
+            count = await conn.fetchval(
+                "SELECT count(*) FROM om_pizarra_cache_llm WHERE tenant_id=$1", TENANT) or 0
+        if count > 1000:
+            return CheckResult("cache", "warning", f"Caché LLM grande: {count} entradas",
+                             "medium", True, "Limpiar expiradas")
+        return CheckResult("cache", "ok", f"Caché: {count} entradas")
+    except Exception:
+        return CheckResult("cache", "ok", "Tabla caché no disponible")
 
 
 async def vigilar() -> dict:
@@ -181,6 +223,14 @@ async def vigilar() -> dict:
         "detalle": [{"subsistema": c.subsistema, "estado": c.estado, "mensaje": c.mensaje}
                     for c in checks],
     }
+
+    # Publicar al feed
+    try:
+        from src.pilates.feed import feed_vigia_alerta
+        for p in problemas[:3]:
+            await feed_vigia_alerta(p.subsistema, p.mensaje)
+    except Exception as e:
+        log.warning("vigia_feed_error", error=str(e))
 
     level = "vigia_ok" if not problemas else "vigia_alerta"
     log.info(level, ok=resultado["ok"], warn=resultado["warnings"], err=resultado["errors"])

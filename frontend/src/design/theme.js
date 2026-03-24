@@ -7,6 +7,7 @@ export const CAPAS = {
   voz:        { label: 'Voz',        icon: '\uD83D\uDCE2', modulos: ['voz_proactiva', 'voz'] },
   motor:      { label: 'Motor',      icon: '\u2699\uFE0F', modulos: ['motor'] },
   identidad:  { label: 'Identidad',  icon: '\uD83E\uDDEC', modulos: ['adn', 'depuracion', 'readiness', 'engagement', 'contenido', 'presencia'] },
+  autonomia:  { label: 'Autonomía', icon: '\uD83E\uDD16', modulos: ['autonomia'] },
 };
 
 export const TABS_PROFUNDO = [

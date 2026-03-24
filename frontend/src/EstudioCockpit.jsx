@@ -436,6 +436,36 @@ function ContenidoPresenciaPanel() {
   );
 }
 
+function AutonomiaDashPanel() {
+  const [d, setD] = useState(null);
+  useEffect(() => { api.getAutonomiaDashboard().then(setD).catch(() => {}); }, []);
+  if (!d) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Cargando...</p>;
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between text-sm">
+        <span className="text-[var(--text-secondary)]">Auto (7d)</span>
+        <span className="font-semibold text-emerald-400">{d.auto_7d}</span>
+      </div>
+      <div className="flex justify-between text-sm">
+        <span className="text-[var(--text-secondary)]">Notificaciones</span>
+        <span className="font-semibold text-cyan-400">{d.notificaciones?.length || 0}</span>
+      </div>
+      <div className="flex justify-between text-sm">
+        <span className="text-[var(--text-secondary)]">CR1 pendientes</span>
+        <span className={`font-semibold ${d.cr1_pendientes?.length > 0 ? 'text-amber-400' : 'text-emerald-400'}`}>{d.cr1_pendientes?.length || 0}</span>
+      </div>
+      {d.postmortems?.length > 0 && (
+        <div className="mt-2">
+          <div className="text-xs text-[var(--text-ghost)] mb-1">Reparaciones recientes:</div>
+          {d.postmortems.map((p, i) => (
+            <div key={i} className="text-[10px] text-[var(--text-tertiary)] truncate">{p.mensaje?.slice(0, 80)}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const MODULO_COMPONENTS = {
   agenda: AgendaHoy,
   calendario: CalendarioSemanal,
@@ -457,6 +487,7 @@ const MODULO_COMPONENTS = {
   motor: MotorPanel,
   contenido: ContenidoPresenciaPanel,
   presencia: IdentidadPresenciaPanel,
+  autonomia: AutonomiaDashPanel,
 };
 
 // Módulos que necesitan Card variant especial

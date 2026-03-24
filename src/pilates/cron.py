@@ -132,6 +132,22 @@ async def _tarea_semanal():
     except Exception as e:
         log.error("cron_semanal_presupuesto_error", error=str(e))
 
+    # 0b. Predicciones (antes de diagnosticar — alimenta al Director)
+    try:
+        from src.pilates.predictor import predecir_abandonos, predecir_demanda_semana
+        from src.pilates.bus import emitir
+        abandonos = await predecir_abandonos()
+        demanda = await predecir_demanda_semana()
+        if abandonos:
+            for a in abandonos[:5]:
+                await emitir("ALERTA", "PREDICTOR",
+                    {"subtipo": "abandono_predicho", **a},
+                    destino="AF1", prioridad=2)
+        log.info("cron_predicciones_ok", abandonos=len(abandonos),
+                 demanda_estimada=demanda.get("sesiones_estimadas"))
+    except Exception as e:
+        log.error("cron_predicciones_error", error=str(e))
+
     try:
         # 1. Ciclo completo (escuchar + priorizar + IRC + ISP)
         from src.pilates.voz_ciclos import ejecutar_ciclo_completo
@@ -273,6 +289,14 @@ async def _tarea_semanal():
                      filtrados=cont.get("filtrados_f3", 0))
         except Exception as e:
             log.error("cron_semanal_contenido_error", error=str(e))
+
+        # 14. Reputación: pedir reseñas a clientes contentos
+        try:
+            from src.pilates.reputacion import programar_pedidos_resena
+            rep = await programar_pedidos_resena()
+            log.info("cron_semanal_reputacion_ok", pedidos=rep.get("programados", 0))
+        except Exception as e:
+            log.error("cron_semanal_reputacion_error", error=str(e))
 
     except Exception as e:
         log.error("cron_semanal_error", error=str(e))

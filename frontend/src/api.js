@@ -203,3 +203,7 @@ export const aprobarContenido = (id) => request(`/contenido/${id}/aprobar`, { me
 export const programarContenido = (id) => request(`/contenido/${id}/programar`, { method: 'POST', body: '{}' });
 export const filtrarContenido = (data) => request('/contenido/filtrar', { method: 'POST', body: JSON.stringify(data) });
 export const getCompetencia = () => request('/competencia');
+
+// AUTONOMÍA + PREDICCIONES (F8)
+export const getAutonomiaDashboard = () => request('/autonomia/dashboard');
+export const getPredicciones = () => request('/predicciones');

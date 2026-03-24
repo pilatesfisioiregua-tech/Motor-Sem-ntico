@@ -4273,3 +4273,112 @@ async def get_competencia():
         rows = await conn.fetch(
             "SELECT * FROM om_competencia WHERE tenant_id = 'authentic_pilates'")
     return [dict(r) for r in rows]
+
+
+# ============================================================
+# AUTONOMÍA + PREDICCIONES (F8)
+# ============================================================
+
+@router.get("/autonomia/dashboard")
+async def dashboard_autonomia():
+    """Qué ha hecho solo, qué ha pedido permiso, qué espera CR1."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        auto = await conn.fetchval("""
+            SELECT count(*) FROM om_pizarra_comunicacion
+            WHERE tenant_id='authentic_pilates' AND origen='AUTONOMIA'
+                AND tipo='log_auto' AND created_at >= now() - interval '7 days'
+        """) or 0
+        notif = await conn.fetch("""
+            SELECT * FROM om_pizarra_comunicacion
+            WHERE tenant_id='authentic_pilates' AND origen='AUTONOMIA'
+                AND tipo='notificacion_autonomia' AND created_at >= now() - interval '7 days'
+        """)
+        cr1 = await conn.fetch("""
+            SELECT * FROM om_pizarra_comunicacion
+            WHERE tenant_id='authentic_pilates' AND origen='AUTONOMIA'
+                AND tipo='solicitud_cr1' AND estado='pendiente'
+        """)
+        postmortems = await conn.fetch("""
+            SELECT * FROM om_pizarra_comunicacion
+            WHERE tenant_id='authentic_pilates' AND origen='MECANICO'
+                AND tipo='postmortem' AND created_at >= now() - interval '7 days'
+            ORDER BY created_at DESC LIMIT 5
+        """)
+    return {
+        "auto_7d": auto,
+        "notificaciones": [dict(r) for r in notif],
+        "cr1_pendientes": [dict(r) for r in cr1],
+        "postmortems": [dict(r) for r in postmortems],
+    }
+
+
+@router.get("/predicciones")
+async def get_predicciones():
+    """Predicciones: abandonos + demanda + cashflow."""
+    from src.pilates.predictor import predecir_abandonos, predecir_demanda_semana, predecir_cashflow_mes
+    abandonos = await predecir_abandonos()
+    demanda = await predecir_demanda_semana()
+    cashflow = await predecir_cashflow_mes()
+    return {"abandonos": abandonos, "demanda": demanda, "cashflow": cashflow}
+
+
+@router.post("/onboarding/tenant")
+async def onboarding_nuevo_tenant(request: Request):
+    """Wizard: crea un nuevo tenant desde cero."""
+    body = await request.json()
+    nombre = body.get("nombre")
+    ubicacion = body.get("ubicacion", "")
+    tipo = body.get("tipo", "pilates")
+    email = body.get("email", "")
+    telefono = body.get("telefono", "")
+
+    if not nombre:
+        raise HTTPException(400, "nombre es requerido")
+
+    # Generar tenant_id
+    import re
+    tenant_id = re.sub(r'[^a-z0-9_]', '_', nombre.lower().strip())[:40]
+
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        # INSERT om_pizarra_dominio
+        await conn.execute("""
+            INSERT INTO om_pizarra_dominio (tenant_id, nombre, config)
+            VALUES ($1, $2, $3::jsonb)
+            ON CONFLICT (tenant_id) DO NOTHING
+        """, tenant_id, nombre, json.dumps({
+            "timezone": "Europe/Madrid", "moneda": "EUR",
+            "tipo": tipo, "ubicacion": ubicacion,
+            "email": email, "telefono": telefono,
+            "funciones_activas": ["F1","F2","F3","F4","F5","F6","F7"],
+            "idioma": "es",
+        }))
+
+        # INSERT om_pizarra_modelos (seeds)
+        await conn.execute("""
+            INSERT INTO om_pizarra_modelos (tenant_id, funcion, complejidad, modelo, origen)
+            SELECT $1, funcion, complejidad, modelo, 'default'
+            FROM om_pizarra_modelos
+            WHERE tenant_id = 'authentic_pilates' AND origen = 'default'
+            ON CONFLICT DO NOTHING
+        """, tenant_id)
+
+        # INSERT om_pizarra_identidad vacía
+        await conn.execute("""
+            INSERT INTO om_pizarra_identidad (tenant_id, esencia, origen)
+            VALUES ($1, $2, 'onboarding')
+            ON CONFLICT (tenant_id) DO NOTHING
+        """, tenant_id, f"{nombre} — {tipo} en {ubicacion}")
+
+        # INSERT cron state
+        await conn.execute("""
+            INSERT INTO om_cron_state (tenant_id, tarea, ultima_ejecucion, resultado)
+            VALUES ($1, 'diaria', now(), 'onboarding')
+            ON CONFLICT DO NOTHING
+        """, tenant_id)
+
+    log.info("onboarding_tenant_creado", tenant_id=tenant_id, tipo=tipo)
+    return {"status": "ok", "tenant_id": tenant_id}
