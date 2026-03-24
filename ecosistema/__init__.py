@@ -1,9 +1,22 @@
-"""OMNI-MIND Ecosistema — Cerebro colectivo de N organismos.
+"""OMNI-MIND Ecosistema — Sistema Operativo para N exocortex.
 
-Nivel 4 de la Matrioska. Gestiona N tenants, cada uno con su DB.
-Lee telemetría anonimizada (NO datos del negocio) y propone
-transferencias cross-dominio (Ley 10 TCF).
+Metafora OS:
+  DB        = Memoria (filesystem persistente)
+  Ecosistema = Sistema Operativo (scheduler, procesos, IPC)
+  Exocortex  = App instalada en el OS
 
-El MOAT: la red de recetas entrenada cross-dominio.
-N tenants × M ciclos = dataset intransferible de "qué funciona para qué gap".
+Estructura:
+  ecosistema/
+    memoria/    → Filesystem: almacen unificado DB (pizarras, cache, telemetria)
+    os/         → Kernel del OS: scheduler, procesos, IPC, app store
+    apps/       → Lifecycle de apps: instalar, actualizar, pausar, desinstalar
+
+Cada App (exocortex) es un proceso del OS que:
+  - Se instala con un manifiesto (sector, capabilities, requirements)
+  - Usa servicios del OS (motor.pensar, pizarras, bus percepcion)
+  - Tiene su propio espacio de memoria (tenant_id en om_pizarra)
+  - Se comunica con otras apps via IPC (transferencias cross-dominio)
+  - El OS gestiona su ciclo de vida (scheduler, health, presupuesto)
+
+El MOAT: N apps × M ciclos = App Store con recetas entrenadas cross-dominio.
 """
