@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { fetchApi } from './context/AppContext';
 
-const BASE = import.meta.env.VITE_API_URL || '';
-
-export default function Onboarding({ token }) {
+export default function Onboarding() {
+  const { token } = useParams();
   const [step, setStep] = useState(0); // 0=cargando, 1=datos, 2=clinico, 3=servicio, 4=confirmar, 5=done
   const [linkData, setLinkData] = useState(null);
   const [error, setError] = useState(null);
@@ -21,7 +22,7 @@ export default function Onboarding({ token }) {
   });
 
   useEffect(() => {
-    fetch(`${BASE}/pilates/onboarding/${token}`)
+    fetch(`/pilates/onboarding/${token}`)
       .then(r => {
         if (!r.ok) throw new Error(r.status === 410 ? 'Este enlace ya fue utilizado o ha expirado' : 'Enlace no válido');
         return r.json();
@@ -43,7 +44,7 @@ export default function Onboarding({ token }) {
   async function submit() {
     setSubmitting(true);
     try {
-      const res = await fetch(`${BASE}/pilates/onboarding/${token}/completar`, {
+      const res = await fetch(`/pilates/onboarding/${token}/completar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

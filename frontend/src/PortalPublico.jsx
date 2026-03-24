@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 
-const BASE = import.meta.env.VITE_API_URL || '';
-
 const SHORTCUTS = [
   "¿Qué es el Pilates auténtico?",
   "Tengo una lesión, ¿me puede ayudar?",
@@ -27,7 +25,7 @@ export default function PortalPublico() {
     setMessages(prev => [...prev, { role: 'user', content: msg }]);
     setLoading(true);
     try {
-      const res = await fetch(`${BASE}/pilates/publico/chat`, {
+      const res = await fetch(`/pilates/publico/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mensaje: msg, historial }),

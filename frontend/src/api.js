@@ -1,22 +1,14 @@
 /**
  * Cliente API para Exocortex Pilates.
- * Base URL configurable para dev/prod.
+ * Auth via fetchApi (X-API-Key header automático).
  */
 
-const BASE = import.meta.env.VITE_API_URL || '';
-const PREFIX = `${BASE}/pilates`;
+import { fetchApi } from './context/AppContext';
+
+const PREFIX = '/pilates';
 
 async function request(path, options = {}) {
-  const url = `${PREFIX}${path}`;
-  const res = await fetch(url, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options,
-  });
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error(error.detail || `Error ${res.status}`);
-  }
-  return res.json();
+  return fetchApi(`${PREFIX}${path}`, options);
 }
 
 // GRUPOS

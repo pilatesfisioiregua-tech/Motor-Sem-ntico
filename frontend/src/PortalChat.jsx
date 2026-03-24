@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-
-const BASE = import.meta.env.VITE_API_URL || '';
+import { useParams } from 'react-router-dom';
 
 // Sugerencias rápidas
 const SHORTCUTS = [
@@ -12,7 +11,8 @@ const SHORTCUTS = [
   { emoji: '📊', text: '¿Cómo voy este mes?' },
 ];
 
-export default function PortalChat({ token }) {
+export default function PortalChat() {
+  const { token } = useParams();
   const [nombre, setNombre] = useState('');
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -24,7 +24,7 @@ export default function PortalChat({ token }) {
 
   // Load client name
   useEffect(() => {
-    fetch(`${BASE}/portal/${token}/data`)
+    fetch(`/portal/${token}/data`)
       .then(r => { if (!r.ok) throw new Error('Portal no disponible'); return r.json(); })
       .then(d => setNombre(d.cliente.nombre))
       .catch(e => setError(e.message));
@@ -42,7 +42,7 @@ export default function PortalChat({ token }) {
     setLoading(true);
 
     try {
-      const r = await fetch(`${BASE}/portal/${token}/chat`, {
+      const r = await fetch(`/portal/${token}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mensaje: userMsg, historial }),

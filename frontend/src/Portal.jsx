@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 
-const BASE = import.meta.env.VITE_API_URL || '';
-
 export default function Portal({ token }) {
   const [data, setData] = useState(null);
   const [view, setView] = useState('home');
@@ -13,7 +11,7 @@ export default function Portal({ token }) {
   const [msg, setMsg] = useState(null);
 
   useEffect(() => {
-    fetch(`${BASE}/portal/${token}/data`)
+    fetch(`/portal/${token}/data`)
       .then(r => { if (!r.ok) throw new Error('Portal no disponible'); return r.json(); })
       .then(setData)
       .catch(e => setError(e.message));
@@ -23,19 +21,19 @@ export default function Portal({ token }) {
     setView(v);
     try {
       if (v === 'sesiones' && !sesiones) {
-        const r = await fetch(`${BASE}/portal/${token}/sesiones`).then(r => r.json());
+        const r = await fetch(`/portal/${token}/sesiones`).then(r => r.json());
         setSesiones(r);
       }
       if (v === 'recuperar' && !recuperaciones) {
-        const r = await fetch(`${BASE}/portal/${token}/recuperaciones`).then(r => r.json());
+        const r = await fetch(`/portal/${token}/recuperaciones`).then(r => r.json());
         setRecuperaciones(r);
       }
       if (v === 'pagos' && !pagos) {
-        const r = await fetch(`${BASE}/portal/${token}/pagos`).then(r => r.json());
+        const r = await fetch(`/portal/${token}/pagos`).then(r => r.json());
         setPagos(r);
       }
       if (v === 'facturas' && !facturas) {
-        const r = await fetch(`${BASE}/portal/${token}/facturas`).then(r => r.json());
+        const r = await fetch(`/portal/${token}/facturas`).then(r => r.json());
         setFacturas(r);
       }
     } catch (e) { setError(e.message); }
@@ -44,18 +42,18 @@ export default function Portal({ token }) {
   async function cancelar(sesionId) {
     if (!confirm('¿Seguro que quieres cancelar esta sesión?')) return;
     try {
-      const r = await fetch(`${BASE}/portal/${token}/cancelar/${sesionId}`, { method: 'POST' });
+      const r = await fetch(`/portal/${token}/cancelar/${sesionId}`, { method: 'POST' });
       const result = await r.json();
       setMsg(result.mensaje);
       // Reload
-      const home = await fetch(`${BASE}/portal/${token}/data`).then(r => r.json());
+      const home = await fetch(`/portal/${token}/data`).then(r => r.json());
       setData(home);
     } catch (e) { setError(e.message); }
   }
 
   async function solicitar_recuperacion(sesionId) {
     try {
-      const r = await fetch(`${BASE}/portal/${token}/recuperar`, {
+      const r = await fetch(`/portal/${token}/recuperar`, {
         method: 'POST', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ sesion_id: sesionId }),
       });
@@ -212,7 +210,7 @@ export default function Portal({ token }) {
                   </div>
                   <div style={{textAlign:'right'}}>
                     <div style={{fontWeight:600}}>{parseFloat(f.total).toFixed(2)}€</div>
-                    <a href={`${BASE}${f.pdf_url}`} target="_blank"
+                    <a href={`${f.pdf_url}`} target="_blank"
                       style={{fontSize:12, color:'#6366f1'}}>Descargar</a>
                   </div>
                 </div>

@@ -3974,11 +3974,11 @@ async def get_pizarra_interfaz():
 
     if not layout:
         return {"source": "default", "capas": {
-            "operativo":  {"label": "Operativo",  "icon": "\u26A1", "modulos": ["agenda", "calendario", "buscar", "grupos", "wa"]},
-            "financiero": {"label": "Financiero", "icon": "\uD83D\uDCB0", "modulos": ["pagos_pendientes", "resumen_mes", "facturas"]},
-            "cognitivo":  {"label": "Cognitivo",  "icon": "\uD83E\uDDE0", "modulos": ["pizarra", "estrategia", "evaluacion", "feed_cognitivo", "bus"]},
-            "voz":        {"label": "Voz",        "icon": "\uD83D\uDCE2", "modulos": ["voz_proactiva", "voz"]},
-            "identidad":  {"label": "Identidad",  "icon": "\uD83E\uDDEC", "modulos": ["adn", "depuracion", "readiness", "engagement"]},
+            "operativo":  {"label": "Operativo",  "icon": "zap", "modulos": ["agenda", "calendario", "buscar", "grupos", "wa"]},
+            "financiero": {"label": "Financiero", "icon": "coins", "modulos": ["pagos_pendientes", "resumen_mes", "facturas"]},
+            "cognitivo":  {"label": "Cognitivo",  "icon": "brain", "modulos": ["pizarra", "estrategia", "evaluacion", "feed_cognitivo", "bus"]},
+            "voz":        {"label": "Voz",        "icon": "megaphone", "modulos": ["voz_proactiva", "voz"]},
+            "identidad":  {"label": "Identidad",  "icon": "dna", "modulos": ["adn", "depuracion", "readiness", "engagement"]},
         }}
 
     return {"source": "pizarra", "ciclo": ciclo, "layout": layout}

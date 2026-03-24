@@ -1,33 +1,45 @@
-import Onboarding from './Onboarding';
-import PortalChat from './PortalChat';
-import Profundo from './Profundo';
-import PortalPublico from './PortalPublico';
-import EstudioCockpit from './EstudioCockpit';
+import { Routes, Route } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
+import ErrorBoundary from './shared/ErrorBoundary';
 import './App.css';
 
+// Layouts
+import DarkLayout from './layouts/DarkLayout';
+import LightLayout from './layouts/LightLayout';
+
+// Pages
+import EstudioCockpit from './EstudioCockpit';
+import Profundo from './Profundo';
+import Onboarding from './Onboarding';
+import PortalChat from './PortalChat';
+import PortalPublico from './PortalPublico';
+import NotFound from './shared/NotFound';
+
 function App() {
-  // Routing simple: si la URL es /onboarding/{token}, mostrar formulario público
-  const path = window.location.pathname;
-  const portalMatch = path.match(/^\/portal\/(.+)$/);
-  if (portalMatch) {
-    return <PortalChat token={portalMatch[1]} />;
-  }
+  return (
+    <AppProvider>
+      <ErrorBoundary>
+        <Routes>
+          {/* Modo Estudio (dark) */}
+          <Route element={<DarkLayout />}>
+            <Route path="/" element={<EstudioCockpit />} />
+            <Route path="/estudio" element={<EstudioCockpit />} />
+            <Route path="/profundo" element={<Profundo />} />
+          </Route>
 
-  const onboardingMatch = path.match(/^\/onboarding\/(.+)$/);
-  if (onboardingMatch) {
-    return <Onboarding token={onboardingMatch[1]} />;
-  }
+          {/* Modo Cliente (light) */}
+          <Route element={<LightLayout />}>
+            <Route path="/portal/:token" element={<PortalChat />} />
+            <Route path="/onboarding/:token" element={<Onboarding />} />
+            <Route path="/info" element={<PortalPublico />} />
+          </Route>
 
-  if (path === '/profundo') {
-    return <Profundo />;
-  }
-
-  if (path === '/info') {
-    return <PortalPublico />;
-  }
-
-  // Por defecto: Cockpit generativo (Modo Estudio)
-  return <EstudioCockpit />;
+          {/* 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ErrorBoundary>
+    </AppProvider>
+  );
 }
 
 export default App;

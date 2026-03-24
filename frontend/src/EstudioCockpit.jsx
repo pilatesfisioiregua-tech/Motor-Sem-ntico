@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import * as api from './api';
+import { fetchApi } from './context/AppContext';
 import Calendario from './Calendario';
 import PanelWA from './PanelWA';
 import Card from './design/Card';
@@ -11,10 +12,7 @@ import SignalFlow from './design/SignalFlow';
 import ConflictLine from './design/ConflictLine';
 import Pulse from './design/Pulse';
 import VoicePanel, { speak } from './shared/VoicePanel';
-import { CAPAS } from './design/theme';
-
-const BASE = import.meta.env.VITE_API_URL || '';
-const PREFIX = `${BASE}/pilates`;
+import { CAPAS as CAPAS_DEFAULT } from './design/theme';
 
 // ============================================================
 // MÓDULOS INLINE — migrados a Tailwind
@@ -145,7 +143,7 @@ function VozPanel() {
 
 function EngagementPanel() {
   const [data, setData] = useState(null);
-  useEffect(() => { fetch(`${PREFIX}/engagement`).then(r => r.json()).then(setData).catch(() => {}); }, []);
+  useEffect(() => { fetchApi('/pilates/engagement').then(setData).catch(() => {}); }, []);
   if (!data) return <p className="text-[var(--text-tertiary)] text-sm py-3 text-center">Cargando...</p>;
   return (
     <div>
@@ -381,11 +379,13 @@ const MODULO_VARIANTS = {
 // SIDEBAR
 // ============================================================
 
-function Sidebar({ modulos, activos, onToggle }) {
+function Sidebar({ modulos, activos, onToggle, capas, visible }) {
   return (
-    <aside className="w-56 min-w-[224px] border-r border-[var(--border)] bg-[var(--bg-deep)]
-                      flex flex-col py-4 overflow-y-auto shrink-0">
-      {Object.entries(CAPAS).map(([key, capa]) => (
+    <aside className={`w-56 min-w-[224px] border-r border-[var(--border)] bg-[var(--bg-deep)]
+                      flex flex-col py-4 overflow-y-auto shrink-0
+                      ${visible ? '' : 'hidden md:flex'}
+                      fixed md:relative inset-y-0 left-0 z-40 md:z-auto`}>
+      {Object.entries(capas).map(([key, capa]) => (
         <div key={key} className="mb-4">
           <div className="px-4 mb-2 text-[10px] font-bold tracking-[0.1em] uppercase text-[var(--text-ghost)]">
             {capa.icon} {capa.label}
@@ -418,10 +418,18 @@ function Sidebar({ modulos, activos, onToggle }) {
 // HEADER
 // ============================================================
 
-function HeaderEstudio({ saludo, lentes, chatInput, setChatInput, onChat, chatLoading, chatResp, onVoiceTranscript }) {
+function HeaderEstudio({ saludo, lentes, chatInput, setChatInput, onChat, chatLoading, chatResp, onVoiceTranscript, onToggleSidebar }) {
   return (
-    <header className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-deep)]">
-      <div className="shrink-0">
+    <header className="flex items-center justify-between px-4 md:px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-deep)]">
+      <div className="flex items-center gap-3 shrink-0">
+        <button
+          className="md:hidden p-2 text-[var(--text-secondary)] bg-transparent border-none cursor-pointer"
+          onClick={onToggleSidebar}
+        >
+          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M3 12h18M3 6h18M3 18h18" />
+          </svg>
+        </button>
         <h1 className="text-lg font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
           {saludo}
         </h1>
@@ -466,9 +474,12 @@ export default function EstudioCockpit() {
   const [chatLoading, setChatLoading] = useState(false);
   const [chatHistorial, setChatHistorial] = useState([]);
   const [lentes, setLentes] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
+  const [capas, setCapas] = useState(CAPAS_DEFAULT);
+  const [capaActiva, setCapaActiva] = useState('operativo');
 
   useEffect(() => {
-    fetch(`${PREFIX}/cockpit`).then(r => r.json()).then(data => {
+    fetchApi('/pilates/cockpit').then(data => {
       setContexto(data);
       const sugeridos = (data.modulos_sugeridos || []).map(m => ({
         id: m.id, rol: m.rol || 'secundario'
@@ -478,15 +489,19 @@ export default function EstudioCockpit() {
     }).catch(() => setLoading(false));
 
     // Cargar lentes ACD
-    fetch(`${PREFIX}/organismo/evaluacion`).then(r => r.json()).then(data => {
+    fetchApi('/pilates/organismo/evaluacion').then(data => {
       if (data.delta_lentes) setLentes(data.delta_lentes);
     }).catch(() => {});
+
+    // Cargar layout de pizarra interfaz (P64)
+    fetchApi('/pilates/pizarra/interfaz').then(data => {
+      if (data.capas) setCapas(data.capas);
+    }).catch(() => {}); // Fallback a CAPAS_DEFAULT
   }, []);
 
   const saveConfig = useCallback((modulos) => {
-    fetch(`${PREFIX}/cockpit/config`, {
-      method: 'POST', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({modulos}),
+    fetchApi('/pilates/cockpit/config', {
+      method: 'POST', body: JSON.stringify({modulos}),
     }).catch(() => {});
   }, []);
 
@@ -512,11 +527,9 @@ export default function EstudioCockpit() {
     setChatInput('');
     setChatResp('');
     try {
-      const resp = await fetch(`${PREFIX}/cockpit/chat`, {
-        method: 'POST', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ mensaje: msg, modulos_activos: modulosActivos, historial: chatHistorial }),
+      const data = await fetchApi('/pilates/cockpit/chat', {
+        method: 'POST', body: JSON.stringify({ mensaje: msg, modulos_activos: modulosActivos, historial: chatHistorial }),
       });
-      const data = await resp.json();
 
       if (data.acciones) {
         setModulosActivos(prev => {
@@ -554,10 +567,9 @@ export default function EstudioCockpit() {
         if (prev === text) {
           // Trigger send
           setChatLoading(true);
-          fetch(`${PREFIX}/cockpit/chat`, {
-            method: 'POST', headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ mensaje: text, modulos_activos: modulosActivos, historial: chatHistorial }),
-          }).then(r => r.json()).then(data => {
+          fetchApi('/pilates/cockpit/chat', {
+            method: 'POST', body: JSON.stringify({ mensaje: text, modulos_activos: modulosActivos, historial: chatHistorial }),
+          }).then(data => {
             if (data.acciones) {
               setModulosActivos(prev2 => {
                 let next = [...prev2];
@@ -607,8 +619,9 @@ export default function EstudioCockpit() {
         style: { background: 'var(--bg-elevated)', color: 'var(--text-primary)', border: '1px solid var(--border)' }
       }} />
 
-      {/* SIDEBAR */}
-      <Sidebar modulos={allModulos} activos={activosIds} onToggle={toggleModulo} />
+      {/* SIDEBAR — hidden on mobile unless open */}
+      <Sidebar modulos={allModulos} activos={activosIds} onToggle={toggleModulo} capas={capas} visible={sidebarOpen} />
+      {sidebarOpen && <div className="fixed inset-0 bg-black/50 z-30 md:hidden" onClick={() => setSidebarOpen(false)} />}
 
       {/* MAIN AREA */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -622,6 +635,7 @@ export default function EstudioCockpit() {
           chatLoading={chatLoading}
           chatResp={chatResp}
           onVoiceTranscript={handleVoiceTranscript}
+          onToggleSidebar={() => setSidebarOpen(p => !p)}
         />
 
         {/* CHAT RESPONSE */}
@@ -632,7 +646,7 @@ export default function EstudioCockpit() {
         )}
 
         {/* MÓDULOS */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6">
           {modulosActivos.length === 0 && (
             <div className="text-center py-20 text-[var(--text-tertiary)]">
               Selecciona modulos en la barra lateral o escribe lo que necesitas
@@ -710,6 +724,23 @@ export default function EstudioCockpit() {
           )}
         </div>
       </div>
+
+      {/* Bottom nav mobile */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-[var(--bg-surface)] border-t border-[var(--border)] flex justify-around py-2 md:hidden z-50">
+        {Object.entries(capas).map(([key, capa]) => (
+          <button
+            key={key}
+            onClick={() => setCapaActiva(key)}
+            className={`flex flex-col items-center text-xs px-2 py-1 rounded-lg transition bg-transparent border-none cursor-pointer
+              ${capaActiva === key
+                ? 'text-[var(--accent-indigo)] bg-[var(--accent-indigo-glow)]'
+                : 'text-[var(--text-tertiary)]'}`}
+          >
+            <span className="text-lg">{capa.icon}</span>
+            <span>{capa.label}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }

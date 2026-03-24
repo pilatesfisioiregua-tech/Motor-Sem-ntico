@@ -9,9 +9,9 @@ import ConflictLine from './design/ConflictLine';
 import Pulse from './design/Pulse';
 import { TABS_PROFUNDO, ESTADO_ACD } from './design/theme';
 import * as api from './api';
+import { fetchApi } from './context/AppContext';
 
-const BASE = import.meta.env.VITE_API_URL || '';
-const P = `${BASE}/pilates`;
+const P = '/pilates';
 
 // ============================================================
 // HEADER PROFUNDO
@@ -266,48 +266,48 @@ export default function Profundo() {
 
   async function loadDashboard() {
     setLoading(true);
-    try { setData(await fetch(`${P}/dashboard`).then(r => r.json())); } catch {}
+    try { setData(await fetchApi(`${P}/dashboard`)); } catch {}
     setLoading(false);
   }
-  async function loadACD() { setAcdHistory(await fetch(`${P}/acd/historial`).then(r => r.json())); }
-  async function loadADN() { setAdnList(await fetch(`${P}/adn`).then(r => r.json())); }
-  async function loadDep() { setDepList(await fetch(`${P}/depuracion`).then(r => r.json())); }
-  async function loadVozProps() { setVozProps(await fetch(`${P}/voz/propuestas`).then(r => r.json())); }
+  async function loadACD() { setAcdHistory(await fetchApi(`${P}/acd/historial`)); }
+  async function loadADN() { setAdnList(await fetchApi(`${P}/adn`)); }
+  async function loadDep() { setDepList(await fetchApi(`${P}/depuracion`)); }
+  async function loadVozProps() { setVozProps(await fetchApi(`${P}/voz/propuestas`)); }
 
   async function crearADN(e) {
     e.preventDefault();
-    await fetch(`${P}/adn`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(adnNew) });
+    await fetchApi(`${P}/adn`, { method: 'POST', body: JSON.stringify(adnNew) });
     setAdnForm(false); setAdnNew({categoria:'principio_innegociable',titulo:'',descripcion:''}); loadADN();
   }
-  async function desactivarADN(id) { await fetch(`${P}/adn/${id}`, { method: 'DELETE' }); loadADN(); }
+  async function desactivarADN(id) { await fetchApi(`${P}/adn/${id}`, { method: 'DELETE' }); loadADN(); }
   async function crearDep(e) {
     e.preventDefault();
-    await fetch(`${P}/depuracion`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(depNew) });
+    await fetchApi(`${P}/depuracion`, { method: 'POST', body: JSON.stringify(depNew) });
     setDepForm(false); setDepNew({tipo:'proceso_redundante',descripcion:'',impacto_estimado:''}); loadDep();
   }
   async function cambiarEstadoDep(id, estado) {
-    await fetch(`${P}/depuracion/${id}`, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ estado }) }); loadDep();
+    await fetchApi(`${P}/depuracion/${id}`, { method: 'PATCH', body: JSON.stringify({ estado }) }); loadDep();
   }
   async function generarVozProps() {
     setVozGenerando(true);
-    try { await fetch(`${P}/voz/generar-propuestas`, { method: 'POST' }).then(r => r.json()); loadVozProps(); } catch {}
+    try { await fetchApi(`${P}/voz/generar-propuestas`, { method: 'POST' }); loadVozProps(); } catch {}
     setVozGenerando(false);
   }
   async function decidirVozProp(id, estado) {
-    await fetch(`${P}/voz/propuestas/${id}`, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ estado }) }); loadVozProps();
+    await fetchApi(`${P}/voz/propuestas/${id}`, { method: 'PATCH', body: JSON.stringify({ estado }) }); loadVozProps();
   }
   async function ejecutarVozProp(id) {
-    await fetch(`${P}/voz/propuestas/${id}/ejecutar`, { method: 'POST' }); loadVozProps();
+    await fetchApi(`${P}/voz/propuestas/${id}/ejecutar`, { method: 'POST' }); loadVozProps();
   }
   async function consultarCapaA() {
     if (!vozCapaQuery.trim()) return;
-    setVozCapaA(await fetch(`${P}/voz/capa-a`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ fuente: 'perplexity', query: vozCapaQuery }) }).then(r => r.json()));
+    setVozCapaA(await fetchApi(`${P}/voz/capa-a`, { method: 'POST', body: JSON.stringify({ fuente: 'perplexity', query: vozCapaQuery }) }));
   }
   async function consultarMeteo() {
-    setVozCapaA(await fetch(`${P}/voz/capa-a`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ fuente: 'open_meteo' }) }).then(r => r.json()));
+    setVozCapaA(await fetchApi(`${P}/voz/capa-a`, { method: 'POST', body: JSON.stringify({ fuente: 'open_meteo' }) }));
   }
   async function loadISP(canal) {
-    setVozIspData(await fetch(`${P}/voz/isp/${canal}`).then(r => r.json()));
+    setVozIspData(await fetchApi(`${P}/voz/isp/${canal}`));
   }
 
   if (loading) return (
@@ -713,7 +713,7 @@ export default function Profundo() {
                 ))}
               </Card>
               <button className="px-5 py-2.5 rounded-[var(--radius-md)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-sm cursor-pointer border border-[var(--border)]"
-                      onClick={() => window.open(`${BASE}/pilates/facturas/paquete-gestor`, '_blank')}>
+                      onClick={() => window.open(`/pilates/facturas/paquete-gestor`, '_blank')}>
                 Descargar paquete gestor
               </button>
             </div>

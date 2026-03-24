@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 
-const BASE = import.meta.env.VITE_API_URL || '';
-
 export default function Consejo() {
   const [pregunta, setPregunta] = useState('');
   const [profundidad, setProfundidad] = useState('normal');
@@ -13,7 +11,7 @@ export default function Consejo() {
   useEffect(() => { loadHistorial(); }, []);
 
   async function loadHistorial() {
-    const h = await fetch(`${BASE}/pilates/consejo/historial`).then(r => r.json());
+    const h = await fetch(`/pilates/consejo/historial`).then(r => r.json());
     setHistorial(h);
   }
 
@@ -21,7 +19,7 @@ export default function Consejo() {
     if (!pregunta.trim()) return;
     setLoading(true);
     try {
-      const r = await fetch(`${BASE}/pilates/consejo`, {
+      const r = await fetch(`/pilates/consejo`, {
         method: 'POST', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ pregunta, profundidad }),
       }).then(r => r.json());
@@ -35,7 +33,7 @@ export default function Consejo() {
   async function registrarDecision(sesionId, decision) {
     const confianza = prompt('Confianza (0-1):', '0.7');
     if (!confianza) return;
-    await fetch(`${BASE}/pilates/consejo/${sesionId}/decision`, {
+    await fetch(`/pilates/consejo/${sesionId}/decision`, {
       method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ decision, confianza: parseFloat(confianza) }),
     });

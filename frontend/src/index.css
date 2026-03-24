@@ -80,6 +80,39 @@
   background: var(--bg-void);
 }
 
+/* === AUTHENTIC LIGHT — tema para clientes === */
+[data-theme="light"] {
+  --bg-void: #f8f9fc;
+  --bg-deep: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f3f4f8;
+  --bg-overlay: #e8eaf0;
+
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a68;
+  --text-tertiary: #8888a0;
+  --text-ghost: #c0c0d0;
+
+  --accent-indigo: #6366f1;
+  --accent-indigo-dim: #4f46e5;
+  --accent-indigo-glow: rgba(99, 102, 241, 0.10);
+  --accent-green: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-violet: #8b5cf6;
+  --accent-cyan: #06b6d4;
+  --accent-rose: #f43f5e;
+
+  --border: rgba(0, 0, 0, 0.08);
+  --border-active: rgba(99, 102, 241, 0.4);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px var(--accent-indigo-glow);
+
+  color: var(--text-primary);
+  background: var(--bg-void);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {

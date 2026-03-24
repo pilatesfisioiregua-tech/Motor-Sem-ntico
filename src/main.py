@@ -51,15 +51,76 @@ async def lifespan(app: FastAPI):
     log.info("shutdown_complete")
 
 
-app = FastAPI(title="Motor Semántico OMNI-MIND", version="0.2.0", lifespan=lifespan)
+import os
 
+_docs_enabled = os.getenv("ENABLE_DOCS", "false").lower() == "true"
+app = FastAPI(
+    title="Motor Semántico OMNI-MIND",
+    version="0.3.0",
+    lifespan=lifespan,
+    docs_url="/docs" if _docs_enabled else None,
+    redoc_url="/redoc" if _docs_enabled else None,
+)
+
+# ============================================================
+# AUTH MIDDLEWARE — API Key para endpoints protegidos
+# ============================================================
+API_KEY = os.getenv("OMNI_API_KEY", "")
+PUBLIC_PREFIXES = (
+    "/portal/", "/onboarding/", "/health", "/info", "/tarjeta/",
+    "/pilates/redsys/notificacion", "/pilates/redsys/retorno",
+    "/pilates/redsys/paygold-retorno",
+    "/pilates/wa/webhook", "/pilates/webhook/whatsapp",
+    "/conocimiento-proyecto/",
+    "/assets/", "/estudio", "/profundo",
+    "/openapi.json", "/favicon.ico",
+    "/pilates/publico/",
+)
+
+# Endpoints caros que SIEMPRE requieren API key (incluso same-origin)
+PROTECTED_PREFIXES = (
+    "/pilates/sistema/", "/pilates/af/",
+    "/pilates/cron/", "/pilates/collectors",
+)
+
+@app.middleware("http")
+async def auth_middleware(request: Request, call_next):
+    path = request.url.path
+
+    # Rutas publicas: nunca requieren auth
+    if path == "/" or any(path.startswith(p) for p in PUBLIC_PREFIXES):
+        return await call_next(request)
+
+    if API_KEY:
+        key = request.headers.get("X-API-Key", "")
+
+        # Endpoints protegidos: siempre requieren API key
+        if any(path.startswith(p) for p in PROTECTED_PREFIXES):
+            if key != API_KEY:
+                return JSONResponse(status_code=401, content={"detail": "API key requerida"})
+            return await call_next(request)
+
+        # Resto: permitir si viene del mismo origen (browser) o tiene API key
+        origin = request.headers.get("origin", "")
+        referer = request.headers.get("referer", "")
+        is_same_origin = any(
+            origin.startswith(o) or referer.startswith(o)
+            for o in ALLOWED_ORIGINS if o
+        )
+
+        if not is_same_origin and key != API_KEY:
+            return JSONResponse(status_code=401, content={"detail": "API key requerida"})
+
+    return await call_next(request)
+
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://motor-semantico-omni.fly.dev,http://localhost:5173").split(",")
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["X-API-Key", "Content-Type", "Authorization"],
 )
 
 # Mount Pilates router
@@ -126,24 +187,66 @@ class MotorResponse(BaseModel):
 
 @app.get("/health")
 async def health():
-    """Health check ampliado con estado de componentes."""
-    status = {"status": "ok", "version": "0.2.0"}
+    """Health check profundo — verifica componentes reales del sistema."""
+    from datetime import datetime as _dt
+    from zoneinfo import ZoneInfo
+    checks = {}
+    status = "healthy"
+
+    # 1. DB connection
     try:
         from src.db.client import get_pool
         pool = await get_pool()
         async with pool.acquire() as conn:
-            status["db"] = "ok"
+            checks["db"] = "ok"
             count = await conn.fetchval(
                 "SELECT count(*) FROM pg_tables WHERE tablename LIKE 'om_%'")
-            status["om_tables"] = count
+            checks["om_tables"] = count
             clientes = await conn.fetchval(
                 "SELECT count(*) FROM om_cliente_tenant WHERE estado = 'activo'")
-            status["clientes_activos"] = clientes
+            checks["clientes_activos"] = clientes
+
+            # 2. Cron staleness: última ejecución < 36h
+            ultima = await conn.fetchval("""
+                SELECT MAX(ultima_ejecucion) FROM om_cron_state
+                WHERE tenant_id = 'authentic_pilates'
+            """)
+            if ultima:
+                ahora = _dt.now(ZoneInfo("Europe/Madrid"))
+                horas_desde_cron = (ahora - ultima).total_seconds() / 3600
+                checks["cron_last_run_hours_ago"] = round(horas_desde_cron, 1)
+                if horas_desde_cron > 36:
+                    checks["cron"] = "stale"
+                    status = "degraded"
+                else:
+                    checks["cron"] = "ok"
+            else:
+                checks["cron"] = "never_run"
+
+            # 3. Bus no saturado (señales pendientes < 100)
+            try:
+                pendientes = await conn.fetchval("""
+                    SELECT count(*) FROM om_senales_agentes
+                    WHERE tenant_id = 'authentic_pilates' AND estado = 'pendiente'
+                """)
+                checks["bus_pendientes"] = pendientes
+                if pendientes and pendientes > 100:
+                    checks["bus"] = "saturated"
+                    status = "degraded"
+                else:
+                    checks["bus"] = "ok"
+            except Exception:
+                checks["bus"] = "table_missing"
+
     except Exception as e:
-        status["db"] = f"error: {str(e)[:50]}"
-    endpoints = [r.path for r in app.routes if hasattr(r, 'methods')]
-    status["endpoints"] = len(endpoints)
-    return status
+        checks["db"] = f"error: {str(e)[:80]}"
+        status = "unhealthy"
+
+    code = 503 if status == "unhealthy" else 200
+    return JSONResponse(
+        status_code=code,
+        content={"status": status, "version": "0.3.0", "checks": checks}
+    )
 
 
 @app.get("/endpoints")
@@ -187,14 +290,18 @@ async def ejecutar_reactor():
 @app.post("/motor/ejecutar", response_model=MotorResponse)
 async def ejecutar(request: MotorRequest):
     """Ejecuta el pipeline completo del motor semántico."""
-    log.info("motor_ejecutar", input_preview=request.input[:100], modo=request.config.modo)
-    try:
-        from src.pipeline.orchestrator import run_pipeline
-        result = await run_pipeline(request)
-        return result
-    except Exception as e:
-        log.error("motor_error", error=str(e))
-        raise HTTPException(status_code=500, detail=str(e))
+    from src.pilates.rate_limit import semaforo_motor
+    if semaforo_motor.locked():
+        raise HTTPException(status_code=429, detail="Motor ocupado, reintenta en unos segundos")
+    async with semaforo_motor:
+        log.info("motor_ejecutar", input_preview=request.input[:100], modo=request.config.modo)
+        try:
+            from src.pipeline.orchestrator import run_pipeline
+            result = await run_pipeline(request)
+            return result
+        except Exception as e:
+            log.error("motor_error", error=str(e))
+            raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/models/entrenar")
@@ -258,6 +365,10 @@ frontend_dist = Path(__file__).parent.parent / "frontend" / "dist"
 if frontend_dist.exists():
     from fastapi.staticfiles import StaticFiles
     from starlette.responses import FileResponse
+
+    @app.get("/")
+    async def root_page():
+        return FileResponse(frontend_dist / "index.html")
 
     @app.get("/estudio")
     async def estudio():
