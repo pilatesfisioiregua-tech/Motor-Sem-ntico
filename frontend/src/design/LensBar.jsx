@@ -17,7 +17,8 @@ const textColors = {
 };
 
 export default function LensBar({ salud = 0, sentido = 0, continuidad = 0, showLabels = true }) {
-  const values = { S: salud, Se: sentido, C: continuidad };
+  const safe = (v) => (typeof v === 'number' && !isNaN(v)) ? v : 0.5;
+  const values = { S: safe(salud), Se: safe(sentido), C: safe(continuidad) };
 
   return (
     <div className="flex gap-3">
