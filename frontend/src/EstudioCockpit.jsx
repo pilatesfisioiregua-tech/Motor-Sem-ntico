@@ -18,6 +18,176 @@ import { CAPAS as CAPAS_DEFAULT } from './design/theme';
 // MÓDULOS INLINE — migrados a Tailwind
 // ============================================================
 
+// ============================================================
+// QUICK BRIEF — Vista optimizada para 10 min entre clases
+// ============================================================
+
+function QuickBrief() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([
+      api.getSesionesHoy().catch(() => ({ sesiones: [] })),
+      api.getCargos({ estado: 'pendiente' }).catch(() => []),
+      api.getAlertas().catch(() => ({ alertas: [] })),
+      api.getResumen().catch(() => ({})),
+      fetchApi('/pilates/wa/recientes').catch(() => ({ mensajes: [] })),
+    ]).then(([sesiones, cargos, alertas, resumen, wa]) => {
+      const cargosList = Array.isArray(cargos) ? cargos : [];
+      const ahora = new Date();
+      const horaActual = ahora.getHours() * 60 + ahora.getMinutes();
+
+      // Encontrar siguiente sesión
+      const sesionesHoy = sesiones.sesiones || [];
+      const siguiente = sesionesHoy.find(s => {
+        if (!s.hora_inicio) return false;
+        const [h, m] = s.hora_inicio.split(':').map(Number);
+        return h * 60 + m > horaActual;
+      });
+
+      // Anterior (última que ya pasó)
+      const anteriores = sesionesHoy.filter(s => {
+        if (!s.hora_inicio) return false;
+        const [h, m] = s.hora_inicio.split(':').map(Number);
+        return h * 60 + m <= horaActual;
+      });
+      const anterior = anteriores[anteriores.length - 1];
+
+      setData({
+        siguiente,
+        anterior,
+        totalSesiones: sesionesHoy.length,
+        cargos: cargosList.slice(0, 3),
+        totalDeuda: cargosList.reduce((s, c) => s + parseFloat(c.total || 0), 0),
+        alertas: (alertas.alertas || []).filter(a => a.severidad === 'alta').slice(0, 2),
+        wa: (wa.mensajes || []).slice(0, 3),
+        resumen,
+      });
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return (
+    <div className="flex items-center justify-center py-12">
+      <Pulse color="indigo" size={8} />
+    </div>
+  );
+
+  if (!data) return null;
+
+  const minutosSiguiente = data.siguiente?.hora_inicio
+    ? (() => {
+        const [h, m] = data.siguiente.hora_inicio.split(':').map(Number);
+        const ahora = new Date();
+        return (h * 60 + m) - (ahora.getHours() * 60 + ahora.getMinutes());
+      })()
+    : null;
+
+  return (
+    <div className="space-y-4 fade-in">
+      {/* SIGUIENTE CLASE */}
+      {data.siguiente && (
+        <div className="glass rounded-2xl p-5 border border-[var(--accent-indigo)]/20">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold tracking-wider uppercase text-[var(--accent-indigo)]">Siguiente clase</span>
+            {minutosSiguiente !== null && (
+              <span className="text-xs font-bold text-[var(--accent-amber)] bg-amber-400/10 px-2 py-0.5 rounded-md">
+                en {minutosSiguiente} min
+              </span>
+            )}
+          </div>
+          <div className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+            {data.siguiente.hora_inicio?.slice(0, 5)} — {data.siguiente.grupo_nombre || 'Individual'}
+          </div>
+          <div className="text-sm text-[var(--text-secondary)] mt-1">
+            {data.siguiente.asistentes_count || 0} alumnos confirmados
+          </div>
+        </div>
+      )}
+
+      {/* URGENTE — alertas + WA sin contestar */}
+      {(data.alertas.length > 0 || data.wa.length > 0) && (
+        <div className="space-y-2">
+          {data.alertas.map((a, i) => (
+            <div key={i} className="glass rounded-xl p-4 border-l-3 border-l-[var(--accent-red)]">
+              <div className="text-sm font-semibold text-[var(--accent-red)]">{a.nombre}</div>
+              <div className="text-xs text-[var(--text-tertiary)] mt-0.5">{a.detalle}</div>
+            </div>
+          ))}
+          {data.wa.length > 0 && (
+            <div className="glass rounded-xl p-4">
+              <div className="text-xs font-semibold tracking-wider uppercase text-[var(--text-ghost)] mb-2">
+                WhatsApp sin leer
+              </div>
+              {data.wa.map((m, i) => (
+                <div key={i} className="flex items-center gap-2 py-1.5 text-sm">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                  <span className="text-[var(--text-primary)] font-medium">{m.nombre || m.telefono_remitente}</span>
+                  <span className="text-[var(--text-tertiary)] truncate flex-1">{m.contenido?.slice(0, 40)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* RESUMEN RÁPIDO — 4 KPIs en fila */}
+      <div className="grid grid-cols-4 gap-3">
+        <div className="glass rounded-xl p-3 text-center">
+          <div className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+            {data.totalSesiones}
+          </div>
+          <div className="text-[9px] text-[var(--text-ghost)] font-semibold tracking-wider uppercase">Sesiones</div>
+        </div>
+        <div className="glass rounded-xl p-3 text-center">
+          <div className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+            {data.resumen?.clientes_activos || 0}
+          </div>
+          <div className="text-[9px] text-[var(--text-ghost)] font-semibold tracking-wider uppercase">Clientes</div>
+        </div>
+        <div className="glass rounded-xl p-3 text-center">
+          <div className={`text-lg font-bold ${data.totalDeuda > 0 ? 'text-[var(--accent-red)]' : 'text-[var(--accent-green)]'}`}
+               style={{ fontFamily: 'var(--font-display)' }}>
+            {data.totalDeuda > 0 ? `${data.totalDeuda.toFixed(0)}\u20AC` : '\u2713'}
+          </div>
+          <div className="text-[9px] text-[var(--text-ghost)] font-semibold tracking-wider uppercase">Deuda</div>
+        </div>
+        <div className="glass rounded-xl p-3 text-center">
+          <div className="text-lg font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-display)' }}>
+            {data.resumen?.ingresos ? `${(data.resumen.ingresos / 1000).toFixed(1)}k` : '0'}
+          </div>
+          <div className="text-[9px] text-[var(--text-ghost)] font-semibold tracking-wider uppercase">Mes</div>
+        </div>
+      </div>
+
+      {/* CLASE ANTERIOR (si hubo) */}
+      {data.anterior && (
+        <div className="glass-subtle rounded-xl p-4">
+          <div className="text-xs text-[var(--text-ghost)] font-semibold tracking-wider uppercase mb-1">Clase anterior</div>
+          <div className="text-sm text-[var(--text-secondary)]">
+            {data.anterior.hora_inicio?.slice(0, 5)} — {data.anterior.grupo_nombre || 'Individual'}
+            <span className="ml-2 text-[var(--text-ghost)]">({data.anterior.asistentes_count || 0} alumnos)</span>
+          </div>
+        </div>
+      )}
+
+      {/* COBROS PENDIENTES (top 3) */}
+      {data.cargos.length > 0 && (
+        <div className="glass-subtle rounded-xl p-4">
+          <div className="text-xs text-[var(--text-ghost)] font-semibold tracking-wider uppercase mb-2">Cobros pendientes</div>
+          {data.cargos.map((c, i) => (
+            <div key={i} className="flex justify-between py-1.5 text-sm border-b border-[var(--border)] last:border-0">
+              <span className="text-[var(--text-secondary)]">{c.cliente_nombre || c.descripcion}</span>
+              <span className="font-semibold text-[var(--accent-red)]">{parseFloat(c.total).toFixed(0)}\u20AC</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AgendaHoy() {
   const [sesiones, setSesiones] = useState([]);
   useEffect(() => { api.getSesionesHoy().then(r => setSesiones(r.sesiones || [])).catch(() => {}); }, []);
@@ -488,6 +658,7 @@ const MODULO_COMPONENTS = {
   contenido: ContenidoPresenciaPanel,
   presencia: IdentidadPresenciaPanel,
   autonomia: AutonomiaDashPanel,
+  quick_brief: QuickBrief,
 };
 
 // Módulos que necesitan Card variant especial
@@ -642,7 +813,7 @@ export default function EstudioCockpit() {
       const sugeridos = (data.modulos_sugeridos || []).map(m => ({
         id: m.id, rol: m.rol || 'secundario'
       }));
-      setModulosActivos(sugeridos.length > 0 ? sugeridos : [{id: 'agenda', rol: 'principal'}]);
+      setModulosActivos(sugeridos.length > 0 ? sugeridos : []);
       setLoading(false);
     }).catch(() => setLoading(false));
 
@@ -816,16 +987,8 @@ export default function EstudioCockpit() {
         {/* MÓDULOS */}
         <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-28 md:pb-6">
           {modulosActivos.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-24 fade-in">
-              <div className="w-16 h-16 rounded-3xl glass flex items-center justify-center mb-6 breathe">
-                <span className="text-3xl">&#x2728;</span>
-              </div>
-              <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-2" style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>
-                Tu estudio, en tus manos
-              </h2>
-              <p className="text-sm text-[var(--text-tertiary)] max-w-sm text-center leading-relaxed">
-                Selecciona un modulo o preguntame lo que necesites. Puedo mostrarte la agenda, los pagos, el estado del negocio...
-              </p>
+            <div className="fade-in">
+              <QuickBrief />
             </div>
           )}
 
