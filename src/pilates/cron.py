@@ -137,9 +137,87 @@ async def _tarea_diaria():
         log.error("cron_diaria_cumpleanos_error", error=str(e))
 
 
+async def _run_step(step_name: str, func, semana_id: str, timeout_s: int = 300):
+    """Ejecuta un paso del cron con tracking individual.
+
+    Si el paso ya se ejecutó esta semana, lo salta.
+    Si falla, registra el error y continúa con el siguiente paso.
+    """
+    from src.db.client import get_pool
+    pool = await get_pool()
+
+    # Verificar si ya se ejecutó este paso esta semana
+    async with pool.acquire() as conn:
+        done = await conn.fetchval("""
+            SELECT 1 FROM om_cron_steps
+            WHERE tenant_id='authentic_pilates' AND semana=$1 AND step_name=$2 AND status='ok'
+        """, semana_id, step_name)
+        if done:
+            return {"status": "skipped", "step": step_name}
+
+    # Ejecutar con timeout individual
+    try:
+        result = await asyncio.wait_for(func(), timeout=timeout_s)
+        async with pool.acquire() as conn:
+            await conn.execute("""
+                INSERT INTO om_cron_steps (tenant_id, semana, step_name, status, resultado, executed_at)
+                VALUES ('authentic_pilates', $1, $2, 'ok', $3, now())
+                ON CONFLICT (tenant_id, semana, step_name)
+                DO UPDATE SET status='ok', resultado=$3, executed_at=now()
+            """, semana_id, step_name, str(result)[:500] if result else "ok")
+        log.info(f"cron_step_ok", step=step_name)
+        return {"status": "ok", "step": step_name, "result": result}
+    except asyncio.TimeoutError:
+        log.error(f"cron_step_timeout", step=step_name, timeout_s=timeout_s)
+        async with pool.acquire() as conn:
+            await conn.execute("""
+                INSERT INTO om_cron_steps (tenant_id, semana, step_name, status, resultado, executed_at)
+                VALUES ('authentic_pilates', $1, $2, 'timeout', $3, now())
+                ON CONFLICT (tenant_id, semana, step_name)
+                DO UPDATE SET status='timeout', resultado=$3, executed_at=now()
+            """, semana_id, step_name, f"timeout after {timeout_s}s")
+        return {"status": "timeout", "step": step_name}
+    except Exception as e:
+        log.error(f"cron_step_error", step=step_name, error=str(e)[:200])
+        async with pool.acquire() as conn:
+            await conn.execute("""
+                INSERT INTO om_cron_steps (tenant_id, semana, step_name, status, resultado, executed_at)
+                VALUES ('authentic_pilates', $1, $2, 'error', $3, now())
+                ON CONFLICT (tenant_id, semana, step_name)
+                DO UPDATE SET status='error', resultado=$3, executed_at=now()
+            """, semana_id, step_name, str(e)[:500])
+        return {"status": "error", "step": step_name, "error": str(e)[:200]}
+
+
+async def _ensure_cron_steps_table():
+    """Crea tabla om_cron_steps si no existe."""
+    from src.db.client import get_pool
+    pool = await get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute("""
+            CREATE TABLE IF NOT EXISTS om_cron_steps (
+                tenant_id TEXT NOT NULL DEFAULT 'authentic_pilates',
+                semana TEXT NOT NULL,
+                step_name TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'pending',
+                resultado TEXT,
+                executed_at TIMESTAMPTZ DEFAULT now(),
+                PRIMARY KEY (tenant_id, semana, step_name)
+            )
+        """)
+
+
 async def _tarea_semanal():
-    """Tarea semanal (lunes): ciclo completo + estrategia + ACD + búsqueda."""
-    # Resetear presupuesto LLM del motor al inicio de cada ciclo semanal
+    """Tarea semanal (lunes): ciclo completo + estrategia + ACD + búsqueda.
+
+    Cada paso es independiente con tracking. Si falla uno, los demás siguen.
+    Si se reinicia a mitad, los pasos completados no se repiten.
+    """
+    await _ensure_cron_steps_table()
+    semana_iso = _hora_madrid().isocalendar()
+    semana_id = f"W{semana_iso[1]:02d}-{semana_iso[0]}"
+
+    # 0. Resetear presupuesto LLM
     try:
         from src.motor.pensar import resetear_presupuesto
         resetear_presupuesto()
@@ -147,174 +225,145 @@ async def _tarea_semanal():
     except Exception as e:
         log.error("cron_semanal_presupuesto_error", error=str(e))
 
-    # 0b. Predicciones (antes de diagnosticar — alimenta al Director)
-    try:
-        from src.pilates.predictor import predecir_abandonos, predecir_demanda_semana
-        from src.pilates.bus import emitir
-        abandonos = await predecir_abandonos()
-        demanda = await predecir_demanda_semana()
-        if abandonos:
-            for a in abandonos[:5]:
-                await emitir("ALERTA", "PREDICTOR",
-                    {"subtipo": "abandono_predicho", **a},
-                    destino="AF1", prioridad=2)
-        log.info("cron_predicciones_ok", abandonos=len(abandonos),
-                 demanda_estimada=demanda.get("sesiones_estimadas"))
-    except Exception as e:
-        log.error("cron_predicciones_error", error=str(e))
+    # 0b. Predicciones
+    await _run_step("predicciones", lambda: _step_predicciones(), semana_id, 120)
 
-    try:
-        # 1. Ciclo completo (escuchar + priorizar + IRC + ISP)
-        from src.pilates.voz_ciclos import ejecutar_ciclo_completo
-        ciclo = await ejecutar_ciclo_completo()
-        log.info("cron_semanal_ciclo_ok", isp=ciclo.get("ciclos", {}).get("aprender", {}).get("isp_global"))
+    # Pasos 1-14: cada uno independiente con tracking
+    steps = [
+        ("ciclo_voz", _step_ciclo_voz, 300),
+        ("estrategia", _step_estrategia, 180),
+        ("diagnostico_acd", _step_diagnostico_acd, 300),
+        ("busqueda_gaps", _step_busqueda, 180),
+        ("evaluador", _step_evaluador, 120),
+        ("g4_completa", _step_g4, 600),
+        ("voz_reactivo", _step_voz_reactivo, 120),
+        ("af1_conservacion", _step_af1, 120),
+        ("af3_depuracion", _step_af3, 120),
+        ("af5_identidad", _step_af5, 120),
+        ("af_restantes", _step_af_rest, 120),
+        ("propiocepcion", _step_propiocepcion, 60),
+        ("mediador", _step_mediador, 180),
+        ("circuito_completo", _step_circuito, 300),
+        ("briefing_wa", _step_briefing, 120),
+        ("snapshot_pizarras", _step_snapshot, 60),
+        ("traductor", _step_traductor, 120),
+        ("contenido", _step_contenido, 180),
+        ("reputacion", _step_reputacion, 60),
+    ]
 
-        # 2. Calcular nueva estrategia semanal
-        from src.pilates.voz_estrategia import calcular_estrategia
-        est = await calcular_estrategia()
-        log.info("cron_semanal_estrategia_ok",
-                 foco=est.get("estrategia", {}).get("foco_principal"),
-                 items=est.get("calendario_items"))
-
-        # 3. Diagnóstico ACD autónomo
-        from src.pilates.diagnosticador import diagnosticar_tenant
-        diag = await diagnosticar_tenant()
-        log.info("cron_semanal_acd_ok", estado=diag.get("estado"), cambio=diag.get("cambio_vs_anterior"))
-
-        # 4. Búsqueda dirigida por gaps (frecuencia según urgencia)
-        from src.pilates.buscador import buscar_por_gaps, decidir_frecuencia_busqueda
-        if await decidir_frecuencia_busqueda():
-            busq = await buscar_por_gaps()
-            log.info("cron_semanal_busqueda_ok",
-                     resultados=busq.get("resultados_utiles"),
-                     tipos=busq.get("tipos_buscador_usados"))
+    ok_count = 0
+    error_count = 0
+    for step_name, func, timeout in steps:
+        result = await _run_step(step_name, func, semana_id, timeout)
+        if result["status"] == "ok":
+            ok_count += 1
+        elif result["status"] == "skipped":
+            ok_count += 1  # Ya ejecutado previamente
         else:
-            log.info("cron_semanal_busqueda_skip", razon="frecuencia_baja")
+            error_count += 1
 
-        # 4b-pre. Evaluador: ¿la prescripción anterior funcionó?
-        try:
-            from src.pilates.evaluador_organismo import evaluar_semana
-            evaluacion = await evaluar_semana()
-            log.info("cron_semanal_evaluador_ok",
-                     funciono=evaluacion.get("interpretacion", {}).get("evaluacion_global", {}).get("prescripcion_funciono"))
-        except Exception as e:
-            log.error("cron_semanal_evaluador_error", error=str(e))
+    log.info("cron_semanal_resumen", semana=semana_id, ok=ok_count,
+             errores=error_count, total=len(steps))
 
-        # 4b. G4 completa: Enjambre → Compositor → Estratega → Recompilador
-        try:
-            from src.pilates.recompilador import ejecutar_g4_con_recompilacion
-            g4 = await ejecutar_g4_con_recompilacion()
-            log.info("cron_semanal_g4_ok",
-                     perfil=g4.get("perfil_detectado"),
-                     nivel=g4.get("nivel_alcanzado"),
-                     recompilados=g4.get("recompilacion", {}).get("configs_aplicadas", 0),
-                     tiempo=g4.get("tiempo_total_s"))
-        except Exception as e:
-            log.error("cron_semanal_g4_error", error=str(e))
 
-        # 4c. AF5 propaga diagnóstico a voz + señales cross-AF
-        from src.pilates.voz_reactivo import propagar_diagnostico_a_voz, emitir_señales_cross_af
-        await propagar_diagnostico_a_voz()
-        await emitir_señales_cross_af()
-        log.info("cron_semanal_voz_reactivo_ok")
+# === STEP FUNCTIONS (cada una aislada) ===
 
-        # 5. AF1 Conservación — detectar clientes en riesgo
-        from src.pilates.af1_conservacion import ejecutar_af1
-        af1 = await ejecutar_af1()
-        log.info("cron_semanal_af1_ok", riesgos=af1.get("total_riesgos"), alertas=af1.get("alertas_emitidas"))
+async def _step_predicciones():
+    from src.pilates.predictor import predecir_abandonos, predecir_demanda_semana
+    from src.pilates.bus import emitir
+    abandonos = await predecir_abandonos()
+    demanda = await predecir_demanda_semana()
+    if abandonos:
+        for a in abandonos[:5]:
+            await emitir("ALERTA", "PREDICTOR", {"subtipo": "abandono_predicho", **a}, destino="AF1", prioridad=2)
+    return {"abandonos": len(abandonos), "demanda": demanda.get("sesiones_estimadas")}
 
-        # 6. AF3 Depuración — detectar ineficiencias + VETO
-        from src.pilates.af3_depuracion import ejecutar_af3
-        af3 = await ejecutar_af3()
-        log.info("cron_semanal_af3_ok", detecciones=af3.get("total_detecciones"), vetos=af3.get("vetos_emitidos"))
+async def _step_ciclo_voz():
+    from src.pilates.voz_ciclos import ejecutar_ciclo_completo
+    return await ejecutar_ciclo_completo()
 
-        # 6b. AF5 Identidad — detectar gaps de identidad + coherencia
-        from src.pilates.af5_identidad import ejecutar_af5
-        af5 = await ejecutar_af5()
-        log.info("cron_semanal_af5_ok", gaps=af5.get("gaps_identidad"), adn=af5.get("adn_count"))
+async def _step_estrategia():
+    from src.pilates.voz_estrategia import calcular_estrategia
+    return await calcular_estrategia()
 
-        # 7. AF2 + AF4 + AF6 + AF7 — agentes funcionales restantes
-        from src.pilates.af_restantes import ejecutar_af_restantes
-        af_rest = await ejecutar_af_restantes()
-        log.info("cron_semanal_af_restantes_ok", alertas=af_rest.get("total_alertas", 0))
+async def _step_diagnostico_acd():
+    from src.pilates.diagnosticador import diagnosticar_tenant
+    return await diagnosticar_tenant()
 
-        # 8. Propiocepción: snapshot semanal
-        from src.pilates.propiocepcion import snapshot
-        snap = await snapshot("semanal")
-        log.info("cron_semanal_propiocepcion_ok",
-            señales=snap["bus"]["emitidas"],
-            drift=snap.get("alerta_drift") is not None)
+async def _step_busqueda():
+    from src.pilates.buscador import buscar_por_gaps, decidir_frecuencia_busqueda
+    if await decidir_frecuencia_busqueda():
+        return await buscar_por_gaps()
+    return {"skipped": "frecuencia_baja"}
 
-        # 8b. Mediador: resolver conflictos cross-AF ANTES de actuar
-        try:
-            from src.pilates.mediador import mediar
-            med = await mediar(ciclo=f"W{_hora_madrid().isocalendar()[1]:02d}-{_hora_madrid().isocalendar()[0]}")
-            log.info("cron_semanal_mediador_ok",
-                     conflictos=med.get("conflictos", 0),
-                     resoluciones=med.get("resoluciones", 0))
-        except Exception as e:
-            log.error("cron_semanal_mediador_error", error=str(e))
+async def _step_evaluador():
+    from src.pilates.evaluador_organismo import evaluar_semana
+    return await evaluar_semana()
 
-        # 9. Ejecutor + Convergencia + Gestor — cierre del circuito
-        from src.pilates.ejecutor_convergencia import ejecutar_circuito_completo
-        circ = await ejecutar_circuito_completo()
-        log.info("cron_semanal_circuito_ok",
-            acciones=circ["ejecutor"]["acciones_emitidas"],
-            convergencias=circ["convergencia"]["total"],
-            archivadas=circ["gestor"]["archivadas_eliminadas"])
+async def _step_g4():
+    from src.pilates.recompilador import ejecutar_g4_con_recompilacion
+    return await ejecutar_g4_con_recompilacion()
 
-        # 10. Briefing semanal por WA a Jesús
-        try:
-            from src.pilates.briefing import generar_briefing
-            from src.pilates.whatsapp import enviar_texto, is_configured as wa_configured
-            briefing = await generar_briefing()
-            telefono_jesus = os.getenv("JESUS_TELEFONO", "")
-            if wa_configured() and telefono_jesus and briefing.get("texto_wa"):
-                await enviar_texto(telefono_jesus, briefing["texto_wa"])
-                log.info("cron_semanal_briefing_wa_ok")
-        except Exception as e:
-            log.error("cron_semanal_briefing_wa_error", error=str(e))
+async def _step_voz_reactivo():
+    from src.pilates.voz_reactivo import propagar_diagnostico_a_voz, emitir_señales_cross_af
+    await propagar_diagnostico_a_voz()
+    await emitir_señales_cross_af()
+    return {"ok": True}
 
-        # 11. Snapshot de todas las pizarras (P65 — "git del organismo")
-        try:
-            from src.pilates.pizarras import snapshot_todas
-            semana_iso = _hora_madrid().isocalendar()
-            ciclo = f"W{semana_iso[1]:02d}-{semana_iso[0]}"
-            snap = await snapshot_todas("authentic_pilates", ciclo)
-            log.info("cron_semanal_snapshot_ok", ciclo=ciclo, pizarras=len(snap))
-        except Exception as e:
-            log.error("cron_semanal_snapshot_error", error=str(e))
+async def _step_af1():
+    from src.pilates.af1_conservacion import ejecutar_af1
+    return await ejecutar_af1()
 
-        # 12. Traductor: álgebra → castellano pueblo → WA lunes 07:00
-        try:
-            from src.pilates.traductor import traducir_acciones_semana
-            trad = await traducir_acciones_semana()
-            log.info("cron_semanal_traductor_ok",
-                     programado=trad.get("programado_para"),
-                     coste=trad.get("coste"))
-        except Exception as e:
-            log.error("cron_semanal_traductor_error", error=str(e))
+async def _step_af3():
+    from src.pilates.af3_depuracion import ejecutar_af3
+    return await ejecutar_af3()
 
-        # 13. Generar contenido semanal (F7 — presencia digital)
-        try:
-            from src.pilates.contenido import generar_contenido_semana
-            cont = await generar_contenido_semana()
-            log.info("cron_semanal_contenido_ok",
-                     creados=cont.get("creados", 0),
-                     filtrados=cont.get("filtrados_f3", 0))
-        except Exception as e:
-            log.error("cron_semanal_contenido_error", error=str(e))
+async def _step_af5():
+    from src.pilates.af5_identidad import ejecutar_af5
+    return await ejecutar_af5()
 
-        # 14. Reputación: pedir reseñas a clientes contentos
-        try:
-            from src.pilates.reputacion import programar_pedidos_resena
-            rep = await programar_pedidos_resena()
-            log.info("cron_semanal_reputacion_ok", pedidos=rep.get("programados", 0))
-        except Exception as e:
-            log.error("cron_semanal_reputacion_error", error=str(e))
+async def _step_af_rest():
+    from src.pilates.af_restantes import ejecutar_af_restantes
+    return await ejecutar_af_restantes()
 
-    except Exception as e:
-        log.error("cron_semanal_error", error=str(e))
+async def _step_propiocepcion():
+    from src.pilates.propiocepcion import snapshot
+    return await snapshot("semanal")
+
+async def _step_mediador():
+    from src.pilates.mediador import mediar
+    return await mediar(ciclo=f"W{_hora_madrid().isocalendar()[1]:02d}-{_hora_madrid().isocalendar()[0]}")
+
+async def _step_circuito():
+    from src.pilates.ejecutor_convergencia import ejecutar_circuito_completo
+    return await ejecutar_circuito_completo()
+
+async def _step_briefing():
+    from src.pilates.briefing import generar_briefing
+    from src.pilates.whatsapp import enviar_texto, is_configured as wa_configured
+    briefing = await generar_briefing()
+    telefono_jesus = os.getenv("JESUS_TELEFONO", "")
+    if wa_configured() and telefono_jesus and briefing.get("texto_wa"):
+        await enviar_texto(telefono_jesus, briefing["texto_wa"])
+    return {"briefing": "ok"}
+
+async def _step_snapshot():
+    from src.pilates.pizarras import snapshot_todas
+    semana_iso = _hora_madrid().isocalendar()
+    ciclo = f"W{semana_iso[1]:02d}-{semana_iso[0]}"
+    return await snapshot_todas("authentic_pilates", ciclo)
+
+async def _step_traductor():
+    from src.pilates.traductor import traducir_acciones_semana
+    return await traducir_acciones_semana()
+
+async def _step_contenido():
+    from src.pilates.contenido import generar_contenido_semana
+    return await generar_contenido_semana()
+
+async def _step_reputacion():
+    from src.pilates.reputacion import programar_pedidos_resena
+    return await programar_pedidos_resena()
 
 
 async def _tarea_mensual():
