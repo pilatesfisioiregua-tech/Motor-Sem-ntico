@@ -282,6 +282,14 @@ try:
 except Exception as e:
     log.warning("conocimiento_router_mount_failed", error=str(e))
 
+# Mount ACD API (Ingeniería Lingüística)
+try:
+    from src.api_acd import router as acd_router
+    app.include_router(acd_router)
+    log.info("acd_router_mounted")
+except Exception as e:
+    log.warning("acd_router_mount_failed", error=str(e))
+
 # Mount Code OS sub-app (agent endpoints at /code-os/*)
 try:
     from motor_v1_validation.agent.api import app as code_os_app
