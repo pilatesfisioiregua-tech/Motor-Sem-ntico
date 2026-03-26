@@ -146,6 +146,21 @@ def extraer_metricas(estructura: dict, diagnostico: dict) -> dict:
             ),
         })
 
+    # Cálculo 3: Operaciones cognitivas
+    if isinstance(diagnostico, dict):
+        ops = diagnostico.get("ops_cognitivas", {})
+        if ops:
+            for k, v in ops.items():
+                if not k.startswith("_"):  # No incluir agregados internos
+                    try:
+                        metricas[f"op_{k}"] = float(v)
+                    except (TypeError, ValueError):
+                        pass
+            # Agregados
+            for agg in ["_apertura", "_construccion", "_direccion", "_conexion", "_total"]:
+                if agg in ops:
+                    metricas[f"op{agg}"] = float(ops[agg])
+
     return metricas
 
 

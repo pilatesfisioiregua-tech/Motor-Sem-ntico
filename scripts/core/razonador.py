@@ -85,6 +85,8 @@ class Diagnostico:
     modos_ausentes: list[str] = field(default_factory=list)     # S6
     lentes_cubiertas: list[str] = field(default_factory=list)   # S2.2 SER/ESTAR/SEGUIR
     invariantes_violados: list[str] = field(default_factory=list)  # L0 invariants
+    # Cálculo 3: Operaciones cognitivas (qué hace el texto en la mente del receptor)
+    ops_cognitivas: dict = field(default_factory=dict)  # {tipo: score}
 
 
 # ===================================================================
@@ -1746,6 +1748,174 @@ CRUCES = [
 ]
 
 
+# ===================================================================
+# CÁLCULO 3: OPERACIONES COGNITIVAS
+# Qué HACE el texto en la mente del receptor.
+# No es qué dice (semántica) ni cómo está estructurado (sintaxis),
+# sino qué operación mental EJECUTA.
+# Código puro, $0, <1ms.
+# ===================================================================
+
+def _detectar_ops_cognitivas(estructura: dict, texto_original: str = "") -> dict:
+    """Detecta qué operaciones cognitivas ejecuta un texto en el receptor.
+
+    12 operaciones cognitivas, cada una con score 0.0-1.0:
+
+    APERTURA (abren espacio mental):
+      1. interrogacion   — preguntas que fuerzan construcción mental
+      2. reformulacion   — cambia el marco/frame de la situación
+      3. confrontacion   — desafía creencia o patrón existente
+
+    CONSTRUCCIÓN (construyen estructura mental):
+      4. subordinacion_causal — explica POR QUÉ (crea modelo causal)
+      5. cuantificacion  — pone números (crea modelo medible)
+      6. ejemplificacion — da ejemplo concreto (crea modelo visual)
+
+    DIRECCIÓN (dirigen acción):
+      7. imperativo      — ordena directamente
+      8. propuesta       — sugiere con opción (agencia del receptor)
+      9. urgencia        — crea presión temporal
+
+    CONEXIÓN (conectan emocionalmente):
+      10. validacion     — reconoce estado emocional del receptor
+      11. personalizacion — usa nombre/datos del receptor
+      12. narrativa      — cuenta una historia (crea identificación)
+    """
+    ops = {}
+
+    # ─── Detectar desde texto original (si disponible) ───
+    texto = texto_original.lower() if texto_original else ""
+
+    # 1. INTERROGACIÓN — preguntas
+    n_preguntas = texto.count("?")
+    ops["interrogacion"] = min(1.0, n_preguntas * 0.3)  # 1 pregunta=0.3, 3+=1.0
+
+    # 2. REFORMULACIÓN — indicadores de cambio de frame
+    reformulacion_markers = [
+        "en realidad", "lo que realmente", "dicho de otro modo", "es decir",
+        "en otras palabras", "más bien", "no es que", "la verdad es",
+        "lo importante es", "el punto es", "la clave es", "piensa en",
+        "imagina que", "míralo así", "desde otro ángulo",
+    ]
+    n_reform = sum(1 for m in reformulacion_markers if m in texto)
+    ops["reformulacion"] = min(1.0, n_reform * 0.4)
+
+    # 3. CONFRONTACIÓN — desafío a creencias
+    confrontacion_markers = [
+        "pero realmente", "sin embargo", "¿estás segur", "¿de verdad",
+        "no crees que", "contradicción", "inconsistente", "por otro lado",
+        "¿y si no", "asumes que", "das por hecho", "la evidencia dice",
+    ]
+    n_confront = sum(1 for m in confrontacion_markers if m in texto)
+    ops["confrontacion"] = min(1.0, n_confront * 0.4)
+
+    # 4. SUBORDINACIÓN CAUSAL — explica por qué
+    causal_markers = [
+        "porque", "ya que", "dado que", "puesto que", "debido a",
+        "por eso", "por lo tanto", "en consecuencia", "como resultado",
+        "esto causa", "esto produce", "esto genera",
+    ]
+    n_causal = sum(1 for m in causal_markers if m in texto)
+    ops["subordinacion_causal"] = min(1.0, n_causal * 0.3)
+
+    # 5. CUANTIFICACIÓN — números concretos
+    import re as _re
+    numeros = _re.findall(r'\d+[%€$]?|\d+\.\d+', texto)
+    ops["cuantificacion"] = min(1.0, len(numeros) * 0.15)  # 7+ números = 1.0
+
+    # 6. EJEMPLIFICACIÓN — ejemplos concretos
+    ejemplo_markers = [
+        "por ejemplo", "como cuando", "imagina", "supón que",
+        "un caso", "en concreto", "específicamente", "como",
+    ]
+    n_ejemplo = sum(1 for m in ejemplo_markers if m in texto)
+    ops["ejemplificacion"] = min(1.0, n_ejemplo * 0.3)
+
+    # 7. IMPERATIVO — órdenes directas
+    imperativo_markers = [
+        "haz", "llama", "envía", "responde", "confirma", "cancela",
+        "reserva", "ven", "prueba", "contacta", "decide", "actúa",
+        "empieza", "deja de", "no hagas", "asegúrate",
+    ]
+    n_imp = sum(1 for m in imperativo_markers if m in texto)
+    ops["imperativo"] = min(1.0, n_imp * 0.3)
+
+    # 8. PROPUESTA — sugiere con agencia del receptor
+    propuesta_markers = [
+        "¿qué te parece", "¿quieres que", "te propongo", "podrías",
+        "¿prefieres", "tienes la opción", "puedes elegir", "si quieres",
+        "¿te gustaría", "una opción es", "otra opción",
+    ]
+    n_prop = sum(1 for m in propuesta_markers if m in texto)
+    ops["propuesta"] = min(1.0, n_prop * 0.4)
+
+    # 9. URGENCIA — presión temporal
+    urgencia_markers = [
+        "ahora", "hoy", "antes de", "última oportunidad", "urgente",
+        "inmediatamente", "no esperes", "ya", "cuanto antes", "deadline",
+        "fecha límite", "mañana", "esta semana", "quedan",
+    ]
+    n_urg = sum(1 for m in urgencia_markers if m in texto)
+    ops["urgencia"] = min(1.0, n_urg * 0.3)
+
+    # 10. VALIDACIÓN — reconocimiento emocional
+    validacion_markers = [
+        "entiendo", "comprendo", "es normal", "tiene sentido",
+        "sé que", "es difícil", "es lógico", "me imagino",
+        "debe ser", "no es fácil", "tienes razón",
+    ]
+    n_val = sum(1 for m in validacion_markers if m in texto)
+    ops["validacion"] = min(1.0, n_val * 0.4)
+
+    # 11. PERSONALIZACIÓN — usa datos del receptor
+    nombre_markers = [
+        # Detectar nombres propios (mayúsculas tras punto o al inicio)
+        # + referencias directas
+    ]
+    n_tu = texto.count(" tú ") + texto.count(" tu ") + texto.count(" usted ")
+    n_nombre = len(_re.findall(r'(?:^|[.!?]\s+)[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+', texto_original or ""))
+    ops["personalizacion"] = min(1.0, (n_tu * 0.15 + n_nombre * 0.3))
+
+    # 12. NARRATIVA — cuenta historia
+    narrativa_markers = [
+        "había una vez", "recuerdo cuando", "me pasó", "un día",
+        "la historia", "resulta que", "lo que pasó fue",
+        "antes", "después", "entonces", "finalmente",
+    ]
+    n_narr = sum(1 for m in narrativa_markers if m in texto)
+    ops["narrativa"] = min(1.0, n_narr * 0.3)
+
+    # ─── Enriquecer desde estructura ACD ───
+    sp = estructura.get("sujeto_predicado", {})
+    conj = estructura.get("conjunciones", {})
+
+    # Refinar confrontación con falsas dicotomías
+    fd = conj.get("falsas_dicotomias", [])
+    if fd:
+        ops["confrontacion"] = min(1.0, ops.get("confrontacion", 0) + len(fd) * 0.2)
+
+    # Refinar causal con conexiones
+    tipo_conn = str(conj.get("tipo_conexion", "")).lower()
+    if "causal" in tipo_conn:
+        ops["subordinacion_causal"] = min(1.0, ops.get("subordinacion_causal", 0) + 0.3)
+
+    # ─── Calcular scores agregados ───
+    ops["_apertura"] = round((ops.get("interrogacion", 0) + ops.get("reformulacion", 0) + ops.get("confrontacion", 0)) / 3, 3)
+    ops["_construccion"] = round((ops.get("subordinacion_causal", 0) + ops.get("cuantificacion", 0) + ops.get("ejemplificacion", 0)) / 3, 3)
+    ops["_direccion"] = round((ops.get("imperativo", 0) + ops.get("propuesta", 0) + ops.get("urgencia", 0)) / 3, 3)
+    ops["_conexion"] = round((ops.get("validacion", 0) + ops.get("personalizacion", 0) + ops.get("narrativa", 0)) / 3, 3)
+
+    # Score total de operaciones cognitivas
+    ops["_total"] = round(sum(ops.get(k, 0) for k in [
+        "interrogacion", "reformulacion", "confrontacion",
+        "subordinacion_causal", "cuantificacion", "ejemplificacion",
+        "imperativo", "propuesta", "urgencia",
+        "validacion", "personalizacion", "narrativa",
+    ]) / 12, 3)
+
+    return ops
+
+
 def razonar(estructura: dict) -> Diagnostico:
     """Razona sobre una estructura ACD. Codigo puro, $0, <5ms.
 
@@ -1852,7 +2022,13 @@ def razonar(estructura: dict) -> Diagnostico:
         except Exception:
             continue
 
-    # 10. Detectar invariantes L0 violados (7 invariantes)
+    # 10. Detectar operaciones cognitivas (Cálculo 3)
+    try:
+        ops_cognitivas = _detectar_ops_cognitivas(estructura)
+    except Exception:
+        ops_cognitivas = {}
+
+    # 11. Detectar invariantes L0 violados (7 invariantes)
     invariantes_violados = []
     for fn in INVARIANTES_L0:
         try:
@@ -1942,6 +2118,7 @@ def razonar(estructura: dict) -> Diagnostico:
         modos_ausentes=modos_ausentes,
         lentes_cubiertas=lentes_cubiertas,
         invariantes_violados=invariantes_violados,
+        ops_cognitivas=ops_cognitivas,
     )
 
 
