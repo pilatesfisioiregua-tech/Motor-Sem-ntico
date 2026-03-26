@@ -1,0 +1,170 @@
+[
+  {
+    "efecto": "credibilidad",
+    "ingredientes": [
+      {
+        "metrica": "precision_adjetivos",
+        "valor_optimo": 0.69,
+        "correlacion": 0.814,
+        "importancia": 0.81,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "explicitud",
+        "valor_optimo": 0.67,
+        "correlacion": 0.748,
+        "importancia": 0.75,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "produce_resultado",
+        "valor_optimo": 0.94,
+        "correlacion": 0.709,
+        "importancia": 0.71,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "n_causalidades_circulares",
+        "valor_optimo": 0.05,
+        "correlacion": -0.582,
+        "importancia": 0.58,
+        "direccion": "bajo"
+      },
+      {
+        "metrica": "agencia",
+        "valor_optimo": 0.75,
+        "correlacion": 0.577,
+        "importancia": 0.58,
+        "direccion": "alto"
+      }
+    ],
+    "confianza": 1.0,
+    "ejemplo_texto": "En las últimas 4 semanas, 8 de tus 12 clientes del grupo de martes han asistido al menos 3 veces. La tasa de cancelación bajó del 15% al 6%. El único grupo con baja asistencia es el de viernes (3/8 me"
+  },
+  {
+    "efecto": "accion",
+    "ingredientes": [
+      {
+        "metrica": "precision_adjetivos",
+        "valor_optimo": 0.66,
+        "correlacion": 0.659,
+        "importancia": 0.66,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "explicitud",
+        "valor_optimo": 0.64,
+        "correlacion": 0.586,
+        "importancia": 0.59,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "fuerza_verbo",
+        "valor_optimo": 0.76,
+        "correlacion": 0.579,
+        "importancia": 0.58,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "produce_resultado",
+        "valor_optimo": 0.91,
+        "correlacion": 0.556,
+        "importancia": 0.56,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "n_vacios",
+        "valor_optimo": 1.66,
+        "correlacion": -0.544,
+        "importancia": 0.54,
+        "direccion": "bajo"
+      }
+    ],
+    "confianza": 1.0,
+    "ejemplo_texto": "Carlos, tu plaza del jueves 18:00 está confirmada. Llega 5 minutos antes, trae toalla y ropa cómoda. Si no puedes venir, cancela antes de las 12:00 para no perder tu plaza."
+  },
+  {
+    "efecto": "persuasion",
+    "ingredientes": [
+      {
+        "metrica": "precision_adjetivos",
+        "valor_optimo": 0.65,
+        "correlacion": 0.651,
+        "importancia": 0.65,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "explicitud",
+        "valor_optimo": 0.63,
+        "correlacion": 0.571,
+        "importancia": 0.57,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "fuerza_verbo",
+        "valor_optimo": 0.74,
+        "correlacion": 0.555,
+        "importancia": 0.56,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "produce_resultado",
+        "valor_optimo": 0.91,
+        "correlacion": 0.55,
+        "importancia": 0.55,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "agencia",
+        "valor_optimo": 0.74,
+        "correlacion": 0.524,
+        "importancia": 0.52,
+        "direccion": "alto"
+      }
+    ],
+    "confianza": 1.0,
+    "ejemplo_texto": "Sofía, tu fisioterapeuta me ha pasado tu informe. Dice que el Pilates terapéutico 2 veces por semana es clave para tu recuperación de la hernia L4-L5. Tengo plaza los lunes y jueves a las 10:00 en gru"
+  },
+  {
+    "efecto": "empatia",
+    "ingredientes": [
+      {
+        "metrica": "precision_adjetivos",
+        "valor_optimo": 0.63,
+        "correlacion": 0.605,
+        "importancia": 0.6,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "explicitud",
+        "valor_optimo": 0.65,
+        "correlacion": 0.578,
+        "importancia": 0.58,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "agencia",
+        "valor_optimo": 0.76,
+        "correlacion": 0.568,
+        "importancia": 0.57,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "produce_resultado",
+        "valor_optimo": 0.92,
+        "correlacion": 0.567,
+        "importancia": 0.57,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "n_causalidades_circulares",
+        "valor_optimo": 0.07,
+        "correlacion": -0.516,
+        "importancia": 0.52,
+        "direccion": "bajo"
+      }
+    ],
+    "confianza": 1.0,
+    "ejemplo_texto": "Entiendo que los últimos meses han sido complicados. La espalda duele más cuando dejamos de movernos, ¿verdad? Marta (tu monitora) me comentó que preguntó por ti. Si quieres, hablamos y buscamos un ho"
+  }
+]
