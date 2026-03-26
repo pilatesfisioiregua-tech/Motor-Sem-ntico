@@ -64,7 +64,7 @@ TEMPLATE_RESPUESTA = """{
 }"""
 
 
-async def percibir(texto: str) -> dict:
+async def percibir(texto: str, motor: str = None) -> dict:
     """Percibe la estructura ACD de un texto. 1 llamada LLM. ~$0.001.
 
     Args:
@@ -73,26 +73,75 @@ async def percibir(texto: str) -> dict:
     Returns:
         Estructura ACD con 7 dimensiones extraídas
     """
-    if not ANTHROPIC_KEY:
-        return {"error": "Sin ANTHROPIC_API_KEY"}
+    OPENAI_KEY = os.getenv("OPENAI_API_KEY", "")
+    GOOGLE_KEY = os.getenv("GOOGLE_API_KEY", "")
+
+    motor = motor or os.getenv("ACD_MOTOR", "auto")
+    if motor == "auto":
+        if OPENAI_KEY:
+            motor = "openai"
+        elif GOOGLE_KEY:
+            motor = "gemini"
+        elif ANTHROPIC_KEY:
+            motor = "anthropic"
+        else:
+            return {"error": "Sin API keys configuradas"}
+
+    response = ""
+    modelo_usado = ""
 
     async with httpx.AsyncClient(timeout=60) as client:
-        r = await client.post(
-            "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": ANTHROPIC_KEY,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-            },
-            json={
-                "model": "claude-3-5-sonnet-20241022",
-                "max_tokens": 1024,
-                "system": SYSTEM_PERCEPTOR,
-                "messages": [{"role": "user", "content": f"TEXTO:\n{texto}\n\nEstructura (JSON):"}],
-            },
-        )
-        data = r.json()
-        response = data.get("content", [{}])[0].get("text", "")
+        if motor == "openai":
+            r = await client.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers={"Authorization": f"Bearer {OPENAI_KEY}", "Content-Type": "application/json"},
+                json={
+                    "model": "gpt-4o-mini",
+                    "max_tokens": 1024,
+                    "messages": [
+                        {"role": "system", "content": SYSTEM_PERCEPTOR},
+                        {"role": "user", "content": f"TEXTO:\n{texto}\n\nEstructura (JSON):"},
+                    ],
+                },
+            )
+            data = r.json()
+            response = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+            modelo_usado = "gpt-4o-mini"
+
+        elif motor == "gemini":
+            r = await client.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GOOGLE_KEY}",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "contents": [{"parts": [{"text": f"{SYSTEM_PERCEPTOR}\n\nTEXTO:\n{texto}\n\nEstructura (JSON):"}]}],
+                    "generationConfig": {"maxOutputTokens": 1024},
+                },
+            )
+            data = r.json()
+            candidates = data.get("candidates", [{}])
+            if candidates:
+                parts = candidates[0].get("content", {}).get("parts", [{}])
+                response = parts[0].get("text", "") if parts else ""
+            modelo_usado = "gemini-2.5-flash"
+
+        elif motor == "anthropic":
+            r = await client.post(
+                "https://api.anthropic.com/v1/messages",
+                headers={
+                    "x-api-key": ANTHROPIC_KEY,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json",
+                },
+                json={
+                    "model": "claude-3-5-sonnet-20241022",
+                    "max_tokens": 1024,
+                    "system": SYSTEM_PERCEPTOR,
+                    "messages": [{"role": "user", "content": f"TEXTO:\n{texto}\n\nEstructura (JSON):"}],
+                },
+            )
+            data = r.json()
+            response = data.get("content", [{}])[0].get("text", "")
+            modelo_usado = "claude-3-5-sonnet"
 
     # Parsear JSON
     clean = response
@@ -109,7 +158,7 @@ async def percibir(texto: str) -> dict:
         if start >= 0 and end > start:
             estructura = json.loads(clean[start:end])
             estructura["_meta"] = {
-                "modelo": "haiku",
+                "modelo": modelo_usado,
                 "coste_estimado": 0.001,
                 "texto_len": len(texto),
             }

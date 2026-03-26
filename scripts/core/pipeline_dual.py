@@ -44,23 +44,42 @@ ANTHROPIC_KEY = os.getenv("ANTHROPIC_API_KEY_1", os.getenv("ANTHROPIC_API_KEY", 
 async def _llamar_llm(system: str, user: str, model: str = "claude-sonnet-4-20250514",
                       max_tokens: int = 2048) -> str:
     """Llamada a Claude."""
+    OPENAI_KEY = os.getenv("OPENAI_API_KEY", "")
+    GOOGLE_KEY = os.getenv("GOOGLE_API_KEY", "")
+
     async with httpx.AsyncClient(timeout=90) as client:
-        r = await client.post(
-            "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": ANTHROPIC_KEY,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-            },
-            json={
-                "model": model,
-                "max_tokens": max_tokens,
-                "system": system,
-                "messages": [{"role": "user", "content": user}],
-            },
-        )
-        data = r.json()
-        return data.get("content", [{}])[0].get("text", "")
+        if OPENAI_KEY:
+            r = await client.post(
+                "https://api.openai.com/v1/chat/completions",
+                headers={"Authorization": f"Bearer {OPENAI_KEY}", "Content-Type": "application/json"},
+                json={
+                    "model": "gpt-4o-mini",
+                    "max_tokens": max_tokens,
+                    "messages": [
+                        {"role": "system", "content": system},
+                        {"role": "user", "content": user},
+                    ],
+                },
+            )
+            data = r.json()
+            return data.get("choices", [{}])[0].get("message", {}).get("content", "")
+        elif GOOGLE_KEY:
+            r = await client.post(
+                f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GOOGLE_KEY}",
+                headers={"Content-Type": "application/json"},
+                json={
+                    "contents": [{"parts": [{"text": f"{system}\n\n{user}"}]}],
+                    "generationConfig": {"maxOutputTokens": max_tokens},
+                },
+            )
+            data = r.json()
+            candidates = data.get("candidates", [{}])
+            if candidates:
+                parts = candidates[0].get("content", {}).get("parts", [{}])
+                return parts[0].get("text", "") if parts else ""
+            return ""
+        else:
+            return "[Sin API keys disponibles]"
 
 
 # ============================================================
