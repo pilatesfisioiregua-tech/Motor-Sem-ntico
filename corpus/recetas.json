@@ -5,35 +5,35 @@
       {
         "metrica": "precision_adjetivos",
         "valor_optimo": 0.69,
-        "correlacion": 0.814,
+        "correlacion": 0.815,
         "importancia": 0.81,
         "direccion": "alto"
       },
       {
         "metrica": "explicitud",
         "valor_optimo": 0.67,
-        "correlacion": 0.748,
+        "correlacion": 0.75,
         "importancia": 0.75,
         "direccion": "alto"
       },
       {
         "metrica": "produce_resultado",
         "valor_optimo": 0.94,
-        "correlacion": 0.709,
-        "importancia": 0.71,
+        "correlacion": 0.702,
+        "importancia": 0.7,
         "direccion": "alto"
       },
       {
-        "metrica": "n_causalidades_circulares",
-        "valor_optimo": 0.05,
-        "correlacion": -0.582,
+        "metrica": "n_vacios",
+        "valor_optimo": 1.61,
+        "correlacion": -0.58,
         "importancia": 0.58,
         "direccion": "bajo"
       },
       {
         "metrica": "agencia",
-        "valor_optimo": 0.75,
-        "correlacion": 0.577,
+        "valor_optimo": 0.76,
+        "correlacion": 0.579,
         "importancia": 0.58,
         "direccion": "alto"
       }
@@ -47,36 +47,36 @@
       {
         "metrica": "precision_adjetivos",
         "valor_optimo": 0.66,
-        "correlacion": 0.659,
+        "correlacion": 0.664,
         "importancia": 0.66,
-        "direccion": "alto"
-      },
-      {
-        "metrica": "explicitud",
-        "valor_optimo": 0.64,
-        "correlacion": 0.586,
-        "importancia": 0.59,
         "direccion": "alto"
       },
       {
         "metrica": "fuerza_verbo",
         "valor_optimo": 0.76,
-        "correlacion": 0.579,
-        "importancia": 0.58,
+        "correlacion": 0.588,
+        "importancia": 0.59,
+        "direccion": "alto"
+      },
+      {
+        "metrica": "explicitud",
+        "valor_optimo": 0.63,
+        "correlacion": 0.587,
+        "importancia": 0.59,
         "direccion": "alto"
       },
       {
         "metrica": "produce_resultado",
-        "valor_optimo": 0.91,
+        "valor_optimo": 0.9,
         "correlacion": 0.556,
         "importancia": 0.56,
         "direccion": "alto"
       },
       {
         "metrica": "n_vacios",
-        "valor_optimo": 1.66,
-        "correlacion": -0.544,
-        "importancia": 0.54,
+        "valor_optimo": 1.67,
+        "correlacion": -0.554,
+        "importancia": 0.55,
         "direccion": "bajo"
       }
     ],
@@ -89,36 +89,36 @@
       {
         "metrica": "precision_adjetivos",
         "valor_optimo": 0.65,
-        "correlacion": 0.651,
-        "importancia": 0.65,
+        "correlacion": 0.658,
+        "importancia": 0.66,
         "direccion": "alto"
       },
       {
         "metrica": "explicitud",
         "valor_optimo": 0.63,
-        "correlacion": 0.571,
+        "correlacion": 0.573,
         "importancia": 0.57,
         "direccion": "alto"
       },
       {
         "metrica": "fuerza_verbo",
-        "valor_optimo": 0.74,
-        "correlacion": 0.555,
-        "importancia": 0.56,
+        "valor_optimo": 0.75,
+        "correlacion": 0.566,
+        "importancia": 0.57,
         "direccion": "alto"
       },
       {
         "metrica": "produce_resultado",
         "valor_optimo": 0.91,
-        "correlacion": 0.55,
+        "correlacion": 0.552,
         "importancia": 0.55,
         "direccion": "alto"
       },
       {
         "metrica": "agencia",
         "valor_optimo": 0.74,
-        "correlacion": 0.524,
-        "importancia": 0.52,
+        "correlacion": 0.528,
+        "importancia": 0.53,
         "direccion": "alto"
       }
     ],
@@ -131,35 +131,35 @@
       {
         "metrica": "precision_adjetivos",
         "valor_optimo": 0.63,
-        "correlacion": 0.605,
-        "importancia": 0.6,
+        "correlacion": 0.61,
+        "importancia": 0.61,
         "direccion": "alto"
       },
       {
         "metrica": "explicitud",
         "valor_optimo": 0.65,
-        "correlacion": 0.578,
+        "correlacion": 0.583,
         "importancia": 0.58,
         "direccion": "alto"
       },
       {
         "metrica": "agencia",
         "valor_optimo": 0.76,
-        "correlacion": 0.568,
+        "correlacion": 0.575,
         "importancia": 0.57,
         "direccion": "alto"
       },
       {
         "metrica": "produce_resultado",
         "valor_optimo": 0.92,
-        "correlacion": 0.567,
+        "correlacion": 0.571,
         "importancia": 0.57,
         "direccion": "alto"
       },
       {
         "metrica": "n_causalidades_circulares",
         "valor_optimo": 0.07,
-        "correlacion": -0.516,
+        "correlacion": -0.518,
         "importancia": 0.52,
         "direccion": "bajo"
       }

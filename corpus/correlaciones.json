@@ -2,705 +2,705 @@
   {
     "metrica": "precision_adjetivos",
     "efecto": "credibilidad",
-    "coeficiente": 0.814,
-    "n_muestras": 1249,
+    "coeficiente": 0.815,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación fuerte: más precision_adjetivos → más credibilidad (r=0.81, N=1249)"
+    "insight": "Correlación fuerte: más precision_adjetivos → más credibilidad (r=0.81, N=1332)"
   },
   {
     "metrica": "explicitud",
     "efecto": "credibilidad",
-    "coeficiente": 0.748,
-    "n_muestras": 1249,
+    "coeficiente": 0.75,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación fuerte: más explicitud → más credibilidad (r=0.75, N=1249)"
+    "insight": "Correlación fuerte: más explicitud → más credibilidad (r=0.75, N=1332)"
   },
   {
     "metrica": "produce_resultado",
     "efecto": "credibilidad",
-    "coeficiente": 0.709,
-    "n_muestras": 1249,
+    "coeficiente": 0.702,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación fuerte: más produce_resultado → más credibilidad (r=0.71, N=1249)"
+    "insight": "Correlación fuerte: más produce_resultado → más credibilidad (r=0.70, N=1332)"
   },
   {
     "metrica": "precision_adjetivos",
     "efecto": "accion",
-    "coeficiente": 0.659,
-    "n_muestras": 1249,
+    "coeficiente": 0.664,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más precision_adjetivos → más accion (r=0.66, N=1249)"
+    "insight": "Correlación moderada: más precision_adjetivos → más accion (r=0.66, N=1332)"
   },
   {
     "metrica": "precision_adjetivos",
     "efecto": "persuasion",
-    "coeficiente": 0.651,
-    "n_muestras": 1249,
+    "coeficiente": 0.658,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más precision_adjetivos → más persuasion (r=0.65, N=1249)"
+    "insight": "Correlación moderada: más precision_adjetivos → más persuasion (r=0.66, N=1332)"
   },
   {
     "metrica": "precision_adjetivos",
     "efecto": "empatia",
-    "coeficiente": 0.605,
-    "n_muestras": 1249,
+    "coeficiente": 0.61,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más precision_adjetivos → más empatia (r=0.61, N=1249)"
-  },
-  {
-    "metrica": "explicitud",
-    "efecto": "accion",
-    "coeficiente": 0.586,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación moderada: más explicitud → más accion (r=0.59, N=1249)"
-  },
-  {
-    "metrica": "n_causalidades_circulares",
-    "efecto": "credibilidad",
-    "coeficiente": -0.582,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación moderada: menos n_causalidades_circulares → menos credibilidad (r=-0.58, N=1249)"
+    "insight": "Correlación moderada: más precision_adjetivos → más empatia (r=0.61, N=1332)"
   },
   {
     "metrica": "fuerza_verbo",
     "efecto": "accion",
-    "coeficiente": 0.579,
-    "n_muestras": 1249,
+    "coeficiente": 0.588,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más fuerza_verbo → más accion (r=0.58, N=1249)"
+    "insight": "Correlación moderada: más fuerza_verbo → más accion (r=0.59, N=1332)"
+  },
+  {
+    "metrica": "explicitud",
+    "efecto": "accion",
+    "coeficiente": 0.587,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación moderada: más explicitud → más accion (r=0.59, N=1332)"
   },
   {
     "metrica": "explicitud",
     "efecto": "empatia",
-    "coeficiente": 0.578,
-    "n_muestras": 1249,
+    "coeficiente": 0.583,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más explicitud → más empatia (r=0.58, N=1249)"
-  },
-  {
-    "metrica": "agencia",
-    "efecto": "credibilidad",
-    "coeficiente": 0.577,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación moderada: más agencia → más credibilidad (r=0.58, N=1249)"
+    "insight": "Correlación moderada: más explicitud → más empatia (r=0.58, N=1332)"
   },
   {
     "metrica": "n_vacios",
     "efecto": "credibilidad",
-    "coeficiente": -0.574,
-    "n_muestras": 1249,
+    "coeficiente": -0.58,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_vacios → menos credibilidad (r=-0.57, N=1249)"
+    "insight": "Correlación moderada: menos n_vacios → menos credibilidad (r=-0.58, N=1332)"
   },
   {
-    "metrica": "explicitud",
-    "efecto": "persuasion",
-    "coeficiente": 0.571,
-    "n_muestras": 1249,
+    "metrica": "agencia",
+    "efecto": "credibilidad",
+    "coeficiente": 0.579,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más explicitud → más persuasion (r=0.57, N=1249)"
+    "insight": "Correlación moderada: más agencia → más credibilidad (r=0.58, N=1332)"
   },
   {
     "metrica": "agencia",
     "efecto": "empatia",
-    "coeficiente": 0.568,
-    "n_muestras": 1249,
+    "coeficiente": 0.575,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más agencia → más empatia (r=0.57, N=1249)"
+    "insight": "Correlación moderada: más agencia → más empatia (r=0.58, N=1332)"
   },
   {
-    "metrica": "n_conexiones_rotas",
-    "efecto": "credibilidad",
-    "coeficiente": -0.567,
-    "n_muestras": 1249,
+    "metrica": "explicitud",
+    "efecto": "persuasion",
+    "coeficiente": 0.573,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_conexiones_rotas → menos credibilidad (r=-0.57, N=1249)"
+    "insight": "Correlación moderada: más explicitud → más persuasion (r=0.57, N=1332)"
+  },
+  {
+    "metrica": "n_causalidades_circulares",
+    "efecto": "credibilidad",
+    "coeficiente": -0.573,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación moderada: menos n_causalidades_circulares → menos credibilidad (r=-0.57, N=1332)"
   },
   {
     "metrica": "produce_resultado",
     "efecto": "empatia",
-    "coeficiente": 0.567,
-    "n_muestras": 1249,
+    "coeficiente": 0.571,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más produce_resultado → más empatia (r=0.57, N=1249)"
+    "insight": "Correlación moderada: más produce_resultado → más empatia (r=0.57, N=1332)"
+  },
+  {
+    "metrica": "fuerza_verbo",
+    "efecto": "persuasion",
+    "coeficiente": 0.566,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación moderada: más fuerza_verbo → más persuasion (r=0.57, N=1332)"
+  },
+  {
+    "metrica": "n_conexiones_rotas",
+    "efecto": "credibilidad",
+    "coeficiente": -0.563,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación moderada: menos n_conexiones_rotas → menos credibilidad (r=-0.56, N=1332)"
   },
   {
     "metrica": "produce_resultado",
     "efecto": "accion",
     "coeficiente": 0.556,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más produce_resultado → más accion (r=0.56, N=1249)"
+    "insight": "Correlación moderada: más produce_resultado → más accion (r=0.56, N=1332)"
   },
   {
-    "metrica": "fuerza_verbo",
-    "efecto": "persuasion",
-    "coeficiente": 0.555,
-    "n_muestras": 1249,
+    "metrica": "n_vacios",
+    "efecto": "accion",
+    "coeficiente": -0.554,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más fuerza_verbo → más persuasion (r=0.56, N=1249)"
-  },
-  {
-    "metrica": "n_falacias",
-    "efecto": "credibilidad",
-    "coeficiente": -0.552,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación moderada: menos n_falacias → menos credibilidad (r=-0.55, N=1249)"
+    "insight": "Correlación moderada: menos n_vacios → menos accion (r=-0.55, N=1332)"
   },
   {
     "metrica": "produce_resultado",
     "efecto": "persuasion",
-    "coeficiente": 0.55,
-    "n_muestras": 1249,
+    "coeficiente": 0.552,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más produce_resultado → más persuasion (r=0.55, N=1249)"
+    "insight": "Correlación moderada: más produce_resultado → más persuasion (r=0.55, N=1332)"
   },
   {
-    "metrica": "n_vacios",
-    "efecto": "accion",
-    "coeficiente": -0.544,
-    "n_muestras": 1249,
+    "metrica": "n_falacias",
+    "efecto": "credibilidad",
+    "coeficiente": -0.55,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_vacios → menos accion (r=-0.54, N=1249)"
-  },
-  {
-    "metrica": "agencia",
-    "efecto": "accion",
-    "coeficiente": 0.524,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación moderada: más agencia → más accion (r=0.52, N=1249)"
+    "insight": "Correlación moderada: menos n_falacias → menos credibilidad (r=-0.55, N=1332)"
   },
   {
     "metrica": "agencia",
     "efecto": "persuasion",
-    "coeficiente": 0.524,
-    "n_muestras": 1249,
+    "coeficiente": 0.528,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más agencia → más persuasion (r=0.52, N=1249)"
+    "insight": "Correlación moderada: más agencia → más persuasion (r=0.53, N=1332)"
   },
   {
     "metrica": "fuerza_verbo",
     "efecto": "credibilidad",
-    "coeficiente": 0.519,
-    "n_muestras": 1249,
+    "coeficiente": 0.528,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más fuerza_verbo → más credibilidad (r=0.52, N=1249)"
+    "insight": "Correlación moderada: más fuerza_verbo → más credibilidad (r=0.53, N=1332)"
   },
   {
-    "metrica": "n_causalidades_circulares",
-    "efecto": "empatia",
-    "coeficiente": -0.516,
-    "n_muestras": 1249,
+    "metrica": "agencia",
+    "efecto": "accion",
+    "coeficiente": 0.527,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_causalidades_circulares → menos empatia (r=-0.52, N=1249)"
+    "insight": "Correlación moderada: más agencia → más accion (r=0.53, N=1332)"
   },
   {
     "metrica": "n_vacios",
     "efecto": "persuasion",
-    "coeficiente": -0.514,
-    "n_muestras": 1249,
+    "coeficiente": -0.526,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_vacios → menos persuasion (r=-0.51, N=1249)"
+    "insight": "Correlación moderada: menos n_vacios → menos persuasion (r=-0.53, N=1332)"
   },
   {
-    "metrica": "n_conexiones_rotas",
+    "metrica": "n_causalidades_circulares",
     "efecto": "empatia",
-    "coeficiente": -0.497,
-    "n_muestras": 1249,
+    "coeficiente": -0.518,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_conexiones_rotas → menos empatia (r=-0.50, N=1249)"
-  },
-  {
-    "metrica": "n_piezas_sueltas",
-    "efecto": "credibilidad",
-    "coeficiente": -0.494,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación moderada: menos n_piezas_sueltas → menos credibilidad (r=-0.49, N=1249)"
+    "insight": "Correlación moderada: menos n_causalidades_circulares → menos empatia (r=-0.52, N=1332)"
   },
   {
     "metrica": "n_vacios",
     "efecto": "empatia",
-    "coeficiente": -0.492,
-    "n_muestras": 1249,
+    "coeficiente": -0.503,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_vacios → menos empatia (r=-0.49, N=1249)"
+    "insight": "Correlación moderada: menos n_vacios → menos empatia (r=-0.50, N=1332)"
+  },
+  {
+    "metrica": "n_conexiones_rotas",
+    "efecto": "empatia",
+    "coeficiente": -0.502,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación moderada: menos n_conexiones_rotas → menos empatia (r=-0.50, N=1332)"
+  },
+  {
+    "metrica": "n_piezas_sueltas",
+    "efecto": "credibilidad",
+    "coeficiente": -0.496,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación moderada: menos n_piezas_sueltas → menos credibilidad (r=-0.50, N=1332)"
   },
   {
     "metrica": "n_hallazgos",
     "efecto": "credibilidad",
-    "coeficiente": -0.49,
-    "n_muestras": 1249,
+    "coeficiente": -0.491,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_hallazgos → menos credibilidad (r=-0.49, N=1249)"
+    "insight": "Correlación moderada: menos n_hallazgos → menos credibilidad (r=-0.49, N=1332)"
   },
   {
     "metrica": "n_colapsos",
     "efecto": "credibilidad",
     "coeficiente": -0.465,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_colapsos → menos credibilidad (r=-0.47, N=1249)"
+    "insight": "Correlación moderada: menos n_colapsos → menos credibilidad (r=-0.47, N=1332)"
   },
   {
     "metrica": "n_causalidades_circulares",
     "efecto": "accion",
     "coeficiente": -0.457,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_causalidades_circulares → menos accion (r=-0.46, N=1249)"
-  },
-  {
-    "metrica": "n_causalidades_circulares",
-    "efecto": "persuasion",
-    "coeficiente": -0.449,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación moderada: menos n_causalidades_circulares → menos persuasion (r=-0.45, N=1249)"
-  },
-  {
-    "metrica": "n_conexiones_rotas",
-    "efecto": "accion",
-    "coeficiente": -0.448,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación moderada: menos n_conexiones_rotas → menos accion (r=-0.45, N=1249)"
+    "insight": "Correlación moderada: menos n_causalidades_circulares → menos accion (r=-0.46, N=1332)"
   },
   {
     "metrica": "fuerza_verbo",
     "efecto": "empatia",
-    "coeficiente": 0.444,
-    "n_muestras": 1249,
+    "coeficiente": 0.455,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: más fuerza_verbo → más empatia (r=0.44, N=1249)"
+    "insight": "Correlación moderada: más fuerza_verbo → más empatia (r=0.46, N=1332)"
+  },
+  {
+    "metrica": "n_conexiones_rotas",
+    "efecto": "accion",
+    "coeficiente": -0.453,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación moderada: menos n_conexiones_rotas → menos accion (r=-0.45, N=1332)"
+  },
+  {
+    "metrica": "n_causalidades_circulares",
+    "efecto": "persuasion",
+    "coeficiente": -0.45,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación moderada: menos n_causalidades_circulares → menos persuasion (r=-0.45, N=1332)"
   },
   {
     "metrica": "n_falacias",
     "efecto": "empatia",
-    "coeficiente": -0.444,
-    "n_muestras": 1249,
+    "coeficiente": -0.445,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_falacias → menos empatia (r=-0.44, N=1249)"
+    "insight": "Correlación moderada: menos n_falacias → menos empatia (r=-0.45, N=1332)"
   },
   {
     "metrica": "n_conexiones_rotas",
     "efecto": "persuasion",
-    "coeficiente": -0.43,
-    "n_muestras": 1249,
+    "coeficiente": -0.436,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_conexiones_rotas → menos persuasion (r=-0.43, N=1249)"
+    "insight": "Correlación moderada: menos n_conexiones_rotas → menos persuasion (r=-0.44, N=1332)"
   },
   {
     "metrica": "n_piezas_sueltas",
     "efecto": "empatia",
-    "coeficiente": -0.428,
-    "n_muestras": 1249,
+    "coeficiente": -0.434,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación moderada: menos n_piezas_sueltas → menos empatia (r=-0.43, N=1249)"
+    "insight": "Correlación moderada: menos n_piezas_sueltas → menos empatia (r=-0.43, N=1332)"
   },
   {
     "metrica": "n_colapsos",
     "efecto": "empatia",
-    "coeficiente": -0.395,
-    "n_muestras": 1249,
+    "coeficiente": -0.399,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_colapsos → menos empatia (r=-0.40, N=1249)"
+    "insight": "Correlación débil: menos n_colapsos → menos empatia (r=-0.40, N=1332)"
   },
   {
     "metrica": "n_piezas_sueltas",
     "efecto": "accion",
-    "coeficiente": -0.382,
-    "n_muestras": 1249,
+    "coeficiente": -0.387,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_piezas_sueltas → menos accion (r=-0.38, N=1249)"
-  },
-  {
-    "metrica": "n_hallazgos",
-    "efecto": "empatia",
-    "coeficiente": -0.373,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación débil: menos n_hallazgos → menos empatia (r=-0.37, N=1249)"
-  },
-  {
-    "metrica": "n_cualidades",
-    "efecto": "accion",
-    "coeficiente": -0.372,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación débil: menos n_cualidades → menos accion (r=-0.37, N=1249)"
+    "insight": "Correlación débil: menos n_piezas_sueltas → menos accion (r=-0.39, N=1332)"
   },
   {
     "metrica": "n_piezas_sueltas",
     "efecto": "persuasion",
-    "coeficiente": -0.372,
-    "n_muestras": 1249,
+    "coeficiente": -0.38,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_piezas_sueltas → menos persuasion (r=-0.37, N=1249)"
+    "insight": "Correlación débil: menos n_piezas_sueltas → menos persuasion (r=-0.38, N=1332)"
+  },
+  {
+    "metrica": "n_cualidades",
+    "efecto": "accion",
+    "coeficiente": -0.378,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación débil: menos n_cualidades → menos accion (r=-0.38, N=1332)"
+  },
+  {
+    "metrica": "n_hallazgos",
+    "efecto": "empatia",
+    "coeficiente": -0.377,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación débil: menos n_hallazgos → menos empatia (r=-0.38, N=1332)"
   },
   {
     "metrica": "n_falacias",
     "efecto": "accion",
-    "coeficiente": -0.369,
-    "n_muestras": 1249,
+    "coeficiente": -0.368,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_falacias → menos accion (r=-0.37, N=1249)"
+    "insight": "Correlación débil: menos n_falacias → menos accion (r=-0.37, N=1332)"
   },
   {
     "metrica": "n_colapsos",
     "efecto": "accion",
     "coeficiente": -0.363,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_colapsos → menos accion (r=-0.36, N=1249)"
+    "insight": "Correlación débil: menos n_colapsos → menos accion (r=-0.36, N=1332)"
   },
   {
     "metrica": "n_falacias",
     "efecto": "persuasion",
-    "coeficiente": -0.36,
-    "n_muestras": 1249,
+    "coeficiente": -0.361,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_falacias → menos persuasion (r=-0.36, N=1249)"
+    "insight": "Correlación débil: menos n_falacias → menos persuasion (r=-0.36, N=1332)"
   },
   {
     "metrica": "n_colapsos",
     "efecto": "persuasion",
+    "coeficiente": -0.343,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación débil: menos n_colapsos → menos persuasion (r=-0.34, N=1332)"
+  },
+  {
+    "metrica": "n_cualidades",
+    "efecto": "persuasion",
     "coeficiente": -0.341,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_colapsos → menos persuasion (r=-0.34, N=1249)"
-  },
-  {
-    "metrica": "n_cualidades",
-    "efecto": "persuasion",
-    "coeficiente": -0.334,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación débil: menos n_cualidades → menos persuasion (r=-0.33, N=1249)"
+    "insight": "Correlación débil: menos n_cualidades → menos persuasion (r=-0.34, N=1332)"
   },
   {
     "metrica": "n_cualidades",
     "efecto": "empatia",
+    "coeficiente": -0.326,
+    "n_muestras": 1332,
+    "p_significativo": true,
+    "insight": "Correlación débil: menos n_cualidades → menos empatia (r=-0.33, N=1332)"
+  },
+  {
+    "metrica": "n_hallazgos",
+    "efecto": "accion",
     "coeficiente": -0.317,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_cualidades → menos empatia (r=-0.32, N=1249)"
-  },
-  {
-    "metrica": "n_hallazgos",
-    "efecto": "accion",
-    "coeficiente": -0.314,
-    "n_muestras": 1249,
-    "p_significativo": true,
-    "insight": "Correlación débil: menos n_hallazgos → menos accion (r=-0.31, N=1249)"
+    "insight": "Correlación débil: menos n_hallazgos → menos accion (r=-0.32, N=1332)"
   },
   {
     "metrica": "n_hallazgos",
     "efecto": "persuasion",
-    "coeficiente": -0.312,
-    "n_muestras": 1249,
+    "coeficiente": -0.317,
+    "n_muestras": 1332,
     "p_significativo": true,
-    "insight": "Correlación débil: menos n_hallazgos → menos persuasion (r=-0.31, N=1249)"
+    "insight": "Correlación débil: menos n_hallazgos → menos persuasion (r=-0.32, N=1332)"
   },
   {
     "metrica": "salud",
     "efecto": "credibilidad",
-    "coeficiente": 0.233,
-    "n_muestras": 1249,
+    "coeficiente": 0.236,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más salud → más credibilidad (r=0.23, N=1249)"
+    "insight": "Correlación débil: más salud → más credibilidad (r=0.24, N=1332)"
   },
   {
     "metrica": "n_cualidades",
     "efecto": "credibilidad",
-    "coeficiente": -0.23,
-    "n_muestras": 1249,
+    "coeficiente": -0.231,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_cualidades → menos credibilidad (r=-0.23, N=1249)"
+    "insight": "Correlación débil: menos n_cualidades → menos credibilidad (r=-0.23, N=1332)"
   },
   {
     "metrica": "salud",
     "efecto": "empatia",
-    "coeficiente": 0.161,
-    "n_muestras": 1249,
+    "coeficiente": 0.167,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más salud → más empatia (r=0.16, N=1249)"
+    "insight": "Correlación débil: más salud → más empatia (r=0.17, N=1332)"
   },
   {
     "metrica": "salud",
     "efecto": "accion",
-    "coeficiente": 0.156,
-    "n_muestras": 1249,
+    "coeficiente": 0.158,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más salud → más accion (r=0.16, N=1249)"
+    "insight": "Correlación débil: más salud → más accion (r=0.16, N=1332)"
   },
   {
     "metrica": "n_perdido",
     "efecto": "empatia",
-    "coeficiente": -0.148,
-    "n_muestras": 1249,
+    "coeficiente": -0.15,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_perdido → menos empatia (r=-0.15, N=1249)"
+    "insight": "Correlación débil: menos n_perdido → menos empatia (r=-0.15, N=1332)"
+  },
+  {
+    "metrica": "salud",
+    "efecto": "persuasion",
+    "coeficiente": 0.147,
+    "n_muestras": 1332,
+    "p_significativo": false,
+    "insight": "Correlación débil: más salud → más persuasion (r=0.15, N=1332)"
   },
   {
     "metrica": "n_perdido",
     "efecto": "credibilidad",
-    "coeficiente": -0.145,
-    "n_muestras": 1249,
+    "coeficiente": -0.143,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_perdido → menos credibilidad (r=-0.14, N=1249)"
+    "insight": "Correlación débil: menos n_perdido → menos credibilidad (r=-0.14, N=1332)"
   },
   {
     "metrica": "n_falsas_dicotomias",
     "efecto": "credibilidad",
-    "coeficiente": -0.143,
-    "n_muestras": 1249,
+    "coeficiente": -0.139,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_falsas_dicotomias → menos credibilidad (r=-0.14, N=1249)"
-  },
-  {
-    "metrica": "salud",
-    "efecto": "persuasion",
-    "coeficiente": 0.143,
-    "n_muestras": 1249,
-    "p_significativo": false,
-    "insight": "Correlación débil: más salud → más persuasion (r=0.14, N=1249)"
+    "insight": "Correlación débil: menos n_falsas_dicotomias → menos credibilidad (r=-0.14, N=1332)"
   },
   {
     "metrica": "n_perdido",
     "efecto": "accion",
-    "coeficiente": -0.108,
-    "n_muestras": 1249,
+    "coeficiente": -0.109,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_perdido → menos accion (r=-0.11, N=1249)"
+    "insight": "Correlación débil: menos n_perdido → menos accion (r=-0.11, N=1332)"
+  },
+  {
+    "metrica": "n_perdido",
+    "efecto": "persuasion",
+    "coeficiente": -0.108,
+    "n_muestras": 1332,
+    "p_significativo": false,
+    "insight": "Correlación débil: menos n_perdido → menos persuasion (r=-0.11, N=1332)"
   },
   {
     "metrica": "n_relaciones",
     "efecto": "accion",
-    "coeficiente": -0.107,
-    "n_muestras": 1249,
+    "coeficiente": -0.108,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_relaciones → menos accion (r=-0.11, N=1249)"
-  },
-  {
-    "metrica": "n_perdido",
-    "efecto": "persuasion",
-    "coeficiente": -0.105,
-    "n_muestras": 1249,
-    "p_significativo": false,
-    "insight": "Correlación débil: menos n_perdido → menos persuasion (r=-0.10, N=1249)"
-  },
-  {
-    "metrica": "n_falsas_dicotomias",
-    "efecto": "accion",
-    "coeficiente": 0.096,
-    "n_muestras": 1249,
-    "p_significativo": false,
-    "insight": "Correlación débil: más n_falsas_dicotomias → más accion (r=0.10, N=1249)"
+    "insight": "Correlación débil: menos n_relaciones → menos accion (r=-0.11, N=1332)"
   },
   {
     "metrica": "n_lentes",
     "efecto": "empatia",
-    "coeficiente": -0.095,
-    "n_muestras": 1249,
+    "coeficiente": -0.1,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_lentes → menos empatia (r=-0.09, N=1249)"
+    "insight": "Correlación débil: menos n_lentes → menos empatia (r=-0.10, N=1332)"
+  },
+  {
+    "metrica": "n_falsas_dicotomias",
+    "efecto": "accion",
+    "coeficiente": 0.095,
+    "n_muestras": 1332,
+    "p_significativo": false,
+    "insight": "Correlación débil: más n_falsas_dicotomias → más accion (r=0.10, N=1332)"
+  },
+  {
+    "metrica": "n_relaciones",
+    "efecto": "persuasion",
+    "coeficiente": -0.092,
+    "n_muestras": 1332,
+    "p_significativo": false,
+    "insight": "Correlación débil: menos n_relaciones → menos persuasion (r=-0.09, N=1332)"
   },
   {
     "metrica": "n_falsas_dicotomias",
     "efecto": "persuasion",
-    "coeficiente": 0.092,
-    "n_muestras": 1249,
+    "coeficiente": 0.09,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más n_falsas_dicotomias → más persuasion (r=0.09, N=1249)"
-  },
-  {
-    "metrica": "n_relaciones",
-    "efecto": "persuasion",
-    "coeficiente": -0.09,
-    "n_muestras": 1249,
-    "p_significativo": false,
-    "insight": "Correlación débil: menos n_relaciones → menos persuasion (r=-0.09, N=1249)"
+    "insight": "Correlación débil: más n_falsas_dicotomias → más persuasion (r=0.09, N=1332)"
   },
   {
     "metrica": "n_relaciones",
     "efecto": "empatia",
-    "coeficiente": -0.083,
-    "n_muestras": 1249,
+    "coeficiente": -0.087,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_relaciones → menos empatia (r=-0.08, N=1249)"
+    "insight": "Correlación débil: menos n_relaciones → menos empatia (r=-0.09, N=1332)"
+  },
+  {
+    "metrica": "n_lentes",
+    "efecto": "persuasion",
+    "coeficiente": -0.073,
+    "n_muestras": 1332,
+    "p_significativo": false,
+    "insight": "Correlación débil: menos n_lentes → menos persuasion (r=-0.07, N=1332)"
   },
   {
     "metrica": "n_modos_ocultos",
     "efecto": "credibilidad",
-    "coeficiente": -0.073,
-    "n_muestras": 1249,
+    "coeficiente": -0.068,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_modos_ocultos → menos credibilidad (r=-0.07, N=1249)"
+    "insight": "Correlación débil: menos n_modos_ocultos → menos credibilidad (r=-0.07, N=1332)"
   },
   {
     "metrica": "n_modos",
     "efecto": "accion",
-    "coeficiente": -0.067,
-    "n_muestras": 1249,
+    "coeficiente": -0.066,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_modos → menos accion (r=-0.07, N=1249)"
-  },
-  {
-    "metrica": "n_lentes",
-    "efecto": "persuasion",
-    "coeficiente": -0.064,
-    "n_muestras": 1249,
-    "p_significativo": false,
-    "insight": "Correlación débil: menos n_lentes → menos persuasion (r=-0.06, N=1249)"
+    "insight": "Correlación débil: menos n_modos → menos accion (r=-0.07, N=1332)"
   },
   {
     "metrica": "n_modos_ocultos",
     "efecto": "empatia",
     "coeficiente": -0.063,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_modos_ocultos → menos empatia (r=-0.06, N=1249)"
-  },
-  {
-    "metrica": "n_falsas_dicotomias",
-    "efecto": "empatia",
-    "coeficiente": -0.054,
-    "n_muestras": 1249,
-    "p_significativo": false,
-    "insight": "Correlación débil: menos n_falsas_dicotomias → menos empatia (r=-0.05, N=1249)"
+    "insight": "Correlación débil: menos n_modos_ocultos → menos empatia (r=-0.06, N=1332)"
   },
   {
     "metrica": "n_lentes",
     "efecto": "accion",
-    "coeficiente": -0.051,
-    "n_muestras": 1249,
+    "coeficiente": -0.062,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_lentes → menos accion (r=-0.05, N=1249)"
+    "insight": "Correlación débil: menos n_lentes → menos accion (r=-0.06, N=1332)"
+  },
+  {
+    "metrica": "n_falsas_dicotomias",
+    "efecto": "empatia",
+    "coeficiente": -0.052,
+    "n_muestras": 1332,
+    "p_significativo": false,
+    "insight": "Correlación débil: menos n_falsas_dicotomias → menos empatia (r=-0.05, N=1332)"
   },
   {
     "metrica": "n_modos_ocultos",
     "efecto": "accion",
     "coeficiente": -0.048,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_modos_ocultos → menos accion (r=-0.05, N=1249)"
+    "insight": "Correlación débil: menos n_modos_ocultos → menos accion (r=-0.05, N=1332)"
   },
   {
     "metrica": "n_modos_ocultos",
     "efecto": "persuasion",
     "coeficiente": -0.044,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_modos_ocultos → menos persuasion (r=-0.04, N=1249)"
+    "insight": "Correlación débil: menos n_modos_ocultos → menos persuasion (r=-0.04, N=1332)"
   },
   {
     "metrica": "n_modos",
     "efecto": "empatia",
-    "coeficiente": -0.037,
-    "n_muestras": 1249,
+    "coeficiente": -0.036,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_modos → menos empatia (r=-0.04, N=1249)"
+    "insight": "Correlación débil: menos n_modos → menos empatia (r=-0.04, N=1332)"
   },
   {
     "metrica": "sujeto_concreto",
     "efecto": "credibilidad",
     "coeficiente": 0.033,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más sujeto_concreto → más credibilidad (r=0.03, N=1249)"
+    "insight": "Correlación débil: más sujeto_concreto → más credibilidad (r=0.03, N=1332)"
   },
   {
     "metrica": "n_modos",
     "efecto": "persuasion",
-    "coeficiente": -0.031,
-    "n_muestras": 1249,
+    "coeficiente": -0.029,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_modos → menos persuasion (r=-0.03, N=1249)"
+    "insight": "Correlación débil: menos n_modos → menos persuasion (r=-0.03, N=1332)"
   },
   {
     "metrica": "resolucion_nivel",
     "efecto": "credibilidad",
     "coeficiente": 0.029,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más resolucion_nivel → más credibilidad (r=0.03, N=1249)"
-  },
-  {
-    "metrica": "n_modos",
-    "efecto": "credibilidad",
-    "coeficiente": 0.027,
-    "n_muestras": 1249,
-    "p_significativo": false,
-    "insight": "Correlación débil: más n_modos → más credibilidad (r=0.03, N=1249)"
+    "insight": "Correlación débil: más resolucion_nivel → más credibilidad (r=0.03, N=1332)"
   },
   {
     "metrica": "n_lentes",
     "efecto": "credibilidad",
-    "coeficiente": -0.023,
-    "n_muestras": 1249,
+    "coeficiente": -0.028,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_lentes → menos credibilidad (r=-0.02, N=1249)"
+    "insight": "Correlación débil: menos n_lentes → menos credibilidad (r=-0.03, N=1332)"
   },
   {
-    "metrica": "sujeto_concreto",
-    "efecto": "accion",
-    "coeficiente": 0.021,
-    "n_muestras": 1249,
+    "metrica": "n_modos",
+    "efecto": "credibilidad",
+    "coeficiente": 0.024,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más sujeto_concreto → más accion (r=0.02, N=1249)"
+    "insight": "Correlación débil: más n_modos → más credibilidad (r=0.02, N=1332)"
   },
   {
     "metrica": "sujeto_concreto",
     "efecto": "persuasion",
     "coeficiente": 0.021,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más sujeto_concreto → más persuasion (r=0.02, N=1249)"
+    "insight": "Correlación débil: más sujeto_concreto → más persuasion (r=0.02, N=1332)"
   },
   {
     "metrica": "resolucion_nivel",
     "efecto": "accion",
     "coeficiente": 0.02,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más resolucion_nivel → más accion (r=0.02, N=1249)"
+    "insight": "Correlación débil: más resolucion_nivel → más accion (r=0.02, N=1332)"
   },
   {
-    "metrica": "resolucion_nivel",
-    "efecto": "persuasion",
-    "coeficiente": 0.014,
-    "n_muestras": 1249,
+    "metrica": "sujeto_concreto",
+    "efecto": "accion",
+    "coeficiente": 0.02,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más resolucion_nivel → más persuasion (r=0.01, N=1249)"
+    "insight": "Correlación débil: más sujeto_concreto → más accion (r=0.02, N=1332)"
   },
   {
     "metrica": "n_relaciones",
     "efecto": "credibilidad",
     "coeficiente": -0.013,
-    "n_muestras": 1249,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: menos n_relaciones → menos credibilidad (r=-0.01, N=1249)"
+    "insight": "Correlación débil: menos n_relaciones → menos credibilidad (r=-0.01, N=1332)"
+  },
+  {
+    "metrica": "resolucion_nivel",
+    "efecto": "persuasion",
+    "coeficiente": 0.013,
+    "n_muestras": 1332,
+    "p_significativo": false,
+    "insight": "Correlación débil: más resolucion_nivel → más persuasion (r=0.01, N=1332)"
   },
   {
     "metrica": "resolucion_nivel",
     "efecto": "empatia",
-    "coeficiente": 0.001,
-    "n_muestras": 1249,
+    "coeficiente": 0.002,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más resolucion_nivel → más empatia (r=0.00, N=1249)"
+    "insight": "Correlación débil: más resolucion_nivel → más empatia (r=0.00, N=1332)"
   },
   {
     "metrica": "sujeto_concreto",
     "efecto": "empatia",
-    "coeficiente": 0.001,
-    "n_muestras": 1249,
+    "coeficiente": 0.002,
+    "n_muestras": 1332,
     "p_significativo": false,
-    "insight": "Correlación débil: más sujeto_concreto → más empatia (r=0.00, N=1249)"
+    "insight": "Correlación débil: más sujeto_concreto → más empatia (r=0.00, N=1332)"
   }
 ]
