@@ -1,0 +1,28 @@
+{
+  "test": "consistencia_posicion_observador",
+  "timestamp": "2026-03-31T12:32:46.519144+00:00",
+  "agreement": {
+    "total_textos": 50,
+    "ambos_validos": 50,
+    "fallos": 0,
+    "acuerdo_posicion": 1.0,
+    "acuerdo_direccion": 0.98,
+    "acuerdo_marco": 0.98,
+    "acuerdo_posicion_n": 50,
+    "acuerdo_posicion_pct": "100.0%",
+    "distribucion_run_a": {
+      "razonamiento": 28,
+      "pensamiento": 21,
+      "inteligencia": 1
+    },
+    "distribucion_run_b": {
+      "razonamiento": 28,
+      "pensamiento": 21,
+      "inteligencia": 1
+    },
+    "confianza_media": 0.841,
+    "disagreements": [],
+    "DECISION": "INCLUIR en gold set v2",
+    "threshold": 0.7
+  }
+}

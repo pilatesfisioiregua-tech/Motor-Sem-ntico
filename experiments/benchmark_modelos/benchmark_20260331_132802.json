@@ -1,0 +1,721 @@
+{
+  "timestamp": "2026-03-31T13:28:02.225485+00:00",
+  "n_texts": 30,
+  "models": {
+    "opus": "Claude Opus 4",
+    "gpt54": "GPT-5.4",
+    "gemini25pro": "Gemini 2.5 Pro"
+  },
+  "agreements": {
+    "gpt54": {
+      "ref": "Opus",
+      "candidate": "GPT-5.4",
+      "n_pairs": 30,
+      "posicion": "60.0%",
+      "direccion": "13.3%",
+      "marco": "63.3%",
+      "posicion_raw": 0.6
+    },
+    "gemini25pro": {
+      "error": "no valid pairs"
+    }
+  },
+  "results_a": {
+    "opus": [
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "verbos copulativos dominantes: 'es normal', 'es un proceso'",
+          "clasificación de estados: 'abrumado', 'fuera de control'",
+          "estructura SUJETO + copulativo + ADJETIVO: 'eso es completamente normal'"
+        ],
+        "direccion": "todo_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "estructura dominante: SUJETO + predicados descriptivos",
+          "verbos copulativos implícitos: '[es] madre', '[tiene] 38 años'",
+          "clasificación de estados: 'diástasis reducida', 'funcionalidad recuperada'"
+        ],
+        "direccion": "parte_todo",
+        "marco": "clinico"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "tienes acceso exclusivo",
+          "eres cliente VIP",
+          "quedan 2 unidades"
+        ],
+        "direccion": "todo_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "redujo",
+          "procesó",
+          "automatiza"
+        ],
+        "direccion": "parte_todo",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "Somos una empresa",
+          "Nuestro equipo cuenta con",
+          "Nos enfocamos en"
+        ],
+        "direccion": "todo_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "inteligencia",
+        "confianza": 0.85,
+        "señales": [
+          "origen epistémico de esa creencia",
+          "marcos interpretativos alternativos",
+          "cuestionar sistemáticamente nuestras premisas"
+        ],
+        "direccion": "todo_todo",
+        "marco": "existencial"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "nominalizaciones dominantes: optimización, desarrollo, alineación",
+          "verbos de acción: reconocer, identificar, alinear, potenciar",
+          "sustantivos en función modal: enfoque holístico, iniciativas de upskilling"
+        ],
+        "direccion": "todo_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "verbos de acción dominantes: observado, mostraron, trabajó, implementar",
+          "nominalizaciones de procesos: crecimiento, iniciativas, mejora",
+          "estructura VERBO + complemento: trabajó para implementar, identificaron oportunidades"
+        ],
+        "direccion": "parte_todo",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "verbos de acción dominantes: mencionaste, recuerdas, preparaste, organizaste",
+          "nominalizaciones de procesos: presentación, cumpleaños, creencia",
+          "estructura dominante de proceso temporal: qué pasó cuando..."
+        ],
+        "direccion": "parte_todo",
+        "marco": "narrativo"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "presenta un saldo pendiente",
+          "valoramos su compromiso",
+          "está disponible"
+        ],
+        "direccion": "todo_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "sigue siendo un obstáculo",
+          "demuestran lo contrario",
+          "refleja"
+        ],
+        "direccion": "todo_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "inteligencia",
+        "confianza": 0.85,
+        "señales": [
+          "opera sobre oraciones completas tratándolas como objetos",
+          "recursión: invita a observar el observar",
+          "nominalización de orden superior: 'esa contradicción'"
+        ],
+        "direccion": "todo_todo",
+        "marco": "existencial"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "implementaremos",
+          "crearemos una función",
+          "divide el array usando"
+        ],
+        "direccion": "parte_todo",
+        "marco": "computacional"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "constituyen marcos",
+          "influyen directamente en",
+          "permite identificar"
+        ],
+        "direccion": "todo_parte",
+        "marco": "existencial"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.95,
+        "señales": [
+          "verbos copulativos dominantes: 'es'",
+          "estructura SUJETO + copulativo + CLASE",
+          "clasificación absoluta del sujeto"
+        ],
+        "direccion": "parte_todo",
+        "marco": "existencial"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "verbos de acción dominantes: analizamos, personalizan, aumentaron",
+          "nominalizaciones de procesos: análisis, comportamiento",
+          "estructura proceso-resultado: cambiamos...resultado"
+        ],
+        "direccion": "parte_todo",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "músculos son para el movimiento",
+          "anatomía es la base",
+          "tienen diferentes funciones"
+        ],
+        "direccion": "todo_parte",
+        "marco": "educativo"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "cambió la vida de +10,000 personas",
+          "Los expertos no quieren que sepas",
+          "los millonarios para generar ingresos"
+        ],
+        "direccion": "parte_todo",
+        "marco": "financiero"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "implementaremos metodologías",
+          "optimizar su experiencia",
+          "participar en esta oportunidad"
+        ],
+        "direccion": "parte_todo",
+        "marco": "social"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "Has demostrado una dedicación excepcional",
+          "refleja los valores fundamentales",
+          "siendo parte de nuestra comunidad de individuos"
+        ],
+        "direccion": "todo_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "verbos copulativos: 'es un patrón', 'es hora'",
+          "clasificación del sujeto: 'has estado evitando', 'no puedes'",
+          "estructura dominante sujeto + estado: 'esto es', 'lo sé porque'"
+        ],
+        "direccion": "todo_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "cifosis dorsal marcada",
+          "columna mucho más alineada",
+          "hombros adelantados/abiertos"
+        ],
+        "direccion": "parte_todo",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "adaptaremos los ejercicios",
+          "necesitarás",
+          "llegaremos 10 minutos antes"
+        ],
+        "direccion": "parte_todo",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "verbos de acción dominantes: enfrentando, afectando, apoyarte",
+          "nominalizaciones: desempeño, comunicación, organización, colaboración",
+          "estructura proceso-orientada: mejoras en X, colaboración con Y"
+        ],
+        "direccion": "parte_todo",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "verbos copulativos: 'es fundamental'",
+          "clasificación implícita: 'profesionales altamente capacitados'",
+          "estructura sujeto-predicativo dominante"
+        ],
+        "direccion": "todo_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.85,
+        "señales": [
+          "verbos copulativos dominantes: 'es importante'",
+          "estructura SUJETO + copulativo + ADJETIVO",
+          "clasificación implícita del receptor como miembro ausente"
+        ],
+        "direccion": "todo_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "nominalizaciones dominantes: proceso, journey, aproximación, compromiso",
+          "verbos de acción: abordado, implemente, optimizar, trabajando",
+          "sustantivos en función modal: aproximación holística"
+        ],
+        "direccion": "parte_todo",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.9,
+        "señales": [
+          "verbos de acción dominantes: trabajan, optimiza, activación",
+          "sustantivos en función adverbial: de forma sinérgica, mediante la activación",
+          "estructura dominante: VERBO + complemento instrumental/modal"
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.8,
+        "señales": [
+          "productos premium que transformarán",
+          "Calidad superior y diseño elegante se combinan",
+          "Cada pieza ha sido cuidadosamente seleccionada"
+        ],
+        "direccion": "todo_parte",
+        "marco": "narrativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.85,
+        "señales": [
+          "ha demostrado",
+          "implementamos",
+          "optimizan"
+        ],
+        "direccion": "parte_todo",
+        "marco": "operativo"
+      }
+    ],
+    "gpt54": [
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.72,
+        "señales": [
+          "predominio de verbos de acción/proceso: 'entiendo', 'experimentar', 'reconocer', 'buscar', 'trabajar', 'identificar', 'manejar'",
+          "presencia de nominalizaciones de proceso: 'situación', 'emociones', 'cambio', 'proceso'",
+          "estructura orientada a operaciones y transformación futura: 'podemos trabajar', 'identificar estrategias', 'manejar mejor'"
+        ],
+        "direccion": "parte_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.86,
+        "señales": [
+          "predominio de nominalizaciones y sintagmas de proceso: \"trabajo específico\", \"resultado\", \"funcionalidad recuperada\"",
+          "estructura secuencial centrada en acciones y transformación: \"recomendó\", \"quiso probar\", \"deriva\"",
+          "uso de complementos instrumentales y de procedimiento: \"de transverso + hipopresivos\", \"3 sesiones/semana\", \"4 meses\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.91,
+        "señales": [
+          "predominio de verbos de acción y proceso: \"notamos\", \"dejaste\", \"completar\", \"quedan\", \"están viendo\", \"predice\", \"se liberará\"",
+          "estructura centrada en operaciones temporales y causales sobre eventos: \"hace 3 horas\", \"hasta medianoche\", \"mañana\", \"en 4 horas\", \"debido a\"",
+          "uso de construcciones procesuales con automatización e instrumentación: \"se liberará automáticamente\", \"nuestro algoritmo predice\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.95,
+        "señales": [
+          "predominio de verbos de acción: \"redujo\", \"procesó\", \"automatiza\", \"genera\", \"sincroniza\", \"optimizaron\"",
+          "estructura centrada en procesos operativos y capacidades verbales con complementos instrumentales/temporales",
+          "presencia de nominalización de proceso: \"implementación\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.84,
+        "señales": [
+          "predominio de verbos de acción y operación: 'ayudamos', 'mejorar', 'hemos trabajado', 'ofrecemos', 'nos enfocamos', 'generar'",
+          "estructuras verbales con complementos instrumentales/modales: 'mediante estrategias de contenido y publicidad digital'",
+          "enumeración de procesos/servicios operativos: 'consultoría personalizada, gestión de redes sociales y campañas publicitarias'"
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "inteligencia",
+        "confianza": 0.94,
+        "señales": [
+          "opera sobre creencias, convicciones, marcos interpretativos y premisas como objetos de análisis",
+          "presencia de nominalizaciones de orden superior: 'origen epistémico', 'construcciones cognitivas', 'marcos interpretativos', 'metodología'",
+          "estructura recursiva y metacognitiva: cuestionar premisas y considerar marcos que generan conclusiones"
+        ],
+        "direccion": "todo_todo",
+        "marco": "existencial"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.88,
+        "señales": [
+          "predominio de verbos de acción y operación: \"reconocer\", \"hemos identificado\", \"alinear\", \"participar\", \"potencien\"",
+          "alta densidad de nominalizaciones de proceso: \"optimización\", \"mejora\", \"desarrollo\", \"upskilling\"",
+          "estructura centrada en procesos con complementos instrumentales/finales: \"en el marco de\", \"nos permite\", \"dentro de\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.88,
+        "señales": [
+          "predominio de verbos de acción y proceso: \"hemos observado\", \"mostraron\", \"presentaron\", \"trabajó\", \"implementar\", \"identificaron\", \"impactar\"",
+          "presencia de nominalizaciones de proceso: \"crecimiento\", \"mejora\", \"satisfacción\"",
+          "estructura centrada en operaciones y cambios con complementos instrumentales/modales: \"para implementar\", \"en procesos operativos\", \"favorablemente\", \"resultados futuros\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "financiero"
+      },
+      {
+        "posicion": "inteligencia",
+        "confianza": 0.87,
+        "señales": [
+          "opera sobre enunciados completos citados como objetos ('siempre arruinas las cosas importantes')",
+          "metaevaluación de una creencia mediante preguntas sobre su validez estructural ('si esta creencia... refleja realmente toda tu experiencia')",
+          "recursión reflexiva y alto nivel abstracto al examinar evidencia y generalización del propio discurso"
+        ],
+        "direccion": "todo_todo",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.86,
+        "señales": [
+          "predominio de verbos de acción y gestión: 'informamos', 'solicitamos', 'regularizar', 'acercarse', 'contactarnos', 'coordinar'",
+          "estructura orientada a procesos operativos con complementos modales/finales: 'para mantener', 'evitar inconvenientes', 'a la brevedad'",
+          "presencia de nominalizaciones operativas: 'continuidad', 'situación', 'horario de atención', 'pago'"
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.71,
+        "señales": [
+          "predominio de estructuras atributivas con adjetivos y sustantivos predicativos: \"sigue siendo un obstáculo significativo\", \"es momento de\"",
+          "clasificación de conductas y tendencias como entidades evaluables: \"varios patrones\", \"tu tendencia...\"",
+          "juicios sobre el sujeto mediante contraste sujeto/propiedad: \"tus acciones demuestran lo contrario\", \"lo cual refleja...\""
+        ],
+        "direccion": "parte_todo",
+        "marco": "social"
+      },
+      {
+        "posicion": "inteligencia",
+        "confianza": 0.87,
+        "señales": [
+          "opera sobre enunciados previos como objetos discursivos ('has mencionado', 'también dijiste')",
+          "recursión metacognitiva mediante preguntas sobre contradicción y conexión entre formulaciones",
+          "alto nivel de abstracción estructural con nominalizaciones de orden superior ('esa contradicción', 'patrones', 'conexión')"
+        ],
+        "direccion": "todo_todo",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.87,
+        "señales": [
+          "Predominio de verbos de acción y operación: \"implementaremos\", \"Crearemos\", \"divide\", \"usando\"",
+          "Estructura centrada en proceso + complemento instrumental/modal: \"implementaremos ... en Python\", \"divide el array usando un pivote\"",
+          "Presencia de nominalizaciones operativas y técnicas subordinadas al hacer: \"ordenamiento\", \"resolución\", \"sorting\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "computacional"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.79,
+        "señales": [
+          "predominio de nominalizaciones de proceso: \"aprendizaje\", \"exploración\", \"funcionamiento\"",
+          "verbos de acción/proceso que articulan operaciones: \"reconocer\", \"interpretar\", \"influyen\", \"permite identificar\"",
+          "complementos instrumentales/modales de proceso: \"mediante procesos de aprendizaje social\", \"a lo largo de nuestra vida\", \"directamente\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "existencial"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.99,
+        "señales": [
+          "repetición de estructura SUJETO + verbo copulativo + sustantivo predicativo ('Pilates es vida', 'es amor', 'es todo')",
+          "dominancia del verbo copulativo 'es' en todas las oraciones",
+          "clasificación/atribución de propiedades al sujeto mediante predicados nominales"
+        ],
+        "direccion": "parte_todo",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.88,
+        "señales": [
+          "predominio de verbos de acción y proceso: \"analizamos\", \"personalizan\", \"aumentaron\", \"cambiamos\", \"incluir\"",
+          "estructura centrada en operaciones y transformación con complementos instrumentales/modalizadores",
+          "presencia de nominalizaciones operativas: \"resultado\", \"análisis\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.74,
+        "señales": [
+          "predominio de verbos de acción y proceso: 'vamos a explorar', 'vamos a ver', 'van a poder palpar'",
+          "secuencia instruccional centrada en operaciones y actividades",
+          "complementos instrumentales/finales que modulan la acción: 'para que puedan visualizar mejor'"
+        ],
+        "direccion": "parte_todo",
+        "marco": "otro"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.79,
+        "señales": [
+          "predominio de verbos de acción y proceso: 'quedan', 'acceder', 'cambió', 'pasó', 'ganar', 'aplicando', 'revelarte', 'usan', 'generar', 'expira', 'reciben'",
+          "estructura verbal orientada a operación/resultado con complementos temporales e instrumentales: 'en solo 60 días', 'aplicando estas técnicas', 'para generar ingresos pasivos'",
+          "presencia de nominalizaciones y objetos de proceso: 'método', 'sistema', 'compradores', 'valor real'"
+        ],
+        "direccion": "parte_parte",
+        "marco": "financiero"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.88,
+        "señales": [
+          "predominio de verbos de acción y operación: \"tendremos\", \"implementaremos\", \"optimizar\", \"participar\", \"conectar\"",
+          "alta densidad de nominalizaciones de proceso: \"fortalecimiento\", \"mejora\", \"crecimiento\", \"transformación\"",
+          "estructura centrada en actividades y modos de ejecución con complementos instrumentales/finales: \"implementaremos metodologías innovadoras para optimizar\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.78,
+        "señales": [
+          "predominio de verbos copulativos o de estado con adjetivación valorativa: \"ser parte\", \"comprometidos\", \"fundamentales\"",
+          "clasificación del destinatario dentro de conjuntos: \"nuestra comunidad\", \"individuos que priorizan\"",
+          "estructura centrada en atribuir propiedades al sujeto: \"compromiso increíble\", \"dedicación excepcional\""
+        ],
+        "direccion": "parte_todo",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.76,
+        "señales": [
+          "predominio de verbos de acción y proceso: 'evitando', 'mencionaste', 'cambiaste', 'pregunté', 'sigues', 'hacer', 'pones'",
+          "estructura centrada en secuencias operativas y condicionales: 'si realmente quieres cambiar, tienes que hacer...'",
+          "uso de nominalización puntual de proceso: 'un patrón' para organizar conductas repetidas"
+        ],
+        "direccion": "parte_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.88,
+        "señales": [
+          "predominio de frases nominales con adjetivos clasificatorios: \"cifosis dorsal marcada\", \"hombros adelantados\", \"columna mucho más alineada\", \"hombros abiertos\"",
+          "estructura elíptica de sujeto + atributo en series descriptivas, sin desarrollo de procesos verbales",
+          "operación comparativa de estados antes/después que clasifica al sujeto según propiedades observables"
+        ],
+        "direccion": "parte_parte",
+        "marco": "otro"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.88,
+        "señales": [
+          "predominio de verbos de acción y planificación: 'será', 'he revisado', 'adaptaremos', 'necesitarás', 'llegaremos'",
+          "estructura orientada a procesos y secuencia operativa de la sesión",
+          "uso de complementos instrumentales y circunstanciales de tiempo/lugar/modo"
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.8,
+        "señales": [
+          "Predominio de verbos de acción y proceso: 'hablar', 'enfrentando', 'afectando', 'apoyarte', 'alcanzar'",
+          "Foco gramatical en procesos operativos con complementos: 'con los plazos de entrega', 'con el equipo', 'en la organización'",
+          "Nominalizaciones de proceso: 'desempeño', 'comunicación', 'mejoras', 'colaboración'"
+        ],
+        "direccion": "parte_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "razonamiento",
+        "confianza": 0.68,
+        "señales": [
+          "predominio de verbos copulativos y cuasi-copulativos: \"es fundamental\", \"está comprometido\"",
+          "uso de adjetivos predicativos para clasificar estados y propiedades: \"muy bien\", \"altamente capacitados\", \"fundamental\"",
+          "estructura sujeto + verbo estativo/copulativo + atributo, orientada a asignar cualidades"
+        ],
+        "direccion": "parte_todo",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.7,
+        "señales": [
+          "predominio de verbos de acción y estado en primera persona plural: \"hemos notado\", \"queremos recordarte\", \"esperamos verte\"",
+          "estructura verbal orientada a procesos comunicativos y volitivos, no a clasificación copulativa",
+          "presencia de subordinadas completivas que encapsulan acciones/eventos: \"que no has venido\", \"que tu bienestar es importante\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.87,
+        "señales": [
+          "predominio de verbos de acción y proceso: 'hemos abordado', 'implemente', 'optimizar', 'continuaremos trabajando'",
+          "alta densidad de nominalizaciones: 'proceso terapéutico', 'oportunidades de mejora', 'aproximación', 'compromiso', 'fortalecimiento'",
+          "estructura orientada a operación/procedimiento con complementos instrumentales y finalistas: 'para optimizar', 'que abarque', 'para alcanzar'"
+        ],
+        "direccion": "parte_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.92,
+        "señales": [
+          "predominio de verbos de acción y proceso: 'trabajan', 'optimiza'",
+          "uso de nominalizaciones de proceso: 'activación'",
+          "complementos instrumentales/modales que describen funcionamiento: 'de forma sinérgica', 'mediante', 'en un continuum'"
+        ],
+        "direccion": "parte_parte",
+        "marco": "otro"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.87,
+        "señales": [
+          "predominio de verbos de acción e imperativos: \"Descubre\", \"transformarán\", \"ofrecerte\", \"Aprovecha\", \"Únete\"",
+          "estructura centrada en procesos y operaciones: \"se combinan\", \"ha sido cuidadosamente seleccionada\", \"satisfacer\"",
+          "uso de complementos instrumentales/finales que describen funcionamiento o efecto: \"para ofrecerte\", \"para satisfacer\", \"por nuestra atención al detalle\""
+        ],
+        "direccion": "parte_parte",
+        "marco": "social"
+      },
+      {
+        "posicion": "pensamiento",
+        "confianza": 0.82,
+        "señales": [
+          "predominio de verbos de acción y proceso: 'ha demostrado', 'reflejan', 'alineándose', 'ha potenciado', 'generar', 'implementamos', 'optimizan', 'fortalecen'",
+          "uso de nominalizaciones de proceso: 'crecimiento', 'sinergia', 'capacidad', 'propuesta de valor'",
+          "estructura centrada en operaciones y efectos instrumentales sobre complementos"
+        ],
+        "direccion": "parte_parte",
+        "marco": "operativo"
+      }
+    ],
+    "gemini25pro": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+}
