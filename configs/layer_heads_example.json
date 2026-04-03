@@ -1,0 +1,44 @@
+{
+  "_comment": "Architecture C — Ejemplo de config para --layer-heads-config",
+  "_comment2": "Cada capa tiene float dims y binary dims asignadas por complejidad lingüística",
+  "_comment3": "Capa 6=sintaxis/morfología (A1), 12=semántica local (A2), 18=semántica global (A3), 24=pragmática (A4)",
+  "_comment4": "Ajustar con los nombres reales de tus dims. Este es un template.",
+
+  "6": {
+    "float": [
+      "densidad_sustantivos", "densidad_adjetivos", "densidad_verbos",
+      "complejidad_sintactica", "longitud_oracion_media",
+      "ratio_subordinacion", "densidad_conectores"
+    ],
+    "binary": []
+  },
+  "12": {
+    "float": [
+      "coherencia_local", "cohesion_lexica", "diversidad_vocabulario",
+      "especificidad_semantica", "vaguedad_semantica",
+      "carga_emocional", "polaridad"
+    ],
+    "binary": []
+  },
+  "18": {
+    "float": [
+      "coherencia_global", "estructura_argumentativa", "fuerza_argumental",
+      "profundidad_razonamiento", "densidad_evidencial",
+      "complejidad_discursiva", "originalidad"
+    ],
+    "binary": [
+      "falacia_ad_hominem", "falacia_strawman"
+    ]
+  },
+  "24": {
+    "float": [
+      "conciencia_metacognitiva", "perspectiva_multiple",
+      "sensibilidad_contexto", "adaptacion_registro",
+      "implicatura", "presuposicion"
+    ],
+    "binary": [
+      "sesgo_confirmacion", "sesgo_anclaje",
+      "circularidad", "falsa_dicotomia"
+    ]
+  }
+}

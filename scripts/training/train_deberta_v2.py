@@ -611,9 +611,9 @@ def main():
                         help="[DORMIDA] Temperature para softened probabilities (default: 2.0)")
     # ── Heads por capa (dormida) ──
     parser.add_argument("--layer-heads", action="store_true",
-                        help="[DORMIDA] Activar heads en capas intermedias (6/12/18/24) — Arquitectura C")
+                        help="Activar Architecture C: heads en capas 6/12/18/24 (22 papers validacion)")
     parser.add_argument("--layer-heads-config", default=None,
-                        help="[DORMIDA] JSON con mapping capa → dims (para Arquitectura C)")
+                        help="JSON: {\"6\": {\"float\": [...], \"binary\": [...]}, \"12\": {...}, ...}")
     args = parser.parse_args()
 
     torch.manual_seed(args.seed)
@@ -668,9 +668,9 @@ def main():
         log.warning("⚠ KD está DORMIDA. Se aceptan los args pero NO se aplica KD loss todavía.")
         log.warning("  Para activar: implementar KDLoss en el training loop (ver TODO abajo).")
 
-    if args.layer_heads:
-        log.warning("⚠ Layer heads (Arquitectura C) está DORMIDA. Se ignora --layer-heads.")
-        log.warning("  Para activar: reemplazar MultiHeadDetectorV2 por LayerHeadDetector.")
+    if args.layer_heads and not args.layer_heads_config:
+        log.error("--layer-heads requiere --layer-heads-config con el JSON de mapping capas→dims")
+        sys.exit(1)
 
     # ── Cargar datos ──────────────────────────────────────────────────────
     all_data = load_data(args.labels)
@@ -719,11 +719,33 @@ def main():
     test_loader = DataLoader(test_ds, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
     # ── Modelo ────────────────────────────────────────────────────────────
-    model = MultiHeadDetectorV2(
-        args.model, n_float, n_binary,
-        span_dim=actual_span_dim, dropout=args.dropout,
-        pooling=args.pooling,
-    )
+    use_layer_heads = args.layer_heads and args.layer_heads_config
+
+    if use_layer_heads:
+        # Arquitectura C: heads en capas intermedias
+        with open(args.layer_heads_config) as f:
+            layer_config = json.load(f)
+
+        model = LayerHeadDetector(
+            args.model, layer_config,
+            span_dim=actual_span_dim, dropout=args.dropout,
+            pooling=args.pooling,
+        )
+
+        # Reordenar float_dims y binary_dims según el output del modelo
+        float_dims = model.get_float_dim_order()
+        binary_dims = model.get_binary_dim_order()
+        n_float = len(float_dims)
+        n_binary = len(binary_dims)
+        log.info(f"Architecture C activa: dims reordenadas por capa")
+        log.info(f"  Float: {n_float}, Binary: {n_binary}")
+    else:
+        model = MultiHeadDetectorV2(
+            args.model, n_float, n_binary,
+            span_dim=actual_span_dim, dropout=args.dropout,
+            pooling=args.pooling,
+        )
+
     log.info(f"Pooling: {args.pooling}")
 
     # ── LoRA (opcional) ──────────────────────────────────────────────────
@@ -732,21 +754,39 @@ def main():
             log.error("--lora requiere peft. pip install peft")
             sys.exit(1)
 
-        # Auto-detect target modules para DeBERTa
         if args.lora_target_modules:
             target_modules = [m.strip() for m in args.lora_target_modules.split(",")]
         else:
-            # DeBERTa-v3 usa query_proj, key_proj, value_proj en disentangled attention
             target_modules = ["query_proj", "key_proj", "value_proj"]
 
-        lora_config = LoraConfig(
-            r=args.lora_r,
-            lora_alpha=args.lora_alpha,
-            lora_dropout=args.lora_dropout,
-            target_modules=target_modules,
-            bias="none",
-            modules_to_save=["float_head", "binary_head", "projection"],  # heads se entrenan full
-        )
+        # LoRA rank adaptivo cuando Architecture C activa
+        if use_layer_heads:
+            adaptive = build_adaptive_lora_config(
+                lora_r_base=args.lora_r,
+                lora_alpha=args.lora_alpha,
+                lora_dropout=args.lora_dropout,
+                n_layers=model.backbone.config.num_hidden_layers,
+            )
+            lora_config = LoraConfig(
+                r=adaptive["r"],
+                lora_alpha=adaptive["lora_alpha"],
+                lora_dropout=adaptive["lora_dropout"],
+                target_modules=adaptive["target_modules"],
+                rank_pattern=adaptive["rank_pattern"],
+                bias="none",
+                modules_to_save=["float_heads", "binary_heads", "projections"],
+            )
+            log.info("LoRA rank ADAPTIVO activado (Architecture C)")
+        else:
+            lora_config = LoraConfig(
+                r=args.lora_r,
+                lora_alpha=args.lora_alpha,
+                lora_dropout=args.lora_dropout,
+                target_modules=target_modules,
+                bias="none",
+                modules_to_save=["float_head", "binary_head", "projection"],
+            )
+
         model = get_peft_model(model, lora_config)
         log.info(f"LoRA activado: r={args.lora_r}, alpha={args.lora_alpha}, "
                  f"targets={target_modules}")
@@ -835,6 +875,8 @@ def main():
             "huber_delta": args.huber_delta if args.float_loss == "huber" else None,
             "relational_loss": args.relational_loss, "relational_weight": args.relational_weight,
             "label_smoothing": args.label_smoothing, "log_loss": use_log_loss,
+            "layer_heads": use_layer_heads,
+            "lora_adaptive": use_layer_heads and args.lora,
             "train_size": len(train_data), "val_size": len(val_data),
             "version": "v2.3_research_quickwins",
         })
@@ -972,8 +1014,11 @@ def main():
                     "lora": args.lora,
                     "lora_r": args.lora_r if args.lora else None,
                     "curriculum_phase": args.curriculum_phase,
+                    "layer_heads": use_layer_heads,
+                    "pooling": args.pooling,
+                    "float_loss": args.float_loss,
                     "pos_weight": pos_weight.tolist(),
-                    "version": "v2.2_lora_curriculum_wbce",
+                    "version": "v2.3_research_quickwins",
                 },
             }
             torch.save(save_dict, ckpt)
@@ -1023,7 +1068,8 @@ def main():
     log.info(f"  Relational:   {'ON (w={})'.format(args.relational_weight) if args.relational_loss else 'OFF'}")
     log.info(f"  Label smooth: {args.label_smoothing}")
     log.info(f"  Log-loss:     {'ON' if use_log_loss else 'OFF'}")
-    log.info(f"  LoRA:         {'ON (r={})'.format(args.lora_r) if args.lora else 'OFF'}")
+    log.info(f"  Arch C:       {'ON ({} layer heads)'.format(len(model.layer_config) if use_layer_heads else 0) if use_layer_heads else 'OFF'}")
+    log.info(f"  LoRA:         {'ON (r={}{})'.format(args.lora_r, ', ADAPTIVO' if use_layer_heads else '') if args.lora else 'OFF'}")
     log.info(f"  Curriculum:   {f'phase {args.curriculum_phase}' if args.curriculum_phase else 'OFF'}")
     log.info(f"  Weighted BCE: ON (range [{pos_weight.min():.1f}, {pos_weight.max():.1f}])")
 
@@ -1090,75 +1136,143 @@ class KDLoss(nn.Module):
 
 
 class LayerHeadDetector(nn.Module):
-    """[DORMIDA] Arquitectura C — Heads en capas intermedias de DeBERTa.
+    """Arquitectura C — Heads en capas intermedias de DeBERTa.
 
-    En lugar de solo usar CLS del último layer, extrae representaciones
-    de capas 6, 12, 18, 24 y asigna diferentes dims a cada head.
+    Extrae representaciones de capas 6, 12, 18, 24 con mean pooling
+    y asigna diferentes dims a cada head según complejidad lingüística.
 
-    Para activar:
-    1. Crear layer_heads_config.json: {"6": ["dim1", "dim2"], "12": [...], ...}
-    2. Reemplazar MultiHeadDetectorV2 por LayerHeadDetector en main()
-    3. Usar --layer-heads --layer-heads-config path/to/config.json
+    Validación: 22 papers (18 soportan, 1 matiza, 0 contradicen).
+    Ref: Sanh AAAI 2019 (+1-3 F1), Tenney ACL 2019, Li 2025 (25 modelos).
 
-    Ref: 28 papers validan que layer-specific heads mejoran 1-4 F1.
-    DeBERTa layers: 1-6 (sintaxis), 7-12 (semántica local), 13-18
-    (semántica global), 19-24 (pragmática/discurso).
+    DeBERTa-v3-large layers:
+      1-6:   sintaxis, morfología → A1 head
+      7-12:  semántica local      → A2 head
+      13-18: semántica global     → A3 head
+      19-24: pragmática/discurso  → A4 head
+
+    Config JSON format:
+    {
+      "6":  {"float": ["dim1", "dim2"], "binary": ["dim3"]},
+      "12": {"float": ["dim4"], "binary": []},
+      "18": {"float": ["dim5", "dim6"], "binary": ["dim7"]},
+      "24": {"float": ["dim8"], "binary": ["dim9", "dim10"]}
+    }
     """
 
     def __init__(
         self,
         model_name: str,
-        layer_dims_config: dict[int, list[str]],
+        layer_dims_config: dict,
         span_dim: int = SPAN_DIM,
         dropout: float = 0.1,
+        pooling: str = "mean",
     ):
         super().__init__()
         self.backbone = AutoModel.from_pretrained(model_name, output_hidden_states=True)
         hidden_size = self.backbone.config.hidden_size
         self.dropout = nn.Dropout(dropout)
+        self.pooling = pooling
 
-        # Un head por layer group
-        self.layer_heads = nn.ModuleDict()
-        self.layer_dims = OrderedDict()  # layer_idx → list of dim names
+        # Parse config: each layer has float_dims and binary_dims
+        self.layer_config = OrderedDict()  # layer_idx → {"float": [...], "binary": [...]}
+        self.float_heads = nn.ModuleDict()
+        self.binary_heads = nn.ModuleDict()
+        self.projections = nn.ModuleDict()
 
-        for layer_idx_str, dim_names in layer_dims_config.items():
+        for layer_idx_str, dims_spec in layer_dims_config.items():
             layer_idx = int(layer_idx_str)
-            n_dims = len(dim_names)
-            self.layer_dims[layer_idx] = dim_names
+            if isinstance(dims_spec, list):
+                # Legacy format: all dims are float
+                float_dims = dims_spec
+                binary_dims = []
+            else:
+                float_dims = dims_spec.get("float", [])
+                binary_dims = dims_spec.get("binary", [])
 
-            # Projection + head
-            self.layer_heads[str(layer_idx)] = nn.Sequential(
-                nn.Linear(hidden_size + span_dim, hidden_size),
+            self.layer_config[layer_idx] = {"float": float_dims, "binary": binary_dims}
+
+            combined_size = hidden_size + span_dim
+            # Shared projection per layer
+            self.projections[str(layer_idx)] = nn.Sequential(
+                nn.Linear(combined_size, hidden_size),
                 nn.GELU(),
                 nn.Dropout(dropout),
-                nn.Linear(hidden_size, n_dims),
             )
 
-        total_dims = sum(len(d) for d in self.layer_dims.values())
-        log.info(f"LayerHeadDetector: {len(self.layer_dims)} heads, {total_dims} dims total")
-        for layer_idx, dims in self.layer_dims.items():
-            log.info(f"  Layer {layer_idx}: {len(dims)} dims")
+            if float_dims:
+                head = nn.Linear(hidden_size, len(float_dims))
+                nn.init.xavier_uniform_(head.weight)
+                nn.init.zeros_(head.bias)
+                self.float_heads[str(layer_idx)] = head
+
+            if binary_dims:
+                head = nn.Linear(hidden_size, len(binary_dims))
+                nn.init.xavier_uniform_(head.weight)
+                nn.init.zeros_(head.bias)
+                self.binary_heads[str(layer_idx)] = head
+
+        # Log architecture
+        total_float = sum(len(c["float"]) for c in self.layer_config.values())
+        total_binary = sum(len(c["binary"]) for c in self.layer_config.values())
+        log.info(f"LayerHeadDetector: {len(self.layer_config)} layer heads, "
+                 f"{total_float} float + {total_binary} binary = {total_float + total_binary} dims")
+        for layer_idx, conf in self.layer_config.items():
+            log.info(f"  Layer {layer_idx}: {len(conf['float'])} float, {len(conf['binary'])} binary")
+
+    def _pool_layer(self, hidden_state, attention_mask):
+        """Pool a single layer's hidden state."""
+        if self.pooling == "cls":
+            return hidden_state[:, 0, :]
+        elif self.pooling == "mean":
+            mask_expanded = attention_mask.unsqueeze(-1).float()
+            return (hidden_state * mask_expanded).sum(dim=1) / mask_expanded.sum(dim=1).clamp(min=1e-9)
+        elif self.pooling == "max":
+            hidden = hidden_state.clone()
+            hidden[attention_mask == 0] = -1e9
+            return hidden.max(dim=1).values
+        else:
+            raise ValueError(f"Unknown pooling: {self.pooling}")
 
     def forward(self, input_ids, attention_mask, span_features):
         outputs = self.backbone(input_ids=input_ids, attention_mask=attention_mask)
         hidden_states = outputs.hidden_states  # tuple of (batch, seq_len, hidden)
 
-        all_logits = []
-        for layer_idx in self.layer_dims:
-            # CLS token de la capa específica
-            layer_cls = hidden_states[layer_idx][:, 0, :]
-            combined = torch.cat([layer_cls, span_features], dim=1)
-            logits = self.layer_heads[str(layer_idx)](combined)
-            all_logits.append(logits)
+        all_float_out = []
+        all_binary_logits = []
 
-        # Concatenar todos los logits de todas las capas
-        return torch.cat(all_logits, dim=-1)
+        for layer_idx in self.layer_config:
+            # Pool the specific layer
+            pooled = self._pool_layer(hidden_states[layer_idx], attention_mask)
+            combined = torch.cat([pooled, span_features], dim=1)
+            projected = self.projections[str(layer_idx)](combined)
+            projected = self.dropout(projected)
 
-    def get_dim_order(self) -> list[str]:
-        """Retorna la lista ordenada de dims como salen del forward."""
+            if str(layer_idx) in self.float_heads:
+                float_out = torch.sigmoid(self.float_heads[str(layer_idx)](projected))
+                all_float_out.append(float_out)
+
+            if str(layer_idx) in self.binary_heads:
+                binary_logits = self.binary_heads[str(layer_idx)](projected)
+                all_binary_logits.append(binary_logits)
+
+        # Concatenar: float → sigmoid applied, binary → raw logits
+        float_result = torch.cat(all_float_out, dim=-1) if all_float_out else torch.empty(0)
+        binary_result = torch.cat(all_binary_logits, dim=-1) if all_binary_logits else torch.empty(0)
+
+        return float_result, binary_result
+
+    def get_float_dim_order(self) -> list[str]:
+        """Retorna dims float en el orden del forward output."""
         order = []
-        for dims in self.layer_dims.values():
-            order.extend(dims)
+        for conf in self.layer_config.values():
+            order.extend(conf["float"])
+        return order
+
+    def get_binary_dim_order(self) -> list[str]:
+        """Retorna dims binary en el orden del forward output."""
+        order = []
+        for conf in self.layer_config.values():
+            order.extend(conf["binary"])
         return order
 
 
