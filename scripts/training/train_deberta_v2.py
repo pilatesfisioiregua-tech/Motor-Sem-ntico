@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """
-OMNI-MIND Detector v2 — Entrenamiento DeBERTa multi-head + spans
-=================================================================
-Evolución de train_deberta.py con 3 cambios clave:
+OMNI-MIND Detector v2.1 — Entrenamiento DeBERTa 2-head + spans
+================================================================
+Evolución post-P48: categoricals eliminados. R/P/I son 3 floats independientes.
 
-1. CATEGORICAL HEAD: cross-entropy para posicion_observador, direccion_navegacion,
-   marco_dominante (§16-§17 Teoría Unificada)
-2. SPAN FEATURES: spaCy extrae sujetos/adjetivales/adverbiales → se concatenan
-   al CLS token como features extra (doble autenticación §15)
-3. TRIPLE LOSS: alpha×MSE + beta×BCE + gamma×CE
+Cambios vs v2.0:
+  - CATEGORICAL HEAD ELIMINADA (P48: R,P son partes de I, no clases excluyentes)
+  - posicion_R, posicion_P, posicion_I ahora son floats en float_dims
+  - DUAL LOSS: alpha×MSE + beta×BCE (no gamma×CE)
+  - Restriccion ontologica verificable post-training: I>0 implica R>0 o P>0
+
+2 heads:
+  1. FLOAT HEAD: sigmoid → MSE loss (38 dims originales + 3 posicion R/P/I + profundidad)
+  2. BINARY HEAD: sigmoid → BCE loss (10 sesgos cognitivos)
 
 Uso:
   python train_deberta_v2.py \\
@@ -18,7 +22,7 @@ Uso:
       --epochs 15 \\
       --lr 2e-5 \\
       --batch-size 8 \\
-      --wandb-name v2_3000
+      --wandb-name v2.1_3000
 
 Arquitectura:
   Texto
@@ -29,10 +33,11 @@ Arquitectura:
     ↓
   [CLS ⊕ span_features] (768 + span_dim)
     ↓
-  ├── Float head:       Linear → sigmoid → MSE loss
-  ├── Binary head:      Linear → sigmoid → BCE loss
-  └── Categorical head: Linear → softmax → CE loss (×3 categoricals)
+  ├── Float head:  Linear → sigmoid → MSE loss
+  └── Binary head: Linear → sigmoid → BCE loss
 """
+
+from __future__ import annotations
 
 import argparse
 import json
@@ -41,8 +46,10 @@ import math
 import os
 import sys
 import time
+from collections import OrderedDict
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 
 # ── Dependencias ──────────────────────────────────────────────────────────
 _missing = []
@@ -65,7 +72,7 @@ try:
 except ImportError:
     _missing.append("scipy")
 try:
-    from sklearn.metrics import f1_score, accuracy_score
+    from sklearn.metrics import f1_score
 except ImportError:
     _missing.append("scikit-learn")
 try:
@@ -77,6 +84,14 @@ except ImportError:
 if _missing:
     print(f"ERROR: Dependencias faltantes: {', '.join(_missing)}")
     sys.exit(1)
+
+# PEFT/LoRA es opcional
+try:
+    from peft import LoraConfig, get_peft_model, TaskType
+    HAS_PEFT = True
+except ImportError:
+    HAS_PEFT = False
+    print("WARNING: peft no instalado. Sin LoRA. pip install peft")
 
 # spaCy es opcional — si no está, skip span features
 try:
@@ -206,7 +221,7 @@ def extract_span_features(text: str, nlp) -> list[float]:
 # ── Dataset ───────────────────────────────────────────────────────────────
 
 class LabeledTextDatasetV2(Dataset):
-    """Dataset con float + binary + categorical labels + span features."""
+    """Dataset con float + binary labels + span features. Sin categoricals (P48)."""
 
     def __init__(
         self,
@@ -214,7 +229,6 @@ class LabeledTextDatasetV2(Dataset):
         tokenizer,
         float_dims: list[str],
         binary_dims: list[str],
-        cat_dims: list[dict],  # [{name, classes}, ...]
         span_features: list[list[float]] | None = None,
         max_length: int = 512,
     ):
@@ -222,7 +236,6 @@ class LabeledTextDatasetV2(Dataset):
         self.tokenizer = tokenizer
         self.float_dims = float_dims
         self.binary_dims = binary_dims
-        self.cat_dims = cat_dims
         self.span_features = span_features
         self.max_length = max_length
 
@@ -245,15 +258,6 @@ class LabeledTextDatasetV2(Dataset):
         float_values = [float(labels.get(d, 0.0) or 0.0) for d in self.float_dims]
         binary_values = [float(labels.get(d, 0.0) or 0.0) for d in self.binary_dims]
 
-        # Categorical: convertir string a index
-        cat_indices = []
-        for cat in self.cat_dims:
-            value = labels.get(cat["name"], cat["classes"][0])
-            if value in cat["classes"]:
-                cat_indices.append(cat["classes"].index(value))
-            else:
-                cat_indices.append(0)  # default a primera clase
-
         # Span features
         if self.span_features is not None:
             spans = self.span_features[idx]
@@ -265,7 +269,6 @@ class LabeledTextDatasetV2(Dataset):
             "attention_mask": encoding["attention_mask"].squeeze(0),
             "float_labels": torch.tensor(float_values, dtype=torch.float32),
             "binary_labels": torch.tensor(binary_values, dtype=torch.float32),
-            "cat_labels": torch.tensor(cat_indices, dtype=torch.long),
             "span_features": torch.tensor(spans, dtype=torch.float32),
         }
         return result
@@ -275,10 +278,9 @@ class LabeledTextDatasetV2(Dataset):
 
 class MultiHeadDetectorV2(nn.Module):
     """
-    DeBERTa con 3 cabezas:
-      - Float head:       Linear(hidden + span_dim, n_float) + sigmoid
-      - Binary head:      Linear(hidden + span_dim, n_binary) + sigmoid
-      - Categorical head: Linear(hidden + span_dim, n_classes) × n_cat_dims
+    DeBERTa con 2 cabezas (P48: sin categorical head):
+      - Float head:  Linear(hidden + span_dim, n_float) + sigmoid
+      - Binary head: Linear(hidden + span_dim, n_binary) + sigmoid
     """
 
     def __init__(
@@ -286,7 +288,6 @@ class MultiHeadDetectorV2(nn.Module):
         model_name: str,
         n_float: int,
         n_binary: int,
-        cat_dims: list[dict],
         span_dim: int = SPAN_DIM,
         dropout: float = 0.1,
     ):
@@ -310,15 +311,8 @@ class MultiHeadDetectorV2(nn.Module):
         # Binary head
         self.binary_head = nn.Linear(hidden_size, n_binary)
 
-        # Categorical heads (una por cada dim categorical)
-        self.cat_heads = nn.ModuleList([
-            nn.Linear(hidden_size, len(cat["classes"]))
-            for cat in cat_dims
-        ])
-        self.cat_dims = cat_dims
-
         # Init
-        for head in [self.float_head, self.binary_head] + list(self.cat_heads):
+        for head in [self.float_head, self.binary_head]:
             nn.init.xavier_uniform_(head.weight)
             nn.init.zeros_(head.bias)
 
@@ -331,12 +325,10 @@ class MultiHeadDetectorV2(nn.Module):
         combined = self.projection(combined)
         combined = self.dropout(combined)
 
-        float_logits = torch.sigmoid(self.float_head(combined))
-        binary_logits = torch.sigmoid(self.binary_head(combined))
+        float_out = torch.sigmoid(self.float_head(combined))
+        binary_logits = self.binary_head(combined)  # raw logits para BCEWithLogitsLoss
 
-        cat_logits = [head(combined) for head in self.cat_heads]  # list of [batch, n_classes]
-
-        return float_logits, binary_logits, cat_logits
+        return float_out, binary_logits
 
 
 # ── Funciones auxiliares ──────────────────────────────────────────────────
@@ -382,13 +374,16 @@ def precompute_spans(data: list[dict], nlp) -> list[list[float]]:
     return spans
 
 
-def compute_metrics_v2(model, dataloader, float_dims, binary_dims, cat_dims, device):
-    """Métricas para las 3 cabezas."""
+def compute_metrics_v2(model, dataloader, float_dims, binary_dims, device,
+                       dim_difficulty: dict | None = None):
+    """Métricas para las 2 cabezas (sin categorical).
+
+    Args:
+        dim_difficulty: opcional dict {dim_name: "easy"|"medium"|"hard"} para métricas por grupo.
+    """
     model.eval()
     all_fp, all_fl = [], []
     all_bp, all_bl = [], []
-    all_cp = {i: [] for i in range(len(cat_dims))}
-    all_cl = {i: [] for i in range(len(cat_dims))}
 
     with torch.no_grad():
         for batch in dataloader:
@@ -396,18 +391,13 @@ def compute_metrics_v2(model, dataloader, float_dims, binary_dims, cat_dims, dev
             mask = batch["attention_mask"].to(device)
             spans = batch["span_features"].to(device)
 
-            fo, bo, co = model(ids, mask, spans)
+            fo, bo = model(ids, mask, spans)
 
             all_fp.append(fo.cpu().numpy())
             all_fl.append(batch["float_labels"].numpy())
-            all_bp.append(bo.cpu().numpy())
+            # bo son logits raw — aplicar sigmoid para métricas
+            all_bp.append(torch.sigmoid(bo).cpu().numpy())
             all_bl.append(batch["binary_labels"].numpy())
-
-            for i, logits in enumerate(co):
-                preds = torch.argmax(logits, dim=1).cpu().numpy()
-                labels = batch["cat_labels"][:, i].numpy()
-                all_cp[i].append(preds)
-                all_cl[i].append(labels)
 
     fp = np.concatenate(all_fp)
     fl = np.concatenate(all_fl)
@@ -437,19 +427,49 @@ def compute_metrics_v2(model, dataloader, float_dims, binary_dims, cat_dims, dev
         f1s.append(f1)
         metrics[f"f1/{name}"] = float(f1)
 
-    # Categorical: accuracy
-    cat_accs = []
-    for i, cat in enumerate(cat_dims):
-        preds = np.concatenate(all_cp[i])
-        labels = np.concatenate(all_cl[i])
-        acc = accuracy_score(labels, preds)
-        cat_accs.append(acc)
-        metrics[f"acc/{cat['name']}"] = float(acc)
+    # Posicion R/P/I: métricas especiales
+    rpi_names = ["posicion_R", "posicion_P", "posicion_I"]
+    for rpi in rpi_names:
+        if rpi in float_dims:
+            idx = float_dims.index(rpi)
+            metrics[f"mean/{rpi}"] = float(np.mean(fp[:, idx]))
+            metrics[f"std/{rpi}"] = float(np.std(fp[:, idx]))
+
+    # Verificar restriccion ontologica P48: I>0.1 implica R>0.1 o P>0.1
+    if all(rpi in float_dims for rpi in rpi_names):
+        idx_r = float_dims.index("posicion_R")
+        idx_p = float_dims.index("posicion_P")
+        idx_i = float_dims.index("posicion_I")
+        i_active = fp[:, idx_i] > 0.1
+        if np.sum(i_active) > 0:
+            rp_active = (fp[i_active, idx_r] > 0.1) | (fp[i_active, idx_p] > 0.1)
+            metrics["p48_compliance"] = float(np.mean(rp_active))
 
     metrics["corr_global"] = float(np.mean(corrs)) if corrs else 0.0
     metrics["mae_global"] = float(np.mean(maes)) if maes else 0.0
     metrics["f1_global"] = float(np.mean(f1s)) if f1s else 0.0
-    metrics["acc_global"] = float(np.mean(cat_accs)) if cat_accs else 0.0
+
+    # ── Métricas por grupo de dificultad ──────────────────────────────────
+    if dim_difficulty:
+        group_corrs = {"easy": [], "medium": [], "hard": []}
+        all_dims = float_dims + binary_dims
+        all_scores = []
+        for name in float_dims:
+            c = metrics.get(f"corr/{name}", 0.0)
+            all_scores.append((name, c))
+        for name in binary_dims:
+            f = metrics.get(f"f1/{name}", 0.0)
+            all_scores.append((name, f))
+
+        for name, score in all_scores:
+            group = dim_difficulty.get(name)
+            if group in group_corrs:
+                group_corrs[group].append(score)
+
+        for group, scores in group_corrs.items():
+            if scores:
+                metrics[f"group_{group}_mean"] = float(np.mean(scores))
+                metrics[f"group_{group}_count"] = len(scores)
 
     return metrics
 
@@ -467,7 +487,7 @@ def get_cosine_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
 # ── Main ──────────────────────────────────────────────────────────────────
 
 def main():
-    parser = argparse.ArgumentParser(description="DeBERTa v2 multi-head + spans")
+    parser = argparse.ArgumentParser(description="DeBERTa v2.1 dual-head + spans (sin categoricals)")
     parser.add_argument("--labels", required=True)
     parser.add_argument("--dims", required=True)
     parser.add_argument("--model", default="microsoft/deberta-v3-base")
@@ -481,13 +501,36 @@ def main():
     parser.add_argument("--wandb-name", default=None)
     parser.add_argument("--wandb-project", default="omni-mind-detector")
     parser.add_argument("--patience", type=int, default=5)
-    parser.add_argument("--loss-alpha", type=float, default=0.5, help="Peso MSE (float dims)")
-    parser.add_argument("--loss-beta", type=float, default=0.2, help="Peso BCE (binary dims)")
-    parser.add_argument("--loss-gamma", type=float, default=0.3, help="Peso CE (categorical dims)")
+    parser.add_argument("--loss-alpha", type=float, default=0.7, help="Peso MSE (float dims)")
+    parser.add_argument("--loss-beta", type=float, default=0.3, help="Peso BCE (binary dims)")
     parser.add_argument("--dropout", type=float, default=0.1)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--warmup-ratio", type=float, default=0.1)
     parser.add_argument("--no-spans", action="store_true", help="Desactivar span features")
+    # ── LoRA ──
+    parser.add_argument("--lora", action="store_true", help="Activar LoRA sobre backbone (requiere peft)")
+    parser.add_argument("--lora-r", type=int, default=16, help="LoRA rank (default: 16)")
+    parser.add_argument("--lora-alpha", type=int, default=32, help="LoRA alpha (default: 32)")
+    parser.add_argument("--lora-dropout", type=float, default=0.05, help="LoRA dropout (default: 0.05)")
+    parser.add_argument("--lora-target-modules", default=None,
+                        help="Comma-separated target modules (default: auto-detect query/value projections)")
+    # ── Curriculum ──
+    parser.add_argument("--curriculum-phase", type=int, default=None, choices=[1, 2, 3],
+                        help="Curriculum phase: 1=easy, 2=easy+medium, 3=all")
+    parser.add_argument("--dim-difficulty", default=None,
+                        help="JSON file mapping dim_name → easy|medium|hard")
+    # ── KD (dormida) ──
+    parser.add_argument("--kd-teacher-logits", default=None,
+                        help="[DORMIDA] Path a JSONL con logits del teacher (Opus) para KD loss")
+    parser.add_argument("--kd-alpha", type=float, default=0.5,
+                        help="[DORMIDA] Peso de KD loss vs task loss (default: 0.5)")
+    parser.add_argument("--kd-temperature", type=float, default=2.0,
+                        help="[DORMIDA] Temperature para softened probabilities (default: 2.0)")
+    # ── Heads por capa (dormida) ──
+    parser.add_argument("--layer-heads", action="store_true",
+                        help="[DORMIDA] Activar heads en capas intermedias (6/12/18/24) — Arquitectura C")
+    parser.add_argument("--layer-heads-config", default=None,
+                        help="[DORMIDA] JSON con mapping capa → dims (para Arquitectura C)")
     args = parser.parse_args()
 
     torch.manual_seed(args.seed)
@@ -509,23 +552,42 @@ def main():
 
     float_dims = dims_config["float_dims"]
     binary_dims = dims_config["binary_dims"]
-    cat_dims_raw = dims_config.get("categorical_dims", [])
 
-    # Construir cat_dims con clases
-    cat_dims = []
-    for cat_name in cat_dims_raw:
-        for d in dims_config["dims"]:
-            if d["name"] == cat_name and d["type"] == "categorical":
-                cat_dims.append({"name": d["name"], "classes": d["classes"]})
-                break
+    # ── Dim difficulty (para curriculum y métricas por grupo) ─────────────
+    dim_difficulty = None
+    if args.dim_difficulty:
+        with open(args.dim_difficulty) as f:
+            dim_difficulty = json.load(f)
+        log.info(f"Dim difficulty loaded: {len(dim_difficulty)} dims clasificadas")
+
+    # ── Curriculum: filtrar dims por fase ─────────────────────────────────
+    if args.curriculum_phase is not None:
+        if dim_difficulty is None:
+            log.error("--curriculum-phase requiere --dim-difficulty")
+            sys.exit(1)
+        phase_map = {1: {"easy"}, 2: {"easy", "medium"}, 3: {"easy", "medium", "hard"}}
+        allowed = phase_map[args.curriculum_phase]
+        orig_float = len(float_dims)
+        orig_binary = len(binary_dims)
+        float_dims = [d for d in float_dims if dim_difficulty.get(d, "hard") in allowed]
+        binary_dims = [d for d in binary_dims if dim_difficulty.get(d, "hard") in allowed]
+        log.info(f"Curriculum phase {args.curriculum_phase}: "
+                 f"float {orig_float}→{len(float_dims)}, binary {orig_binary}→{len(binary_dims)}")
 
     n_float = len(float_dims)
     n_binary = len(binary_dims)
-    n_cat = len(cat_dims)
 
-    log.info(f"Dims: {n_float} float + {n_binary} binary + {n_cat} categorical = {n_float + n_binary + n_cat}")
-    for cat in cat_dims:
-        log.info(f"  {cat['name']}: {len(cat['classes'])} clases → {cat['classes']}")
+    log.info(f"Dims: {n_float} float + {n_binary} binary = {n_float + n_binary} total")
+    log.info(f"  Float dims incluyen posicion_R/P/I: {all(d in float_dims for d in ['posicion_R', 'posicion_P', 'posicion_I'])}")
+
+    # ── Validar features dormidas ────────────────────────────────────────
+    if args.kd_teacher_logits:
+        log.warning("⚠ KD está DORMIDA. Se aceptan los args pero NO se aplica KD loss todavía.")
+        log.warning("  Para activar: implementar KDLoss en el training loop (ver TODO abajo).")
+
+    if args.layer_heads:
+        log.warning("⚠ Layer heads (Arquitectura C) está DORMIDA. Se ignora --layer-heads.")
+        log.warning("  Para activar: reemplazar MultiHeadDetectorV2 por LayerHeadDetector.")
 
     # ── Cargar datos ──────────────────────────────────────────────────────
     all_data = load_data(args.labels)
@@ -565,9 +627,9 @@ def main():
     # ── Tokenizer y datasets ──────────────────────────────────────────────
     tokenizer = AutoTokenizer.from_pretrained(args.model)
 
-    train_ds = LabeledTextDatasetV2(train_data, tokenizer, float_dims, binary_dims, cat_dims, train_spans, args.max_length)
-    val_ds = LabeledTextDatasetV2(val_data, tokenizer, float_dims, binary_dims, cat_dims, val_spans, args.max_length)
-    test_ds = LabeledTextDatasetV2(test_data, tokenizer, float_dims, binary_dims, cat_dims, test_spans, args.max_length)
+    train_ds = LabeledTextDatasetV2(train_data, tokenizer, float_dims, binary_dims, train_spans, args.max_length)
+    val_ds = LabeledTextDatasetV2(val_data, tokenizer, float_dims, binary_dims, val_spans, args.max_length)
+    test_ds = LabeledTextDatasetV2(test_data, tokenizer, float_dims, binary_dims, test_spans, args.max_length)
 
     train_loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True, num_workers=0, pin_memory=True)
     val_loader = DataLoader(val_ds, batch_size=args.batch_size, shuffle=False, num_workers=0)
@@ -575,24 +637,81 @@ def main():
 
     # ── Modelo ────────────────────────────────────────────────────────────
     model = MultiHeadDetectorV2(
-        args.model, n_float, n_binary, cat_dims,
+        args.model, n_float, n_binary,
         span_dim=actual_span_dim, dropout=args.dropout
     )
+
+    # ── LoRA (opcional) ──────────────────────────────────────────────────
+    if args.lora:
+        if not HAS_PEFT:
+            log.error("--lora requiere peft. pip install peft")
+            sys.exit(1)
+
+        # Auto-detect target modules para DeBERTa
+        if args.lora_target_modules:
+            target_modules = [m.strip() for m in args.lora_target_modules.split(",")]
+        else:
+            # DeBERTa-v3 usa query_proj, key_proj, value_proj en disentangled attention
+            target_modules = ["query_proj", "key_proj", "value_proj"]
+
+        lora_config = LoraConfig(
+            r=args.lora_r,
+            lora_alpha=args.lora_alpha,
+            lora_dropout=args.lora_dropout,
+            target_modules=target_modules,
+            bias="none",
+            modules_to_save=["float_head", "binary_head", "projection"],  # heads se entrenan full
+        )
+        model = get_peft_model(model, lora_config)
+        log.info(f"LoRA activado: r={args.lora_r}, alpha={args.lora_alpha}, "
+                 f"targets={target_modules}")
+        model.print_trainable_parameters()
+    else:
+        log.info("LoRA desactivado (full fine-tune)")
+
     model.to(device)
 
     total_params = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
     log.info(f"Params: {total_params:,} total, {trainable:,} entrenables")
 
+    # ── Calcular pos_weight para binary dims (weighted BCE) ──────────────
+    log.info("Calculando pos_weight para dims binarias desde training data...")
+    pos_counts = np.zeros(n_binary)
+    neg_counts = np.zeros(n_binary)
+    for item in train_data:
+        labels = item.get("labels", {})
+        for i, dim_name in enumerate(binary_dims):
+            val = float(labels.get(dim_name, 0.0) or 0.0)
+            if val >= 0.5:
+                pos_counts[i] += 1
+            else:
+                neg_counts[i] += 1
+
+    # pos_weight = neg_count / pos_count (clamped para evitar extremos)
+    pos_weight = np.ones(n_binary)
+    for i in range(n_binary):
+        if pos_counts[i] > 0:
+            pw = neg_counts[i] / pos_counts[i]
+            pos_weight[i] = min(max(pw, 0.5), 20.0)  # clamp [0.5, 20]
+            log.info(f"  {binary_dims[i]}: pos={int(pos_counts[i])}, neg={int(neg_counts[i])}, "
+                     f"pos_weight={pos_weight[i]:.2f}")
+        else:
+            log.warning(f"  {binary_dims[i]}: 0 positivos en train — pos_weight=1.0")
+
+    pos_weight_tensor = torch.tensor(pos_weight, dtype=torch.float32).to(device)
+
     # ── Optimizer, scheduler, losses ──────────────────────────────────────
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.01)
+    optimizer = torch.optim.AdamW(
+        filter(lambda p: p.requires_grad, model.parameters()),
+        lr=args.lr, weight_decay=0.01,
+    )
     total_steps = len(train_loader) * args.epochs // args.grad_accum
     warmup_steps = int(total_steps * args.warmup_ratio)
     scheduler = get_cosine_schedule_with_warmup(optimizer, warmup_steps, total_steps)
 
     mse_fn = nn.MSELoss()
-    bce_fn = nn.BCELoss()
-    ce_fn = nn.CrossEntropyLoss()
+    bce_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight_tensor)  # weighted BCE con logits
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -602,10 +721,15 @@ def main():
         wandb.init(project=args.wandb_project, name=args.wandb_name, config={
             "model": args.model, "epochs": args.epochs, "lr": args.lr,
             "batch_size": args.batch_size, "n_float": n_float,
-            "n_binary": n_binary, "n_cat": n_cat, "span_features": use_spans,
+            "n_binary": n_binary, "span_features": use_spans,
             "span_dim": actual_span_dim, "loss_alpha": args.loss_alpha,
-            "loss_beta": args.loss_beta, "loss_gamma": args.loss_gamma,
+            "loss_beta": args.loss_beta,
+            "lora": args.lora, "lora_r": args.lora_r if args.lora else None,
+            "lora_alpha": args.lora_alpha if args.lora else None,
+            "curriculum_phase": args.curriculum_phase,
+            "weighted_bce": True, "pos_weight_range": f"[{pos_weight.min():.1f}, {pos_weight.max():.1f}]",
             "train_size": len(train_data), "val_size": len(val_data),
+            "version": "v2.2_lora_curriculum_wbce",
         })
 
     # ── Training loop ─────────────────────────────────────────────────────
@@ -615,11 +739,11 @@ def main():
     start_time = time.time()
 
     log.info(f"Training: {args.epochs} epochs, {total_steps} steps, "
-             f"loss weights: α={args.loss_alpha} β={args.loss_beta} γ={args.loss_gamma}")
+             f"loss weights: α={args.loss_alpha} β={args.loss_beta}")
 
     for epoch in range(args.epochs):
         model.train()
-        ep_loss = ep_f = ep_b = ep_c = 0.0
+        ep_loss = ep_f = ep_b = 0.0
         n_batches = 0
 
         for batch_idx, batch in enumerate(train_loader):
@@ -627,22 +751,14 @@ def main():
             mask = batch["attention_mask"].to(device)
             fl = batch["float_labels"].to(device)
             bl = batch["binary_labels"].to(device)
-            cl = batch["cat_labels"].to(device)
             spans = batch["span_features"].to(device)
 
-            fo, bo, co = model(ids, mask, spans)
+            fo, bo = model(ids, mask, spans)
 
             loss_f = mse_fn(fo, fl)
             loss_b = bce_fn(bo, bl)
 
-            # CE para cada dim categorical
-            loss_c = torch.tensor(0.0, device=device)
-            for i, logits in enumerate(co):
-                loss_c = loss_c + ce_fn(logits, cl[:, i])
-            if len(co) > 0:
-                loss_c = loss_c / len(co)
-
-            loss = args.loss_alpha * loss_f + args.loss_beta * loss_b + args.loss_gamma * loss_c
+            loss = args.loss_alpha * loss_f + args.loss_beta * loss_b
             loss = loss / args.grad_accum
             loss.backward()
 
@@ -658,14 +774,12 @@ def main():
                         "train/loss": loss.item() * args.grad_accum,
                         "train/loss_float": loss_f.item(),
                         "train/loss_binary": loss_b.item(),
-                        "train/loss_cat": loss_c.item(),
                         "train/lr": scheduler.get_last_lr()[0],
                     })
 
             ep_loss += loss.item() * args.grad_accum
             ep_f += loss_f.item()
             ep_b += loss_b.item()
-            ep_c += loss_c.item()
             n_batches += 1
 
         # ── Validación ────────────────────────────────────────────────────
@@ -678,46 +792,45 @@ def main():
                 mask = batch["attention_mask"].to(device)
                 fl = batch["float_labels"].to(device)
                 bl = batch["binary_labels"].to(device)
-                cl = batch["cat_labels"].to(device)
                 spans = batch["span_features"].to(device)
 
-                fo, bo, co = model(ids, mask, spans)
+                fo, bo = model(ids, mask, spans)
                 lf = mse_fn(fo, fl)
                 lb = bce_fn(bo, bl)
-                lc = torch.tensor(0.0, device=device)
-                for i, logits in enumerate(co):
-                    lc = lc + ce_fn(logits, cl[:, i])
-                if len(co) > 0:
-                    lc = lc / len(co)
 
-                val_loss += (args.loss_alpha * lf + args.loss_beta * lb + args.loss_gamma * lc).item()
+                val_loss += (args.loss_alpha * lf + args.loss_beta * lb).item()
                 val_n += 1
 
         avg_val_loss = val_loss / val_n if val_n > 0 else float("inf")
-        val_metrics = compute_metrics_v2(model, val_loader, float_dims, binary_dims, cat_dims, device)
+        val_metrics = compute_metrics_v2(model, val_loader, float_dims, binary_dims, device, dim_difficulty)
 
         log.info(
             f"Epoch {epoch+1}/{args.epochs} — "
             f"train={ep_loss/n_batches:.4f} val={avg_val_loss:.4f} "
             f"corr={val_metrics['corr_global']:.3f} "
             f"f1={val_metrics['f1_global']:.3f} "
-            f"acc={val_metrics['acc_global']:.3f} "
             f"mae={val_metrics['mae_global']:.3f}"
         )
 
         if HAS_WANDB and args.wandb_name:
-            wandb.log({"epoch": epoch+1, "val/loss": avg_val_loss,
+            log_dict = {"epoch": epoch+1, "val/loss": avg_val_loss,
                        "val/corr_global": val_metrics["corr_global"],
                        "val/f1_global": val_metrics["f1_global"],
-                       "val/acc_global": val_metrics["acc_global"],
-                       "val/mae_global": val_metrics["mae_global"]})
+                       "val/mae_global": val_metrics["mae_global"]}
+            if "p48_compliance" in val_metrics:
+                log_dict["val/p48_compliance"] = val_metrics["p48_compliance"]
+            for group in ["easy", "medium", "hard"]:
+                key = f"group_{group}_mean"
+                if key in val_metrics:
+                    log_dict[f"val/{key}"] = val_metrics[key]
+            wandb.log(log_dict)
 
         # Checkpoint
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             patience_counter = 0
             ckpt = output_dir / "best_model.pt"
-            torch.save({
+            save_dict = {
                 "epoch": epoch + 1,
                 "model_state_dict": model.state_dict(),
                 "val_loss": avg_val_loss,
@@ -726,10 +839,16 @@ def main():
                     "model_name": args.model,
                     "n_float": n_float, "n_binary": n_binary,
                     "float_dims": float_dims, "binary_dims": binary_dims,
-                    "cat_dims": cat_dims, "span_dim": actual_span_dim,
+                    "span_dim": actual_span_dim,
                     "dropout": args.dropout,
+                    "lora": args.lora,
+                    "lora_r": args.lora_r if args.lora else None,
+                    "curriculum_phase": args.curriculum_phase,
+                    "pos_weight": pos_weight.tolist(),
+                    "version": "v2.2_lora_curriculum_wbce",
                 },
-            }, ckpt)
+            }
+            torch.save(save_dict, ckpt)
             log.info(f"  Best → {ckpt} (val_loss={avg_val_loss:.4f})")
         else:
             patience_counter += 1
@@ -741,12 +860,12 @@ def main():
     log.info("Evaluando test set con mejor checkpoint...")
     ckpt = torch.load(output_dir / "best_model.pt", map_location=device, weights_only=False)
     model.load_state_dict(ckpt["model_state_dict"])
-    test_metrics = compute_metrics_v2(model, test_loader, float_dims, binary_dims, cat_dims, device)
+    test_metrics = compute_metrics_v2(model, test_loader, float_dims, binary_dims, device, dim_difficulty)
 
     total_time = time.time() - start_time
 
     final = {
-        "experiment": args.wandb_name or "v2",
+        "experiment": args.wandb_name or "v2.1",
         "model": args.model,
         "epochs_run": epoch + 1,
         "best_epoch": ckpt["epoch"],
@@ -758,19 +877,37 @@ def main():
         "span_features": use_spans,
         "total_time_s": round(total_time, 1),
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "version": "v2.1_no_categoricals",
     }
 
     (output_dir / "final_metrics.json").write_text(
         json.dumps(final, indent=2, ensure_ascii=False))
 
     log.info(f"\n{'='*60}")
-    log.info(f"RESULTADOS v2")
+    log.info(f"RESULTADOS v2.2 (LoRA + curriculum + weighted BCE)")
     log.info(f"{'='*60}")
     log.info(f"  corr_global:  {test_metrics['corr_global']:.3f}  (target: >0.35)")
     log.info(f"  f1_global:    {test_metrics['f1_global']:.3f}  (target: >0.50)")
-    log.info(f"  acc_global:   {test_metrics['acc_global']:.3f}  (target: >0.70)")
     log.info(f"  mae_global:   {test_metrics['mae_global']:.3f}")
     log.info(f"  Tiempo:       {total_time/60:.1f} min")
+    log.info(f"  LoRA:         {'ON (r={})'.format(args.lora_r) if args.lora else 'OFF'}")
+    log.info(f"  Curriculum:   {f'phase {args.curriculum_phase}' if args.curriculum_phase else 'OFF'}")
+    log.info(f"  Weighted BCE: ON (range [{pos_weight.min():.1f}, {pos_weight.max():.1f}])")
+
+    # Métricas por grupo de dificultad
+    for group in ["easy", "medium", "hard"]:
+        key = f"group_{group}_mean"
+        if key in test_metrics:
+            log.info(f"  {group:8s}:     {test_metrics[key]:.3f}  ({test_metrics[f'group_{group}_count']} dims)")
+
+    # Posicion R/P/I
+    log.info(f"\n  Posicion R/P/I:")
+    for rpi in ["posicion_R", "posicion_P", "posicion_I"]:
+        corr = test_metrics.get(f"corr/{rpi}", "N/A")
+        mean = test_metrics.get(f"mean/{rpi}", "N/A")
+        log.info(f"    {rpi}: corr={corr}, mean={mean}")
+    if "p48_compliance" in test_metrics:
+        log.info(f"    P48 compliance (I>0.1 → R>0.1 or P>0.1): {test_metrics['p48_compliance']:.1%}")
 
     # Top dims
     log.info(f"\n  Top correlaciones:")
@@ -778,19 +915,118 @@ def main():
     for k, v in sorted(corr_dims.items(), key=lambda x: -x[1])[:10]:
         log.info(f"    {k}: {v:.3f}")
 
-    log.info(f"\n  Accuracy categoricals:")
-    for cat in cat_dims:
-        acc = test_metrics.get(f"acc/{cat['name']}", 0)
-        log.info(f"    {cat['name']}: {acc:.3f}")
-
     if HAS_WANDB and args.wandb_name:
         wandb.log({"test/corr_global": test_metrics["corr_global"],
-                   "test/f1_global": test_metrics["f1_global"],
-                   "test/acc_global": test_metrics["acc_global"]})
+                   "test/f1_global": test_metrics["f1_global"]})
+        if "p48_compliance" in test_metrics:
+            wandb.log({"test/p48_compliance": test_metrics["p48_compliance"]})
         wandb.finish()
 
     log.info(f"\nCheckpoint: {output_dir / 'best_model.pt'}")
     log.info(f"Métricas: {output_dir / 'final_metrics.json'}")
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# DORMIDAS — Preparadas para activar cuando toque
+# ══════════════════════════════════════════════════════════════════════════
+
+
+class KDLoss(nn.Module):
+    """[DORMIDA] Knowledge Distillation loss.
+
+    Combina task loss con soft-target loss del teacher (Opus).
+    Para activar: cargar teacher_logits desde --kd-teacher-logits y añadir
+    al training loop como:
+        kd_loss = kd_fn(student_logits, teacher_logits_batch)
+        total_loss = (1-kd_alpha) * task_loss + kd_alpha * kd_loss
+
+    Ref: KD-LoRA (arxiv.org/abs/2410.20777) — evaluado en DeBERTa-v3.
+    """
+
+    def __init__(self, temperature: float = 2.0):
+        super().__init__()
+        self.temperature = temperature
+        self.kl_div = nn.KLDivLoss(reduction="batchmean")
+
+    def forward(self, student_logits: torch.Tensor, teacher_logits: torch.Tensor) -> torch.Tensor:
+        """Calcula KL divergence entre softened distributions."""
+        T = self.temperature
+        student_soft = nn.functional.log_softmax(student_logits / T, dim=-1)
+        teacher_soft = nn.functional.softmax(teacher_logits / T, dim=-1)
+        return self.kl_div(student_soft, teacher_soft) * (T * T)
+
+
+class LayerHeadDetector(nn.Module):
+    """[DORMIDA] Arquitectura C — Heads en capas intermedias de DeBERTa.
+
+    En lugar de solo usar CLS del último layer, extrae representaciones
+    de capas 6, 12, 18, 24 y asigna diferentes dims a cada head.
+
+    Para activar:
+    1. Crear layer_heads_config.json: {"6": ["dim1", "dim2"], "12": [...], ...}
+    2. Reemplazar MultiHeadDetectorV2 por LayerHeadDetector en main()
+    3. Usar --layer-heads --layer-heads-config path/to/config.json
+
+    Ref: 28 papers validan que layer-specific heads mejoran 1-4 F1.
+    DeBERTa layers: 1-6 (sintaxis), 7-12 (semántica local), 13-18
+    (semántica global), 19-24 (pragmática/discurso).
+    """
+
+    def __init__(
+        self,
+        model_name: str,
+        layer_dims_config: dict[int, list[str]],
+        span_dim: int = SPAN_DIM,
+        dropout: float = 0.1,
+    ):
+        super().__init__()
+        self.backbone = AutoModel.from_pretrained(model_name, output_hidden_states=True)
+        hidden_size = self.backbone.config.hidden_size
+        self.dropout = nn.Dropout(dropout)
+
+        # Un head por layer group
+        self.layer_heads = nn.ModuleDict()
+        self.layer_dims = OrderedDict()  # layer_idx → list of dim names
+
+        for layer_idx_str, dim_names in layer_dims_config.items():
+            layer_idx = int(layer_idx_str)
+            n_dims = len(dim_names)
+            self.layer_dims[layer_idx] = dim_names
+
+            # Projection + head
+            self.layer_heads[str(layer_idx)] = nn.Sequential(
+                nn.Linear(hidden_size + span_dim, hidden_size),
+                nn.GELU(),
+                nn.Dropout(dropout),
+                nn.Linear(hidden_size, n_dims),
+            )
+
+        total_dims = sum(len(d) for d in self.layer_dims.values())
+        log.info(f"LayerHeadDetector: {len(self.layer_dims)} heads, {total_dims} dims total")
+        for layer_idx, dims in self.layer_dims.items():
+            log.info(f"  Layer {layer_idx}: {len(dims)} dims")
+
+    def forward(self, input_ids, attention_mask, span_features):
+        outputs = self.backbone(input_ids=input_ids, attention_mask=attention_mask)
+        hidden_states = outputs.hidden_states  # tuple of (batch, seq_len, hidden)
+
+        all_logits = []
+        for layer_idx in self.layer_dims:
+            # CLS token de la capa específica
+            layer_cls = hidden_states[layer_idx][:, 0, :]
+            combined = torch.cat([layer_cls, span_features], dim=1)
+            logits = self.layer_heads[str(layer_idx)](combined)
+            all_logits.append(logits)
+
+        # Concatenar todos los logits de todas las capas
+        return torch.cat(all_logits, dim=-1)
+
+    def get_dim_order(self) -> list[str]:
+        """Retorna la lista ordenada de dims como salen del forward."""
+        order = []
+        for dims in self.layer_dims.values():
+            order.extend(dims)
+        return order
 
 
 if __name__ == "__main__":
