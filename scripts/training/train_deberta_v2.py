@@ -1,40 +1,33 @@
 #!/usr/bin/env python3
 """
-OMNI-MIND Detector v2.1 — Entrenamiento DeBERTa 2-head + spans
-================================================================
-Evolución post-P48: categoricals eliminados. R/P/I son 3 floats independientes.
+OMNI-MIND Detector v2.3 — DeBERTa multi-head + research-backed improvements
+=============================================================================
+v2.3 (04-Apr-2026): Quick wins from deep research (35+ papers).
 
-Cambios vs v2.0:
-  - CATEGORICAL HEAD ELIMINADA (P48: R,P son partes de I, no clases excluyentes)
-  - posicion_R, posicion_P, posicion_I ahora son floats en float_dims
-  - DUAL LOSS: alpha×MSE + beta×BCE (no gamma×CE)
-  - Restriccion ontologica verificable post-training: I>0 implica R>0 o P>0
+Features activas:
+  - Mean pooling (Paper: Pool Me Wisely, NeurIPS 2025) — reemplaza CLS-only
+  - Huber loss (SmoothL1) — robusto a outliers en labels de Opus
+  - Relational loss (Paper: RRD 2024) — matchea relaciones entre textos
+  - Label smoothing binarios — 0.05/0.95 en vez de 0/1
+  - Log-transform de losses — normaliza escala entre dims
+  - Weighted BCE con pos_weight — fix F1_binary=0.0
+  - LoRA/PEFT — reduce params entrenables
+  - Curriculum learning — training por fases de dificultad
 
-2 heads:
-  1. FLOAT HEAD: sigmoid → MSE loss (38 dims originales + 3 posicion R/P/I + profundidad)
-  2. BINARY HEAD: sigmoid → BCE loss (10 sesgos cognitivos)
+Dormidas:
+  - KD Loss (Knowledge Distillation con temperature)
+  - LayerHeadDetector (Architecture C: heads en capas 6/12/18/24)
+  - LoRA rank adaptivo por bloque (4/8/12/16)
 
 Uso:
   python train_deberta_v2.py \\
       --labels data/gold_set_v2_3000.jsonl \\
       --dims configs/v2_51_dims.json \\
       --output-dir experiments/v2/checkpoints \\
-      --epochs 15 \\
-      --lr 2e-5 \\
-      --batch-size 8 \\
-      --wandb-name v2.1_3000
-
-Arquitectura:
-  Texto
-    ↓
-  spaCy → span_features (n_sujetos, n_adjetivales, n_adverbiales, ...)
-    ↓
-  DeBERTa → CLS token (768d)
-    ↓
-  [CLS ⊕ span_features] (768 + span_dim)
-    ↓
-  ├── Float head:  Linear → sigmoid → MSE loss
-  └── Binary head: Linear → sigmoid → BCE loss
+      --epochs 15 --lr 2e-5 --batch-size 8 \\
+      --lora --pooling mean --float-loss huber \\
+      --relational-loss --label-smoothing 0.05 \\
+      --wandb-name v2.3_research
 """
 
 from __future__ import annotations
@@ -278,9 +271,8 @@ class LabeledTextDatasetV2(Dataset):
 
 class MultiHeadDetectorV2(nn.Module):
     """
-    DeBERTa con 2 cabezas (P48: sin categorical head):
-      - Float head:  Linear(hidden + span_dim, n_float) + sigmoid
-      - Binary head: Linear(hidden + span_dim, n_binary) + sigmoid
+    DeBERTa con 2 cabezas + pooling configurable.
+    Pooling options: cls, mean, max, cls+mean (Paper: Pool Me Wisely, NeurIPS 2025)
     """
 
     def __init__(
@@ -290,43 +282,69 @@ class MultiHeadDetectorV2(nn.Module):
         n_binary: int,
         span_dim: int = SPAN_DIM,
         dropout: float = 0.1,
+        pooling: str = "mean",
     ):
         super().__init__()
         self.backbone = AutoModel.from_pretrained(model_name)
         hidden_size = self.backbone.config.hidden_size
-        combined_size = hidden_size + span_dim
+        self.pooling = pooling
+
+        # cls+mean concatena ambos → 2x hidden
+        pool_size = hidden_size * 2 if pooling == "cls+mean" else hidden_size
+        combined_size = pool_size + span_dim
 
         self.dropout = nn.Dropout(dropout)
 
-        # Projection layer para combinar CLS + spans
+        # Projection layer
         self.projection = nn.Sequential(
             nn.Linear(combined_size, hidden_size),
             nn.GELU(),
             nn.Dropout(dropout),
         )
 
-        # Float head
         self.float_head = nn.Linear(hidden_size, n_float)
-
-        # Binary head
         self.binary_head = nn.Linear(hidden_size, n_binary)
 
-        # Init
         for head in [self.float_head, self.binary_head]:
             nn.init.xavier_uniform_(head.weight)
             nn.init.zeros_(head.bias)
 
+    def _pool(self, last_hidden_state, attention_mask):
+        """Pooling strategy over encoder output."""
+        if self.pooling == "cls":
+            return last_hidden_state[:, 0, :]
+        elif self.pooling == "mean":
+            # Mean pooling con attention mask (ignora padding)
+            mask_expanded = attention_mask.unsqueeze(-1).float()  # (B, seq, 1)
+            sum_hidden = (last_hidden_state * mask_expanded).sum(dim=1)
+            sum_mask = mask_expanded.sum(dim=1).clamp(min=1e-9)
+            return sum_hidden / sum_mask
+        elif self.pooling == "max":
+            mask_expanded = attention_mask.unsqueeze(-1).float()
+            # Set padding to large negative for max
+            hidden = last_hidden_state.clone()
+            hidden[mask_expanded.squeeze(-1) == 0] = -1e9
+            return hidden.max(dim=1).values
+        elif self.pooling == "cls+mean":
+            cls_out = last_hidden_state[:, 0, :]
+            mask_expanded = attention_mask.unsqueeze(-1).float()
+            sum_hidden = (last_hidden_state * mask_expanded).sum(dim=1)
+            sum_mask = mask_expanded.sum(dim=1).clamp(min=1e-9)
+            mean_out = sum_hidden / sum_mask
+            return torch.cat([cls_out, mean_out], dim=-1)
+        else:
+            raise ValueError(f"Unknown pooling: {self.pooling}")
+
     def forward(self, input_ids, attention_mask, span_features):
         outputs = self.backbone(input_ids=input_ids, attention_mask=attention_mask)
-        cls_output = outputs.last_hidden_state[:, 0, :]  # CLS token
+        pooled = self._pool(outputs.last_hidden_state, attention_mask)
 
-        # Concatenar span features al CLS
-        combined = torch.cat([cls_output, span_features], dim=1)
+        combined = torch.cat([pooled, span_features], dim=1)
         combined = self.projection(combined)
         combined = self.dropout(combined)
 
         float_out = torch.sigmoid(self.float_head(combined))
-        binary_logits = self.binary_head(combined)  # raw logits para BCEWithLogitsLoss
+        binary_logits = self.binary_head(combined)
 
         return float_out, binary_logits
 
@@ -484,6 +502,54 @@ def get_cosine_schedule_with_warmup(optimizer, num_warmup_steps, num_training_st
     return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda)
 
 
+class RelationalLoss(nn.Module):
+    """Relational Representation Distillation loss (RRD, 2024).
+
+    Matchea la estructura relacional entre ejemplos de un batch:
+    si Opus dice que texto A y B son similares en dims, DeBERTa debe
+    mantener esa relación. Más robusto que MSE cuando los valores
+    absolutos son ruidosos pero las relaciones entre textos son estables.
+    """
+
+    def __init__(self, temperature: float = 1.0):
+        super().__init__()
+        self.temperature = temperature
+
+    def forward(self, student_out: torch.Tensor, teacher_labels: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            student_out: (batch, n_dims) predicciones del modelo
+            teacher_labels: (batch, n_dims) labels de Opus
+        Returns:
+            KL divergence entre distribuciones de similitud pairwise
+        """
+        if student_out.shape[0] < 2:
+            return torch.tensor(0.0, device=student_out.device)
+
+        # Pairwise cosine similarity matrices
+        s_norm = nn.functional.normalize(student_out, dim=-1)
+        t_norm = nn.functional.normalize(teacher_labels, dim=-1)
+
+        s_sim = torch.mm(s_norm, s_norm.t()) / self.temperature
+        t_sim = torch.mm(t_norm, t_norm.t()) / self.temperature
+
+        # Softmax → distribuciones
+        s_dist = nn.functional.log_softmax(s_sim, dim=-1)
+        t_dist = nn.functional.softmax(t_sim, dim=-1)
+
+        # KL divergence
+        return nn.functional.kl_div(s_dist, t_dist, reduction="batchmean")
+
+
+def smooth_binary_labels(labels: torch.Tensor, smoothing: float = 0.05) -> torch.Tensor:
+    """Label smoothing para targets binarios: 0→smoothing, 1→(1-smoothing).
+
+    Paper: Robust Classification via Regression (ICLR 2024) demuestra que
+    targets suavizados son más robustos al ruido en labels.
+    """
+    return labels * (1.0 - 2 * smoothing) + smoothing
+
+
 # ── Main ──────────────────────────────────────────────────────────────────
 
 def main():
@@ -507,6 +573,23 @@ def main():
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--warmup-ratio", type=float, default=0.1)
     parser.add_argument("--no-spans", action="store_true", help="Desactivar span features")
+    # ── Research quick wins ──
+    parser.add_argument("--pooling", default="mean", choices=["cls", "mean", "max", "cls+mean"],
+                        help="Pooling strategy (default: mean — Paper: Pool Me Wisely NeurIPS 2025)")
+    parser.add_argument("--float-loss", default="huber", choices=["mse", "huber"],
+                        help="Float loss function (default: huber — robusto a outliers)")
+    parser.add_argument("--huber-delta", type=float, default=0.1,
+                        help="Huber loss delta (default: 0.1)")
+    parser.add_argument("--relational-loss", action="store_true",
+                        help="Activar relational loss (Paper: RRD 2024)")
+    parser.add_argument("--relational-weight", type=float, default=0.1,
+                        help="Peso del relational loss (default: 0.1)")
+    parser.add_argument("--label-smoothing", type=float, default=0.05,
+                        help="Label smoothing para binarios: 0→s, 1→(1-s) (default: 0.05, 0=off)")
+    parser.add_argument("--log-loss", action="store_true", default=True,
+                        help="Log-transform losses antes de combinar (Paper: DB-MTL ICLR 2024)")
+    parser.add_argument("--no-log-loss", action="store_true",
+                        help="Desactivar log-transform de losses")
     # ── LoRA ──
     parser.add_argument("--lora", action="store_true", help="Activar LoRA sobre backbone (requiere peft)")
     parser.add_argument("--lora-r", type=int, default=16, help="LoRA rank (default: 16)")
@@ -638,8 +721,10 @@ def main():
     # ── Modelo ────────────────────────────────────────────────────────────
     model = MultiHeadDetectorV2(
         args.model, n_float, n_binary,
-        span_dim=actual_span_dim, dropout=args.dropout
+        span_dim=actual_span_dim, dropout=args.dropout,
+        pooling=args.pooling,
     )
+    log.info(f"Pooling: {args.pooling}")
 
     # ── LoRA (opcional) ──────────────────────────────────────────────────
     if args.lora:
@@ -710,8 +795,26 @@ def main():
     warmup_steps = int(total_steps * args.warmup_ratio)
     scheduler = get_cosine_schedule_with_warmup(optimizer, warmup_steps, total_steps)
 
-    mse_fn = nn.MSELoss()
-    bce_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight_tensor)  # weighted BCE con logits
+    # Float loss: Huber (default) o MSE
+    if args.float_loss == "huber":
+        float_loss_fn = nn.SmoothL1Loss(beta=args.huber_delta)
+        log.info(f"Float loss: Huber (SmoothL1, delta={args.huber_delta})")
+    else:
+        float_loss_fn = nn.MSELoss()
+        log.info("Float loss: MSE")
+
+    bce_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight_tensor)
+
+    # Relational loss (Paper: RRD 2024)
+    rel_loss_fn = None
+    if args.relational_loss:
+        rel_loss_fn = RelationalLoss(temperature=1.0)
+        log.info(f"Relational loss: ON (weight={args.relational_weight})")
+
+    # Log-transform y label smoothing
+    use_log_loss = args.log_loss and not args.no_log_loss
+    log.info(f"Log-transform losses: {'ON' if use_log_loss else 'OFF'}")
+    log.info(f"Label smoothing (binary): {args.label_smoothing}")
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -728,8 +831,12 @@ def main():
             "lora_alpha": args.lora_alpha if args.lora else None,
             "curriculum_phase": args.curriculum_phase,
             "weighted_bce": True, "pos_weight_range": f"[{pos_weight.min():.1f}, {pos_weight.max():.1f}]",
+            "pooling": args.pooling, "float_loss": args.float_loss,
+            "huber_delta": args.huber_delta if args.float_loss == "huber" else None,
+            "relational_loss": args.relational_loss, "relational_weight": args.relational_weight,
+            "label_smoothing": args.label_smoothing, "log_loss": use_log_loss,
             "train_size": len(train_data), "val_size": len(val_data),
-            "version": "v2.2_lora_curriculum_wbce",
+            "version": "v2.3_research_quickwins",
         })
 
     # ── Training loop ─────────────────────────────────────────────────────
@@ -755,10 +862,27 @@ def main():
 
             fo, bo = model(ids, mask, spans)
 
-            loss_f = mse_fn(fo, fl)
-            loss_b = bce_fn(bo, bl)
+            # Float loss (Huber or MSE)
+            loss_f = float_loss_fn(fo, fl)
 
-            loss = args.loss_alpha * loss_f + args.loss_beta * loss_b
+            # Binary loss con label smoothing
+            bl_smooth = smooth_binary_labels(bl, args.label_smoothing) if args.label_smoothing > 0 else bl
+            loss_b = bce_fn(bo, bl_smooth)
+
+            # Log-transform (Paper: DB-MTL, ICLR 2024) — normaliza escala
+            if use_log_loss:
+                loss_f_combined = torch.log1p(loss_f)
+                loss_b_combined = torch.log1p(loss_b)
+            else:
+                loss_f_combined = loss_f
+                loss_b_combined = loss_b
+
+            loss = args.loss_alpha * loss_f_combined + args.loss_beta * loss_b_combined
+
+            # Relational loss (Paper: RRD 2024)
+            if rel_loss_fn is not None:
+                loss_rel = rel_loss_fn(fo, fl)
+                loss = loss + args.relational_weight * loss_rel
             loss = loss / args.grad_accum
             loss.backward()
 
@@ -770,12 +894,15 @@ def main():
                 global_step += 1
 
                 if HAS_WANDB and args.wandb_name and global_step % 10 == 0:
-                    wandb.log({
+                    step_log = {
                         "train/loss": loss.item() * args.grad_accum,
                         "train/loss_float": loss_f.item(),
                         "train/loss_binary": loss_b.item(),
                         "train/lr": scheduler.get_last_lr()[0],
-                    })
+                    }
+                    if rel_loss_fn is not None:
+                        step_log["train/loss_relational"] = loss_rel.item()
+                    wandb.log(step_log)
 
             ep_loss += loss.item() * args.grad_accum
             ep_f += loss_f.item()
@@ -795,8 +922,9 @@ def main():
                 spans = batch["span_features"].to(device)
 
                 fo, bo = model(ids, mask, spans)
-                lf = mse_fn(fo, fl)
-                lb = bce_fn(bo, bl)
+                bl_s = smooth_binary_labels(bl, args.label_smoothing) if args.label_smoothing > 0 else bl
+                lf = float_loss_fn(fo, fl)
+                lb = bce_fn(bo, bl_s)
 
                 val_loss += (args.loss_alpha * lf + args.loss_beta * lb).item()
                 val_n += 1
@@ -877,19 +1005,24 @@ def main():
         "span_features": use_spans,
         "total_time_s": round(total_time, 1),
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "version": "v2.1_no_categoricals",
+        "version": "v2.3_research_quickwins",
     }
 
     (output_dir / "final_metrics.json").write_text(
         json.dumps(final, indent=2, ensure_ascii=False))
 
     log.info(f"\n{'='*60}")
-    log.info(f"RESULTADOS v2.2 (LoRA + curriculum + weighted BCE)")
+    log.info(f"RESULTADOS v2.3 (research quick wins)")
     log.info(f"{'='*60}")
     log.info(f"  corr_global:  {test_metrics['corr_global']:.3f}  (target: >0.35)")
     log.info(f"  f1_global:    {test_metrics['f1_global']:.3f}  (target: >0.50)")
     log.info(f"  mae_global:   {test_metrics['mae_global']:.3f}")
     log.info(f"  Tiempo:       {total_time/60:.1f} min")
+    log.info(f"  Pooling:      {args.pooling}")
+    log.info(f"  Float loss:   {args.float_loss}" + (f" (delta={args.huber_delta})" if args.float_loss == "huber" else ""))
+    log.info(f"  Relational:   {'ON (w={})'.format(args.relational_weight) if args.relational_loss else 'OFF'}")
+    log.info(f"  Label smooth: {args.label_smoothing}")
+    log.info(f"  Log-loss:     {'ON' if use_log_loss else 'OFF'}")
     log.info(f"  LoRA:         {'ON (r={})'.format(args.lora_r) if args.lora else 'OFF'}")
     log.info(f"  Curriculum:   {f'phase {args.curriculum_phase}' if args.curriculum_phase else 'OFF'}")
     log.info(f"  Weighted BCE: ON (range [{pos_weight.min():.1f}, {pos_weight.max():.1f}])")
@@ -1027,6 +1160,56 @@ class LayerHeadDetector(nn.Module):
         for dims in self.layer_dims.values():
             order.extend(dims)
         return order
+
+
+def build_adaptive_lora_config(
+    lora_r_base: int = 8,
+    lora_alpha: int = 32,
+    lora_dropout: float = 0.05,
+    n_layers: int = 24,
+) -> dict:
+    """[DORMIDA] LoRA rank adaptivo por bloque de capas.
+
+    Papers: Act-LoRA (2024), ARD-LoRA (2025), DR-LoRA (2025).
+    Capas profundas necesitan +10.7% más rank (DR-LoRA).
+
+    Rank por bloque:
+      Capas  1-6  (sintaxis):  rank = r_base / 2
+      Capas  7-12 (semántica local):  rank = r_base
+      Capas 13-18 (semántica global): rank = r_base * 1.5
+      Capas 19-24 (pragmática):       rank = r_base * 2
+
+    Para activar: usar --lora-adaptive en lugar de --lora.
+    Requiere peft con layer-specific rank (peft >= 0.7).
+
+    Returns:
+        dict con rank_pattern para LoraConfig
+    """
+    rank_pattern = {}
+    for layer_idx in range(n_layers):
+        if layer_idx < 6:
+            r = max(4, lora_r_base // 2)
+        elif layer_idx < 12:
+            r = lora_r_base
+        elif layer_idx < 18:
+            r = int(lora_r_base * 1.5)
+        else:
+            r = lora_r_base * 2
+
+        for proj in ["query_proj", "key_proj", "value_proj"]:
+            rank_pattern[f"backbone.encoder.layer.{layer_idx}.attention.self.{proj}"] = r
+
+    log.info(f"LoRA rank adaptivo: 1-6={max(4, lora_r_base//2)}, 7-12={lora_r_base}, "
+             f"13-18={int(lora_r_base*1.5)}, 19-24={lora_r_base*2}")
+
+    return {
+        "r": lora_r_base,  # default rank
+        "lora_alpha": lora_alpha,
+        "lora_dropout": lora_dropout,
+        "target_modules": ["query_proj", "key_proj", "value_proj"],
+        "rank_pattern": rank_pattern,
+        "bias": "none",
+    }
 
 
 if __name__ == "__main__":
