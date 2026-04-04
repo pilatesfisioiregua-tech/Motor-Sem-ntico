@@ -1,0 +1,666 @@
+{
+  "poc_v1_metrics_recalc": {
+    "corr_global_simple_original": 0.1192,
+    "corr_global_median": 0.0494,
+    "corr_global_weighted_by_variance": 0.208,
+    "n_dims": 40,
+    "n_positive_corr_gt_03": 9,
+    "n_weak_corr_0_03": 18,
+    "n_negative_corr": 13,
+    "note_bootstrap": "SIN predicciones por muestra — Bootstrap requiere vectores pred/label originales",
+    "top_10_dims": [
+      {
+        "dim": "int_12_narrativa",
+        "pearson": 0.5352
+      },
+      {
+        "dim": "resp_sujeto_explicito",
+        "pearson": 0.5227
+      },
+      {
+        "dim": "tl_conductas",
+        "pearson": 0.4827
+      },
+      {
+        "dim": "fv_subjuntivo",
+        "pearson": 0.4806
+      },
+      {
+        "dim": "tl_interpretaciones",
+        "pearson": 0.4311
+      },
+      {
+        "dim": "verb_densidad",
+        "pearson": 0.4169
+      },
+      {
+        "dim": "foco_voz_activa",
+        "pearson": 0.4137
+      },
+      {
+        "dim": "disc_emocionalidad",
+        "pearson": 0.4129
+      },
+      {
+        "dim": "int_08_social",
+        "pearson": 0.4059
+      },
+      {
+        "dim": "sust_densidad",
+        "pearson": 0.2034
+      }
+    ],
+    "bottom_10_dims": [
+      {
+        "dim": "lente_sentido",
+        "pearson": -0.0254
+      },
+      {
+        "dim": "plano_auto",
+        "pearson": -0.0426
+      },
+      {
+        "dim": "modo_relacion",
+        "pearson": -0.0516
+      },
+      {
+        "dim": "acd_distancia_id_ir",
+        "pearson": -0.0708
+      },
+      {
+        "dim": "canal_visual",
+        "pearson": -0.0719
+      },
+      {
+        "dim": "cre_condicional",
+        "pearson": -0.0959
+      },
+      {
+        "dim": "fal_verbal",
+        "pearson": -0.1006
+      },
+      {
+        "dim": "adj_densidad",
+        "pearson": -0.1083
+      },
+      {
+        "dim": "nodo_rigidez",
+        "pearson": -0.1458
+      },
+      {
+        "dim": "fal_complejidad",
+        "pearson": -0.1598
+      }
+    ],
+    "overfitting_analysis": [
+      {
+        "dim": "fv_indicativo",
+        "train_corr": 0.6767,
+        "val_corr": -0.0172,
+        "delta": -0.6939,
+        "flag": "OVERFIT"
+      },
+      {
+        "dim": "inf_validez",
+        "train_corr": 0.4084,
+        "val_corr": 0.0626,
+        "delta": -0.3458,
+        "flag": "OVERFIT"
+      },
+      {
+        "dim": "foco_voz_activa",
+        "train_corr": 0.722,
+        "val_corr": 0.4137,
+        "delta": -0.3083,
+        "flag": "OVERFIT"
+      },
+      {
+        "dim": "verb_densidad",
+        "train_corr": 0.7021,
+        "val_corr": 0.4169,
+        "delta": -0.2852,
+        "flag": "OVERFIT"
+      },
+      {
+        "dim": "inf_causal",
+        "train_corr": 0.2659,
+        "val_corr": 0.0515,
+        "delta": -0.2144,
+        "flag": "OVERFIT"
+      },
+      {
+        "dim": "tl_conductas",
+        "train_corr": 0.6913,
+        "val_corr": 0.4827,
+        "delta": -0.2086,
+        "flag": "OVERFIT"
+      },
+      {
+        "dim": "disc_emocionalidad",
+        "train_corr": 0.6125,
+        "val_corr": 0.4129,
+        "delta": -0.1996,
+        "flag": "OK"
+      },
+      {
+        "dim": "acd_distancia_id_ir",
+        "train_corr": 0.1182,
+        "val_corr": -0.0708,
+        "delta": -0.189,
+        "flag": "OK"
+      },
+      {
+        "dim": "conj_pero",
+        "train_corr": 0.3025,
+        "val_corr": 0.1353,
+        "delta": -0.1672,
+        "flag": "OK"
+      },
+      {
+        "dim": "resp_sujeto_explicito",
+        "train_corr": 0.6749,
+        "val_corr": 0.5227,
+        "delta": -0.1522,
+        "flag": "OK"
+      },
+      {
+        "dim": "r_03_abduccion",
+        "train_corr": 0.129,
+        "val_corr": 0.011,
+        "delta": -0.118,
+        "flag": "OK"
+      },
+      {
+        "dim": "fal_verbal",
+        "train_corr": 0.0,
+        "val_corr": -0.1006,
+        "delta": -0.1006,
+        "flag": "OK"
+      },
+      {
+        "dim": "fal_complejidad",
+        "train_corr": -0.0829,
+        "val_corr": -0.1598,
+        "delta": -0.0769,
+        "flag": "OK"
+      },
+      {
+        "dim": "plano_auto",
+        "train_corr": 0.0292,
+        "val_corr": -0.0426,
+        "delta": -0.0718,
+        "flag": "OK"
+      },
+      {
+        "dim": "nodo_rigidez",
+        "train_corr": -0.0792,
+        "val_corr": -0.1458,
+        "delta": -0.0666,
+        "flag": "OK"
+      },
+      {
+        "dim": "lente_sentido",
+        "train_corr": 0.0397,
+        "val_corr": -0.0254,
+        "delta": -0.0651,
+        "flag": "OK"
+      },
+      {
+        "dim": "fv_subjuntivo",
+        "train_corr": 0.5327,
+        "val_corr": 0.4806,
+        "delta": -0.0521,
+        "flag": "OK"
+      },
+      {
+        "dim": "tl_interpretaciones",
+        "train_corr": 0.4807,
+        "val_corr": 0.4311,
+        "delta": -0.0496,
+        "flag": "OK"
+      },
+      {
+        "dim": "r_05_causal",
+        "train_corr": 0.0805,
+        "val_corr": 0.0348,
+        "delta": -0.0457,
+        "flag": "OK"
+      },
+      {
+        "dim": "r_01_deduccion",
+        "train_corr": 0.1473,
+        "val_corr": 0.1021,
+        "delta": -0.0452,
+        "flag": "OK"
+      },
+      {
+        "dim": "adj_densidad",
+        "train_corr": -0.0686,
+        "val_corr": -0.1083,
+        "delta": -0.0397,
+        "flag": "OK"
+      },
+      {
+        "dim": "int_08_social",
+        "train_corr": 0.4385,
+        "val_corr": 0.4059,
+        "delta": -0.0326,
+        "flag": "OK"
+      },
+      {
+        "dim": "plano_ref",
+        "train_corr": 0.136,
+        "val_corr": 0.1181,
+        "delta": -0.0179,
+        "flag": "OK"
+      },
+      {
+        "dim": "canal_visual",
+        "train_corr": -0.062,
+        "val_corr": -0.0719,
+        "delta": -0.0099,
+        "flag": "OK"
+      },
+      {
+        "dim": "p_03_critico",
+        "train_corr": 0.0259,
+        "val_corr": 0.0396,
+        "delta": 0.0137,
+        "flag": "OK"
+      },
+      {
+        "dim": "cre_condicional",
+        "train_corr": -0.112,
+        "val_corr": -0.0959,
+        "delta": 0.0161,
+        "flag": "OK"
+      },
+      {
+        "dim": "p_02_sistemico",
+        "train_corr": -0.0027,
+        "val_corr": 0.0342,
+        "delta": 0.0369,
+        "flag": "OK"
+      },
+      {
+        "dim": "cre_sustantiva",
+        "train_corr": 0.0782,
+        "val_corr": 0.1294,
+        "delta": 0.0512,
+        "flag": "OK"
+      },
+      {
+        "dim": "eval_brecha_como_problema",
+        "train_corr": 0.0,
+        "val_corr": 0.0592,
+        "delta": 0.0592,
+        "flag": "OK"
+      },
+      {
+        "dim": "gob_declarada_vs_ejecutada",
+        "train_corr": -0.0843,
+        "val_corr": -0.0088,
+        "delta": 0.0755,
+        "flag": "OK"
+      },
+      {
+        "dim": "modo_relacion",
+        "train_corr": -0.1386,
+        "val_corr": -0.0516,
+        "delta": 0.087,
+        "flag": "OK"
+      },
+      {
+        "dim": "adv_modo",
+        "train_corr": 0.0904,
+        "val_corr": 0.1809,
+        "delta": 0.0905,
+        "flag": "OK"
+      },
+      {
+        "dim": "canal_kinestesico",
+        "train_corr": 0.0386,
+        "val_corr": 0.1819,
+        "delta": 0.1433,
+        "flag": "OK"
+      },
+      {
+        "dim": "fal_sustantiva",
+        "train_corr": -0.1094,
+        "val_corr": 0.0397,
+        "delta": 0.1491,
+        "flag": "OK"
+      },
+      {
+        "dim": "int_01_logico_matematica",
+        "train_corr": -0.071,
+        "val_corr": 0.1109,
+        "delta": 0.1819,
+        "flag": "OK"
+      },
+      {
+        "dim": "modo_proceso",
+        "train_corr": -0.1996,
+        "val_corr": -0.0074,
+        "delta": 0.1922,
+        "flag": "OK"
+      },
+      {
+        "dim": "lente_salud",
+        "train_corr": -0.1859,
+        "val_corr": 0.0316,
+        "delta": 0.2175,
+        "flag": "UNDERFIT"
+      },
+      {
+        "dim": "sust_densidad",
+        "train_corr": -0.0919,
+        "val_corr": 0.2034,
+        "delta": 0.2953,
+        "flag": "UNDERFIT"
+      },
+      {
+        "dim": "conj_porque",
+        "train_corr": -0.2486,
+        "val_corr": 0.0474,
+        "delta": 0.296,
+        "flag": "UNDERFIT"
+      },
+      {
+        "dim": "int_12_narrativa",
+        "train_corr": 0.2031,
+        "val_corr": 0.5352,
+        "delta": 0.3321,
+        "flag": "UNDERFIT"
+      }
+    ],
+    "n_overfit_dims": 6,
+    "n_underfit_dims": 4
+  },
+  "label_quality_gold_v2": {
+    "n_dims_analyzed": 48,
+    "n_normal_distribution": 0,
+    "n_skewed_distribution": 48,
+    "n_floor_ceiling_effect": 26,
+    "pct_skewed": 100.0,
+    "pct_floor_ceiling": 54.2,
+    "top_10_most_skewed": [
+      {
+        "dim": "h55_atribucion_autoservicio",
+        "skewness": 5.3704,
+        "floor_rate": 0.9686
+      },
+      {
+        "dim": "adj_densidad",
+        "skewness": 4.8533,
+        "floor_rate": 0.2421
+      },
+      {
+        "dim": "canal_visual",
+        "skewness": 4.4906,
+        "floor_rate": 0.7314
+      },
+      {
+        "dim": "canal_kinestesico",
+        "skewness": 4.411,
+        "floor_rate": 0.8502
+      },
+      {
+        "dim": "h62_difusion_resp_cognitiva",
+        "skewness": 4.2903,
+        "floor_rate": 0.9532
+      },
+      {
+        "dim": "cre_condicional",
+        "skewness": 4.1127,
+        "floor_rate": 0.6709
+      },
+      {
+        "dim": "disc_emocionalidad",
+        "skewness": 4.0877,
+        "floor_rate": 0.6963
+      },
+      {
+        "dim": "sust_densidad",
+        "skewness": 3.8278,
+        "floor_rate": 0.0074
+      },
+      {
+        "dim": "conj_porque",
+        "skewness": 3.4466,
+        "floor_rate": 0.9977
+      },
+      {
+        "dim": "fv_indicativo",
+        "skewness": -3.3864,
+        "floor_rate": 0.0391
+      }
+    ],
+    "floor_ceiling_dims": [
+      "conj_pero",
+      "conj_porque",
+      "adv_modo",
+      "disc_emocionalidad",
+      "plano_auto",
+      "plano_ref",
+      "canal_visual",
+      "canal_kinestesico",
+      "cre_condicional",
+      "fal_verbal",
+      "inf_causal",
+      "gob_declarada_vs_ejecutada",
+      "acd_distancia_id_ir",
+      "eval_brecha_como_problema",
+      "int_01_logico_matematica",
+      "p_03_critico",
+      "h01_confirmacion",
+      "h04_autoridad_implicita",
+      "h12_granularidad_falsa",
+      "h14_causalidad_narrativa",
+      "h22_validacion_social",
+      "h25_aversion_perdida",
+      "h26_framing",
+      "h55_atribucion_autoservicio",
+      "h62_difusion_resp_cognitiva",
+      "h77_reificacion_categorias"
+    ]
+  },
+  "split_analysis": {
+    "n_total": 2990,
+    "n_train": 2392,
+    "n_val": 598,
+    "train_ratio": 0.8,
+    "n_dims_analyzed": 48,
+    "n_statistically_equivalent": 42,
+    "n_not_equivalent": 6,
+    "pct_equivalent": 87.5,
+    "verdict": "SPLIT SESGADO — revisar",
+    "non_equivalent_dims": [
+      {
+        "dim": "canal_kinestesico",
+        "mw_pvalue": 0.0125,
+        "mean_delta": 0.0022
+      },
+      {
+        "dim": "fal_verbal",
+        "mw_pvalue": 0.0153,
+        "mean_delta": 0.009
+      },
+      {
+        "dim": "verb_densidad",
+        "mw_pvalue": 0.017,
+        "mean_delta": 0.0048
+      },
+      {
+        "dim": "plano_ref",
+        "mw_pvalue": 0.0174,
+        "mean_delta": 0.0157
+      },
+      {
+        "dim": "acd_distancia_id_ir",
+        "mw_pvalue": 0.0376,
+        "mean_delta": 0.0138
+      },
+      {
+        "dim": "int_08_social",
+        "mw_pvalue": 0.0455,
+        "mean_delta": 0.0258
+      }
+    ],
+    "split_seed": 42
+  },
+  "baselines": {
+    "n_dims": 48,
+    "random_baseline_mean": 0.0223,
+    "random_baseline_ci95": "[-0.0829, 0.1652]",
+    "signal_baseline_mean": 0.8712,
+    "interpretation": "El predictor random oscila en torno a 0 (esperado). Un modelo debe superar claramente ~0.10 de Spearman medio para ser mejor que random."
+  },
+  "spearman_estimation": {
+    "note": "[SUPOSICION] Delta Pearson->Spearman estimado, no calculado con datos reales",
+    "corr_global_spearman_estimated_mean": 0.2022,
+    "corr_global_spearman_estimated_median": 0.1215,
+    "by_dim": [
+      {
+        "dim": "fv_subjuntivo",
+        "pearson_r": 0.4806,
+        "label_skewness": 3.132,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.6006
+      },
+      {
+        "dim": "int_12_narrativa",
+        "pearson_r": 0.5352,
+        "label_skewness": 0.586,
+        "expected_spearman_delta": 0.03,
+        "estimated_spearman": 0.5652
+      },
+      {
+        "dim": "foco_voz_activa",
+        "pearson_r": 0.4137,
+        "label_skewness": 2.795,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.5337
+      },
+      {
+        "dim": "disc_emocionalidad",
+        "pearson_r": 0.4129,
+        "label_skewness": 4.088,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.5329
+      },
+      {
+        "dim": "resp_sujeto_explicito",
+        "pearson_r": 0.5227,
+        "label_skewness": 0.356,
+        "expected_spearman_delta": 0.0,
+        "estimated_spearman": 0.5227
+      },
+      {
+        "dim": "tl_conductas",
+        "pearson_r": 0.4827,
+        "label_skewness": 0.777,
+        "expected_spearman_delta": 0.03,
+        "estimated_spearman": 0.5127
+      },
+      {
+        "dim": "verb_densidad",
+        "pearson_r": 0.4169,
+        "label_skewness": 1.245,
+        "expected_spearman_delta": 0.07,
+        "estimated_spearman": 0.4869
+      },
+      {
+        "dim": "tl_interpretaciones",
+        "pearson_r": 0.4311,
+        "label_skewness": 0.897,
+        "expected_spearman_delta": 0.03,
+        "estimated_spearman": 0.4611
+      },
+      {
+        "dim": "int_08_social",
+        "pearson_r": 0.4059,
+        "label_skewness": 0.755,
+        "expected_spearman_delta": 0.03,
+        "estimated_spearman": 0.4359
+      },
+      {
+        "dim": "sust_densidad",
+        "pearson_r": 0.2034,
+        "label_skewness": 3.828,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.3234
+      },
+      {
+        "dim": "canal_kinestesico",
+        "pearson_r": 0.1819,
+        "label_skewness": 4.411,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.3019
+      },
+      {
+        "dim": "adv_modo",
+        "pearson_r": 0.1809,
+        "label_skewness": 2.0,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.3009
+      },
+      {
+        "dim": "plano_ref",
+        "pearson_r": 0.1181,
+        "label_skewness": 2.564,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.2381
+      },
+      {
+        "dim": "int_01_logico_matematica",
+        "pearson_r": 0.1109,
+        "label_skewness": 3.069,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.2309
+      },
+      {
+        "dim": "conj_pero",
+        "pearson_r": 0.1353,
+        "label_skewness": 1.582,
+        "expected_spearman_delta": 0.07,
+        "estimated_spearman": 0.2053
+      },
+      {
+        "dim": "conj_porque",
+        "pearson_r": 0.0474,
+        "label_skewness": 3.447,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.1674
+      },
+      {
+        "dim": "cre_sustantiva",
+        "pearson_r": 0.1294,
+        "label_skewness": 0.879,
+        "expected_spearman_delta": 0.03,
+        "estimated_spearman": 0.1594
+      },
+      {
+        "dim": "eval_brecha_como_problema",
+        "pearson_r": 0.0592,
+        "label_skewness": 1.652,
+        "expected_spearman_delta": 0.07,
+        "estimated_spearman": 0.1292
+      },
+      {
+        "dim": "inf_causal",
+        "pearson_r": 0.0515,
+        "label_skewness": 1.999,
+        "expected_spearman_delta": 0.07,
+        "estimated_spearman": 0.1215
+      },
+      {
+        "dim": "gob_declarada_vs_ejecutada",
+        "pearson_r": -0.0088,
+        "label_skewness": 2.341,
+        "expected_spearman_delta": 0.12,
+        "estimated_spearman": 0.1112
+      }
+    ]
+  }
+}
