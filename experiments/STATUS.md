@@ -1,10 +1,13 @@
 # ESTADO EXPERIMENTOS OMNI-MIND
-**Última actualización:** 2026-04-05 (T-S2-1 COMPLETADO — 200 textos seleccionados, entropy 0.624, $0. Bug 20 PEFT corregido.)
+**Última actualización:** 2026-04-05 (T-CORPUS-BIBER COMPLETADO — 6 dims Biber medidas, todos los polos ≥10%, corpus diverso verificado. T-CORPUS-AUGMENT condicional post-R1. T-S1-SEL + T-S3-1 desbloqueados.)
 **Total experimentos:** 11
 
 ---
 
 ## COMPLETADOS
+- **T-CORPUS-BIBER** | Análisis Biber MDA: 6 dimensiones medidas sobre 2990 textos. Resultado: todos los polos ≥10% representados. Corpus diverso por registro — heurística X-GENRE de T-CORPUS-AUDIT sobrestimaba homogeneidad. Decisión CEO: T-CORPUS-AUGMENT condicional post-R1 (solo si T-*-EVAL falla gate). T-S1-SEL y T-S3-1 desbloqueados directamente.
+  Artefactos: experiments/corpus_audit/biber_profiles.jsonl
+
 - **T-CORPUS-AUDIT** | Clasificación 2990 textos gold_set_v2 por complejidad/diversidad/clustering.
   Resultado: Flesch medio 27.4 (muy_complejo), MTLD medio 76.9 (media-alta), 6 clusters temáticos (Literatura/Turismo/Política/Personal/Técnico/Empresa). Tipos: técnico 46% + informativo 35% + mixto 19%. Aviso: C2/C3/C5 con inglés mezclado. Silhouette k=6: 0.036.
   Artefactos: experiments/corpus_audit/corpus_features.jsonl + report.md + coverage_matrix.csv
@@ -69,13 +72,14 @@
 ## PRÓXIMO PASO — RONDA 1 (Principio 6 + agentes + verificación automática)
 Pipeline actualizado 05-Apr-2026. Agentes Opus etiquetan. CEO no etiqueta. Verificación 6 capas automática.
 
-**FASE 0 — CORPUS AUDIT (nuevo, obligatorio antes de selección):**
-  T-CORPUS-AUDIT: Clasificar 2990 textos por tipo/registro/complejidad — X-GENRE + textstat ($0, 30min)
-  Desbloquea T-S1-SEL y T-S3-1 con mapa de cobertura real del corpus.
+**FASE 0 — CORPUS (CASCADA P23 REV: Biber confirma diversidad):**
+  T-CORPUS-AUDIT: ✅ Completado — 2990 textos, 6 clusters, 81% tecnico+informativo (heuristica)
+  T-CORPUS-BIBER: ✅ Completado — 6 dims Biber medidas. Todos los polos ≥10%. Corpus diverso verificado.
+  T-CORPUS-AUGMENT: CONDICIONAL POST-R1 — Biber confirma diversidad suficiente para R1.
 
-**SELECCIÓN (paralelo, automático, $0):**
-  T-S1-SEL: Selección 200 textos S1 por diversidad morfosintáctica (spaCy, $0) — depende de T-CORPUS-AUDIT
-  T-S3-1: Active Learning S3 — MC Dropout sobre 2990 textos ($0) — depende de T-CORPUS-AUDIT
+**SELECCIÓN (paralelo, automático, $0) — DESBLOQUEADOS desde T-CORPUS-BIBER:**
+  T-S1-SEL: Selección 200 textos S1 (spaCy + Biber + filtro idioma) — DESBLOQUEADO
+  T-S3-1: Active Learning S3 — MC Dropout sobre 2990 textos — DESBLOQUEADO
   T-S2-1: ✅ Ya completado
 
 **LABELING (AGENTES Opus background, $0 — CEO no interviene):**
