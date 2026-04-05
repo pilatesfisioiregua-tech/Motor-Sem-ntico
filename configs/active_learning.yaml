@@ -1,0 +1,102 @@
+# ============================================================================
+# ACTIVE LEARNING CONFIG — N-Simbiontes
+# Aprobado CEO: 04-Apr-2026
+# Papers: BEAL, CoMAL, PPI, PRECISE, Lapras
+# ============================================================================
+
+strategy: uncertainty_sampling
+n_initial: 2990             # gold_set_v2 existente
+n_select_per_round: 200     # textos seleccionados por max incertidumbre
+uncertainty_metric: predictive_entropy  # o MC dropout variance
+n_mc_samples: 10            # para MC dropout
+rounds_max: 3
+
+papers:
+  - "BEAL (Scientific Reports 2024) — reduce 30-50% textos necesarios"
+  - "CoMAL (KDD 2024) — seleccion optima para multi-label"
+  - "PPI/PPI++ (Angelopoulos) — debiasing con 200 gold labels"
+  - "PRECISE (AAAI 2026) — correccion fiable con 100 anotaciones"
+  - "Lapras (CHI 2024) — verificacion labels LLM con RF 200 gold"
+
+# ── PIPELINE POR SIMBIONTE ──────────────────────────────────────────────────
+# Fase 0: Re-training preliminar con gold_set_v2 ($0)
+# Fase 1: Active Learning — seleccionar 200 textos con max incertidumbre ($0)
+# Fase 2: Gold set mini 200 textos × dims completas (Desktop, $0)
+# Fase 3: PPI debiasing — 200 gold corrigen sesgo en 2990 labels masivos ($0)
+# Fase 4: Re-training final ($0)
+# Fase 5: Eval + bootstrap CI ($0) — gate: spearman_weighted > 0.40
+
+simbiontes:
+  s1:
+    nombre: "S1 Morfosintaxis"
+    proyecto: simbionte-s1
+    dims_prelim: 12          # dims disponibles en gold_set_v2
+    dims_full: 81            # dims completas head A1
+    layers: [1, 2, 3, 4, 5, 6]
+    lora_rank: 4
+    gate_fase0: 0.30         # spearman_weighted minimo para confirmar senal
+    gate_final: 0.40         # spearman_weighted para produccion
+    estado: aprobado
+    registro: "cualquiera — morfosintaxis es universal"
+
+  s2:
+    nombre: "S2 Semantica local"
+    proyecto: simbionte-s2
+    dims_prelim: 9
+    dims_full: 114
+    layers: [7, 8, 9, 10, 11, 12]
+    lora_rank: 8
+    gate_fase0: 0.30
+    gate_final: 0.40
+    estado: aprobado         # paralelo a S1
+    registro: "diversidad tematica — Wikipedia, noticias, ciencia"
+
+  s3:
+    nombre: "S3 Semantica global"
+    proyecto: simbionte-s3
+    dims_prelim: 10
+    dims_full: 126
+    layers: [13, 14, 15, 16, 17, 18]
+    lora_rank: 12
+    gate_fase0: 0.30
+    gate_final: 0.40
+    estado: aprobado         # paralelo a S1
+    registro: "argumentativos, ensayos, analisis — GAQCorpus, PERSUADE"
+
+  s4:
+    nombre: "S4 Pragmatica"
+    proyecto: simbionte-s4
+    dims_prelim: 8
+    dims_full: 121
+    layers: [19, 20, 21, 22, 23, 24]
+    lora_rank: 16
+    gate_fase0: 0.30
+    gate_final: 0.35         # expectativa reducida — pragmatica es dificil para encoders
+    estado: bloqueado
+    blocked_until: "S1 gate_fase0 passed"
+    registro: "debate, humor, ironia, foros, legal"
+    nota: "ACL 2025: encoders no manejan bien pragmatica. Plan B: Qwen 3B"
+
+# ── PARAMETROS COMUNES ──────────────────────────────────────────────────────
+training:
+  base_model: "microsoft/deberta-v3-large"
+  script: "motor-semantico/scripts/training/train_deberta_v2.py"
+  flags: "--lora --pooling mean --float-loss huber --relational-loss --label-smoothing 0.05"
+  curriculum: true
+  r_drop: true
+  bootstrap_ci_samples: 1000
+  loss_balancing: "famo"      # FAMO (NeurIPS 2023, arXiv:2306.03792) — O(1) memoria/tiempo, escala a 321 tasks
+  gradient_strategy: "graph_coloring_by_head"  # entrenar por head group (A1/A2/A3/A4/E en round-robin), reduce conflictos de gradiente
+  fallback_balancing: "coba"  # CoBa (EMNLP 2024, aclanthology.org/2024.emnlp-main.459) si FAMO no converge (+13% sobre baselines)
+
+debiasing:
+  method: "PPI"              # PRECISE como alternativa si falla
+  n_gold_needed: 200         # textos anotados manualmente
+  corrects_n_llm_labels: 2990
+
+labeling_gold_mini:
+  method: "Desktop Max Plan ($0)"
+  escala: "0-5 con rubrica"
+  anchoring_examples: 3      # por dim (0, 3, 5)
+  bloques_dims: 2            # dividir dims en bloques de ~40 para evitar fatiga
+  n_textos: 200              # seleccionados por active learning
