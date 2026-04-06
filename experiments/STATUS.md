@@ -1,10 +1,30 @@
 # ESTADO EXPERIMENTOS OMNI-MIND
-**Última actualización:** 2026-04-05 (T-CORPUS-BIBER COMPLETADO — 6 dims Biber medidas, todos los polos ≥10%, corpus diverso verificado. T-CORPUS-AUGMENT condicional post-R1. T-S1-SEL + T-S3-1 desbloqueados.)
+**Última actualización:** 2026-04-06 (T-S1-LABEL COMPLETADO — 200/200 textos × 81 dims con Opus. 81/81 dims VIVAS. Mean=1.58. Mecanismo claude -p CLI $0.)
 **Total experimentos:** 11
 
 ---
 
 ## COMPLETADOS
+- **T-S3-LABEL** ✅ COMPLETADO (2026-04-06 18:28) — 191 textos × 123 dims con Opus via claude -p CLI cacheado.
+  Resultado: 123/123 dims VIVAS, 0 muertas. Mean=1.84, stdev=1.24.
+  Mecanismo: ClaudeCachedClient (~85% cache hit rate). Coste: $0 (Max Plan).
+- **T-S2-LABEL** ✅ COMPLETADO (2026-04-06 18:24) — 191 textos × 114 dims con Opus via claude -p CLI cacheado.
+  Resultado: 114/114 dims VIVAS, 0 muertas. Mean=1.66, stdev=1.33.
+  Mecanismo: ClaudeCachedClient (~85% cache hit rate). Coste: $0 (Max Plan).
+- **T-S1-LABEL** | Gold set S1: 200 textos × 81 dims morfosintaxis etiquetados con Opus via claude -p CLI.
+  Resultado: 200/200 completados, 0 fallos, 81/81 dims VIVAS (100% — 0 muertas, vs 49% en gold_set_v2). Mean global=1.58, stdev=1.54. Gate 180+ SUPERADO con margen.
+  Mecanismo: claude -p CLI + --json-schema + structured_output ($0 Max Plan, ~1.5h ejecucion con pausas por rate limit).
+  Artefactos: motor-semantico/data/gold_set_s1_labels.jsonl
+  Desbloquea: T-VERIFY → T-S1-TRAIN (primer training DeBERTa S1).
+
+- **T-S3-1** | Active Learning S3: 200 textos seleccionados por MC Dropout (n=10) sobre 2990 textos.
+  Resultado: entropy media=0.607 (vs S2=0.624, coherente). 34% overlap S2-S3 (67 textos dificiles compartidos, 133 unicos).
+  Artefactos: experiments/s3_prelim/al_selected_200.json
+  Desbloquea: T-S3-LABEL (126 dims cognitivas). $0, 4.5h MPS.
+
+- **T-S1-SEL** | Seleccion 200 textos S1 por diversidad morfosintactica (greedy-diverse + Biber D1 + filtro idioma).
+  Artefactos: experiments/s1_sel/selected_200.json. $0, 15s.
+
 - **T-CORPUS-BIBER** | Análisis Biber MDA: 6 dimensiones medidas sobre 2990 textos. Resultado: todos los polos ≥10% representados. Corpus diverso por registro — heurística X-GENRE de T-CORPUS-AUDIT sobrestimaba homogeneidad. Decisión CEO: T-CORPUS-AUGMENT condicional post-R1 (solo si T-*-EVAL falla gate). T-S1-SEL y T-S3-1 desbloqueados directamente.
   Artefactos: experiments/corpus_audit/biber_profiles.jsonl
 
@@ -78,8 +98,8 @@ Pipeline actualizado 05-Apr-2026. Agentes Opus etiquetan. CEO no etiqueta. Verif
   T-CORPUS-AUGMENT: CONDICIONAL POST-R1 — Biber confirma diversidad suficiente para R1.
 
 **SELECCIÓN (paralelo, automático, $0) — DESBLOQUEADOS desde T-CORPUS-BIBER:**
-  T-S1-SEL: Selección 200 textos S1 (spaCy + Biber + filtro idioma) — DESBLOQUEADO
-  T-S3-1: Active Learning S3 — MC Dropout sobre 2990 textos — DESBLOQUEADO
+  T-S1-SEL: ✅ Completado — 200 textos por diversidad morfosintactica
+  T-S3-1: ✅ Completado — 200 textos MC Dropout, entropy=0.607, 34% overlap S2
   T-S2-1: ✅ Ya completado
 
 **LABELING (AGENTES Opus background, $0 — CEO no interviene):**
