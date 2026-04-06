@@ -1,0 +1,2990 @@
+{
+  "simbionte": "s2",
+  "fecha": "2026-04-06T19:43:18.836640",
+  "n_textos": 191,
+  "n_dims_total": 114,
+  "resumen": {
+    "fiable": 114,
+    "sospechosa": 0,
+    "excluir": 0,
+    "ratio_excluir": 0.0
+  },
+  "dims_fiable": [
+    "arg_claim_ratio",
+    "arg_data_ratio",
+    "arg_warrant_explicito",
+    "canal_atrapamiento",
+    "canal_auditivo",
+    "canal_dominante",
+    "canal_secuencia_funcional",
+    "cib_escalada_simetrica",
+    "cogn_fictive_motion",
+    "cogn_metafora_convencionalidad",
+    "cogn_metafora_grounding",
+    "cogn_metafora_tipo",
+    "cogn_productividad_constructional",
+    "cogn_scanning_tipo",
+    "cre_comparativa",
+    "cre_concesiva",
+    "cre_molde_identidad",
+    "cre_nivel_compresion",
+    "cre_origen_experiencia",
+    "cre_origen_repeticion",
+    "cre_origen_silogismo",
+    "cre_solidez",
+    "cre_sustantiva",
+    "cre_verificabilidad",
+    "dec_absorcion",
+    "dec_aplazamiento",
+    "dec_condicional",
+    "dec_delegacion",
+    "dec_exclusion",
+    "dec_fallo_conclusion_no_derivada",
+    "dec_fallo_premisa_ausente",
+    "dec_fallo_premisa_opaca",
+    "dec_fallo_premisa_universal",
+    "dec_fallo_premisas_contradictorias",
+    "eco_diversidad_argumental",
+    "epist_jerarquia_evidencial",
+    "epist_trazabilidad_evidencial",
+    "fal_adjetiva",
+    "fal_adverbial",
+    "fal_conjuntiva",
+    "fal_ecuacion_falsa",
+    "fal_predicado_desconectado",
+    "fal_predicado_sin_sujeto",
+    "fal_preposicional",
+    "fal_subordinada_disfrazada",
+    "fal_sujeto_falso",
+    "fal_sujeto_sustituido",
+    "gt_cooperativo_vs_competitivo",
+    "inf_analogica",
+    "inf_atributiva",
+    "inf_condicional",
+    "inf_fuerza_conectores",
+    "inf_negativa",
+    "inf_transitiva",
+    "inf_validez",
+    "ing_cohesion_tematica_bloque",
+    "ing_profundidad_causal",
+    "ing_separation_hechos_opiniones",
+    "nodo_rigidez",
+    "plano_equilibrio",
+    "plano_extra",
+    "plano_sesgo_auto_normalizacion",
+    "plano_sesgo_extra_fantasia",
+    "plano_sesgo_ref_generalizacion",
+    "prag_completitud_explicatura",
+    "prag_deficit_informativo",
+    "prag_indirectividad",
+    "prag_precision_escalar",
+    "preg_ausencia",
+    "preg_como",
+    "preg_cuando",
+    "preg_donde",
+    "preg_para_que",
+    "preg_porque",
+    "preg_que",
+    "preg_quien",
+    "presup_cadena_causal",
+    "presup_carga_compartida",
+    "presup_densidad",
+    "presup_proyeccion",
+    "presup_verificabilidad",
+    "sem_acto_habla",
+    "sem_acto_habla_fuerza",
+    "sem_agentividad",
+    "sem_ambiguedad_lexica",
+    "sem_anafora_resuelta",
+    "sem_aspectualidad_evento",
+    "sem_causalidad_evento",
+    "sem_coherencia_campo_semantico",
+    "sem_coherencia_ref_local",
+    "sem_comparacion_bien_formada",
+    "sem_evidencialidad",
+    "sem_implicatura",
+    "sem_informatividad",
+    "sem_modal_deontico",
+    "sem_modal_epistemico",
+    "sem_precision_numerica",
+    "sem_relacion_retorica_local",
+    "sem_relevancia_tematica",
+    "sem_rol_paciente_afectado",
+    "sem_stance",
+    "sem_telicidad",
+    "sem_vaguedad_semantica",
+    "set_exclusion",
+    "set_inclusion",
+    "set_intersection",
+    "sol_alternativas_presentadas",
+    "sol_evidencia_presente",
+    "tl_colapso",
+    "tl_conductas",
+    "tl_criterios",
+    "tl_interpretaciones",
+    "tl_metanivel",
+    "tl_reglas_sistema"
+  ],
+  "dims_sospechosa": [],
+  "dims_excluir": [],
+  "capas": {
+    "capa1": {
+      "n_dims_aplicables": 0,
+      "n_dims_fiables": 0,
+      "details": {}
+    },
+    "capa3": {
+      "n_dims": 114,
+      "redundant_pairs": [
+        {
+          "dim1": "sem_anafora_resuelta",
+          "dim2": "sem_coherencia_ref_local",
+          "corr": 0.959
+        }
+      ],
+      "n_redundant_pairs": 1,
+      "isolated_dims": [
+        "tl_reglas_sistema"
+      ],
+      "n_isolated_dims": 1
+    },
+    "capa4": {
+      "n_sondas": 10,
+      "n_checks_total": 11,
+      "n_checks_passed": 10,
+      "details": {
+        "S_INTERROG": {
+          "texto_preview": "¿Quien dijo eso? ¿Donde? ¿Cuando? ¿Por que? ¿Como? ¿Que paso?",
+          "morf_interrogacion": {
+            "computed": 0.0,
+            "expected": "min 0.5",
+            "ok": false
+          }
+        },
+        "S_NEGATIVO": {
+          "texto_preview": "No vino. Nunca llamo. Tampoco escribio. Nada explico. Ni se disculpo.",
+          "morf_negacion": {
+            "computed": 0.4545,
+            "expected": "min 0.15",
+            "ok": true
+          }
+        },
+        "S_PRIMERA_P": {
+          "texto_preview": "Yo creo que mi opinion es importante. Conmigo nadie habla. Me siento solo. Mis i...",
+          "morf_primera_persona": {
+            "computed": 0.2941,
+            "expected": "min 0.1",
+            "ok": true
+          }
+        },
+        "S_SUBORDIN": {
+          "texto_preview": "Cuando llegue, vio que el hombre que estaba alli, porque tenia frio, esperaba a ...",
+          "morf_subordinacion": {
+            "computed": 0.2308,
+            "expected": "min 0.05",
+            "ok": true
+          },
+          "sint_longitud_oracion": {
+            "computed": 26.0,
+            "expected": "min 25",
+            "ok": true
+          }
+        },
+        "S_NOMINAL": {
+          "texto_preview": "La realizacion de la transformacion organizacional requiere la implementacion de...",
+          "morf_nominalizacion": {
+            "computed": 0.28,
+            "expected": "min 0.1",
+            "ok": true
+          }
+        },
+        "S_PASIVO": {
+          "texto_preview": "El informe fue redactado. Las normas son aplicadas. Los recursos seran asignados...",
+          "morf_pasiva": {
+            "computed": 0.2381,
+            "expected": "min 0.05",
+            "ok": true
+          },
+          "sint_pasiva": {
+            "computed": 0.2381,
+            "expected": "min 0.05",
+            "ok": true
+          }
+        },
+        "S_CORTO_SIMPLE": {
+          "texto_preview": "Hola. Bien. Si. No. Vale. Ok.",
+          "sint_longitud_oracion": {
+            "computed": 1.0,
+            "expected": "max 3",
+            "ok": true
+          }
+        },
+        "S_AFIRMATIVO": {
+          "texto_preview": "El cielo es azul. La nieve es fria. El sol calienta. La lluvia moja. La hierba c...",
+          "morf_negacion": {
+            "computed": 0.0,
+            "expected": "max 0.02",
+            "ok": true
+          },
+          "morf_interrogacion": {
+            "computed": 0.0,
+            "expected": "max 0.05",
+            "ok": true
+          }
+        },
+        "S_TECNICO": {
+          "texto_preview": "El gradient descent converge cuando la funcion de coste alcanza un minimo local ..."
+        },
+        "S_NARRATIVO": {
+          "texto_preview": "Llego, vio, vencio. Despues comio. Mas tarde durmio. Al amanecer partio."
+        }
+      }
+    },
+    "capa5": {
+      "n_dims": 114,
+      "n_fiable": 114,
+      "n_sospechosa": 0,
+      "n_excluir": 0,
+      "details": {
+        "plano_extra": {
+          "verdict": "FIABLE",
+          "var": 1.0337,
+          "mean": 3.753,
+          "none_ratio": 0.005,
+          "verb_bias": 0.082,
+          "issues": []
+        },
+        "plano_equilibrio": {
+          "verdict": "FIABLE",
+          "var": 1.0762,
+          "mean": 2.376,
+          "none_ratio": 0.01,
+          "verb_bias": 0.181,
+          "issues": []
+        },
+        "plano_sesgo_auto_normalizacion": {
+          "verdict": "FIABLE",
+          "var": 0.7831,
+          "mean": 0.772,
+          "none_ratio": 0.01,
+          "verb_bias": 0.424,
+          "issues": []
+        },
+        "plano_sesgo_ref_generalizacion": {
+          "verdict": "FIABLE",
+          "var": 1.2677,
+          "mean": 1.624,
+          "none_ratio": 0.01,
+          "verb_bias": 0.348,
+          "issues": []
+        },
+        "plano_sesgo_extra_fantasia": {
+          "verdict": "FIABLE",
+          "var": 1.4089,
+          "mean": 1.545,
+          "none_ratio": 0.01,
+          "verb_bias": 0.271,
+          "issues": []
+        },
+        "canal_auditivo": {
+          "verdict": "FIABLE",
+          "var": 0.9574,
+          "mean": 0.616,
+          "none_ratio": 0.005,
+          "verb_bias": 0.239,
+          "issues": []
+        },
+        "canal_dominante": {
+          "verdict": "FIABLE",
+          "var": 0.7724,
+          "mean": 1.228,
+          "none_ratio": 0.01,
+          "verb_bias": 0.437,
+          "issues": []
+        },
+        "canal_secuencia_funcional": {
+          "verdict": "FIABLE",
+          "var": 1.1905,
+          "mean": 1.079,
+          "none_ratio": 0.01,
+          "verb_bias": 0.492,
+          "issues": []
+        },
+        "canal_atrapamiento": {
+          "verdict": "FIABLE",
+          "var": 1.1709,
+          "mean": 1.577,
+          "none_ratio": 0.01,
+          "verb_bias": 0.298,
+          "issues": []
+        },
+        "tl_conductas": {
+          "verdict": "FIABLE",
+          "var": 1.4343,
+          "mean": 2.347,
+          "none_ratio": 0.005,
+          "verb_bias": 0.432,
+          "issues": []
+        },
+        "tl_interpretaciones": {
+          "verdict": "FIABLE",
+          "var": 0.7655,
+          "mean": 2.689,
+          "none_ratio": 0.005,
+          "verb_bias": 0.418,
+          "issues": []
+        },
+        "tl_criterios": {
+          "verdict": "FIABLE",
+          "var": 1.1996,
+          "mean": 2.221,
+          "none_ratio": 0.005,
+          "verb_bias": 0.382,
+          "issues": []
+        },
+        "tl_reglas_sistema": {
+          "verdict": "FIABLE",
+          "var": 0.8891,
+          "mean": 0.81,
+          "none_ratio": 0.01,
+          "verb_bias": 0.146,
+          "issues": []
+        },
+        "tl_metanivel": {
+          "verdict": "FIABLE",
+          "var": 1.0978,
+          "mean": 0.911,
+          "none_ratio": 0.005,
+          "verb_bias": 0.182,
+          "issues": []
+        },
+        "tl_colapso": {
+          "verdict": "FIABLE",
+          "var": 0.7623,
+          "mean": 1.323,
+          "none_ratio": 0.01,
+          "verb_bias": 0.298,
+          "issues": []
+        },
+        "fal_adjetiva": {
+          "verdict": "FIABLE",
+          "var": 1.1769,
+          "mean": 2.663,
+          "none_ratio": 0.005,
+          "verb_bias": 0.342,
+          "issues": []
+        },
+        "fal_adverbial": {
+          "verdict": "FIABLE",
+          "var": 0.8522,
+          "mean": 1.547,
+          "none_ratio": 0.005,
+          "verb_bias": 0.357,
+          "issues": []
+        },
+        "fal_conjuntiva": {
+          "verdict": "FIABLE",
+          "var": 0.7614,
+          "mean": 1.143,
+          "none_ratio": 0.01,
+          "verb_bias": 0.385,
+          "issues": []
+        },
+        "fal_preposicional": {
+          "verdict": "FIABLE",
+          "var": 0.681,
+          "mean": 1.221,
+          "none_ratio": 0.005,
+          "verb_bias": 0.343,
+          "issues": []
+        },
+        "fal_sujeto_falso": {
+          "verdict": "FIABLE",
+          "var": 0.9916,
+          "mean": 1.138,
+          "none_ratio": 0.01,
+          "verb_bias": 0.255,
+          "issues": []
+        },
+        "fal_predicado_desconectado": {
+          "verdict": "FIABLE",
+          "var": 0.7121,
+          "mean": 0.82,
+          "none_ratio": 0.01,
+          "verb_bias": 0.284,
+          "issues": []
+        },
+        "fal_sujeto_sustituido": {
+          "verdict": "FIABLE",
+          "var": 1.2402,
+          "mean": 1.2,
+          "none_ratio": 0.005,
+          "verb_bias": 0.214,
+          "issues": []
+        },
+        "fal_predicado_sin_sujeto": {
+          "verdict": "FIABLE",
+          "var": 0.9734,
+          "mean": 1.291,
+          "none_ratio": 0.01,
+          "verb_bias": 0.331,
+          "issues": []
+        },
+        "fal_ecuacion_falsa": {
+          "verdict": "FIABLE",
+          "var": 1.1046,
+          "mean": 0.958,
+          "none_ratio": 0.01,
+          "verb_bias": 0.251,
+          "issues": []
+        },
+        "fal_subordinada_disfrazada": {
+          "verdict": "FIABLE",
+          "var": 1.2348,
+          "mean": 1.423,
+          "none_ratio": 0.01,
+          "verb_bias": 0.226,
+          "issues": []
+        },
+        "inf_transitiva": {
+          "verdict": "FIABLE",
+          "var": 0.7181,
+          "mean": 1.005,
+          "none_ratio": 0.01,
+          "verb_bias": 0.458,
+          "issues": []
+        },
+        "inf_condicional": {
+          "verdict": "FIABLE",
+          "var": 0.9944,
+          "mean": 1.127,
+          "none_ratio": 0.01,
+          "verb_bias": 0.444,
+          "issues": []
+        },
+        "inf_atributiva": {
+          "verdict": "FIABLE",
+          "var": 0.676,
+          "mean": 2.101,
+          "none_ratio": 0.01,
+          "verb_bias": 0.508,
+          "issues": []
+        },
+        "inf_analogica": {
+          "verdict": "FIABLE",
+          "var": 1.0786,
+          "mean": 0.735,
+          "none_ratio": 0.01,
+          "verb_bias": 0.383,
+          "issues": []
+        },
+        "inf_negativa": {
+          "verdict": "FIABLE",
+          "var": 0.6266,
+          "mean": 0.921,
+          "none_ratio": 0.01,
+          "verb_bias": 0.343,
+          "issues": []
+        },
+        "inf_validez": {
+          "verdict": "FIABLE",
+          "var": 0.5025,
+          "mean": 2.553,
+          "none_ratio": 0.005,
+          "verb_bias": 0.185,
+          "issues": []
+        },
+        "inf_fuerza_conectores": {
+          "verdict": "FIABLE",
+          "var": 0.5522,
+          "mean": 1.698,
+          "none_ratio": 0.01,
+          "verb_bias": 0.351,
+          "issues": []
+        },
+        "cre_sustantiva": {
+          "verdict": "FIABLE",
+          "var": 0.5709,
+          "mean": 3.7,
+          "none_ratio": 0.005,
+          "verb_bias": 0.315,
+          "issues": []
+        },
+        "cre_comparativa": {
+          "verdict": "FIABLE",
+          "var": 1.3313,
+          "mean": 1.762,
+          "none_ratio": 0.01,
+          "verb_bias": 0.53,
+          "issues": []
+        },
+        "cre_concesiva": {
+          "verdict": "FIABLE",
+          "var": 1.1586,
+          "mean": 1.413,
+          "none_ratio": 0.01,
+          "verb_bias": 0.402,
+          "issues": []
+        },
+        "cre_solidez": {
+          "verdict": "FIABLE",
+          "var": 0.5394,
+          "mean": 1.637,
+          "none_ratio": 0.005,
+          "verb_bias": 0.253,
+          "issues": []
+        },
+        "cre_nivel_compresion": {
+          "verdict": "FIABLE",
+          "var": 0.6024,
+          "mean": 3.354,
+          "none_ratio": 0.01,
+          "verb_bias": -0.167,
+          "issues": []
+        },
+        "cre_verificabilidad": {
+          "verdict": "FIABLE",
+          "var": 0.8706,
+          "mean": 1.816,
+          "none_ratio": 0.005,
+          "verb_bias": 0.171,
+          "issues": []
+        },
+        "cre_origen_silogismo": {
+          "verdict": "FIABLE",
+          "var": 0.6023,
+          "mean": 0.603,
+          "none_ratio": 0.01,
+          "verb_bias": 0.21,
+          "issues": []
+        },
+        "cre_origen_experiencia": {
+          "verdict": "FIABLE",
+          "var": 2.6266,
+          "mean": 2.032,
+          "none_ratio": 0.01,
+          "verb_bias": 0.326,
+          "issues": []
+        },
+        "cre_origen_repeticion": {
+          "verdict": "FIABLE",
+          "var": 1.392,
+          "mean": 1.275,
+          "none_ratio": 0.01,
+          "verb_bias": 0.307,
+          "issues": []
+        },
+        "cre_molde_identidad": {
+          "verdict": "FIABLE",
+          "var": 1.3989,
+          "mean": 1.291,
+          "none_ratio": 0.01,
+          "verb_bias": 0.349,
+          "issues": []
+        },
+        "nodo_rigidez": {
+          "verdict": "FIABLE",
+          "var": 1.7206,
+          "mean": 2.053,
+          "none_ratio": 0.01,
+          "verb_bias": 0.107,
+          "issues": []
+        },
+        "dec_exclusion": {
+          "verdict": "FIABLE",
+          "var": 0.8305,
+          "mean": 0.72,
+          "none_ratio": 0.01,
+          "verb_bias": 0.286,
+          "issues": []
+        },
+        "dec_absorcion": {
+          "verdict": "FIABLE",
+          "var": 0.6313,
+          "mean": 0.532,
+          "none_ratio": 0.005,
+          "verb_bias": 0.298,
+          "issues": []
+        },
+        "dec_aplazamiento": {
+          "verdict": "FIABLE",
+          "var": 0.4412,
+          "mean": 0.317,
+          "none_ratio": 0.01,
+          "verb_bias": 0.164,
+          "issues": []
+        },
+        "dec_delegacion": {
+          "verdict": "FIABLE",
+          "var": 0.445,
+          "mean": 0.328,
+          "none_ratio": 0.01,
+          "verb_bias": 0.178,
+          "issues": []
+        },
+        "dec_condicional": {
+          "verdict": "FIABLE",
+          "var": 1.1093,
+          "mean": 0.958,
+          "none_ratio": 0.005,
+          "verb_bias": 0.379,
+          "issues": []
+        },
+        "dec_fallo_premisa_opaca": {
+          "verdict": "FIABLE",
+          "var": 1.3099,
+          "mean": 1.789,
+          "none_ratio": 0.005,
+          "verb_bias": 0.048,
+          "issues": []
+        },
+        "dec_fallo_premisa_universal": {
+          "verdict": "FIABLE",
+          "var": 1.6555,
+          "mean": 1.492,
+          "none_ratio": 0.01,
+          "verb_bias": 0.261,
+          "issues": []
+        },
+        "dec_fallo_premisa_ausente": {
+          "verdict": "FIABLE",
+          "var": 1.1507,
+          "mean": 1.624,
+          "none_ratio": 0.01,
+          "verb_bias": 0.012,
+          "issues": []
+        },
+        "dec_fallo_premisas_contradictorias": {
+          "verdict": "FIABLE",
+          "var": 0.4153,
+          "mean": 0.37,
+          "none_ratio": 0.01,
+          "verb_bias": 0.304,
+          "issues": []
+        },
+        "dec_fallo_conclusion_no_derivada": {
+          "verdict": "FIABLE",
+          "var": 1.0532,
+          "mean": 1.333,
+          "none_ratio": 0.01,
+          "verb_bias": 0.194,
+          "issues": []
+        },
+        "preg_que": {
+          "verdict": "FIABLE",
+          "var": 1.4716,
+          "mean": 1.111,
+          "none_ratio": 0.01,
+          "verb_bias": 0.317,
+          "issues": []
+        },
+        "preg_como": {
+          "verdict": "FIABLE",
+          "var": 1.3351,
+          "mean": 1.005,
+          "none_ratio": 0.01,
+          "verb_bias": 0.414,
+          "issues": []
+        },
+        "preg_porque": {
+          "verdict": "FIABLE",
+          "var": 0.9886,
+          "mean": 0.852,
+          "none_ratio": 0.01,
+          "verb_bias": 0.391,
+          "issues": []
+        },
+        "preg_para_que": {
+          "verdict": "FIABLE",
+          "var": 0.8043,
+          "mean": 0.772,
+          "none_ratio": 0.01,
+          "verb_bias": 0.246,
+          "issues": []
+        },
+        "preg_cuando": {
+          "verdict": "FIABLE",
+          "var": 0.4786,
+          "mean": 0.418,
+          "none_ratio": 0.01,
+          "verb_bias": 0.178,
+          "issues": []
+        },
+        "preg_donde": {
+          "verdict": "FIABLE",
+          "var": 0.4286,
+          "mean": 0.312,
+          "none_ratio": 0.01,
+          "verb_bias": 0.232,
+          "issues": []
+        },
+        "preg_quien": {
+          "verdict": "FIABLE",
+          "var": 0.6767,
+          "mean": 0.513,
+          "none_ratio": 0.01,
+          "verb_bias": 0.29,
+          "issues": []
+        },
+        "preg_ausencia": {
+          "verdict": "FIABLE",
+          "var": 1.1476,
+          "mean": 1.804,
+          "none_ratio": 0.01,
+          "verb_bias": -0.038,
+          "issues": []
+        },
+        "sol_evidencia_presente": {
+          "verdict": "FIABLE",
+          "var": 0.804,
+          "mean": 1.143,
+          "none_ratio": 0.01,
+          "verb_bias": 0.343,
+          "issues": []
+        },
+        "sol_alternativas_presentadas": {
+          "verdict": "FIABLE",
+          "var": 0.6193,
+          "mean": 0.566,
+          "none_ratio": 0.01,
+          "verb_bias": 0.276,
+          "issues": []
+        },
+        "arg_claim_ratio": {
+          "verdict": "FIABLE",
+          "var": 0.7353,
+          "mean": 3.926,
+          "none_ratio": 0.005,
+          "verb_bias": -0.07,
+          "issues": []
+        },
+        "arg_data_ratio": {
+          "verdict": "FIABLE",
+          "var": 0.9046,
+          "mean": 0.926,
+          "none_ratio": 0.005,
+          "verb_bias": 0.277,
+          "issues": []
+        },
+        "arg_warrant_explicito": {
+          "verdict": "FIABLE",
+          "var": 0.5353,
+          "mean": 0.811,
+          "none_ratio": 0.005,
+          "verb_bias": 0.341,
+          "issues": []
+        },
+        "set_inclusion": {
+          "verdict": "FIABLE",
+          "var": 0.8533,
+          "mean": 1.566,
+          "none_ratio": 0.01,
+          "verb_bias": 0.416,
+          "issues": []
+        },
+        "set_exclusion": {
+          "verdict": "FIABLE",
+          "var": 0.9441,
+          "mean": 0.863,
+          "none_ratio": 0.005,
+          "verb_bias": 0.253,
+          "issues": []
+        },
+        "set_intersection": {
+          "verdict": "FIABLE",
+          "var": 0.3528,
+          "mean": 0.339,
+          "none_ratio": 0.01,
+          "verb_bias": 0.292,
+          "issues": []
+        },
+        "presup_densidad": {
+          "verdict": "FIABLE",
+          "var": 0.5915,
+          "mean": 3.405,
+          "none_ratio": 0.005,
+          "verb_bias": -0.005,
+          "issues": []
+        },
+        "presup_verificabilidad": {
+          "verdict": "FIABLE",
+          "var": 0.731,
+          "mean": 1.784,
+          "none_ratio": 0.005,
+          "verb_bias": 0.189,
+          "issues": []
+        },
+        "presup_carga_compartida": {
+          "verdict": "FIABLE",
+          "var": 0.499,
+          "mean": 3.579,
+          "none_ratio": 0.005,
+          "verb_bias": -0.011,
+          "issues": []
+        },
+        "presup_proyeccion": {
+          "verdict": "FIABLE",
+          "var": 0.4277,
+          "mean": 2.737,
+          "none_ratio": 0.005,
+          "verb_bias": 0.113,
+          "issues": []
+        },
+        "presup_cadena_causal": {
+          "verdict": "FIABLE",
+          "var": 0.7484,
+          "mean": 1.884,
+          "none_ratio": 0.005,
+          "verb_bias": 0.217,
+          "issues": []
+        },
+        "sem_acto_habla": {
+          "verdict": "FIABLE",
+          "var": 1.6459,
+          "mean": 1.453,
+          "none_ratio": 0.005,
+          "verb_bias": -0.107,
+          "issues": []
+        },
+        "sem_evidencialidad": {
+          "verdict": "FIABLE",
+          "var": 1.4407,
+          "mean": 1.095,
+          "none_ratio": 0.005,
+          "verb_bias": -0.132,
+          "issues": []
+        },
+        "eco_diversidad_argumental": {
+          "verdict": "FIABLE",
+          "var": 0.5756,
+          "mean": 1.545,
+          "none_ratio": 0.0,
+          "verb_bias": 0.554,
+          "issues": []
+        },
+        "sem_modal_deontico": {
+          "verdict": "FIABLE",
+          "var": 1.6061,
+          "mean": 1.686,
+          "none_ratio": 0.0,
+          "verb_bias": 0.222,
+          "issues": []
+        },
+        "sem_modal_epistemico": {
+          "verdict": "FIABLE",
+          "var": 0.6788,
+          "mean": 2.073,
+          "none_ratio": 0.0,
+          "verb_bias": 0.469,
+          "issues": []
+        },
+        "sem_agentividad": {
+          "verdict": "FIABLE",
+          "var": 0.5675,
+          "mean": 2.921,
+          "none_ratio": 0.0,
+          "verb_bias": 0.537,
+          "issues": []
+        },
+        "sem_vaguedad_semantica": {
+          "verdict": "FIABLE",
+          "var": 0.6331,
+          "mean": 3.277,
+          "none_ratio": 0.0,
+          "verb_bias": -0.062,
+          "issues": []
+        },
+        "sem_causalidad_evento": {
+          "verdict": "FIABLE",
+          "var": 0.8244,
+          "mean": 1.832,
+          "none_ratio": 0.0,
+          "verb_bias": 0.472,
+          "issues": []
+        },
+        "sem_telicidad": {
+          "verdict": "FIABLE",
+          "var": 0.5295,
+          "mean": 2.152,
+          "none_ratio": 0.0,
+          "verb_bias": 0.32,
+          "issues": []
+        },
+        "sem_informatividad": {
+          "verdict": "FIABLE",
+          "var": 0.6639,
+          "mean": 2.408,
+          "none_ratio": 0.0,
+          "verb_bias": 0.425,
+          "issues": []
+        },
+        "sem_relevancia_tematica": {
+          "verdict": "FIABLE",
+          "var": 0.603,
+          "mean": 4.047,
+          "none_ratio": 0.0,
+          "verb_bias": -0.153,
+          "issues": []
+        },
+        "sem_stance": {
+          "verdict": "FIABLE",
+          "var": 1.0841,
+          "mean": 4.01,
+          "none_ratio": 0.0,
+          "verb_bias": 0.046,
+          "issues": []
+        },
+        "sem_relacion_retorica_local": {
+          "verdict": "FIABLE",
+          "var": 0.5339,
+          "mean": 2.754,
+          "none_ratio": 0.0,
+          "verb_bias": 0.465,
+          "issues": []
+        },
+        "sem_ambiguedad_lexica": {
+          "verdict": "FIABLE",
+          "var": 0.533,
+          "mean": 1.55,
+          "none_ratio": 0.0,
+          "verb_bias": 0.052,
+          "issues": []
+        },
+        "sem_coherencia_campo_semantico": {
+          "verdict": "FIABLE",
+          "var": 0.6046,
+          "mean": 4.026,
+          "none_ratio": 0.0,
+          "verb_bias": -0.001,
+          "issues": []
+        },
+        "sem_precision_numerica": {
+          "verdict": "FIABLE",
+          "var": 1.1368,
+          "mean": 0.702,
+          "none_ratio": 0.0,
+          "verb_bias": 0.2,
+          "issues": []
+        },
+        "sem_comparacion_bien_formada": {
+          "verdict": "FIABLE",
+          "var": 0.967,
+          "mean": 1.131,
+          "none_ratio": 0.0,
+          "verb_bias": 0.406,
+          "issues": []
+        },
+        "sem_aspectualidad_evento": {
+          "verdict": "FIABLE",
+          "var": 0.8696,
+          "mean": 0.812,
+          "none_ratio": 0.0,
+          "verb_bias": 0.088,
+          "issues": []
+        },
+        "sem_rol_paciente_afectado": {
+          "verdict": "FIABLE",
+          "var": 0.5238,
+          "mean": 2.534,
+          "none_ratio": 0.0,
+          "verb_bias": 0.385,
+          "issues": []
+        },
+        "sem_implicatura": {
+          "verdict": "FIABLE",
+          "var": 0.7099,
+          "mean": 2.34,
+          "none_ratio": 0.0,
+          "verb_bias": 0.212,
+          "issues": []
+        },
+        "sem_acto_habla_fuerza": {
+          "verdict": "FIABLE",
+          "var": 0.5384,
+          "mean": 3.277,
+          "none_ratio": 0.0,
+          "verb_bias": -0.041,
+          "issues": []
+        },
+        "sem_coherencia_ref_local": {
+          "verdict": "FIABLE",
+          "var": 0.4188,
+          "mean": 3.293,
+          "none_ratio": 0.0,
+          "verb_bias": -0.016,
+          "issues": []
+        },
+        "sem_anafora_resuelta": {
+          "verdict": "FIABLE",
+          "var": 0.4542,
+          "mean": 3.277,
+          "none_ratio": 0.0,
+          "verb_bias": 0.064,
+          "issues": []
+        },
+        "ing_profundidad_causal": {
+          "verdict": "FIABLE",
+          "var": 0.4878,
+          "mean": 0.89,
+          "none_ratio": 0.0,
+          "verb_bias": 0.298,
+          "issues": []
+        },
+        "ing_cohesion_tematica_bloque": {
+          "verdict": "FIABLE",
+          "var": 0.743,
+          "mean": 3.288,
+          "none_ratio": 0.0,
+          "verb_bias": -0.334,
+          "issues": []
+        },
+        "ing_separation_hechos_opiniones": {
+          "verdict": "FIABLE",
+          "var": 0.5349,
+          "mean": 0.791,
+          "none_ratio": 0.0,
+          "verb_bias": 0.306,
+          "issues": []
+        },
+        "epist_trazabilidad_evidencial": {
+          "verdict": "FIABLE",
+          "var": 0.8563,
+          "mean": 0.89,
+          "none_ratio": 0.0,
+          "verb_bias": 0.286,
+          "issues": []
+        },
+        "epist_jerarquia_evidencial": {
+          "verdict": "FIABLE",
+          "var": 0.4918,
+          "mean": 0.754,
+          "none_ratio": 0.0,
+          "verb_bias": 0.221,
+          "issues": []
+        },
+        "prag_precision_escalar": {
+          "verdict": "FIABLE",
+          "var": 0.4432,
+          "mean": 1.785,
+          "none_ratio": 0.0,
+          "verb_bias": -0.029,
+          "issues": []
+        },
+        "cogn_metafora_tipo": {
+          "verdict": "FIABLE",
+          "var": 2.1505,
+          "mean": 1.152,
+          "none_ratio": 0.0,
+          "verb_bias": 0.055,
+          "issues": []
+        },
+        "cogn_metafora_convencionalidad": {
+          "verdict": "FIABLE",
+          "var": 0.722,
+          "mean": 1.445,
+          "none_ratio": 0.0,
+          "verb_bias": 0.369,
+          "issues": []
+        },
+        "cogn_metafora_grounding": {
+          "verdict": "FIABLE",
+          "var": 0.8776,
+          "mean": 2.037,
+          "none_ratio": 0.0,
+          "verb_bias": 0.585,
+          "issues": []
+        },
+        "cogn_scanning_tipo": {
+          "verdict": "FIABLE",
+          "var": 0.7139,
+          "mean": 1.476,
+          "none_ratio": 0.0,
+          "verb_bias": 0.506,
+          "issues": []
+        },
+        "cogn_fictive_motion": {
+          "verdict": "FIABLE",
+          "var": 0.5814,
+          "mean": 0.864,
+          "none_ratio": 0.0,
+          "verb_bias": 0.475,
+          "issues": []
+        },
+        "cib_escalada_simetrica": {
+          "verdict": "FIABLE",
+          "var": 0.8354,
+          "mean": 0.717,
+          "none_ratio": 0.0,
+          "verb_bias": 0.309,
+          "issues": []
+        },
+        "gt_cooperativo_vs_competitivo": {
+          "verdict": "FIABLE",
+          "var": 1.3194,
+          "mean": 1.11,
+          "none_ratio": 0.0,
+          "verb_bias": 0.282,
+          "issues": []
+        },
+        "prag_deficit_informativo": {
+          "verdict": "FIABLE",
+          "var": 0.7634,
+          "mean": 2.204,
+          "none_ratio": 0.0,
+          "verb_bias": -0.323,
+          "issues": []
+        },
+        "prag_indirectividad": {
+          "verdict": "FIABLE",
+          "var": 0.747,
+          "mean": 1.749,
+          "none_ratio": 0.0,
+          "verb_bias": 0.348,
+          "issues": []
+        },
+        "prag_completitud_explicatura": {
+          "verdict": "FIABLE",
+          "var": 0.3668,
+          "mean": 2.482,
+          "none_ratio": 0.0,
+          "verb_bias": 0.314,
+          "issues": []
+        },
+        "cogn_productividad_constructional": {
+          "verdict": "FIABLE",
+          "var": 0.617,
+          "mean": 2.0,
+          "none_ratio": 0.01,
+          "verb_bias": 0.418,
+          "issues": []
+        }
+      }
+    }
+  },
+  "veredictos_detalle": {
+    "fal_adjetiva": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1769,
+          "mean": 2.663,
+          "none_ratio": 0.005,
+          "verb_bias": 0.342,
+          "issues": []
+        }
+      }
+    },
+    "tl_interpretaciones": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7655,
+          "mean": 2.689,
+          "none_ratio": 0.005,
+          "verb_bias": 0.418,
+          "issues": []
+        }
+      }
+    },
+    "sem_modal_epistemico": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6788,
+          "mean": 2.073,
+          "none_ratio": 0.0,
+          "verb_bias": 0.469,
+          "issues": []
+        }
+      }
+    },
+    "plano_extra": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.0337,
+          "mean": 3.753,
+          "none_ratio": 0.005,
+          "verb_bias": 0.082,
+          "issues": []
+        }
+      }
+    },
+    "cogn_metafora_grounding": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8776,
+          "mean": 2.037,
+          "none_ratio": 0.0,
+          "verb_bias": 0.585,
+          "issues": []
+        }
+      }
+    },
+    "inf_analogica": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.0786,
+          "mean": 0.735,
+          "none_ratio": 0.01,
+          "verb_bias": 0.383,
+          "issues": []
+        }
+      }
+    },
+    "cib_escalada_simetrica": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8354,
+          "mean": 0.717,
+          "none_ratio": 0.0,
+          "verb_bias": 0.309,
+          "issues": []
+        }
+      }
+    },
+    "fal_conjuntiva": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7614,
+          "mean": 1.143,
+          "none_ratio": 0.01,
+          "verb_bias": 0.385,
+          "issues": []
+        }
+      }
+    },
+    "prag_precision_escalar": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4432,
+          "mean": 1.785,
+          "none_ratio": 0.0,
+          "verb_bias": -0.029,
+          "issues": []
+        }
+      }
+    },
+    "cre_origen_repeticion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.392,
+          "mean": 1.275,
+          "none_ratio": 0.01,
+          "verb_bias": 0.307,
+          "issues": []
+        }
+      }
+    },
+    "set_intersection": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.3528,
+          "mean": 0.339,
+          "none_ratio": 0.01,
+          "verb_bias": 0.292,
+          "issues": []
+        }
+      }
+    },
+    "sem_aspectualidad_evento": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8696,
+          "mean": 0.812,
+          "none_ratio": 0.0,
+          "verb_bias": 0.088,
+          "issues": []
+        }
+      }
+    },
+    "set_inclusion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8533,
+          "mean": 1.566,
+          "none_ratio": 0.01,
+          "verb_bias": 0.416,
+          "issues": []
+        }
+      }
+    },
+    "cre_origen_silogismo": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6023,
+          "mean": 0.603,
+          "none_ratio": 0.01,
+          "verb_bias": 0.21,
+          "issues": []
+        }
+      }
+    },
+    "sem_relevancia_tematica": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.603,
+          "mean": 4.047,
+          "none_ratio": 0.0,
+          "verb_bias": -0.153,
+          "issues": []
+        }
+      }
+    },
+    "fal_ecuacion_falsa": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1046,
+          "mean": 0.958,
+          "none_ratio": 0.01,
+          "verb_bias": 0.251,
+          "issues": []
+        }
+      }
+    },
+    "dec_fallo_premisa_ausente": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1507,
+          "mean": 1.624,
+          "none_ratio": 0.01,
+          "verb_bias": 0.012,
+          "issues": []
+        }
+      }
+    },
+    "sol_alternativas_presentadas": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6193,
+          "mean": 0.566,
+          "none_ratio": 0.01,
+          "verb_bias": 0.276,
+          "issues": []
+        }
+      }
+    },
+    "epist_trazabilidad_evidencial": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8563,
+          "mean": 0.89,
+          "none_ratio": 0.0,
+          "verb_bias": 0.286,
+          "issues": []
+        }
+      }
+    },
+    "preg_donde": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4286,
+          "mean": 0.312,
+          "none_ratio": 0.01,
+          "verb_bias": 0.232,
+          "issues": []
+        }
+      }
+    },
+    "sem_acto_habla": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.6459,
+          "mean": 1.453,
+          "none_ratio": 0.005,
+          "verb_bias": -0.107,
+          "issues": []
+        }
+      }
+    },
+    "sem_vaguedad_semantica": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6331,
+          "mean": 3.277,
+          "none_ratio": 0.0,
+          "verb_bias": -0.062,
+          "issues": []
+        }
+      }
+    },
+    "preg_para_que": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8043,
+          "mean": 0.772,
+          "none_ratio": 0.01,
+          "verb_bias": 0.246,
+          "issues": []
+        }
+      }
+    },
+    "fal_predicado_desconectado": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7121,
+          "mean": 0.82,
+          "none_ratio": 0.01,
+          "verb_bias": 0.284,
+          "issues": []
+        }
+      }
+    },
+    "sem_implicatura": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7099,
+          "mean": 2.34,
+          "none_ratio": 0.0,
+          "verb_bias": 0.212,
+          "issues": []
+        }
+      }
+    },
+    "dec_fallo_premisa_opaca": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.3099,
+          "mean": 1.789,
+          "none_ratio": 0.005,
+          "verb_bias": 0.048,
+          "issues": []
+        }
+      }
+    },
+    "plano_sesgo_ref_generalizacion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.2677,
+          "mean": 1.624,
+          "none_ratio": 0.01,
+          "verb_bias": 0.348,
+          "issues": []
+        }
+      }
+    },
+    "canal_dominante": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7724,
+          "mean": 1.228,
+          "none_ratio": 0.01,
+          "verb_bias": 0.437,
+          "issues": []
+        }
+      }
+    },
+    "canal_atrapamiento": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1709,
+          "mean": 1.577,
+          "none_ratio": 0.01,
+          "verb_bias": 0.298,
+          "issues": []
+        }
+      }
+    },
+    "inf_condicional": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.9944,
+          "mean": 1.127,
+          "none_ratio": 0.01,
+          "verb_bias": 0.444,
+          "issues": []
+        }
+      }
+    },
+    "presup_cadena_causal": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7484,
+          "mean": 1.884,
+          "none_ratio": 0.005,
+          "verb_bias": 0.217,
+          "issues": []
+        }
+      }
+    },
+    "tl_conductas": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.4343,
+          "mean": 2.347,
+          "none_ratio": 0.005,
+          "verb_bias": 0.432,
+          "issues": []
+        }
+      }
+    },
+    "dec_fallo_premisa_universal": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.6555,
+          "mean": 1.492,
+          "none_ratio": 0.01,
+          "verb_bias": 0.261,
+          "issues": []
+        }
+      }
+    },
+    "dec_aplazamiento": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4412,
+          "mean": 0.317,
+          "none_ratio": 0.01,
+          "verb_bias": 0.164,
+          "issues": []
+        }
+      }
+    },
+    "eco_diversidad_argumental": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5756,
+          "mean": 1.545,
+          "none_ratio": 0.0,
+          "verb_bias": 0.554,
+          "issues": []
+        }
+      }
+    },
+    "gt_cooperativo_vs_competitivo": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.3194,
+          "mean": 1.11,
+          "none_ratio": 0.0,
+          "verb_bias": 0.282,
+          "issues": []
+        }
+      }
+    },
+    "plano_sesgo_extra_fantasia": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.4089,
+          "mean": 1.545,
+          "none_ratio": 0.01,
+          "verb_bias": 0.271,
+          "issues": []
+        }
+      }
+    },
+    "prag_indirectividad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.747,
+          "mean": 1.749,
+          "none_ratio": 0.0,
+          "verb_bias": 0.348,
+          "issues": []
+        }
+      }
+    },
+    "cre_origen_experiencia": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 2.6266,
+          "mean": 2.032,
+          "none_ratio": 0.01,
+          "verb_bias": 0.326,
+          "issues": []
+        }
+      }
+    },
+    "preg_como": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.3351,
+          "mean": 1.005,
+          "none_ratio": 0.01,
+          "verb_bias": 0.414,
+          "issues": []
+        }
+      }
+    },
+    "inf_validez": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5025,
+          "mean": 2.553,
+          "none_ratio": 0.005,
+          "verb_bias": 0.185,
+          "issues": []
+        }
+      }
+    },
+    "sem_ambiguedad_lexica": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.533,
+          "mean": 1.55,
+          "none_ratio": 0.0,
+          "verb_bias": 0.052,
+          "issues": []
+        }
+      }
+    },
+    "dec_absorcion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6313,
+          "mean": 0.532,
+          "none_ratio": 0.005,
+          "verb_bias": 0.298,
+          "issues": []
+        }
+      }
+    },
+    "canal_auditivo": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.9574,
+          "mean": 0.616,
+          "none_ratio": 0.005,
+          "verb_bias": 0.239,
+          "issues": []
+        }
+      }
+    },
+    "inf_transitiva": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7181,
+          "mean": 1.005,
+          "none_ratio": 0.01,
+          "verb_bias": 0.458,
+          "issues": []
+        }
+      }
+    },
+    "prag_completitud_explicatura": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.3668,
+          "mean": 2.482,
+          "none_ratio": 0.0,
+          "verb_bias": 0.314,
+          "issues": []
+        }
+      }
+    },
+    "cre_molde_identidad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.3989,
+          "mean": 1.291,
+          "none_ratio": 0.01,
+          "verb_bias": 0.349,
+          "issues": []
+        }
+      }
+    },
+    "dec_condicional": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1093,
+          "mean": 0.958,
+          "none_ratio": 0.005,
+          "verb_bias": 0.379,
+          "issues": []
+        }
+      }
+    },
+    "dec_fallo_premisas_contradictorias": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4153,
+          "mean": 0.37,
+          "none_ratio": 0.01,
+          "verb_bias": 0.304,
+          "issues": []
+        }
+      }
+    },
+    "canal_secuencia_funcional": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1905,
+          "mean": 1.079,
+          "none_ratio": 0.01,
+          "verb_bias": 0.492,
+          "issues": []
+        }
+      }
+    },
+    "preg_porque": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.9886,
+          "mean": 0.852,
+          "none_ratio": 0.01,
+          "verb_bias": 0.391,
+          "issues": []
+        }
+      }
+    },
+    "cogn_productividad_constructional": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.617,
+          "mean": 2.0,
+          "none_ratio": 0.01,
+          "verb_bias": 0.418,
+          "issues": []
+        }
+      }
+    },
+    "sem_relacion_retorica_local": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5339,
+          "mean": 2.754,
+          "none_ratio": 0.0,
+          "verb_bias": 0.465,
+          "issues": []
+        }
+      }
+    },
+    "cre_verificabilidad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8706,
+          "mean": 1.816,
+          "none_ratio": 0.005,
+          "verb_bias": 0.171,
+          "issues": []
+        }
+      }
+    },
+    "ing_cohesion_tematica_bloque": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.743,
+          "mean": 3.288,
+          "none_ratio": 0.0,
+          "verb_bias": -0.334,
+          "issues": []
+        }
+      }
+    },
+    "inf_atributiva": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.676,
+          "mean": 2.101,
+          "none_ratio": 0.01,
+          "verb_bias": 0.508,
+          "issues": []
+        }
+      }
+    },
+    "preg_cuando": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4786,
+          "mean": 0.418,
+          "none_ratio": 0.01,
+          "verb_bias": 0.178,
+          "issues": []
+        }
+      }
+    },
+    "inf_fuerza_conectores": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5522,
+          "mean": 1.698,
+          "none_ratio": 0.01,
+          "verb_bias": 0.351,
+          "issues": []
+        }
+      }
+    },
+    "sem_acto_habla_fuerza": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5384,
+          "mean": 3.277,
+          "none_ratio": 0.0,
+          "verb_bias": -0.041,
+          "issues": []
+        }
+      }
+    },
+    "sem_precision_numerica": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1368,
+          "mean": 0.702,
+          "none_ratio": 0.0,
+          "verb_bias": 0.2,
+          "issues": []
+        }
+      }
+    },
+    "sem_evidencialidad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.4407,
+          "mean": 1.095,
+          "none_ratio": 0.005,
+          "verb_bias": -0.132,
+          "issues": []
+        }
+      }
+    },
+    "dec_delegacion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.445,
+          "mean": 0.328,
+          "none_ratio": 0.01,
+          "verb_bias": 0.178,
+          "issues": []
+        }
+      }
+    },
+    "tl_colapso": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7623,
+          "mean": 1.323,
+          "none_ratio": 0.01,
+          "verb_bias": 0.298,
+          "issues": []
+        }
+      }
+    },
+    "cre_concesiva": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1586,
+          "mean": 1.413,
+          "none_ratio": 0.01,
+          "verb_bias": 0.402,
+          "issues": []
+        }
+      }
+    },
+    "fal_preposicional": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.681,
+          "mean": 1.221,
+          "none_ratio": 0.005,
+          "verb_bias": 0.343,
+          "issues": []
+        }
+      }
+    },
+    "preg_que": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.4716,
+          "mean": 1.111,
+          "none_ratio": 0.01,
+          "verb_bias": 0.317,
+          "issues": []
+        }
+      }
+    },
+    "sem_agentividad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5675,
+          "mean": 2.921,
+          "none_ratio": 0.0,
+          "verb_bias": 0.537,
+          "issues": []
+        }
+      }
+    },
+    "tl_criterios": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1996,
+          "mean": 2.221,
+          "none_ratio": 0.005,
+          "verb_bias": 0.382,
+          "issues": []
+        }
+      }
+    },
+    "cogn_scanning_tipo": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7139,
+          "mean": 1.476,
+          "none_ratio": 0.0,
+          "verb_bias": 0.506,
+          "issues": []
+        }
+      }
+    },
+    "presup_proyeccion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4277,
+          "mean": 2.737,
+          "none_ratio": 0.005,
+          "verb_bias": 0.113,
+          "issues": []
+        }
+      }
+    },
+    "cogn_metafora_convencionalidad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.722,
+          "mean": 1.445,
+          "none_ratio": 0.0,
+          "verb_bias": 0.369,
+          "issues": []
+        }
+      }
+    },
+    "tl_metanivel": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.0978,
+          "mean": 0.911,
+          "none_ratio": 0.005,
+          "verb_bias": 0.182,
+          "issues": []
+        }
+      }
+    },
+    "plano_equilibrio": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.0762,
+          "mean": 2.376,
+          "none_ratio": 0.01,
+          "verb_bias": 0.181,
+          "issues": []
+        }
+      }
+    },
+    "fal_adverbial": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8522,
+          "mean": 1.547,
+          "none_ratio": 0.005,
+          "verb_bias": 0.357,
+          "issues": []
+        }
+      }
+    },
+    "cre_sustantiva": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5709,
+          "mean": 3.7,
+          "none_ratio": 0.005,
+          "verb_bias": 0.315,
+          "issues": []
+        }
+      }
+    },
+    "cre_comparativa": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.3313,
+          "mean": 1.762,
+          "none_ratio": 0.01,
+          "verb_bias": 0.53,
+          "issues": []
+        }
+      }
+    },
+    "dec_exclusion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8305,
+          "mean": 0.72,
+          "none_ratio": 0.01,
+          "verb_bias": 0.286,
+          "issues": []
+        }
+      }
+    },
+    "preg_quien": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6767,
+          "mean": 0.513,
+          "none_ratio": 0.01,
+          "verb_bias": 0.29,
+          "issues": []
+        }
+      }
+    },
+    "arg_data_ratio": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.9046,
+          "mean": 0.926,
+          "none_ratio": 0.005,
+          "verb_bias": 0.277,
+          "issues": []
+        }
+      }
+    },
+    "sem_stance": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.0841,
+          "mean": 4.01,
+          "none_ratio": 0.0,
+          "verb_bias": 0.046,
+          "issues": []
+        }
+      }
+    },
+    "fal_subordinada_disfrazada": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.2348,
+          "mean": 1.423,
+          "none_ratio": 0.01,
+          "verb_bias": 0.226,
+          "issues": []
+        }
+      }
+    },
+    "presup_verificabilidad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.731,
+          "mean": 1.784,
+          "none_ratio": 0.005,
+          "verb_bias": 0.189,
+          "issues": []
+        }
+      }
+    },
+    "sem_modal_deontico": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.6061,
+          "mean": 1.686,
+          "none_ratio": 0.0,
+          "verb_bias": 0.222,
+          "issues": []
+        }
+      }
+    },
+    "set_exclusion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.9441,
+          "mean": 0.863,
+          "none_ratio": 0.005,
+          "verb_bias": 0.253,
+          "issues": []
+        }
+      }
+    },
+    "sem_anafora_resuelta": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4542,
+          "mean": 3.277,
+          "none_ratio": 0.0,
+          "verb_bias": 0.064,
+          "issues": []
+        }
+      }
+    },
+    "sem_rol_paciente_afectado": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5238,
+          "mean": 2.534,
+          "none_ratio": 0.0,
+          "verb_bias": 0.385,
+          "issues": []
+        }
+      }
+    },
+    "nodo_rigidez": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.7206,
+          "mean": 2.053,
+          "none_ratio": 0.01,
+          "verb_bias": 0.107,
+          "issues": []
+        }
+      }
+    },
+    "ing_profundidad_causal": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4878,
+          "mean": 0.89,
+          "none_ratio": 0.0,
+          "verb_bias": 0.298,
+          "issues": []
+        }
+      }
+    },
+    "arg_claim_ratio": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7353,
+          "mean": 3.926,
+          "none_ratio": 0.005,
+          "verb_bias": -0.07,
+          "issues": []
+        }
+      }
+    },
+    "sem_coherencia_ref_local": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4188,
+          "mean": 3.293,
+          "none_ratio": 0.0,
+          "verb_bias": -0.016,
+          "issues": []
+        }
+      }
+    },
+    "sem_coherencia_campo_semantico": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6046,
+          "mean": 4.026,
+          "none_ratio": 0.0,
+          "verb_bias": -0.001,
+          "issues": []
+        }
+      }
+    },
+    "fal_predicado_sin_sujeto": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.9734,
+          "mean": 1.291,
+          "none_ratio": 0.01,
+          "verb_bias": 0.331,
+          "issues": []
+        }
+      }
+    },
+    "preg_ausencia": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.1476,
+          "mean": 1.804,
+          "none_ratio": 0.01,
+          "verb_bias": -0.038,
+          "issues": []
+        }
+      }
+    },
+    "arg_warrant_explicito": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5353,
+          "mean": 0.811,
+          "none_ratio": 0.005,
+          "verb_bias": 0.341,
+          "issues": []
+        }
+      }
+    },
+    "epist_jerarquia_evidencial": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.4918,
+          "mean": 0.754,
+          "none_ratio": 0.0,
+          "verb_bias": 0.221,
+          "issues": []
+        }
+      }
+    },
+    "presup_densidad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5915,
+          "mean": 3.405,
+          "none_ratio": 0.005,
+          "verb_bias": -0.005,
+          "issues": []
+        }
+      }
+    },
+    "fal_sujeto_sustituido": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.2402,
+          "mean": 1.2,
+          "none_ratio": 0.005,
+          "verb_bias": 0.214,
+          "issues": []
+        }
+      }
+    },
+    "sem_informatividad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6639,
+          "mean": 2.408,
+          "none_ratio": 0.0,
+          "verb_bias": 0.425,
+          "issues": []
+        }
+      }
+    },
+    "fal_sujeto_falso": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.9916,
+          "mean": 1.138,
+          "none_ratio": 0.01,
+          "verb_bias": 0.255,
+          "issues": []
+        }
+      }
+    },
+    "inf_negativa": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6266,
+          "mean": 0.921,
+          "none_ratio": 0.01,
+          "verb_bias": 0.343,
+          "issues": []
+        }
+      }
+    },
+    "ing_separation_hechos_opiniones": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5349,
+          "mean": 0.791,
+          "none_ratio": 0.0,
+          "verb_bias": 0.306,
+          "issues": []
+        }
+      }
+    },
+    "cogn_metafora_tipo": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 2.1505,
+          "mean": 1.152,
+          "none_ratio": 0.0,
+          "verb_bias": 0.055,
+          "issues": []
+        }
+      }
+    },
+    "presup_carga_compartida": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.499,
+          "mean": 3.579,
+          "none_ratio": 0.005,
+          "verb_bias": -0.011,
+          "issues": []
+        }
+      }
+    },
+    "sem_telicidad": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5295,
+          "mean": 2.152,
+          "none_ratio": 0.0,
+          "verb_bias": 0.32,
+          "issues": []
+        }
+      }
+    },
+    "cre_solidez": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5394,
+          "mean": 1.637,
+          "none_ratio": 0.005,
+          "verb_bias": 0.253,
+          "issues": []
+        }
+      }
+    },
+    "cre_nivel_compresion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.6024,
+          "mean": 3.354,
+          "none_ratio": 0.01,
+          "verb_bias": -0.167,
+          "issues": []
+        }
+      }
+    },
+    "cogn_fictive_motion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.5814,
+          "mean": 0.864,
+          "none_ratio": 0.0,
+          "verb_bias": 0.475,
+          "issues": []
+        }
+      }
+    },
+    "tl_reglas_sistema": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8891,
+          "mean": 0.81,
+          "none_ratio": 0.01,
+          "verb_bias": 0.146,
+          "issues": []
+        }
+      }
+    },
+    "dec_fallo_conclusion_no_derivada": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 1.0532,
+          "mean": 1.333,
+          "none_ratio": 0.01,
+          "verb_bias": 0.194,
+          "issues": []
+        }
+      }
+    },
+    "sol_evidencia_presente": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.804,
+          "mean": 1.143,
+          "none_ratio": 0.01,
+          "verb_bias": 0.343,
+          "issues": []
+        }
+      }
+    },
+    "sem_comparacion_bien_formada": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.967,
+          "mean": 1.131,
+          "none_ratio": 0.0,
+          "verb_bias": 0.406,
+          "issues": []
+        }
+      }
+    },
+    "plano_sesgo_auto_normalizacion": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7831,
+          "mean": 0.772,
+          "none_ratio": 0.01,
+          "verb_bias": 0.424,
+          "issues": []
+        }
+      }
+    },
+    "sem_causalidad_evento": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.8244,
+          "mean": 1.832,
+          "none_ratio": 0.0,
+          "verb_bias": 0.472,
+          "issues": []
+        }
+      }
+    },
+    "prag_deficit_informativo": {
+      "verdict_final": "FIABLE",
+      "verdicts_por_capa": [
+        "FIABLE"
+      ],
+      "evidence": {
+        "capa5_distribucion": {
+          "verdict": "FIABLE",
+          "var": 0.7634,
+          "mean": 2.204,
+          "none_ratio": 0.0,
+          "verb_bias": -0.323,
+          "issues": []
+        }
+      }
+    }
+  }
+}
