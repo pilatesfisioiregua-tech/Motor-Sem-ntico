@@ -104,3 +104,38 @@ Los únicos costes futuros serán: POCs de validación puntuales y test final de
 |---|---|---|---|---|
 | [descripción] | $[X] | $[Y] | [+/-Z%] | [explicación si delta >10%] |
 ```
+
+---
+
+## 06-Apr-2026
+
+| Operación | Estimado | Real | Delta | Causa |
+|---|---|---|---|---|
+| **T-S1-TRAIN R1 vast.ai A100 SXM4 40GB** | $0.40 (25min × $0.86/h) | **$0.24** (19.4min × $0.86/h) | **-40%** | OK — terminó antes de lo esperado: 240s training (4 min), resto = setup (deps install + descarga modelo + patch script) |
+
+### Detalles T-S1-TRAIN R1
+- Instancia: 34255158 (A100-SXM4-40GB)
+- GPU: 99% utilización, 20.3GB/40GB memoria
+- Modelo: DeBERTa-v3-large (436M total, 1.4M entrenables LoRA r=8)
+- Training: 15 epochs en 240s (~16s/epoch)
+- Speedup vs MPS: ~55x (T-S2-0 prelim: 13min/epoch en MPS)
+- Status: terminó natural, instancia destruida tras descarga
+- Crédito post: $234.59 (-$0.24)
+
+### Hallazgo crítico — métricas S1 R1
+- corr/dim media simple: 0.009 (Pearson)
+- corr/dim media |·|: 0.21
+- dims con corr ≥ 0.30: 10/81 (12.3%)
+- dims con corr negativa significativa (<-0.10): 26/81 (32%)
+- **Diagnóstico**: probable artefacto del test split n=20 (muy pequeño para evaluar 81 dims). Las correlaciones individuales con n=20 son extremadamente ruidosas. NO bug del setup vast.ai.
+- Acción: NO lanzar S2/S3 hasta diagnosticar (k-fold CV o cambio split).
+
+### Lo que SÍ funcionó (validado)
+- vast.ai CLI install + setup
+- Crear instancia + onstart deps
+- SSH + scp transfer
+- torch 2.6 upgrade
+- transformers 4.44.2 + peft 0.13.2 (validado local)
+- Patch revision='refs/pr/13' para safetensors deberta-v3-large
+- Training corre, A100 99% util, completa en minutos
+- Destroy automático limpio
