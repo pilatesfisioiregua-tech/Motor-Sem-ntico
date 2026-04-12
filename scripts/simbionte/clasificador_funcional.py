@@ -113,25 +113,78 @@ FUNC_CODES = {name: info["codigo"] for name, info in FUNCIONES.items()}
 # LISTAS CERRADAS (verificadas)
 # ============================================================
 
-ADV_TIEMPO = frozenset({"ayer","hoy","mañana","después","antes","luego","finalmente",
+# Listas cerradas bilingues ES + EN
+ADV_TIEMPO = frozenset({
+    # ES
+    "ayer","hoy","mañana","después","antes","luego","finalmente",
     "posteriormente","previamente","entonces","mientras","ya","aún","todavía",
-    "pronto","tarde","temprano","inmediatamente","recientemente"})
-ADV_LUGAR = frozenset({"aquí","allí","ahí","dentro","fuera","arriba","abajo","cerca",
-    "lejos","delante","detrás","encima","debajo","donde"})
-ADV_CANTIDAD = frozenset({"muy","mucho","poco","bastante","demasiado","más","menos",
-    "tanto","casi","apenas","solo","solamente"})
-ADV_EPISTEMICO = frozenset({"probablemente","posiblemente","quizás","quizá","seguramente",
+    "pronto","tarde","temprano","inmediatamente","recientemente",
+    # EN
+    "yesterday","today","tomorrow","after","before","then","finally",
+    "subsequently","previously","meanwhile","already","still","yet",
+    "soon","late","early","immediately","recently","now","ago","later",
+    "ahead","earlier","formerly",
+})
+ADV_LUGAR = frozenset({
+    # ES
+    "aquí","allí","ahí","dentro","fuera","arriba","abajo","cerca",
+    "lejos","delante","detrás","encima","debajo","donde",
+    # EN
+    "here","there","inside","outside","above","below","near","far",
+    "ahead","behind","where","somewhere","nowhere","everywhere",
+    "upward","downward","upwards","downwards","overseas","abroad",
+})
+ADV_CANTIDAD = frozenset({
+    # ES
+    "muy","mucho","poco","bastante","demasiado","más","menos",
+    "tanto","casi","apenas","solo","solamente",
+    # EN
+    "very","much","little","enough","too","more","less",
+    "almost","barely","only","just","quite","rather","fairly",
+    "somewhat","nearly","approximately","roughly","about",
+})
+ADV_EPISTEMICO = frozenset({
+    # ES
+    "probablemente","posiblemente","quizás","quizá","seguramente",
     "evidentemente","aparentemente","supuestamente","realmente","efectivamente",
-    "ciertamente","indudablemente"})
-ADV_NEGACION = frozenset({"no","nunca","jamás","tampoco","ni"})
-ADV_FRECUENCIA = frozenset({"siempre","frecuentemente","habitualmente","generalmente",
-    "normalmente","raramente","ocasionalmente"})
-ADV_ABSOLUTO = frozenset({"absolutamente","totalmente","completamente","definitivamente",
-    "enteramente","plenamente"})
+    "ciertamente","indudablemente",
+    # EN
+    "probably","possibly","perhaps","maybe","certainly","surely",
+    "apparently","supposedly","really","actually","effectively",
+    "clearly","obviously","definitely","undoubtedly","arguably",
+    "presumably","reportedly","allegedly","evidently",
+})
+ADV_NEGACION = frozenset({
+    # ES
+    "no","nunca","jamás","tampoco","ni",
+    # EN
+    "not","never","neither","nor","n't",
+})
+ADV_FRECUENCIA = frozenset({
+    # ES
+    "siempre","frecuentemente","habitualmente","generalmente",
+    "normalmente","raramente","ocasionalmente",
+    # EN
+    "always","frequently","usually","generally","normally",
+    "rarely","occasionally","often","sometimes","seldom",
+    "typically","commonly","regularly","constantly",
+})
+ADV_ABSOLUTO = frozenset({
+    # ES
+    "absolutamente","totalmente","completamente","definitivamente",
+    "enteramente","plenamente",
+    # EN
+    "absolutely","totally","completely","definitely",
+    "entirely","fully","wholly","utterly","thoroughly",
+})
 
-SUF_NOM_VERBO = ("ción","sión","miento","aje","ura","anza","encia","ancia")
-SUF_NOM_ADJ = ("dad","eza","ía","itud","ez")
-SUF_RELACIONAL = ("al","ar","ivo","iva","ico","ica","ero","era","ario","aria","tico","tica")
+# Sufijos bilingues ES + EN
+SUF_NOM_VERBO = ("ción","sión","miento","aje","ura","anza","encia","ancia",
+                 "tion","sion","ment","age","ure","ance","ence")
+SUF_NOM_ADJ = ("dad","eza","ía","itud","ez",
+               "ity","ness","ism","dom")
+SUF_RELACIONAL = ("al","ar","ivo","iva","ico","ica","ero","era","ario","aria","tico","tica",
+                  "ial","ive","ic","ical","ary","ory","ous","ful")
 
 # ============================================================
 # CLASIFICADOR PRINCIPAL
@@ -175,6 +228,13 @@ def clasificar_token(t):
             return "sust_nom_verbo", False
         elif t.text.lower().endswith(SUF_NOM_ADJ):
             return "sust_nom_adj", False
+        # PROPN y compound: resolver por DEP directamente (no necesita Haiku)
+        elif t.pos_ == "PROPN":
+            return "sust_agente" if dep == "nsubj" else "sust_complemento", False
+        elif dep == "compound":
+            return "sust_modificador", False
+        elif dep in ("appos", "flat", "flat:name"):
+            return "sust_complemento", False
         else:
             return "sust_no_clasificado", True
 
@@ -277,31 +337,37 @@ def clasificar_token(t):
         elif tl in ADV_EPISTEMICO: return "adv_epistemico", False
         elif tl in ADV_FRECUENCIA: return "adv_frecuencia", False
         elif tl in ADV_ABSOLUTO: return "adv_absoluto", False
-        elif tl.endswith("mente"): return "adv_modo", False
+        elif tl.endswith("mente") or tl.endswith("ly"): return "adv_modo", False
         else: return "adv_no_clasificado", True
 
-    # === CONJUNCIONES ===
+    # === CONJUNCIONES (ES + EN) ===
     elif t.pos_ in ("CCONJ", "SCONJ"):
         tl = t.text.lower()
-        if tl in ("y", "e", "ni"): return "conj_copulativa", False
-        elif tl in ("pero", "sino", "mas"): return "conj_adversativa", False
-        elif tl in ("o", "u"): return "conj_disyuntiva", False
-        elif tl in ("porque", "pues"): return "conj_causal", False
-        elif tl == "si": return "conj_condicional", False
-        elif tl == "aunque": return "conj_concesiva", False
-        elif tl in ("cuando", "mientras"): return "conj_temporal", False
+        if tl in ("y", "e", "ni", "and", "both", "nor"): return "conj_copulativa", False
+        elif tl in ("pero", "sino", "mas", "but", "yet", "however"): return "conj_adversativa", False
+        elif tl in ("o", "u", "or", "either"): return "conj_disyuntiva", False
+        elif tl in ("porque", "pues", "because", "since", "as", "for"): return "conj_causal", False
+        elif tl in ("si", "if", "whether", "unless"): return "conj_condicional", False
+        elif tl in ("aunque", "although", "though", "even"): return "conj_concesiva", False
+        elif tl in ("cuando", "mientras", "when", "while", "until", "before", "after"): return "conj_temporal", False
+        elif tl in ("that", "than", "so"): return "conj_otra", False
         else: return "conj_otra", False
 
     # === PREPOSICIONES ===
-    elif t.pos_ == "ADP":
+    # === PREPOSICIONES (ES + EN) ===
+    elif t.pos_ == "ADP" or (t.pos_ == "PART" and t.text.lower() == "to"):
         tl = t.text.lower()
-        if tl in ("en", "sobre", "bajo", "entre", "dentro", "fuera"): return "prep_espacial", False
-        elif tl in ("durante", "hasta", "desde", "tras"): return "prep_temporal", False
-        elif tl in ("con", "mediante"): return "prep_instrumental", False
-        elif tl == "para": return "prep_final", False
-        elif tl == "de": return "prep_relacion", False
-        elif tl == "a": return "prep_direccion", False
-        elif tl == "por": return "prep_no_clasificado", True
+        if tl in ("en", "sobre", "bajo", "entre", "dentro", "fuera",
+                   "in", "on", "at", "under", "between", "inside", "outside", "within"): return "prep_espacial", False
+        elif tl in ("durante", "hasta", "desde", "tras",
+                     "during", "until", "since", "after", "before"): return "prep_temporal", False
+        elif tl in ("con", "mediante", "with", "through", "via", "by"): return "prep_instrumental", False
+        elif tl in ("para", "for", "to", "toward", "towards"): return "prep_final", False
+        elif tl in ("de", "of", "from", "about", "regarding"): return "prep_relacion", False
+        elif tl in ("a", "hacia", "into", "onto", "toward"): return "prep_direccion", False
+        elif tl in ("por", "per"): return "prep_no_clasificado", True
+        elif tl in ("as", "like", "than", "against", "without", "despite",
+                     "across", "along", "around", "over", "beyond"): return "prep_no_clasificado", False
         else: return "prep_no_clasificado", False
 
     # === PRONOMBRES ===
