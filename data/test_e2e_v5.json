@@ -1,0 +1,119 @@
+{
+  "version": "e2e_v5_h1_tono_h3_modulado",
+  "fecha": "2026-04-12 18:45",
+  "sonnet": {
+    "bytecode": {
+      "diagnostico": {
+        "patron_principal": "dato_como_escudo",
+        "confianza": 0.85,
+        "dims_evaluadas": {
+          "epist_calibracion": 2,
+          "cogn_fuerza_equilibrio": 4,
+          "cog_pensamiento_sistemico": 4,
+          "f1_conservar": 3,
+          "f3_depurar": 1,
+          "lente_salud": 2,
+          "gob_sin_medir": 4,
+          "cib_escalada_simetrica": 1,
+          "cogn_fuerza_patron": 4,
+          "dato_como_escudo": 5,
+          "coherencia_datos": 3
+        }
+      },
+      "prescripcion": {
+        "accion": "confrontar_disonancia",
+        "instrucciones_traductor": [
+          "Exponer contradicción entre datos objetivos y expectativas",
+          "Señalar brecha entre facturación y rentabilidad",
+          "Cuestionar métricas de éxito utilizadas",
+          "Revelar inconsistencia en análisis comparativo"
+        ],
+        "restricciones_output": {
+          "mood_prohibido": [
+            "eufemistico",
+            "diplomatico",
+            "tranquilizador"
+          ],
+          "conectores_prohibidos": [
+            "sin_embargo",
+            "no_obstante",
+            "aunque",
+            "a_pesar_de"
+          ],
+          "fg_minimo": 0.85
+        }
+      },
+      "metadata": {
+        "geometria_cumplida": true
+      }
+    },
+    "texto_final": "**Tu empresa factura más pero gana menos. Los números crecen mientras la rentabilidad cae. Las métricas que usas para medir éxito ocultan esta realidad: comparas cifras sin analizar qué generan realmente.**",
+    "cost": 0.010589800000000002,
+    "h3": {
+      "passed": false,
+      "violations": [
+        "oraciones: 4 > 3 (tono frio)"
+      ],
+      "tono": "frio",
+      "fg_output": 0.984,
+      "n_oraciones": 4,
+      "n_tokens": 31
+    },
+    "tono": "frio"
+  },
+  "opus": {
+    "bytecode": {
+      "diagnostico": {
+        "patron_principal": "equilibrio_nash",
+        "confianza": 0.85,
+        "dims_evaluadas": {
+          "epist_calibracion": 4,
+          "cogn_fuerza_equilibrio": 5,
+          "cog_pensamiento_sistemico": 4,
+          "f1_conservar": 3,
+          "f3_depurar": 2,
+          "lente_salud": 3,
+          "gob_sin_medir": 1,
+          "cib_escalada_simetrica": 2,
+          "cogn_fuerza_patron": 4,
+          "dato_como_escudo": 5,
+          "coherencia_datos": 4
+        }
+      },
+      "prescripcion": {
+        "accion": "reforzar_compromiso",
+        "instrucciones_traductor": [
+          "mantener_precision_numerica",
+          "preservar_comparaciones_competitivas",
+          "enfatizar_brecha_objetivo_realidad",
+          "resaltar_factores_estructurales"
+        ],
+        "restricciones_output": {
+          "mood_prohibido": [
+            "emocional",
+            "dramatico"
+          ],
+          "conectores_prohibidos": [
+            "sin_embargo",
+            "no_obstante"
+          ],
+          "fg_minimo": 0.95
+        }
+      },
+      "metadata": {
+        "geometria_cumplida": true
+      }
+    },
+    "texto_final": "**Tu instrucción es reforzar el compromiso con precisión.**\n\nMantén números exactos, destaca cómo competimos vs. objetivos, muestra la brecha real entre donde estamos y donde debemos llegar, y explica qué factores estructurales lo generan. Usa datos como base sólida, piensa en sistemas completos, y asegura que todo sea coherente y verificable.",
+    "cost": 0.0447688,
+    "h3": {
+      "passed": true,
+      "violations": [],
+      "tono": "frio",
+      "fg_output": 0.994,
+      "n_oraciones": 3,
+      "n_tokens": 51
+    },
+    "tono": "frio"
+  }
+}

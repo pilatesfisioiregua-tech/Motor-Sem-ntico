@@ -1,0 +1,82 @@
+{
+  "version": "e2e_v4_harness",
+  "fecha": "2026-04-12 18:06",
+  "texto_words": 746,
+  "timings": {
+    "capa0": 141,
+    "capa2": 5650,
+    "capa3": 1430,
+    "total_ms": 12161
+  },
+  "costs": {
+    "h1": 0,
+    "capa2": 0.006924,
+    "capa3": 0.000752,
+    "total": 0.007676
+  },
+  "capa2_bytecode": {
+    "diagnostico": {
+      "patron_principal": "feedback_ciclico",
+      "confianza": 0.92,
+      "dims_evaluadas": {
+        "epist_calibracion": 1,
+        "cogn_fuerza_equilibrio": 4,
+        "cog_pensamiento_sistemico": 1,
+        "f1_conservar": 4,
+        "f3_depurar": 1,
+        "lente_salud": 4,
+        "gob_sin_medir": 5,
+        "cib_escalada_simetrica": 3,
+        "cogn_fuerza_patron": 4
+      }
+    },
+    "prescripcion": {
+      "accion": "confrontar_disonancia",
+      "instrucciones_traductor": [
+        "Señalar la contradicción entre métricas departamentales exitosas y resultado empresarial fallido",
+        "Evidenciar que cada director optimiza su subsistema ignorando el sistema total",
+        "Forzar reconocimiento de que las métricas actuales no miden lo que realmente importa para retener cuota de mercado"
+      ]
+    },
+    "metadata": {
+      "modo_recibido": "match_directo",
+      "geometria_cumplida": true
+    }
+  },
+  "capa3_output": "**Tu organización optimiza departamentos mientras el negocio se desmorona.** Cada director maximiza sus métricas ignorando que el sistema total falla. Las mediciones actuales no capturan lo que retiene clientes ni cuota de mercado. Redefine qué mides ahora o pierdes relevancia competitiva.",
+  "h3_verificacion": {
+    "passed": true,
+    "violations": [],
+    "fg_output": 0.993,
+    "n_oraciones": 4,
+    "n_tokens": 41
+  },
+  "modulador": {
+    "temperature": 0.1,
+    "tono": "clinico",
+    "system_prompt": "Responde de forma directa y breve. Solo datos y acciones. Cero rodeos.",
+    "max_tokens": 150,
+    "modelo": "haiku"
+  },
+  "resumen_simbionte": {
+    "fg_global": 0.989,
+    "n_tokens": 746,
+    "n_oraciones": 50,
+    "top_funciones": {
+      "det_articulo": 0.131,
+      "sust_agente": 0.079,
+      "sust_paciente": 0.076,
+      "verb_indicativo": 0.075,
+      "pronombre": 0.067
+    },
+    "ratio_condicional": 0.009,
+    "ratio_nominalizacion": 0.04,
+    "ratio_adversativo": 0.012,
+    "patrones_detectados": [
+      "feedback_ciclico",
+      "pensamiento_sistemico"
+    ],
+    "pct_determinista": 94.23592493297586,
+    "tokens_haiku": 43
+  }
+}

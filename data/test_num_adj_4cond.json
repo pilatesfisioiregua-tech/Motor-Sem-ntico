@@ -1,0 +1,159 @@
+{
+  "version": "poc_num_adj_4cond",
+  "fecha": "2026-04-12 18:22",
+  "texto_words": 444,
+  "condiciones": {
+    "A": {
+      "con_adj": true,
+      "modelo": "claude-opus-4-20250514",
+      "bytecode": {
+        "diagnostico": {
+          "patron_principal": "dato_como_escudo",
+          "confianza": 0.92,
+          "dims_evaluadas": {
+            "epist_calibracion": 1,
+            "cogn_fuerza_equilibrio": 4,
+            "cog_pensamiento_sistemico": 2,
+            "f1_conservar": 1,
+            "f3_depurar": 3,
+            "lente_salud": 4,
+            "gob_sin_medir": 1,
+            "cib_escalada_simetrica": 3,
+            "cogn_fuerza_patron": 4,
+            "dato_como_escudo": 5,
+            "coherencia_datos": 4
+          }
+        },
+        "prescripcion": {
+          "accion": "confrontar_disonancia",
+          "instrucciones_traductor": [
+            "Señalar contradicción entre abundancia de métricas y ausencia de acción correctiva",
+            "Cuestionar por qué con tantos datos precisos el sistema sigue disfuncional",
+            "Preguntar qué decisiones concretas se han tomado basadas en estas métricas"
+          ]
+        },
+        "metadata": {
+          "geometria_cumplida": true
+        }
+      },
+      "texto_final": "**Traducción del bytecode:**\n\nSe te instruye a confrontar una disonancia crítica: el sistema tiene métricas abundantes y precisas, pero carece de acciones correctivas reales. Debes señalar esta contradicción directamente y cuestionar por qué tanta recopilación de datos no se traduce en cambios funcionales.\n\n**Acción concreta:** Pregunta qué decisiones específicas y medibles se han tomado basadas en estas métricas. Las dimensiones clave indican que hay un patrón donde los datos se usan como escudo defensivo (puntuación 5) en lugar de como herramienta de transformación, mientras que la coherencia entre datos y acciones es débil (puntuación 4).",
+      "coste_total": 0.04842,
+      "latencia_s": 16.7,
+      "num_reclasificados": 20
+    },
+    "B": {
+      "con_adj": true,
+      "modelo": "claude-sonnet-4-20250514",
+      "bytecode": {
+        "diagnostico": {
+          "patron_principal": "dato_como_escudo",
+          "confianza": 0.92,
+          "dims_evaluadas": {
+            "epist_calibracion": 2,
+            "cogn_fuerza_equilibrio": 4,
+            "cog_pensamiento_sistemico": 3,
+            "f1_conservar": 1,
+            "f3_depurar": 2,
+            "lente_salud": 3,
+            "gob_sin_medir": 4,
+            "cib_escalada_simetrica": 2,
+            "cogn_fuerza_patron": 4,
+            "dato_como_escudo": 5,
+            "coherencia_datos": 4
+          }
+        },
+        "prescripcion": {
+          "accion": "confrontar_disonancia",
+          "instrucciones_traductor": [
+            "Señalar la contradicción entre crecimiento del 15% y margen del 8% vs objetivo del 20%",
+            "Preguntar qué métricas específicas usarán para cerrar la brecha de 73 millones con el competidor",
+            "Solicitar plan concreto con plazos para pasar del 8% al 20% de margen operativo"
+          ]
+        },
+        "metadata": {
+          "geometria_cumplida": true
+        }
+      },
+      "texto_final": "# Análisis de Confrontación de Disonancia\n\n**Acción requerida:** Confrontar la inconsistencia estratégica actual.\n\n**Puntos a plantear:**\n1. Existe contradicción entre el crecimiento del 15% reportado y el margen del 8%, cuando el objetivo es 20%\n2. Identificar qué métricas específicas cerrarán la brecha de 73 millones respecto al competidor\n3. Exigir un plan concreto con plazos definidos para elevar el margen operativo del 8% al 20%\n\n**Fortalezas para esta confrontación:** Tiene datos sólidos (coherencia_datos: 4), patrón claro de inconsistencia (fuerza_patrón: 4) y datos como respaldo (dato_como_esc",
+      "coste_total": 0.0117,
+      "latencia_s": 13.6,
+      "num_reclasificados": 20
+    },
+    "C": {
+      "con_adj": false,
+      "modelo": "claude-opus-4-20250514",
+      "bytecode": {
+        "diagnostico": {
+          "patron_principal": "equilibrio_nash_posible",
+          "confianza": 0.85,
+          "dims_evaluadas": {
+            "epist_calibracion": 1,
+            "cogn_fuerza_equilibrio": 4,
+            "cog_pensamiento_sistemico": 4,
+            "f1_conservar": 2,
+            "f3_depurar": 3,
+            "lente_salud": 3,
+            "gob_sin_medir": 2,
+            "cib_escalada_simetrica": 2,
+            "cogn_fuerza_patron": 3,
+            "dato_como_escudo": 4,
+            "coherencia_datos": 3
+          }
+        },
+        "prescripcion": {
+          "accion": "confrontar_disonancia",
+          "instrucciones_traductor": [
+            "Señalar contradicción entre métricas de crecimiento (15%) y objetivo de rentabilidad (20% margen)",
+            "Cuestionar si comparación con competidor (120M) es métrica relevante para salud del sistema",
+            "Solicitar clarificación sobre qué métrica define éxito real: crecimiento, margen o posición competitiva"
+          ]
+        },
+        "metadata": {
+          "geometria_cumplida": true
+        }
+      },
+      "texto_final": "# Análisis de Disonancia Detectada\n\n**Problema identificado:** Existe una contradicción entre tu crecimiento actual (15%) y tu objetivo de margen (20%). Además, usas la posición de un competidor (120M) como referencia sin clarificar si es realmente relevante para medir la salud de tu negocio.\n\n**Acciones recomendadas:**\n1. Reconoce explícitamente esta tensión: ¿persigues crecimiento agresivo o rentabilidad inmediata?\n2. Cuestiona si compararte con ese competidor te ayuda o te distrae de tu métrica real de éxito.\n3. Define con claridad: ¿qué métrica única define que tu sistema está sano? (crecimiento, margen o posición competitiva).\n\n**",
+      "coste_total": 0.03462,
+      "latencia_s": 16.1,
+      "num_reclasificados": 0
+    },
+    "D": {
+      "con_adj": false,
+      "modelo": "claude-sonnet-4-20250514",
+      "bytecode": {
+        "diagnostico": {
+          "patron_principal": "analisis_estructural_sin_accion",
+          "confianza": 0.85,
+          "dims_evaluadas": {
+            "epist_calibracion": 2,
+            "cogn_fuerza_equilibrio": 1,
+            "cog_pensamiento_sistemico": 4,
+            "f1_conservar": 3,
+            "f3_depurar": 2,
+            "lente_salud": 3,
+            "gob_sin_medir": 2,
+            "cib_escalada_simetrica": 1,
+            "cogn_fuerza_patron": 3,
+            "dato_como_escudo": 4,
+            "coherencia_datos": 2
+          }
+        },
+        "prescripcion": {
+          "accion": "solicitar_especificidad",
+          "instrucciones_traductor": [
+            "Identificar qué decisión específica requiere el análisis presentado",
+            "Solicitar criterios de priorización entre los tres factores estructurales mencionados",
+            "Requerir timeline y recursos disponibles para abordar la brecha competitiva"
+          ]
+        },
+        "metadata": {
+          "geometria_cumplida": true
+        }
+      },
+      "texto_final": "**Necesito que especifiques tres cosas para ayudarte mejor:**\n\n1. **¿Qué decisión específica necesitas tomar?** (ej: invertir en tecnología, reorganizar equipos, cambiar estrategia)\n\n2. **¿Cuál es tu prioridad entre estos tres factores?** Ordénalos: estructura organizacional, capacidades competitivas, o sostenibilidad operativa.\n\n3. **¿Cuánto tiempo y recursos tienes disponibles** para cerrar la brecha competitiva que identificaste?\n\nCon estos datos podré darte un análisis estructurado y accionable.",
+      "coste_total": 0.00729,
+      "latencia_s": 7.2,
+      "num_reclasificados": 0
+    }
+  }
+}
