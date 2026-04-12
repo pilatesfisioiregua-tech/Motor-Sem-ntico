@@ -483,6 +483,318 @@ FORMULAS = {
         "resultado": "adjetivo de distorsión probabilística",
         "rama": "conductual",
     },
+    # ==========================================
+    # G. EQUILIBRIO GENERAL Y BIENESTAR
+    # ==========================================
+    "exceso_demanda": {
+        "formula": "z(p) = Σ x_i(p) - Σ ω_i",
+        "ops": ["ACUMULAR", "ACUMULAR", "COMPARAR"],
+        "lectura": "acumula todas las demandas, acumula todas las dotaciones, compara → cuánto sobra o falta en el mercado",
+        "resultado": "adjetivo de desequilibrio de mercado",
+        "rama": "micro",
+    },
+    "ley_walras": {
+        "formula": "p·z(p) = 0",
+        "ops": ["COMPONER", "ACUMULAR"],
+        "lectura": "compone precio×exceso por cada bien, acumula → el valor total del exceso siempre es cero",
+        "resultado": "identidad (restricción del sistema)",
+        "rama": "micro",
+    },
+    "bienestar_utilitarista": {
+        "formula": "W = Σ u_i(x_i)",
+        "ops": ["ACUMULAR"],
+        "lectura": "acumula las utilidades de todos los individuos → bienestar total",
+        "resultado": "sujeto (bienestar social agregado)",
+        "rama": "micro",
+    },
+    "bienestar_rawls": {
+        "formula": "W = min_i {u_i(x_i)}",
+        "ops": ["SELECCIONAR"],
+        "lectura": "selecciona la utilidad mínima → bienestar del peor individuo",
+        "resultado": "sujeto (bienestar del más desfavorecido)",
+        "rama": "micro",
+    },
+    "indice_atkinson": {
+        "formula": "A = 1 - [Σ(y_i/ȳ)^(1-ε)/n]^(1/(1-ε))",
+        "ops": ["NORMALIZAR", "TRANSFORMAR", "ACUMULAR", "NORMALIZAR", "TRANSFORMAR", "COMPARAR"],
+        "lectura": "normaliza rentas por media, transforma por aversión ε, acumula, normaliza, transforma de vuelta, compara con 1 → desigualdad con preferencia ética explícita",
+        "resultado": "adjetivo de desigualdad (con juicio de valor)",
+        "rama": "micro",
+    },
+    "indice_theil": {
+        "formula": "T = (1/n)Σ (y_i/ȳ)·ln(y_i/ȳ)",
+        "ops": ["NORMALIZAR", "TRANSFORMAR", "COMPONER", "ACUMULAR", "NORMALIZAR"],
+        "lectura": "normaliza rentas por media, transforma a log, compone ratio×log, acumula, normaliza → desigualdad descomponible por grupos",
+        "resultado": "adjetivo de desigualdad descomponible",
+        "rama": "micro",
+    },
+
+    # ==========================================
+    # H. OPTIMIZACIÓN DINÁMICA
+    # ==========================================
+    "bellman": {
+        "formula": "V(x) = max_a {r(x,a) + β·V(f(x,a))}",
+        "ops": ["COMPONER", "ESCALAR", "ACUMULAR", "SELECCIONAR"],
+        "lectura": "compone acción×estado, escala futuro por descuento, acumula presente+futuro, selecciona máximo → valor óptimo del estado",
+        "resultado": "sujeto (valor fundamental de una situación)",
+        "rama": "optimizacion",
+    },
+    "bellman_estocastica": {
+        "formula": "V(x) = max_a {r(x,a) + β·E[V(x')|x,a]}",
+        "ops": ["COMPONER", "ESCALAR", "CONDICIONAR", "ACUMULAR", "SELECCIONAR"],
+        "lectura": "como Bellman pero condiciona el futuro a la incertidumbre → decisión óptima bajo riesgo",
+        "resultado": "sujeto (valor fundamental bajo incertidumbre)",
+        "rama": "optimizacion",
+    },
+    "lagrangiano": {
+        "formula": "L = f(x) - Σ λ_j·g_j(x)",
+        "ops": ["ESCALAR", "COMPARAR"],
+        "lectura": "escala restricciones por precios sombra, compara con objetivo → función auxiliar para optimizar con restricciones",
+        "resultado": "herramienta (transforma problema restringido en libre)",
+        "rama": "optimizacion",
+    },
+    "kkt": {
+        "formula": "∇f = Σλ∇g + Σμ∇h; μ≥0; μ·h(x)=0",
+        "ops": ["DERIVAR", "ESCALAR", "COMPARAR", "CONDICIONAR"],
+        "lectura": "deriva objetivo, escala restricciones por multiplicadores, compara gradientes, condiciona por complementariedad → óptimo con desigualdades",
+        "resultado": "condición de óptimo (cuándo parar)",
+        "rama": "optimizacion",
+    },
+    "hjb": {
+        "formula": "ρV(x) = max_a {r(x,a) + V'(x)·f(x,a)}",
+        "ops": ["DERIVAR", "COMPONER", "ACUMULAR", "SELECCIONAR", "ESCALAR"],
+        "lectura": "Bellman en tiempo continuo: deriva valor, compone con dinámica, acumula flujo+cambio, selecciona óptimo, escala por impaciencia",
+        "resultado": "sujeto (valor en tiempo continuo)",
+        "rama": "optimizacion",
+    },
+
+    # ==========================================
+    # I. PUNTO FIJO Y EXISTENCIA
+    # ==========================================
+    "punto_fijo_brouwer": {
+        "formula": "f:K→K continua, K compacto convexo → ∃x*: f(x*)=x*",
+        "ops": ["CONDICIONAR", "SELECCIONAR"],
+        "lectura": "condiciona por propiedades del espacio, selecciona punto donde la función se reproduce a sí misma → existencia de equilibrio",
+        "resultado": "existencia (garantía de que el equilibrio existe)",
+        "rama": "matematica",
+    },
+    "contraccion_banach": {
+        "formula": "T contracción → ∃! x*=T(x*), T^n(x_0)→x*",
+        "ops": ["COMPARAR", "TRANSFORMAR", "SELECCIONAR"],
+        "lectura": "compara iteraciones sucesivas (se acercan), transforma por contracción, selecciona punto fijo → existencia + unicidad + convergencia",
+        "resultado": "existencia + unicidad + algoritmo",
+        "rama": "matematica",
+    },
+
+    # ==========================================
+    # J. ECONOMETRÍA AVANZADA
+    # ==========================================
+    "control_sintetico": {
+        "formula": "Ŷ₁ = Σ w_j·Y_j, w* = argmin ||X₁-X₀w||",
+        "ops": ["ESCALAR", "ACUMULAR", "COMPARAR", "SELECCIONAR"],
+        "lectura": "escala controles por pesos óptimos, acumula → contrafactual sintético, compara con tratado → efecto causal",
+        "resultado": "adjetivo de efecto causal (contrafactual construido)",
+        "rama": "econometria",
+    },
+    "doubly_robust": {
+        "formula": "τ̂ = (1/n)Σ[m̂₁(x)-m̂₀(x) + D(Y-m̂₁)/ê - (1-D)(Y-m̂₀)/(1-ê)]",
+        "ops": ["COMPARAR", "NORMALIZAR", "COMPARAR", "NORMALIZAR", "ACUMULAR", "NORMALIZAR"],
+        "lectura": "compara outcomes estimados, normaliza por propensity score, acumula correcciones → efecto causal robusto a errores en un modelo",
+        "resultado": "adjetivo de efecto causal (doblemente robusto)",
+        "rama": "econometria",
+    },
+    "kalman": {
+        "formula": "x̂ = x̂_pred + K·(y - H·x̂_pred); K = PH'(HPH'+R)⁻¹",
+        "ops": ["COMPONER", "COMPARAR", "COMPONER", "INVERTIR", "ESCALAR", "ACUMULAR"],
+        "lectura": "compone predicción×modelo, compara con observación (innovación), compone incertidumbres, invierte para ponderar, escala corrección → estimación óptima de estado oculto",
+        "resultado": "sujeto (mejor estimación del estado real)",
+        "rama": "econometria",
+    },
+    "garch": {
+        "formula": "σ²_t = ω + α·ε²_{t-1} + β·σ²_{t-1}",
+        "ops": ["TRANSFORMAR", "ESCALAR", "ESCALAR", "ACUMULAR"],
+        "lectura": "transforma error al cuadrado, escala por reacción α, escala persistencia por β, acumula con base ω → volatilidad que se alimenta de sí misma",
+        "resultado": "adjetivo de volatilidad auto-alimentada",
+        "rama": "econometria",
+    },
+
+    # ==========================================
+    # K. FINANZAS AVANZADAS
+    # ==========================================
+    "sdf": {
+        "formula": "p = E[m·x], m = β·u'(c₁)/u'(c₀)",
+        "ops": ["DERIVAR", "DERIVAR", "NORMALIZAR", "ESCALAR", "COMPONER", "CONDICIONAR", "ACUMULAR"],
+        "lectura": "deriva utilidad hoy y mañana, normaliza (ratio), escala por descuento, compone con pago, condiciona por información, acumula → precio de cualquier activo",
+        "resultado": "sujeto universal (precio de TODO activo financiero)",
+        "rama": "finanzas",
+    },
+    "modigliani_miller": {
+        "formula": "V_L = V_U (sin fricciones)",
+        "ops": ["COMPARAR"],
+        "lectura": "compara valor apalancado con no apalancado → la estructura de capital no importa",
+        "resultado": "identidad (irrelevancia)",
+        "rama": "finanzas",
+    },
+    "ito_lemma": {
+        "formula": "df = (∂f/∂t + μS·∂f/∂S + ½σ²S²·∂²f/∂S²)dt + σS·∂f/∂S·dW",
+        "ops": ["DERIVAR", "DERIVAR", "DERIVAR", "COMPONER", "TRANSFORMAR", "COMPONER", "ACUMULAR"],
+        "lectura": "deriva por tiempo, deriva por precio (1ª y 2ª orden), compone con drift y difusión, transforma cuadrático, acumula → cómo cambia cualquier función de un activo aleatorio",
+        "resultado": "herramienta universal (cadena de regla estocástica)",
+        "rama": "finanzas",
+    },
+    "frontera_eficiente": {
+        "formula": "min w'Σw s.a. w'μ=μ̄, w'1=1",
+        "ops": ["COMPONER", "CONDICIONAR", "SELECCIONAR"],
+        "lectura": "compone pesos×varianzas, condiciona por retorno objetivo, selecciona mínimo riesgo → portfolio óptimo",
+        "resultado": "prescripción (cómo invertir dado un objetivo)",
+        "rama": "finanzas",
+    },
+
+    # ==========================================
+    # L. CONDUCTUAL AVANZADA
+    # ==========================================
+    "fehr_schmidt": {
+        "formula": "U_i = x_i - α·Σmax(x_j-x_i,0)/(n-1) - β·Σmax(x_i-x_j,0)/(n-1)",
+        "ops": ["COMPARAR", "ACOTAR", "ACUMULAR", "NORMALIZAR", "ESCALAR", "COMPARAR", "ACOTAR", "ACUMULAR", "NORMALIZAR", "ESCALAR", "COMPARAR"],
+        "lectura": "compara con cada otro, acota a positivos (envidia), acumula, normaliza, escala por aversión; repite para culpa; compara con pago propio → utilidad que sufre por desigualdad",
+        "resultado": "adjetivo de preferencia social (envidia + culpa)",
+        "rama": "conductual",
+    },
+    "quantal_response": {
+        "formula": "σ_i(s) = exp(λ·Eπ_i(s)) / Σ exp(λ·Eπ_i(s'))",
+        "ops": ["ESCALAR", "TRANSFORMAR", "NORMALIZAR"],
+        "lectura": "escala payoff por racionalidad λ, transforma a exponencial, normaliza (softmax) → equilibrio con errores",
+        "resultado": "adjetivo de racionalidad limitada (λ→∞ = Nash, λ→0 = aleatorio)",
+        "rama": "conductual",
+    },
+
+    # ==========================================
+    # M. SERIES TEMPORALES
+    # ==========================================
+    "ar1": {
+        "formula": "y_t = c + φ·y_{t-1} + ε_t",
+        "ops": ["ESCALAR", "ACUMULAR"],
+        "lectura": "escala valor anterior por persistencia φ, acumula con constante + shock → cuánto del pasado permanece en el presente",
+        "resultado": "adjetivo de persistencia (φ→1 = permanente, φ→0 = transitorio)",
+        "rama": "econometria",
+    },
+    "var": {
+        "formula": "Y_t = c + A₁Y_{t-1} + ... + A_pY_{t-p} + ε_t",
+        "ops": ["COMPONER", "ACUMULAR"],
+        "lectura": "compone vectores pasados por matrices de impacto, acumula → sistema completo de interdependencias temporales",
+        "resultado": "sistema (cómo todo afecta a todo en el tiempo)",
+        "rama": "econometria",
+    },
+    "cointegracion": {
+        "formula": "β'Y_t ~ I(0) aunque Y_t ~ I(1)",
+        "ops": ["COMPONER", "TRANSFORMAR", "COMPARAR"],
+        "lectura": "compone variables no estacionarias por vector β, transforma → resultado estacionario, compara con I(0) → relación de largo plazo entre variables que deambulan",
+        "resultado": "adjetivo de relación estable de largo plazo",
+        "rama": "econometria",
+    },
+    "impulso_respuesta": {
+        "formula": "IRF: Y_{t+h} = Σ Ψ_s·ε_{t+h-s}",
+        "ops": ["COMPONER", "ACUMULAR"],
+        "lectura": "compone shocks pasados por matrices de respuesta, acumula → efecto dinámico completo de un shock",
+        "resultado": "narrativa (cómo se propaga un shock en el tiempo)",
+        "rama": "econometria",
+    },
+
+    # ==========================================
+    # N. MACRO AVANZADA
+    # ==========================================
+    "nkpc": {
+        "formula": "π_t = β·E_t[π_{t+1}] + κ·x_t",
+        "ops": ["CONDICIONAR", "ESCALAR", "ESCALAR", "ACUMULAR"],
+        "lectura": "condiciona inflación futura por información actual, escala por descuento, escala output gap por pendiente, acumula → inflación como expectativas + presión real",
+        "resultado": "adjetivo de presión inflacionaria (expectativas + gap)",
+        "rama": "macro",
+    },
+    "is_nk": {
+        "formula": "x_t = E_t[x_{t+1}] - (1/σ)(i_t - E_t[π_{t+1}] - r^n)",
+        "ops": ["CONDICIONAR", "COMPARAR", "INVERTIR", "ESCALAR", "COMPARAR"],
+        "lectura": "condiciona futuro, compara tipo de interés con natural, invierte elasticidad, escala → output gap como función del tipo real vs natural",
+        "resultado": "adjetivo de posición cíclica",
+        "rama": "macro",
+    },
+    "calvo_pricing": {
+        "formula": "p* = (1-βθ)Σ(βθ)^k E_t[mc_{t+k}]",
+        "ops": ["CONDICIONAR", "ESCALAR", "TRANSFORMAR", "ACUMULAR"],
+        "lectura": "condiciona costes futuros, escala por descuento×rigidez, transforma a serie geométrica, acumula → precio óptimo mirando al futuro",
+        "resultado": "sujeto (precio que fijaría si pudiera cambiar)",
+        "rama": "macro",
+    },
+    "dyn_deuda": {
+        "formula": "ΔB/Y = (r-g)·B/Y - pb",
+        "ops": ["COMPARAR", "COMPONER", "COMPARAR"],
+        "lectura": "compara tipo de interés con crecimiento, compone con ratio deuda, compara con superávit primario → si la deuda crece o se reduce",
+        "resultado": "adjetivo de sostenibilidad fiscal (r>g = diverge, r<g = converge)",
+        "rama": "macro",
+    },
+    "ramsey_euler": {
+        "formula": "ċ/c = (1/σ)[f'(k) - δ - ρ]",
+        "ops": ["DERIVAR", "COMPARAR", "COMPARAR", "INVERTIR", "COMPONER"],
+        "lectura": "deriva utilidad, compara productividad marginal con depreciación+impaciencia, invierte aversión al riesgo, compone → velocidad óptima de cambio del consumo",
+        "resultado": "prescripción (cuánto debe crecer el consumo)",
+        "rama": "macro",
+    },
+    "hodrick_prescott": {
+        "formula": "min Σ(y_t-τ_t)² + λΣ[(τ_{t+1}-τ_t)-(τ_t-τ_{t-1})]²",
+        "ops": ["COMPARAR", "TRANSFORMAR", "ACUMULAR", "COMPARAR", "COMPARAR", "TRANSFORMAR", "ACUMULAR", "ESCALAR", "ACUMULAR", "SELECCIONAR"],
+        "lectura": "compara dato con tendencia (ajuste), transforma al cuadrado, acumula; compara cambios de tendencia (suavidad), transforma, acumula, escala por λ; suma ambos, selecciona mínimo → separa tendencia de ciclo",
+        "resultado": "descomposición (trend + cycle)",
+        "rama": "macro",
+    },
+
+    # ==========================================
+    # O. PROBABILIDAD Y CONVERGENCIA
+    # ==========================================
+    "lln": {
+        "formula": "X̄_n → E[X] (p o a.s.)",
+        "ops": ["ACUMULAR", "NORMALIZAR", "COMPARAR"],
+        "lectura": "acumula observaciones, normaliza por n, compara con esperanza → la media muestral converge a la real",
+        "resultado": "garantía (los datos eventualmente revelan la verdad)",
+        "rama": "matematica",
+    },
+    "tcl": {
+        "formula": "√n(X̄-μ)/σ →d N(0,1)",
+        "ops": ["ACUMULAR", "NORMALIZAR", "COMPARAR", "NORMALIZAR", "TRANSFORMAR"],
+        "lectura": "acumula, normaliza (media), compara con esperanza, normaliza por desviación, transforma por √n → la distribución de la media es normal",
+        "resultado": "garantía (la incertidumbre se puede cuantificar)",
+        "rama": "matematica",
+    },
+    "jensen": {
+        "formula": "E[g(X)] ≥ g(E[X]) si g convexa",
+        "ops": ["TRANSFORMAR", "CONDICIONAR", "COMPARAR"],
+        "lectura": "transforma por función convexa, condiciona por convexidad, compara esperanza de transformada con transformada de esperanza → la desigualdad fundamental de la aversión al riesgo",
+        "resultado": "restricción (por qué los aversos al riesgo pagan prima)",
+        "rama": "matematica",
+    },
+
+    # ==========================================
+    # P. SUBASTAS Y MECANISMOS
+    # ==========================================
+    "vickrey": {
+        "formula": "b(v) = v (estrategia dominante)",
+        "ops": [],
+        "lectura": "pujas tu valor real — ninguna operación, la verdad es óptima",
+        "resultado": "identidad (la verdad es la estrategia óptima)",
+        "rama": "micro",
+    },
+    "myerson_subasta": {
+        "formula": "ψ(v) = v - (1-F(v))/f(v)",
+        "ops": ["NORMALIZAR", "INVERTIR", "COMPARAR"],
+        "lectura": "normaliza la distribución (hazard rate), invierte, compara con valor real → valor virtual (lo que realmente vale extraer del comprador)",
+        "resultado": "sujeto (valor virtual — la verdad económica detrás del valor reportado)",
+        "rama": "micro",
+    },
+    "vcg": {
+        "formula": "t_i = Σ_{j≠i} v_j(q*) - Σ_{j≠i} v_j(q*_{-i})",
+        "ops": ["ACUMULAR", "ACUMULAR", "COMPARAR"],
+        "lectura": "acumula valor de los demás con i, acumula sin i, compara → cuánto cambia el bienestar de otros por la presencia de i",
+        "resultado": "adjetivo de externalidad (cuánto afectas a los demás)",
+        "rama": "micro",
+    },
 }
 
 N_FORMULAS = len(FORMULAS)
