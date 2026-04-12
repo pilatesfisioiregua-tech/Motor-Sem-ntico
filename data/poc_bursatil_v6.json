@@ -1,0 +1,225 @@
+{
+  "version": "poc_bursatil_v6",
+  "fecha": "2026-04-12 21:31",
+  "activos": {
+    "AAPL": {
+      "cambio_pct": 32.03,
+      "profundidad": 0.5829,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria": {
+        "N1": -0.4875,
+        "N2": -1.8521,
+        "N3": -0.2002,
+        "N4": -0.0992
+      }
+    },
+    "TSLA": {
+      "cambio_pct": 38.3,
+      "profundidad": 0.52,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria": {
+        "N1": -0.4683,
+        "N2": -1.8521,
+        "N3": -0.224,
+        "N4": -0.0992
+      }
+    },
+    "JPM": {
+      "cambio_pct": 33.74,
+      "profundidad": 0.6032,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria": {
+        "N1": -0.5042,
+        "N2": -1.8521,
+        "N3": -0.291,
+        "N4": -0.0992
+      }
+    },
+    "XOM": {
+      "cambio_pct": 52.95,
+      "profundidad": 0.5986,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria": {
+        "N1": -0.5048,
+        "N2": -1.8521,
+        "N3": -0.1953,
+        "N4": -0.0992
+      }
+    },
+    "SPY": {
+      "cambio_pct": 28.71,
+      "profundidad": 0.6062,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria": {
+        "N1": -0.5125,
+        "N2": -1.8521,
+        "N3": -0.3183,
+        "N4": -0.0992
+      }
+    },
+    "QQQ": {
+      "cambio_pct": 35.13,
+      "profundidad": 0.6058,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria": {
+        "N1": -0.5193,
+        "N2": -1.8521,
+        "N3": -0.3253,
+        "N4": -0.0992
+      }
+    },
+    "BTC-USD": {
+      "cambio_pct": -16.54,
+      "profundidad": 0.5011,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria": {
+        "N1": -0.5893,
+        "N2": -1.8974,
+        "N3": -0.3494,
+        "N4": -0.0992
+      }
+    },
+    "ETH-USD": {
+      "cambio_pct": 34.14,
+      "profundidad": 0.5162,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria": {
+        "N1": -0.5953,
+        "N2": -1.8974,
+        "N3": -0.3108,
+        "N4": -0.0992
+      }
+    }
+  }
+}
