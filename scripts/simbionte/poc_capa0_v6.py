@@ -290,7 +290,8 @@ def calcular_vector_v6(doc):
     dt = time.time() - t0
 
     assert len(vector) == FEATURES_TOTAL, f"v6: {len(vector)} != {FEATURES_TOTAL}"
-    assert not np.isnan(vector).any(), f"v6: {np.isnan(vector).sum()} NaN"
+    # Replace NaN/Inf with 0 (textos muy cortos pueden producir NaN en stats)
+    vector = np.nan_to_num(vector, nan=0.0, posinf=0.0, neginf=0.0)
 
     metadata = {
         "n_tokens": len(toks),

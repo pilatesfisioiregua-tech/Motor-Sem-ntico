@@ -1,0 +1,144 @@
+{
+  "prueba_a": {
+    "bytecode": {
+      "diagnostico": {
+        "patron_principal": "escalada_simetrica_con_fragmentacion_sistemica",
+        "confianza": 0.87,
+        "dims_evaluadas": {
+          "epist_calibracion": 1,
+          "cogn_fuerza_equilibrio": 2,
+          "cog_pensamiento_sistemico": 1,
+          "f1_conservar": 4,
+          "f3_depurar": 1,
+          "lente_salud": 2,
+          "gob_sin_medir": 4,
+          "cib_escalada_simetrica": 5,
+          "cogn_fuerza_patron": 2,
+          "dato_como_escudo": 3,
+          "coherencia_datos": 1
+        }
+      },
+      "prescripcion": {
+        "accion": "romper_simetria",
+        "instrucciones_traductor": [
+          "Interrumpir el ciclo de acusacion-justificacion",
+          "Introducir asimetria temporal: reconocer primero, luego proponer",
+          "Anclar en datos especificos verificables del CRM",
+          "Evitar defensividad o contraataque",
+          "Proponer mecanismo de medicion conjunto"
+        ],
+        "restricciones_output": {
+          "mood_prohibido": [
+            "defensivo",
+            "justificativo",
+            "escalatorio"
+          ],
+          "conectores_prohibidos": [
+            "pero",
+            "sin embargo",
+            "aunque",
+            "no obstante"
+          ],
+          "fg_minimo": 0.7
+        }
+      },
+      "candidato_isomorfismo": {
+        "nombre": "fragmentacion_con_equilibrio_simetrico",
+        "definicion": "Sistema complejo con multiples subsistemas incoherentes (coherencia_sis=0.00) pero manteniendo equilibrios simetricos perfectos en juegos multiagente. La fragmentacion coexiste con estabilidad estructural via feedback negativo.",
+        "ejes_dominantes": [
+          "sistemas",
+          "juegos",
+          "cibernetica"
+        ],
+        "nivel_profundidad": "medio",
+        "patron_geometrico": "curvatura_alta_con_persistencia_robusta"
+      },
+      "metadata": {
+        "geometria_cumplida": true
+      }
+    },
+    "texto_final": "**Rompamos el ciclo.**\n\nReconozco que hemos estado atrapados en acusación-justificación. Propongo algo diferente: tomo los datos del CRM (tenemos X casos sin resolución en Y días, Z métricas de respuesta), reconozco que eso es real, y luego construyamos juntos cómo medirlo diferente. No es defensa—es cambio de juego.",
+    "cost": 0.020547999999999997,
+    "profundidad": 0.6852,
+    "candidato": {
+      "nombre": "fragmentacion_con_equilibrio_simetrico",
+      "definicion": "Sistema complejo con multiples subsistemas incoherentes (coherencia_sis=0.00) pero manteniendo equilibrios simetricos perfectos en juegos multiagente. La fragmentacion coexiste con estabilidad estructural via feedback negativo.",
+      "ejes_dominantes": [
+        "sistemas",
+        "juegos",
+        "cibernetica"
+      ],
+      "nivel_profundidad": "medio",
+      "patron_geometrico": "curvatura_alta_con_persistencia_robusta"
+    }
+  },
+  "prueba_b": {
+    "bytecode": {
+      "diagnostico": {
+        "patron_principal": "FRAGMENTACION_SISTEMICA_MULTIAGENTE",
+        "confianza": 0.87,
+        "dims_evaluadas": {
+          "epist_calibracion": 2,
+          "cogn_fuerza_equilibrio": 1,
+          "cog_pensamiento_sistemico": 4,
+          "f1_conservar": 3,
+          "f3_depurar": 1,
+          "lente_salud": 2,
+          "gob_sin_medir": 4,
+          "cib_escalada_simetrica": 2,
+          "cogn_fuerza_patron": 3,
+          "dato_como_escudo": 4,
+          "coherencia_datos": 1
+        }
+      },
+      "prescripcion": {
+        "accion": "reforzar_compromiso",
+        "instrucciones_traductor": [
+          "Consolidar subsistemas dispersos en narrativa coherente",
+          "Reducir agentes en conflicto mediante sintesis ejecutiva",
+          "Eliminar gaps argumentativos con conexiones causales explicitas",
+          "Transformar datos numericos de escudo defensivo a evidencia constructiva"
+        ],
+        "restricciones_output": {
+          "mood_prohibido": [
+            "defensivo",
+            "fragmentado",
+            "evasivo"
+          ],
+          "conectores_prohibidos": [
+            "sin embargo",
+            "no obstante",
+            "por otro lado"
+          ],
+          "fg_minimo": 0.7
+        }
+      },
+      "candidato_isomorfismo": {
+        "nombre": "ACTA_CORPORATIVA_FRAGMENTADA",
+        "definicion": "Documento ejecutivo con multiples subsistemas incoherentes (n_subsistemas>25), alta alternancia de agentes (>0.8), feedback negativo dominante, y datos numericos como escudo ante gaps estructurales. Patron recurrente en comunicacion corporativa bajo presion.",
+        "ejes_dominantes": [
+          "sistemas",
+          "juegos",
+          "cibernetica"
+        ],
+        "nivel_profundidad": 0.67
+      },
+      "metadata": {
+        "geometria_cumplida": true
+      }
+    },
+    "texto_final": "**Refuerza tu compromiso consolidando una narrativa coherente**: integra tus subsistemas dispersos en una estrategia unificada, reduce conflictos internos mediante síntesis ejecutivas claras, y conecta tus argumentos con causalidad explícita. Transforma tus datos de herramienta defensiva en evidencia constructiva que impulse acción.",
+    "cost": 0.0225222,
+    "profundidad": 0.6676,
+    "candidato": {
+      "nombre": "ACTA_CORPORATIVA_FRAGMENTADA",
+      "definicion": "Documento ejecutivo con multiples subsistemas incoherentes (n_subsistemas>25), alta alternancia de agentes (>0.8), feedback negativo dominante, y datos numericos como escudo ante gaps estructurales. Patron recurrente en comunicacion corporativa bajo presion.",
+      "ejes_dominantes": [
+        "sistemas",
+        "juegos",
+        "cibernetica"
+      ],
+      "nivel_profundidad": 0.67
+    }
+  }
+}

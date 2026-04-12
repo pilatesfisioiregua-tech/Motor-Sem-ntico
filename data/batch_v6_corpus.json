@@ -1,0 +1,2713 @@
+{
+  "version": "batch_v6",
+  "fecha": "2026-04-12 20:08",
+  "n_textos": 2990,
+  "n_errores": 0,
+  "tiempo_total_s": 1126.8,
+  "media_ms": 377,
+  "p95_ms": 792,
+  "best_k": 3,
+  "best_silhouette": 0.3088,
+  "results": [
+    {
+      "id": "gold-00000",
+      "n_tokens": 886,
+      "n_oraciones": 60,
+      "profundidad": 0.3983,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "cibernetica"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "cibernetica"
+        ]
+      },
+      "simetria_N2": -0.4174,
+      "coherencia_N2": 0.4461,
+      "latencia_ms": 791,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00001",
+      "n_tokens": 253,
+      "n_oraciones": 12,
+      "profundidad": 0.6263,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2672,
+      "coherencia_N2": 0.4077,
+      "latencia_ms": 230,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00002",
+      "n_tokens": 646,
+      "n_oraciones": 20,
+      "profundidad": 0.5891,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2096,
+      "coherencia_N2": 0.4154,
+      "latencia_ms": 529,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00003",
+      "n_tokens": 203,
+      "n_oraciones": 20,
+      "profundidad": 0.6842,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.125,
+      "coherencia_N2": 0.5015,
+      "latencia_ms": 257,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00004",
+      "n_tokens": 96,
+      "n_oraciones": 3,
+      "profundidad": 0.6174,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.5418,
+      "coherencia_N2": 0.1938,
+      "latencia_ms": 140,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00005",
+      "n_tokens": 360,
+      "n_oraciones": 14,
+      "profundidad": 0.6345,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.1367,
+      "coherencia_N2": 0.4985,
+      "latencia_ms": 321,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00006",
+      "n_tokens": 378,
+      "n_oraciones": 16,
+      "profundidad": 0.7598,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2483,
+      "coherencia_N2": 0.395,
+      "latencia_ms": 344,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00007",
+      "n_tokens": 485,
+      "n_oraciones": 10,
+      "profundidad": 0.632,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2548,
+      "coherencia_N2": 0.3826,
+      "latencia_ms": 486,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00008",
+      "n_tokens": 486,
+      "n_oraciones": 31,
+      "profundidad": 0.5559,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0513,
+      "coherencia_N2": 0.4664,
+      "latencia_ms": 519,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00009",
+      "n_tokens": 263,
+      "n_oraciones": 10,
+      "profundidad": 0.6814,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.0071,
+      "coherencia_N2": 0.4071,
+      "latencia_ms": 267,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00010",
+      "n_tokens": 395,
+      "n_oraciones": 22,
+      "profundidad": 0.7638,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1379,
+      "coherencia_N2": 0.431,
+      "latencia_ms": 335,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00011",
+      "n_tokens": 67,
+      "n_oraciones": 1,
+      "profundidad": 0.2,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 70,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00012",
+      "n_tokens": 199,
+      "n_oraciones": 8,
+      "profundidad": 0.6027,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.2998,
+      "coherencia_N2": 0.4178,
+      "latencia_ms": 219,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00013",
+      "n_tokens": 202,
+      "n_oraciones": 14,
+      "profundidad": 0.6206,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.333,
+      "coherencia_N2": 0.4076,
+      "latencia_ms": 248,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00014",
+      "n_tokens": 352,
+      "n_oraciones": 13,
+      "profundidad": 0.7227,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2688,
+      "coherencia_N2": 0.4438,
+      "latencia_ms": 378,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00015",
+      "n_tokens": 846,
+      "n_oraciones": 58,
+      "profundidad": 0.3232,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "cibernetica"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "cibernetica"
+        ]
+      },
+      "simetria_N2": -0.4215,
+      "coherencia_N2": 0.4419,
+      "latencia_ms": 710,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00016",
+      "n_tokens": 267,
+      "n_oraciones": 9,
+      "profundidad": 0.6951,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2585,
+      "coherencia_N2": 0.5005,
+      "latencia_ms": 225,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00017",
+      "n_tokens": 459,
+      "n_oraciones": 31,
+      "profundidad": 0.5429,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0132,
+      "coherencia_N2": 0.4451,
+      "latencia_ms": 399,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00018",
+      "n_tokens": 257,
+      "n_oraciones": 11,
+      "profundidad": 0.5154,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2185,
+      "coherencia_N2": 0.4251,
+      "latencia_ms": 266,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00019",
+      "n_tokens": 230,
+      "n_oraciones": 5,
+      "profundidad": 0.4032,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.0394,
+      "coherencia_N2": 0.3455,
+      "latencia_ms": 209,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00020",
+      "n_tokens": 167,
+      "n_oraciones": 5,
+      "profundidad": 0.4572,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.1213,
+      "coherencia_N2": 0.3849,
+      "latencia_ms": 160,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00021",
+      "n_tokens": 349,
+      "n_oraciones": 8,
+      "profundidad": 0.5413,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2112,
+      "coherencia_N2": 0.4173,
+      "latencia_ms": 274,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00022",
+      "n_tokens": 430,
+      "n_oraciones": 25,
+      "profundidad": 0.7795,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.146,
+      "coherencia_N2": 0.4072,
+      "latencia_ms": 629,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00023",
+      "n_tokens": 840,
+      "n_oraciones": 29,
+      "profundidad": 0.527,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0578,
+      "coherencia_N2": 0.4395,
+      "latencia_ms": 606,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00024",
+      "n_tokens": 59,
+      "n_oraciones": 1,
+      "profundidad": 0.2,
+      "dominantes": {
+        "N1": [
+          "cibernetica"
+        ]
+      },
+      "simetria_N2": 0.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 78,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00025",
+      "n_tokens": 526,
+      "n_oraciones": 29,
+      "profundidad": 0.643,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0524,
+      "coherencia_N2": 0.4137,
+      "latencia_ms": 457,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00026",
+      "n_tokens": 131,
+      "n_oraciones": 8,
+      "profundidad": 0.7065,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.3163,
+      "coherencia_N2": 0.4267,
+      "latencia_ms": 163,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00027",
+      "n_tokens": 272,
+      "n_oraciones": 8,
+      "profundidad": 0.6577,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.1438,
+      "coherencia_N2": 0.3386,
+      "latencia_ms": 272,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00028",
+      "n_tokens": 865,
+      "n_oraciones": 41,
+      "profundidad": 0.5507,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.0875,
+      "coherencia_N2": 0.4282,
+      "latencia_ms": 698,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00029",
+      "n_tokens": 111,
+      "n_oraciones": 7,
+      "profundidad": 0.6255,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.1802,
+      "coherencia_N2": 0.4597,
+      "latencia_ms": 161,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00030",
+      "n_tokens": 34,
+      "n_oraciones": 2,
+      "profundidad": 0.6896,
+      "dominantes": {
+        "N1": [
+          "sistemas",
+          "topologia"
+        ],
+        "N2": [
+          "estadistica"
+        ],
+        "N3": [
+          "estadistica"
+        ],
+        "N4": [
+          "estadistica"
+        ]
+      },
+      "simetria_N2": -2.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 56,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00031",
+      "n_tokens": 33,
+      "n_oraciones": 2,
+      "profundidad": 0.665,
+      "dominantes": {
+        "N1": [
+          "sistemas",
+          "topologia"
+        ],
+        "N2": [
+          "estadistica"
+        ],
+        "N3": [
+          "estadistica"
+        ],
+        "N4": [
+          "estadistica"
+        ]
+      },
+      "simetria_N2": -2.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 55,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00032",
+      "n_tokens": 453,
+      "n_oraciones": 18,
+      "profundidad": 0.7257,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2466,
+      "coherencia_N2": 0.4574,
+      "latencia_ms": 404,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00033",
+      "n_tokens": 794,
+      "n_oraciones": 36,
+      "profundidad": 0.5027,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.0393,
+      "coherencia_N2": 0.4627,
+      "latencia_ms": 719,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00034",
+      "n_tokens": 304,
+      "n_oraciones": 13,
+      "profundidad": 0.6087,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.3137,
+      "coherencia_N2": 0.4157,
+      "latencia_ms": 313,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00035",
+      "n_tokens": 634,
+      "n_oraciones": 20,
+      "profundidad": 0.6326,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1623,
+      "coherencia_N2": 0.3898,
+      "latencia_ms": 507,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00036",
+      "n_tokens": 16,
+      "n_oraciones": 2,
+      "profundidad": 0.6661,
+      "dominantes": {
+        "N1": [
+          "topologia"
+        ],
+        "N2": [
+          "estadistica"
+        ],
+        "N3": [
+          "estadistica"
+        ],
+        "N4": [
+          "estadistica"
+        ]
+      },
+      "simetria_N2": -2.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 44,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00037",
+      "n_tokens": 467,
+      "n_oraciones": 28,
+      "profundidad": 0.5209,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0583,
+      "coherencia_N2": 0.4342,
+      "latencia_ms": 436,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00038",
+      "n_tokens": 106,
+      "n_oraciones": 2,
+      "profundidad": 0.6531,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "estadistica"
+        ],
+        "N3": [
+          "estadistica"
+        ],
+        "N4": [
+          "estadistica"
+        ]
+      },
+      "simetria_N2": -2.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 134,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00039",
+      "n_tokens": 330,
+      "n_oraciones": 37,
+      "profundidad": 0.6276,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.0652,
+      "coherencia_N2": 0.5005,
+      "latencia_ms": 357,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00040",
+      "n_tokens": 553,
+      "n_oraciones": 24,
+      "profundidad": 0.6714,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1521,
+      "coherencia_N2": 0.4704,
+      "latencia_ms": 603,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00041",
+      "n_tokens": 659,
+      "n_oraciones": 9,
+      "profundidad": 0.5317,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1778,
+      "coherencia_N2": 0.4201,
+      "latencia_ms": 515,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00042",
+      "n_tokens": 128,
+      "n_oraciones": 4,
+      "profundidad": 0.3655,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.105,
+      "coherencia_N2": 0.3041,
+      "latencia_ms": 156,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00043",
+      "n_tokens": 483,
+      "n_oraciones": 16,
+      "profundidad": 0.6179,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2801,
+      "coherencia_N2": 0.4002,
+      "latencia_ms": 393,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00044",
+      "n_tokens": 481,
+      "n_oraciones": 20,
+      "profundidad": 0.7177,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2139,
+      "coherencia_N2": 0.4504,
+      "latencia_ms": 507,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00045",
+      "n_tokens": 88,
+      "n_oraciones": 4,
+      "profundidad": 0.5798,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.126,
+      "coherencia_N2": 0.3337,
+      "latencia_ms": 94,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00046",
+      "n_tokens": 359,
+      "n_oraciones": 14,
+      "profundidad": 0.6334,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.218,
+      "coherencia_N2": 0.4001,
+      "latencia_ms": 370,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00047",
+      "n_tokens": 158,
+      "n_oraciones": 6,
+      "profundidad": 0.5711,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2479,
+      "coherencia_N2": 0.3713,
+      "latencia_ms": 162,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00048",
+      "n_tokens": 53,
+      "n_oraciones": 2,
+      "profundidad": 0.6573,
+      "dominantes": {
+        "N1": [
+          "cibernetica"
+        ],
+        "N2": [
+          "estadistica"
+        ],
+        "N3": [
+          "estadistica"
+        ],
+        "N4": [
+          "estadistica"
+        ]
+      },
+      "simetria_N2": -2.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 66,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00049",
+      "n_tokens": 576,
+      "n_oraciones": 25,
+      "profundidad": 0.5759,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0384,
+      "coherencia_N2": 0.4389,
+      "latencia_ms": 495,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00050",
+      "n_tokens": 693,
+      "n_oraciones": 30,
+      "profundidad": 0.6976,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1296,
+      "coherencia_N2": 0.4691,
+      "latencia_ms": 861,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00051",
+      "n_tokens": 835,
+      "n_oraciones": 41,
+      "profundidad": 0.3302,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "cibernetica"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.5294,
+      "coherencia_N2": 0.4284,
+      "latencia_ms": 816,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00052",
+      "n_tokens": 838,
+      "n_oraciones": 102,
+      "profundidad": 0.5943,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.3295,
+      "coherencia_N2": 0.4664,
+      "latencia_ms": 722,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00053",
+      "n_tokens": 662,
+      "n_oraciones": 28,
+      "profundidad": 0.5955,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0509,
+      "coherencia_N2": 0.4796,
+      "latencia_ms": 522,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00054",
+      "n_tokens": 44,
+      "n_oraciones": 4,
+      "profundidad": 0.6551,
+      "dominantes": {
+        "N1": [
+          "cibernetica"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.2994,
+      "coherencia_N2": 0.3667,
+      "latencia_ms": 80,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00055",
+      "n_tokens": 73,
+      "n_oraciones": 4,
+      "profundidad": 0.5558,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.0957,
+      "coherencia_N2": 0.3037,
+      "latencia_ms": 135,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00056",
+      "n_tokens": 740,
+      "n_oraciones": 35,
+      "profundidad": 0.4341,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "cibernetica"
+        ]
+      },
+      "simetria_N2": -0.185,
+      "coherencia_N2": 0.4488,
+      "latencia_ms": 663,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00057",
+      "n_tokens": 86,
+      "n_oraciones": 6,
+      "profundidad": 0.9606,
+      "dominantes": {
+        "N1": [
+          "sistemas",
+          "topologia"
+        ],
+        "N2": [
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.5994,
+      "coherencia_N2": 0.2026,
+      "latencia_ms": 142,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00058",
+      "n_tokens": 582,
+      "n_oraciones": 31,
+      "profundidad": 0.468,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "cibernetica"
+        ]
+      },
+      "simetria_N2": 0.0084,
+      "coherencia_N2": 0.4045,
+      "latencia_ms": 455,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00059",
+      "n_tokens": 271,
+      "n_oraciones": 11,
+      "profundidad": 0.5485,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1787,
+      "coherencia_N2": 0.3588,
+      "latencia_ms": 260,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00060",
+      "n_tokens": 625,
+      "n_oraciones": 12,
+      "profundidad": 0.6245,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2699,
+      "coherencia_N2": 0.4249,
+      "latencia_ms": 707,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00061",
+      "n_tokens": 820,
+      "n_oraciones": 53,
+      "profundidad": 0.4922,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "cibernetica"
+        ]
+      },
+      "simetria_N2": -0.0975,
+      "coherencia_N2": 0.4264,
+      "latencia_ms": 677,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00062",
+      "n_tokens": 163,
+      "n_oraciones": 10,
+      "profundidad": 0.5967,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.3103,
+      "coherencia_N2": 0.4289,
+      "latencia_ms": 206,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00063",
+      "n_tokens": 817,
+      "n_oraciones": 38,
+      "profundidad": 0.4411,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "cibernetica"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.5199,
+      "coherencia_N2": 0.4334,
+      "latencia_ms": 684,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00064",
+      "n_tokens": 799,
+      "n_oraciones": 36,
+      "profundidad": 0.4863,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.1967,
+      "coherencia_N2": 0.414,
+      "latencia_ms": 678,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00065",
+      "n_tokens": 67,
+      "n_oraciones": 5,
+      "profundidad": 0.5933,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.0959,
+      "coherencia_N2": 0.4042,
+      "latencia_ms": 94,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00066",
+      "n_tokens": 32,
+      "n_oraciones": 1,
+      "profundidad": 0.2,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 52,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00067",
+      "n_tokens": 40,
+      "n_oraciones": 1,
+      "profundidad": 0.2,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 55,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00068",
+      "n_tokens": 512,
+      "n_oraciones": 13,
+      "profundidad": 0.6366,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2572,
+      "coherencia_N2": 0.4179,
+      "latencia_ms": 417,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00069",
+      "n_tokens": 804,
+      "n_oraciones": 27,
+      "profundidad": 0.6017,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0483,
+      "coherencia_N2": 0.4104,
+      "latencia_ms": 643,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00070",
+      "n_tokens": 407,
+      "n_oraciones": 7,
+      "profundidad": 0.4469,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.138,
+      "coherencia_N2": 0.4647,
+      "latencia_ms": 443,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00071",
+      "n_tokens": 364,
+      "n_oraciones": 18,
+      "profundidad": 0.7215,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2508,
+      "coherencia_N2": 0.4125,
+      "latencia_ms": 321,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00072",
+      "n_tokens": 666,
+      "n_oraciones": 75,
+      "profundidad": 0.578,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.3459,
+      "coherencia_N2": 0.4888,
+      "latencia_ms": 587,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00073",
+      "n_tokens": 70,
+      "n_oraciones": 2,
+      "profundidad": 0.6549,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "estadistica"
+        ],
+        "N3": [
+          "estadistica"
+        ],
+        "N4": [
+          "estadistica"
+        ]
+      },
+      "simetria_N2": -2.0,
+      "coherencia_N2": 0.0,
+      "latencia_ms": 71,
+      "cluster": 1
+    },
+    {
+      "id": "gold-00074",
+      "n_tokens": 843,
+      "n_oraciones": 58,
+      "profundidad": 0.4904,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.1926,
+      "coherencia_N2": 0.4512,
+      "latencia_ms": 741,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00075",
+      "n_tokens": 283,
+      "n_oraciones": 14,
+      "profundidad": 0.6343,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2345,
+      "coherencia_N2": 0.4583,
+      "latencia_ms": 269,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00076",
+      "n_tokens": 799,
+      "n_oraciones": 38,
+      "profundidad": 0.5501,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0116,
+      "coherencia_N2": 0.4666,
+      "latencia_ms": 631,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00077",
+      "n_tokens": 724,
+      "n_oraciones": 63,
+      "profundidad": 0.3407,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "cibernetica"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "cibernetica"
+        ]
+      },
+      "simetria_N2": -0.4104,
+      "coherencia_N2": 0.3985,
+      "latencia_ms": 574,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00078",
+      "n_tokens": 948,
+      "n_oraciones": 35,
+      "profundidad": 0.3977,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "cibernetica"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.2139,
+      "coherencia_N2": 0.4624,
+      "latencia_ms": 769,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00079",
+      "n_tokens": 738,
+      "n_oraciones": 29,
+      "profundidad": 0.3823,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "cibernetica"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.1652,
+      "coherencia_N2": 0.4929,
+      "latencia_ms": 602,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00080",
+      "n_tokens": 894,
+      "n_oraciones": 40,
+      "profundidad": 0.605,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.1404,
+      "coherencia_N2": 0.4079,
+      "latencia_ms": 762,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00081",
+      "n_tokens": 140,
+      "n_oraciones": 3,
+      "profundidad": 0.5675,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.5347,
+      "coherencia_N2": 0.1968,
+      "latencia_ms": 162,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00082",
+      "n_tokens": 144,
+      "n_oraciones": 3,
+      "profundidad": 0.4961,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.4584,
+      "coherencia_N2": 0.1232,
+      "latencia_ms": 156,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00083",
+      "n_tokens": 620,
+      "n_oraciones": 17,
+      "profundidad": 0.7072,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1671,
+      "coherencia_N2": 0.4189,
+      "latencia_ms": 503,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00084",
+      "n_tokens": 804,
+      "n_oraciones": 33,
+      "profundidad": 0.3777,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "cibernetica"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.2425,
+      "coherencia_N2": 0.4058,
+      "latencia_ms": 736,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00085",
+      "n_tokens": 877,
+      "n_oraciones": 46,
+      "profundidad": 0.5937,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0112,
+      "coherencia_N2": 0.4046,
+      "latencia_ms": 718,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00086",
+      "n_tokens": 201,
+      "n_oraciones": 13,
+      "profundidad": 0.7072,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2951,
+      "coherencia_N2": 0.4392,
+      "latencia_ms": 215,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00087",
+      "n_tokens": 795,
+      "n_oraciones": 38,
+      "profundidad": 0.5559,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.0672,
+      "coherencia_N2": 0.4591,
+      "latencia_ms": 587,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00088",
+      "n_tokens": 408,
+      "n_oraciones": 16,
+      "profundidad": 0.6506,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.23,
+      "coherencia_N2": 0.4143,
+      "latencia_ms": 975,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00089",
+      "n_tokens": 203,
+      "n_oraciones": 19,
+      "profundidad": 0.661,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1945,
+      "coherencia_N2": 0.4486,
+      "latencia_ms": 255,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00090",
+      "n_tokens": 46,
+      "n_oraciones": 3,
+      "profundidad": 0.7043,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas",
+          "topologia"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "topologia"
+        ]
+      },
+      "simetria_N2": -0.7853,
+      "coherencia_N2": 0.155,
+      "latencia_ms": 69,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00091",
+      "n_tokens": 268,
+      "n_oraciones": 18,
+      "profundidad": 0.6338,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.1498,
+      "coherencia_N2": 0.4478,
+      "latencia_ms": 266,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00092",
+      "n_tokens": 462,
+      "n_oraciones": 9,
+      "profundidad": 0.6367,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N2": 0.0841,
+      "coherencia_N2": 0.4081,
+      "latencia_ms": 384,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00093",
+      "n_tokens": 816,
+      "n_oraciones": 64,
+      "profundidad": 0.5475,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.2181,
+      "coherencia_N2": 0.4825,
+      "latencia_ms": 685,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00094",
+      "n_tokens": 209,
+      "n_oraciones": 8,
+      "profundidad": 0.6402,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.3375,
+      "coherencia_N2": 0.3528,
+      "latencia_ms": 216,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00095",
+      "n_tokens": 332,
+      "n_oraciones": 16,
+      "profundidad": 0.6354,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.2297,
+      "coherencia_N2": 0.4588,
+      "latencia_ms": 324,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00096",
+      "n_tokens": 223,
+      "n_oraciones": 10,
+      "profundidad": 0.5834,
+      "dominantes": {
+        "N1": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.3107,
+      "coherencia_N2": 0.3801,
+      "latencia_ms": 296,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00097",
+      "n_tokens": 313,
+      "n_oraciones": 9,
+      "profundidad": 0.6554,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.3295,
+      "coherencia_N2": 0.4373,
+      "latencia_ms": 269,
+      "cluster": 0
+    },
+    {
+      "id": "gold-00098",
+      "n_tokens": 819,
+      "n_oraciones": 53,
+      "profundidad": 0.5133,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": -0.1905,
+      "coherencia_N2": 0.3795,
+      "latencia_ms": 646,
+      "cluster": 2
+    },
+    {
+      "id": "gold-00099",
+      "n_tokens": 666,
+      "n_oraciones": 31,
+      "profundidad": 0.5921,
+      "dominantes": {
+        "N1": [
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "simetria_N2": 0.0704,
+      "coherencia_N2": 0.4106,
+      "latencia_ms": 958,
+      "cluster": 0
+    }
+  ],
+  "errores": []
+}

@@ -137,27 +137,39 @@ SUF_RELACIONAL = ("al","ar","ivo","iva","ico","ica","ero","era","ario","aria","t
 # CLASIFICADOR PRINCIPAL
 # ============================================================
 
+def _dep(t):
+    """Normaliza DEP labels entre spaCy ES (Universal) y EN (Clear NLP)."""
+    d = t.dep_
+    if d == "dobj": return "obj"      # EN→ES
+    if d == "pobj": return "obl"      # EN→ES
+    if d == "dative": return "iobj"   # EN→ES
+    return d
+
+
 def clasificar_token(t):
     """Clasifica un token spaCy por su función real en contexto.
+    Funciona con spaCy ES y EN (normaliza deps automáticamente).
 
     Returns: (func_name: str, needs_haiku: bool)
     """
+    dep = _dep(t)
+
     # === SUSTANTIVOS ===
     if t.pos_ in ("NOUN", "PROPN"):
-        if t.dep_ == "nsubj":
+        if dep == "nsubj":
             return "sust_agente", False
-        elif t.dep_ == "obj":
+        elif dep == "obj":
             return "sust_paciente", False
-        elif t.dep_ == "obl":
-            cases = [c for c in t.children if c.dep_ == "case"]
+        elif dep == "obl":
+            cases = [c for c in t.children if _dep(c) == "case"]
             if cases:
                 prep = cases[0].text.lower()
-                if prep in ("con", "mediante"):
+                if prep in ("con", "mediante", "with", "by"):
                     return "sust_instrumento", False
-                elif prep in ("en", "dentro", "sobre"):
+                elif prep in ("en", "dentro", "sobre", "in", "on", "at"):
                     return "sust_locativo", False
             return "sust_complemento", False
-        elif t.dep_ == "nmod":
+        elif dep == "nmod":
             return "sust_modificador", False
         elif t.text.lower().endswith(SUF_NOM_VERBO):
             return "sust_nom_verbo", False
@@ -174,7 +186,7 @@ def clasificar_token(t):
             return "adj_participio", False
         elif nt == "Ord":
             return "adj_ordinal", False
-        elif any(c.dep_ == "cop" for c in t.children):
+        elif any(_dep(c) == "cop" for c in t.children):
             return "adj_predicativo", False
         elif t.text.lower().endswith(SUF_RELACIONAL):
             return "adj_relacional", False
@@ -190,9 +202,9 @@ def clasificar_token(t):
         if nt == "Ord":
             return "num_ordinal_func", False
         # Predicativo: "el margen ES 15%", "la cifra FUE 3000"
-        if head.pos_ in ("VERB", "AUX") and head.dep_ == "cop":
+        if head.pos_ in ("VERB", "AUX") and _dep(head) == "cop":
             return "num_predicativo", False
-        if t.dep_ == "attr" or (t.dep_ == "ROOT" and any(c.dep_ == "cop" for c in t.children)):
+        if dep == "attr" or (dep == "ROOT" and any(_dep(c) == "cop" for c in t.children)):
             return "num_predicativo", False
         # Posesivo: "sus 3.000€" — PRON/DET posesivo como hijo del NUM o hermano del NUM
         own_children = list(t.children)
@@ -212,17 +224,17 @@ def clasificar_token(t):
         if has_indef:
             return "num_indefinido", False
         # Calificativo explicativo: ADJ valorativo antepuesto como hermano ("los enormes 3M€")
-        has_valorativo = any(s.pos_ == "ADJ" and s.i < t.i and s.dep_ == "amod" for s in siblings)
+        has_valorativo = any(s.pos_ == "ADJ" and s.i < t.i and _dep(s) == "amod" for s in siblings)
         if has_valorativo:
             return "num_calif_explic", False
         # Calificativo especificativo: modifica sustantivo vía nmod/obl ("inversión DE 3.000€")
-        if t.dep_ in ("nmod", "obl") and head.pos_ in ("NOUN", "PROPN"):
+        if dep in ("nmod", "obl") and head.pos_ in ("NOUN", "PROPN"):
             return "num_calif_espec", False
         # Caso compound: "treinta por ciento" → el head es otro NUM
-        if t.dep_ == "compound" and head.pos_ == "NUM":
+        if dep == "compound" and head.pos_ == "NUM":
             return "num_cardinal", False  # el head llevará la función real
         # Default simple nummod → cardinal si modifica sustantivo directamente
-        if t.dep_ == "nummod" and head.pos_ in ("NOUN", "PROPN"):
+        if dep == "nummod" and head.pos_ in ("NOUN", "PROPN"):
             return "num_cardinal", False
         # Todo lo demás: necesita Harness H1 para clasificar qué tipo de adjetivo
         # "facturó 47 millones" → ¿califica la acción? ¿especifica cuánto?
@@ -244,8 +256,8 @@ def clasificar_token(t):
     elif t.pos_ in ("VERB", "AUX"):
         mood = t.morph.get("Mood", [""])[0] if t.morph.get("Mood") else ""
         vf = t.morph.get("VerbForm", [""])[0] if t.morph.get("VerbForm") else ""
-        if t.dep_ == "cop": return "verb_copula", False
-        elif t.dep_ == "aux": return "verb_auxiliar", False
+        if dep == "cop": return "verb_copula", False
+        elif dep == "aux": return "verb_auxiliar", False
         elif mood == "Ind": return "verb_indicativo", False
         elif mood == "Cnd": return "verb_condicional", False
         elif mood == "Sub": return "verb_subjuntivo", False
