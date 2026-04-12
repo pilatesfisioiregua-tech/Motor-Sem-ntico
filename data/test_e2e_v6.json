@@ -1,0 +1,81 @@
+{
+  "version": "e2e_v6_decodificador",
+  "fecha": "2026-04-12 19:33",
+  "vector_dims": 361,
+  "bytecode": {
+    "diagnostico": {
+      "patron_principal": "FRAGMENTACION_SISTEMICA_CON_REGULACION",
+      "confianza": 0.85,
+      "dims_evaluadas": {
+        "epist_calibracion": 2,
+        "cogn_fuerza_equilibrio": 4,
+        "cog_pensamiento_sistemico": 5,
+        "f1_conservar": 3,
+        "f3_depurar": 1,
+        "lente_salud": 2,
+        "gob_sin_medir": 1,
+        "cib_escalada_simetrica": 1,
+        "cogn_fuerza_patron": 4,
+        "dato_como_escudo": 4,
+        "coherencia_datos": 1
+      }
+    },
+    "prescripcion": {
+      "accion": "reforzar_compromiso",
+      "instrucciones_traductor": [
+        "Integrar subsistemas fragmentados mediante conectores causales explícitos",
+        "Reducir alternancia funcional manteniendo variedad estructural",
+        "Convertir emergencia sistémica en conclusiones derivables",
+        "Preservar feedback negativo como mecanismo de estabilidad"
+      ],
+      "restricciones_output": {
+        "mood_prohibido": [
+          "especulativo",
+          "emocional"
+        ],
+        "conectores_prohibidos": [
+          "sin embargo",
+          "no obstante",
+          "por el contrario"
+        ],
+        "fg_minimo": 0.7
+      }
+    },
+    "candidato_isomorfismo": {
+      "nombre": "HIPERCOMPLEJIDAD_AUTORREGULADA",
+      "definicion": "Sistema con múltiples subsistemas incoherentes entre sí pero con mecanismos de feedback negativo que mantienen estabilidad global. Alta fragmentación local con regulación cibernética emergente.",
+      "ejes_dominantes": [
+        "sistemas",
+        "cibernetica",
+        "juegos"
+      ],
+      "nivel_profundidad": "medio",
+      "patron_geometrico": "curvatura_alta_con_persistencia"
+    },
+    "metadata": {
+      "geometria_cumplida": true
+    }
+  },
+  "texto_final": "**Reforzar tu compromiso significa:**\n\nConecta tus diferentes áreas de vida (trabajo, relaciones, salud) con causas claras que las unan, reduce saltar entre tareas sin perder variedad, y convierte lo que surge naturalmente en conclusiones sólidas que puedas defender. Mantén la autocrítica como tu brújula de estabilidad.",
+  "total_cost": 0.0207668,
+  "profundidad": 0.6924,
+  "candidato": {
+    "nombre": "HIPERCOMPLEJIDAD_AUTORREGULADA",
+    "definicion": "Sistema con múltiples subsistemas incoherentes entre sí pero con mecanismos de feedback negativo que mantienen estabilidad global. Alta fragmentación local con regulación cibernética emergente.",
+    "ejes_dominantes": [
+      "sistemas",
+      "cibernetica",
+      "juegos"
+    ],
+    "nivel_profundidad": "medio",
+    "patron_geometrico": "curvatura_alta_con_persistencia"
+  },
+  "h3": {
+    "passed": true,
+    "violations": [],
+    "tono": "frio",
+    "fg_output": 0.997,
+    "n_oraciones": 2,
+    "n_tokens": 46
+  }
+}

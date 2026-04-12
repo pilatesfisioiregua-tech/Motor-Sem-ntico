@@ -609,6 +609,7 @@ FEATURES_POR_EJE = {
     "geometria": 5,
     "cinematica": 6,
 }
+MARCOS = list(FEATURES_POR_EJE.keys())  # Los 10 marcos
 FEATURES_POR_NIVEL = sum(FEATURES_POR_EJE.values())  # 62
 
 FEATURE_NAMES_EJES = []
