@@ -1,0 +1,87 @@
+{
+  "version": "masivo_twelvedata_1h",
+  "n_activos": 3,
+  "n_velas": 1500,
+  "tiempo_s": 12,
+  "best_k": 0,
+  "silhouette": 0,
+  "results": [
+    {
+      "ticker": "GLD",
+      "sector": "Commodity",
+      "n_velas": 500,
+      "cambio": 4.95,
+      "profundidad": 0.6092,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.6269
+    },
+    {
+      "ticker": "SLV",
+      "sector": "Commodity",
+      "n_velas": 500,
+      "cambio": -1.57,
+      "profundidad": 0.5214,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.4509
+    },
+    {
+      "ticker": "USO",
+      "sector": "Commodity",
+      "n_velas": 500,
+      "cambio": 82.98,
+      "profundidad": 0.5345,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.4739
+    }
+  ]
+}

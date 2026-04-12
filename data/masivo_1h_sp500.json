@@ -1,0 +1,221 @@
+{
+  "version": "masivo_1h_sp500",
+  "n_activos": 8,
+  "n_velas": 4187,
+  "best_k": 0,
+  "silhouette": 0,
+  "results": [
+    {
+      "ticker": "BTC-USD",
+      "sector": "Crypto",
+      "n_velas": 745,
+      "cambio": 1.19,
+      "profundidad": 0.7398,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.8191
+    },
+    {
+      "ticker": "ETH-USD",
+      "sector": "Crypto",
+      "n_velas": 745,
+      "cambio": 6.48,
+      "profundidad": 0.7394,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.8252
+    },
+    {
+      "ticker": "SOL-USD",
+      "sector": "Crypto",
+      "n_velas": 745,
+      "cambio": -5.12,
+      "profundidad": 0.821,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.9422
+    },
+    {
+      "ticker": "DOGE-USD",
+      "sector": "Crypto",
+      "n_velas": 745,
+      "cambio": -3.45,
+      "profundidad": 0.8383,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.9739
+    },
+    {
+      "ticker": "XRP-USD",
+      "sector": "Crypto",
+      "n_velas": 745,
+      "cambio": -3.01,
+      "profundidad": 0.8377,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.9723
+    },
+    {
+      "ticker": "GLD",
+      "sector": "Commodity",
+      "n_velas": 154,
+      "cambio": -8.4,
+      "profundidad": 0.7933,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.7821
+    },
+    {
+      "ticker": "SLV",
+      "sector": "Commodity",
+      "n_velas": 154,
+      "cambio": -11.16,
+      "profundidad": 0.8331,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.9775
+    },
+    {
+      "ticker": "USO",
+      "sector": "Commodity",
+      "n_velas": 154,
+      "cambio": 17.43,
+      "profundidad": 0.9035,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "juegos",
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.9773
+    }
+  ]
+}

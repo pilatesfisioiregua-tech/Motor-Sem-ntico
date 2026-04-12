@@ -1,0 +1,581 @@
+{
+  "version": "masivo_intradia_v6",
+  "fecha": "2026-04-12 22:23",
+  "n_activos": 22,
+  "n_velas_total": 17643,
+  "tiempo_s": 7,
+  "best_k": 3,
+  "silhouette": 0.2332,
+  "results": [
+    {
+      "ticker": "BTC-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -1.15,
+      "profundidad": 0.5243,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.5041,
+      "cluster": 1
+    },
+    {
+      "ticker": "ETH-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -1.92,
+      "profundidad": 0.513,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.4605,
+      "cluster": 0
+    },
+    {
+      "ticker": "SOL-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -4.27,
+      "profundidad": 0.6273,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.6906,
+      "cluster": 1
+    },
+    {
+      "ticker": "DOGE-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -4.37,
+      "profundidad": 0.508,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.4523,
+      "cluster": 0
+    },
+    {
+      "ticker": "ADA-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -9.71,
+      "profundidad": 0.5132,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.4575,
+      "cluster": 0
+    },
+    {
+      "ticker": "XRP-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -3.64,
+      "profundidad": 0.6389,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.7114,
+      "cluster": 1
+    },
+    {
+      "ticker": "BNB-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -4.62,
+      "profundidad": 0.6635,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.7411,
+      "cluster": 1
+    },
+    {
+      "ticker": "AVAX-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -3.92,
+      "profundidad": 0.4685,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.4515,
+      "cluster": 1
+    },
+    {
+      "ticker": "DOT-USD",
+      "sector": "Crypto",
+      "n_velas": 1397,
+      "cambio_5d": -5.86,
+      "profundidad": 0.4423,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.3756,
+      "cluster": 0
+    },
+    {
+      "ticker": "GLD",
+      "sector": "Commodity",
+      "n_velas": 390,
+      "cambio_5d": 1.88,
+      "profundidad": 0.6821,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.736,
+      "cluster": 2
+    },
+    {
+      "ticker": "SLV",
+      "sector": "Commodity",
+      "n_velas": 390,
+      "cambio_5d": 4.78,
+      "profundidad": 0.6344,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "grafos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.65,
+      "cluster": 1
+    },
+    {
+      "ticker": "USO",
+      "sector": "Commodity",
+      "n_velas": 390,
+      "cambio_5d": -9.79,
+      "profundidad": 0.5579,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "grafos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.582,
+      "cluster": 2
+    },
+    {
+      "ticker": "GDX",
+      "sector": "Commodity",
+      "n_velas": 390,
+      "cambio_5d": 5.07,
+      "profundidad": 0.6047,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "grafos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.6316,
+      "cluster": 2
+    },
+    {
+      "ticker": "XLE",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": -4.19,
+      "profundidad": 0.6533,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "juegos",
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.7346,
+      "cluster": 1
+    },
+    {
+      "ticker": "XLF",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": 2.19,
+      "profundidad": 0.5477,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "grafos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "homo_n2n3": 0.6124,
+      "cluster": 2
+    },
+    {
+      "ticker": "XLK",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": 4.19,
+      "profundidad": 0.5364,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.5294,
+      "cluster": 2
+    },
+    {
+      "ticker": "XLV",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": 0.81,
+      "profundidad": 0.5128,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.5258,
+      "cluster": 2
+    },
+    {
+      "ticker": "XLI",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": 4.78,
+      "profundidad": 0.5524,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.5779,
+      "cluster": 2
+    },
+    {
+      "ticker": "XLP",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": 0.59,
+      "profundidad": 0.5759,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "grafos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.6122,
+      "cluster": 2
+    },
+    {
+      "ticker": "XLU",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": 1.41,
+      "profundidad": 0.578,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.5541,
+      "cluster": 2
+    },
+    {
+      "ticker": "XLB",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": 3.48,
+      "profundidad": 0.4789,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "topologia"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.4654,
+      "cluster": 2
+    },
+    {
+      "ticker": "XLRE",
+      "sector": "Sector ETF",
+      "n_velas": 390,
+      "cambio_5d": 3.01,
+      "profundidad": 0.6804,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas",
+          "topologia"
+        ],
+        "N3": [
+          "sistemas",
+          "topologia"
+        ],
+        "N4": [
+          "sistemas"
+        ]
+      },
+      "homo_n2n3": 0.9428,
+      "cluster": 2
+    }
+  ]
+}
