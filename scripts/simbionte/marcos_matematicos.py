@@ -647,7 +647,9 @@ def calcular_10_ejes(seq, n_tipos, edges=None, agentes=None, condicionales=None,
     v.extend(eje_cinematica(seq, n_tipos))             # 6
 
     assert len(v) == FEATURES_POR_NIVEL, f"10 ejes: {len(v)} != {FEATURES_POR_NIVEL}"
-    return np.array(v, dtype=np.float64)
+    result = np.array(v, dtype=np.float64)
+    result = np.nan_to_num(result, nan=0.0, posinf=0.0, neginf=0.0)
+    return result
 
 
 # ============================================================

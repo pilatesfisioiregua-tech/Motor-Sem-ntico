@@ -1,0 +1,11 @@
+{
+  "version": "muestra_masiva_v1",
+  "fecha": "2026-04-12 23:24",
+  "n_tickers": 197,
+  "n_empresas": 500,
+  "clusters_mercado": 8,
+  "clusters_empresa": 6,
+  "pca_varianza_10": 0.9994814324536715,
+  "cross_sim_max": 0.6165036803833617,
+  "cross_sim_mean": 0.6049848937693829
+}
