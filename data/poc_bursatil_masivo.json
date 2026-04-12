@@ -1,0 +1,3153 @@
+{
+  "version": "poc_bursatil_masivo_v6",
+  "fecha": "2026-04-12 21:50",
+  "n_activos": 110,
+  "n_errores": 3,
+  "tiempo_s": 39,
+  "best_k": 3,
+  "silhouette": 0.2451,
+  "results": [
+    {
+      "ticker": "AAPL",
+      "cambio_pct": 32.03,
+      "n_sesiones": 250,
+      "profundidad": 0.5829,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4875,
+      "coherencia_N1": 0.4666,
+      "simetria_N3": -0.2002,
+      "latencia_ms": 476,
+      "cluster": 0
+    },
+    {
+      "ticker": "MSFT",
+      "cambio_pct": -3.79,
+      "n_sesiones": 250,
+      "profundidad": 0.5993,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5121,
+      "coherencia_N1": 0.4532,
+      "simetria_N3": -0.2212,
+      "latencia_ms": 280,
+      "cluster": 0
+    },
+    {
+      "ticker": "AMZN",
+      "cambio_pct": 28.94,
+      "n_sesiones": 250,
+      "profundidad": 0.5855,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5053,
+      "coherencia_N1": 0.4182,
+      "simetria_N3": -0.207,
+      "latencia_ms": 235,
+      "cluster": 0
+    },
+    {
+      "ticker": "NVDA",
+      "cambio_pct": 70.08,
+      "n_sesiones": 250,
+      "profundidad": 0.5426,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4859,
+      "coherencia_N1": 0.4299,
+      "simetria_N3": -0.2025,
+      "latencia_ms": 269,
+      "cluster": 2
+    },
+    {
+      "ticker": "GOOGL",
+      "cambio_pct": 102.58,
+      "n_sesiones": 250,
+      "profundidad": 0.5938,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4924,
+      "coherencia_N1": 0.4683,
+      "simetria_N3": -0.2494,
+      "latencia_ms": 307,
+      "cluster": 0
+    },
+    {
+      "ticker": "META",
+      "cambio_pct": 16.24,
+      "n_sesiones": 250,
+      "profundidad": 0.5888,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5062,
+      "coherencia_N1": 0.4593,
+      "simetria_N3": -0.1799,
+      "latencia_ms": 225,
+      "cluster": 0
+    },
+    {
+      "ticker": "TSLA",
+      "cambio_pct": 38.3,
+      "n_sesiones": 250,
+      "profundidad": 0.52,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4683,
+      "coherencia_N1": 0.4723,
+      "simetria_N3": -0.224,
+      "latencia_ms": 140,
+      "cluster": 2
+    },
+    {
+      "ticker": "BRK-B",
+      "cambio_pct": -8.44,
+      "n_sesiones": 250,
+      "profundidad": 0.6042,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4989,
+      "coherencia_N1": 0.4658,
+      "simetria_N3": -0.2551,
+      "latencia_ms": 313,
+      "cluster": 0
+    },
+    {
+      "ticker": "UNH",
+      "cambio_pct": -47.8,
+      "n_sesiones": 250,
+      "profundidad": 0.5491,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5071,
+      "coherencia_N1": 0.4557,
+      "simetria_N3": -0.2241,
+      "latencia_ms": 308,
+      "cluster": 2
+    },
+    {
+      "ticker": "JNJ",
+      "cambio_pct": 61.54,
+      "n_sesiones": 250,
+      "profundidad": 0.6044,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4969,
+      "coherencia_N1": 0.4547,
+      "simetria_N3": -0.3275,
+      "latencia_ms": 389,
+      "cluster": 0
+    },
+    {
+      "ticker": "JPM",
+      "cambio_pct": 33.74,
+      "n_sesiones": 250,
+      "profundidad": 0.6032,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5042,
+      "coherencia_N1": 0.4725,
+      "simetria_N3": -0.291,
+      "latencia_ms": 210,
+      "cluster": 0
+    },
+    {
+      "ticker": "V",
+      "cambio_pct": -8.03,
+      "n_sesiones": 250,
+      "profundidad": 0.5951,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5018,
+      "coherencia_N1": 0.4464,
+      "simetria_N3": -0.1648,
+      "latencia_ms": 271,
+      "cluster": 0
+    },
+    {
+      "ticker": "PG",
+      "cambio_pct": -10.64,
+      "n_sesiones": 250,
+      "profundidad": 0.5993,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4901,
+      "coherencia_N1": 0.4481,
+      "simetria_N3": -0.2365,
+      "latencia_ms": 443,
+      "cluster": 0
+    },
+    {
+      "ticker": "XOM",
+      "cambio_pct": 52.95,
+      "n_sesiones": 250,
+      "profundidad": 0.5986,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5049,
+      "coherencia_N1": 0.4241,
+      "simetria_N3": -0.1953,
+      "latencia_ms": 244,
+      "cluster": 0
+    },
+    {
+      "ticker": "HD",
+      "cambio_pct": -2.26,
+      "n_sesiones": 250,
+      "profundidad": 0.584,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4946,
+      "coherencia_N1": 0.4519,
+      "simetria_N3": -0.1784,
+      "latencia_ms": 340,
+      "cluster": 0
+    },
+    {
+      "ticker": "MA",
+      "cambio_pct": -1.6,
+      "n_sesiones": 250,
+      "profundidad": 0.5947,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5025,
+      "coherencia_N1": 0.4545,
+      "simetria_N3": -0.2329,
+      "latencia_ms": 321,
+      "cluster": 0
+    },
+    {
+      "ticker": "CVX",
+      "cambio_pct": 45.27,
+      "n_sesiones": 250,
+      "profundidad": 0.5963,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5091,
+      "coherencia_N1": 0.4599,
+      "simetria_N3": -0.2624,
+      "latencia_ms": 417,
+      "cluster": 0
+    },
+    {
+      "ticker": "MRK",
+      "cambio_pct": 58.92,
+      "n_sesiones": 250,
+      "profundidad": 0.5474,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5043,
+      "coherencia_N1": 0.4548,
+      "simetria_N3": -0.242,
+      "latencia_ms": 411,
+      "cluster": 2
+    },
+    {
+      "ticker": "ABBV",
+      "cambio_pct": 22.77,
+      "n_sesiones": 250,
+      "profundidad": 0.5581,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5146,
+      "coherencia_N1": 0.4541,
+      "simetria_N3": -0.2246,
+      "latencia_ms": 263,
+      "cluster": 2
+    },
+    {
+      "ticker": "PEP",
+      "cambio_pct": 13.1,
+      "n_sesiones": 250,
+      "profundidad": 0.6017,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4983,
+      "coherencia_N1": 0.4636,
+      "simetria_N3": -0.2661,
+      "latencia_ms": 370,
+      "cluster": 0
+    },
+    {
+      "ticker": "KO",
+      "cambio_pct": 11.6,
+      "n_sesiones": 250,
+      "profundidad": 0.5991,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5122,
+      "coherencia_N1": 0.4377,
+      "simetria_N3": -0.2774,
+      "latencia_ms": 362,
+      "cluster": 0
+    },
+    {
+      "ticker": "AVGO",
+      "cambio_pct": 105.87,
+      "n_sesiones": 250,
+      "profundidad": 0.5019,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4791,
+      "coherencia_N1": 0.4555,
+      "simetria_N3": -0.2616,
+      "latencia_ms": 259,
+      "cluster": 2
+    },
+    {
+      "ticker": "COST",
+      "cambio_pct": 4.21,
+      "n_sesiones": 250,
+      "profundidad": 0.6057,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5034,
+      "coherencia_N1": 0.4795,
+      "simetria_N3": -0.2727,
+      "latencia_ms": 350,
+      "cluster": 0
+    },
+    {
+      "ticker": "LLY",
+      "cambio_pct": 29.22,
+      "n_sesiones": 250,
+      "profundidad": 0.5233,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.494,
+      "coherencia_N1": 0.414,
+      "simetria_N3": -0.2201,
+      "latencia_ms": 356,
+      "cluster": 2
+    },
+    {
+      "ticker": "WMT",
+      "cambio_pct": 37.82,
+      "n_sesiones": 250,
+      "profundidad": 0.5499,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4881,
+      "coherencia_N1": 0.4473,
+      "simetria_N3": -0.1848,
+      "latencia_ms": 409,
+      "cluster": 2
+    },
+    {
+      "ticker": "TMO",
+      "cambio_pct": 13.64,
+      "n_sesiones": 250,
+      "profundidad": 0.5517,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4928,
+      "coherencia_N1": 0.4639,
+      "simetria_N3": -0.2037,
+      "latencia_ms": 296,
+      "cluster": 2
+    },
+    {
+      "ticker": "MCD",
+      "cambio_pct": 0.92,
+      "n_sesiones": 250,
+      "profundidad": 0.6036,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5197,
+      "coherencia_N1": 0.4475,
+      "simetria_N3": -0.3061,
+      "latencia_ms": 414,
+      "cluster": 0
+    },
+    {
+      "ticker": "CSCO",
+      "cambio_pct": 46.72,
+      "n_sesiones": 250,
+      "profundidad": 0.5851,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5089,
+      "coherencia_N1": 0.45,
+      "simetria_N3": -0.2229,
+      "latencia_ms": 436,
+      "cluster": 0
+    },
+    {
+      "ticker": "ACN",
+      "cambio_pct": -36.01,
+      "n_sesiones": 250,
+      "profundidad": 0.5,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5199,
+      "coherencia_N1": 0.4634,
+      "simetria_N3": -0.2594,
+      "latencia_ms": 308,
+      "cluster": 2
+    },
+    {
+      "ticker": "ABT",
+      "cambio_pct": -19.47,
+      "n_sesiones": 250,
+      "profundidad": 0.6011,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5064,
+      "coherencia_N1": 0.4728,
+      "simetria_N3": -0.2517,
+      "latencia_ms": 359,
+      "cluster": 0
+    },
+    {
+      "ticker": "DHR",
+      "cambio_pct": 1.16,
+      "n_sesiones": 250,
+      "profundidad": 0.4799,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5006,
+      "coherencia_N1": 0.4468,
+      "simetria_N3": -0.2914,
+      "latencia_ms": 322,
+      "cluster": 2
+    },
+    {
+      "ticker": "NEE",
+      "cambio_pct": 47.21,
+      "n_sesiones": 250,
+      "profundidad": 0.5435,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.497,
+      "coherencia_N1": 0.4069,
+      "simetria_N3": -0.2023,
+      "latencia_ms": 476,
+      "cluster": 2
+    },
+    {
+      "ticker": "ADBE",
+      "cambio_pct": -36.07,
+      "n_sesiones": 250,
+      "profundidad": 0.4812,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5104,
+      "coherencia_N1": 0.4758,
+      "simetria_N3": -0.3425,
+      "latencia_ms": 290,
+      "cluster": 2
+    },
+    {
+      "ticker": "CRM",
+      "cambio_pct": -34.83,
+      "n_sesiones": 250,
+      "profundidad": 0.5303,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5151,
+      "coherencia_N1": 0.4257,
+      "simetria_N3": -0.2322,
+      "latencia_ms": 226,
+      "cluster": 2
+    },
+    {
+      "ticker": "TXN",
+      "cambio_pct": 50.07,
+      "n_sesiones": 250,
+      "profundidad": 0.5058,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5217,
+      "coherencia_N1": 0.4423,
+      "simetria_N3": -0.2289,
+      "latencia_ms": 454,
+      "cluster": 2
+    },
+    {
+      "ticker": "CMCSA",
+      "cambio_pct": -7.75,
+      "n_sesiones": 250,
+      "profundidad": 0.5873,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5142,
+      "coherencia_N1": 0.4647,
+      "simetria_N3": -0.2259,
+      "latencia_ms": 333,
+      "cluster": 0
+    },
+    {
+      "ticker": "BMY",
+      "cambio_pct": 21.37,
+      "n_sesiones": 250,
+      "profundidad": 0.5499,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5069,
+      "coherencia_N1": 0.4273,
+      "simetria_N3": -0.1913,
+      "latencia_ms": 447,
+      "cluster": 2
+    },
+    {
+      "ticker": "PM",
+      "cambio_pct": 7.96,
+      "n_sesiones": 250,
+      "profundidad": 0.5239,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4798,
+      "coherencia_N1": 0.4627,
+      "simetria_N3": -0.2287,
+      "latencia_ms": 284,
+      "cluster": 2
+    },
+    {
+      "ticker": "UNP",
+      "cambio_pct": 17.31,
+      "n_sesiones": 250,
+      "profundidad": 0.6024,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5173,
+      "coherencia_N1": 0.4623,
+      "simetria_N3": -0.3044,
+      "latencia_ms": 331,
+      "cluster": 0
+    },
+    {
+      "ticker": "RTX",
+      "cambio_pct": 59.8,
+      "n_sesiones": 250,
+      "profundidad": 0.5989,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5011,
+      "coherencia_N1": 0.4643,
+      "simetria_N3": -0.2704,
+      "latencia_ms": 495,
+      "cluster": 0
+    },
+    {
+      "ticker": "HON",
+      "cambio_pct": 28.29,
+      "n_sesiones": 250,
+      "profundidad": 0.602,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5086,
+      "coherencia_N1": 0.4585,
+      "simetria_N3": -0.296,
+      "latencia_ms": 462,
+      "cluster": 0
+    },
+    {
+      "ticker": "INTC",
+      "cambio_pct": 216.01,
+      "n_sesiones": 250,
+      "profundidad": 0.5084,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4835,
+      "coherencia_N1": 0.4207,
+      "simetria_N3": -0.1738,
+      "latencia_ms": 389,
+      "cluster": 2
+    },
+    {
+      "ticker": "AMGN",
+      "cambio_pct": 26.59,
+      "n_sesiones": 250,
+      "profundidad": 0.5496,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5068,
+      "coherencia_N1": 0.4513,
+      "simetria_N3": -0.2282,
+      "latencia_ms": 312,
+      "cluster": 2
+    },
+    {
+      "ticker": "IBM",
+      "cambio_pct": 0.43,
+      "n_sesiones": 250,
+      "profundidad": 0.5312,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5066,
+      "coherencia_N1": 0.445,
+      "simetria_N3": -0.1695,
+      "latencia_ms": 429,
+      "cluster": 2
+    },
+    {
+      "ticker": "QCOM",
+      "cambio_pct": -5.88,
+      "n_sesiones": 250,
+      "profundidad": 0.5901,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4999,
+      "coherencia_N1": 0.4028,
+      "simetria_N3": -0.2203,
+      "latencia_ms": 299,
+      "cluster": 0
+    },
+    {
+      "ticker": "LOW",
+      "cambio_pct": 13.07,
+      "n_sesiones": 250,
+      "profundidad": 0.5438,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5017,
+      "coherencia_N1": 0.4318,
+      "simetria_N3": -0.1778,
+      "latencia_ms": 352,
+      "cluster": 2
+    },
+    {
+      "ticker": "SPGI",
+      "cambio_pct": -9.98,
+      "n_sesiones": 250,
+      "profundidad": 0.5059,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5033,
+      "coherencia_N1": 0.4274,
+      "simetria_N3": -0.2364,
+      "latencia_ms": 328,
+      "cluster": 2
+    },
+    {
+      "ticker": "ELV",
+      "cambio_pct": -27.65,
+      "n_sesiones": 250,
+      "profundidad": 0.4149,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "cibernetica"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5078,
+      "coherencia_N1": 0.4702,
+      "simetria_N3": -0.3373,
+      "latencia_ms": 351,
+      "cluster": 2
+    },
+    {
+      "ticker": "GE",
+      "cambio_pct": 70.63,
+      "n_sesiones": 250,
+      "profundidad": 0.5461,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5186,
+      "coherencia_N1": 0.444,
+      "simetria_N3": -0.2269,
+      "latencia_ms": 461,
+      "cluster": 2
+    },
+    {
+      "ticker": "CAT",
+      "cambio_pct": 173.14,
+      "n_sesiones": 250,
+      "profundidad": 0.5547,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4964,
+      "coherencia_N1": 0.4522,
+      "simetria_N3": -0.2274,
+      "latencia_ms": 569,
+      "cluster": 2
+    },
+    {
+      "ticker": "INTU",
+      "cambio_pct": -39.73,
+      "n_sesiones": 250,
+      "profundidad": 0.5157,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5019,
+      "coherencia_N1": 0.4291,
+      "simetria_N3": -0.2117,
+      "latencia_ms": 280,
+      "cluster": 2
+    },
+    {
+      "ticker": "ISRG",
+      "cambio_pct": -8.71,
+      "n_sesiones": 250,
+      "profundidad": 0.5888,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5211,
+      "coherencia_N1": 0.4338,
+      "simetria_N3": -0.1753,
+      "latencia_ms": 264,
+      "cluster": 0
+    },
+    {
+      "ticker": "BA",
+      "cambio_pct": 38.76,
+      "n_sesiones": 250,
+      "profundidad": 0.5916,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4939,
+      "coherencia_N1": 0.4704,
+      "simetria_N3": -0.2272,
+      "latencia_ms": 478,
+      "cluster": 0
+    },
+    {
+      "ticker": "SYK",
+      "cambio_pct": -2.24,
+      "n_sesiones": 250,
+      "profundidad": 0.5978,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5,
+      "coherencia_N1": 0.4324,
+      "simetria_N3": -0.2736,
+      "latencia_ms": 286,
+      "cluster": 0
+    },
+    {
+      "ticker": "BLK",
+      "cambio_pct": 16.06,
+      "n_sesiones": 250,
+      "profundidad": 0.5915,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4981,
+      "coherencia_N1": 0.4078,
+      "simetria_N3": -0.1738,
+      "latencia_ms": 294,
+      "cluster": 0
+    },
+    {
+      "ticker": "ADP",
+      "cambio_pct": -35.39,
+      "n_sesiones": 250,
+      "profundidad": 0.5968,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5008,
+      "coherencia_N1": 0.4272,
+      "simetria_N3": -0.2572,
+      "latencia_ms": 361,
+      "cluster": 0
+    },
+    {
+      "ticker": "MDLZ",
+      "cambio_pct": -9.08,
+      "n_sesiones": 250,
+      "profundidad": 0.5923,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5148,
+      "coherencia_N1": 0.4477,
+      "simetria_N3": -0.242,
+      "latencia_ms": 292,
+      "cluster": 0
+    },
+    {
+      "ticker": "GILD",
+      "cambio_pct": 37.69,
+      "n_sesiones": 250,
+      "profundidad": 0.5152,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5194,
+      "coherencia_N1": 0.4586,
+      "simetria_N3": -0.2513,
+      "latencia_ms": 324,
+      "cluster": 2
+    },
+    {
+      "ticker": "DE",
+      "cambio_pct": 33.5,
+      "n_sesiones": 250,
+      "profundidad": 0.5507,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5195,
+      "coherencia_N1": 0.459,
+      "simetria_N3": -0.1802,
+      "latencia_ms": 489,
+      "cluster": 2
+    },
+    {
+      "ticker": "VRTX",
+      "cambio_pct": -9.9,
+      "n_sesiones": 250,
+      "profundidad": 0.5179,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4965,
+      "coherencia_N1": 0.4616,
+      "simetria_N3": -0.2368,
+      "latencia_ms": 229,
+      "cluster": 2
+    },
+    {
+      "ticker": "AMT",
+      "cambio_pct": -13.67,
+      "n_sesiones": 250,
+      "profundidad": 0.6032,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5158,
+      "coherencia_N1": 0.4689,
+      "simetria_N3": -0.2395,
+      "latencia_ms": 332,
+      "cluster": 0
+    },
+    {
+      "ticker": "ADI",
+      "cambio_pct": 98.42,
+      "n_sesiones": 250,
+      "profundidad": 0.511,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5001,
+      "coherencia_N1": 0.4812,
+      "simetria_N3": -0.2623,
+      "latencia_ms": 301,
+      "cluster": 2
+    },
+    {
+      "ticker": "REGN",
+      "cambio_pct": 35.87,
+      "n_sesiones": 250,
+      "profundidad": 0.5037,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5157,
+      "coherencia_N1": 0.4365,
+      "simetria_N3": -0.2563,
+      "latencia_ms": 235,
+      "cluster": 2
+    },
+    {
+      "ticker": "CI",
+      "cambio_pct": -16.11,
+      "n_sesiones": 250,
+      "profundidad": 0.6011,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5003,
+      "coherencia_N1": 0.47,
+      "simetria_N3": -0.301,
+      "latencia_ms": 337,
+      "cluster": 0
+    },
+    {
+      "ticker": "PYPL",
+      "cambio_pct": -27.33,
+      "n_sesiones": 250,
+      "profundidad": 0.4119,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "cibernetica"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5088,
+      "coherencia_N1": 0.4215,
+      "simetria_N3": -0.3435,
+      "latencia_ms": 262,
+      "cluster": 2
+    },
+    {
+      "ticker": "LRCX",
+      "cambio_pct": 293.59,
+      "n_sesiones": 250,
+      "profundidad": 0.5286,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4814,
+      "coherencia_N1": 0.4094,
+      "simetria_N3": -0.203,
+      "latencia_ms": 275,
+      "cluster": 2
+    },
+    {
+      "ticker": "SCHW",
+      "cambio_pct": 24.7,
+      "n_sesiones": 250,
+      "profundidad": 0.6028,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4995,
+      "coherencia_N1": 0.4048,
+      "simetria_N3": -0.2853,
+      "latencia_ms": 371,
+      "cluster": 0
+    },
+    {
+      "ticker": "ZTS",
+      "cambio_pct": -19.98,
+      "n_sesiones": 250,
+      "profundidad": 0.5849,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5009,
+      "coherencia_N1": 0.4042,
+      "simetria_N3": -0.2055,
+      "latencia_ms": 262,
+      "cluster": 0
+    },
+    {
+      "ticker": "CB",
+      "cambio_pct": 16.45,
+      "n_sesiones": 250,
+      "profundidad": 0.603,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5014,
+      "coherencia_N1": 0.4352,
+      "simetria_N3": -0.3145,
+      "latencia_ms": 368,
+      "cluster": 0
+    },
+    {
+      "ticker": "NOW",
+      "cambio_pct": -47.18,
+      "n_sesiones": 250,
+      "profundidad": 0.4885,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5031,
+      "coherencia_N1": 0.4023,
+      "simetria_N3": -0.272,
+      "latencia_ms": 248,
+      "cluster": 2
+    },
+    {
+      "ticker": "MO",
+      "cambio_pct": 27.31,
+      "n_sesiones": 250,
+      "profundidad": 0.6027,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4914,
+      "coherencia_N1": 0.4235,
+      "simetria_N3": -0.3039,
+      "latencia_ms": 458,
+      "cluster": 0
+    },
+    {
+      "ticker": "DUK",
+      "cambio_pct": 14.73,
+      "n_sesiones": 250,
+      "profundidad": 0.6061,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4946,
+      "coherencia_N1": 0.4348,
+      "simetria_N3": -0.3175,
+      "latencia_ms": 527,
+      "cluster": 0
+    },
+    {
+      "ticker": "SO",
+      "cambio_pct": 11.66,
+      "n_sesiones": 250,
+      "profundidad": 0.6046,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4952,
+      "coherencia_N1": 0.4368,
+      "simetria_N3": -0.3392,
+      "latencia_ms": 373,
+      "cluster": 0
+    },
+    {
+      "ticker": "AON",
+      "cambio_pct": -16.59,
+      "n_sesiones": 250,
+      "profundidad": 0.5546,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5141,
+      "coherencia_N1": 0.4493,
+      "simetria_N3": -0.215,
+      "latencia_ms": 320,
+      "cluster": 2
+    },
+    {
+      "ticker": "CL",
+      "cambio_pct": -8.07,
+      "n_sesiones": 250,
+      "profundidad": 0.5982,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5027,
+      "coherencia_N1": 0.4536,
+      "simetria_N3": -0.2087,
+      "latencia_ms": 400,
+      "cluster": 0
+    },
+    {
+      "ticker": "BSX",
+      "cambio_pct": -34.03,
+      "n_sesiones": 250,
+      "profundidad": 0.5384,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5136,
+      "coherencia_N1": 0.4369,
+      "simetria_N3": -0.2098,
+      "latencia_ms": 213,
+      "cluster": 2
+    },
+    {
+      "ticker": "PGR",
+      "cambio_pct": -25.0,
+      "n_sesiones": 250,
+      "profundidad": 0.6008,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5197,
+      "coherencia_N1": 0.4342,
+      "simetria_N3": -0.2447,
+      "latencia_ms": 442,
+      "cluster": 0
+    },
+    {
+      "ticker": "CME",
+      "cambio_pct": 17.23,
+      "n_sesiones": 250,
+      "profundidad": 0.6046,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.488,
+      "coherencia_N1": 0.4604,
+      "simetria_N3": -0.166,
+      "latencia_ms": 329,
+      "cluster": 0
+    },
+    {
+      "ticker": "SLB",
+      "cambio_pct": 57.56,
+      "n_sesiones": 250,
+      "profundidad": 0.5409,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4815,
+      "coherencia_N1": 0.4825,
+      "simetria_N3": -0.1831,
+      "latencia_ms": 364,
+      "cluster": 2
+    },
+    {
+      "ticker": "EQIX",
+      "cambio_pct": 35.7,
+      "n_sesiones": 250,
+      "profundidad": 0.6023,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.508,
+      "coherencia_N1": 0.4403,
+      "simetria_N3": -0.2838,
+      "latencia_ms": 296,
+      "cluster": 0
+    },
+    {
+      "ticker": "ITW",
+      "cambio_pct": 19.39,
+      "n_sesiones": 250,
+      "profundidad": 0.6024,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5035,
+      "coherencia_N1": 0.4429,
+      "simetria_N3": -0.274,
+      "latencia_ms": 375,
+      "cluster": 0
+    },
+    {
+      "ticker": "WM",
+      "cambio_pct": 1.55,
+      "n_sesiones": 250,
+      "profundidad": 0.6042,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.512,
+      "coherencia_N1": 0.4855,
+      "simetria_N3": -0.3924,
+      "latencia_ms": 406,
+      "cluster": 0
+    },
+    {
+      "ticker": "NOC",
+      "cambio_pct": 28.2,
+      "n_sesiones": 250,
+      "profundidad": 0.54,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5161,
+      "coherencia_N1": 0.4513,
+      "simetria_N3": -0.1774,
+      "latencia_ms": 438,
+      "cluster": 2
+    },
+    {
+      "ticker": "ICE",
+      "cambio_pct": 4.22,
+      "n_sesiones": 250,
+      "profundidad": 0.5908,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5103,
+      "coherencia_N1": 0.469,
+      "simetria_N3": -0.2521,
+      "latencia_ms": 293,
+      "cluster": 0
+    },
+    {
+      "ticker": "FDX",
+      "cambio_pct": 84.05,
+      "n_sesiones": 250,
+      "profundidad": 0.5316,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5006,
+      "coherencia_N1": 0.4799,
+      "simetria_N3": -0.2605,
+      "latencia_ms": 310,
+      "cluster": 2
+    },
+    {
+      "ticker": "SHW",
+      "cambio_pct": 0.7,
+      "n_sesiones": 250,
+      "profundidad": 0.5841,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5077,
+      "coherencia_N1": 0.4367,
+      "simetria_N3": -0.2369,
+      "latencia_ms": 324,
+      "cluster": 0
+    },
+    {
+      "ticker": "MCK",
+      "cambio_pct": 26.06,
+      "n_sesiones": 250,
+      "profundidad": 0.5548,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5125,
+      "coherencia_N1": 0.4518,
+      "simetria_N3": -0.2008,
+      "latencia_ms": 322,
+      "cluster": 2
+    },
+    {
+      "ticker": "EMR",
+      "cambio_pct": 45.45,
+      "n_sesiones": 250,
+      "profundidad": 0.4927,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.495,
+      "coherencia_N1": 0.4648,
+      "simetria_N3": -0.2402,
+      "latencia_ms": 372,
+      "cluster": 2
+    },
+    {
+      "ticker": "GD",
+      "cambio_pct": 23.37,
+      "n_sesiones": 250,
+      "profundidad": 0.6032,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.508,
+      "coherencia_N1": 0.438,
+      "simetria_N3": -0.2735,
+      "latencia_ms": 410,
+      "cluster": 0
+    },
+    {
+      "ticker": "APD",
+      "cambio_pct": 14.02,
+      "n_sesiones": 250,
+      "profundidad": 0.5576,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5083,
+      "coherencia_N1": 0.4618,
+      "simetria_N3": -0.2332,
+      "latencia_ms": 364,
+      "cluster": 2
+    },
+    {
+      "ticker": "ORLY",
+      "cambio_pct": 0.39,
+      "n_sesiones": 250,
+      "profundidad": 0.6033,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5052,
+      "coherencia_N1": 0.4636,
+      "simetria_N3": -0.2586,
+      "latencia_ms": 215,
+      "cluster": 0
+    },
+    {
+      "ticker": "KLAC",
+      "cambio_pct": 161.18,
+      "n_sesiones": 250,
+      "profundidad": 0.5011,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4917,
+      "coherencia_N1": 0.4824,
+      "simetria_N3": -0.2559,
+      "latencia_ms": 297,
+      "cluster": 2
+    },
+    {
+      "ticker": "NSC",
+      "cambio_pct": 38.49,
+      "n_sesiones": 250,
+      "profundidad": 0.6052,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5166,
+      "coherencia_N1": 0.3963,
+      "simetria_N3": -0.3678,
+      "latencia_ms": 429,
+      "cluster": 0
+    },
+    {
+      "ticker": "AJG",
+      "cambio_pct": -35.43,
+      "n_sesiones": 250,
+      "profundidad": 0.4948,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4962,
+      "coherencia_N1": 0.4178,
+      "simetria_N3": -0.2796,
+      "latencia_ms": 372,
+      "cluster": 2
+    },
+    {
+      "ticker": "MPC",
+      "cambio_pct": 84.23,
+      "n_sesiones": 250,
+      "profundidad": 0.5368,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5242,
+      "coherencia_N1": 0.4949,
+      "simetria_N3": -0.2053,
+      "latencia_ms": 286,
+      "cluster": 2
+    },
+    {
+      "ticker": "PSX",
+      "cambio_pct": 69.54,
+      "n_sesiones": 250,
+      "profundidad": 0.5002,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5064,
+      "coherencia_N1": 0.4475,
+      "simetria_N3": -0.334,
+      "latencia_ms": 341,
+      "cluster": 2
+    },
+    {
+      "ticker": "VLO",
+      "cambio_pct": 122.08,
+      "n_sesiones": 250,
+      "profundidad": 0.495,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4853,
+      "coherencia_N1": 0.4893,
+      "simetria_N3": -0.279,
+      "latencia_ms": 434,
+      "cluster": 2
+    },
+    {
+      "ticker": "F",
+      "cambio_pct": 36.69,
+      "n_sesiones": 250,
+      "profundidad": 0.597,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5055,
+      "coherencia_N1": 0.4013,
+      "simetria_N3": -0.2786,
+      "latencia_ms": 348,
+      "cluster": 0
+    },
+    {
+      "ticker": "GM",
+      "cambio_pct": 76.94,
+      "n_sesiones": 250,
+      "profundidad": 0.5868,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5067,
+      "coherencia_N1": 0.4061,
+      "simetria_N3": -0.2111,
+      "latencia_ms": 248,
+      "cluster": 0
+    },
+    {
+      "ticker": "BTC-USD",
+      "cambio_pct": -16.6,
+      "n_sesiones": 366,
+      "profundidad": 0.5011,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5893,
+      "coherencia_N1": 0.4388,
+      "simetria_N3": -0.3494,
+      "latencia_ms": 205,
+      "cluster": 1
+    },
+    {
+      "ticker": "ETH-USD",
+      "cambio_pct": 33.96,
+      "n_sesiones": 366,
+      "profundidad": 0.5162,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5953,
+      "coherencia_N1": 0.4398,
+      "simetria_N3": -0.3108,
+      "latencia_ms": 164,
+      "cluster": 1
+    },
+    {
+      "ticker": "SOL-USD",
+      "cambio_pct": -37.9,
+      "n_sesiones": 366,
+      "profundidad": 0.5348,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.578,
+      "coherencia_N1": 0.4266,
+      "simetria_N3": -0.2602,
+      "latencia_ms": 255,
+      "cluster": 1
+    },
+    {
+      "ticker": "SPY",
+      "cambio_pct": 28.71,
+      "n_sesiones": 250,
+      "profundidad": 0.6062,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5125,
+      "coherencia_N1": 0.4597,
+      "simetria_N3": -0.3183,
+      "latencia_ms": 192,
+      "cluster": 0
+    },
+    {
+      "ticker": "QQQ",
+      "cambio_pct": 35.13,
+      "n_sesiones": 250,
+      "profundidad": 0.6058,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5193,
+      "coherencia_N1": 0.4383,
+      "simetria_N3": -0.3253,
+      "latencia_ms": 179,
+      "cluster": 0
+    },
+    {
+      "ticker": "IWM",
+      "cambio_pct": 43.26,
+      "n_sesiones": 250,
+      "profundidad": 0.6026,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4998,
+      "coherencia_N1": 0.4646,
+      "simetria_N3": -0.339,
+      "latencia_ms": 373,
+      "cluster": 0
+    },
+    {
+      "ticker": "DIA",
+      "cambio_pct": 21.1,
+      "n_sesiones": 250,
+      "profundidad": 0.6038,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4944,
+      "coherencia_N1": 0.4576,
+      "simetria_N3": -0.3095,
+      "latencia_ms": 333,
+      "cluster": 0
+    },
+    {
+      "ticker": "GLD",
+      "cambio_pct": 46.72,
+      "n_sesiones": 250,
+      "profundidad": 0.552,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4971,
+      "coherencia_N1": 0.4754,
+      "simetria_N3": -0.1803,
+      "latencia_ms": 243,
+      "cluster": 2
+    },
+    {
+      "ticker": "SLV",
+      "cambio_pct": 136.66,
+      "n_sesiones": 250,
+      "profundidad": 0.5171,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.4923,
+      "coherencia_N1": 0.4496,
+      "simetria_N3": -0.2191,
+      "latencia_ms": 222,
+      "cluster": 2
+    },
+    {
+      "ticker": "USO",
+      "cambio_pct": 87.81,
+      "n_sesiones": 250,
+      "profundidad": 0.5337,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "cibernetica",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.503,
+      "coherencia_N1": 0.4378,
+      "simetria_N3": -0.1607,
+      "latencia_ms": 242,
+      "cluster": 2
+    },
+    {
+      "ticker": "TLT",
+      "cambio_pct": 4.06,
+      "n_sesiones": 250,
+      "profundidad": 0.6076,
+      "dominantes": {
+        "N1": [
+          "juegos",
+          "sistemas"
+        ],
+        "N2": [
+          "sistemas"
+        ],
+        "N3": [
+          "juegos",
+          "sistemas"
+        ],
+        "N4": [
+          "sistemas",
+          "topologia"
+        ]
+      },
+      "simetria_N1": -0.5079,
+      "coherencia_N1": 0.4232,
+      "simetria_N3": -0.2943,
+      "latencia_ms": 392,
+      "cluster": 0
+    }
+  ],
+  "errores": [
+    {
+      "ticker": "MMC",
+      "error": "solo 0 filas"
+    },
+    {
+      "ticker": "PXD",
+      "error": "solo 0 filas"
+    },
+    {
+      "ticker": "VIX",
+      "error": "solo 0 filas"
+    }
+  ]
+}
