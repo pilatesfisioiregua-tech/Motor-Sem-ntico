@@ -50,19 +50,43 @@ PROTOCOLO = {
     # ==========================================
     "1_INVENTARIO": {
         "nombre": "Inventariar los datos disponibles",
-        "pregunta_clave": "¿Qué datos tengo y qué calidad tienen?",
+        "pregunta_clave": "¿Qué datos tengo?",
         "descripcion": "No analizar todavía — solo saber qué hay. "
-                       "Cuántas series, cuántos periodos, qué falta, qué está roto.",
+                       "Cuántas series, cuántos periodos, qué fuentes, qué granularidad.",
         "acciones": [
-            "Listar todas las variables disponibles",
-            "Verificar longitud de cada serie (¿suficientes datos?)",
-            "Detectar NaN, infinitos, outliers evidentes",
+            "Listar todas las variables disponibles con su fuente",
+            "Verificar granularidad temporal (diario, mensual, trimestral) y de entidad",
+            "Verificar rango temporal de cada serie",
             "Clasificar variables por tipo: nivel, tasa, ratio, índice, dummy",
+            "Identificar datos que DEBERÍAN existir pero NO están",
         ],
         "consulta_pgvector": None,
-        "output": "Lista de variables con metadata (tipo, longitud, calidad)",
-        "desbloquea": ["2_DIAGNOSTICO"],
+        "output": "Lista de variables con: nombre, tipo, granularidad, rango, fuente",
+        "desbloquea": ["1B_CALIDAD"],
         "tokens_estimados": 50,
+    },
+
+    # ==========================================
+    # FASE 1B: CALIDAD DE DATOS (del research)
+    # ==========================================
+    "1B_CALIDAD": {
+        "nombre": "Auditar calidad de datos",
+        "pregunta_clave": "¿Puedo confiar en estos datos?",
+        "descripcion": "ANTES de analizar: verificar que los datos no mienten. "
+                       "NaN sistemáticos, duplicados, cambios de definición, huecos de ingesta. "
+                       "Un análisis brillante sobre datos rotos es peor que inútil.",
+        "acciones": [
+            "Porcentaje de NaN por variable — ¿aleatorios o sistemáticos?",
+            "Duplicados — ¿por qué existen? (reprocessing, bug, merge)",
+            "Rangos plausibles — ¿valores imposibles? (negativos, futuros, extremos)",
+            "Cambios de definición — ¿la métrica cambió su cálculo en algún punto?",
+            "Volumen por periodo — ¿huecos o picos sospechosos?",
+            "Para cada problema: limpiar con regla documentada, excluir con justificación, o marcar como limitación",
+        ],
+        "consulta_pgvector": None,
+        "output": "Dataset auditado + lista de limitaciones conocidas + decisiones de limpieza documentadas",
+        "desbloquea": ["2_DIAGNOSTICO"],
+        "tokens_estimados": 80,
     },
 
     # ==========================================
@@ -233,20 +257,35 @@ PROTOCOLO = {
     "10_COMUNICAR": {
         "nombre": "Comunicar resultados",
         "pregunta_clave": "¿Cómo lo explico para que el decisor actúe?",
-        "descripcion": "Traducir el análisis técnico a lenguaje de decisión. "
-                       "Priorizar: qué es urgente, qué es importante, qué es ruido.",
+        "descripcion": "Pyramid Principle (Minto/McKinsey): respuesta primero, "
+                       "3 argumentos de soporte, evidencia por argumento, apéndice técnico. "
+                       "Cada gráfico tiene como título LA CONCLUSIÓN, no la métrica.",
         "acciones": [
-            "Ordenar hallazgos por impacto en la decisión original",
-            "Cada hallazgo: dato + significado + acción + riesgo",
-            "Destacar contradicciones entre análisis convencional y estructural",
+            "RESPUESTA PRIMERO: una frase con la conclusión (no el proceso)",
+            "3 ARGUMENTOS: los hallazgos clave que sostienen la conclusión",
+            "EVIDENCIA: para cada argumento, el dato del Simbionte que lo soporta",
+            "CONTRADICCIONES: donde el análisis estructural contradice el convencional",
+            "LIMITACIONES: declarar ANTES de que pregunten",
             "Marcar confianza: [VERIFICADO] vs [SUPOSICIÓN] vs [RIESGO DE MODELO]",
         ],
         "consulta_pgvector": None,
-        "output": "Informe estructurado: diagnóstico → relaciones → patrón → prescripción → riesgos",
+        "output": "Informe: conclusión → argumentos → evidencia → riesgos → limitaciones",
         "desbloquea": [],
         "tokens_estimados": 200,
     },
 }
+
+# ============================================================
+# META-REGLAS TRANSVERSALES (del research)
+# ============================================================
+
+META_REGLAS = [
+    "Documentar CADA decisión de limpieza/exclusión. Si dentro de 3 meses alguien pregunta por qué, la respuesta está escrita.",
+    "Reproducibilidad: cualquier analista puede reejecutar y llegar al mismo número.",
+    "El análisis NO termina en el entregable. Termina cuando se mide si la acción recomendada funcionó (feedback loop).",
+    "Si todas las hipótesis son inconclusas, volver al Paso 1 por más datos — no inventar.",
+    "Cada observación es factual ('X bajó 15%') hasta que se demuestre causal ('X bajó 15% PORQUE Y').",
+]
 
 # Tokens totales estimados: ~1800 (vs ~4000 del approach anterior)
 TOKENS_ESTIMADOS_TOTAL = sum(p["tokens_estimados"] for p in PROTOCOLO.values())
@@ -282,8 +321,8 @@ NO inventes datos. Si pgvector no tiene algo, di "sin datos".
     # Solo incluir los pasos relevantes para las finalidades detectadas
     pasos_relevantes = []
     for paso_id, paso in PROTOCOLO.items():
-        # Siempre incluir framing, inventario, diagnóstico
-        if paso_id in ("0_FRAMING", "1_INVENTARIO", "2_DIAGNOSTICO", "10_COMUNICAR"):
+        # Siempre incluir framing, inventario, calidad, diagnóstico, comunicar
+        if paso_id in ("0_FRAMING", "1_INVENTARIO", "1B_CALIDAD", "2_DIAGNOSTICO", "10_COMUNICAR"):
             pasos_relevantes.append((paso_id, paso))
             continue
 
