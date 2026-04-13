@@ -176,6 +176,17 @@ def ejecutar_mcts(series_dict: dict, pregunta: str) -> dict:
     # Calcular resultados locales para evaluador
     resultados_local = calcular_formulas_economia(series_dict)
 
+    # Añadir valores absolutos al dict de referencia (para que R1 pueda verificar)
+    for nombre_serie, valores in series_dict.items():
+        arr = np.array(valores, dtype=float)
+        arr = arr[np.isfinite(arr)]
+        if len(arr) < 2:
+            continue
+        resultados_local[f"{nombre_serie}_ultimo"] = {"valor": float(arr[-1]), "tipo": "nivel", "texto": f"último valor de {nombre_serie}"}
+        resultados_local[f"{nombre_serie}_minimo"] = {"valor": float(np.min(arr)), "tipo": "nivel", "texto": f"mínimo de {nombre_serie}"}
+        resultados_local[f"{nombre_serie}_maximo"] = {"valor": float(np.max(arr)), "tipo": "nivel", "texto": f"máximo de {nombre_serie}"}
+        resultados_local[f"{nombre_serie}_media"] = {"valor": float(np.mean(arr)), "tipo": "nivel", "texto": f"media de {nombre_serie}"}
+
     # === FASE 2: Harness consulta Postgres ===
     print("  [2] Harness → Postgres...")
     contexto = _harness_context(sesion_id)

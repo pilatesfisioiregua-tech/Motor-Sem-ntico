@@ -60,6 +60,76 @@ def calcular_y_escribir(series_dict: dict, pregunta: str, modelo_llm: str = "unk
     # 4. Construir batch de resultados para Postgres
     batch = []
 
+    # 4a. VALORES ABSOLUTOS de cada serie (último, mínimo, máximo, media)
+    # El LLM SOLO puede citar estos valores, no inventar otros
+    for nombre_serie, valores in series_dict.items():
+        arr = np.array(valores, dtype=float)
+        arr = arr[np.isfinite(arr)]
+        if len(arr) < 2:
+            continue
+        # Último valor
+        batch.append({
+            "nombre": f"{nombre_serie}_ultimo",
+            "tipo": "nivel",
+            "categoria": "valor absoluto serie",
+            "valor": float(arr[-1]),
+            "valor_texto": f"último valor de {nombre_serie}",
+            "texto_legible": f"Valor más reciente de la serie {nombre_serie}",
+            "pregunta": f"¿Cuál es el valor actual de {nombre_serie}?",
+            "polos": None, "presupuestos": None, "razonamiento": None,
+            "datos_origen": {"serie": nombre_serie, "n_puntos": len(arr)},
+            "finalidad": finalidad, "paso_protocolo": None,
+            "patron_match": None, "isomorfismo": None, "precedentes": None,
+            "prescripcion": None, "enlaces": None,
+            "modelo_llm": modelo_llm, "coste_calculo": 0.0,
+        })
+        # Mínimo
+        batch.append({
+            "nombre": f"{nombre_serie}_minimo",
+            "tipo": "nivel",
+            "categoria": "valor absoluto serie",
+            "valor": float(np.min(arr)),
+            "valor_texto": f"mínimo histórico de {nombre_serie}",
+            "texto_legible": f"Mínimo de la serie {nombre_serie} en el periodo",
+            "pregunta": f"¿Cuál fue el mínimo de {nombre_serie}?",
+            "polos": None, "presupuestos": None, "razonamiento": None,
+            "datos_origen": {"serie": nombre_serie}, "finalidad": finalidad,
+            "paso_protocolo": None, "patron_match": None, "isomorfismo": None,
+            "precedentes": None, "prescripcion": None, "enlaces": None,
+            "modelo_llm": modelo_llm, "coste_calculo": 0.0,
+        })
+        # Máximo
+        batch.append({
+            "nombre": f"{nombre_serie}_maximo",
+            "tipo": "nivel",
+            "categoria": "valor absoluto serie",
+            "valor": float(np.max(arr)),
+            "valor_texto": f"máximo histórico de {nombre_serie}",
+            "texto_legible": f"Máximo de la serie {nombre_serie} en el periodo",
+            "pregunta": f"¿Cuál fue el máximo de {nombre_serie}?",
+            "polos": None, "presupuestos": None, "razonamiento": None,
+            "datos_origen": {"serie": nombre_serie}, "finalidad": finalidad,
+            "paso_protocolo": None, "patron_match": None, "isomorfismo": None,
+            "precedentes": None, "prescripcion": None, "enlaces": None,
+            "modelo_llm": modelo_llm, "coste_calculo": 0.0,
+        })
+        # Media
+        batch.append({
+            "nombre": f"{nombre_serie}_media",
+            "tipo": "nivel",
+            "categoria": "valor absoluto serie",
+            "valor": float(np.mean(arr)),
+            "valor_texto": f"media de {nombre_serie}",
+            "texto_legible": f"Media de la serie {nombre_serie} en el periodo",
+            "pregunta": f"¿Cuál es la media de {nombre_serie}?",
+            "polos": None, "presupuestos": None, "razonamiento": None,
+            "datos_origen": {"serie": nombre_serie}, "finalidad": finalidad,
+            "paso_protocolo": None, "patron_match": None, "isomorfismo": None,
+            "precedentes": None, "prescripcion": None, "enlaces": None,
+            "modelo_llm": modelo_llm, "coste_calculo": 0.0,
+        })
+
+    # 4b. Resultados derivados (fórmulas del Simbionte)
     for nombre, info, score, reason, nivel_idx, nivel_texto in seleccion:
         # Semántica
         sem = SEMANTICA.get(info.get("tipo", ""), {})

@@ -366,6 +366,19 @@ def evaluar(hipotesis: dict, resultados: dict, enlaces: dict = None) -> dict:
 
     score = round(100 * score_ganado / total_peso)
 
+    # HARD GATES — reglas que si fallan, capean el score
+    # R1 (números inventados) es la más crítica: si el LLM inventa datos, nada vale
+    if not detalle.get("R1", {}).get("ok", False):
+        n_inventados = len(detalle.get("R1", {}).get("fails", []))
+        if n_inventados >= 3:
+            score = min(score, 40)  # 3+ inventados = máximo 40
+        elif n_inventados >= 1:
+            score = min(score, 60)  # 1-2 inventados = máximo 60
+
+    # R2 (signos invertidos) también es hard gate
+    if not detalle.get("R2", {}).get("ok", False):
+        score = min(score, 50)
+
     return {
         "score": score,
         "pasadas": pasadas,
@@ -373,6 +386,7 @@ def evaluar(hipotesis: dict, resultados: dict, enlaces: dict = None) -> dict:
         "n_pasadas": len(pasadas),
         "n_fallidas": len(fallidas),
         "detalle": detalle,
+        "hard_gate": not detalle.get("R1", {}).get("ok", True) or not detalle.get("R2", {}).get("ok", True),
     }
 
 
