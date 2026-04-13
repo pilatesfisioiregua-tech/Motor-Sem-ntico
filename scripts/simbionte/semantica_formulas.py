@@ -521,6 +521,295 @@ SEMANTICA = {
     },
 }
 
+# Bloque 2: fórmulas adicionales
+SEMANTICA_2 = {
+    # ============================================================
+    # ESTADÍSTICA DESCRIPTIVA (restantes)
+    # ============================================================
+    "desviacion_estandar": {
+        "polos": ("concentrado", "disperso"), "eje": "dispersión en unidades originales",
+        "presupuestos": ["Mismos que varianza pero en escala original (raíz cuadrada devuelve al eje)", "Más interpretable que varianza pero menos tratable matemáticamente"],
+        "razonamiento": [("Calcular varianza", "dispersión al cuadrado", "magnitud cuadrada"), ("Raíz cuadrada", "volver al eje original", "RESULTADO: dispersión en las mismas unidades que los datos")],
+        "si_alto": "Los datos varían mucho alrededor del centro.", "si_bajo": "Los datos están agrupados cerca del centro.",
+        "pregunta": "¿Cuánto varían los datos en sus propias unidades?",
+    },
+    "coeficiente_variacion": {
+        "polos": ("predecible", "impredecible"), "eje": "dispersión relativa",
+        "presupuestos": ["Normaliza por la media — comparable entre variables con diferentes escalas", "Pierde sentido si la media es cercana a cero"],
+        "razonamiento": [("Calcular desviación estándar", "dispersión absoluta", "cuánto varían"), ("Dividir por la media", "relativizar", "RESULTADO: cuánto varían RESPECTO a su nivel")],
+        "si_alto": "Variable impredecible — su variación es grande respecto a su nivel.", "si_bajo": "Variable predecible — su variación es pequeña respecto a su nivel.",
+        "pregunta": "¿Cuán impredecible es esta variable respecto a su nivel?",
+    },
+    "kurtosis": {
+        "polos": ("colas ligeras (sin extremos)", "colas pesadas (extremos probables)"), "eje": "riesgo de eventos extremos",
+        "presupuestos": ["Cuarta potencia amplifica extremos brutalmente", "Kurtosis=3 es 'normal' (mesokúrtica)", "No dice cuán grande será el extremo, solo cuán probable"],
+        "razonamiento": [("Elevar desviaciones a la cuarta potencia", "Amplificar extremos exponencialmente", "Detectar colas"), ("Normalizar", "Comparar con distribución normal", "RESULTADO: cuán probable es un cisne negro")],
+        "si_alto": "Eventos extremos son más probables de lo que parece. Cuidado con los cisnes negros.", "si_bajo": "Eventos extremos son raros. La distribución es bien comportada.",
+        "pregunta": "¿Cuán probables son los eventos extremos?",
+    },
+    "percentil": {
+        "polos": ("cola inferior", "cola superior"), "eje": "posición en la distribución",
+        "presupuestos": ["No asume forma de distribución (no paramétrico)", "Ordena todos los datos — sensible a la muestra"],
+        "razonamiento": [("Ordenar todos los valores", "Crear ranking", "posición relativa"), ("Seleccionar el valor en la posición k%", "Encontrar umbral", "RESULTADO: qué valor deja k% debajo")],
+        "si_alto": "Este valor está en la cola superior — mejor que la mayoría.", "si_bajo": "Este valor está en la cola inferior — peor que la mayoría.",
+        "pregunta": "¿Dónde está este valor en la distribución?",
+    },
+    "mediana": {
+        "polos": ("bajo", "alto"), "eje": "centro robusto",
+        "presupuestos": ["Inmune a outliers (a diferencia de la media)", "Ignora magnitud — solo mira posición"],
+        "razonamiento": [("Ordenar valores", "Ranking", "secuencia"), ("Tomar el del medio", "Centro posicional", "RESULTADO: valor típico que ignora extremos")],
+        "si_alto": "El centro real del grupo está arriba.", "si_bajo": "El centro real está abajo.",
+        "pregunta": "¿Cuál es el valor central ignorando extremos?",
+    },
+
+    # ============================================================
+    # MICRO: Consumidor (restantes)
+    # ============================================================
+    "utilidad_marginal": {
+        "polos": ("saciado (utilidad marginal ~0)", "hambriento (utilidad marginal alta)"), "eje": "satisfacción incremental",
+        "presupuestos": ["Asume utilidad diferenciable", "Decreciente por convexidad de preferencias"],
+        "razonamiento": [("Derivar utilidad respecto a la cantidad", "¿Cuánto más feliz te hace una unidad más?", "RESULTADO: satisfacción por unidad adicional")],
+        "si_alto": "Cada unidad adicional aporta mucha satisfacción. Quieres más.", "si_bajo": "Ya tienes suficiente. Una unidad más apenas importa.",
+        "pregunta": "¿Cuánta satisfacción adicional da una unidad más?",
+    },
+    "tasa_marginal_sustitucion": {
+        "polos": ("complementarios (no sustituyes)", "sustitutos (intercambias fácilmente)"), "eje": "sustituibilidad",
+        "presupuestos": ["Mide sobre curva de indiferencia (utilidad constante)", "Es local — puede cambiar en otros puntos"],
+        "razonamiento": [("Medir utilidad marginal de X y de Y", "¿Cuánto valoras cada uno?", "Valoraciones"), ("Dividir UMx/UMy", "Ratio de valoraciones", "RESULTADO: cuántas unidades de Y sacrificas por 1 más de X")],
+        "si_alto": "X vale mucho más que Y para ti. Sacrificas mucho Y por poco X.", "si_bajo": "X y Y valen similar. No sacrificas mucho de uno por el otro.",
+        "pregunta": "¿Cuánto de Y estás dispuesto a dar por una unidad más de X?",
+    },
+    "excedente_productor": {
+        "polos": ("sin margen", "alto margen"), "eje": "beneficio del productor",
+        "presupuestos": ["Simétrico al excedente del consumidor", "Área entre precio y curva de oferta"],
+        "razonamiento": [("Calcular precio de mercado × cantidad", "Ingreso total", "Lo que cobra"), ("Restar coste variable total (integral de CMg)", "Lo que cuesta", "COMPARACIÓN"), ("La diferencia es el excedente", "Beneficio variable", "RESULTADO: cuánto gana por encima de sus costes")],
+        "si_alto": "El productor cobra mucho más de lo que le cuesta. Buen negocio.", "si_bajo": "El productor cobra casi lo que le cuesta. Negocio marginal.",
+        "pregunta": "¿Cuánto gana el productor por participar en este mercado?",
+    },
+    "coste_marginal": {
+        "polos": ("barato producir más", "caro producir más"), "eje": "coste incremental",
+        "presupuestos": ["Isomorfo con utilidad marginal (DERIVAR)", "Creciente en el corto plazo (rendimientos decrecientes)"],
+        "razonamiento": [("Derivar coste total respecto a cantidad", "¿Cuánto más cuesta una unidad más?", "RESULTADO: coste de la siguiente unidad")],
+        "si_alto": "Producir más es cada vez más caro. Capacidad saturada.", "si_bajo": "Producir más es barato. Hay capacidad ociosa.",
+        "pregunta": "¿Cuánto cuesta producir una unidad más?",
+    },
+    "hhi": {
+        "polos": ("fragmentado (muchos pequeños)", "concentrado (pocos grandes)"), "eje": "concentración de mercado",
+        "presupuestos": ["Solo mira cuotas, no barreras ni comportamiento", "Cuadrado amplifica a los grandes"],
+        "razonamiento": [("Calcular cuota de mercado de cada empresa", "¿Qué % tiene cada una?", "Participaciones"), ("Elevar al cuadrado cada cuota", "Amplificar a los grandes, minimizar a los pequeños", "PONDERACIÓN"), ("Sumar", "Índice de concentración", "RESULTADO: cuán dominado está el mercado")],
+        "si_alto": "Pocas empresas dominan. Riesgo de colusión y precios altos.", "si_bajo": "Muchas empresas pequeñas. Competencia intensa.",
+        "pregunta": "¿Cuántas empresas dominan este mercado?",
+    },
+    "equilibrio_nash": {
+        "polos": ("inestable (incentivo a desviarse)", "estable (nadie mejora cambiando)"), "eje": "estabilidad estratégica",
+        "presupuestos": ["Cada jugador es racional y conoce las estrategias del otro", "Puede haber múltiples equilibrios", "No necesariamente es el mejor resultado posible"],
+        "razonamiento": [("Para cada jugador, calcular mejor respuesta dado lo que hacen los demás", "¿Qué harías si los demás no cambian?", "Mejor respuesta"), ("Encontrar punto donde todas las mejores respuestas son consistentes", "Nadie quiere cambiar", "RESULTADO: equilibrio — estado estable del conflicto")],
+        "si_alto": "El equilibrio es fuerte: desviarse cuesta mucho. Situación difícil de cambiar.", "si_bajo": "El equilibrio es débil: un pequeño cambio puede romperlo.",
+        "pregunta": "¿Hay una situación donde nadie quiere cambiar su estrategia?",
+    },
+    "valor_shapley": {
+        "polos": ("no contribuye", "contribuye mucho"), "eje": "contribución justa",
+        "presupuestos": ["Mide contribución marginal MEDIA sobre todas las coaliciones posibles", "Es el único valor que cumple eficiencia+simetría+nulidad+aditividad"],
+        "razonamiento": [("Para cada coalición posible, medir valor con y sin el jugador", "¿Cuánto añade?", "Contribución marginal"), ("Promediar sobre todas las coaliciones ponderado por combinatoria", "Promediar el orden de llegada", "RESULTADO: contribución justa")],
+        "si_alto": "Este jugador aporta mucho. Sin él, el grupo vale significativamente menos.", "si_bajo": "Este jugador es prescindible. El grupo funciona similar sin él.",
+        "pregunta": "¿Cuánto contribuye justamente cada jugador al resultado del grupo?",
+    },
+
+    # ============================================================
+    # MACRO (restantes)
+    # ============================================================
+    "solow_steady_state": {
+        "polos": ("subdesarrollado (lejos del estado estacionario)", "desarrollado (en estado estacionario)"), "eje": "posición de largo plazo",
+        "presupuestos": ["Rendimientos decrecientes del capital", "Ahorro exógeno y constante", "Sin progreso técnico en versión básica"],
+        "razonamiento": [("Calcular inversión: s×f(k)", "¿Cuánto capital nuevo se crea?", "INVERSIÓN"), ("Calcular depreciación: (n+δ)×k", "¿Cuánto capital se destruye?", "DEPRECIACIÓN"), ("Encontrar k* donde inversión = depreciación", "Equilibrio de largo plazo", "RESULTADO: nivel de capital sostenible")],
+        "si_alto": "Alto capital por trabajador = economía rica. Pero crecimiento se frena (rendimientos decrecientes).", "si_bajo": "Bajo capital = economía pobre pero con potencial de crecimiento rápido (convergencia).",
+        "pregunta": "¿Cuál es el nivel de riqueza de largo plazo de esta economía?",
+    },
+    "residuo_solow": {
+        "polos": ("sin innovación (todo se explica por capital+trabajo)", "alta innovación (la productividad crece sola)"), "eje": "progreso tecnológico",
+        "presupuestos": ["'La medida de nuestra ignorancia' (Solow)", "Recoge TODO lo que no es capital ni trabajo (instituciones, educación, tecnología, errores de medición)"],
+        "razonamiento": [("Medir crecimiento del PIB", "¿Cuánto creció?", "TOTAL"), ("Restar contribución de capital (α×ΔK/K) y trabajo ((1-α)×ΔL/L)", "¿Cuánto explican los factores?", "FACTORES"), ("Lo que sobra es el residuo", "Lo que no se explica", "RESULTADO: productividad total de los factores")],
+        "si_alto": "La economía crece por innovación, no por acumular más. Crecimiento sano y sostenible.", "si_bajo": "El crecimiento viene solo de más capital o más trabajadores. Insostenible sin innovación.",
+        "pregunta": "¿Cuánto del crecimiento viene de la innovación vs acumulación bruta?",
+    },
+    "ecuacion_fisher": {
+        "polos": ("tipo real negativo (la inflación se come los intereses)", "tipo real positivo (los intereses superan la inflación)"), "eje": "coste real del dinero",
+        "presupuestos": ["Solo una resta — la fórmula más simple y más importante de la macro", "Isomorfa con Modigliani-Miller, Bertrand, dominancia estocástica (COMPARAR)"],
+        "razonamiento": [("Tomar tipo de interés nominal", "¿Cuánto te paga el banco?", "NOMINAL"), ("Restar inflación esperada", "¿Cuánto te quita la inflación?", "INFLACIÓN"), ("La diferencia es el tipo real", "¿Cuánto ganas de verdad?", "RESULTADO: el precio real del dinero")],
+        "si_alto": "El dinero tiene valor real positivo. Ahorrar compensa. Política monetaria restrictiva.", "si_bajo": "La inflación se come los intereses. Ahorrar es perder. Incentivo a gastar/invertir/especular.",
+        "pregunta": "¿Cuál es el coste real de pedir prestado (o el retorno real de ahorrar)?",
+    },
+    "tasa_crecimiento": {
+        "polos": ("contracción", "expansión"), "eje": "velocidad de la economía",
+        "presupuestos": ["Isomorfa con Lerner, output gap, Sharpe (COMPARAR→NORMALIZAR)", "Solo mide velocidad, no dirección ni sostenibilidad"],
+        "razonamiento": [("Restar valor actual menos anterior", "¿Cuánto cambió?", "CAMBIO absoluto"), ("Dividir por valor anterior", "Normalizar por el nivel", "RESULTADO: cambio proporcional")],
+        "si_alto": "La economía crece rápido. Puede ser sano o burbuja — depende de qué crece.", "si_bajo": "La economía se contrae. Puede ser recesión o ajuste necesario.",
+        "pregunta": "¿A qué velocidad crece o decrece?",
+    },
+    "inflacion": {
+        "polos": ("deflación (precios caen)", "inflación alta (precios suben rápido)"), "eje": "velocidad de cambio de precios",
+        "presupuestos": ["Es una tasa de cambio del nivel de precios", "Inflación moderada (~2%) es objetivo de la mayoría de bancos centrales"],
+        "razonamiento": [("Medir nivel de precios hoy vs ayer", "¿Cuánto subieron?", "CAMBIO"), ("Normalizar", "Cambio proporcional", "RESULTADO: velocidad de subida de precios")],
+        "si_alto": "Los precios suben rápido. Poder adquisitivo se erosiona. Incertidumbre.", "si_bajo": "Los precios bajan (deflación). Incentivo a no gastar (esperar precios más bajos). Trampa deflacionaria.",
+        "pregunta": "¿A qué velocidad cambian los precios?",
+    },
+    "deuda_pib": {
+        "polos": ("solvente (baja deuda)", "vulnerable (alta deuda)"), "eje": "sostenibilidad fiscal",
+        "presupuestos": ["No hay umbral mágico (60%, 90%... depende del país)", "Lo que importa es r-g: si tipos > crecimiento, la deuda explota"],
+        "razonamiento": [("Medir deuda total", "¿Cuánto debe?", "OBLIGACIÓN"), ("Dividir por PIB", "¿Cuánto produce?", "CAPACIDAD de pago"), ("El ratio dice cuántos años de producción se necesitan para pagar", "Sostenibilidad", "RESULTADO: carga fiscal relativa")],
+        "si_alto": "Deuda alta relativa al PIB. Vulnerable a shocks de tipos de interés. Margen fiscal limitado.", "si_bajo": "Deuda manejable. Margen para estímulo fiscal si es necesario.",
+        "pregunta": "¿Cuánta deuda tiene el gobierno relativa a lo que produce la economía?",
+    },
+    "dyn_deuda": {
+        "polos": ("deuda converge (sostenible)", "deuda diverge (insostenible)"), "eje": "dinámica fiscal",
+        "presupuestos": ["r-g es el factor clave: si tipo de interés > crecimiento, la deuda crece sola", "El superávit primario es lo que el gobierno controla"],
+        "razonamiento": [("Comparar tipo de interés (r) con crecimiento (g)", "¿La deuda crece más rápido que la economía?", "DINÁMICA automática"), ("Multiplicar (r-g) por ratio deuda actual", "¿Cuánto sube la deuda por inercia?", "EFECTO bola de nieve"), ("Restar superávit primario", "¿Cuánto compensa el gobierno con impuestos-gasto?", "RESULTADO: si la deuda sube o baja")],
+        "si_alto": "r>g y déficit: la deuda explota. Espiral fiscal. Crisis inminente sin ajuste.", "si_bajo": "g>r o superávit: la deuda se reduce sola. Sostenible.",
+        "pregunta": "¿La deuda está en trayectoria sostenible o explosiva?",
+    },
+
+    # ============================================================
+    # FINANZAS (restantes)
+    # ============================================================
+    "beta_capm": {
+        "polos": ("defensivo (β<1)", "agresivo (β>1)"), "eje": "sensibilidad al mercado",
+        "presupuestos": ["Solo mide riesgo SISTEMÁTICO", "Asume relación lineal y estable con el mercado"],
+        "razonamiento": [("Calcular covarianza del activo con el mercado", "¿Se mueven juntos?", "CO-MOVIMIENTO"), ("Dividir por varianza del mercado", "Normalizar", "RESULTADO: cuánto se mueve el activo por cada 1% del mercado")],
+        "si_alto": "Activo agresivo: amplifica los movimientos del mercado. Sube más cuando todo sube, cae más cuando todo cae.", "si_bajo": "Activo defensivo: amortigua los movimientos del mercado.",
+        "pregunta": "¿Cuánto amplifica o amortigua este activo los movimientos del mercado?",
+    },
+    "var_parametrico": {
+        "polos": ("riesgo bajo", "riesgo alto"), "eje": "pérdida máxima probable",
+        "presupuestos": ["Asume distribución normal (falla en colas pesadas)", "No dice cuánto pierdes en el peor caso, solo el umbral"],
+        "razonamiento": [("Tomar media de retornos", "Retorno esperado", "CENTRO"), ("Restar z_α × desviación", "Bajar z desviaciones estándar", "UMBRAL"), ("RESULTADO: con X% de confianza, no perderás más que esto", "Pérdida máxima probable", "RESULTADO")],
+        "si_alto": "Puedes perder mucho. Posición arriesgada.", "si_bajo": "Pérdida máxima contenida. Posición segura.",
+        "pregunta": "¿Cuál es la máxima pérdida probable con X% de confianza?",
+    },
+    "black_scholes": {
+        "polos": ("opción sin valor (muy out of the money)", "opción valiosa (deep in the money)"), "eje": "precio justo de un derecho futuro",
+        "presupuestos": ["Volatilidad constante (no lo es)", "Sin dividendos en versión básica", "Mercados continuos y sin fricción"],
+        "razonamiento": [("Calcular probabilidad de ejercicio (N(d1), N(d2))", "¿Cuán probable es que la opción acabe in the money?", "PROBABILIDAD"), ("Ponderar: precio actual × probabilidad de subir - precio ejercicio × probabilidad de cobrar", "Valor esperado descontado", "RESULTADO: precio justo de la opción")],
+        "si_alto": "La opción es valiosa: alta probabilidad de ejercerla con beneficio.", "si_bajo": "La opción apenas vale: improbable que se ejerza con beneficio.",
+        "pregunta": "¿Cuál es el precio justo de este derecho a comprar/vender en el futuro?",
+    },
+
+    # ============================================================
+    # ECONOMETRÍA (restantes)
+    # ============================================================
+    "t_statistic": {
+        "polos": ("no significativo (efecto ≈ ruido)", "significativo (efecto real)"), "eje": "señal/ruido",
+        "presupuestos": ["Solo una normalización (NORMALIZAR) — la fórmula más simple de econometría", "p<0.05 es convención, no verdad absoluta"],
+        "razonamiento": [("Dividir coeficiente por su error estándar", "¿Cuántas veces más grande es el efecto que su incertidumbre?", "RESULTADO: ratio señal/ruido")],
+        "si_alto": "El efecto es grande relativo a la incertidumbre. Probablemente real.", "si_bajo": "El efecto es pequeño relativo a la incertidumbre. Podría ser ruido.",
+        "pregunta": "¿Este efecto es real o podría ser casualidad?",
+    },
+    "p_valor": {
+        "polos": ("efecto real (p bajo)", "posiblemente ruido (p alto)"), "eje": "evidencia contra la hipótesis nula",
+        "presupuestos": ["NO es la probabilidad de que la hipótesis sea verdadera", "Es la probabilidad de ver estos datos SI el efecto fuera cero"],
+        "razonamiento": [("Asumir que no hay efecto (H0)", "Mundo donde no pasa nada", "HIPÓTESIS nula"), ("Calcular probabilidad de ver datos tan extremos como los observados", "¿Cuán raro es lo que vi si no pasa nada?", "RESULTADO: cuán incompatibles son los datos con 'no pasa nada'")],
+        "si_alto": "Los datos son compatibles con 'no pasa nada'. No hay evidencia suficiente.", "si_bajo": "Los datos son MUY incompatibles con 'no pasa nada'. Probablemente hay efecto real.",
+        "pregunta": "¿Cuán probable es ver estos datos si realmente no hubiera efecto?",
+    },
+    "iv_2sls": {
+        "polos": ("sin efecto causal", "efecto causal fuerte"), "eje": "efecto causal limpio",
+        "presupuestos": ["Isomorfo con OLS (COMPONER→INVERTIR→COMPONER) — misma gramática, diferente pureza", "Requiere instrumento válido (relevante + exógeno) — el talón de Aquiles"],
+        "razonamiento": [("Encontrar instrumento Z que afecta X pero no Y directamente", "Variable que 'empuja' X sin tocar Y", "INSTRUMENTO"), ("Primera etapa: predecir X con Z", "Purificar X de endogeneidad", "X limpia"), ("Segunda etapa: regresar Y sobre X limpia", "Efecto causal", "RESULTADO: cuánto cambia Y cuando X cambia por razones exógenas")],
+        "si_alto": "X tiene efecto causal fuerte sobre Y. Cambiar X cambiaría Y.", "si_bajo": "X no causa Y (o el efecto es pequeño). La correlación era espuria.",
+        "pregunta": "¿Cuál es el efecto CAUSAL de X sobre Y, limpio de endogeneidad?",
+    },
+    "control_sintetico": {
+        "polos": ("sin efecto", "efecto grande"), "eje": "efecto causal por contrafactual construido",
+        "presupuestos": ["Construye un 'clon' del tratado con combinación de controles", "No funciona si no hay buenos controles"],
+        "razonamiento": [("Encontrar pesos óptimos para controles que repliquen al tratado pre-tratamiento", "Construir gemelo sintético", "CONTRAFACTUAL"), ("Comparar tratado con su gemelo post-tratamiento", "¿Qué habría pasado sin tratamiento?", "RESULTADO: efecto = diferencia entre real y sintético")],
+        "si_alto": "El tratamiento tuvo efecto grande. El real diverge mucho de su gemelo.", "si_bajo": "El tratamiento no tuvo efecto. El real y su gemelo evolucionan igual.",
+        "pregunta": "¿Qué habría pasado sin la intervención?",
+    },
+    "garch": {
+        "polos": ("volatilidad baja y estable", "volatilidad alta y autoalimentada"), "eje": "volatilidad condicional",
+        "presupuestos": ["La volatilidad de hoy depende de la volatilidad y shocks de ayer", "Captura clusters de volatilidad (periodos tranquilos y periodos turbulentos)"],
+        "razonamiento": [("Tomar shock cuadrado del período anterior (ε²)", "¿Hubo sorpresa ayer?", "REACCIÓN a noticias"), ("Tomar volatilidad del período anterior (σ²)", "¿Era volátil ayer?", "PERSISTENCIA"), ("Ponderar y sumar", "Volatilidad de hoy = reacción + inercia + base", "RESULTADO: cuánto fluctuará hoy dado lo que pasó ayer")],
+        "si_alto": "Período turbulento: la volatilidad se autoalimenta. Shocks grandes generan más volatilidad.", "si_bajo": "Período tranquilo: poca reacción a noticias, baja inercia.",
+        "pregunta": "¿Cuánto fluctuará hoy dado lo que pasó ayer?",
+    },
+
+    # ============================================================
+    # OPTIMIZACIÓN (restantes)
+    # ============================================================
+    "lagrangiano": {
+        "polos": ("restricción inactiva (no muerde)", "restricción activa (limita el óptimo)"), "eje": "coste de la restricción",
+        "presupuestos": ["λ (multiplicador) = precio sombra: cuánto mejoraría el óptimo si relajaras la restricción 1 unidad"],
+        "razonamiento": [("Construir L = f(x) - λ·g(x)", "Objetivo - penalización por violar restricción", "FUNCIÓN AUXILIAR"), ("Derivar respecto a x: ∂f/∂x = λ·∂g/∂x", "En el óptimo, el gradiente del objetivo es proporcional al de la restricción", "CONDICIÓN"), ("λ = cuánto vale relajar la restricción", "Precio sombra", "RESULTADO: cuánto pagarías por una unidad más de recurso")],
+        "si_alto": "La restricción muerde fuerte. Relajarla mejoraría mucho el resultado. Recurso escaso y valioso.", "si_bajo": "La restricción no muerde. Hay holgura. El recurso no es limitante.",
+        "pregunta": "¿Cuánto mejoraría el resultado si tuviera una unidad más de recurso?",
+    },
+    "kkt": {
+        "polos": ("interior (lejos de límites)", "frontera (en el límite)"), "eje": "naturaleza del óptimo",
+        "presupuestos": ["Generalizan Lagrange a desigualdades", "Complementariedad: o la restricción muerde o su multiplicador es cero"],
+        "razonamiento": [("Verificar condiciones de primer orden", "Gradiente = combinación de gradientes de restricciones", "NECESIDAD"), ("Verificar complementariedad", "Restricción activa ↔ multiplicador > 0", "SELECCIÓN de restricciones activas"), ("RESULTADO: qué restricciones limitan y cuáles son irrelevantes", "Mapa de cuellos de botella", "RESULTADO")],
+        "si_alto": "El óptimo está en el borde. Las restricciones importan.", "si_bajo": "El óptimo está en el interior. Las restricciones no limitan.",
+        "pregunta": "¿Qué restricciones limitan el óptimo y cuáles son irrelevantes?",
+    },
+
+    # ============================================================
+    # CONDUCTUAL (restantes)
+    # ============================================================
+    "descuento_hiperbolico": {
+        "polos": ("paciente (descuenta poco)", "impaciente (descuenta mucho)"), "eje": "impaciencia inconsistente",
+        "presupuestos": ["A diferencia del descuento exponencial, las preferencias CAMBIAN con el tiempo", "Hoy prefiero €100 hoy a €110 mañana, pero prefiero €110 en 31 días a €100 en 30"],
+        "razonamiento": [("Multiplicar utilidad futura por 1/(1+kt)", "Descontar el futuro", "DESCUENTO"), ("A diferencia de δ^t (exponencial), 1/(1+kt) desciende rápido al principio y lento después", "El presente es DESPROPORCIONADAMENTE más valioso", "INCONSISTENCIA"), ("RESULTADO: explica procrastinación, adicción, falta de ahorro", "Sesgo presente", "RESULTADO")],
+        "si_alto": "Muy impaciente: el presente domina cualquier decisión. Incapaz de comprometerse con el futuro.", "si_bajo": "Relativamente paciente: capaz de sacrificar hoy por mañana.",
+        "pregunta": "¿Cuánto devalúa el futuro de forma inconsistente?",
+    },
+    "prospect_theory_weighting": {
+        "polos": ("objetivo (percibe probabilidades correctamente)", "distorsionado (sobrepondera raras, infrapondera frecuentes)"), "eje": "distorsión probabilística",
+        "presupuestos": ["La gente sobrepondera eventos raros (comprar lotería) e infrapondera eventos frecuentes (no comprar seguro)"],
+        "razonamiento": [("Transformar probabilidad objetiva por función w(p)", "Distorsionar percepción", "SESGO"), ("Sobreponderar colas (p pequeña → w(p) > p)", "Los eventos raros parecen más probables de lo que son", "RESULTADO: por qué compramos lotería y no seguro")],
+        "si_alto": "Percepción distorsionada: eventos raros parecen comunes, comunes parecen raros.", "si_bajo": "Percepción calibrada: evalúa probabilidades correctamente.",
+        "pregunta": "¿Cuánto distorsiona la percepción de probabilidades?",
+    },
+
+    # ============================================================
+    # MATEMÁTICA PURA (restantes)
+    # ============================================================
+    "punto_fijo_brouwer": {
+        "polos": ("sin equilibrio (no hay punto fijo)", "equilibrio existe (hay punto fijo)"), "eje": "existencia de solución",
+        "presupuestos": ["Solo garantiza EXISTENCIA, no unicidad ni estabilidad", "Requiere compacidad + convexidad + continuidad"],
+        "razonamiento": [("Verificar que el espacio es compacto y convexo", "¿El problema está bien definido?", "CONDICIÓN"), ("Verificar que la función es continua", "¿Las respuestas cambian suavemente?", "CONDICIÓN"), ("EXISTE punto donde f(x*)=x*", "La función se reproduce a sí misma", "RESULTADO: el equilibrio existe (aunque no sepamos dónde)")],
+        "si_alto": "Condiciones cumplidas: equilibrio existe. Buscar es fructífero.", "si_bajo": "Condiciones no cumplidas: el equilibrio puede no existir. No buscar a ciegas.",
+        "pregunta": "¿Existe un equilibrio en este sistema?",
+    },
+    "contraccion_banach": {
+        "polos": ("no converge (diverge)", "converge (al punto fijo)"), "eje": "convergencia algorítmica",
+        "presupuestos": ["Más fuerte que Brouwer: existencia + unicidad + convergencia + algoritmo", "Requiere contracción: cada iteración acerca al punto fijo"],
+        "razonamiento": [("Verificar que cada iteración reduce la distancia en factor β<1", "¿Se acerca?", "CONTRACCIÓN"), ("Iterar: T(T(T(...x₀)))", "Repetir", "ALGORITMO"), ("RESULTADO: converge al ÚNICO punto fijo", "Garantía triple", "RESULTADO")],
+        "si_alto": "Converge rápido (β pequeño). Pocas iteraciones necesarias.", "si_bajo": "Converge lento (β cercano a 1). Muchas iteraciones.",
+        "pregunta": "¿Este proceso iterativo converge y a qué velocidad?",
+    },
+    "lln": {
+        "polos": ("datos insuficientes (muestra pequeña)", "datos revelan la verdad (muestra grande)"), "eje": "convergencia a la realidad",
+        "presupuestos": ["Requiere independencia", "No dice cuán rápido converge (eso es el TCL)"],
+        "razonamiento": [("Acumular observaciones", "Más datos", "ACUMULACIÓN"), ("La media muestral converge a la esperanza", "Los datos revelan la verdad", "RESULTADO: con suficientes datos, sabrás la respuesta correcta")],
+        "si_alto": "Muestra grande: la media muestral ES (casi) la real. Confía en los datos.", "si_bajo": "Muestra pequeña: la media muestral puede estar lejos de la real. No confíes aún.",
+        "pregunta": "¿Tengo suficientes datos para que la media muestral sea fiable?",
+    },
+    "tcl": {
+        "polos": ("distribución desconocida", "distribución normal"), "eje": "normalidad asintótica",
+        "presupuestos": ["Funciona con CUALQUIER distribución original (si tiene varianza finita)", "La velocidad de convergencia depende de la distribución original"],
+        "razonamiento": [("Tomar medias de muestras repetidas", "Distribución de medias muestrales", "DISTRIBUCIÓN del estimador"), ("Con n grande, esta distribución se parece a una normal", "Campana de Gauss", "FORMA"), ("RESULTADO: puedes usar intervalos de confianza y tests normales", "Inferencia estadística", "RESULTADO")],
+        "si_alto": "n grande: la distribución es normal. Tests estándar son válidos.", "si_bajo": "n pequeño: la distribución puede no ser normal. Tests pueden ser incorrectos.",
+        "pregunta": "¿Puedo usar estadística normal para hacer inferencia?",
+    },
+    "jensen": {
+        "polos": ("función lineal (igualdad)", "función convexa/cóncava (desigualdad estricta)"), "eje": "efecto de la curvatura",
+        "presupuestos": ["Fundamental para entender aversión al riesgo", "Si u es cóncava: E[u(X)] < u(E[X]) → la gente prefiere la certeza"],
+        "razonamiento": [("Aplicar función convexa/cóncava a variable aleatoria", "Transformar", "TRANSFORMACIÓN"), ("Comparar E[f(X)] con f(E[X])", "¿La esperanza de la transformación = transformación de la esperanza?", "COMPARACIÓN"), ("NO: la curvatura crea gap", "El gap ES la prima de riesgo", "RESULTADO: por qué los aversos al riesgo pagan seguro")],
+        "si_alto": "Gran curvatura: gran desigualdad. Las personas pagan mucho por certeza.", "si_bajo": "Poca curvatura (casi lineal): poca diferencia entre riesgo y certeza.",
+        "pregunta": "¿Cuánto afecta la curvatura de las preferencias a las decisiones bajo riesgo?",
+    },
+}
+
+SEMANTICA.update(SEMANTICA_2)
+
 
 def obtener_semantica(nombre_formula):
     """Devuelve la semántica completa de una fórmula."""
