@@ -286,39 +286,95 @@ def h3_verificar(respuesta_llm, resultados):
 # ============================================================
 
 def pipeline_completo(series_dict, nombre, client, model, question):
-    """Ejecuta el pipeline completo: Simbionte → Harness → pgvector → Caching → LLM → H3.
+    """Ejecuta el pipeline completo v2:
+    Finalidad → Harness demand-driven → Simbionte → Cascada → pgvector → Semántica → Caching → LLM → H3
 
     Returns: dict con respuesta, métricas, verificación
     """
+    from catalogo_finalidades import detectar_finalidad, formulas_para_pregunta
+    from red_preguntas import cascada, cascada_a_texto
+    from semantica_formulas import razonamiento_a_texto
+
     t0 = time.time()
 
-    # 1. Simbionte: calcular fórmulas
+    # 1. FINALIDAD: detectar intención del usuario
+    finalidades = detectar_finalidad(question)
+
+    # 2. SIMBIONTE: calcular TODAS las fórmulas (el harness filtra después)
     resultados = calcular_formulas_economia(series_dict)
     dt_sim = time.time() - t0
 
-    # 2. Harness: seleccionar
-    seleccion = harness_seleccionar(resultados, top_n=30)
+    # 3. HARNESS demand-driven: seleccionar por finalidad + relevancia
+    formulas_activas = formulas_para_pregunta(question)
+    seleccion = harness_seleccionar(resultados, top_n=35)
 
-    # 3. Decodificador: traducir a texto
+    # 4. CASCADA: red de preguntas encadenadas
+    # Mapear resultados detallados (pib_varianza) a tipos genéricos (varianza)
+    # tomando el valor más extremo de cada tipo
+    import numpy as _np
+    resultados_por_tipo = {}
+    for n, info in resultados.items():
+        tipo = info["tipo"]
+        val = info["valor"]
+        # Extraer nombre genérico: "pib_varianza" → "varianza", "corr_pib_inflacion" → "correlacion"
+        for enlace_nombre in ENLACES:
+            if enlace_nombre in n or tipo == enlace_nombre:
+                if enlace_nombre not in resultados_por_tipo or abs(val) > abs(resultados_por_tipo[enlace_nombre]):
+                    resultados_por_tipo[enlace_nombre] = val
+    # También añadir marcos si están
+    for n, info in resultados.items():
+        if n.startswith("marco_"):
+            resultados_por_tipo[n] = info["valor"]
+
+    resultados_valores = resultados_por_tipo
+    cadena = cascada(resultados_valores, max_profundidad=3)
+    contexto_cascada = cascada_a_texto(cadena, resultados_valores)
+
+    # 5. SEMÁNTICA: razonamiento paso a paso para las fórmulas más importantes
+    contexto_semantica_lines = []
+    formulas_con_semantica = 0
+    for nombre_f, info, score, reason, ni, nt in seleccion[:10]:  # Top 10
+        texto_raz = razonamiento_a_texto(nombre_f, info["valor"])
+        if texto_raz:
+            contexto_semantica_lines.append(texto_raz)
+            formulas_con_semantica += 1
+    contexto_semantica = "\n\n".join(contexto_semantica_lines) if contexto_semantica_lines else ""
+
+    # 6. DECODIFICADOR: traducir selección a texto
     contexto_simbionte = decodificar(seleccion, nombre)
 
-    # 4. pgvector: buscar isomorfismos
+    # 7. pgvector: buscar patrones históricos
     matches = pgvector_buscar(resultados)
     contexto_pgvector = pgvector_a_texto(matches)
 
-    # 5. Construir system prompt completo (para caching)
-    system_prompt = f"""Eres un economista senior con acceso al Simbionte — un sistema que calcula fórmulas económicas y detecta patrones estructurales.
+    # 8. Construir system prompt completo (para caching)
+    system_prompt = f"""Eres un economista senior con acceso al Simbionte — un sistema que:
+1. Calcula fórmulas económicas sobre datos reales
+2. Descompone cada fórmula en su gramática de operaciones primitivas
+3. Detecta patrones históricos (isomorfismos) por similitud estructural
+4. Encadena preguntas: la respuesta de una fórmula desbloquea la siguiente
+5. Verifica cruzado: ¿tu análisis semántico coincide con la estructura?
 
 INSTRUCCIONES:
-- Usa los datos del Simbionte como evidencia. Cita valores específicos.
-- Los isomorfismos cross-domain indican que el mismo mecanismo opera en diferentes contextos.
-- Los patrones históricos (pgvector) son precedentes verificados — úsalos para prescribir.
+- Usa los datos del Simbionte como EVIDENCIA. Cita valores específicos.
+- Cada fórmula tiene POLOS (eje semántico) y PRESUPUESTOS (lo que asume sin decirlo).
+- Los isomorfismos cross-domain indican que el MISMO mecanismo opera en dominios diferentes.
+- La RED DE PREGUNTAS muestra qué preguntas desbloquea cada respuesta. SÍGUELA.
+- La VERIFICACIÓN CRUZADA marca puntos donde tu análisis debe coincidir con la estructura.
+- Los patrones históricos son PRECEDENTES verificados — úsalos para prescribir.
 - NO inventes datos. Si no tienes un valor del Simbionte, di "sin datos".
-- Responde en máximo 400 palabras.
+- Máximo 400 palabras.
+
+Finalidades detectadas: {', '.join(finalidades)}
 
 {contexto_simbionte}
 
-{contexto_pgvector}"""
+{contexto_cascada}
+
+{contexto_pgvector}
+
+## SEMÁNTICA (razonamiento paso a paso de las fórmulas clave)
+{contexto_semantica}"""
 
     dt_prep = time.time() - t0
 
@@ -357,8 +413,12 @@ INSTRUCCIONES:
 
     return {
         "respuesta": respuesta,
+        "finalidades": finalidades,
         "n_formulas": len(resultados),
         "n_seleccionadas": len(seleccion),
+        "n_formulas_activas": len(formulas_activas),
+        "n_cascada": len(cadena),
+        "n_semantica": formulas_con_semantica,
         "n_isomorfismos": len(matches),
         "isomorfismos": [m["nombre"] for m in matches],
         "n_discrepancias": len(discrepancias),
