@@ -100,6 +100,7 @@ PUBLIC_PREFIXES = (
     "/pilates/redsys/paygold-retorno",
     "/pilates/wa/webhook", "/pilates/webhook/whatsapp",
     "/conocimiento-proyecto/",
+    "/simbionte/",
     "/assets/", "/estudio", "/profundo",
     "/openapi.json", "/favicon.ico",
     "/pilates/publico/",
@@ -281,6 +282,14 @@ try:
     log.info("conocimiento_router_mounted")
 except Exception as e:
     log.warning("conocimiento_router_mount_failed", error=str(e))
+
+# Mount Simbionte router (OMC-95: Postgres + tool_use)
+try:
+    from src.pilates.router_simbionte import router as simbionte_router
+    app.include_router(simbionte_router)
+    log.info("simbionte_router_mounted")
+except Exception as e:
+    log.warning("simbionte_router_mount_failed", error=str(e))
 
 # Mount ACD API (Ingeniería Lingüística)
 try:

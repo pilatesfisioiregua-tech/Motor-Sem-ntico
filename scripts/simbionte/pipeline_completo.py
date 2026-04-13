@@ -246,37 +246,60 @@ def pgvector_a_texto(matches):
 def h3_verificar(respuesta_llm, resultados):
     """Verifica que el LLM no inventa datos.
 
-    Busca números citados en la respuesta y compara con Simbionte.
-    Devuelve lista de discrepancias.
+    Fase 1: Busca nombres EXACTOS de fórmulas del Simbionte en el texto + valor asociado.
+    Fase 2: Busca números con 3+ decimales que no corresponden a ninguna fórmula.
+    Solo marca discrepancia si el valor citado difiere >20% del real.
     """
     import re
     discrepancias = []
+    texto = respuesta_llm.lower()
 
-    # Buscar patrones como "correlación X-Y = 0.XX" o "elasticidad = 0.XX"
-    # Pattern: word followed by number
-    numeros_citados = re.findall(r'(\w+)[:\s=]+([+-]?\d+\.?\d*)', respuesta_llm.lower())
+    # Fase 1: Matching exacto por nombre de fórmula
+    for res_nombre, res_info in resultados.items():
+        nombre_lower = res_nombre.lower()
+        valor_real = res_info["valor"]
 
-    for contexto, valor_str in numeros_citados:
-        try:
-            valor_citado = float(valor_str)
-        except ValueError:
+        if abs(valor_real) < 0.001:
             continue
 
-        # Buscar en resultados del Simbionte
-        for res_nombre, res_info in resultados.items():
-            if contexto in res_nombre.lower():
-                valor_real = res_info["valor"]
-                # Verificar si el LLM citó algo cercano
-                if abs(valor_real) > 0.01:
-                    error_pct = abs(valor_citado - valor_real) / abs(valor_real)
-                    if error_pct > 0.20:  # >20% discrepancia
-                        discrepancias.append({
-                            "contexto": contexto,
-                            "citado": valor_citado,
-                            "real": valor_real,
-                            "error_pct": error_pct,
-                        })
+        patterns = [
+            rf'{re.escape(nombre_lower)}[:\s|=]+([+-]?\d+\.?\d+)',
+            rf'{re.escape(nombre_lower)}\s*\(([+-]?\d+\.?\d+)\)',
+        ]
+        for pat in patterns:
+            match = re.search(pat, texto)
+            if match:
+                try:
+                    valor_citado = float(match.group(1))
+                except ValueError:
+                    continue
+                error_pct = abs(valor_citado - valor_real) / abs(valor_real)
+                if error_pct > 0.20:
+                    discrepancias.append({
+                        "formula": res_nombre,
+                        "citado": valor_citado,
+                        "real": round(valor_real, 6),
+                        "error_pct": round(error_pct, 3),
+                    })
                 break
+
+    # Fase 2: Números sueltos con 3+ decimales no encontrados en ninguna fórmula
+    valores_reales = {round(v["valor"], 4) for v in resultados.values() if abs(v["valor"]) > 0.001}
+    numeros_sueltos = re.findall(r'(?<!\w)([+-]?\d+\.\d{3,})(?!\w)', texto)
+    for valor_str in numeros_sueltos:
+        try:
+            val = float(valor_str)
+        except ValueError:
+            continue
+        if abs(val) < 0.01:
+            continue
+        if not any(abs(vr - val) < 0.01 for vr in valores_reales):
+            discrepancias.append({
+                "formula": "?",
+                "citado": val,
+                "real": None,
+                "error_pct": "no_match",
+            })
 
     return discrepancias
 

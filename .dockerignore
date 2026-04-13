@@ -5,3 +5,28 @@ __pycache__
 .git
 .env
 .env.*
+
+# Datos pesados que NO van a fly.io
+corpus/
+experiments/
+modelo_pequeno/
+checkpoints/
+data/
+datos/
+results/
+context/
+gmail_cleanup/
+motor_v1_validation/
+briefings/
+
+# Scripts del Simbionte (solo se ejecutan localmente)
+scripts/simbionte/
+
+# Otros
+*.tar.gz
+*.zip
+*.model
+*.bin
+*.pt
+*.safetensors
+*.onnx
