@@ -253,7 +253,7 @@ def ejecutar_tool(nombre_tool, input_data):
 # LOOP DEL AGENTE
 # ============================================================
 
-def ejecutar_agente(series_dict, pregunta, client, model="claude-sonnet-4-20250514", max_turns=8):
+def ejecutar_agente(series_dict, pregunta, client, model="claude-sonnet-4-20250514", max_turns=12):
     """Ejecuta el agente analista con tool_use.
 
     El LLM recibe el protocolo y puede llamar herramientas en cada paso.
@@ -270,16 +270,19 @@ def ejecutar_agente(series_dict, pregunta, client, model="claude-sonnet-4-202505
 PROTOCOLO ({len(pasos)} pasos):
 {chr(10).join(f'  {i+1}. {p["nombre"]}' for i, (_, p) in enumerate(pasos))}
 
-REGLAS:
+REGLAS CRÍTICAS:
 - Sigue los pasos EN ORDEN.
-- En CADA paso, usa las herramientas para obtener datos. NO inventes.
+- En CADA paso: primero llama herramientas, luego ESCRIBE tu conclusión del paso.
+- ACUMULA hallazgos: el output de cada paso es input del siguiente.
+- Antes de llamar la siguiente herramienta, escribe "PASO N CONCLUSIÓN: [lo que encontraste]"
+- El último paso es la SÍNTESIS FINAL que usa TODOS los hallazgos acumulados.
 - consultar_formula: para entender qué significa un valor
 - consultar_patron: para buscar precedentes históricos
 - calcular: para obtener valores del Simbionte
 - cascada_preguntas: para saber qué analizar después de un hallazgo
 - Marca [VERIFICADO] cuando la estructura confirma tu análisis semántico.
 - Marca ⚡ ALERTA cuando hay contradicción.
-- Máximo 400 palabras en la respuesta final."""
+- Máximo 500 palabras en la respuesta final."""
 
     messages = [{"role": "user", "content": f"Datos disponibles: {list(series_dict.keys())}\n\nPregunta: {pregunta}"}]
 
