@@ -36,24 +36,47 @@ def harness_seleccionar(resultados, top_n=30):
         v = info["valor"]; t = info["tipo"]; av = abs(v)
         ni, nt = clasificar_nivel(v, t)
         s = 0; r = ""
+
+        # Principio: la AUSENCIA de señal es tan informativa como su PRESENCIA.
+        # Persistencia baja = "transitorio" es tan valioso como persistencia alta = "estructural".
+        # Correlación ~0 = "independientes" es valioso si se esperaría relación.
+        # Gap ~0 = "en equilibrio" es valioso como confirmación.
+
         if t == "correlacion":
-            s = 100 if av > 0.8 else 70 if av > 0.6 else 10
-            r = "corr fuerte" if av > 0.6 else ""
+            if av > 0.8: s, r = 100, "corr muy fuerte"
+            elif av > 0.6: s, r = 70, "corr fuerte"
+            elif av < 0.05: s, r = 40, "independientes (sin relación)"  # AUSENCIA informativa
+            else: s = 10
         elif t == "gap":
-            s = 90 if av > 0.05 else 50 if av > 0.02 else 5
-            r = "gap" if av > 0.02 else ""
-        elif t == "elasticidad": s, r = 85, "elasticidad"
+            if av > 0.05: s, r = 90, "gap significativo"
+            elif av > 0.02: s, r = 50, "gap moderado"
+            elif av < 0.005: s, r = 35, "en equilibrio"  # AUSENCIA informativa
+            else: s = 5
+        elif t == "elasticidad":
+            s, r = 85, "elasticidad"
+            if av < 0.05: r = "inelástico (insensible)"  # AUSENCIA informativa
         elif t == "persistencia":
-            s = 80 if av > 0.5 else 25
-            r = "persistente" if av > 0.5 else ""
+            if av > 0.5: s, r = 80, "persistente (estructural)"
+            elif av < 0.1: s, r = 60, "transitorio (se disipa)"  # FIX: antes era 25 → descartado
+            else: s = 25
         elif t == "aceleracion":
-            s = 65 if av > 0.05 else 10
+            if av > 0.05: s, r = 65, "aceleración"
+            elif av < 0.005: s, r = 30, "sin aceleración (velocidad constante)"  # AUSENCIA
+            else: s = 10
         elif t == "tasa_crecimiento":
-            s = 55 if "momentum" in n and av > 0.1 else 40 if "crecimiento" in n else 15
+            if "momentum" in n and av > 0.10: s, r = 55, "momentum fuerte"
+            elif "momentum" in n and av < 0.01: s, r = 35, "sin momentum (estancado)"  # AUSENCIA
+            elif "crecimiento" in n:
+                s = 40
+                if av < 0.002: r = "crecimiento nulo"  # AUSENCIA
+            else: s = 15
         elif t == "coef_variacion":
-            s = 50 if av > 0.2 else 5
+            if av > 0.20: s, r = 50, "alta impredecibilidad"
+            elif av < 0.03: s, r = 30, "muy predecible"  # AUSENCIA
+            else: s = 5
         elif t == "tasa_cambio":
-            s = 45 if av > 0.05 else 10
+            if av > 0.05: s, r = 45, "cambio reciente grande"
+            else: s = 10
         elif t in ("varianza", "nivel"):
             s = 2
         else:

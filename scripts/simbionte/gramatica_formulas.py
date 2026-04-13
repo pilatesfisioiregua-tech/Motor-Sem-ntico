@@ -795,6 +795,410 @@ FORMULAS = {
         "resultado": "adjetivo de externalidad (cuánto afectas a los demás)",
         "rama": "micro",
     },
+
+    # ==========================================
+    # Q. MICRO: Consumidor avanzado (del catálogo 288)
+    # ==========================================
+    "utilidad_indirecta": {
+        "formula": "v(p,w) = max_{p·x≤w} u(x)",
+        "ops": ["CONDICIONAR", "SELECCIONAR"],
+        "lectura": "condiciona por presupuesto, selecciona máximo → máxima satisfacción posible",
+        "resultado": "sujeto (techo de bienestar dada la restricción)",
+        "rama": "micro",
+    },
+    "identidad_roy": {
+        "formula": "x_i = -(∂v/∂p_i)/(∂v/∂w)",
+        "ops": ["DERIVAR", "DERIVAR", "NORMALIZAR", "TRANSFORMAR"],
+        "lectura": "deriva utilidad indirecta por precio y por renta, divide, invierte signo → demanda desde arriba",
+        "resultado": "herramienta (demanda sin resolver el problema del consumidor)",
+        "rama": "micro",
+    },
+    "funcion_gasto": {
+        "formula": "e(p,ū) = min_{u(x)≥ū} p·x",
+        "ops": ["CONDICIONAR", "COMPONER", "SELECCIONAR"],
+        "lectura": "condiciona por utilidad mínima, compone precio×cantidad, selecciona mínimo → cuánto cuesta ser feliz",
+        "resultado": "sujeto (coste de la felicidad)",
+        "rama": "micro",
+    },
+    "slutsky": {
+        "formula": "∂x/∂p = ∂h/∂p - x·∂x/∂w",
+        "ops": ["DERIVAR", "DERIVAR", "COMPONER", "COMPARAR"],
+        "lectura": "deriva efecto sustitución, deriva efecto renta, compone cantidad×renta, compara → descompone por qué cambias lo que compras",
+        "resultado": "descomposición (sustitución + renta)",
+        "rama": "micro",
+    },
+    "aversion_riesgo_arrow_pratt": {
+        "formula": "r_A(x) = -u''(x)/u'(x)",
+        "ops": ["DERIVAR", "DERIVAR", "NORMALIZAR", "TRANSFORMAR"],
+        "lectura": "deriva 2x la utilidad, normaliza por la primera derivada, invierte signo → cuánto te disgusta el riesgo",
+        "resultado": "adjetivo de personalidad frente al riesgo",
+        "rama": "micro",
+    },
+    "prima_riesgo_arrowpratt": {
+        "formula": "π ≈ ½·r_A·Var(x)",
+        "ops": ["COMPONER", "ESCALAR"],
+        "lectura": "compone aversión×varianza, escala por ½ → cuánto pagas para NO tener incertidumbre",
+        "resultado": "adjetivo de coste del miedo",
+        "rama": "micro",
+    },
+    "equivalente_cierto": {
+        "formula": "CE: u(CE) = E[u(x)]",
+        "ops": ["CONDICIONAR", "ACUMULAR", "INVERTIR"],
+        "lectura": "condiciona por incertidumbre, acumula utilidades esperadas, invierte la función → riqueza segura equivalente a la lotería",
+        "resultado": "sujeto (cuánto vale la certeza)",
+        "rama": "micro",
+    },
+    "dominancia_estocastica_1": {
+        "formula": "F ≥_FSD G ⟺ F(x) ≤ G(x) ∀x",
+        "ops": ["COMPARAR"],
+        "lectura": "compara distribuciones punto a punto → F da más probabilidad a resultados buenos",
+        "resultado": "ordenamiento (esta opción domina a la otra para todos)",
+        "rama": "micro",
+    },
+    "agregacion_engel": {
+        "formula": "Σ s_i·ε_wi = 1",
+        "ops": ["COMPONER", "ACUMULAR"],
+        "lectura": "compone participación×elasticidad-renta por bien, acumula → la suma ponderada siempre es 1",
+        "resultado": "identidad (restricción contable del consumidor)",
+        "rama": "micro",
+    },
+
+    # ==========================================
+    # R. MICRO: Productor avanzado
+    # ==========================================
+    "funcion_coste": {
+        "formula": "C(w,y) = min_{f(x)≥y} w·x",
+        "ops": ["CONDICIONAR", "COMPONER", "SELECCIONAR"],
+        "lectura": "condiciona por output mínimo, compone precio×input, selecciona mínimo → coste de producir",
+        "resultado": "sujeto (precio de crear)",
+        "rama": "micro",
+    },
+    "lema_shephard": {
+        "formula": "x_i*(w,y) = ∂C/∂w_i",
+        "ops": ["DERIVAR"],
+        "lectura": "deriva coste respecto al precio del input → cuánto usas de cada input",
+        "resultado": "adjetivo de intensidad de uso del input",
+        "rama": "micro",
+    },
+    "hotelling": {
+        "formula": "y* = ∂π/∂p",
+        "ops": ["DERIVAR"],
+        "lectura": "deriva beneficio respecto al precio → cuánto produces",
+        "resultado": "adjetivo de respuesta al precio",
+        "rama": "micro",
+    },
+    "ces": {
+        "formula": "f = A[δK^ρ + (1-δ)L^ρ]^{1/ρ}",
+        "ops": ["TRANSFORMAR", "ESCALAR", "ACUMULAR", "TRANSFORMAR", "ESCALAR"],
+        "lectura": "transforma inputs por elasticidad ρ, escala por participación δ, acumula, transforma de vuelta, escala por productividad → producción con sustituibilidad constante",
+        "resultado": "sujeto (output con flexibilidad paramétrica)",
+        "rama": "micro",
+    },
+
+    # ==========================================
+    # S. EQUILIBRIO GENERAL avanzado
+    # ==========================================
+    "pareto_eficiencia": {
+        "formula": "∄x' t.q. u_i(x'_i) ≥ u_i(x_i) ∀i con ≥1 estricta",
+        "ops": ["COMPARAR", "CONDICIONAR"],
+        "lectura": "compara todas las asignaciones posibles, condiciona por mejora sin empeoramiento → no se puede mejorar a nadie sin perjudicar a otro",
+        "resultado": "test de eficiencia (¿es óptimo?)",
+        "rama": "micro",
+    },
+    "precios_arrow_debreu": {
+        "formula": "q(s) = β·π(s)·u'(c₁(s))/u'(c₀)",
+        "ops": ["DERIVAR", "DERIVAR", "NORMALIZAR", "ESCALAR", "COMPONER"],
+        "lectura": "deriva utilidades en dos estados, normaliza, escala por descuento, compone con probabilidad → precio de un seguro por estado del mundo",
+        "resultado": "sujeto (precio del miedo a cada escenario)",
+        "rama": "micro",
+    },
+
+    # ==========================================
+    # T. JUEGOS avanzados
+    # ==========================================
+    "equilibrio_bayesiano": {
+        "formula": "σ_i*(θ_i) : E_{θ-i|θi}[u_i(σ*)] ≥ E[u_i(s_i,σ*_{-i})]",
+        "ops": ["CONDICIONAR", "ACUMULAR", "COMPARAR", "SELECCIONAR"],
+        "lectura": "condiciona por información privada, acumula utilidad esperada, compara estrategias, selecciona la mejor → jugar óptimo con información incompleta",
+        "resultado": "prescripción bajo incertidumbre",
+        "rama": "micro",
+    },
+    "cournot": {
+        "formula": "q_i* = (a-c_i-q_{-i})/(2b)",
+        "ops": ["COMPARAR", "COMPARAR", "NORMALIZAR"],
+        "lectura": "compara demanda con coste, compara con producción rival, normaliza → cuánto producir contra el competidor",
+        "resultado": "prescripción de cantidad (oligopolio)",
+        "rama": "micro",
+    },
+    "bertrand": {
+        "formula": "p* = c",
+        "ops": ["COMPARAR"],
+        "lectura": "compara precio con coste → la competencia en precios lleva al coste marginal",
+        "resultado": "identidad (competencia perfecta en precios)",
+        "rama": "micro",
+    },
+    "stackelberg": {
+        "formula": "q_1* = argmax q_1·P(q_1+BR_2(q_1))-C_1",
+        "ops": ["COMPONER", "CONDICIONAR", "SELECCIONAR"],
+        "lectura": "compone precio×cantidad, condiciona por reacción del seguidor, selecciona máximo → ventaja del primero en mover",
+        "resultado": "prescripción con compromiso (liderazgo)",
+        "rama": "micro",
+    },
+    "folk_theorem": {
+        "formula": "Todo pago factible+IR es SPE para δ suficientemente alto",
+        "ops": ["COMPARAR", "CONDICIONAR"],
+        "lectura": "compara payoff con punto de amenaza, condiciona por paciencia → la cooperación emerge si el futuro importa",
+        "resultado": "condición (cuándo la cooperación es sostenible)",
+        "rama": "micro",
+    },
+
+    # ==========================================
+    # U. INFORMACIÓN Y MECANISMOS
+    # ==========================================
+    "incentive_compatibility": {
+        "formula": "U(θ,θ) ≥ U(θ,θ̂) ∀θ,θ̂",
+        "ops": ["COMPARAR", "CONDICIONAR"],
+        "lectura": "compara utilidad de decir verdad vs mentir, condiciona por todo tipo → la verdad es óptima",
+        "resultado": "restricción (cuándo conviene ser honesto)",
+        "rama": "micro",
+    },
+    "envelope_theorem": {
+        "formula": "dU*/dθ = ∂v(q*(θ),θ)/∂θ",
+        "ops": ["DERIVAR", "CONDICIONAR"],
+        "lectura": "deriva utilidad óptima respecto al tipo, condicionado a decisión óptima → cómo cambia el valor cuando cambias quién eres",
+        "resultado": "adjetivo de sensibilidad del valor al tipo",
+        "rama": "micro",
+    },
+    "moral_hazard": {
+        "formula": "max E[x-w(x)] s.a. IC + IR",
+        "ops": ["CONDICIONAR", "CONDICIONAR", "SELECCIONAR"],
+        "lectura": "condiciona por incentivos del agente, condiciona por participación, selecciona contrato → diseñar incentivos cuando no ves lo que hace el otro",
+        "resultado": "prescripción (contrato óptimo bajo acción oculta)",
+        "rama": "micro",
+    },
+    "señalizacion_spence": {
+        "formula": "e*(θ_H) > e*(θ_L) t.q. w(e)-c(e,θ) satisface IC",
+        "ops": ["COMPARAR", "CONDICIONAR", "SELECCIONAR"],
+        "lectura": "compara señales por tipo, condiciona por incentivos, selecciona separador → los buenos se distinguen invirtiendo más en señal",
+        "resultado": "mecanismo (cómo demuestras lo que vales)",
+        "rama": "micro",
+    },
+    "myerson_satterthwaite": {
+        "formula": "No ∃ mecanismo IC+IR+eficiente+BB con tipos continuos",
+        "ops": [],
+        "lectura": "imposibilidad — no puedes tener incentivos, participación, eficiencia y presupuesto equilibrado a la vez",
+        "resultado": "imposibilidad (el mercado perfecto no existe bajo asimetría)",
+        "rama": "micro",
+    },
+
+    # ==========================================
+    # V. MACRO: Crecimiento avanzado
+    # ==========================================
+    "romer_variedades": {
+        "formula": "Y = L^(1-α)∫₀^A x(i)^α di; Ȧ = δ·L_A·A",
+        "ops": ["TRANSFORMAR", "INTEGRAR", "COMPONER", "DERIVAR", "COMPONER"],
+        "lectura": "transforma por elasticidad, integra sobre variedades, compone trabajo×capital; la innovación es más gente investigando × más conocimiento",
+        "resultado": "sistema (crecimiento por crear cosas nuevas)",
+        "rama": "macro",
+    },
+    "schumpeter_destruccion_creativa": {
+        "formula": "V = π/(r+φ) donde φ = tasa destrucción",
+        "ops": ["NORMALIZAR", "ACUMULAR", "INVERTIR"],
+        "lectura": "normaliza beneficio del monopolio temporal, acumula con riesgo de destrucción, invierte → valor de innovar sabiendo que te reemplazarán",
+        "resultado": "sujeto (precio de la innovación con fecha de caducidad)",
+        "rama": "macro",
+    },
+    "mankiw_romer_weil": {
+        "formula": "ln(Y/L) = const + [α/(1-α)]ln(s_K) + [β/(1-α)]ln(s_H) - [(α+β)/(1-α)]ln(n+g+δ)",
+        "ops": ["TRANSFORMAR", "ESCALAR", "ACUMULAR"],
+        "lectura": "transforma a logaritmos, escala por elasticidades, acumula → renta per cápita explicada por ahorro físico, humano y crecimiento poblacional",
+        "resultado": "descomposición (por qué unos países son ricos y otros pobres)",
+        "rama": "macro",
+    },
+    "contabilidad_crecimiento": {
+        "formula": "ΔA/A = ΔY/Y - α·ΔK/K - (1-α)·ΔL/L",
+        "ops": ["COMPARAR", "ESCALAR", "COMPARAR", "ESCALAR", "COMPARAR"],
+        "lectura": "compara crecimiento del output con contribución ponderada de capital y trabajo → lo que sobra es productividad",
+        "resultado": "residuo (la medida de nuestra ignorancia — Solow)",
+        "rama": "macro",
+    },
+    "transversalidad": {
+        "formula": "lim_{t→∞} β^t·u'(c_t)·k_t = 0",
+        "ops": ["ESCALAR", "DERIVAR", "COMPONER", "SELECCIONAR"],
+        "lectura": "escala por descuento, deriva utilidad marginal, compone con capital, selecciona límite → no acumules para siempre ni te arruines",
+        "resultado": "restricción (la vida es finita — no mueras rico ni pobre)",
+        "rama": "macro",
+    },
+
+    # ==========================================
+    # W. MACRO: Ciclos NK avanzados
+    # ==========================================
+    "blanchard_kahn": {
+        "formula": "condición: #eigenvalues>1 = #variables forward",
+        "ops": ["TRANSFORMAR", "COMPARAR"],
+        "lectura": "transforma sistema a eigenvalores, compara número de inestables con variables forward → ¿el modelo tiene solución única?",
+        "resultado": "test de determinación (¿este modelo está bien definido?)",
+        "rama": "macro",
+    },
+    "perdida_banco_central": {
+        "formula": "L = E Σ β^t [(π-π*)² + λ·x²]",
+        "ops": ["COMPARAR", "TRANSFORMAR", "COMPARAR", "TRANSFORMAR", "ESCALAR", "ACUMULAR", "ESCALAR", "CONDICIONAR"],
+        "lectura": "compara inflación con objetivo (al cuadrado), compara output gap (al cuadrado), escala por preferencia λ, acumula en el tiempo, escala por descuento → cuánto sufre el banco central",
+        "resultado": "sujeto (dolor del banquero central)",
+        "rama": "macro",
+    },
+    "inconsistencia_temporal": {
+        "formula": "π^e = π* + λκ/α > π* (sesgo inflacionario)",
+        "ops": ["COMPARAR", "NORMALIZAR", "ACUMULAR"],
+        "lectura": "compara equilibrio con objetivo, normaliza por parámetros, acumula sesgo → sin compromiso creíble, siempre hay más inflación de la deseada",
+        "resultado": "adjetivo de credibilidad (cuánto vale tu palabra)",
+        "rama": "macro",
+    },
+
+    # ==========================================
+    # X. ECONOMETRÍA avanzada
+    # ==========================================
+    "gauss_markov": {
+        "formula": "β̂_OLS es BLUE bajo E[ε|X]=0, Var(ε|X)=σ²I",
+        "ops": ["CONDICIONAR", "COMPARAR"],
+        "lectura": "condiciona por supuestos clásicos, compara con todo estimador lineal insesgado → OLS es el mejor (bajo esos supuestos)",
+        "resultado": "garantía (OLS gana si el mundo es como asumes)",
+        "rama": "econometria",
+    },
+    "varianza_robusta_white": {
+        "formula": "V̂ = (X'X)⁻¹(Σ ê²xᵢxᵢ')(X'X)⁻¹",
+        "ops": ["COMPONER", "INVERTIR", "TRANSFORMAR", "COMPONER", "COMPONER", "INVERTIR"],
+        "lectura": "invierte la varianza de X, transforma residuos al cuadrado, compone sandwich → incertidumbre correcta aunque los errores sean irregulares",
+        "resultado": "herramienta (errores estándar que no mienten)",
+        "rama": "econometria",
+    },
+    "lr_test": {
+        "formula": "LR = 2[ℓ(θ̂_u) - ℓ(θ̂_r)]",
+        "ops": ["COMPARAR", "ESCALAR"],
+        "lectura": "compara verosimilitud del modelo libre vs restringido, escala por 2 → ¿las restricciones duelen?",
+        "resultado": "test (¿la simplificación pierde información?)",
+        "rama": "econometria",
+    },
+    "wald_test": {
+        "formula": "W = (Rθ̂-r)'[RVR']⁻¹(Rθ̂-r)",
+        "ops": ["COMPARAR", "COMPONER", "INVERTIR", "COMPONER"],
+        "lectura": "compara estimaciones con restricción, compone con varianza invertida → distancia cuadrática a la hipótesis",
+        "resultado": "test (cuán lejos estás de lo que asumes)",
+        "rama": "econometria",
+    },
+    "aic": {
+        "formula": "AIC = -2ℓ(θ̂) + 2k",
+        "ops": ["TRANSFORMAR", "ESCALAR", "ACUMULAR"],
+        "lectura": "transforma verosimilitud (×-2), escala parámetros (×2), acumula → calidad penalizada por complejidad",
+        "resultado": "score (cuánto vale tu modelo descontando cuánto le cuesta)",
+        "rama": "econometria",
+    },
+    "probit": {
+        "formula": "P(y=1|x) = Φ(x'β)",
+        "ops": ["COMPONER", "TRANSFORMAR"],
+        "lectura": "compone variables×coeficientes, transforma por función normal acumulada → probabilidad de que ocurra",
+        "resultado": "adjetivo de probabilidad (cuán probable es el evento)",
+        "rama": "econometria",
+    },
+    "logit": {
+        "formula": "P(y=1|x) = exp(x'β)/(1+exp(x'β))",
+        "ops": ["COMPONER", "TRANSFORMAR", "NORMALIZAR"],
+        "lectura": "compone variables×coeficientes, transforma a exponencial, normaliza → probabilidad logística",
+        "resultado": "adjetivo de probabilidad (versión logística)",
+        "rama": "econometria",
+    },
+    "tobit": {
+        "formula": "y* = x'β+ε; y = max(0,y*)",
+        "ops": ["COMPONER", "ACOTAR"],
+        "lectura": "compone variables×coeficientes, acota por cero → estimar cuando los datos están censurados",
+        "resultado": "herramienta (ver lo que está detrás del cero)",
+        "rama": "econometria",
+    },
+    "bootstrap": {
+        "formula": "θ̂* = g(X₁*,...,Xₙ*) remuestreando con reemplazo",
+        "ops": ["TRANSFORMAR", "ACUMULAR", "NORMALIZAR"],
+        "lectura": "transforma por remuestreo aleatorio, acumula estadísticos, normaliza → incertidumbre sin supuestos distribucionales",
+        "resultado": "herramienta (medir error sin asumir nada)",
+        "rama": "econometria",
+    },
+    "kaplan_meier": {
+        "formula": "Ŝ(t) = Π (1-d_i/n_i)",
+        "ops": ["NORMALIZAR", "COMPONER"],
+        "lectura": "normaliza eventos por expuestos, compone probabilidades de supervivencia → probabilidad de seguir vivo/activo",
+        "resultado": "adjetivo de supervivencia",
+        "rama": "econometria",
+    },
+
+    # ==========================================
+    # Y. PROBABILIDAD Y CONVERGENCIA avanzada
+    # ==========================================
+    "chebyshev": {
+        "formula": "P(|X-μ| ≥ kσ) ≤ 1/k²",
+        "ops": ["COMPARAR", "NORMALIZAR", "TRANSFORMAR", "INVERTIR"],
+        "lectura": "compara con media, normaliza por desviación, transforma al cuadrado, invierte → cota universal de cuán raro es un evento",
+        "resultado": "cota (lo peor que puede pasar sin asumir nada)",
+        "rama": "matematica",
+    },
+    "delta_method": {
+        "formula": "√n(g(θ̂)-g(θ)) →d N(0, g'V g')",
+        "ops": ["DERIVAR", "COMPONER", "TRANSFORMAR"],
+        "lectura": "deriva la función, compone con varianza del estimador, transforma → incertidumbre de funciones de estimadores",
+        "resultado": "herramienta (propagar incertidumbre a través de funciones)",
+        "rama": "matematica",
+    },
+    "radon_nikodym": {
+        "formula": "dQ/dP = f → Q(A) = ∫_A f dP",
+        "ops": ["NORMALIZAR", "INTEGRAR"],
+        "lectura": "normaliza una medida por otra, integra → cambiar de perspectiva probabilística",
+        "resultado": "herramienta universal (ver el mundo desde otra distribución)",
+        "rama": "matematica",
+    },
+    "girsanov": {
+        "formula": "dQ/dP = exp(-∫θdW - ½∫θ²dt)",
+        "ops": ["COMPONER", "INTEGRAR", "TRANSFORMAR", "NORMALIZAR"],
+        "lectura": "compone drift×browniano, integra, transforma a exponencial, normaliza → cambiar drift preservando estructura estocástica",
+        "resultado": "herramienta (pricing neutral al riesgo — la base de toda finanza moderna)",
+        "rama": "matematica",
+    },
+    "martingala": {
+        "formula": "E[X_{t+1}|F_t] = X_t",
+        "ops": ["CONDICIONAR", "COMPARAR"],
+        "lectura": "condiciona por información actual, compara esperanza futura con presente → sin tendencia predecible",
+        "resultado": "propiedad (el futuro es justo dado lo que sabes)",
+        "rama": "matematica",
+    },
+
+    # ==========================================
+    # Z. CONDUCTUAL avanzada
+    # ==========================================
+    "quasi_hiperbolic": {
+        "formula": "U₀ = u₀ + β·Σδ^t·u_t (β<1)",
+        "ops": ["ESCALAR", "ESCALAR", "TRANSFORMAR", "ACUMULAR"],
+        "lectura": "escala presente por 1, escala futuro por β<1 (penalización), transforma por descuento δ^t, acumula → presente vale desproporcionadamente más",
+        "resultado": "adjetivo de sesgo presente (la procrastinación modelada)",
+        "rama": "conductual",
+    },
+    "aversion_inequidad_fehr_schmidt_simple": {
+        "formula": "U = x_i - α·max(x_j-x_i,0) - β·max(x_i-x_j,0)",
+        "ops": ["COMPARAR", "ACOTAR", "ESCALAR", "COMPARAR", "ACOTAR", "ESCALAR", "COMPARAR"],
+        "lectura": "compara con otros (envidia si menos, culpa si más), acota a positivo, escala por intensidad → utilidad que sufre por desigualdad",
+        "resultado": "adjetivo de justicia percibida",
+        "rama": "conductual",
+    },
+    "referencia_dependiente_koszegi_rabin": {
+        "formula": "U(c|r) = m(c) + μ(m(c)-m(r))",
+        "ops": ["COMPARAR", "TRANSFORMAR", "ACUMULAR"],
+        "lectura": "compara consumo real con expectativa (referencia), transforma la diferencia por aversión a pérdida, acumula → cuánto duele no cumplir tus expectativas",
+        "resultado": "adjetivo de decepción/satisfacción relativa",
+        "rama": "conductual",
+    },
+    "maxmin_ambiguedad": {
+        "formula": "V(f) = min_{P∈C} E_P[u(f)]",
+        "ops": ["CONDICIONAR", "ACUMULAR", "SELECCIONAR"],
+        "lectura": "condiciona por múltiples distribuciones posibles, acumula utilidad esperada bajo cada una, selecciona la peor → decisión cuando no sabes ni las probabilidades",
+        "resultado": "prescripción bajo ignorancia profunda",
+        "rama": "conductual",
+    },
 }
 
 N_FORMULAS = len(FORMULAS)
