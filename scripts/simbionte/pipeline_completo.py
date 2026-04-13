@@ -292,7 +292,7 @@ def pipeline_completo(series_dict, nombre, client, model, question):
     Returns: dict con respuesta, métricas, verificación
     """
     from catalogo_finalidades import detectar_finalidad, formulas_para_pregunta
-    from red_preguntas import cascada, cascada_a_texto
+    from red_preguntas import cascada, cascada_a_texto, ENLACES
     from semantica_formulas import razonamiento_a_texto
 
     t0 = time.time()
