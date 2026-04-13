@@ -30,6 +30,14 @@ FINALIDADES = {
             "gini", "entropia_shannon", "skewness", "kurtosis", "percentil",
             "output_gap", "gap", "hhi", "inflacion", "tasa_crecimiento",
             "deuda_pib", "solow_steady_state", "pib",
+            # Marcos: estadística
+            "marco_entropia", "marco_diversidad", "marco_concentracion", "marco_dominante",
+            "marco_top2", "marco_asimetria", "marco_curtosis", "marco_raros",
+            # Marcos: conjuntos
+            "marco_jaccard", "marco_simetria_conj",
+            # Marcos: topología
+            "marco_agujeros", "marco_ratio_agujeros", "marco_compacidad",
+            "marco_n_comp_topo", "marco_convexidad",
         ],
     },
 
@@ -41,6 +49,10 @@ FINALIDADES = {
             "correlacion", "covarianza", "elasticidad_precio", "elasticidad_general",
             "beta_capm", "tasa_marginal_sustitucion", "curva_phillips",
             "ley_okun", "ecuacion_fisher", "persistencia",
+            # Marcos: grafos
+            "marco_grado_medio", "marco_betweenness", "marco_reciprocidad", "marco_clustering",
+            # Marcos: conjuntos
+            "marco_exclusivas_a", "marco_exclusivas_b", "marco_cobertura",
         ],
     },
 
@@ -52,6 +64,11 @@ FINALIDADES = {
             "regla_taylor", "multiplicador_fiscal", "bellman", "lagrangiano", "kkt",
             "capm", "equilibrio_nash", "cournot", "stackelberg",
             "regla_friedman", "pigouviana", "regla_oro_fiscal",
+            # Marcos: juegos
+            "marco_n_agentes", "marco_n_condicionales", "marco_cruce",
+            "marco_simetria_juego", "marco_alternancia", "marco_completitud",
+            # Marcos: cibernética
+            "marco_prof_ciclo",
         ],
     },
 
@@ -74,6 +91,11 @@ FINALIDADES = {
             "persistencia", "ar1", "var", "garch", "impulso_respuesta",
             "euler_estocastica", "dyn_deuda", "convergencia_condicional",
             "cointegracion", "momentum",
+            # Marcos: Markov
+            "marco_h_dist", "marco_h_trans", "marco_estructura", "marco_diagonal",
+            "marco_est_0", "marco_est_1", "marco_est_2",
+            # Marcos: cinemática
+            "marco_vel_media", "marco_aceleracion", "marco_coherencia_dir",
         ],
     },
 
@@ -86,6 +108,11 @@ FINALIDADES = {
             "hodrick_prescott_formal", "descomposicion_espectral_ts",
             "mankiw_romer_weil", "cholesky_var",
             "valor_shapley", "pib",
+            # Marcos: sistemas
+            "marco_n_subsistemas", "marco_equilibrio", "marco_coherencia_sis",
+            "marco_prof_max", "marco_prof_media",
+            # Marcos: grafos
+            "marco_profundidad", "marco_n_componentes", "marco_densidad", "marco_ratio_hojas",
         ],
     },
 
@@ -98,6 +125,16 @@ FINALIDADES = {
             "varianza", "coeficiente_variacion", "max_drawdown",
             "aversion_riesgo_arrow_pratt", "prima_riesgo_arrowpratt",
             "dyn_deuda", "prospect_value",
+            # Marcos: cibernética
+            "marco_n_ciclos", "marco_amplificacion", "marco_regulacion", "marco_ratio_feedback",
+            # Marcos: sistemas
+            "marco_emergencia",
+            # Marcos: topología
+            "marco_persistencia_topo",
+            # Marcos: geometría
+            "marco_curvatura_max",
+            # Marcos: cinemática
+            "marco_vel_max", "marco_bruscos",
         ],
     },
 
@@ -132,6 +169,10 @@ FINALIDADES = {
             "sharpe", "r_cuadrado", "aic", "indice_lerner",
             "gini", "idh", "ventaja_comparativa",
             "dominancia_estocastica_1", "factor_bayes",
+            # Marcos: geometría diferencial
+            "marco_curvatura_media", "marco_torsion", "marco_ratio_inflexion", "marco_ratio_curv_if",
+            # Marcos: cinemática
+            "marco_desplazamiento",
         ],
     },
 }
