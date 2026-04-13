@@ -253,7 +253,7 @@ def ejecutar_tool(nombre_tool, input_data):
 # LOOP DEL AGENTE
 # ============================================================
 
-def ejecutar_agente(series_dict, pregunta, client, model="claude-sonnet-4-20250514", max_turns=12):
+def ejecutar_agente(series_dict, pregunta, client, model="claude-sonnet-4-20250514", max_turns=15):
     """Ejecuta el agente analista con tool_use.
 
     El LLM recibe el protocolo y puede llamar herramientas en cada paso.
@@ -265,24 +265,46 @@ def ejecutar_agente(series_dict, pregunta, client, model="claude-sonnet-4-202505
     # Generar schema compacto
     schema, pasos = generar_schema(pregunta)
 
-    system = f"""Eres un analista de datos que sigue un protocolo riguroso.
+    system = f"""Eres un analista de datos ENJAULADO. Sigues un protocolo estricto y SOLO puedes usar datos de las herramientas.
 
 PROTOCOLO ({len(pasos)} pasos):
 {chr(10).join(f'  {i+1}. {p["nombre"]}' for i, (_, p) in enumerate(pasos))}
 
-REGLAS CRÍTICAS:
-- Sigue los pasos EN ORDEN.
-- En CADA paso: primero llama herramientas, luego ESCRIBE tu conclusión del paso.
-- ACUMULA hallazgos: el output de cada paso es input del siguiente.
-- Antes de llamar la siguiente herramienta, escribe "PASO N CONCLUSIÓN: [lo que encontraste]"
-- El último paso es la SÍNTESIS FINAL que usa TODOS los hallazgos acumulados.
-- consultar_formula: para entender qué significa un valor
-- consultar_patron: para buscar precedentes históricos
-- calcular: para obtener valores del Simbionte
-- cascada_preguntas: para saber qué analizar después de un hallazgo
-- Marca [VERIFICADO] cuando la estructura confirma tu análisis semántico.
-- Marca ⚡ ALERTA cuando hay contradicción.
-- Máximo 500 palabras en la respuesta final."""
+=== JAULA: RESTRICCIONES ABSOLUTAS ===
+
+1. DATOS: Solo puedes citar valores que vengan de las herramientas (calcular, consultar_formula, consultar_patron, cascada_preguntas). Si un dato NO viene de una herramienta, NO lo cites. Di "sin datos" en vez de inventar.
+
+2. PROTOCOLO: Sigue los pasos EN ORDEN. No saltes pasos. En CADA paso:
+   a) Llama las herramientas necesarias
+   b) Escribe "PASO N CONCLUSIÓN: [hallazgo]" con datos de la herramienta
+   c) El output de este paso es input del siguiente
+
+3. VOCABULARIO: Usa solo estos tipos de conclusión:
+   - [VERIFICADO]: la estructura del Simbionte confirma tu análisis
+   - [SUPOSICIÓN]: no hay datos del Simbionte que confirmen
+   - ⚡ ALERTA: hay contradicción entre estructura y análisis
+   - [SIN DATOS]: no hay información disponible
+
+4. FORMATO FINAL: El ÚLTIMO paso produce un JSON con esta estructura exacta:
+{{
+  "diagnostico": "fase del ciclo en una frase",
+  "desequilibrios": ["desequilibrio 1", "desequilibrio 2"],
+  "prescripcion_bc": "qué hacer banco central",
+  "prescripcion_gobierno": "qué hacer gobierno",
+  "riesgos_ocultos": ["riesgo 1", "riesgo 2"],
+  "alertas": ["contradicciones encontradas"],
+  "confianza": "alta/media/baja",
+  "datos_clave": {{"nombre": valor}}
+}}
+
+5. PROHIBICIONES:
+   - NO cites porcentajes que no vengan de "calcular"
+   - NO menciones teorías que no vengan de "consultar_formula"
+   - NO nombres precedentes que no vengan de "consultar_patron"
+   - NO inventes elasticidades, correlaciones ni persistencias
+
+6. CIERRE: Después de máximo 8 llamadas a herramientas, DEBES producir el JSON final.
+   No hagas más consultas — sintetiza con lo que tienes. Lo perfecto es enemigo de lo bueno."""
 
     messages = [{"role": "user", "content": f"Datos disponibles: {list(series_dict.keys())}\n\nPregunta: {pregunta}"}]
 
@@ -352,27 +374,58 @@ REGLAS CRÍTICAS:
                 final_text = block.text
                 break
 
-    dt = time.time() - t0
+    dt_agente = time.time() - t0
 
-    # Coste
+    # H3 verificación sobre output del agente
+    resultados = _resultados_cache or calcular_formulas_economia(series_dict)
+    discrepancias = h3_verificar(final_text, resultados)
+
+    # ========================================
+    # TRADUCTOR: JSON enjaulado → lenguaje natural
+    # ========================================
+    # El agente produce JSON estructurado.
+    # El traductor lo convierte a texto natural para el usuario final.
+    t_trad = time.time()
+    try:
+        traductor_response = client.messages.create(
+            model=model,
+            max_tokens=1000,
+            temperature=0.3,  # Un poco de variación para naturalidad
+            system="Eres un traductor. Recibes el análisis técnico de un economista (puede ser JSON o texto con datos). "
+                   "Tu trabajo es traducirlo a lenguaje natural claro y directo para un CEO que NO es economista. "
+                   "REGLAS: No añadas información nueva. No inventes datos. Solo traduce lo que recibes. "
+                   "Estructura: 1 párrafo de diagnóstico, 1 de qué hacer, 1 de riesgos. Máximo 250 palabras.",
+            messages=[{"role": "user", "content": f"Traduce este análisis económico a lenguaje natural:\n\n{final_text}"}],
+        )
+        traduccion = traductor_response.content[0].text
+        tokens_trad_in = traductor_response.usage.input_tokens
+        tokens_trad_out = traductor_response.usage.output_tokens
+    except Exception as e:
+        traduccion = final_text  # Fallback: devolver sin traducir
+        tokens_trad_in = 0
+        tokens_trad_out = 0
+
+    dt_total = time.time() - t0
+    total_tokens_in += tokens_trad_in
+    total_tokens_out += tokens_trad_out
+
+    # Coste total (agente + traductor)
     if "opus" in model:
         cost = (total_tokens_in * 15 + total_tokens_out * 75) / 1e6
     else:
         cost = (total_tokens_in * 3 + total_tokens_out * 15) / 1e6
 
-    # H3 verificación
-    resultados = _resultados_cache or calcular_formulas_economia(series_dict)
-    discrepancias = h3_verificar(final_text, resultados)
-
     return {
-        "respuesta": final_text,
+        "respuesta_raw": final_text,        # Output del agente (JSON/técnico)
+        "respuesta": traduccion,             # Output del traductor (lenguaje natural)
         "n_tool_calls": len(all_tool_calls),
         "tool_calls": all_tool_calls,
         "n_turns": turn + 1,
         "tokens_in": total_tokens_in,
         "tokens_out": total_tokens_out,
         "cost": cost,
-        "dt": dt,
+        "dt_agente": dt_agente,
+        "dt_total": dt_total,
         "system_chars": len(system),
         "n_discrepancias": len(discrepancias),
     }
