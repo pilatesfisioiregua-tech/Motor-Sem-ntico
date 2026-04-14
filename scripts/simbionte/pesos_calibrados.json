@@ -1,0 +1,125 @@
+{
+  "pesos": {
+    "R1": 8,
+    "R2": 2,
+    "R3": 2,
+    "R4": 2,
+    "R5": 2,
+    "R6": 2,
+    "R7": 2,
+    "R8": 2,
+    "R9": 2,
+    "R10": 2,
+    "R11": 2,
+    "R12": 2,
+    "R13": 2,
+    "R14": 2,
+    "R15": 15
+  },
+  "stats": {
+    "R1": {
+      "ok": 35,
+      "fail": 215,
+      "total": 250,
+      "fail_rate": 0.86
+    },
+    "R2": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R3": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R4": {
+      "ok": 246,
+      "fail": 4,
+      "total": 250,
+      "fail_rate": 0.016
+    },
+    "R5": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R6": {
+      "ok": 238,
+      "fail": 12,
+      "total": 250,
+      "fail_rate": 0.048
+    },
+    "R7": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R8": {
+      "ok": 246,
+      "fail": 4,
+      "total": 250,
+      "fail_rate": 0.016
+    },
+    "R9": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R10": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R11": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R12": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R13": {
+      "ok": 250,
+      "fail": 0,
+      "total": 250,
+      "fail_rate": 0.0
+    },
+    "R14": {
+      "ok": 238,
+      "fail": 12,
+      "total": 250,
+      "fail_rate": 0.048
+    },
+    "R15": {
+      "ok": 160,
+      "fail": 90,
+      "total": 250,
+      "fail_rate": 0.36
+    }
+  },
+  "meta": {
+    "n_evaluaciones": 250,
+    "n_errores": 0,
+    "score_media": 51.4,
+    "datasets": [
+      "espana",
+      "usa",
+      "alemania",
+      "japon",
+      "sintetico_crisis"
+    ],
+    "n_preguntas": 50,
+    "dt_total_min": 297.6
+  }
+}
